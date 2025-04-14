@@ -61,7 +61,11 @@ namespace AvaloniaMiaDev.Services
 
             await Task.Delay(2000);
 
-            var response = await _httpClient.GetStringAsync(new Uri($"{_baseUrl}/start_cameras?left={calibration.LeftEyeMjpegSource}&right={calibration.RightEyeMjpegSource}"));
+            // Update the URLs to use the new streaming protocol
+            var leftStreamUrl = $"udp://localhost:{calibration.LeftEyeMjpegSource.Split(':').Last()}";
+            var rightStreamUrl = $"udp://localhost:{calibration.RightEyeMjpegSource.Split(':').Last()}";
+
+            var response = await _httpClient.GetStringAsync(new Uri($"{_baseUrl}/start_cameras?left={leftStreamUrl}&right={rightStreamUrl}"));
             var result = JsonConvert.DeserializeObject<ApiResponse>(response);
             return result!.Result == "ok";
         }

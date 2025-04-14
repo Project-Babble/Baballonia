@@ -64,14 +64,9 @@ public class CameraController : IDisposable
     // Tracking mode property
     private readonly StyledProperty<bool> _isTrackingModeProperty;
 
-    // MJPEG Streaming
-    private HttpListener _httpListener;
-    private bool _isStreaming;
-    private CancellationTokenSource _streamingCancellationTokenSource;
-    private readonly object _streamLock = new object();
-    private byte[] _currentJpegFrame;
-    private int _mjpegPort = 8080;
-    private readonly string _mjpegBoundary = "mjpegstream";
+    // Replace MJPEG streaming fields with CameraStreamServer
+    private CameraStreamServer _streamServer;
+    private int _streamPort = 8080;
 
     public CameraController(
         HomePageView view,
@@ -122,8 +117,8 @@ public class CameraController : IDisposable
         // Set initial mode
         _view.SetValue(_isTrackingModeProperty, true);
 
-        // Initialize MJPEG streaming
-        _currentJpegFrame = new byte[0];
+        // Initialize streaming
+        _streamServer = new CameraStreamServer(_streamPort);
     }
 
     public async Task UpdateImage(bool isVisible)
@@ -348,25 +343,9 @@ public class CameraController : IDisposable
     /// <param name="port">Port to listen on (default: 8080)</param>
     public void StartMjpegStreaming(int port = 8080)
     {
-        if (_isStreaming)
-            return;
-
-        _mjpegPort = port;
-        _isStreaming = true;
-        _streamingCancellationTokenSource = new CancellationTokenSource();
-
-        try
-        {
-            _httpListener = new HttpListener();
-            _httpListener.Prefixes.Add($"http://localhost:{_mjpegPort}/");
-            _httpListener.Start();
-
-            Task.Run(() => HandleHttpRequests(_streamingCancellationTokenSource.Token));
-        }
-        catch (Exception ex)
-        {
-            _isStreaming = false;
-        }
+        _streamPort = port;
+        _streamServer = new CameraStreamServer(_streamPort);
+        _streamServer.StartStreaming();
     }
 
     /// <summary>
@@ -374,242 +353,26 @@ public class CameraController : IDisposable
     /// </summary>
     public void StopMjpegStreaming()
     {
-        if (!_isStreaming)
-            return;
-
-        _isStreaming = false;
-        _streamingCancellationTokenSource?.Cancel();
-
-        try
-        {
-            _httpListener?.Stop();
-            _httpListener?.Close();
-        }
-        catch (Exception ex)
-        {
-
-        }
-    }
-
-    private async Task HandleHttpRequests(CancellationToken cancellationToken)
-    {
-        while (_isStreaming && !cancellationToken.IsCancellationRequested)
-        {
-            try
-            {
-                var context = await _httpListener.GetContextAsync();
-
-                if (cancellationToken.IsCancellationRequested)
-                    break;
-
-                string requestPath = context.Request.Url.AbsolutePath.ToLowerInvariant();
-
-                if (requestPath == "/mjpeg")
-                {
-                    // Handle MJPEG stream request
-                    Task.Run(() => HandleMjpegRequest(context, cancellationToken));
-                }
-                else if (requestPath == "/snapshot" || requestPath == "/jpeg")
-                {
-                    // Handle single JPEG snapshot request
-                    Task.Run(() => HandleSnapshotRequest(context));
-                }
-                else
-                {
-                    // Handle other requests (like a simple status page)
-                    HandleDefaultRequest(context);
-                }
-            }
-            catch (Exception ex)
-            {
-                if (!cancellationToken.IsCancellationRequested)
-                {
-
-                }
-            }
-        }
-    }
-
-    private async Task HandleMjpegRequest(HttpListenerContext context, CancellationToken cancellationToken)
-    {
-        // Get the underlying TCP connection
-        var response = context.Response;
-
-        try
-        {
-            // Write the HTTP response headers manually
-            string responseHeaders =
-                "HTTP/1.1 200 OK\r\n" +
-                $"Content-Type: multipart/x-mixed-replace; boundary={_mjpegBoundary}\r\n" +
-                "Cache-Control: no-cache, no-store, must-revalidate\r\n" +
-                "Pragma: no-cache\r\n" +
-                "Expires: 0\r\n" +
-                "Connection: close\r\n\r\n";
-
-            byte[] headerBytes = Encoding.ASCII.GetBytes(responseHeaders);
-
-            // Get the raw output stream
-            using var outputStream = response.OutputStream;
-            await outputStream.WriteAsync(headerBytes, 0, headerBytes.Length, cancellationToken);
-
-            // Initial boundary
-            string initialBoundary = $"--{_mjpegBoundary}\r\n";
-            byte[] boundaryBytes = Encoding.ASCII.GetBytes(initialBoundary);
-            await outputStream.WriteAsync(boundaryBytes, 0, boundaryBytes.Length, cancellationToken);
-
-            // Stream frames
-            while (_isStreaming && !cancellationToken.IsCancellationRequested)
-            {
-                if (_currentJpegFrame == null || _currentJpegFrame.Length == 0)
-                {
-                    await Task.Delay(33, cancellationToken);
-                    continue;
-                }
-
-                byte[] frameData = _currentJpegFrame;
-
-                try
-                {
-                    // Frame headers
-                    string frameHeader = "Content-Type: image/jpeg\r\n" +
-                                        $"Content-Length: {frameData.Length}\r\n\r\n";
-                    byte[] frameHeaderBytes = Encoding.ASCII.GetBytes(frameHeader);
-
-                    await outputStream.WriteAsync(frameHeaderBytes, 0, frameHeaderBytes.Length, cancellationToken);
-                    await outputStream.WriteAsync(frameData, 0, frameData.Length, cancellationToken);
-
-                    // Next boundary
-                    string nextBoundary = $"\r\n--{_mjpegBoundary}\r\n";
-                    byte[] nextBoundaryBytes = Encoding.ASCII.GetBytes(nextBoundary);
-                    await outputStream.WriteAsync(nextBoundaryBytes, 0, nextBoundaryBytes.Length, cancellationToken);
-
-                    await outputStream.FlushAsync(cancellationToken);
-                }
-                catch (IOException)
-                {
-                    break;
-                }
-
-                await Task.Delay(33, cancellationToken);
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error in MJPEG stream: {ex.Message}");
-        }
-        finally
-        {
-            try { response.Abort(); } catch { }
-        }
-    }
-
-    private void HandleSnapshotRequest(HttpListenerContext context)
-    {
-        HttpListenerResponse response = context.Response;
-
-        try
-        {
-            response.ContentType = "image/jpeg";
-            response.Headers.Add("Cache-Control", "no-cache, no-store, must-revalidate");
-            response.Headers.Add("Pragma", "no-cache");
-            response.Headers.Add("Expires", "0");
-
-            byte[] frameData;
-
-            lock (_streamLock)
-            {
-                frameData = _currentJpegFrame;
-            }
-
-            if (frameData.Length > 0)
-            {
-                //response.ContentLength64 = frameData.Length;
-                response.OutputStream.Write(frameData, 0, frameData.Length);
-            }
-            else
-            {
-                response.StatusCode = 503; // Service Unavailable
-                byte[] errorMsg = Encoding.UTF8.GetBytes("No image available");
-                //response.ContentLength64 = errorMsg.Length;
-                response.OutputStream.Write(errorMsg, 0, errorMsg.Length);
-            }
-        }
-        catch (Exception ex)
-        {
-
-        }
-        finally
-        {
-            response.Close();
-        }
-    }
-
-    private void HandleDefaultRequest(HttpListenerContext context)
-    {
-        HttpListenerResponse response = context.Response;
-
-        try
-        {
-            string html = $@"
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Camera Stream</title>
-                    <style>
-                        body {{ font-family: Arial, sans-serif; margin: 20px; }}
-                        h1 {{ color: #333; }}
-                        .stream-container {{ margin-top: 20px; }}
-                        img {{ max-width: 100%; border: 1px solid #ccc; }}
-                    </style>
-                </head>
-                <body>
-                    <h1>Camera Stream</h1>
-                    <div class='stream-container'>
-                        <h2>Live Stream</h2>
-                        <img src='/mjpeg' alt='MJPEG Stream'>
-                    </div>
-                    <div class='stream-container'>
-                        <h2>Static Image</h2>
-                        <img src='/snapshot' alt='Snapshot'>
-                    </div>
-                </body>
-                </html>";
-
-            byte[] buffer = Encoding.UTF8.GetBytes(html);
-            response.ContentType = "text/html";
-            //response.ContentLength64 = buffer.Length;
-            response.OutputStream.Write(buffer, 0, buffer.Length);
-        }
-        catch (Exception ex)
-        {
-
-        }
-        finally
-        {
-            response.Close();
-        }
+        _streamServer?.StopStreaming();
     }
 
     private void UpdateMjpegFrame(ref byte[] arr)
     {
-        if (_bitmap == null || !_isStreaming)
+        if (_bitmap == null)
             return;
 
         try
         {
-            // Update the current frame
-            lock (_streamLock)
-            {
-                _currentJpegFrame = CreateImageFromGray8UsingBitmap(arr, (int)_bitmap.Size.Width, (int)_bitmap.Size.Height);
-            }
+            var skJpegData = CreateImageFromGray8UsingBitmap(arr, (int)_bitmap.Size.Width, (int)_bitmap.Size.Height);
+            _streamServer.UpdateFrame(skJpegData);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-
+            // Handle conversion errors
         }
     }
 
-    private byte[] CreateImageFromGray8UsingBitmap(byte[] pixelData, int width, int height)
+    private SKImage CreateImageFromGray8UsingBitmap(byte[] pixelData, int width, int height)
     {
         var bitmap = new SKBitmap(width, height, SKColorType.Gray8, SKAlphaType.Opaque);
 
@@ -617,7 +380,7 @@ public class CameraController : IDisposable
         bitmap.SetPixels(Marshal.UnsafeAddrOfPinnedArrayElement(pixelData, 0));
 
         // Create an SKImage from the bitmap
-        return SKImage.FromBitmap(bitmap).Encode(SKEncodedImageFormat.Jpeg, quality: 80).ToArray();
+        return SKImage.FromBitmap(bitmap);
     }
 
     #endregion
@@ -625,12 +388,12 @@ public class CameraController : IDisposable
     public void Dispose()
     {
         StopMjpegStreaming();
+        _streamServer?.Dispose();
 
         _mouthWindow.PointerPressed -= OnPointerPressed;
         _mouthWindow.PointerMoved -= OnPointerMoved;
         _mouthWindow.PointerReleased -= OnPointerReleased;
 
         _bitmap?.Dispose();
-        _streamingCancellationTokenSource?.Dispose();
     }
 }
