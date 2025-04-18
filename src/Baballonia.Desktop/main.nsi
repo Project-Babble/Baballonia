@@ -17,7 +17,7 @@
   Name "${NAME}"
   OutFile "${NAME} Setup.exe"
   ; Default install directory in user's AppData folder
-  InstallDir "PROGRAMFILES\\${NAME}"
+  InstallDir "$PROGRAMFILES\${NAME}"
   InstallDirRegKey HKCU "Software\${NAME}" ""
   RequestExecutionLevel admin
 
@@ -55,7 +55,7 @@
   Section "-hidden app"
     SectionIn RO
     SetOutPath "$INSTDIR"
-    File /r /x ".gitignore" "*.*"
+    File /r "bin\Debug\net8.0\*"
     WriteRegStr HKCU "Software\${NAME}" "" $INSTDIR
     WriteUninstaller "$INSTDIR\Uninstall.exe"
   SectionEnd
