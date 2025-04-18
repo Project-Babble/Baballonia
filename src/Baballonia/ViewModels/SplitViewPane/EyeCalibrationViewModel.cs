@@ -122,24 +122,24 @@ public partial class EyeCalibrationViewModel : ViewModelBase
 
     public readonly CalibrationItem[] LeftEyeCalibrationItems =
     [
-        new CalibrationItem { ShapeName = "/LeftEyeX", Min = -1, Max = 1 },
-        new CalibrationItem { ShapeName = "/LeftEyeY", Min = -1, Max = 1 },
-        new CalibrationItem { ShapeName = "/LeftExp1", Min = 0, Max = 1 },
-        new CalibrationItem { ShapeName = "/LeftExp2", Min = 0, Max = 1 },
-        new CalibrationItem { ShapeName = "/LeftExp3", Min = 0, Max = 1 },
-        new CalibrationItem { ShapeName = "/LeftExp4", Min = 0, Max = 1 },
-        new CalibrationItem { ShapeName = "/LeftExp5", Min = 0, Max = 1 },
+        new CalibrationItem { ShapeName = "/LeftEyeX", Min = -1f, Max = 1f },
+        new CalibrationItem { ShapeName = "/LeftEyeY", Min = -1f, Max = 1f },
+        new CalibrationItem { ShapeName = "/LeftExp1", Min = 0f, Max = 1f },
+        new CalibrationItem { ShapeName = "/LeftExp2", Min = 0f, Max = 1f },
+        new CalibrationItem { ShapeName = "/LeftExp3", Min = 0f, Max = 1f },
+        new CalibrationItem { ShapeName = "/LeftExp4", Min = 0f, Max = 1f },
+        new CalibrationItem { ShapeName = "/LeftExp5", Min = 0f, Max = 1f },
     ];
 
     public readonly CalibrationItem[] RightEyeCalibrationItems =
     [
-        new CalibrationItem { ShapeName = "/RightEyeX", Min = -1, Max = 1 },
-        new CalibrationItem { ShapeName = "/RightEyeY", Min = -1, Max = 1 },
-        new CalibrationItem { ShapeName = "/RightExp1", Min = 0, Max = 1 },
-        new CalibrationItem { ShapeName = "/RightExp2", Min = 0, Max = 1 },
-        new CalibrationItem { ShapeName = "/RightExp3", Min = 0, Max = 1 },
-        new CalibrationItem { ShapeName = "/RightExp4", Min = 0, Max = 1 },
-        new CalibrationItem { ShapeName = "/RightExp5", Min = 0, Max = 1 },
+        new CalibrationItem { ShapeName = "/RightEyeX", Min = -1f, Max = 1f },
+        new CalibrationItem { ShapeName = "/RightEyeY", Min = -1f, Max = 1f },
+        new CalibrationItem { ShapeName = "/RightExp1", Min = 0f, Max = 1f },
+        new CalibrationItem { ShapeName = "/RightExp2", Min = 0f, Max = 1f },
+        new CalibrationItem { ShapeName = "/RightExp3", Min = 0f, Max = 1f },
+        new CalibrationItem { ShapeName = "/RightExp4", Min = 0f, Max = 1f },
+        new CalibrationItem { ShapeName = "/RightExp5", Min = 0f, Max = 1f },
     ];
 
     private ILocalSettingsService _settingsService { get; }

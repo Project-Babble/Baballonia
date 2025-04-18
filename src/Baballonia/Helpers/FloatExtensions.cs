@@ -1,8 +1,8 @@
 namespace AvaloniaMiaDev.Helpers;
 
-public static class DoubleExtensions
+public static class FloatExtensions
 {
-    public static double Remap (this float from, double fromMin, double fromMax, double toMin,  double toMax)
+    public static float Remap (this float from, float fromMin, float fromMax, float toMin,  float toMax)
     {
         var fromAbs  =  from - fromMin;
         var fromMaxAbs = fromMax - fromMin;

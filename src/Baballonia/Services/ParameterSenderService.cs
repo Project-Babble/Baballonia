@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AvaloniaMiaDev.Contracts;
 using AvaloniaMiaDev.Helpers;
 using AvaloniaMiaDev.Models;
 using AvaloniaMiaDev.OSC;
 using AvaloniaMiaDev.Services.Inference;
-using AvaloniaMiaDev.Services.Inference.Enums;
 using AvaloniaMiaDev.ViewModels.SplitViewPane;
-using AvaloniaMiaDev.Views;
 using Microsoft.Extensions.Hosting;
 
 namespace AvaloniaMiaDev.Services;
@@ -55,8 +52,9 @@ public class ParameterSenderService(
         }
     }
 
-    private void ProcessExpressionData(float[] expressions, Dictionary<string, (double Lower, double Upper)> calibrationItems)
+    private void ProcessExpressionData(float[] expressions, Dictionary<string, (float Lower, float Upper)> calibrationItems)
     {
+        if (expressions is null) return;
         if (expressions.Length == 0) return;
 
         foreach (var (remappedExpression, weight) in calibrationItems.Zip(expressions))
@@ -70,6 +68,7 @@ public class ParameterSenderService(
 
     private void ProcessExpressionData(float[] expressions, CalibrationItem[] calibrationItems)
     {
+        if (expressions is null) return;
         if (expressions.Length == 0) return;
 
         foreach (var (remappedExpression, weight) in calibrationItems.Zip(expressions))

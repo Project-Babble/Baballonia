@@ -61,6 +61,31 @@ public sealed class OpenCvCapture : Capture
     private Task? _updateTask = null;
     private CancellationTokenSource _updateTaskCTS = new();
 
+    private static readonly VideoCaptureAPIs PreferredBackend;
+
+    static OpenCvCapture()
+    {
+        // Choose the most appropriate backend based on the detected OS
+        // This is needed to handle concurrent camera access
+        if (OperatingSystem.IsWindows())
+        {
+            PreferredBackend = VideoCaptureAPIs.DSHOW;
+        }
+        else if (OperatingSystem.IsLinux())
+        {
+            PreferredBackend = VideoCaptureAPIs.V4L2;
+        }
+        else if (OperatingSystem.IsMacOS())
+        {
+            PreferredBackend = VideoCaptureAPIs.AVFOUNDATION;
+        }
+        else
+        {
+            // Fallback to ANY which lets OpenCV choose
+            PreferredBackend = VideoCaptureAPIs.ANY;
+        }
+    }
+
     /// <summary>
     /// Starts video capture and applies custom resolution and framerate settings.
     /// </summary>
@@ -77,7 +102,7 @@ public sealed class OpenCvCapture : Capture
             {
                 // Initialize VideoCapture with URL, timeout for robustness
                 if (int.TryParse(Url, out var index))
-                    _videoCapture = await Task.Run(() => VideoCapture.FromCamera(index), cts.Token);
+                    _videoCapture = await Task.Run(() => VideoCapture.FromCamera(index, PreferredBackend), cts.Token);
                 else
                     _videoCapture = await Task.Run(() => new VideoCapture(Url), cts.Token);
             }
