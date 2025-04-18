@@ -100,13 +100,22 @@ namespace AvaloniaMiaDev.Services
 
         private Task StartVrProcess()
         {
+            // Make sure Calibrator exists
             if (!File.Exists(Calibrator))
             {
                 throw new FileNotFoundException("VR calibration executable not found", Calibrator);
             }
 
+            // Make sure Calibrator isn't already running
             if (Process.GetProcesses().Any(p => p.ProcessName == Path.GetFileNameWithoutExtension(Calibrator)))
             {
+                return Task.FromResult(false);
+            }
+
+            // Check if SteamVR is running. The Calibrator needs it!
+            if (!Process.GetProcesses().Any(p => p.ProcessName.ToLower().Contains("vrserver")))
+            {
+                // SteamVR is not running
                 return Task.FromResult(false);
             }
 

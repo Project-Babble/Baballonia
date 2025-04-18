@@ -55,7 +55,7 @@
   Section "-hidden app"
     SectionIn RO
     SetOutPath "$INSTDIR"
-    File /r "bin\Debug\net8.0\*"
+    File /r "bin\Release\net8.0\*"
     WriteRegStr HKCU "Software\${NAME}" "" $INSTDIR
     WriteUninstaller "$INSTDIR\Uninstall.exe"
   SectionEnd
