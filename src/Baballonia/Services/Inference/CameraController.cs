@@ -431,6 +431,7 @@ public class CameraController : IDisposable
 
                 string requestPath = context.Request.Url!.AbsolutePath.ToLowerInvariant();
 
+#pragma warning disable CS4014 // Awaiting prevents the calibration app from receiving MJPEG frames
                 if (requestPath == "/mjpeg")
                 {
                     // Handle MJPEG stream request
@@ -446,6 +447,7 @@ public class CameraController : IDisposable
                     // Handle other requests (like a simple status page)
                     HandleDefaultRequest(context);
                 }
+#pragma warning restore CS4014 // Awaiting prevents the calibration app from receiving MJPEG frames
             }
             catch (Exception)
             {

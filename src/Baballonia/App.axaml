@@ -138,8 +138,8 @@
             <Setter Property="Spacing" Value="15" />
         </Style>
 
-        <StyleInclude Source="avares://AvaloniaMiaDev/Assets/Icons.axaml" />
-        <StyleInclude Source="avares://AvaloniaMiaDev/Controls/ContentExample.axaml" />
+        <StyleInclude Source="avares://Baballonia/Assets/Icons.axaml" />
+        <StyleInclude Source="avares://Baballonia/Controls/ContentExample.axaml" />
         <themes:RangeSliderTheme />
 
     </Application.Styles>

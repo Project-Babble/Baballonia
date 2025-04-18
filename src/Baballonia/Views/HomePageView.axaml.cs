@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -277,7 +278,7 @@ public partial class HomePageView : UserControl
 
         const int leftPort = 8080;
         const int rightPort = 8081;
-        var modelPath = Path.GetTempPath(); // This should ideally point to a more persistent dir at some point
+        var modelPath = Directory.GetCurrentDirectory(); // This should ideally point to a more persistent dir at some point
 
         var model = new VrCalibration
         {

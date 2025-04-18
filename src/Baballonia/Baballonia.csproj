@@ -6,12 +6,58 @@
         <ApplicationIcon>./Assets/logo_big_no_bg.ico</ApplicationIcon>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	<NoWarn>CS8618;CS8509;CS0067;CS8613;CS8622;MVVMTK0034</NoWarn>
+	<RootNamespace>AvaloniaMiaDev</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
         <AvaloniaResource Include="Assets\**" />
         <None Update="LocalSettings.json">
-          <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Calibration\Windows\app.rc">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Calibration\Windows\app.res">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Calibration\Windows\gaze_overlay.exe">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Calibration\Windows\onnxruntime.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Calibration\Windows\onnxruntime_providers_shared.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Calibration\Windows\openvr_api.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Calibration\Windows\trainer.exe">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Calibration\Windows\turbojpeg.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Calibration\Windows\onnx_artifacts\training\eval_model.onnx">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Calibration\Windows\onnx_artifacts\training\optimizer_model.onnx">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Calibration\Windows\onnx_artifacts\training\training_model.onnx">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Calibration\Windows\onnx_artifacts\baball_model.onnx">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Calibration\Windows\onnx_artifacts\training\checkpoint\paramfrozen_tensors.pbseq">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Calibration\Windows\onnx_artifacts\training\checkpoint\paramtrain_tensors.pbseq">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="eyeModel.onnx">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 
@@ -95,7 +141,6 @@
     <Content Include="faceModel.onnx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Remove="eyeModel.onnx" />
 </ItemGroup>
 <ItemGroup>
   <ProjectReference Include="..\HyperText.Avalonia\HyperText.Avalonia\HyperText.Avalonia.csproj" />

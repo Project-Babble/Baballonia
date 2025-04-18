@@ -6,7 +6,7 @@ using Avalonia.Android;
 namespace AvaloniaMiaDev.Android;
 
 [Activity(
-    Label = "AvaloniaMiaDev.Android",
+    Label = "Baballonia.Android",
     Theme = "@style/MyTheme.NoActionBar",
     Icon = "@drawable/icon",
     MainLauncher = true,

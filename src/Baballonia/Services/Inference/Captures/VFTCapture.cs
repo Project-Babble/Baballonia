@@ -75,7 +75,7 @@ public class VftCapture : Capture
                 _loop = true;
                 _ = Task.Run(VideoCapture_UpdateLoop);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 IsReady = false;
                 return IsReady;

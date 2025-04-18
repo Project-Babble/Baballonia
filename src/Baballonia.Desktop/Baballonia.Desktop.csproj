@@ -5,6 +5,7 @@
         One for Windows with net8.0-windows TFM, one for MacOS with net8.0-macos and one with net8.0 TFM for Linux.-->
         <TargetFramework>net8.0</TargetFramework>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+        <RootNamespace>AvaloniaMiaDev.Desktop</RootNamespace>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -31,7 +32,7 @@
 		<PackageReference Include="Microsoft.ML.OnnxRuntime.Gpu" Version="1.20.1" Condition="$([MSBuild]::IsOSPlatform('Linux'))"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\AvaloniaMiaDev\AvaloniaMiaDev.csproj" />
+        <ProjectReference Include="..\Baballonia\Baballonia.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -45,5 +46,32 @@
       <Content Include="libOpenCvSharpExtern.so">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <None Update="assets\BannerOpaque_90x58.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="assets\BannerOpaque_175x345.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="assets\Icon_32x32.ico">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="assets\Icon_512x512.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="assets\IconOpaque_32x32.ico">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="assets\IconOpaque_32x32.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="assets\MUI_HEADERIMAGE_BITMAP.bmp">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="assets\MUI_WELCOMEFINISHPAGE_BITMAP.bmp">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="assets\license.txt">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 </Project>

@@ -3,23 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35919.96 d17.13
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaloniaMiaDev", "src\AvaloniaMiaDev\AvaloniaMiaDev.csproj", "{00505DCC-588E-4E46-8F91-2AF6A88CBC78}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baballonia", "src\Baballonia\Baballonia.csproj", "{00505DCC-588E-4E46-8F91-2AF6A88CBC78}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1AA1C9C6-90AF-4BFB-ABA2-B433E9766B0F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baballonia.Android", "src\Baballonia.Android\Baballonia.Android.csproj", "{63DAAA66-AF92-4170-9F89-6C2846B8E389}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaloniaMiaDev.Android", "src\AvaloniaMiaDev.Android\AvaloniaMiaDev.Android.csproj", "{63DAAA66-AF92-4170-9F89-6C2846B8E389}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaloniaMiaDev.Desktop", "src\AvaloniaMiaDev.Desktop\AvaloniaMiaDev.Desktop.csproj", "{12649311-9B1B-4EDF-8917-4609499D70BB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baballonia.Desktop", "src\Baballonia.Desktop\Baballonia.Desktop.csproj", "{12649311-9B1B-4EDF-8917-4609499D70BB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{82C6A0B4-5014-4BE4-9F52-7DC1989134E3}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		Directory.Build.props = Directory.Build.props
 		README.md = README.md
+		LICENSE = LICENSE
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HyperText.Avalonia", "src\HyperText.Avalonia\HyperText.Avalonia\HyperText.Avalonia.csproj", "{9645BD4E-51F7-4DCF-8A0A-5E628C2A7D52}"
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaloniaMiaDev.iOS", "src\AvaloniaMiaDev.iOS\AvaloniaMiaDev.iOS.csproj", "{7720B7DB-1021-4F42-86C2-EBF1FD6BD461}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baballonia.iOS", "src\Baballonia.iOS\Baballonia.iOS.csproj", "{7720B7DB-1021-4F42-86C2-EBF1FD6BD461}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,10 +53,5 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{00505DCC-588E-4E46-8F91-2AF6A88CBC78} = {1AA1C9C6-90AF-4BFB-ABA2-B433E9766B0F}
-		{63DAAA66-AF92-4170-9F89-6C2846B8E389} = {1AA1C9C6-90AF-4BFB-ABA2-B433E9766B0F}
-		{12649311-9B1B-4EDF-8917-4609499D70BB} = {1AA1C9C6-90AF-4BFB-ABA2-B433E9766B0F}
-		{9645BD4E-51F7-4DCF-8A0A-5E628C2A7D52} = {1AA1C9C6-90AF-4BFB-ABA2-B433E9766B0F}
-		{7720B7DB-1021-4F42-86C2-EBF1FD6BD461} = {1AA1C9C6-90AF-4BFB-ABA2-B433E9766B0F}
 	EndGlobalSection
 EndGlobal
