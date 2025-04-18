@@ -20,8 +20,6 @@ namespace AvaloniaMiaDev.Views;
 
 public partial class HomePageView : UserControl
 {
-    private readonly ParameterSenderService _parameterSenderService;
-
     public static readonly StyledProperty<bool> IsLeftTrackingModeProperty =
         AvaloniaProperty.Register<HomePageView, bool>(nameof(IsLeftTrackingMode));
 
@@ -49,10 +47,9 @@ public partial class HomePageView : UserControl
         set => SetValue(IsFaceTrackingModeProperty, value);
     }
 
-    // Hacky
-    public CameraController LeftCameraController { get; private set; }
-    public CameraController RightCameraController { get; private set; }
-    public CameraController FaceCameraController { get; private set; }
+    private CameraController LeftCameraController { get; }
+    private CameraController RightCameraController { get; }
+    private CameraController FaceCameraController { get; }
 
     private readonly IInferenceService _inferenceService;
     private readonly IVRService _vrService;
@@ -146,10 +143,10 @@ public partial class HomePageView : UserControl
             "Face_FlipYAxis",
             IsFaceTrackingModeProperty);
 
-        _parameterSenderService = Ioc.Default.GetService<ParameterSenderService>()!;
-        _parameterSenderService.RegisterLeftCameraController(LeftCameraController!);
-        _parameterSenderService.RegisterRightCameraController(RightCameraController!);
-        _parameterSenderService.RegisterFaceCameraController(FaceCameraController!);
+        var parameterSenderService = Ioc.Default.GetService<ParameterSenderService>()!;
+        parameterSenderService.RegisterLeftCameraController(LeftCameraController!);
+        parameterSenderService.RegisterRightCameraController(RightCameraController!);
+        parameterSenderService.RegisterFaceCameraController(FaceCameraController!);
 
         StartImageUpdates();
 
@@ -183,7 +180,6 @@ public partial class HomePageView : UserControl
             await RightCameraController.UpdateImage(_isVisible);
             await FaceCameraController.UpdateImage(_isVisible);
 
-            // Update ViewModel bitmaps
             _viewModel.LeftEyeBitmap = LeftCameraController.Bitmap;
             _viewModel.RightEyeBitmap = RightCameraController.Bitmap;
             _viewModel.FaceBitmap = FaceCameraController.Bitmap;
@@ -194,7 +190,8 @@ public partial class HomePageView : UserControl
     // Event handlers for left camera
     public void LeftCameraStart(object? sender, RoutedEventArgs e)
     {
-        LeftCameraController.StartCamera(_viewModel.LeftCameraAddress);
+        LeftCameraController.StopCamera();
+        LeftCameraController.StartCamera(LeftCameraAddressEntry.Text!);
     }
 
     private void LeftCameraStopped(object? sender, RoutedEventArgs e)
@@ -221,7 +218,8 @@ public partial class HomePageView : UserControl
     // Event handlers for right camera
     public void RightCameraStart(object? sender, RoutedEventArgs e)
     {
-        RightCameraController.StartCamera(_viewModel.RightCameraAddress);
+        RightCameraController.StopCamera();
+        RightCameraController.StartCamera(RightCameraAddressEntry.Text!);
     }
 
     public void RightCameraStopped(object? sender, RoutedEventArgs e)
@@ -248,7 +246,8 @@ public partial class HomePageView : UserControl
     // Event handlers for face camera
     public void FaceCameraStart(object? sender, RoutedEventArgs e)
     {
-        FaceCameraController.StartCamera(_viewModel.FaceCameraAddress);
+        FaceCameraController.StopCamera();
+        FaceCameraController.StartCamera(FaceCameraAddressEntry.Text!);
     }
 
     public void FaceCameraStopped(object? sender, RoutedEventArgs e)

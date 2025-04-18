@@ -23,7 +23,7 @@ public partial class HomePageViewModel : ViewModelBase
     private string _eyeModel;
 
     [ObservableProperty]
-    [property: SavedSetting("EyeHome_LeftCameraIndex", "0")]
+    [property: SavedSetting("EyeHome_LeftCameraIndex", "")]
     private string _leftCameraAddress;
 
     [ObservableProperty]
@@ -42,7 +42,7 @@ public partial class HomePageViewModel : ViewModelBase
     private float _leftEyeRotation;
 
     [ObservableProperty]
-    [property: SavedSetting("EyeHome_RightCameraIndex", "0")]
+    [property: SavedSetting("EyeHome_RightCameraIndex", "")]
     private string _rightCameraAddress;
 
     [ObservableProperty]
@@ -63,7 +63,7 @@ public partial class HomePageViewModel : ViewModelBase
     public WriteableBitmap FaceBitmap { get; set; }
 
     [ObservableProperty]
-    [property: SavedSetting("EyeHome_FaceCameraIndex", "0")]
+    [property: SavedSetting("EyeHome_FaceCameraIndex", "")]
     private string _faceCameraAddress;
 
     [ObservableProperty]
