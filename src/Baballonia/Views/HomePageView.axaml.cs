@@ -5,6 +5,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using AvaloniaMiaDev.Calibration;
 using AvaloniaMiaDev.Contracts;
 using AvaloniaMiaDev.Helpers;
 using AvaloniaMiaDev.Models;
@@ -282,7 +283,7 @@ public partial class HomePageView : UserControl
         var model = new VrCalibration
         {
             ModelSavePath = modelPath,
-            CalibrationInstructions = "2",
+            CalibrationInstructions = CalibrationRoutine.HorizontalSweep,
             FOV = 1f,
             LeftEyeMjpegSource = $"http://localhost:{leftPort}/mjpeg",
             RightEyeMjpegSource = $"http://localhost:{rightPort}/mjpeg",
