@@ -368,7 +368,7 @@ public partial class HomePageView : UserControl
         await _localSettingsService.SaveSettingAsync("EyeHome_EyeModel", modelName);
 
         // Cleanup any leftover capture.bin files
-        // DeleteCaptureFiles(modelPath);
+        DeleteCaptureFiles(modelPath);
 
         // Instruct the inference service to load the new model
         var minCutoff = await _localSettingsService.ReadSettingAsync<float>("AppSettings_OneEuroMinFreqCutoff");
@@ -430,7 +430,7 @@ public partial class HomePageView : UserControl
             return;
 
         // Get all files matching the capture pattern
-        string[] filesToDelete = Directory.GetFiles(directoryPath, "capture*.bin");
+        string[] filesToDelete = Directory.GetFiles(directoryPath, "capture.bin");
 
         // Delete each file
         foreach (string file in filesToDelete)

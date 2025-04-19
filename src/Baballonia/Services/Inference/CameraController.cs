@@ -187,6 +187,8 @@ public class CameraController : IDisposable
             case CamViewMode.Tracking:
                 useColor = false;
                 valid = _inferenceService.GetImage(CameraSettings, out image, out dims);
+                if (valid) // Don't run infer on raw images
+                    _inferenceService.GetExpressionData(CameraSettings, out ARExpressions);
                 break;
             case CamViewMode.Cropping:
                 useColor = true;
@@ -198,8 +200,6 @@ public class CameraController : IDisposable
 
         if (valid && isVisible)
         {
-            _inferenceService.GetExpressionData(CameraSettings, out ARExpressions);
-
             _viewBox.Margin = new Thickness(0, 0, 0, 16);
 
             if (dims.width == 0 || dims.height == 0 || image is null ||
