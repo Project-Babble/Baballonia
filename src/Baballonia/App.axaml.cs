@@ -74,6 +74,7 @@ public partial class App : Application
                 services.AddSingleton<ILanguageSelectorService, LanguageSelectorService>();
                 services.AddSingleton<IInferenceService, InferenceService>();
                 services.AddSingleton<IVrService, VrCalibrationService>();
+                services.AddSingleton<DeviceHardwareLogger>();
 
                 services.AddSingleton<IActivationService, ActivationService>();
                 services.AddSingleton<IDispatcherService, DispatcherService>();
@@ -124,6 +125,10 @@ public partial class App : Application
         Ioc.Default.ConfigureServices(_host.Services);
 
         Task.Run(async () => await _host.StartAsync());
+
+        // Log hardware information
+        var hardwareLogger = Ioc.Default.GetRequiredService<DeviceHardwareLogger>();
+        hardwareLogger.LogHardwareInfo();
 
         var activation = Ioc.Default.GetRequiredService<IActivationService>();
         Task.Run(async () => await activation.ActivateAsync(null!));
