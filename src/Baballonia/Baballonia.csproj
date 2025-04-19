@@ -38,28 +38,28 @@
         <None Update="Calibration\Windows\turbojpeg.dll">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Calibration\Windows\onnx_artifacts\training\eval_model.onnx">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Calibration\Windows\onnx_artifacts\training\optimizer_model.onnx">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Calibration\Windows\onnx_artifacts\training\training_model.onnx">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Calibration\Windows\onnx_artifacts\baball_model.onnx">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Calibration\Windows\onnx_artifacts\training\checkpoint\paramfrozen_tensors.pbseq">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Calibration\Windows\onnx_artifacts\training\checkpoint\paramtrain_tensors.pbseq">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
         <None Update="eyeModel.onnx">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="Calibration\Windows\capture_417272897.bin">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="onnx_artifacts\training\checkpoint\paramfrozen_tensors.pbseq">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="onnx_artifacts\training\checkpoint\paramtrain_tensors.pbseq">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="onnx_artifacts\training\eval_model.onnx">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="onnx_artifacts\training\optimizer_model.onnx">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="onnx_artifacts\training\training_model.onnx">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="onnx_artifacts\baball_model.onnx">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>

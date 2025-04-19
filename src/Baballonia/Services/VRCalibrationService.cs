@@ -10,37 +10,42 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AvaloniaMiaDev.Contracts;
 using AvaloniaMiaDev.Models;
+using AvaloniaMiaDev.Services.Overlay;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace AvaloniaMiaDev.Services
 {
-    public class VrCalibrationService : IVRService
+    // Maybe this could be an abstract class and have overlay/trainer derive from it
+    public class VrCalibrationService : IVrService, IDisposable
     {
-        public static string CalibratorPath { get; }
+        // Event to notify subscribers about process output, unused rn
+        public event EventHandler<ProcessOutputEventArgs> ProcessOutputReceived;
 
-        public static string Calibrator { get; }
+        public static string Overlay { get; }
+        public static string Trainer { get; }
+        public static string OverlayPath { get; }
 
         private ILogger<VrCalibrationService> _logger;
+        private Dictionary<string, Action<string>> _responseHandlers;
         private readonly HttpClient _httpClient;
         private readonly string _baseUrl;
-        private Dictionary<string, Action<string>> _responseHandlers;
-        private Process _vrProcess;
 
-        // Event to notify subscribers about process output
-        public event EventHandler<ProcessOutputEventArgs> ProcessOutputReceived;
+        private Dictionary<string, Process> _activeProcesses = new();
 
         static VrCalibrationService()
         {
             if (OperatingSystem.IsWindows())
             {
-                CalibratorPath = Path.Combine(AppContext.BaseDirectory, "Calibration", "Windows");
-                Calibrator = Path.Combine(CalibratorPath, "gaze_overlay.exe");
+                OverlayPath = Path.Combine(AppContext.BaseDirectory, "Calibration", "Windows");
+                Overlay = Path.Combine(OverlayPath, "gaze_overlay.exe");
+                Trainer = Path.Combine(OverlayPath, "trainer.exe");
             }
             else if (OperatingSystem.IsLinux())
             {
-                CalibratorPath = Path.Combine(AppContext.BaseDirectory, "Calibration", "Linux");
-                Calibrator = Path.Combine(CalibratorPath, "gaze_overlay");
+                OverlayPath = Path.Combine(AppContext.BaseDirectory, "Calibration", "Linux");
+                Overlay = Path.Combine(OverlayPath, "gaze_overlay");
+                Trainer = Path.Combine(OverlayPath, "trainer");
             }
         }
 
@@ -56,19 +61,185 @@ namespace AvaloniaMiaDev.Services
             };
         }
 
+        private async Task<bool> StartProcess(string program, string[] arguments = null, bool waitForExit = false, string[] blacklistedPrograms = null)
+        {
+            // Make sure program exists
+            if (!File.Exists(program))
+            {
+                _logger.LogError($"Program not found: {program}");
+                return false;
+            }
+
+            string processName = Path.GetFileNameWithoutExtension(program);
+
+            // Make sure program isn't already running
+            if (Process.GetProcesses().Any(p => p.ProcessName == processName))
+            {
+                _logger.LogInformation($"{processName} is already running");
+                return true; // Already running is considered success
+            }
+
+            // Check if any blacklisted programs are running
+            if (blacklistedPrograms != null && blacklistedPrograms.Length > 0)
+            {
+                foreach (var blacklisted in blacklistedPrograms)
+                {
+                    if (Process.GetProcesses().Any(p => p.ProcessName == Path.GetFileNameWithoutExtension(blacklisted)))
+                    {
+                        _logger.LogWarning($"Cannot start {processName} because {blacklisted} is running");
+                        return false;
+                    }
+                }
+            }
+
+            // Check if SteamVR is running. The VR programs need it!
+            if (!Process.GetProcesses().Any(p => p.ProcessName.ToLower().Contains("vrserver")))
+            {
+                _logger.LogError("SteamVR is not running. Required for VR operations.");
+                return false;
+            }
+
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = program,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            };
+
+            if (arguments != null)
+                startInfo.Arguments = string.Join(" ", arguments);
+
+            var process = new Process
+            {
+                StartInfo = startInfo,
+                EnableRaisingEvents = true
+            };
+
+            process.OutputDataReceived += ProcessOutputHandler;
+            process.ErrorDataReceived += ProcessErrorHandler;
+            process.Exited += (_, _) =>
+            {
+                _activeProcesses.Remove(processName);
+                _logger.LogInformation($"{processName} process exited");
+            };
+
+            process.Start();
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+
+            _activeProcesses[processName] = process;
+            _logger.LogInformation($"Successfully started {processName}");
+
+            if (waitForExit)
+                await process.WaitForExitAsync();
+
+            _logger.LogInformation($"{processName} exited gracefully!");
+
+            return true;
+        }
+
+        public async Task<bool> StartOverlay(string[] arguments = null, string[] blacklistedPrograms = null)
+        {
+            return await StartProcess(Overlay, arguments, waitForExit: false, blacklistedPrograms);
+        }
+
+        public async Task<bool> StartTrainer(string[] arguments = null, string[] blacklistedPrograms = null)
+        {
+            return await StartProcess(Trainer, arguments, waitForExit: true, blacklistedPrograms);
+        }
+
+        private bool StopProcess(string program)
+        {
+            string processName = Path.GetFileNameWithoutExtension(program);
+
+            if (_activeProcesses.TryGetValue(processName, out var process))
+            {
+                try
+                {
+                    if (!process.HasExited)
+                    {
+                        process.Kill();
+                        process.WaitForExit(3000); // Wait up to 3 seconds for graceful exit
+                    }
+                    process.Dispose();
+                    _activeProcesses.Remove(processName);
+                    _logger.LogInformation($"Successfully stopped {processName}");
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error stopping {processName}: {ex.Message}");
+                    return false;
+                }
+            }
+            else
+            {
+                // Check if it's running but not tracked by us
+                var runningProcess = Process.GetProcesses().FirstOrDefault(p => p.ProcessName == processName);
+                if (runningProcess != null)
+                {
+                    try
+                    {
+                        runningProcess.Kill();
+                        runningProcess.WaitForExit(3000);
+                        runningProcess.Dispose();
+                        _logger.LogInformation($"Successfully stopped untracked {processName}");
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"Error stopping untracked {processName}: {ex.Message}");
+                        return false;
+                    }
+                }
+
+                _logger.LogInformation($"{processName} is not running");
+                return true; // Not running is considered success for stopping
+            }
+        }
+
+        public bool StopOverlay()
+        {
+            return StopProcess(Overlay);
+        }
+
+        public bool StopTrainer()
+        {
+            return StopProcess(Trainer);
+        }
+
+        public void StopAllProcesses()
+        {
+            foreach (var process in _activeProcesses.Values.ToList())
+            {
+                try
+                {
+                    if (!process.HasExited)
+                    {
+                        process.Kill();
+                        process.WaitForExit(3000);
+                    }
+                    process.Dispose();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error stopping process: {ex.Message}");
+                }
+            }
+            _activeProcesses.Clear();
+        }
+
         public async Task<VrCalibrationStatus> GetStatusAsync()
         {
-            await StartVrProcess();
+            await StartProcess(Overlay, []);
             var response = await _httpClient.GetStringAsync($"{_baseUrl}/status");
             return JsonConvert.DeserializeObject<VrCalibrationStatus>(response)!;
         }
 
         public async Task<bool> StartCamerasAsync(VrCalibration calibration)
         {
-            await StartVrProcess();
-
-            await Task.Delay(2000);
-
             var response = await _httpClient.GetStringAsync(new Uri($"{_baseUrl}/start_cameras?left={calibration.LeftEyeMjpegSource}&right={calibration.RightEyeMjpegSource}"));
             var result = JsonConvert.DeserializeObject<ApiResponse>(response);
             return result!.Result == "ok";
@@ -96,54 +267,6 @@ namespace AvaloniaMiaDev.Services
             var response = await _httpClient.GetStringAsync($"{_baseUrl}/stop_preview");
             var result = JsonConvert.DeserializeObject<ApiResponse>(response);
             return result!.Result == "ok";
-        }
-
-        private Task StartVrProcess()
-        {
-            // Make sure Calibrator exists
-            if (!File.Exists(Calibrator))
-            {
-                throw new FileNotFoundException("VR calibration executable not found", Calibrator);
-            }
-
-            // Make sure Calibrator isn't already running
-            if (Process.GetProcesses().Any(p => p.ProcessName == Path.GetFileNameWithoutExtension(Calibrator)))
-            {
-                return Task.FromResult(false);
-            }
-
-            // Check if SteamVR is running. The Calibrator needs it!
-            if (!Process.GetProcesses().Any(p => p.ProcessName.ToLower().Contains("vrserver")))
-            {
-                // SteamVR is not running
-                return Task.FromResult(false);
-            }
-
-            _vrProcess = new Process
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = Calibrator,
-                    UseShellExecute = false,
-                    CreateNoWindow = false,
-                    //RedirectStandardOutput = true,
-                    //RedirectStandardError = true
-                },
-                EnableRaisingEvents = true
-            };
-
-            _vrProcess.OutputDataReceived += ProcessOutputHandler;
-            _vrProcess.ErrorDataReceived += ProcessErrorHandler;
-            _vrProcess.Exited += (_, _) =>
-            {
-                _vrProcess = null!;
-            };
-
-            _vrProcess.Start();
-            // _vrProcess.BeginOutputReadLine();
-            // _vrProcess.BeginErrorReadLine();
-
-            return Task.CompletedTask;
         }
 
         private void ProcessOutputHandler(object sender, DataReceivedEventArgs e)
@@ -184,72 +307,9 @@ namespace AvaloniaMiaDev.Services
             }
         }
 
-        // Add a method to dispose of resources properly
         public void Dispose()
         {
-            if (_vrProcess != null && !_vrProcess.HasExited)
-            {
-                try
-                {
-                    _vrProcess.Kill();
-                    _vrProcess.Dispose();
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error disposing VR process: {ex.Message}");
-                }
-                _vrProcess = null!;
-            }
+            StopAllProcesses();
         }
-    }
-
-    public class ProcessOutputEventArgs : EventArgs
-    {
-        public string Output { get; }
-        public bool IsError { get; }
-        public DateTime Timestamp { get; }
-
-        public ProcessOutputEventArgs(string output, bool isError)
-        {
-            Output = output;
-            IsError = isError;
-            Timestamp = DateTime.Now;
-        }
-    }
-
-    public class ApiResponse
-    {
-        [JsonProperty("result")]
-        public string Result { get; set; }
-
-        [JsonProperty("message")]
-        public string Message { get; set; }
-    }
-
-    public class VrCalibrationStatus
-    {
-        [JsonProperty("running")]
-        public string Running { get; set; }
-
-        [JsonProperty("recording")]
-        public string Recording { get; set; }
-
-        [JsonProperty("calibrationComplete")]
-        public string CalibrationComplete { get; set; }
-
-        [JsonProperty("isTrained")]
-        public string Trained { get; set; }
-
-        [JsonProperty("currentIndex")]
-        public int CurrentIndex { get; set; }
-
-        [JsonProperty("maxIndex")]
-        public int MaxIndex { get; set; }
-
-        public bool IsRunning => Running == "1";
-        public bool IsRecording => Recording == "1";
-        public bool IsTrained => Trained == "1";
-        public bool IsCalibrationComplete => CalibrationComplete == "1";
-        public double Progress => MaxIndex > 0 ? (double)CurrentIndex / MaxIndex : 0;
     }
 }

@@ -54,7 +54,7 @@ public partial class HomePageView : UserControl
     private CameraController FaceCameraController { get; }
 
     private readonly IInferenceService _inferenceService;
-    private readonly IVRService _vrService;
+    private readonly IVrService _vrService;
     private readonly HomePageViewModel _viewModel;
     private readonly ILocalSettingsService _localSettingsService;
 
@@ -69,7 +69,7 @@ public partial class HomePageView : UserControl
         _viewModel = Ioc.Default.GetRequiredService<HomePageViewModel>()!;
         _localSettingsService = Ioc.Default.GetRequiredService<ILocalSettingsService>()!;
         _inferenceService = Ioc.Default.GetService<IInferenceService>()!;
-        _vrService = Ioc.Default.GetService<IVRService>()!;
+        _vrService = Ioc.Default.GetService<IVrService>()!;
         _localSettingsService.Load(this);
 
         try
@@ -320,7 +320,7 @@ public partial class HomePageView : UserControl
 
         const int leftPort = 8080;
         const int rightPort = 8081;
-        var modelPath = Directory.GetCurrentDirectory(); // This should ideally point to a more persistent dir at some point
+        var modelPath = Directory.GetCurrentDirectory();
 
         var model = new VrCalibration
         {
@@ -336,6 +336,7 @@ public partial class HomePageView : UserControl
         RightCameraController.StartMjpegStreaming(rightPort);
 
         // First tell the subprocess to accept our streams, then start calibration
+        await _vrService.StartOverlay();
         await _vrService.StartCamerasAsync(model);
         await _vrService.StartCalibrationAsync(model);
 
@@ -352,13 +353,22 @@ public partial class HomePageView : UserControl
             await Task.Delay(1000);
         }
 
-        // Cleanup
+        // Stop the MJPEG streams, we don't need them anymore
         LeftCameraController.StopMjpegStreaming();
         RightCameraController.StopMjpegStreaming();
+        _vrService.StopOverlay();
 
-        // Save the location of the model so when we boot up the app it auto-loads
-        var modelName = Path.Combine(modelPath, VrCalibration.ModelName);
+        // Sanity check: If the trainer hasn't started already, do it ourselves.
+        // This blocks until training is complete
+        await _vrService.StartTrainer(arguments: ["capture.bin"]);
+        _vrService.StopTrainer();
+
+        // Save the location of the model so when we boot up the app it autoloads
+        var modelName = "tuned_model.onnx";
         await _localSettingsService.SaveSettingAsync("EyeHome_EyeModel", modelName);
+
+        // Cleanup any leftover capture.bin files
+        // DeleteCaptureFiles(modelPath);
 
         // Instruct the inference service to load the new model
         var minCutoff = await _localSettingsService.ReadSettingAsync<float>("AppSettings_OneEuroMinFreqCutoff");
@@ -411,5 +421,21 @@ public partial class HomePageView : UserControl
         }
 
         hint.IsVisible = showHint;
+    }
+
+    public static void DeleteCaptureFiles(string directoryPath)
+    {
+        // Validate directory exists
+        if (!Directory.Exists(directoryPath))
+            return;
+
+        // Get all files matching the capture pattern
+        string[] filesToDelete = Directory.GetFiles(directoryPath, "capture*.bin");
+
+        // Delete each file
+        foreach (string file in filesToDelete)
+        {
+            File.Delete(file);
+        }
     }
 }
