@@ -40,11 +40,36 @@
                 </controls:SettingsBlock.SettingsContent>
             </controls:SettingsBlock>
 
-            <controls:SettingsExpander
-                Description="{l:Localize OscSettings.Description}"
-                IconPath="WirelessRegular"
-                Title="{l:Localize OscSettings.Header}">
-                <controls:SettingsExpander.ExpanderContent>
+            <Expander
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch"
+                IsExpanded="{Binding IsExpandedByDefault, RelativeSource={RelativeSource AncestorType=controls:SettingsExpander}}"
+                VerticalAlignment="Stretch">
+                    <Expander.Header>
+                        <Grid ColumnDefinitions="Auto,Auto,*">
+                            <PathIcon
+                              Data="{StaticResource WirelessRegular}"
+                              Grid.Column="0"
+                              Margin="10,10,20,10"
+                              VerticalAlignment="Center"
+                              Width="32" />
+                            <StackPanel
+                                Grid.Column="1"
+                                HorizontalAlignment="Stretch"
+                                Margin="0,10,0,10">
+                                <TextBlock
+                                  FontSize="16"
+                                  FontWeight="SemiBold"
+                                  Margin="5"
+                                  Text="{l:Localize OscSettings.Description}" />
+                                <TextBlock
+                                  FontSize="14"
+                                  Foreground="{DynamicResource SystemChromeGrayColor}"
+                                  Margin="5"
+                                  Text="{l:Localize OscSettings.Header}" />
+                            </StackPanel>
+                        </Grid>
+                    </Expander.Header>
                     <Grid
                         ColumnDefinitions="Auto,Auto"
                         Margin="0,4"
@@ -116,8 +141,7 @@
                             Watermark="Input the recenter address..."
                             x:Name="RecenterAddress" />
                     </Grid>
-                </controls:SettingsExpander.ExpanderContent>
-            </controls:SettingsExpander>
+            </Expander>
 
             <Expander
                   HorizontalAlignment="Stretch"

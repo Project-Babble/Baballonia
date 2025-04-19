@@ -10,11 +10,11 @@ public partial class OscTarget : ObservableValidator, IOscTarget
     private bool _isConnected;
 
     [ObservableProperty]
-    [property: SavedSetting("OSCInPort", 9001)]
+    [property: SavedSetting("OSCInPort", 8889)]
     private int _inPort;
 
     [ObservableProperty]
-    [property: SavedSetting("OSCOutPort", 9000)]
+    [property: SavedSetting("OSCOutPort", 8888)]
     private int _outPort;
 
     [ObservableProperty]
@@ -26,6 +26,7 @@ public partial class OscTarget : ObservableValidator, IOscTarget
 
     public OscTarget(ILocalSettingsService localSettingsService)
     {
+        localSettingsService.Load(this);
         PropertyChanged += (_, _) => localSettingsService.Save(this);
     }
 }
