@@ -55,7 +55,22 @@
   Section "-hidden app"
     SectionIn RO
     SetOutPath "$INSTDIR"
-    File /r "bin\Release\net8.0\*"
+
+    ; Copy all files except runtimes and Calibration folders
+    File /r /x "runtimes" /x "Calibration" "bin\Release\net8.0\*"
+
+    ; Create runtimes directory and copy only Windows runtimes
+    CreateDirectory "$INSTDIR\runtimes"
+    SetOutPath "$INSTDIR\runtimes"
+    File /r "bin\Release\net8.0\runtimes\win*"
+
+    ; Create Calibration directory and copy only Windows calibration files
+    CreateDirectory "$INSTDIR\Calibration"
+    SetOutPath "$INSTDIR\Calibration"
+    File /r "bin\Release\net8.0\Calibration\Windows"
+
+    ; Reset output path and write registry values
+    SetOutPath "$INSTDIR"
     WriteRegStr HKCU "Software\${NAME}" "" $INSTDIR
     WriteUninstaller "$INSTDIR\Uninstall.exe"
   SectionEnd

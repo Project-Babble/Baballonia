@@ -59,7 +59,7 @@
                                     Grid.Row="0"
                                     Height="36"
                                     Margin="0,6"
-                                    Text="{Binding LeftCameraAddress}"
+                                    Text="{Binding LeftCameraDisplayedAddress}"
                                     TextChanged="CameraAddressEntry_TextChanged"
                                     Watermark="Start typing..."
                                     x:Name="LeftCameraAddressEntry" />
@@ -234,7 +234,7 @@
                                     Grid.Row="0"
                                     Height="36"
                                     Margin="0,6"
-                                    Text="{Binding RightCameraAddress}"
+                                    Text="{Binding RightCameraDisplayedAddress}"
                                     TextChanged="CameraAddressEntry_TextChanged"
                                     Watermark="Start typing..."
                                     x:Name="RightCameraAddressEntry" />
@@ -409,7 +409,7 @@
                                     Grid.Row="0"
                                     Height="36"
                                     Margin="0,6"
-                                    Text="{Binding FaceCameraAddress}"
+                                    Text="{Binding FaceCameraDisplayedAddress}"
                                     TextChanged="CameraAddressEntry_TextChanged"
                                     Watermark="Start typing..."
                                     x:Name="FaceCameraAddressEntry" />

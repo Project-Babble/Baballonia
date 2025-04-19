@@ -88,6 +88,7 @@
         <PackageReference Include="SkiaSharp" Version="2.88.9" />
         <PackageReference Include="SoundFlow" Version="1.0.3" />
         <PackageReference Include="System.IO.Ports" Version="9.0.2" />
+        <PackageReference Include="System.Management" Version="9.0.4" />
     </ItemGroup>
 
 

@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using AvaloniaMiaDev.Contracts;
+using AvaloniaMiaDev.Helpers;
 using AvaloniaMiaDev.OSC;
 using AvaloniaMiaDev.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -13,14 +14,19 @@ namespace AvaloniaMiaDev.ViewModels.SplitViewPane;
 
 public partial class HomePageViewModel : ViewModelBase
 {
-    // Left eye properties
+    // Camera properties
     public WriteableBitmap LeftEyeBitmap { get; set; }
-
     public WriteableBitmap RightEyeBitmap { get; set; }
+    public WriteableBitmap FaceBitmap { get; set; }
 
     [ObservableProperty]
     [property: SavedSetting("EyeHome_EyeModel", "eyeModel.onnx")]
     private string _eyeModel;
+
+    // Left eye properties
+    [ObservableProperty]
+    [property: SavedSetting("EyeHome_LeftCameraDisplayedIndex", "")]
+    private string _leftCameraDisplayedAddress;
 
     [ObservableProperty]
     [property: SavedSetting("EyeHome_LeftCameraIndex", "")]
@@ -41,6 +47,11 @@ public partial class HomePageViewModel : ViewModelBase
     [property: SavedSetting("EyeHome_LeftEyeRotation", 0f)]
     private float _leftEyeRotation;
 
+    // Right eye properties
+    [ObservableProperty]
+    [property: SavedSetting("EyeHome_RightCameraDisplayedIndex", "")]
+    private string _rightCameraDisplayedAddress;
+
     [ObservableProperty]
     [property: SavedSetting("EyeHome_RightCameraIndex", "")]
     private string _rightCameraAddress;
@@ -60,7 +71,10 @@ public partial class HomePageViewModel : ViewModelBase
     [property: SavedSetting("EyeHome_RightEyeRotation", 0f)]
     private float _rightEyeRotation;
 
-    public WriteableBitmap FaceBitmap { get; set; }
+    // Face properties
+    [ObservableProperty]
+    [property: SavedSetting("EyeHome_FaceCameraDisplayedIndex", "")]
+    private string _faceCameraDisplayedAddress;
 
     [ObservableProperty]
     [property: SavedSetting("EyeHome_FaceCameraIndex", "")]
@@ -82,7 +96,6 @@ public partial class HomePageViewModel : ViewModelBase
     [property: SavedSetting("Face_Rotation", 0f)]
     private float _faceRotation;
 
-    // Services and other properties
     public IOscTarget OscTarget { get; }
     private OscRecvService OscRecvService { get; }
     private OscSendService OscSendService { get; }
@@ -98,18 +111,17 @@ public partial class HomePageViewModel : ViewModelBase
 
     public HomePageViewModel()
     {
-        // Services
         OscTarget = Ioc.Default.GetService<IOscTarget>()!;
         OscRecvService = Ioc.Default.GetService<OscRecvService>()!;
         OscSendService = Ioc.Default.GetService<OscSendService>()!;
         LocalSettingsService = Ioc.Default.GetService<ILocalSettingsService>()!;
         LocalSettingsService.Load(this);
 
-        // Message Timer
         MessagesInPerSecCount = "0";
         MessagesOutPerSecCount = "0";
         OscRecvService.OnMessageReceived += MessageReceived;
         OscSendService.OnMessagesDispatched += MessageDispatched;
+
         _msgCounterTimer = new DispatcherTimer
         {
             Interval = TimeSpan.FromSeconds(1)
@@ -127,22 +139,63 @@ public partial class HomePageViewModel : ViewModelBase
         PropertyChanged += OnPropertyChangedEventHandler;
     }
 
-    private void OnPropertyChangedEventHandler(object? o, PropertyChangedEventArgs propertyChangedEventArgs)
+    private void OnPropertyChangedEventHandler(object? o, PropertyChangedEventArgs args)
     {
-        if (propertyChangedEventArgs.PropertyName is "MessagesOutPerSecCount" or "MessagesInPerSecCount")
+        string propertyName = args.PropertyName!;
+
+        if (propertyName is "MessagesOutPerSecCount" or "MessagesInPerSecCount")
             return;
 
+        // Handle camera address properties
+        HandleCameraAddressChange(propertyName);
+
+        // Save all other changes
         LocalSettingsService.Save(this);
     }
 
+    private void HandleCameraAddressChange(string propertyName)
+    {
+        switch (propertyName)
+        {
+            case "LeftCameraDisplayedAddress":
+                UpdateCameraAddress(LeftCameraDisplayedAddress, address => LeftCameraAddress = address);
+                break;
+
+            case "RightCameraDisplayedAddress":
+                UpdateCameraAddress(RightCameraDisplayedAddress, address => RightCameraAddress = address);
+                break;
+
+            case "FaceCameraDisplayedAddress":
+                UpdateCameraAddress(FaceCameraDisplayedAddress, address => FaceCameraAddress = address);
+                break;
+        }
+    }
+
+    private void UpdateCameraAddress(string displayedAddress, Action<string> updateAction)
+    {
+        if (DeviceEnumerator.Cameras.TryGetValue(displayedAddress, out var deviceAddress))
+        {
+            updateAction(deviceAddress);
+        }
+        else
+        {
+            updateAction(displayedAddress);
+        }
+    }
+
     private void MessageReceived(OscMessage msg) => _messagesRecvd++;
+
     private void MessageDispatched(int msgCount) => _messagesSent += msgCount;
 
     ~HomePageViewModel()
     {
+        CleanupResources();
+    }
+
+    private void CleanupResources()
+    {
         OscRecvService.OnMessageReceived -= MessageReceived;
         OscSendService.OnMessagesDispatched -= MessageDispatched;
-
         _msgCounterTimer.Stop();
     }
 }

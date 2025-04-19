@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Avalonia;
@@ -73,10 +74,23 @@ public partial class HomePageView : UserControl
 
         try
         {
-            var cameraEntries = DeviceEnumerator.ListCameraNames();
+            var cameraDevices = DeviceEnumerator.ListCameras();
+
+            var cameraEntries = cameraDevices.Keys;
             LeftCameraAddressEntry.ItemsSource = cameraEntries;
             RightCameraAddressEntry.ItemsSource = cameraEntries;
             FaceCameraAddressEntry.ItemsSource = cameraEntries;
+
+            // Set MinimumPrefixLength to 0 to show all items even when no text is entered
+            // Set MinimumPopulateDelay to 0 to show the dropdown immediately
+            LeftCameraAddressEntry.MinimumPrefixLength = 0;
+            LeftCameraAddressEntry.MinimumPopulateDelay = TimeSpan.Zero;
+
+            RightCameraAddressEntry.MinimumPrefixLength = 0;
+            RightCameraAddressEntry.MinimumPopulateDelay = TimeSpan.Zero;
+
+            FaceCameraAddressEntry.MinimumPrefixLength = 0;
+            FaceCameraAddressEntry.MinimumPopulateDelay = TimeSpan.Zero;
         }
         catch (Exception)
         {
@@ -192,7 +206,16 @@ public partial class HomePageView : UserControl
     public void LeftCameraStart(object? sender, RoutedEventArgs e)
     {
         LeftCameraController.StopCamera();
-        LeftCameraController.StartCamera(LeftCameraAddressEntry.Text!);
+        string selectedFriendlyName = LeftCameraAddressEntry.Text!;
+        string cameraAddress = selectedFriendlyName;
+
+        // If the friendly name exists in our dictionary, use the corresponding device ID
+        if (DeviceEnumerator.Cameras.TryGetValue(selectedFriendlyName, out var deviceId))
+        {
+            cameraAddress = deviceId;
+        }
+
+        LeftCameraController.StartCamera(cameraAddress);
     }
 
     private void LeftCameraStopped(object? sender, RoutedEventArgs e)
@@ -220,8 +243,18 @@ public partial class HomePageView : UserControl
     public void RightCameraStart(object? sender, RoutedEventArgs e)
     {
         RightCameraController.StopCamera();
-        RightCameraController.StartCamera(RightCameraAddressEntry.Text!);
+        string selectedFriendlyName = RightCameraAddressEntry.Text!;
+        string cameraAddress = selectedFriendlyName;
+
+        // If the friendly name exists in our dictionary, use the corresponding device ID
+        if (DeviceEnumerator.Cameras.TryGetValue(selectedFriendlyName, out var deviceId))
+        {
+            cameraAddress = deviceId;
+        }
+
+        RightCameraController.StartCamera(cameraAddress);
     }
+
 
     public void RightCameraStopped(object? sender, RoutedEventArgs e)
     {
@@ -248,7 +281,16 @@ public partial class HomePageView : UserControl
     public void FaceCameraStart(object? sender, RoutedEventArgs e)
     {
         FaceCameraController.StopCamera();
-        FaceCameraController.StartCamera(FaceCameraAddressEntry.Text!);
+        string selectedFriendlyName = FaceCameraAddressEntry.Text!;
+        string cameraAddress = selectedFriendlyName;
+
+        // If the friendly name exists in our dictionary, use the corresponding device ID
+        if (DeviceEnumerator.Cameras.TryGetValue(selectedFriendlyName, out var deviceId))
+        {
+            cameraAddress = deviceId;
+        }
+
+        FaceCameraController.StartCamera(cameraAddress);
     }
 
     public void FaceCameraStopped(object? sender, RoutedEventArgs e)
