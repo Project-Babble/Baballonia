@@ -59,6 +59,9 @@
         <None Update="eyeModel.onnx">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="Calibration\Windows\capture_417272897.bin">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 
