@@ -105,8 +105,7 @@ public class OscSendService
         {
             foreach (var message in messages)
             {
-                var ip = new IPEndPoint(IPAddress.Parse(_oscTarget.DestinationAddress), _oscTarget.OutPort);
-                await _sendSocket.SendToAsync(message.ToByteArray(), SocketFlags.None, ip, ct);
+                await _sendSocket.SendAsync(message.ToByteArray(), SocketFlags.None, ct);
             }
 
             OnMessagesDispatched(messages.Length);
