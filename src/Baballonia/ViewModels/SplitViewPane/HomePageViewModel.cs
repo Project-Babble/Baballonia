@@ -5,7 +5,6 @@ using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using AvaloniaMiaDev.Contracts;
 using AvaloniaMiaDev.Helpers;
-using AvaloniaMiaDev.OSC;
 using AvaloniaMiaDev.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
@@ -119,7 +118,6 @@ public partial class HomePageViewModel : ViewModelBase
 
         MessagesInPerSecCount = "0";
         MessagesOutPerSecCount = "0";
-        OscRecvService.OnMessageReceived += MessageReceived;
         OscSendService.OnMessagesDispatched += MessageDispatched;
 
         _msgCounterTimer = new DispatcherTimer
@@ -183,8 +181,6 @@ public partial class HomePageViewModel : ViewModelBase
         }
     }
 
-    private void MessageReceived(OscMessage msg) => _messagesRecvd++;
-
     private void MessageDispatched(int msgCount) => _messagesSent += msgCount;
 
     ~HomePageViewModel()
@@ -194,7 +190,6 @@ public partial class HomePageViewModel : ViewModelBase
 
     private void CleanupResources()
     {
-        OscRecvService.OnMessageReceived -= MessageReceived;
         OscSendService.OnMessagesDispatched -= MessageDispatched;
         _msgCounterTimer.Stop();
     }

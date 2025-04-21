@@ -84,6 +84,7 @@
         <PackageReference Include="Microsoft.ML.OnnxTransformer" Version="4.0.2" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="OpenCvSharp4" Version="4.10.0.20241108" />
+        <PackageReference Include="OscCore" Version="1.0.5" />
         <PackageReference Include="RangeSlider.Avalonia" Version="2.1.0" />
         <PackageReference Include="SkiaSharp" Version="2.88.9" />
         <PackageReference Include="SoundFlow" Version="1.0.3" />
@@ -126,28 +127,14 @@
       <UpToDateCheckInput Remove="Assets\Images\tiny_house.jpg" />
     </ItemGroup>
 
-<!-- Gets the current OS and uses it to determine which fti_osc lib to use.-->
-<!-- This prevents building non-natively (IE linux binaries on macOS), but this way we don't need a billion build targets -->
-<ItemGroup>
-    <!-- Windows-specific -->
-    <Content Include="fti_osc.dll" Link="fti_osc.dll" Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <!-- macOS-specific -->
-    <Content Include="fti_osc.dylib" Link="fti_osc.dylib" Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <!-- Linux-specific -->
-    <Content Include="fti_osc.so" Link="fti_osc.so" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Remove="faceModel.onnx" />
-    <Content Include="faceModel.onnx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-</ItemGroup>
-<ItemGroup>
-  <ProjectReference Include="..\HyperText.Avalonia\HyperText.Avalonia\HyperText.Avalonia.csproj" />
-</ItemGroup>
+	<ItemGroup>
+		<None Remove="faceModel.onnx" />
+		<Content Include="faceModel.onnx">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\HyperText.Avalonia\HyperText.Avalonia\HyperText.Avalonia.csproj" />
+	</ItemGroup>
 
 </Project>

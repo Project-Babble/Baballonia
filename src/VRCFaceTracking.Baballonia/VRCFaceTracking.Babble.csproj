@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="BabbleLogo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="BabbleLogo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.Extensions.Logging">
+      <HintPath>..\..\..\..\..\Program Files\WindowsApps\96ba052f-0948-44d8-86c4-a0212e4ae047_5.1.1.0_x64__d7rcq4vxghz0r\Microsoft.Extensions.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions">
+      <HintPath>..\..\..\..\..\Program Files\WindowsApps\96ba052f-0948-44d8-86c4-a0212e4ae047_5.1.1.0_x64__d7rcq4vxghz0r\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.EventLog">
+      <HintPath>..\..\..\..\..\Program Files\WindowsApps\96ba052f-0948-44d8-86c4-a0212e4ae047_5.1.1.0_x64__d7rcq4vxghz0r\Microsoft.Extensions.Logging.EventLog.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.EventSource">
+      <HintPath>..\..\..\..\..\Program Files\WindowsApps\96ba052f-0948-44d8-86c4-a0212e4ae047_5.1.1.0_x64__d7rcq4vxghz0r\Microsoft.Extensions.Logging.EventSource.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\..\Program Files\WindowsApps\96ba052f-0948-44d8-86c4-a0212e4ae047_5.1.1.0_x64__d7rcq4vxghz0r\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VRCFaceTracking\VRCFaceTracking.Core\VRCFaceTracking.Core.csproj" />
+    <ProjectReference Include="..\VRCFaceTracking\VRCFaceTracking.SDK\VRCFaceTracking.SDK.csproj" />
+  </ItemGroup>
+  
+
+</Project>

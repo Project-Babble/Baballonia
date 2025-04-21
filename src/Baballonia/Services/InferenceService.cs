@@ -8,9 +8,6 @@ using AvaloniaMiaDev.Services.Inference.Enums;
 using AvaloniaMiaDev.Services.Inference.Filters;
 using AvaloniaMiaDev.Services.Inference.Models;
 using AvaloniaMiaDev.Services.Inference.Platforms;
-using AvaloniaMiaDev.ViewModels.SplitViewPane;
-using AvaloniaMiaDev.Views;
-using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
@@ -91,6 +88,7 @@ public class InferenceService : IInferenceService
     /// Poll expression data, frames
     /// </summary>
     /// <param name="camera"></param>
+    /// <param name="cameraSettings"></param>
     /// <param name="arKitExpressions"></param>
     /// <returns></returns>
     public bool GetExpressionData(CameraSettings cameraSettings, out float[] arKitExpressions)
@@ -113,8 +111,9 @@ public class InferenceService : IInferenceService
         // Test if the camera is not ready or connecting to new source
         if (!platformConnector.Capture!.IsReady) return false;
 
-        if (!platformConnector.ExtractFrameData(platformSettings.Tensor.Buffer.Span, platformSettings.InputSize,
-                cameraSettings)) return false;
+        // Update the (256x256) image the onnx model uses
+        if (platformConnector.ExtractFrameData(platformSettings.Tensor.Buffer.Span, platformSettings.InputSize, cameraSettings) != true)
+            return false;
 
         // Camera ready, prepare Mat as DenseTensor
         var inputs = new List<NamedOnnxValue>

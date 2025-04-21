@@ -5,10 +5,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using AvaloniaMiaDev.Helpers;
 using AvaloniaMiaDev.Models;
-using AvaloniaMiaDev.OSC;
 using AvaloniaMiaDev.Services.Inference;
 using AvaloniaMiaDev.ViewModels.SplitViewPane;
 using Microsoft.Extensions.Hosting;
+using OscCore;
 
 namespace AvaloniaMiaDev.Services;
 
@@ -59,10 +59,8 @@ public class ParameterSenderService(
 
         foreach (var (remappedExpression, weight) in calibrationItems.Zip(expressions))
         {
-            _sendQueue.Enqueue(new OscMessage(remappedExpression.Key, typeof(float))
-            {
-                Value = weight.Remap(0, 1, remappedExpression.Value.Lower, remappedExpression.Value.Upper)
-            });
+            var msg = new OscMessage(remappedExpression.Key!, weight.Remap(0, 1, remappedExpression.Value.Lower, remappedExpression.Value.Upper));
+            _sendQueue.Enqueue(msg);
         }
     }
 
@@ -73,10 +71,8 @@ public class ParameterSenderService(
 
         foreach (var (remappedExpression, weight) in calibrationItems.Zip(expressions))
         {
-            _sendQueue.Enqueue(new OscMessage(remappedExpression.ShapeName!, typeof(float))
-            {
-                Value = Math.Clamp(weight, remappedExpression.Min, remappedExpression.Max)
-            });
+            var msg = new OscMessage(remappedExpression.ShapeName!, Math.Clamp(weight, remappedExpression.Min, remappedExpression.Max));
+            _sendQueue.Enqueue(msg);
         }
     }
 

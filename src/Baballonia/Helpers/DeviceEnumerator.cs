@@ -33,15 +33,13 @@ public static class DeviceEnumerator
 
         try
         {
-            // Add cameras based on platform
-            if (OperatingSystem.IsWindows() || OperatingSystem.IsMacOS())
+            if (OperatingSystem.IsWindows())
+            {
+                AddWindowsWmiCameras(cameraDict);
+            }
+            else if (OperatingSystem.IsMacOS())
             {
                 AddOpenCvCameras(cameraDict);
-
-                if (OperatingSystem.IsWindows())
-                {
-                    AddWindowsWmiCameras(cameraDict);
-                }
             }
             else if (OperatingSystem.IsLinux())
             {

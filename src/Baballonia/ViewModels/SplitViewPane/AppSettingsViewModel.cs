@@ -8,7 +8,7 @@ namespace AvaloniaMiaDev.ViewModels.SplitViewPane;
 public partial class AppSettingsViewModel : ViewModelBase
 {
     public IOscTarget OscTarget { get; private set;}
-    public ILocalSettingsService SettingsService { get; private set;}
+    public ILocalSettingsService SettingsService { get; }
     public GithubService GithubService { get; private set;}
     public ParameterSenderService ParameterSenderService { get; private set;}
 
@@ -21,11 +21,11 @@ public partial class AppSettingsViewModel : ViewModelBase
     private string _recenterAddress;
 
     [ObservableProperty]
-    [property: SavedSetting("AppSettings_OneEuroMinFreqCutoff", 0.0004f)]
+    [property: SavedSetting("AppSettings_OneEuroMinFreqCutoff", 1f)]
     private float _oneEuroMinFreqCutoff;
 
     [ObservableProperty]
-    [property: SavedSetting("AppSettings_OneEuroSpeedCutoff", 0.9f)]
+    [property: SavedSetting("AppSettings_OneEuroSpeedCutoff", 1f)]
     private float _oneEuroSpeedCutoff;
 
     [ObservableProperty]

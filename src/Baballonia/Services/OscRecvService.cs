@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using AvaloniaMiaDev.Contracts;
-using AvaloniaMiaDev.OSC;
+using AvaloniaMiaDev.Helpers;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using OscCore;
 
 namespace AvaloniaMiaDev.Services;
 
@@ -58,7 +60,6 @@ public class OscRecvService : BackgroundService
     public async override Task StartAsync(CancellationToken cancellationToken)
     {
         await _settingsService.Load(_oscTarget);
-
         await base.StartAsync(cancellationToken);
     }
 
@@ -92,32 +93,54 @@ public class OscRecvService : BackgroundService
     protected async override Task ExecuteAsync(CancellationToken stoppingToken)
     {
         _stoppingToken = stoppingToken;
-
         _linkedToken = CancellationTokenSource.CreateLinkedTokenSource(_stoppingToken, _cts.Token);
 
         while (!_stoppingToken.IsCancellationRequested)
         {
             if (_linkedToken.IsCancellationRequested || _recvSocket is not { IsBound: true })
             {
+                await Task.Delay(100, stoppingToken);
                 continue;
             }
 
             try
             {
                 var bytesReceived = await _recvSocket.ReceiveAsync(_recvBuffer, _linkedToken.Token);
+                OscPacket packet = OscPacket.Read(_recvBuffer, 0, bytesReceived);
+
+                if (bytesReceived == 0) continue;
+
                 var offset = 0;
-                var newMsg = await Task.Run(() => OscMessage.TryParseOsc(_recvBuffer, bytesReceived, ref offset), stoppingToken);
-                if (newMsg == null)
+                if (packet is OscBundle)
                 {
-                    continue;
+                    List<OscMessage> allMessages = OscHelper.ExtractMessages(packet);
+
+                    foreach (var message in allMessages)
+                    {
+                        OnMessageReceived(message);
+                    }
                 }
-
-                OnMessageReceived(newMsg);
+                else if (packet is OscMessage message)
+                {
+                    OnMessageReceived(message);
+                }
             }
-            catch (Exception)
+            catch (OperationCanceledException)
             {
-
+                // Expected during shutdown or target updates
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error processing OSC message");
+                await Task.Delay(1000, stoppingToken); // Prevent tight loop on errors
             }
         }
+    }
+
+    public override async Task StopAsync(CancellationToken cancellationToken)
+    {
+        _cts.Cancel();
+        _recvSocket?.Close();
+        await base.StopAsync(cancellationToken);
     }
 }

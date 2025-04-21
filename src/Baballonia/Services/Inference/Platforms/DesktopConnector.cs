@@ -13,7 +13,7 @@ namespace AvaloniaMiaDev.Services.Inference.Platforms;
 public class DesktopConnector : PlatformConnector
 {
     private static readonly HashSet<string> SerialConnections
-        = new(StringComparer.OrdinalIgnoreCase) { "com", "dev/ttyacm" };
+        = new(StringComparer.OrdinalIgnoreCase) { "com", "/dev/ttyacm" };
 
     private static readonly HashSet<string> VftConnections
         = new(StringComparer.OrdinalIgnoreCase) { "/dev/video" };

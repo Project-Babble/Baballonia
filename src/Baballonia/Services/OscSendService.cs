@@ -1,27 +1,24 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using AvaloniaMiaDev.Contracts;
-using AvaloniaMiaDev.OSC;
 using Microsoft.Extensions.Logging;
+using OscCore;
 
 namespace AvaloniaMiaDev.Services;
 
-/**
- * OscSendService is responsible for encoding osc messages and sending them over OSC
- */
+/// <summary>
+/// OscSendService is responsible for encoding osc messages and sending them over OSC
+/// </summary>
 public class OscSendService
 {
     private readonly ILogger<OscSendService> _logger;
     private readonly IOscTarget _oscTarget;
 
-    private Socket _sendSocket;
-    private readonly byte[] _sendBuffer = new byte[4096];
-
     private CancellationTokenSource _cts;
+    private Socket _sendSocket;
     public event Action<int> OnMessagesDispatched = _ => { };
 
     public OscSendService(
@@ -78,26 +75,45 @@ public class OscSendService
 
     public async Task Send(OscMessage message, CancellationToken ct)
     {
-        var nextByteIndex =await  message.Encode(_sendBuffer, ct);
-        if (nextByteIndex > 4096)
+        if (_sendSocket is not { Connected: true })
         {
-            _logger.LogError("OSC message too large to send! Skipping this batch of messages.");
+            _logger.LogWarning("Cannot send OSC message - socket not connected");
             return;
         }
 
-        await _sendSocket?.SendAsync(_sendBuffer[..nextByteIndex])!;
-        OnMessagesDispatched(1);
+        try
+        {
+            var ip = IPEndPoint.Parse(_oscTarget.DestinationAddress);
+            await _sendSocket.SendToAsync(message.ToByteArray(), SocketFlags.None, ip, ct);
+            OnMessagesDispatched(1);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error sending OSC message");
+        }
     }
 
     public async Task Send(OscMessage[] messages, CancellationToken ct)
     {
-        var cbt = messages.Select(m => m.Meta).ToArray();
-        var index = 0;
-        while (index < cbt.Length)
+        if (_sendSocket is not { Connected: true })
         {
-            var length = await Task.Run(() => FtiOsc.create_osc_bundle(_sendBuffer, cbt, messages.Length, ref index), ct);
-            await _sendSocket?.SendAsync(_sendBuffer[..length])!;
+            _logger.LogWarning("Cannot send OSC messages - socket not connected");
+            return;
         }
-        OnMessagesDispatched(index);
+
+        try
+        {
+            foreach (var message in messages)
+            {
+                var ip = new IPEndPoint(IPAddress.Parse(_oscTarget.DestinationAddress), _oscTarget.OutPort);
+                await _sendSocket.SendToAsync(message.ToByteArray(), SocketFlags.None, ip, ct);
+            }
+
+            OnMessagesDispatched(messages.Length);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error sending OSC bundle");
+        }
     }
 }

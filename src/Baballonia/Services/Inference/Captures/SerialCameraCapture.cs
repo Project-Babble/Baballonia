@@ -28,7 +28,7 @@ public sealed class SerialCameraCapture(string portName) : Capture(portName), ID
     };
 
     public override string Url { get; set; } = null!;
-    public override Mat RawMat { get; } = new Mat();
+    public override Mat RawMat { get; } = new();
 
     public override (int width, int height) Dimensions => (RawMat.Width, RawMat.Height);
 

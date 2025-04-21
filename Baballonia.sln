@@ -21,6 +21,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HyperText.Avalonia", "src\H
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baballonia.iOS", "src\Baballonia.iOS\Baballonia.iOS.csproj", "{7720B7DB-1021-4F42-86C2-EBF1FD6BD461}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VRCFaceTracking.Babble", "src\VRCFaceTracking.Baballonia\VRCFaceTracking.Babble.csproj", "{8E0592BC-591A-4460-8D7C-F4332B440162}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VRCFaceTracking.Core", "src\VRCFaceTracking\VRCFaceTracking.Core\VRCFaceTracking.Core.csproj", "{DF7A9278-8E0E-4C9B-8B3E-E6C256CAA199}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VRCFaceTracking.SDK", "src\VRCFaceTracking\VRCFaceTracking.SDK\VRCFaceTracking.SDK.csproj", "{1DD9FEF8-E0D2-48C1-894F-325A2DBE2979}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +54,18 @@ Global
 		{7720B7DB-1021-4F42-86C2-EBF1FD6BD461}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7720B7DB-1021-4F42-86C2-EBF1FD6BD461}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7720B7DB-1021-4F42-86C2-EBF1FD6BD461}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E0592BC-591A-4460-8D7C-F4332B440162}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E0592BC-591A-4460-8D7C-F4332B440162}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E0592BC-591A-4460-8D7C-F4332B440162}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E0592BC-591A-4460-8D7C-F4332B440162}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF7A9278-8E0E-4C9B-8B3E-E6C256CAA199}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF7A9278-8E0E-4C9B-8B3E-E6C256CAA199}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF7A9278-8E0E-4C9B-8B3E-E6C256CAA199}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF7A9278-8E0E-4C9B-8B3E-E6C256CAA199}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DD9FEF8-E0D2-48C1-894F-325A2DBE2979}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DD9FEF8-E0D2-48C1-894F-325A2DBE2979}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DD9FEF8-E0D2-48C1-894F-325A2DBE2979}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DD9FEF8-E0D2-48C1-894F-325A2DBE2979}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
