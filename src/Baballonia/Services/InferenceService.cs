@@ -284,7 +284,6 @@ public class InferenceService : IInferenceService
     /// <param name="sessionOptions"></param>
     public async Task ConfigurePlatformSpecificGpu(SessionOptions sessionOptions)
     {
-        sessionOptions.AppendExecutionProvider_CPU();
 
         var useGpu = await _localSettingsService.ReadSettingAsync<bool>("AppSettings_UseGPU");
         if (!useGpu) return;
@@ -359,6 +358,7 @@ public class InferenceService : IInferenceService
         }
 
         _logger.LogWarning("No GPU acceleration will be applied.");
+        sessionOptions.AppendExecutionProvider_CPU();
     }
 
     /// <summary>
