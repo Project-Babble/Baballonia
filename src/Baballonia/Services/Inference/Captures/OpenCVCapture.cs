@@ -106,11 +106,10 @@ public sealed class OpenCvCapture : Capture
                 else
                     _videoCapture = await Task.Run(() => new VideoCapture(Url), cts.Token);
             }
-            catch (AggregateException)
+            catch (Exception)
             {
-                // Default to camera index 0 if URL-based capture fails
-                const string defaultSource = "0";
-                _videoCapture = new VideoCapture(defaultSource);
+                IsReady = false;
+                return false;
             }
         }
 
