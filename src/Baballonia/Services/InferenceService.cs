@@ -39,7 +39,7 @@ public class InferenceService : IInferenceService
 
             var minCutoff = await settingsService.ReadSettingAsync<float>("AppSettings_OneEuroMinFreqCutoff");
             var speedCoeff = await settingsService.ReadSettingAsync<float>("AppSettings_OneEuroSpeedCutoff");
-            
+
             var eyeModel = await settingsService.ReadSettingAsync<string>("EyeHome_EyeModel");
 
             SetupInference(eyeModel, Camera.Left, minCutoff, speedCoeff, sessionOptions);
@@ -127,24 +127,14 @@ public class InferenceService : IInferenceService
         using var results = platformSettings.Session!.Run(inputs);
         arKitExpressions = results[0].AsEnumerable<float>().ToArray();
         float time = (float)_sw.Elapsed.TotalSeconds;
-        platformSettings.Ms = (time - platformSettings.LastTime) * 1000;
+        var delta = time - platformSettings.LastTime;
+        platformSettings.Ms = delta * 1000;
 
-        // if (cameraSettings.Camera == Camera.Face)
-        // {
-        //     _logger.LogInformation("Hello");
-        // }
-
-        // Filter ARKit Expressions
-        for (int i = 0; i < arKitExpressions.Length; i++)
-        {
-            arKitExpressions[i] = platformSettings.Filter.Filter(arKitExpressions[i], time - platformSettings.LastTime);
-        }
-
-        // Log the filtered values for face tracking
-        // if (cameraSettings.Camera == Camera.Face)
-        // {
-        //     _logger.LogInformation($"Face model FILTERED values: [{string.Join(", ", arKitExpressions.Select(v => v.ToString("F4")))}]");
-        // }
+        // Filter ARKit Expressions. This is broken rn!
+        //for (int i = 0; i < arKitExpressions.Length; i++)
+        //{
+        //    arKitExpressions[i] = platformSettings.Filter.Filter(arKitExpressions[i], delta);
+        //}
 
         platformSettings.LastTime = time;
         return true;
