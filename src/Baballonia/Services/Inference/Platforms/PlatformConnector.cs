@@ -96,24 +96,43 @@ public abstract class PlatformConnector
     /// <exception cref="InvalidOperationException"></exception>
     public unsafe bool ExtractFrameData(Span<float> floatArray, Size size, CameraSettings settings)
     {
-        if (Capture?.IsReady != true || Capture.RawMat == null || Capture.RawMat.DataPointer == null || Capture.FrameCount == _lastFrameCount)
+        // Check if capture is ready and has valid data
+        if (Capture?.IsReady != true || Capture.RawMat == null || Capture.RawMat.DataPointer == null || 
+            Capture.RawMat.Width <= 0 || Capture.RawMat.Height <= 0)
+        {
+            Logger.LogWarning("Invalid or empty frame detected; skipping frame processing.");
             return false;
+        }
+        
+        // Removed frame count check to always update the buffer
         if (floatArray.Length < size.Width * size.Height)
             throw new ArgumentException("Bad floatArray size");
 
-        _lastFrameCount = Capture.FrameCount;
+        uint currentFrameCount = Capture.FrameCount;
+        Logger.LogDebug($"Processing frame with count: {currentFrameCount}");
 
         fixed (float* array = floatArray)
         {
             using var finalMat = Mat<float>.FromPixelData(size.Height, size.Width, new IntPtr(array));
             settings.Brightness = 1.0f / 255.0f;
-            return TransformRawImage(finalMat, settings);
+            bool result = TransformRawImage(finalMat, settings);
+            if (result)
+            {
+                _lastFrameCount = currentFrameCount;
+                Logger.LogDebug("Frame successfully processed and transformed");
+            }
+            else
+            {
+                Logger.LogWarning("TransformRawImage failed; skipping inference for this frame.");
+            }
+            return result;
         }
     }
 
     public unsafe bool TransformRawImage(Mat outputMat, CameraSettings settings)
     {
-        if (Capture?.IsReady != true || Capture.RawMat == null || Capture.RawMat.DataPointer == null)
+        if (Capture?.IsReady != true || Capture.RawMat == null || Capture.RawMat.DataPointer == null || 
+            Capture.RawMat.Width <= 0 || Capture.RawMat.Height <= 0 || Capture.RawMat.Channels() <= 0)
             return false;
 
         var sourceMat = Capture.RawMat;

@@ -85,8 +85,13 @@ public sealed class SerialCameraCapture(string portName) : Capture(portName), ID
                 BinaryPrimitives.WriteUInt16LittleEndian(buffer, 0xd8ff);
                 for (int bufferPosition = 2; bufferPosition < jpegSize;)
                     bufferPosition += await stream.ReadAsync(buffer, bufferPosition, jpegSize - bufferPosition);
-                Mat.FromImageData(buffer).CopyTo(RawMat);
-                FrameCount++;
+                var newFrame = Mat.FromImageData(buffer);
+                // Only update the frame count if the image data has actually changed
+                if (newFrame.Width > 0 && newFrame.Height > 0)
+                {
+                    newFrame.CopyTo(RawMat);
+                    FrameCount++; // Increment frame count to indicate a new frame is available
+                }
             }
         }
         catch (ObjectDisposedException)
