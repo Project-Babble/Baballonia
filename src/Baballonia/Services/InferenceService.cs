@@ -284,9 +284,12 @@ public class InferenceService : IInferenceService
     /// <param name="sessionOptions"></param>
     public async Task ConfigurePlatformSpecificGpu(SessionOptions sessionOptions)
     {
-
         var useGpu = await _localSettingsService.ReadSettingAsync<bool>("AppSettings_UseGPU");
-        if (!useGpu) return;
+        if (!useGpu)
+        {
+            sessionOptions.AppendExecutionProvider_CPU();
+            return;
+        }
 
         // "The Android Neural Networks API (NNAPI) is an Android C API designed for
         // running computationally intensive operations for machine learning on Android devices."
