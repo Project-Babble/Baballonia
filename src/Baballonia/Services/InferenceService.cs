@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
 using OpenCvSharp;
+using System.Threading;
 
 namespace AvaloniaMiaDev.Services;
 
@@ -38,6 +39,7 @@ public class InferenceService : IInferenceService
 
             var minCutoff = await settingsService.ReadSettingAsync<float>("AppSettings_OneEuroMinFreqCutoff");
             var speedCoeff = await settingsService.ReadSettingAsync<float>("AppSettings_OneEuroSpeedCutoff");
+            
             var eyeModel = await settingsService.ReadSettingAsync<string>("EyeHome_EyeModel");
 
             SetupInference(eyeModel, Camera.Left, minCutoff, speedCoeff, sessionOptions);
@@ -127,11 +129,22 @@ public class InferenceService : IInferenceService
         float time = (float)_sw.Elapsed.TotalSeconds;
         platformSettings.Ms = (time - platformSettings.LastTime) * 1000;
 
+        // if (cameraSettings.Camera == Camera.Face)
+        // {
+        //     _logger.LogInformation("Hello");
+        // }
+
         // Filter ARKit Expressions
         for (int i = 0; i < arKitExpressions.Length; i++)
         {
             arKitExpressions[i] = platformSettings.Filter.Filter(arKitExpressions[i], time - platformSettings.LastTime);
         }
+
+        // Log the filtered values for face tracking
+        // if (cameraSettings.Camera == Camera.Face)
+        // {
+        //     _logger.LogInformation($"Face model FILTERED values: [{string.Join(", ", arKitExpressions.Select(v => v.ToString("F4")))}]");
+        // }
 
         platformSettings.LastTime = time;
         return true;
