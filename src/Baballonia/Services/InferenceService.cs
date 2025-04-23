@@ -149,53 +149,36 @@ public class InferenceService : IInferenceService
     /// <param name="dimensions"></param>
     /// <param name="cameraSettings"></param>
     /// <returns></returns>
-    public bool GetRawImage(CameraSettings cameraSettings, ColorType color, out byte[] image, out (int width, int height) dimensions)
+    public bool GetRawImage(CameraSettings cameraSettings, ColorType color, out Mat image, out (int width, int height) dimensions)
     {
         var index = (int)cameraSettings.Camera;
         var platformConnector = PlatformConnectors[index].Item2;
+        dimensions = (0, 0);
+        image = new Mat();
+
         if (platformConnector is null)
-        {
-            dimensions = (0, 0);
-            image = [];
             return false;
-        }
 
         if (platformConnector.Capture is null)
-        {
-            dimensions = (0, 0);
-            image = [];
             return false;
-        }
 
         if (!platformConnector.Capture.IsReady)
-        {
-            dimensions = (0, 0);
-            image = [];
             return false;
-        }
 
-        if (platformConnector.Capture!.RawMat is null)
-        {
-            dimensions = (0, 0);
-            image = [];
+        if (platformConnector.Capture.RawMat is null)
             return false;
-        }
 
         if (platformConnector.Capture.Dimensions == (0, 0))
-        {
-            dimensions = (0, 0);
-            image = [];
             return false;
-        }
 
         dimensions = platformConnector.Capture!.Dimensions;
         if (color == (platformConnector.Capture!.RawMat.Channels() == 1 ? ColorType.Gray8 : ColorType.Bgr24))
         {
-            image = platformConnector.Capture!.RawMat.AsSpan<byte>().ToArray();
+            image = platformConnector.Capture!.RawMat;
         }
         else
         {
-            using var convertedMat = new Mat();
+            var convertedMat = new Mat();
             Cv2.CvtColor(platformConnector.Capture!.RawMat, convertedMat, (platformConnector.Capture!.RawMat.Channels() == 1) ? color switch
             {
                 ColorType.Bgr24 => ColorConversionCodes.GRAY2BGR,
@@ -207,7 +190,7 @@ public class InferenceService : IInferenceService
                 ColorType.Rgb24 => ColorConversionCodes.BGR2RGB,
                 ColorType.Rgba32 => ColorConversionCodes.BGR2RGBA,
             });
-            image = convertedMat.AsSpan<byte>().ToArray();
+            image = convertedMat;
         }
 
         return true;
@@ -221,7 +204,7 @@ public class InferenceService : IInferenceService
     /// <param name="image"></param>
     /// <param name="dimensions"></param>
     /// <returns></returns>
-    public bool GetImage(CameraSettings cameraSettings, out byte[]? image, out (int width, int height) dimensions)
+    public bool GetImage(CameraSettings cameraSettings, out Mat? image, out (int width, int height) dimensions)
     {
         image = null;
         dimensions = (0, 0);
@@ -230,10 +213,10 @@ public class InferenceService : IInferenceService
         if (platformConnector is null) return false;
 
         byte[] data = new byte[platformSettings.InputSize.Width * platformSettings.InputSize.Height];
-        using var imageMat = Mat<byte>.FromPixelData(platformSettings.InputSize.Height, platformSettings.InputSize.Width, data);
+        var imageMat = Mat<byte>.FromPixelData(platformSettings.InputSize.Height, platformSettings.InputSize.Width, data);
         if (platformConnector.TransformRawImage(imageMat, cameraSettings) != true) return false;
 
-        image = data;
+        image = imageMat;
         dimensions = (imageMat.Width, imageMat.Height);
         return true;
     }
