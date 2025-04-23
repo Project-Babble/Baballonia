@@ -212,9 +212,13 @@ public class InferenceService : IInferenceService
         var platformConnector = PlatformConnectors[(int)cameraSettings.Camera].Item2;
         if (platformConnector is null) return false;
 
-        byte[] data = new byte[platformSettings.InputSize.Width * platformSettings.InputSize.Height];
-        var imageMat = Mat<byte>.FromPixelData(platformSettings.InputSize.Height, platformSettings.InputSize.Width, data);
-        if (platformConnector.TransformRawImage(imageMat, cameraSettings) != true) return false;
+        var imageMat = new Mat<byte>(platformSettings.InputSize.Height, platformSettings.InputSize.Width);
+
+        if (platformConnector.TransformRawImage(imageMat, cameraSettings) != true)
+        {
+            imageMat.Dispose();
+            return false;
+        }
 
         image = imageMat;
         dimensions = (imageMat.Width, imageMat.Height);
