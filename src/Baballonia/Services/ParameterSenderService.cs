@@ -38,9 +38,9 @@ public class ParameterSenderService(
         {
             try
             {
-                if (_leftCameraController != null)  ProcessExpressionData(_leftCameraController.ARExpressions, eyeCalibrationViewModel.LeftEyeCalibrationItems);
-                if (_rightCameraController != null) ProcessExpressionData( _rightCameraController.ARExpressions, eyeCalibrationViewModel.RightEyeCalibrationItems);
-                if (_faceCameraController != null) ProcessExpressionData(_faceCameraController.ARExpressions, faceCalibrationViewModel.GetCalibrationValues());
+                if (_leftCameraController != null)  ProcessExpressionData(_leftCameraController.ArExpressions, eyeCalibrationViewModel.LeftEyeCalibrationItems);
+                if (_rightCameraController != null) ProcessExpressionData( _rightCameraController.ArExpressions, eyeCalibrationViewModel.RightEyeCalibrationItems);
+                if (_faceCameraController != null) ProcessExpressionData(_faceCameraController.ArExpressions, faceCalibrationViewModel.GetCalibrationValues());
 
                 await SendAndClearQueue(cancellationToken);
                 await Task.Delay(10, cancellationToken);
