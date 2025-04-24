@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,7 +17,8 @@ using AvaloniaMiaDev.Helpers;
 using AvaloniaMiaDev.Services.Inference.Enums;
 using AvaloniaMiaDev.Services.Inference.Models;
 using AvaloniaMiaDev.Views;
-using SkiaSharp;
+using OpenCvSharp;
+using Rect = Avalonia.Rect;
 
 namespace AvaloniaMiaDev.Services.Inference;
 
@@ -28,7 +26,7 @@ public class CameraController : IDisposable
 {
     public CameraSettings CameraSettings { get; private set; }
 
-    public float[] ARExpressions = [];
+    public float[] ArExpressions = [];
 
     private readonly HomePageView _view;
     private readonly ILocalSettingsService _localSettingsService;
@@ -161,7 +159,7 @@ public class CameraController : IDisposable
 
         bool valid;
         bool useColor;
-        byte[]? image;
+        Mat? image;
         (int width, int height) dims;
 
         if (_overlayRectangle is { X: 0, Y: 0, Width: 0, Height: 0 })
@@ -192,7 +190,7 @@ public class CameraController : IDisposable
                 useColor = false;
                 valid = _inferenceService.GetImage(CameraSettings, out image, out dims);
                 if (valid) // Don't run infer on raw images
-                    _inferenceService.GetExpressionData(CameraSettings, out ARExpressions);
+                    _inferenceService.GetExpressionData(CameraSettings, out ArExpressions);
                 break;
             case CamViewMode.Cropping:
                 useColor = true;
@@ -232,13 +230,21 @@ public class CameraController : IDisposable
                 _mouthWindow.Source = _bitmap;
             }
 
+            // Allocation-free image-update
             using var frameBuffer = _bitmap.Lock();
             {
-                Marshal.Copy(image, 0, frameBuffer.Address, image.Length);
+                IntPtr srcPtr = image.Data;
+                IntPtr destPtr = frameBuffer.Address;
+                int size = image.Rows * image.Cols * image.ElemSize();
+
+                unsafe
+                {
+                    Buffer.MemoryCopy(srcPtr.ToPointer(), destPtr.ToPointer(), size, size);
+                }
             }
 
             // Update MJPEG frame
-            UpdateMjpegFrame(ref image);
+            UpdateMjpegFrame(image);
 
             if (_mouthWindow.Width != dims.width || _mouthWindow.Height != dims.height)
             {
@@ -496,6 +502,7 @@ public class CameraController : IDisposable
                     continue;
                 }
 
+                // Copy to avoid race conditions
                 byte[] frameData = _currentJpegFrame;
 
                 try
@@ -548,12 +555,8 @@ public class CameraController : IDisposable
             response.Headers.Add("Pragma", "no-cache");
             response.Headers.Add("Expires", "0");
 
-            byte[] frameData;
-
-            lock (_streamLock)
-            {
-                frameData = _currentJpegFrame;
-            }
+            // Copy to avoid race conditions
+            byte[] frameData = _currentJpegFrame;
 
             if (frameData.Length > 0)
             {
@@ -624,7 +627,7 @@ public class CameraController : IDisposable
         }
     }
 
-    private void UpdateMjpegFrame(ref byte[] arr)
+    private void UpdateMjpegFrame(Mat mat)
     {
         if (_bitmap == null || !_isStreaming)
             return;
@@ -634,24 +637,13 @@ public class CameraController : IDisposable
             // Update the current frame
             lock (_streamLock)
             {
-                _currentJpegFrame = CreateImageFromGray8UsingBitmap(arr, (int)_bitmap.Size.Width, (int)_bitmap.Size.Height);
+                _currentJpegFrame = mat.ToBytes(ext: ".jpg"); // Cv2.Imencode
             }
         }
         catch (Exception)
         {
             // ignored
         }
-    }
-
-    private byte[] CreateImageFromGray8UsingBitmap(byte[] pixelData, int width, int height)
-    {
-        var bitmap = new SKBitmap(width, height, SKColorType.Gray8, SKAlphaType.Opaque);
-
-        // Copy the pixel data to the bitmap
-        bitmap.SetPixels(Marshal.UnsafeAddrOfPinnedArrayElement(pixelData, 0));
-
-        // Create an SKImage from the bitmap
-        return SKImage.FromBitmap(bitmap).Encode(SKEncodedImageFormat.Jpeg, quality: 80).ToArray();
     }
 
     #endregion
