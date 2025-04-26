@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Numerics.Tensors;
 using System.Threading.Tasks;
 using AvaloniaMiaDev.Contracts;
 using AvaloniaMiaDev.Services.Inference.Enums;
@@ -12,7 +14,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
 using OpenCvSharp;
-using System.Threading;
+using Newtonsoft.Json;
 
 namespace AvaloniaMiaDev.Services;
 
@@ -20,6 +22,8 @@ public class InferenceService : IInferenceService
 {
     public (PlatformSettings, PlatformConnector)[] PlatformConnectors { get; }
         = new (PlatformSettings settings, PlatformConnector connector)[3];
+
+    private Dictionary<float[], float[]> eyeEmbs;
 
     private readonly Stopwatch _sw = Stopwatch.StartNew();
     private readonly ILogger<InferenceService> _logger;
@@ -76,6 +80,9 @@ public class InferenceService : IInferenceService
         {
             // Handle the interleaved model
             tensor = new DenseTensor<float> ([1, 2, dimensions[2], dimensions[3]]);
+
+            // Load eye model embeddings
+            eyeEmbs = JsonConvert.DeserializeObject<Dictionary<float[], float[]>>(File.ReadAllText("foo.txt"))!;
         }
         else // Camera.Face
         {
@@ -126,6 +133,12 @@ public class InferenceService : IInferenceService
         // Run inference!
         using var results = platformSettings.Session!.Run(inputs);
         arKitExpressions = results[0].AsEnumerable<float>().ToArray();
+
+        if (cameraSettings.Camera is Camera.Left or Camera.Right)
+        {
+            arKitExpressions = GetWeightedEyePrediction(arKitExpressions);
+        }
+
         float time = (float)_sw.Elapsed.TotalSeconds;
         var delta = time - platformSettings.LastTime;
         platformSettings.Ms = delta * 1000;
@@ -379,5 +392,34 @@ public class InferenceService : IInferenceService
                 pc.Terminate();
             }
         }
+    }
+
+    // TODO: Add Benchmark project to evaluate this
+    private float[] GetWeightedEyePrediction(float[] predictions)
+    {
+        var length = eyeEmbs.Values.First().Length;
+        var weightedSum = new float[length];
+        var count = 0;
+
+        foreach (var (vector, label) in eyeEmbs)
+        {
+            var similarity = TensorPrimitives.CosineSimilarity(vector, predictions);
+            for (var i = 0; i < length; i++)
+            {
+                weightedSum[i] += label[i] * similarity;
+            }
+            count++;
+        }
+
+        if (count > 0)
+        {
+            var invCount = 1f / count;
+            for (var i = 0; i < length; i++)
+            {
+                weightedSum[i] *= invCount;
+            }
+        }
+
+        return weightedSum;
     }
 }
