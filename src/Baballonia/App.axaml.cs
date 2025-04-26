@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -116,8 +118,27 @@ public partial class App : Application
 
         if (!File.Exists(LocalSettingsService.DefaultLocalSettingsFile))
         {
-            // Create the file if it doesn't exist
-            File.Create(LocalSettingsService.DefaultLocalSettingsFile).Dispose();
+            // Create the file if it doesn't exist and write empty JSON "{}"
+            // TODO Write defaults
+            var path = Path.Combine(AppContext.BaseDirectory, LocalSettingsService.DefaultLocalSettingsFile);
+            File.WriteAllText(path, "{}");
+        }
+
+        if (OperatingSystem.IsAndroid())
+        {
+            string[] models = ["eyeModel.onnx", "faceModel.onnx"];
+            foreach (var model in models)
+            {
+                string modelPath = Path.Combine(AppContext.BaseDirectory, model);
+                Utils.ExtractEmbeddedResource(
+                    Assembly.GetExecutingAssembly(),
+                    Assembly.
+                        GetExecutingAssembly().
+                        GetManifestResourceNames().
+                        First(x => x.Contains(model)),
+                    modelPath,
+                    overwrite: false);
+            }
         }
 
         _host = hostBuilder.Build();

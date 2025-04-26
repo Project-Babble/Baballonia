@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AvaloniaMiaDev.Contracts;
@@ -40,7 +41,7 @@ public class InferenceService : IInferenceService
             var minCutoff = await settingsService.ReadSettingAsync<float>("AppSettings_OneEuroMinFreqCutoff");
             var speedCoeff = await settingsService.ReadSettingAsync<float>("AppSettings_OneEuroSpeedCutoff");
 
-            var eyeModel = await settingsService.ReadSettingAsync<string>("EyeHome_EyeModel");
+            var eyeModel = await settingsService.ReadSettingAsync<string>("EyeHome_EyeModel") ?? "eyeModel.onnx";
 
             SetupInference(eyeModel, Camera.Left, minCutoff, speedCoeff, sessionOptions);
             SetupInference(eyeModel, Camera.Right, minCutoff, speedCoeff, sessionOptions);
@@ -66,7 +67,7 @@ public class InferenceService : IInferenceService
             beta: speedCoeff
         );
 
-        var session = new InferenceSession(modelName, sessionOptions);
+        var session = new InferenceSession(Path.Combine(AppContext.BaseDirectory, modelName), sessionOptions);
         var inputName = session.InputMetadata.Keys.First();
         var dimensions = session.InputMetadata.Values.First().Dimensions;
         var inputSize = new Size(dimensions[2], dimensions[3]);

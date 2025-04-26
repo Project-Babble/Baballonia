@@ -38,9 +38,6 @@
         <None Update="Calibration\Windows\turbojpeg.dll">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="eyeModel.onnx">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
         <None Update="Calibration\Windows\capture_417272897.bin">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
@@ -66,29 +63,28 @@
 
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.2.4" />
-        <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.2.4" />
+        <PackageReference Include="Avalonia" Version="11.2.8" />
+        <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.2.8" />
         <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.1.5" />
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.4" />
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.4" />
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.8" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.8" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.2.4" />
-        <PackageReference Include="Avalonia.Xaml.Interactions.Draggable" Version="11.2.0.9" />
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.2.8" />
+        <PackageReference Include="Avalonia.Xaml.Interactions.Draggable" Version="11.2.7.1" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
         <PackageReference Include="Jeek.Avalonia.Localization" Version="1.3.1" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.2" />
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.2" />
-        <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.2" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.4" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.4" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.4" />
         <PackageReference Include="Microsoft.ML" Version="4.0.2" />
-        <PackageReference Include="Microsoft.ML.OnnxRuntime.Managed" Version="1.21.0" />
         <PackageReference Include="Microsoft.ML.OnnxTransformer" Version="4.0.2" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="OpenCvSharp4" Version="4.10.0.20241108" />
         <PackageReference Include="OscCore" Version="1.0.5" />
         <PackageReference Include="RangeSlider.Avalonia" Version="2.1.0" />
-        <PackageReference Include="SkiaSharp" Version="2.88.9" />
+        <PackageReference Include="SkiaSharp" Version="3.116.1" />
         <PackageReference Include="SoundFlow" Version="1.0.3" />
-        <PackageReference Include="System.IO.Ports" Version="9.0.2" />
+        <PackageReference Include="System.IO.Ports" Version="9.0.4" />
         <PackageReference Include="System.Management" Version="9.0.4" />
     </ItemGroup>
 
@@ -129,12 +125,18 @@
 
 	<ItemGroup>
 		<None Remove="faceModel.onnx" />
-		<Content Include="faceModel.onnx">
+		<EmbeddedResource Include="faceModel.onnx">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
+		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\HyperText.Avalonia\HyperText.Avalonia\HyperText.Avalonia.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="eyeModel.onnx" />
+	  <EmbeddedResource Include="eyeModel.onnx">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </EmbeddedResource>
 	</ItemGroup>
 
 </Project>

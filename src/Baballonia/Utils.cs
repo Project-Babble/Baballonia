@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Principal;
@@ -36,5 +37,30 @@ public static class Utils
     public static readonly bool HasAdmin = !OperatingSystem.IsWindows() || new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
 
     public static readonly string UserAccessibleDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ProjectBabble");
-    public static readonly string PersistentDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ProjectBabble");
+    public static readonly string PersistentDataDirectory = OperatingSystem.IsAndroid() ?
+        AppContext.BaseDirectory :
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ProjectBabble");
+
+    public static void ExtractEmbeddedResource(Assembly assembly, string resourceName, string file, bool overwrite = false)
+    {
+        // Extract the embedded model if it isn't already present
+        if (!File.Exists(file) || overwrite)
+        {
+            using var stm = assembly
+                .GetManifestResourceStream(resourceName);
+
+            using Stream outFile = File.Create(file);
+
+            const int sz = 4096;
+            var buf = new byte[sz];
+            while (true)
+            {
+                if (stm == null) throw new FileNotFoundException(file);
+                var nRead = stm.Read(buf, 0, sz);
+                if (nRead < 1)
+                    break;
+                outFile.Write(buf, 0, nRead);
+            }
+        }
+    }
 }

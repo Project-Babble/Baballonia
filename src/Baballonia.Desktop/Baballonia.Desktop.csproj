@@ -14,23 +14,23 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia.Desktop" Version="11.2.4" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.2.8" />
 
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.2.4" />
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.2.8" />
         <PackageReference Include="Velopack" Version="0.0.1053" />
 
-		<!-- Windows-specific -->
+	<!-- Windows-specific -->
     	<PackageReference Include="OpenCvSharp4.runtime.win" Version="4.10.0.20241108" Condition="$([MSBuild]::IsOSPlatform('Windows'))"/>
-		<PackageReference Include="Microsoft.ML.OnnxRuntime.DirectML" Version="1.21.0" Condition="$([MSBuild]::IsOSPlatform('Windows'))"/>
+	<PackageReference Include="Microsoft.ML.OnnxRuntime.DirectML" Version="1.21.0" Condition="$([MSBuild]::IsOSPlatform('Windows'))"/>
 
     	<!-- macOS-specific -->
     	<PackageReference Include="OpenCvSharp4.runtime.osx.10.15-universal" Version="4.7.0.20230224" Condition="$([MSBuild]::IsOSPlatform('OSX'))"/>
-		<PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.21.0" Condition="$([MSBuild]::IsOSPlatform('OSX'))"/>
+	<PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.21.0" Condition="$([MSBuild]::IsOSPlatform('OSX'))"/>
 
     	<!-- Linux-specific -->
     	<Content Include="libOpenCvSharpExtern.so" Link="libOpenCvSharpExtern.so" Condition="$([MSBuild]::IsOSPlatform('Linux'))"/>
-		<PackageReference Include="Microsoft.ML.OnnxRuntime.Gpu" Version="1.20.1" Condition="$([MSBuild]::IsOSPlatform('Linux'))"/>
+	<PackageReference Include="Microsoft.ML.OnnxRuntime.Gpu" Version="1.20.1" Condition="$([MSBuild]::IsOSPlatform('Linux'))"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Baballonia\Baballonia.csproj" />
