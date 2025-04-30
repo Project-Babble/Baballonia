@@ -1,9 +1,9 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Layout;
-using AvaloniaMiaDev.ViewModels;
+using Baballonia.ViewModels;
 
-namespace AvaloniaMiaDev.Views;
+namespace Baballonia.Views;
 
 public partial class MainWindow : Window
 {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 
-namespace AvaloniaMiaDev.Helpers;
+namespace Baballonia.Helpers;
 
 public static class ImageHelper
 {

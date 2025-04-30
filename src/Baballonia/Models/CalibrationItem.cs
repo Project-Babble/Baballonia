@@ -1,6 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AvaloniaMiaDev.Models;
+namespace Baballonia.Models;
 
 public partial class CalibrationItem : ObservableObject
 {

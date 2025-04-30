@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using AvaloniaMiaDev.Views;
+using Baballonia.Views;
 
-namespace AvaloniaMiaDev.Helpers
+namespace Baballonia.Helpers
 {
     public static class MainWindowExtensions
     {

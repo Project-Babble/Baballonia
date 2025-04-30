@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AvaloniaMiaDev.Services.Overlay;
+namespace Baballonia.Services.Overlay;
 
 public class ProcessOutputEventArgs : EventArgs
 {

@@ -4,13 +4,13 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
-using AvaloniaMiaDev.Contracts;
-using AvaloniaMiaDev.Helpers;
+using Baballonia.Contracts;
+using Baballonia.Helpers;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OscCore;
 
-namespace AvaloniaMiaDev.Services;
+namespace Baballonia.Services;
 
 public class OscRecvService : BackgroundService
 {

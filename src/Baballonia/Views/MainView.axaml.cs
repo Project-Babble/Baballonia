@@ -2,7 +2,7 @@
 using Avalonia;
 using Avalonia.Controls;
 
-namespace AvaloniaMiaDev.Views;
+namespace Baballonia.Views;
 
 public partial class MainView : UserControl
 {

@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using OpenCvSharp;
 
-namespace AvaloniaMiaDev.Services.Inference.Captures;
+namespace Baballonia.Services.Inference.Captures;
 
 /// <summary>
 /// Vive Facial Tracker camera capture

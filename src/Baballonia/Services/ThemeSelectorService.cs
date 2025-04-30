@@ -2,9 +2,9 @@
 using Avalonia;
 using Avalonia.Styling;
 using Avalonia.Threading;
-using AvaloniaMiaDev.Contracts;
+using Baballonia.Contracts;
 
-namespace AvaloniaMiaDev.Services;
+namespace Baballonia.Services;
 
 public class ThemeSelectorService(ILocalSettingsService localSettingsService) : IThemeSelectorService
 {

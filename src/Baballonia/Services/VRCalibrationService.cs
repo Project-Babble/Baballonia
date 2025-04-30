@@ -8,13 +8,13 @@ using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AvaloniaMiaDev.Contracts;
-using AvaloniaMiaDev.Models;
-using AvaloniaMiaDev.Services.Overlay;
+using Baballonia.Contracts;
+using Baballonia.Models;
+using Baballonia.Services.Overlay;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace AvaloniaMiaDev.Services
+namespace Baballonia.Services
 {
     // Maybe this could be an abstract class and have overlay/trainer derive from it
     public class VrCalibrationService : IVrService, IDisposable

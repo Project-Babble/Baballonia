@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AvaloniaMiaDev.Services.Inference.Enums;
-using AvaloniaMiaDev.Services.Inference.Models;
-using AvaloniaMiaDev.Services.Inference.Platforms;
+using Baballonia.Services.Inference.Enums;
+using Baballonia.Services.Inference.Models;
+using Baballonia.Services.Inference.Platforms;
 using Microsoft.ML.OnnxRuntime;
 using OpenCvSharp;
 
-namespace AvaloniaMiaDev.Contracts;
+namespace Baballonia.Contracts;
 
 public interface IInferenceService
 {

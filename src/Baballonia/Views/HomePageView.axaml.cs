@@ -6,19 +6,19 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
-using AvaloniaMiaDev.Calibration;
-using AvaloniaMiaDev.Contracts;
-using AvaloniaMiaDev.Helpers;
-using AvaloniaMiaDev.Models;
-using AvaloniaMiaDev.Services;
-using AvaloniaMiaDev.Services.Inference;
-using AvaloniaMiaDev.Services.Inference.Enums;
-using AvaloniaMiaDev.ViewModels.SplitViewPane;
+using Baballonia.Calibration;
+using Baballonia.Contracts;
+using Baballonia.Helpers;
+using Baballonia.Models;
+using Baballonia.Services;
+using Baballonia.Services.Inference;
+using Baballonia.Services.Inference.Enums;
+using Baballonia.ViewModels.SplitViewPane;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.ML.OnnxRuntime;
 using Path = System.IO.Path;
 
-namespace AvaloniaMiaDev.Views;
+namespace Baballonia.Views;
 
 public partial class HomePageView : UserControl
 {

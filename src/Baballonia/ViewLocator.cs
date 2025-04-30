@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using AvaloniaMiaDev.ViewModels;
-using AvaloniaMiaDev.ViewModels.SplitViewPane;
-using AvaloniaMiaDev.Views;
+using Baballonia.ViewModels;
+using Baballonia.ViewModels.SplitViewPane;
+using Baballonia.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 
-namespace AvaloniaMiaDev;
+namespace Baballonia;
 
 public class ViewLocator : IDataTemplate
 {

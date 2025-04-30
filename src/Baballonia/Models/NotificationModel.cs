@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace AvaloniaMiaDev.Models;
+namespace Baballonia.Models;
 
 public class NotificationModel
 {

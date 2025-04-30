@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using Avalonia.Threading;
 using Microsoft.Extensions.Logging;
 
-namespace AvaloniaMiaDev.Services;
+namespace Baballonia.Services;
 
 public class OutputPageLogger : ILogger
 {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace AvaloniaMiaDev.Models;
+namespace Baballonia.Models;
 
 /*
  * 0, 1, 2 - Corresponds to a numerical device entry

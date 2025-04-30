@@ -3,13 +3,13 @@ using System.ComponentModel;
 using Avalonia;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
-using AvaloniaMiaDev.Contracts;
-using AvaloniaMiaDev.Helpers;
-using AvaloniaMiaDev.Services;
+using Baballonia.Contracts;
+using Baballonia.Helpers;
+using Baballonia.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 
-namespace AvaloniaMiaDev.ViewModels.SplitViewPane;
+namespace Baballonia.ViewModels.SplitViewPane;
 
 public partial class HomePageViewModel : ViewModelBase
 {

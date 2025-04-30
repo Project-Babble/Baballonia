@@ -3,7 +3,7 @@ using System.Globalization;
 using Avalonia.Data.Converters;
 using Avalonia.Styling;
 
-namespace AvaloniaMiaDev.Helpers;
+namespace Baballonia.Helpers;
 
 public class EnumToBooleanConverter : IValueConverter
 {

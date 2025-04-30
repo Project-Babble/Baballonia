@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text;
 
-namespace AvaloniaMiaDev.Helpers;
+namespace Baballonia.Helpers;
 
 public class RuntimeHelper
 {

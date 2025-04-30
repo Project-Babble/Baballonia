@@ -1,4 +1,4 @@
-﻿namespace AvaloniaMiaDev.Calibration;
+﻿namespace Baballonia.Calibration;
 
 public static class CalibrationRoutine
 {

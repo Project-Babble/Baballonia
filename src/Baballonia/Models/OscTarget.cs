@@ -1,8 +1,8 @@
-﻿using AvaloniaMiaDev.Contracts;
-using AvaloniaMiaDev.Validation;
+﻿using Baballonia.Contracts;
+using Baballonia.Validation;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AvaloniaMiaDev.Models;
+namespace Baballonia.Models;
 
 public partial class OscTarget : ObservableValidator, IOscTarget
 {

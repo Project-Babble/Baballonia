@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 
-namespace AvaloniaMiaDev.Validation;
+namespace Baballonia.Validation;
 
 public class ValidIpAddressAttribute : ValidationAttribute
 {

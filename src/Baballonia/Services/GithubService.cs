@@ -4,9 +4,9 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.Tasks;
-using AvaloniaMiaDev.Models;
+using Baballonia.Models;
 
-namespace AvaloniaMiaDev.Services;
+namespace Baballonia.Services;
 
 public class GithubService
 {

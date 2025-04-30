@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace AvaloniaMiaDev.Services.Overlay;
+namespace Baballonia.Services.Overlay;
 
 public class ApiResponse
 {

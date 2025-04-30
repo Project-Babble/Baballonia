@@ -12,15 +12,15 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
-using AvaloniaMiaDev.Contracts;
-using AvaloniaMiaDev.Helpers;
-using AvaloniaMiaDev.Services.Inference.Enums;
-using AvaloniaMiaDev.Services.Inference.Models;
-using AvaloniaMiaDev.Views;
+using Baballonia.Contracts;
+using Baballonia.Helpers;
+using Baballonia.Services.Inference.Enums;
+using Baballonia.Services.Inference.Models;
+using Baballonia.Views;
 using OpenCvSharp;
 using Rect = Avalonia.Rect;
 
-namespace AvaloniaMiaDev.Services.Inference;
+namespace Baballonia.Services.Inference;
 
 public class CameraController : IDisposable
 {

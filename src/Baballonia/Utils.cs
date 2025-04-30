@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Principal;
 
-namespace AvaloniaMiaDev;
+namespace Baballonia;
 
 public static class Utils
 {

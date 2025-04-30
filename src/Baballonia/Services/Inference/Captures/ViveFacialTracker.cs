@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AvaloniaMiaDev.Services.Inference.Captures
+namespace Baballonia.Services.Inference.Captures
 {
     public partial class ViveFacialTracker
     {

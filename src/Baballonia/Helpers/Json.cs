@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace AvaloniaMiaDev.Helpers;
+namespace Baballonia.Helpers;
 
 public static class Json
 {

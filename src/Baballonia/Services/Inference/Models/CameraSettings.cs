@@ -1,4 +1,4 @@
-namespace AvaloniaMiaDev.Services.Inference.Models;
+namespace Baballonia.Services.Inference.Models;
 
 public class CameraSettings
 {

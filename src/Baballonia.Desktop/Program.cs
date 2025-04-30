@@ -2,7 +2,7 @@
 using Avalonia;
 using Velopack;
 
-namespace AvaloniaMiaDev.Desktop;
+namespace Baballonia.Desktop;
 
 sealed class Program
 {

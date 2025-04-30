@@ -1,6 +1,6 @@
 ﻿<Styles
     xmlns="https://github.com/avaloniaui"
-    xmlns:controls="clr-namespace:AvaloniaMiaDev.Controls"
+    xmlns:controls="clr-namespace:Baballonia.Controls"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Style Selector="controls|ContentExample">

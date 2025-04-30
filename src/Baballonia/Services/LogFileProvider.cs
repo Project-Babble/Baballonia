@@ -4,7 +4,7 @@ using System.IO;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace AvaloniaMiaDev.Services;
+namespace Baballonia.Services;
 
 [ProviderAlias("Debug")]
 public class LogFileProvider : ILoggerProvider

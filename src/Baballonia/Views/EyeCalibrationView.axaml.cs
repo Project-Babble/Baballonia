@@ -1,8 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using AvaloniaMiaDev.ViewModels.SplitViewPane;
+using Baballonia.ViewModels.SplitViewPane;
 
-namespace AvaloniaMiaDev.Views;
+namespace Baballonia.Views;
 
 public partial class EyeCalibrationView : UserControl
 {

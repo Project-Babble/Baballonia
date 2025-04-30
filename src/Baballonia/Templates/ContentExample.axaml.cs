@@ -4,7 +4,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.LogicalTree;
 using Avalonia.Metadata;
 
-namespace AvaloniaMiaDev.Templates;
+namespace Baballonia.Templates;
 
 public class ContentExample : TemplatedControl
 {

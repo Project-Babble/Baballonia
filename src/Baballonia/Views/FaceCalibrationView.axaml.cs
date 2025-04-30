@@ -3,11 +3,11 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using AvaloniaMiaDev.Models;
-using AvaloniaMiaDev.ViewModels.SplitViewPane;
+using Baballonia.Models;
+using Baballonia.ViewModels.SplitViewPane;
 using CommunityToolkit.Mvvm.DependencyInjection;
 
-namespace AvaloniaMiaDev.Views;
+namespace Baballonia.Views;
 
 public partial class FaceCalibrationView : UserControl
 {

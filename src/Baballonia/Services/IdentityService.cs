@@ -3,10 +3,10 @@ using System.IO;
 using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text;
-using AvaloniaMiaDev.Contracts;
+using Baballonia.Contracts;
 using Microsoft.Win32;
 
-namespace AvaloniaMiaDev.Services;
+namespace Baballonia.Services;
 
 public class IdentityService : IIdentityService
 {

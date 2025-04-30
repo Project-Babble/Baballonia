@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AvaloniaMiaDev.Helpers;
-using AvaloniaMiaDev.Models;
-using AvaloniaMiaDev.Services.Inference;
-using AvaloniaMiaDev.ViewModels.SplitViewPane;
+using Baballonia.Helpers;
+using Baballonia.Models;
+using Baballonia.Services.Inference;
+using Baballonia.ViewModels.SplitViewPane;
 using Microsoft.Extensions.Hosting;
 using OscCore;
 
-namespace AvaloniaMiaDev.Services;
+namespace Baballonia.Services;
 
 public class ParameterSenderService(
     OscSendService sendService,

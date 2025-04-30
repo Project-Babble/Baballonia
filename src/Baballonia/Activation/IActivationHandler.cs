@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace AvaloniaMiaDev.Activation;
+namespace Baballonia.Activation;
 
 public interface IActivationHandler
 {

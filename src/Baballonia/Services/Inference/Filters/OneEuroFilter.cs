@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AvaloniaMiaDev.Services.Inference.Filters;
+namespace Baballonia.Services.Inference.Filters;
 
 public class OneEuroFilter
 {

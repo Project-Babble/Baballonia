@@ -1,9 +1,9 @@
 using System.Globalization;
 using System.Threading.Tasks;
-using AvaloniaMiaDev.Contracts;
+using Baballonia.Contracts;
 using Jeek.Avalonia.Localization;
 
-namespace AvaloniaMiaDev.Services;
+namespace Baballonia.Services;
 
 public class LanguageSelectorService(ILocalSettingsService localSettingsService) : ILanguageSelectorService
 {

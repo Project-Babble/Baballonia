@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading;
 using Microsoft.Extensions.Logging;
 
-namespace AvaloniaMiaDev.Services;
+namespace Baballonia.Services;
 
 public class LogFileLogger : ILogger
 {

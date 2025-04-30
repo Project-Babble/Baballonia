@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using OpenCvSharp;
 
-namespace AvaloniaMiaDev.Services.Inference.Captures;
+namespace Baballonia.Services.Inference.Captures;
 
 /// <summary>
 /// Captures and decodes an MJPEG stream, commonly used by IP Cameras

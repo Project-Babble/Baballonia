@@ -5,7 +5,7 @@ using System.IO;
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 
-namespace AvaloniaMiaDev.Helpers;
+namespace Baballonia.Helpers;
 
 public class StreamToBitmapConverter : IValueConverter
 {

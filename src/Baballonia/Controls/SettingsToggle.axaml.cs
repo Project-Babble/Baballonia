@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 
-namespace AvaloniaMiaDev.Controls;
+namespace Baballonia.Controls;
 
 public partial class SettingsToggle : UserControl
 {

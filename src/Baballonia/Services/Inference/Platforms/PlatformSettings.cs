@@ -1,10 +1,10 @@
 using System;
-using AvaloniaMiaDev.Services.Inference.Filters;
+using Baballonia.Services.Inference.Filters;
 using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
 using OpenCvSharp;
 
-namespace AvaloniaMiaDev.Services.Inference.Platforms;
+namespace Baballonia.Services.Inference.Platforms;
 
 public class PlatformSettings(
     Size inputSize,

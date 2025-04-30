@@ -1,4 +1,4 @@
-namespace AvaloniaMiaDev.Services.Inference.Enums;
+namespace Baballonia.Services.Inference.Enums;
 
 public enum Camera : int
 {

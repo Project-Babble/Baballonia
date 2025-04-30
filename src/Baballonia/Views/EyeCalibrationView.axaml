@@ -2,13 +2,13 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d"
-    x:Class="AvaloniaMiaDev.Views.EyeCalibrationView"
+    x:Class="Baballonia.Views.EyeCalibrationView"
     x:DataType="splitViewPane:EyeCalibrationViewModel"
     xmlns="https://github.com/avaloniaui"
-    xmlns:controls="clr-namespace:AvaloniaMiaDev.Controls"
+    xmlns:controls="clr-namespace:Baballonia.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:splitViewPane="clr-namespace:AvaloniaMiaDev.ViewModels.SplitViewPane"
+    xmlns:splitViewPane="clr-namespace:Baballonia.ViewModels.SplitViewPane"
     xmlns:twoRangeSlider="https://github.com/DmitryNizhebovsky/Avalonia.RangeSlider"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 

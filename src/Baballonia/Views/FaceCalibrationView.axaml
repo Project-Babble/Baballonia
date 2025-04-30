@@ -2,12 +2,12 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d"
-    x:Class="AvaloniaMiaDev.Views.FaceCalibrationView"
+    x:Class="Baballonia.Views.FaceCalibrationView"
     x:DataType="splitViewPane:FaceCalibrationViewModel"
     xmlns="https://github.com/avaloniaui"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:splitViewPane="clr-namespace:AvaloniaMiaDev.ViewModels.SplitViewPane"
+    xmlns:splitViewPane="clr-namespace:Baballonia.ViewModels.SplitViewPane"
     xmlns:twoRangeSlider="https://github.com/DmitryNizhebovsky/Avalonia.RangeSlider"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 

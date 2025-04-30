@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using AvaloniaMiaDev.Contracts;
-using AvaloniaMiaDev.Helpers;
-using AvaloniaMiaDev.Models;
+using Baballonia.Contracts;
+using Baballonia.Helpers;
+using Baballonia.Models;
 using Microsoft.Extensions.Options;
 
-namespace AvaloniaMiaDev.Services;
+namespace Baballonia.Services;
 
 public class LocalSettingsService : ILocalSettingsService
 {

@@ -1,4 +1,4 @@
-﻿namespace AvaloniaMiaDev.Models;
+﻿namespace Baballonia.Models;
 
 public class LocalSettingsOptions
 {

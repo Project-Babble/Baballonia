@@ -3,11 +3,11 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
-using AvaloniaMiaDev.Contracts;
+using Baballonia.Contracts;
 using Microsoft.Extensions.Logging;
 using OscCore;
 
-namespace AvaloniaMiaDev.Services;
+namespace Baballonia.Services;
 
 /// <summary>
 /// OscSendService is responsible for encoding osc messages and sending them over OSC

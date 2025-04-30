@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using AvaloniaMiaDev.Contracts;
-using AvaloniaMiaDev.Services.Inference.Captures;
+using Baballonia.Contracts;
+using Baballonia.Services.Inference.Captures;
 using Microsoft.Extensions.Logging;
 
-namespace AvaloniaMiaDev.Services.Inference.Platforms;
+namespace Baballonia.Services.Inference.Platforms;
 
 /// <summary>
 /// Special class for iOS, Android and UWP platforms where VideoCapture is not fully implemented

@@ -1,7 +1,7 @@
-using AvaloniaMiaDev.Views;
+using Baballonia.Views;
 using CommunityToolkit.Mvvm.DependencyInjection;
 
-namespace AvaloniaMiaDev.ViewModels.SplitViewPane;
+namespace Baballonia.ViewModels.SplitViewPane;
 
 public class OutputPageViewModel : ViewModelBase
 {

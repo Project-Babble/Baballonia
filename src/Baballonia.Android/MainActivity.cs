@@ -3,7 +3,7 @@ using Android.Content.PM;
 using Avalonia;
 using Avalonia.Android;
 
-namespace AvaloniaMiaDev.Android;
+namespace Baballonia.Android;
 
 [Activity(
     Label = "Baballonia.Android",

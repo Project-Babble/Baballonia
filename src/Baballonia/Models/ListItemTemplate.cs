@@ -1,5 +1,5 @@
 ﻿using System;
 
-namespace AvaloniaMiaDev.Models;
+namespace Baballonia.Models;
 
 public record ListItemTemplate(Type ModelType, string IconKey, string Label);

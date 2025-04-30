@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AvaloniaMiaDev.Contracts;
+namespace Baballonia.Contracts;
 
 public interface IPageService
 {

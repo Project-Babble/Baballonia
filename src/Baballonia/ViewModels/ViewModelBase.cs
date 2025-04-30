@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AvaloniaMiaDev.ViewModels;
+namespace Baballonia.ViewModels;
 
 public class ViewModelBase : ObservableObject { }

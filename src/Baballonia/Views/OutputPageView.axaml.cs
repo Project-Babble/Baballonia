@@ -6,9 +6,9 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
-using AvaloniaMiaDev.Services;
+using Baballonia.Services;
 
-namespace AvaloniaMiaDev.Views;
+namespace Baballonia.Views;
 
 public partial class OutputPageView : UserControl
 {

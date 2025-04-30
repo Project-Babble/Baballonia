@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using Avalonia.Controls;
-using AvaloniaMiaDev.Contracts;
 using CommunityToolkit.Mvvm.ComponentModel;
-using AvaloniaMiaDev.Models;
+using Baballonia.Models;
+using Baballonia.Contracts;
 using CommunityToolkit.Mvvm.DependencyInjection;
 
-namespace AvaloniaMiaDev.ViewModels.SplitViewPane
+namespace Baballonia.ViewModels.SplitViewPane
 {
     public partial class FaceCalibrationViewModel : ViewModelBase
     {

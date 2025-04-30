@@ -7,7 +7,7 @@ using System.Management;
 using System.Runtime.Versioning;
 using OpenCvSharp;
 
-namespace AvaloniaMiaDev.Helpers;
+namespace Baballonia.Helpers;
 
 public static class DeviceEnumerator
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace AvaloniaMiaDev.Contracts;
+namespace Baballonia.Contracts;
 public interface IMainService
 {
     Action<string, float> ParameterUpdate { get; set; }

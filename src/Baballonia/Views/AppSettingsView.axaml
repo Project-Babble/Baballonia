@@ -2,14 +2,14 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d"
-    x:Class="AvaloniaMiaDev.Views.AppSettingsView"
+    x:Class="Baballonia.Views.AppSettingsView"
     x:DataType="splitViewPane:AppSettingsViewModel"
     xmlns="https://github.com/avaloniaui"
-    xmlns:controls="clr-namespace:AvaloniaMiaDev.Controls"
+    xmlns:controls="clr-namespace:Baballonia.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:l="using:Jeek.Avalonia.Localization"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:splitViewPane="clr-namespace:AvaloniaMiaDev.ViewModels.SplitViewPane"
+    xmlns:splitViewPane="clr-namespace:Baballonia.ViewModels.SplitViewPane"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ScrollViewer>
         <StackPanel Classes="Page">

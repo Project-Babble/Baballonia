@@ -1,17 +1,17 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using AvaloniaMiaDev.ViewModels;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Avalonia.Interactivity;
 using Avalonia.Platform;
-using AvaloniaMiaDev.Contracts;
-using AvaloniaMiaDev.Services;
+using Baballonia.Services;
+using Baballonia.Contracts;
+using Baballonia.ViewModels;
 using CommunityToolkit.Mvvm.DependencyInjection;
 
-namespace AvaloniaMiaDev.Views
+namespace Baballonia.Views
 {
     public partial class OnboardingView : UserControl
     {

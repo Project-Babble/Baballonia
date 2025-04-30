@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace AvaloniaMiaDev.Contracts;
+namespace Baballonia.Contracts;
 
 public interface IFileService
 {

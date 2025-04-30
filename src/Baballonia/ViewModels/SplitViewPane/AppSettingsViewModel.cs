@@ -1,9 +1,9 @@
-using AvaloniaMiaDev.Contracts;
-using AvaloniaMiaDev.Services;
+using Baballonia.Contracts;
+using Baballonia.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 
-namespace AvaloniaMiaDev.ViewModels.SplitViewPane;
+namespace Baballonia.ViewModels.SplitViewPane;
 
 public partial class AppSettingsViewModel : ViewModelBase
 {

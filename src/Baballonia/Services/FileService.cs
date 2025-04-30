@@ -1,10 +1,10 @@
 ﻿using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using AvaloniaMiaDev.Contracts;
+using Baballonia.Contracts;
 using Newtonsoft.Json;
 
-namespace AvaloniaMiaDev.Services;
+namespace Baballonia.Services;
 
 public class FileService : IFileService
 {

@@ -8,14 +8,14 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
-using AvaloniaMiaDev.Activation;
-using AvaloniaMiaDev.Contracts;
-using AvaloniaMiaDev.Helpers;
-using AvaloniaMiaDev.Models;
-using AvaloniaMiaDev.Services;
-using AvaloniaMiaDev.ViewModels;
-using AvaloniaMiaDev.ViewModels.SplitViewPane;
-using AvaloniaMiaDev.Views;
+using Baballonia.Helpers;
+using Baballonia.Activation;
+using Baballonia.Contracts;
+using Baballonia.Models;
+using Baballonia.Services;
+using Baballonia.ViewModels;
+using Baballonia.ViewModels.SplitViewPane;
+using Baballonia.Views;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Messaging;
 using Jeek.Avalonia.Localization;
@@ -24,7 +24,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace AvaloniaMiaDev;
+namespace Baballonia;
 
 public partial class App : Application
 {

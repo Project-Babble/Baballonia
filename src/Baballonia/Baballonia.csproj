@@ -6,7 +6,6 @@
         <ApplicationIcon>./Assets/logo_big_no_bg.ico</ApplicationIcon>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	<NoWarn>CS8618;CS8509;CS0067;CS8613;CS8622;MVVMTK0034</NoWarn>
-	<RootNamespace>AvaloniaMiaDev</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

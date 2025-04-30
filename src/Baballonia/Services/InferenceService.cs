@@ -4,18 +4,17 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using AvaloniaMiaDev.Contracts;
-using AvaloniaMiaDev.Services.Inference.Enums;
-using AvaloniaMiaDev.Services.Inference.Filters;
-using AvaloniaMiaDev.Services.Inference.Models;
-using AvaloniaMiaDev.Services.Inference.Platforms;
 using Microsoft.Extensions.Logging;
 using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
 using OpenCvSharp;
-using System.Threading;
+using Baballonia.Contracts;
+using Baballonia.Services.Inference.Enums;
+using Baballonia.Services.Inference.Filters;
+using Baballonia.Services.Inference.Models;
+using Baballonia.Services.Inference.Platforms;
 
-namespace AvaloniaMiaDev.Services;
+namespace Baballonia.Services;
 
 public class InferenceService : IInferenceService
 {

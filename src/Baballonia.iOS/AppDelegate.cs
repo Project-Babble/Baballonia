@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.iOS;
 using Foundation;
 
-namespace AvaloniaMiaDev.iOS;
+namespace Baballonia.iOS;
 
 // The UIApplicationDelegate for the application. This class is responsible for launching the
 // User Interface of the application, as well as listening (and optionally responding) to

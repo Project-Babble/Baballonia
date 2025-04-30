@@ -1,9 +1,9 @@
 <Application
     RequestedThemeVariant="Dark"
-    x:Class="AvaloniaMiaDev.App"
+    x:Class="Baballonia.App"
     xmlns="https://github.com/avaloniaui"
     xmlns:avalonia="clr-namespace:HyperText.Avalonia;assembly=HyperText.Avalonia"
-    xmlns:avaloniaMiaDev="clr-namespace:AvaloniaMiaDev"
+    xmlns:avaloniaMiaDev="clr-namespace:Baballonia"
     xmlns:themes="using:RangeSlider.Avalonia.Themes.Fluent"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 

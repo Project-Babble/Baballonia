@@ -2,14 +2,14 @@
     d:DesignHeight="800"
     d:DesignWidth="800"
     mc:Ignorable="d"
-    x:Class="AvaloniaMiaDev.Views.OnboardingView"
+    x:Class="Baballonia.Views.OnboardingView"
     x:DataType="viewModels:OnboardingViewModel"
     xmlns="https://github.com/avaloniaui"
     xmlns:controls="clr-namespace:HyperText.Avalonia.Controls;assembly=HyperText.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:helpers="clr-namespace:AvaloniaMiaDev.Helpers"
+    xmlns:helpers="clr-namespace:Baballonia.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewModels="clr-namespace:AvaloniaMiaDev.ViewModels"
+    xmlns:viewModels="clr-namespace:Baballonia.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <UserControl.Resources>

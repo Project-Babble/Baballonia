@@ -6,7 +6,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using OpenCvSharp;
 
-namespace AvaloniaMiaDev.Services.Inference.Captures;
+namespace Baballonia.Services.Inference.Captures;
 
 /// <summary>
 /// Serial Camera capture class intended for use on Desktop platforms

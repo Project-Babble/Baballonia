@@ -6,10 +6,10 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
-using AvaloniaMiaDev.Contracts;
-using AvaloniaMiaDev.Services;
+using Baballonia.Services;
+using Baballonia.Contracts;
 
-namespace AvaloniaMiaDev.ViewModels
+namespace Baballonia.ViewModels
 {
     public partial class OnboardingViewModel : ObservableObject
     {

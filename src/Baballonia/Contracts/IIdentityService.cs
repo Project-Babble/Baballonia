@@ -1,4 +1,4 @@
-﻿namespace AvaloniaMiaDev.Contracts;
+﻿namespace Baballonia.Contracts;
 
 public interface IIdentityService
 {

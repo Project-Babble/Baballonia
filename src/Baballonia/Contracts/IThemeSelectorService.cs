@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Avalonia.Styling;
 
-namespace AvaloniaMiaDev.Contracts;
+namespace Baballonia.Contracts;
 
 public interface IThemeSelectorService
 {

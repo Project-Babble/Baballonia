@@ -8,7 +8,6 @@
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
         <AndroidPackageFormat>apk</AndroidPackageFormat>
         <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
-        <RootNamespace>AvaloniaMiaDev.Android</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

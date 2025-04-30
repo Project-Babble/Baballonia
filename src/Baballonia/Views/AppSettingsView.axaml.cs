@@ -4,12 +4,12 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
 using Avalonia.Styling;
 using Avalonia.Threading;
-using AvaloniaMiaDev.Contracts;
-using AvaloniaMiaDev.Services;
+using Baballonia.Contracts;
+using Baballonia.Services;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using Jeek.Avalonia.Localization;
 
-namespace AvaloniaMiaDev.Views;
+namespace Baballonia.Views;
 
 public partial class AppSettingsView : UserControl
 {

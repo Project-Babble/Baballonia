@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using AvaloniaMiaDev.Contracts;
+using Baballonia.Contracts;
 using Microsoft.Extensions.Logging;
 
-namespace AvaloniaMiaDev.Services;
+namespace Baballonia.Services;
 
 public class ActivationService(
     IThemeSelectorService themeSelectorService,

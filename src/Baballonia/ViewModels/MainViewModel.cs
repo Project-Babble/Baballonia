@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia.Controls;
-using AvaloniaMiaDev.Models;
-using AvaloniaMiaDev.ViewModels.SplitViewPane;
-using AvaloniaMiaDev.Views;
+using Baballonia.Views;
+using Baballonia.Models;
+using Baballonia.ViewModels.SplitViewPane;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Jeek.Avalonia.Localization;
 
-namespace AvaloniaMiaDev.ViewModels;
+namespace Baballonia.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {

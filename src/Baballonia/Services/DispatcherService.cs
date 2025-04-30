@@ -1,8 +1,8 @@
 ﻿using System;
 using Avalonia.Threading;
-using AvaloniaMiaDev.Contracts;
+using Baballonia.Contracts;
 
-namespace AvaloniaMiaDev.Services;
+namespace Baballonia.Services;
 
 // Simple service to invoke actions on the UI thread from the Core project.
 public class DispatcherService : IDispatcherService

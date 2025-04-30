@@ -1,9 +1,9 @@
-﻿using AvaloniaMiaDev.Services;
+﻿using Baballonia.Services;
 using System.Threading.Tasks;
-using AvaloniaMiaDev.Models;
-using AvaloniaMiaDev.Services.Overlay;
+using Baballonia.Models;
+using Baballonia.Services.Overlay;
 
-namespace AvaloniaMiaDev.Contracts;
+namespace Baballonia.Contracts;
 
 internal interface IVrService
 {

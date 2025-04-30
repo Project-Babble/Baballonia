@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AvaloniaMiaDev.Contracts;
-using AvaloniaMiaDev.Services.Inference.Captures;
-using AvaloniaMiaDev.Services.Inference.Models;
+using Baballonia.Contracts;
+using Baballonia.Services.Inference.Captures;
+using Baballonia.Services.Inference.Models;
 using Microsoft.Extensions.Logging;
 using OpenCvSharp;
 
-namespace AvaloniaMiaDev.Services.Inference.Platforms;
+namespace Baballonia.Services.Inference.Platforms;
 
 /// <summary>
 /// Manages what Captures are allowed to run on what platforms, as well as their Urls, etc.

@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using OpenCvSharp;
 
-namespace AvaloniaMiaDev.Services.Inference.Captures;
+namespace Baballonia.Services.Inference.Captures;
 
 /// <summary>
 /// Wrapper class for OpenCV. We use this class when we know our camera isn't a:

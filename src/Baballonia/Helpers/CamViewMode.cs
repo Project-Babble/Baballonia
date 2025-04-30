@@ -1,4 +1,4 @@
-namespace AvaloniaMiaDev.Helpers;
+namespace Baballonia.Helpers;
 
 public enum CamViewMode
 {
