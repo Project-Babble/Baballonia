@@ -74,7 +74,8 @@ public partial class App : Application
                 services.AddSingleton<ILocalSettingsService, LocalSettingsService>();
                 services.AddSingleton<IThemeSelectorService, ThemeSelectorService>();
                 services.AddSingleton<ILanguageSelectorService, LanguageSelectorService>();
-                services.AddSingleton<IInferenceService, InferenceService>();
+                services.AddSingleton<IEyeInferenceService, EyeInferenceService>();
+                services.AddSingleton<IFaceInferenceService, FaceInferenceService>();
                 services.AddSingleton<IVrService, VrCalibrationService>();
 
                 services.AddSingleton<IActivationService, ActivationService>();
@@ -180,8 +181,11 @@ public partial class App : Application
         var vrcft = Ioc.Default.GetRequiredService<IMainService>();
         Task.Run(vrcft.Teardown);
 
-        var infer = Ioc.Default.GetRequiredService<IInferenceService>();
-        infer.Shutdown();
+        var eye = Ioc.Default.GetRequiredService<IEyeInferenceService>();
+        eye.Shutdown();
+
+        var face = Ioc.Default.GetRequiredService<IFaceInferenceService>();
+        face.Shutdown();
     }
 
     private void OnTrayShutdownClicked(object? sender, EventArgs e)

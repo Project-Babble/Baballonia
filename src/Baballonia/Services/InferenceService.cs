@@ -1,54 +1,23 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.ML.OnnxRuntime;
-using Microsoft.ML.OnnxRuntime.Tensors;
 using OpenCvSharp;
 using Baballonia.Contracts;
 using Baballonia.Services.Inference.Enums;
-using Baballonia.Services.Inference.Filters;
 using Baballonia.Services.Inference.Models;
 using Baballonia.Services.Inference.Platforms;
 
 namespace Baballonia.Services;
 
-public class InferenceService : IInferenceService
+public abstract class InferenceService(ILogger<InferenceService> logger, ILocalSettingsService settingsService)
 {
-    public (PlatformSettings, PlatformConnector)[] PlatformConnectors { get; }
-        = new (PlatformSettings settings, PlatformConnector connector)[3];
+    public abstract (PlatformSettings, PlatformConnector)[] PlatformConnectors { get; }
 
-    private readonly Stopwatch _sw = Stopwatch.StartNew();
-    private readonly ILogger<InferenceService> _logger;
-    private readonly ILocalSettingsService _localSettingsService;
-
-    public InferenceService(ILogger<InferenceService> logger, ILocalSettingsService settingsService)
-    {
-        _logger = logger;
-        _localSettingsService = settingsService;
-
-        Task.Run(async () =>
-        {
-            logger.LogInformation("Starting Inference Service...");
-
-            SessionOptions sessionOptions = SetupSessionOptions();
-            await ConfigurePlatformSpecificGpu(sessionOptions);
-
-            var minCutoff = await settingsService.ReadSettingAsync<float>("AppSettings_OneEuroMinFreqCutoff");
-            var speedCoeff = await settingsService.ReadSettingAsync<float>("AppSettings_OneEuroSpeedCutoff");
-
-            var eyeModel = await settingsService.ReadSettingAsync<string>("EyeHome_EyeModel") ?? "eyeModel.onnx";
-
-            SetupInference(eyeModel, Camera.Left, minCutoff, speedCoeff, sessionOptions);
-            SetupInference(eyeModel, Camera.Right, minCutoff, speedCoeff, sessionOptions);
-            SetupInference("faceModel.onnx", Camera.Face, minCutoff, speedCoeff, sessionOptions);
-
-            logger.LogInformation("Inference started!");
-        });
-    }
+    protected readonly ILogger<InferenceService> logger = logger;
+    protected readonly ILocalSettingsService localSettingsService = settingsService;
+    protected readonly Stopwatch sw = Stopwatch.StartNew();
 
     /// <summary>
     /// Loads/reloads the ONNX model for a specified camera
@@ -58,33 +27,8 @@ public class InferenceService : IInferenceService
     /// <param name="minCutoff"></param>
     /// <param name="speedCoeff"></param>
     /// <param name="sessionOptions"></param>
-    public void SetupInference(string model, Camera camera, float minCutoff, float speedCoeff, SessionOptions sessionOptions)
-    {
-        var modelName = model;
-        var filter = new OneEuroFilter(
-            minCutoff: minCutoff,
-            beta: speedCoeff
-        );
-
-        var session = new InferenceSession(Path.Combine(AppContext.BaseDirectory, modelName), sessionOptions);
-        var inputName = session.InputMetadata.Keys.First();
-        var dimensions = session.InputMetadata.Values.First().Dimensions;
-        var inputSize = new Size(dimensions[2], dimensions[3]);
-
-        DenseTensor<float> tensor;
-        if (camera is Camera.Left or Camera.Right)
-        {
-            // Handle the interleaved model
-            tensor = new DenseTensor<float> ([1, 2, dimensions[2], dimensions[3]]);
-        }
-        else // Camera.Face
-        {
-            tensor = new DenseTensor<float> ([1, 1, dimensions[2], dimensions[3]]);
-        }
-
-        var platformSettings = new PlatformSettings(inputSize, session, tensor, filter, 0f, inputName, modelName);
-        PlatformConnectors[(int)camera] = (platformSettings, null)!;
-    }
+    public abstract void SetupInference(string model, Camera camera, float minCutoff, float speedCoeff,
+        SessionOptions sessionOptions);
 
     /// <summary>
     /// Poll expression data, frames
@@ -93,52 +37,7 @@ public class InferenceService : IInferenceService
     /// <param name="cameraSettings"></param>
     /// <param name="arKitExpressions"></param>
     /// <returns></returns>
-    public bool GetExpressionData(CameraSettings cameraSettings, out float[] arKitExpressions)
-    {
-        arKitExpressions = null!;
-
-        var index = (int)cameraSettings.Camera;
-        var platformSettings = PlatformConnectors[index].Item1;
-        var platformConnector = PlatformConnectors[index].Item2;
-        if (platformConnector is null)
-        {
-            return false;
-        }
-
-        if (platformConnector.Capture is null)
-        {
-            return false;
-        }
-
-        // Test if the camera is not ready or connecting to new source
-        if (!platformConnector.Capture!.IsReady) return false;
-
-        // Update the (256x256) image the onnx model uses
-        if (platformConnector.ExtractFrameData(platformSettings.Tensor.Buffer.Span, platformSettings.InputSize, cameraSettings) != true)
-            return false;
-
-        // Camera ready, prepare Mat as DenseTensor
-        var inputs = new List<NamedOnnxValue>
-        {
-            NamedOnnxValue.CreateFromTensor(platformSettings.InputName, platformSettings.Tensor)
-        };
-
-        // Run inference!
-        using var results = platformSettings.Session!.Run(inputs);
-        arKitExpressions = results[0].AsEnumerable<float>().ToArray();
-        float time = (float)_sw.Elapsed.TotalSeconds;
-        var delta = time - platformSettings.LastTime;
-        platformSettings.Ms = delta * 1000;
-
-        // Filter ARKit Expressions. This is broken rn!
-        //for (int i = 0; i < arKitExpressions.Length; i++)
-        //{
-        //    arKitExpressions[i] = platformSettings.Filter.Filter(arKitExpressions[i], delta);
-        //}
-
-        platformSettings.LastTime = time;
-        return true;
-    }
+    public abstract bool GetExpressionData(CameraSettings cameraSettings, out float[] arKitExpressions);
 
     /// <summary>
     /// Gets the pre-transform lip image for this frame
@@ -149,52 +48,8 @@ public class InferenceService : IInferenceService
     /// <param name="dimensions"></param>
     /// <param name="cameraSettings"></param>
     /// <returns></returns>
-    public bool GetRawImage(CameraSettings cameraSettings, ColorType color, out Mat image, out (int width, int height) dimensions)
-    {
-        var index = (int)cameraSettings.Camera;
-        var platformConnector = PlatformConnectors[index].Item2;
-        dimensions = (0, 0);
-        image = new Mat();
-
-        if (platformConnector is null)
-            return false;
-
-        if (platformConnector.Capture is null)
-            return false;
-
-        if (!platformConnector.Capture.IsReady)
-            return false;
-
-        if (platformConnector.Capture.RawMat is null)
-            return false;
-
-        if (platformConnector.Capture.Dimensions == (0, 0))
-            return false;
-
-        dimensions = platformConnector.Capture!.Dimensions;
-        if (color == (platformConnector.Capture!.RawMat.Channels() == 1 ? ColorType.Gray8 : ColorType.Bgr24))
-        {
-            image = platformConnector.Capture!.RawMat;
-        }
-        else
-        {
-            var convertedMat = new Mat();
-            Cv2.CvtColor(platformConnector.Capture!.RawMat, convertedMat, (platformConnector.Capture!.RawMat.Channels() == 1) ? color switch
-            {
-                ColorType.Bgr24 => ColorConversionCodes.GRAY2BGR,
-                ColorType.Rgb24 => ColorConversionCodes.GRAY2RGB,
-                ColorType.Rgba32 => ColorConversionCodes.GRAY2RGBA,
-            } : color switch
-            {
-                ColorType.Gray8 => ColorConversionCodes.BGR2GRAY,
-                ColorType.Rgb24 => ColorConversionCodes.BGR2RGB,
-                ColorType.Rgba32 => ColorConversionCodes.BGR2RGBA,
-            });
-            image = convertedMat;
-        }
-
-        return true;
-    }
+    public abstract bool GetRawImage(CameraSettings cameraSettings, ColorType color, out Mat image,
+        out (int width, int height) dimensions);
 
     /// <summary>
     /// Gets the prost-transform lip image for this frame
@@ -204,26 +59,7 @@ public class InferenceService : IInferenceService
     /// <param name="image"></param>
     /// <param name="dimensions"></param>
     /// <returns></returns>
-    public bool GetImage(CameraSettings cameraSettings, out Mat? image, out (int width, int height) dimensions)
-    {
-        image = null;
-        dimensions = (0, 0);
-        var platformSettings = PlatformConnectors[(int)cameraSettings.Camera].Item1;
-        var platformConnector = PlatformConnectors[(int)cameraSettings.Camera].Item2;
-        if (platformConnector is null) return false;
-
-        var imageMat = new Mat<byte>(platformSettings.InputSize.Height, platformSettings.InputSize.Width);
-
-        if (platformConnector.TransformRawImage(imageMat, cameraSettings) != true)
-        {
-            imageMat.Dispose();
-            return false;
-        }
-
-        image = imageMat;
-        dimensions = (imageMat.Width, imageMat.Height);
-        return true;
-    }
+    public abstract bool GetImage(CameraSettings cameraSettings, out Mat? image, out (int width, int height) dimensions);
 
     /// <summary>
     /// Creates the proper video streaming classes based on the platform we're deploying to.
@@ -235,14 +71,14 @@ public class InferenceService : IInferenceService
     {
         if (OperatingSystem.IsAndroid())
         {
-            PlatformConnectors[(int)camera].Item2 = new AndroidConnector(cameraIndex, _logger, _localSettingsService);
+            PlatformConnectors[(int)camera].Item2 = new AndroidConnector(cameraIndex, logger, localSettingsService);
             PlatformConnectors[(int)camera].Item2.Initialize(cameraIndex);
         }
         else // if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())
         {
             // Else, for WinUI, macOS, watchOS, MacCatalyst, tvOS, Tizen, etc...
             // Use the standard OpenCVSharp VideoCapture backend
-            PlatformConnectors[(int)camera].Item2 = new DesktopConnector(cameraIndex, _logger, _localSettingsService);
+            PlatformConnectors[(int)camera].Item2 = new DesktopConnector(cameraIndex, logger, localSettingsService);
             PlatformConnectors[(int)camera].Item2.Initialize(cameraIndex);
         }
     }
@@ -274,7 +110,7 @@ public class InferenceService : IInferenceService
     /// <param name="sessionOptions"></param>
     public async Task ConfigurePlatformSpecificGpu(SessionOptions sessionOptions)
     {
-        var useGpu = await _localSettingsService.ReadSettingAsync<bool>("AppSettings_UseGPU");
+        var useGpu = await localSettingsService.ReadSettingAsync<bool>("AppSettings_UseGPU");
         if (!useGpu)
         {
             sessionOptions.AppendExecutionProvider_CPU();
@@ -289,7 +125,7 @@ public class InferenceService : IInferenceService
             !OperatingSystem.IsAndroidVersionAtLeast(15))          // At most 15
         {
             sessionOptions.AppendExecutionProvider_Nnapi();
-            _logger.LogInformation("Initialized ExecutionProvider: nnAPI");
+            logger.LogInformation("Initialized ExecutionProvider: nnAPI");
             return;
         }
 
@@ -300,7 +136,7 @@ public class InferenceService : IInferenceService
             OperatingSystem.IsTvOS())
         {
             sessionOptions.AppendExecutionProvider_CoreML();
-            _logger.LogInformation("Initialized ExecutionProvider: CoreML");
+            logger.LogInformation("Initialized ExecutionProvider: CoreML");
             return;
         }
 
@@ -311,13 +147,13 @@ public class InferenceService : IInferenceService
             try
             {
                 sessionOptions.AppendExecutionProvider_DML();
-                _logger.LogInformation("Initialized ExecutionProvider: DirectML");
+                logger.LogInformation("Initialized ExecutionProvider: DirectML");
                 return;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to configure Gpu.");
-                _logger.LogWarning("Failed to create DML Execution Provider on Windows. Falling back to CUDA...");
+                logger.LogError(ex, "Failed to configure Gpu.");
+                logger.LogWarning("Failed to create DML Execution Provider on Windows. Falling back to CUDA...");
             }
         }
 
@@ -327,13 +163,13 @@ public class InferenceService : IInferenceService
         try
         {
             sessionOptions.AppendExecutionProvider_CUDA();
-            _logger.LogInformation("Initialized ExecutionProvider: CUDA");
+            logger.LogInformation("Initialized ExecutionProvider: CUDA");
             return;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to configure Gpu.");
-            _logger.LogWarning("Failed to create CUDA Execution Provider.");
+            logger.LogError(ex, "Failed to configure Gpu.");
+            logger.LogWarning("Failed to create CUDA Execution Provider.");
         }
 
         // And, if CUDA fails (or we have an AMD card)
@@ -341,16 +177,16 @@ public class InferenceService : IInferenceService
         try
         {
             sessionOptions.AppendExecutionProvider_ROCm();
-            _logger.LogInformation("Initialized ExecutionProvider: ROCm");
+            logger.LogInformation("Initialized ExecutionProvider: ROCm");
             return;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to configure ROCm.");
-            _logger.LogWarning("Failed to create ROCm Execution Provider.");
+            logger.LogError(ex, "Failed to configure ROCm.");
+            logger.LogWarning("Failed to create ROCm Execution Provider.");
         }
 
-        _logger.LogWarning("No GPU acceleration will be applied.");
+        logger.LogWarning("No GPU acceleration will be applied.");
         sessionOptions.AppendExecutionProvider_CPU();
     }
 

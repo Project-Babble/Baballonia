@@ -53,7 +53,8 @@ public partial class HomePageView : UserControl
     private CameraController RightCameraController { get; }
     private CameraController FaceCameraController { get; }
 
-    private readonly IInferenceService _inferenceService;
+    private readonly IEyeInferenceService _eyeInferenceService;
+    private readonly IFaceInferenceService _faceInferenceService;
     private readonly IVrService _vrService;
     private readonly HomePageViewModel _viewModel;
     private readonly ILocalSettingsService _localSettingsService;
@@ -68,7 +69,8 @@ public partial class HomePageView : UserControl
 
         _viewModel = Ioc.Default.GetRequiredService<HomePageViewModel>()!;
         _localSettingsService = Ioc.Default.GetRequiredService<ILocalSettingsService>()!;
-        _inferenceService = Ioc.Default.GetService<IInferenceService>()!;
+        _eyeInferenceService = Ioc.Default.GetService<IEyeInferenceService>()!;
+        _faceInferenceService = Ioc.Default.GetService<IFaceInferenceService>()!;
         _vrService = Ioc.Default.GetService<IVrService>()!;
         _localSettingsService.Load(this);
 
@@ -101,7 +103,7 @@ public partial class HomePageView : UserControl
         LeftCameraController = new CameraController(
             this,
             _localSettingsService,
-            _inferenceService,
+            _eyeInferenceService,
             Camera.Left,
             LeftRectangleWindow,
             LeftSelectEntireFrame,
@@ -121,7 +123,7 @@ public partial class HomePageView : UserControl
         RightCameraController = new CameraController(
             this,
             _localSettingsService,
-            _inferenceService,
+            _eyeInferenceService,
             Camera.Right,
             RightRectangleWindow,
             RightSelectEntireFrame,
@@ -141,7 +143,7 @@ public partial class HomePageView : UserControl
         FaceCameraController = new CameraController(
             this,
             _localSettingsService,
-            _inferenceService,
+            _faceInferenceService,
             Camera.Face,
             FaceRectangleWindow,
             FaceSelectEntireFrame,
@@ -373,16 +375,16 @@ public partial class HomePageView : UserControl
         // Instruct the inference service to load the new model
         var minCutoff = await _localSettingsService.ReadSettingAsync<float>("AppSettings_OneEuroMinFreqCutoff");
         var speedCoeff = await _localSettingsService.ReadSettingAsync<float>("AppSettings_OneEuroSpeedCutoff");
-        SessionOptions sessionOptions = _inferenceService.SetupSessionOptions();
-        await _inferenceService.ConfigurePlatformSpecificGpu(sessionOptions);
+        SessionOptions sessionOptions = _eyeInferenceService.SetupSessionOptions();
+        await _eyeInferenceService.ConfigurePlatformSpecificGpu(sessionOptions);
 
         // Finally, close any open eye cameras. The inference service will spin these up
         LeftCameraController.StopCamera();
         RightCameraController.StopCamera();
-        _inferenceService.SetupInference(modelName, Camera.Left, minCutoff, speedCoeff, sessionOptions);
-        _inferenceService.ConfigurePlatformConnectors(Camera.Left, _viewModel.LeftCameraAddress);
-        _inferenceService.SetupInference(modelName, Camera.Right, minCutoff, speedCoeff, sessionOptions);
-        _inferenceService.ConfigurePlatformConnectors(Camera.Right, _viewModel.RightCameraAddress);
+        _eyeInferenceService.SetupInference(modelName, Camera.Left, minCutoff, speedCoeff, sessionOptions);
+        _eyeInferenceService.ConfigurePlatformConnectors(Camera.Left, _viewModel.LeftCameraAddress);
+        _eyeInferenceService.SetupInference(modelName, Camera.Right, minCutoff, speedCoeff, sessionOptions);
+        _eyeInferenceService.ConfigurePlatformConnectors(Camera.Right, _viewModel.RightCameraAddress);
     }
 
     private void CameraAddressEntry_TextChanged(object? sender, TextChangedEventArgs e)
