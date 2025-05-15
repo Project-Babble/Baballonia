@@ -44,23 +44,22 @@ public static class Utils
     public static void ExtractEmbeddedResource(Assembly assembly, string resourceName, string file, bool overwrite = false)
     {
         // Extract the embedded model if it isn't already present
-        if (!File.Exists(file) || overwrite)
+        if (File.Exists(file) && !overwrite) return;
+
+        using var stm = assembly
+            .GetManifestResourceStream(resourceName);
+
+        using Stream outFile = File.Create(file);
+
+        const int sz = 4096;
+        var buf = new byte[sz];
+        while (true)
         {
-            using var stm = assembly
-                .GetManifestResourceStream(resourceName);
-
-            using Stream outFile = File.Create(file);
-
-            const int sz = 4096;
-            var buf = new byte[sz];
-            while (true)
-            {
-                if (stm == null) throw new FileNotFoundException(file);
-                var nRead = stm.Read(buf, 0, sz);
-                if (nRead < 1)
-                    break;
-                outFile.Write(buf, 0, nRead);
-            }
+            if (stm == null) throw new FileNotFoundException(file);
+            var nRead = stm.Read(buf, 0, sz);
+            if (nRead < 1)
+                break;
+            outFile.Write(buf, 0, nRead);
         }
     }
 }

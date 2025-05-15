@@ -11,77 +11,76 @@ using Baballonia.Contracts;
 using Baballonia.ViewModels;
 using CommunityToolkit.Mvvm.DependencyInjection;
 
-namespace Baballonia.Views
+namespace Baballonia.Views;
+
+public partial class OnboardingView : UserControl
 {
-    public partial class OnboardingView : UserControl
+    private readonly OnboardingViewModel _viewModel;
+
+    public event EventHandler OnboardingCompleted;
+
+    private static bool _showOnStartup;
+
+    public OnboardingView()
     {
-        private readonly OnboardingViewModel _viewModel;
+        InitializeComponent();
 
-        public event EventHandler OnboardingCompleted;
+        _viewModel = Ioc.Default.GetRequiredService<OnboardingViewModel>();
 
-        private static bool _showOnStartup;
+        DataContext = _viewModel;
 
-        public OnboardingView()
+        _viewModel.OnboardingCompleted += (_, _) => OnboardingCompleted?.Invoke(this, EventArgs.Empty);
+
+        // Initialize the view model asynchronously
+        Task.Run(async () => await _viewModel.InitializeAsync());
+    }
+
+    private void InitializeComponent()
+    {
+        AvaloniaXamlLoader.Load(this);
+    }
+
+    public static void ShowIfNeeded(Window parent)
+    {
+        Task.Run(async () =>
         {
-            InitializeComponent();
+            var localSettingsService = Ioc.Default.GetService<ILocalSettingsService>()!;
+            _showOnStartup = await localSettingsService.ReadSettingAsync<bool>("ShowOnboardingOnStartup");
+        }).Wait();
 
-            _viewModel = Ioc.Default.GetRequiredService<OnboardingViewModel>();
-
-            DataContext = _viewModel;
-
-            _viewModel.OnboardingCompleted += (_, _) => OnboardingCompleted?.Invoke(this, EventArgs.Empty);
-
-            // Initialize the view model asynchronously
-            Task.Run(async () => await _viewModel.InitializeAsync());
-        }
-
-        private void InitializeComponent()
+        if (_showOnStartup)
         {
-            AvaloniaXamlLoader.Load(this);
+            ShowOnboarding(parent);
         }
+    }
 
-        public static void ShowIfNeeded(Window parent)
+    public static void ShowOnboarding(Window parent)
+    {
+        var overlay = new OnboardingView();
+
+        // Create a simple host window for the overlay
+        var overlayWindow = new Window
         {
-            Task.Run(async () =>
-            {
-                var localSettingsService = Ioc.Default.GetService<ILocalSettingsService>()!;
-                _showOnStartup = await localSettingsService.ReadSettingAsync<bool>("ShowOnboardingOnStartup");
-            }).Wait();
+            Content = overlay,
+            Width = parent.Width,
+            Height = parent.Height,
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+            SystemDecorations = SystemDecorations.None,
+            Background = Avalonia.Media.Brushes.Transparent,
+            ShowInTaskbar = false,
+            CanResize = false,
+            ExtendClientAreaToDecorationsHint = true,
+            ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome,
+            ExtendClientAreaTitleBarHeightHint = -1
+        };
 
-            if (_showOnStartup)
-            {
-                ShowOnboarding(parent);
-            }
-        }
+        overlay.OnboardingCompleted += (_, _) => overlayWindow.Close();
 
-        public static void ShowOnboarding(Window parent)
-        {
-            var overlay = new OnboardingView();
+        overlayWindow.ShowDialog(parent);
+    }
 
-            // Create a simple host window for the overlay
-            var overlayWindow = new Window
-            {
-                Content = overlay,
-                Width = parent.Width,
-                Height = parent.Height,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                SystemDecorations = SystemDecorations.None,
-                Background = Avalonia.Media.Brushes.Transparent,
-                ShowInTaskbar = false,
-                CanResize = false,
-                ExtendClientAreaToDecorationsHint = true,
-                ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome,
-                ExtendClientAreaTitleBarHeightHint = -1
-            };
-
-            overlay.OnboardingCompleted += (_, _) => overlayWindow.Close();
-
-            overlayWindow.ShowDialog(parent);
-        }
-
-        private void OnPreviousRequested(object? sender, RoutedEventArgs e)
-        {
-            _viewModel.GoToPrevious();
-        }
+    private void OnPreviousRequested(object? sender, RoutedEventArgs e)
+    {
+        _viewModel.GoToPrevious();
     }
 }

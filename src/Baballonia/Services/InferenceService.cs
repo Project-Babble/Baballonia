@@ -227,7 +227,7 @@ public class InferenceService : IInferenceService
 
     /// <summary>
     /// Creates the proper video streaming classes based on the platform we're deploying to.
-    /// EmguCV doesn't have support for VideoCapture on Android, iOS, or UWP
+    /// OpenCVSharp doesn't have support for VideoCapture on Android, iOS, or UWP
     /// We have a custom implementations for IP Cameras, the de-facto use case on mobile
     /// As well as SerialCameras (not tested on mobile yet)
     /// </summary>
@@ -241,7 +241,7 @@ public class InferenceService : IInferenceService
         else // if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())
         {
             // Else, for WinUI, macOS, watchOS, MacCatalyst, tvOS, Tizen, etc...
-            // Use the standard EmguCV VideoCapture backend
+            // Use the standard OpenCVSharp VideoCapture backend
             PlatformConnectors[(int)camera].Item2 = new DesktopConnector(cameraIndex, _logger, _localSettingsService);
             PlatformConnectors[(int)camera].Item2.Initialize(cameraIndex);
         }

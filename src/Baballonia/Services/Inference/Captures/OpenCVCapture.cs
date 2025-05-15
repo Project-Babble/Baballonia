@@ -58,7 +58,7 @@ public sealed class OpenCvCapture : Capture
     /// <param name="url">URL for video source.</param>
     public OpenCvCapture(string url) : base(url) { }
 
-    private Task? _updateTask = null;
+    private Task? _updateTask;
     private CancellationTokenSource _updateTaskCTS = new();
 
     private static readonly VideoCaptureAPIs PreferredBackend;
@@ -113,6 +113,9 @@ public sealed class OpenCvCapture : Capture
             }
         }
 
+        // Handle edge case cameras like the Varjo Aero that send frames in YUV
+        // This won't activate the IR illuminators, but it's a good idea to standardize inputs
+        _videoCapture.ConvertRgb = true;
         IsReady = _videoCapture.IsOpened();
 
         CancellationToken token = _updateTaskCTS.Token;

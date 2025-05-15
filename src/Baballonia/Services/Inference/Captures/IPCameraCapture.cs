@@ -10,16 +10,15 @@ using OpenCvSharp;
 namespace Baballonia.Services.Inference.Captures;
 
 /// <summary>
-/// Captures and decodes an MJPEG stream, commonly used by IP Cameras
-/// Mobile-platform specific implementation
+/// Captures and decodes a known-size MJPEG stream, commonly used by IP Cameras
+/// Mobile-platform specific implementation, Desktop uses OpenCVCapture
 /// https://github.com/Larry57/SimpleMJPEGStreamViewer
 /// https://stackoverflow.com/questions/3801275/how-to-convert-image-to-byte-array
 /// </summary>
 public sealed class IpCameraCapture(string url) : Capture(url)
 {
-    // Babble Cam res (240x240)
     public override (int width, int height) Dimensions =>
-        DefaultFrameDimensions;
+        DefaultFrameDimensions; // Constant Babble Cam res (240x240)
 
     public override uint FrameCount { get; protected set; }
     public override Mat RawMat { get; } = new();
@@ -52,7 +51,7 @@ public sealed class IpCameraCapture(string url) : Capture(url)
     /// <param name="frameBufferSize">Maximum frame byte size</param>
     /// <returns></returns>
     ///
-    public async Task StartStreaming(string url, string? login = null, string? password = null, CancellationToken? token = null,
+    private async Task StartStreaming(string url, string? login = null, string? password = null, CancellationToken? token = null,
         int chunkMaxSize = 1024, int frameBufferSize = 1024 * 1024)
     {
         var tok = token ?? CancellationToken.None;
@@ -103,7 +102,6 @@ public sealed class IpCameraCapture(string url) : Capture(url)
     }
 
     // While we are looking for a picture, look for a FFD8 (end of JPEG) sequence.
-
     private void SearchPicture(byte[] frameBuffer, ref int frameIdx, ref int streamLength, byte[] streamBuffer,
         ref int idx, ref bool inPicture, ref byte previous, ref byte current)
     {
@@ -164,7 +162,7 @@ public sealed class IpCameraCapture(string url) : Capture(url)
         return Task.FromResult(true);
     }
 
-    public static byte[] TrimEnd(byte[] array)
+    private static byte[] TrimEnd(byte[] array)
     {
         int lastIndex = Array.FindLastIndex(array, b => b != 0);
 

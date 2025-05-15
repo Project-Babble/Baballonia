@@ -509,7 +509,8 @@ public class CameraController : IDisposable
                 {
                     // Frame headers
                     string frameHeader = "Content-Type: image/jpeg\r\n" +
-                                        $"Content-Length: {frameData.Length}\r\n\r\n";
+                                         $"Content-Length: {frameData.Length}\r\n" +
+                                         $"X-Timestamp: {DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}\r\n\r\n";
                     byte[] frameHeaderBytes = Encoding.ASCII.GetBytes(frameHeader);
 
                     await outputStream.WriteAsync(frameHeaderBytes, 0, frameHeaderBytes.Length, cancellationToken);
