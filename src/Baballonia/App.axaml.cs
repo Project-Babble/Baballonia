@@ -89,6 +89,7 @@ public partial class App : Application
                 services.AddSingleton<OscSendService>();
                 services.AddSingleton<ParameterSenderService>();
                 services.AddTransient<GithubService>();
+                services.AddTransient<FirmwareService>();
                 services.AddSingleton<IMainService, MainStandalone>();
 
                 services.AddSingleton<MainViewModel>();
