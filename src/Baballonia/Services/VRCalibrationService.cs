@@ -61,7 +61,7 @@ public class VrCalibrationService : IVrService, IDisposable
         };
     }
 
-    private async Task<bool> StartProcess(string program, string[] arguments = null, bool waitForExit = false, string[] blacklistedPrograms = null)
+    private async Task<bool> StartProcess(string program, string[] arguments = null!, bool waitForExit = false, string[] blacklistedPrograms = null!)
     {
         // Make sure program exists
         if (!File.Exists(program))
@@ -140,12 +140,12 @@ public class VrCalibrationService : IVrService, IDisposable
         return true;
     }
 
-    public async Task<bool> StartOverlay(string[] arguments = null, string[] blacklistedPrograms = null)
+    public async Task<bool> StartOverlay(string[] arguments = null!, string[] blacklistedPrograms = null!)
     {
         return await StartProcess(Overlay, arguments, waitForExit: false, blacklistedPrograms);
     }
 
-    public async Task<bool> StartTrainer(string[] arguments = null, string[] blacklistedPrograms = null)
+    public async Task<bool> StartTrainer(string[] arguments = null!, string[] blacklistedPrograms = null!)
     {
         return await StartProcess(Trainer, arguments, waitForExit: true, blacklistedPrograms);
     }

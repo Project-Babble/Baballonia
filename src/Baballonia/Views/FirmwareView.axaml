@@ -1,0 +1,153 @@
+﻿<UserControl
+    d:DesignHeight="800"
+    d:DesignWidth="800"
+    mc:Ignorable="d"
+    x:Class="Baballonia.Views.FirmwareView"
+    x:DataType="splitViewPane:FirmwareViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:controls="clr-namespace:Baballonia.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hyperlinkControls="clr-namespace:HyperText.Avalonia.Controls;assembly=HyperText.Avalonia"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:splitViewPane="clr-namespace:Baballonia.ViewModels.SplitViewPane"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush Color="#80000000" x:Key="DialogOverlayBrush" />
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush Color="#80000000" x:Key="DialogOverlayBrush" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <!--  Main Content  -->
+        <StackPanel Classes="Page">
+            <TextBlock Classes="Header" Text="Firmware" />
+
+            <TextBlock Text="Make sure your device in plugged in and in boot mode!" />
+
+            <controls:ContentExample>
+                <StackPanel Spacing="12">
+                    <TextBlock FontWeight="Bold" Text="Step 1) Select your tracker" />
+                    <TextBlock TextWrapping="Wrap">
+                        <Run>• Your tracker's name will start with</Run> <Run FontWeight="Bold">COM, /dev/ttyACM</Run> <Run>or something similar!</Run>
+                    </TextBlock>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <ComboBox
+                            ItemsSource="{Binding AvailableSerialPorts}"
+                            PlaceholderText="Click to see trackers..."
+                            SelectedItem="{Binding SelectedSerialPort, Mode=TwoWay}" />
+                        <Button Command="{Binding RefreshSerialPorts}" Content="Refresh" />
+                    </StackPanel>
+                </StackPanel>
+            </controls:ContentExample>
+
+            <controls:ContentExample IsVisible="{Binding IsDeviceSelected}">
+                <StackPanel Spacing="12">
+                    <TextBlock FontWeight="Bold" Text="Step 2) Select your desired Firmware" />
+                    <TextBlock TextWrapping="Wrap">
+                        <Run>• For wired, we recommend</Run> <Run FontWeight="Bold">Babble_USB-wrooms-s3</Run> <LineBreak />
+                        <Run>• For wireless, we recommend</Run> <Run FontWeight="Bold">Babble-wrooms-s3</Run> </TextBlock>
+                    <ComboBox
+                        ItemsSource="{Binding AvailableFirmwareTypes}"
+                        PlaceholderText="Click me for options..."
+                        SelectedItem="{Binding SelectedFirmwareType, Mode=TwoWay}" />
+                </StackPanel>
+            </controls:ContentExample>
+
+            <controls:ContentExample IsVisible="{Binding IsWirelessFirmware}">
+                <StackPanel Spacing="12">
+                    <TextBlock FontWeight="Bold" Text="Step 3) Input your Wi-Fi credentials" />
+                    <TextBlock TextWrapping="Wrap">
+                        <Run>• Your tracker will use these credentials to connect to your wifi</Run> <LineBreak />
+                        <Run>• Please enter the credentials of your wifi network</Run> </TextBlock>
+                    <TextBlock
+                        FontSize="12"
+                        FontWeight="Bold"
+                        Text="WiFi Network Name (SSID)" />
+                    <TextBox
+                        HorizontalAlignment="Left"
+                        Text="{Binding WifiSsid, Mode=TwoWay}"
+                        Watermark="Enter WiFi SSID..." />
+                    <TextBlock
+                        FontSize="12"
+                        FontWeight="Bold"
+                        Text="WiFi Password" />
+                    <TextBox
+                        HorizontalAlignment="Left"
+                        PasswordChar="*"
+                        Text="{Binding WifiPassword, Mode=TwoWay}"
+                        Watermark="Enter WiFi password..." />
+                </StackPanel>
+            </controls:ContentExample>
+
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button
+                    Command="{Binding FlashFirmware}"
+                    Content="Flash!"
+                    IsEnabled="{Binding !IsFlashing}"
+                    IsVisible="{Binding IsReadyToFlashFirmware}" />
+                <TextBlock IsVisible="{Binding IsReadyToFlashFirmware}" VerticalAlignment="Center">This will take around ~10 seconds. Don't leave this page!</TextBlock>
+            </StackPanel>
+
+
+            <ProgressBar
+                Height="30"
+                IsIndeterminate="True"
+                IsVisible="{Binding IsFlashing}"
+                ShowProgressText="False" />
+
+            <TextBlock
+                HorizontalAlignment="Center"
+                IsVisible="{Binding IsFinished}"
+                Text="Done! Check the output panel for more information :)" />
+        </StackPanel>
+
+        <!--  License Dialog Overlay  -->
+        <Panel IsVisible="{Binding !LicensedAcknowledged, Mode=TwoWay}" ZIndex="100">
+            <Rectangle Fill="{DynamicResource DialogOverlayBrush}" />
+            <Border
+                Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                BorderThickness="1"
+                CornerRadius="8"
+                HorizontalAlignment="Center"
+                MaxWidth="500"
+                Padding="20"
+                VerticalAlignment="Center">
+                <StackPanel Spacing="15">
+                    <TextBlock
+                        FontSize="16"
+                        FontWeight="Bold"
+                        HorizontalAlignment="Center"
+                        Text="License Acknowledgment"
+                        VerticalAlignment="Center" />
+
+                    <TextBlock TextWrapping="Wrap">
+                        <Run>To use ESP flashing features, this application requires</Run>
+                        <Run FontStyle="Italic">esptool.py</Run>
+                        <Run>, which is licensed under the GNU General Public License v2. By continuing, you acknowledge and accept the GPL-2.0 license terms.</Run>
+                    </TextBlock>
+
+                    <StackPanel
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal"
+                        Spacing="15">
+                        <hyperlinkControls:Hyperlink
+                            Alias="View License"
+                            Command="{Binding OpenLicenseUrl}"
+                            Url="{Binding LicenseUrl}"
+                            VerticalAlignment="Center" />
+                        <Button Command="{Binding AcceptLicense}" Content="I Accept" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Panel>
+    </Grid>
+</UserControl>

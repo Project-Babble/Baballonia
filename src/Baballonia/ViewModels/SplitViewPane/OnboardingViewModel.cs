@@ -111,41 +111,17 @@ public partial class OnboardingViewModel : ObservableObject
 
     public void OpenETVRModuleUrl()
     {
-        OpenUrl(EtvrFirmwareFlashingTool);
+        Utils.OpenUrl(EtvrFirmwareFlashingTool);
     }
 
     public void OpenBabbleModuleUrl()
     {
-        OpenUrl(BabbleFirmwareDocs);
+        Utils.OpenUrl(BabbleFirmwareDocs);
     }
 
     public void OpenYoutubeUrl()
     {
-        OpenUrl(YoutubeLink);
-    }
-
-    private void OpenUrl(string URL)
-    {
-        try
-        {
-            Process.Start(URL);
-        }
-        catch
-        {
-            if (OperatingSystem.IsWindows())
-            {
-                var url = URL.Replace("&", "^&");
-                Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
-            }
-            else if (OperatingSystem.IsMacOS())
-            {
-                Process.Start("open", URL);
-            }
-            else if (OperatingSystem.IsLinux())
-            {
-                Process.Start("xdg-open", URL);
-            }
-        }
+        Utils.OpenUrl(YoutubeLink);
     }
 
     private async void FinishOnboarding()

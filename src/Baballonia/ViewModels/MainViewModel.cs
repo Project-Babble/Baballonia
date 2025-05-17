@@ -26,10 +26,11 @@ public partial class MainViewModel : ViewModelBase
     private readonly List<ListItemTemplate> _templates =
     [
         new ListItemTemplate(typeof(HomePageViewModel), "HomeRegular", "Home"),
-        new ListItemTemplate(typeof(EyeCalibrationViewModel), "EyeTrackingSettingsRegular", "Eye Calibration"),
-        new ListItemTemplate(typeof(FaceCalibrationViewModel), "EmojiLaughSettingsRegular", "Face Calibration"),
+        // new ListItemTemplate(typeof(EyeCalibrationViewModel), "EyeTrackingSettingsRegular", "Eye Calibration"),
+        new ListItemTemplate(typeof(FaceCalibrationViewModel), "EditRegular", "Calibration"),
+        new ListItemTemplate(typeof(FirmwareViewModel), "DeveloperBoardRegular", "Firmware"),
         new ListItemTemplate(typeof(OutputPageViewModel), "TextFirstLineRegular", "Output"),
-        new ListItemTemplate(typeof(AppSettingsViewModel), "SettingsRegular", "App Settings"),
+        new ListItemTemplate(typeof(AppSettingsViewModel), "SettingsRegular", "Settings"),
     ];
 
     public MainViewModel() : this(new WeakReferenceMessenger()) { }
