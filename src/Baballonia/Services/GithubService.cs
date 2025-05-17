@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -40,16 +41,25 @@ public class GithubService
         return JsonSerializer.Deserialize<GithubRelease>(content)!;
     }
 
-    public async Task<string> DownloadRelease(string localPath, string asset)
+    /// <summary>
+    /// Downloads an OpenIris .zip artifact from github, extracts it and returns the paths of the firmware and config
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="asset"></param>
+    /// <returns></returns>
+    public async Task<(FirmwareConfig config, string firmwarePath)> DownloadAndExtractOpenIrisRelease(string tempDir, string asset, string name)
     {
-        var directory = Path.GetDirectoryName(localPath);
-        if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
-        {
-            Directory.CreateDirectory(directory);
-        }
-
+        var zipFile = Path.Combine(tempDir, name);
         var bytes = await Client.GetByteArrayAsync(asset);
-        await File.WriteAllBytesAsync(localPath, bytes);
-        return localPath;
+
+        await File.WriteAllBytesAsync(zipFile, bytes);
+        ZipFile.ExtractToDirectory(zipFile, tempDir);
+
+        var manifest = Path.Combine(tempDir, "manifest.json");
+        var manifestText = await File.ReadAllTextAsync(manifest);
+        var config = JsonSerializer.Deserialize<FirmwareConfig>(manifestText);
+
+        var firmware = Path.Combine(tempDir, "merged-firmware.bin");
+        return (config, firmwarePath: firmware)!;
     }
 }

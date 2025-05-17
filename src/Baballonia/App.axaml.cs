@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
@@ -26,7 +25,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Baballonia;
 
-public partial class App : Application
+public class App : Application
 {
     private IHost? _host;
 
@@ -105,6 +104,8 @@ public partial class App : Application
                 services.AddTransient<EyeCalibrationView>();
                 services.AddTransient<FaceCalibrationViewModel>();
                 services.AddTransient<FaceCalibrationView>();
+                services.AddTransient<FirmwareViewModel>();
+                services.AddTransient<FirmwareView>();
                 services.AddTransient<OnboardingViewModel>();
                 services.AddTransient<OnboardingView>();
 

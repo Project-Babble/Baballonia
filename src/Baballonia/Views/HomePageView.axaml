@@ -90,7 +90,7 @@
                                         Padding="12,8" />
 
                                     <Button
-                                        Click="LeftCameraStopped"
+                                        Click="StopLeftCamera"
                                         Content="Stop Camera"
                                         FontSize="13"
                                         Grid.Column="1"
@@ -265,7 +265,7 @@
                                         Padding="12,8" />
 
                                     <Button
-                                        Click="RightCameraStopped"
+                                        Click="StopRightCamera"
                                         Content="Stop Camera"
                                         FontSize="13"
                                         Grid.Column="1"
@@ -440,7 +440,7 @@
                                         Padding="12,8" />
 
                                     <Button
-                                        Click="FaceCameraStopped"
+                                        Click="StopFaceCamera"
                                         Content="Stop Camera"
                                         FontSize="13"
                                         Grid.Column="1"

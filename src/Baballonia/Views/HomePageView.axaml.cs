@@ -220,7 +220,7 @@ public partial class HomePageView : UserControl
         LeftCameraController.StartCamera(cameraAddress);
     }
 
-    private void LeftCameraStopped(object? sender, RoutedEventArgs e)
+    public void StopLeftCamera(object? sender, RoutedEventArgs e)
     {
         LeftCameraController.StopCamera();
         LeftCameraController.StopMjpegStreaming();
@@ -258,7 +258,7 @@ public partial class HomePageView : UserControl
     }
 
 
-    public void RightCameraStopped(object? sender, RoutedEventArgs e)
+    public void StopRightCamera(object? sender, RoutedEventArgs e)
     {
         RightCameraController.StopCamera();
         RightCameraController.StopMjpegStreaming();
@@ -295,7 +295,7 @@ public partial class HomePageView : UserControl
         FaceCameraController.StartCamera(cameraAddress);
     }
 
-    public void FaceCameraStopped(object? sender, RoutedEventArgs e)
+    public void StopFaceCamera(object? sender, RoutedEventArgs e)
     {
         FaceCameraController.StopCamera();
     }

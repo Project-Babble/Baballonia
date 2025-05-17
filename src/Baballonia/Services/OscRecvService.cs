@@ -110,7 +110,6 @@ public class OscRecvService : BackgroundService
 
                 if (bytesReceived == 0) continue;
 
-                var offset = 0;
                 if (packet is OscBundle)
                 {
                     List<OscMessage> allMessages = OscHelper.ExtractMessages(packet);
