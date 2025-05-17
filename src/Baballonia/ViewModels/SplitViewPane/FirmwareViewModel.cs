@@ -8,6 +8,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Media;
 using Avalonia.Threading;
+using Baballonia.Contracts;
 using Baballonia.Models;
 using Baballonia.Services;
 using Baballonia.Views;
@@ -22,19 +23,27 @@ public partial class FirmwareViewModel : ViewModelBase
     private readonly HomePageView _homePageView;
     private readonly GithubService _githubService;
     private readonly FirmwareService _firmwareService;
+    private ILocalSettingsService _settingsService { get; }
     private GithubRelease _githubRelease;
 
     public bool IsDeviceSelected { get; private set; }
     public bool IsWirelessFirmware { get; private set; }
 
     [ObservableProperty]
-    public bool _isReadyToFlashFirmware;
+    [property: SavedSetting("LicensedAcknowledged", false)]
+    private bool _licensedAcknowledged;
+
+    [ObservableProperty] private string _licenseUrl =
+        "https://github.com/espressif/esptool";
 
     [ObservableProperty]
-    public bool _isFlashing;
+    private bool _isReadyToFlashFirmware;
 
     [ObservableProperty]
-    public bool _isFinished;
+    private bool _isFlashing;
+
+    [ObservableProperty]
+    private bool _isFinished;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsReadyToFlashFirmware))]
@@ -62,15 +71,20 @@ public partial class FirmwareViewModel : ViewModelBase
 
     public ICommand ProgramCommand { get; }
     public ICommand FlashFirmware { get; }
+    public ICommand AcceptLicense { get; }
 
     public FirmwareViewModel()
     {
         _homePageView = Ioc.Default.GetService<HomePageView>()!;
         _githubService = Ioc.Default.GetRequiredService<GithubService>();
         _firmwareService = Ioc.Default.GetRequiredService<FirmwareService>();
-        ProgramCommand = new RelayCommand(UpdateSerialPorts);
+        _settingsService = Ioc.Default.GetService<ILocalSettingsService>()!;
+        _settingsService.Load(this);
+
+        ProgramCommand = new RelayCommand(RefreshSerialPorts);
         FlashFirmware = new RelayCommand(FlashDeviceFirmware);
-        UpdateSerialPorts();
+        AcceptLicense = new RelayCommand(AcceptedLicense);
+        RefreshSerialPorts();
 
         IsFinished = false;
         IsFlashing = false;
@@ -132,7 +146,13 @@ public partial class FirmwareViewModel : ViewModelBase
         };
     }
 
-    private void UpdateSerialPorts()
+    private async void AcceptedLicense()
+    {
+        await _settingsService.SaveSettingAsync("LicensedAcknowledged", true);
+        LicensedAcknowledged = true;
+    }
+
+    private void RefreshSerialPorts()
     {
         AvailableSerialPorts.Clear();
         foreach (var name in SerialPort.GetPortNames())
@@ -157,5 +177,10 @@ public partial class FirmwareViewModel : ViewModelBase
             await _firmwareService.UploadFirmwareAsync(_selectedSerialPort!, pathToBinary.firmwarePath);
             Directory.Delete(tempDir, true);
         });
+    }
+
+    public void OpenLicenseUrl()
+    {
+        Utils.OpenUrl(LicenseUrl);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -60,6 +61,30 @@ public static class Utils
             if (nRead < 1)
                 break;
             outFile.Write(buf, 0, nRead);
+        }
+    }
+
+    public static void OpenUrl(string URL)
+    {
+        try
+        {
+            Process.Start(URL);
+        }
+        catch
+        {
+            if (OperatingSystem.IsWindows())
+            {
+                var url = URL.Replace("&", "^&");
+                Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+            }
+            else if (OperatingSystem.IsMacOS())
+            {
+                Process.Start("open", URL);
+            }
+            else if (OperatingSystem.IsLinux())
+            {
+                Process.Start("xdg-open", URL);
+            }
         }
     }
 }
