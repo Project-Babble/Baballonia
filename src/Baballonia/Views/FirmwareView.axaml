@@ -30,8 +30,6 @@
         <StackPanel Classes="Page">
             <TextBlock Classes="Header" Text="Firmware" />
 
-            <TextBlock Text="Make sure your device in plugged in and in boot mode!" />
-
             <controls:ContentExample>
                 <StackPanel Spacing="12">
                     <TextBlock FontWeight="Bold" Text="Step 1) Select your tracker" />
