@@ -3,6 +3,8 @@
     ExtendClientAreaToDecorationsHint="True"
     Height="825"
     Icon="/Assets/WindowIcon.ico"
+    MinHeight="250"
+    MinWidth="850"
     SystemDecorations="Full"
     Title="Project Babble"
     Width="1100"

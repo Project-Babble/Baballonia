@@ -263,9 +263,9 @@ public partial class FaceCalibrationViewModel : ViewModelBase
                 MouthLeftUpper = 1f;
                 MouthRightUpper = 1f;
                 MouthRollUpperUpper = 1f;
-                MouthRollUpperUpper = 1f;
+                MouthRollLowerUpper = 1f;
                 MouthShrugUpperUpper = 1f;
-                MouthShrugUpperUpper = 1f;
+                MouthShrugLowerUpper = 1f;
                 MouthCloseUpper = 1f;
                 TongueOutUpper = 1f;
                 TongueUpUpper = 1f;

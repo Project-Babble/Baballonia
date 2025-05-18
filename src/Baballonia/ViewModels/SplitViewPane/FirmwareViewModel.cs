@@ -152,7 +152,7 @@ public partial class FirmwareViewModel : ViewModelBase
         LicensedAcknowledged = true;
     }
 
-    private void RefreshSerialPorts()
+    public void RefreshSerialPorts()
     {
         AvailableSerialPorts.Clear();
         foreach (var name in SerialPort.GetPortNames())
@@ -174,7 +174,7 @@ public partial class FirmwareViewModel : ViewModelBase
             _homePageView.StopRightCamera(null, null!);
             _homePageView.StopFaceCamera(null, null!);
 
-            await _firmwareService.UploadFirmwareAsync(_selectedSerialPort!, pathToBinary.firmwarePath);
+            _firmwareService.UploadFirmwareAsync(_selectedSerialPort!, pathToBinary.firmwarePath, IsWirelessFirmware, WifiSsid, WifiPassword);
             Directory.Delete(tempDir, true);
         });
     }
