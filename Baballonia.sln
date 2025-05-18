@@ -27,7 +27,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VRCFaceTracking.Core", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VRCFaceTracking.SDK", "src\VRCFaceTracking\VRCFaceTracking.SDK\VRCFaceTracking.SDK.csproj", "{1DD9FEF8-E0D2-48C1-894F-325A2DBE2979}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baballonia.Tests", "Baballonia.Tests\Baballonia.Tests.csproj", "{2607F8F1-1E25-4C61-9D2A-8387412CA036}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baballonia.Tests", "src\Baballonia.Tests\Baballonia.Tests.csproj", "{10F4B957-D0DA-4B65-8EA6-20491B031C60}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,10 +68,10 @@ Global
 		{1DD9FEF8-E0D2-48C1-894F-325A2DBE2979}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DD9FEF8-E0D2-48C1-894F-325A2DBE2979}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DD9FEF8-E0D2-48C1-894F-325A2DBE2979}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2607F8F1-1E25-4C61-9D2A-8387412CA036}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2607F8F1-1E25-4C61-9D2A-8387412CA036}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2607F8F1-1E25-4C61-9D2A-8387412CA036}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2607F8F1-1E25-4C61-9D2A-8387412CA036}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10F4B957-D0DA-4B65-8EA6-20491B031C60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10F4B957-D0DA-4B65-8EA6-20491B031C60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10F4B957-D0DA-4B65-8EA6-20491B031C60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10F4B957-D0DA-4B65-8EA6-20491B031C60}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

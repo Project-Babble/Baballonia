@@ -89,13 +89,12 @@
 
             <StackPanel Orientation="Horizontal" Spacing="8">
                 <Button
-                    Command="{Binding FlashFirmware}"
+                    Command="{Binding FlashFirmwareCommand}"
                     Content="Flash!"
                     IsEnabled="{Binding !IsFlashing}"
                     IsVisible="{Binding IsReadyToFlashFirmware}" />
                 <TextBlock IsVisible="{Binding IsReadyToFlashFirmware}" VerticalAlignment="Center">This will take around ~10 seconds. Don't leave this page!</TextBlock>
             </StackPanel>
-
 
             <ProgressBar
                 Height="30"
@@ -106,46 +105,52 @@
             <TextBlock
                 HorizontalAlignment="Center"
                 IsVisible="{Binding IsFinished}"
-                Text="Done! Check the output panel for more information :)" />
+                Text="Done! You may need to restart your tracker/the Babble App :)" />
         </StackPanel>
 
-        <!--  License Dialog Overlay  -->
-        <Panel IsVisible="{Binding !LicensedAcknowledged, Mode=TwoWay}" ZIndex="100">
+        <!--  WiFi Connection Overlay  -->
+        <Panel IsVisible="{Binding WirelessWarningVisible}" ZIndex="100">
             <Rectangle Fill="{DynamicResource DialogOverlayBrush}" />
             <Border
                 Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
                 BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
                 BorderThickness="1"
+                BoxShadow="0 4 20 #40000000"
                 CornerRadius="8"
+                Height="270"
                 HorizontalAlignment="Center"
-                MaxWidth="500"
-                Padding="20"
-                VerticalAlignment="Center">
-                <StackPanel Spacing="15">
-                    <TextBlock
-                        FontSize="16"
-                        FontWeight="Bold"
-                        HorizontalAlignment="Center"
-                        Text="License Acknowledgment"
-                        VerticalAlignment="Center" />
+                VerticalAlignment="Center"
+                Width="450"
+                ZIndex="100">
 
-                    <TextBlock TextWrapping="Wrap">
-                        <Run>To use ESP flashing features, this application requires</Run>
-                        <Run FontStyle="Italic">esptool.py</Run>
-                        <Run>, which is licensed under the GNU General Public License v2. By continuing, you acknowledge and accept the GPL-2.0 license terms.</Run>
-                    </TextBlock>
+              <StackPanel Spacing="16" Margin="20">
+                  <TextBlock
+                    FontSize="22"
+                    FontWeight="Bold"
+                    TextWrapping="Wrap"
+                    Text="Important!" />
 
-                    <StackPanel
-                        HorizontalAlignment="Center"
-                        Orientation="Horizontal"
-                        Spacing="15">
-                        <hyperlinkControls:Hyperlink
-                            Alias="View License"
-                            Command="{Binding OpenLicenseUrl}"
-                            Url="{Binding LicenseUrl}"
-                            VerticalAlignment="Center" />
-                        <Button Command="{Binding AcceptLicense}" Content="I Accept" />
+                  <TextBlock TextWrapping="Wrap">
+                        Before proceeding, you <Run FontWeight="Bold">must</Run>
+                        first restart your board. Simply disconnect it and plug it back in, no buttons need to be held.</TextBlock>
+
+                    <StackPanel Spacing="8">
+                        <TextBlock TextWrapping="Wrap">
+                            Once done, press <Run FontWeight="Bold">Send Credentials</Run>
+                            and give it a couple of seconds until it finishes.</TextBlock>
+
+                        <TextBlock TextWrapping="Wrap">
+                            This should setup your board proper wifi and mdns name check if it connected!
+                        </TextBlock>
                     </StackPanel>
+
+                  <!--  Footer  -->
+                  <Button
+                    Command="{Binding DismissWirelessWarningCommand}"
+                    Content="Send credentials"
+                    CornerRadius="4"
+                    HorizontalAlignment="Right"
+                    Padding="16,8" />
                 </StackPanel>
             </Border>
         </Panel>

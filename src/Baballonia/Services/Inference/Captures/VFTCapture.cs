@@ -88,22 +88,29 @@ public class VftCapture : Capture
 
     private Task VideoCapture_UpdateLoop()
     {
+        Mat lut = new Mat(new Size(1,256), MatType.CV_8U);
+        for (var i = 0; i <= 255; i++)
+        {
+            lut.Set(i, (byte)(Math.Pow(i / 2048.0, (1 / 2.5)) * 255.0));
+        }
         while (_loop)
         {
             try
             {
-                // Grab VideoCapture frame and provide proper cropping/transformations/etc
-                // Also map YUV color space to RGB
                 IsReady = _videoCapture?.Read(_orignalMat) == true;
-                Mat yuvConvert = Mat.FromPixelData(400, 400, MatType.CV_8UC2, _orignalMat.Data);
-                yuvConvert = yuvConvert.CvtColor(ColorConversionCodes.YUV2GRAY_Y422, 0);
-                yuvConvert = yuvConvert.ColRange(new OpenCvSharp.Range(0, 200));
-                yuvConvert = yuvConvert.Resize(new Size(400, 400));
-                _mat = yuvConvert;
-                if (!IsReady) continue;
-                FrameCount++;
-                _dimensions.width = _mat.Width;
-                _dimensions.height = _mat.Height;
+                if (IsReady)
+                {
+                    Mat yuvConvert = Mat.FromPixelData(400, 400, MatType.CV_8UC2, _orignalMat.Data);
+                    yuvConvert = yuvConvert.CvtColor(ColorConversionCodes.YUV2GRAY_Y422, 0);
+                    yuvConvert = yuvConvert.ColRange(new OpenCvSharp.Range(0, 200));
+                    yuvConvert = yuvConvert.Resize(new Size(400, 400));
+                    yuvConvert = yuvConvert.GaussianBlur(new Size(15, 15), 0);
+
+                    _mat = yuvConvert.LUT(lut);
+                    FrameCount++;
+                    _dimensions.width = _mat.Width;
+                    _dimensions.height = _mat.Height;
+                }
             }
             catch (Exception)
             {

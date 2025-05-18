@@ -4,3 +4,6 @@
 [submodule "src/VRCFaceTracking"]
 	path = src/VRCFaceTracking
 	url = https://github.com/Project-Babble/VRCFaceTracking.git
+[submodule "src/espflash"]
+	path = src/espflash
+	url = https://github.com/esp-rs/espflash.git

@@ -16,57 +16,45 @@ public class FirmwareService
     public event Action OnFirmwareUpdateComplete;
     public event Action<string> OnFirmwareUpdateError;
 
-    private const string PYTHON_COMMAND = "python3";
-    private const string ESPTOOL_COMMAND = "esptool";
-    private const int DEFAULT_BAUD_RATE = 921600;
+    private static readonly string EsptoolCommand;
+    private const int DefaultBaudRate = 921600; // esptool-rs: Setting baud rate higher than 115,200 can cause issues
+
+    static FirmwareService()
+    {
+        EsptoolCommand = OperatingSystem.IsWindows() ? "espflash.exe" : "espflash";
+    }
 
     /// <summary>
-    /// Uploads firmware to an ESP32-S3 device using esptool.py via Python subprocess
+    /// Uploads firmware to an ESP32-S3 device using an subprocess esptool-rs
     /// </summary>
     /// <param name="port">COM port where the device is connected</param>
     /// <param name="pathToFirmware">Path to the firmware file to upload</param>
-    /// <param name="isWireless"></param>
-    /// <param name="ssid"></param>
     /// <param name="token">Cancellation token</param>
-    /// <param name="password"></param>
     /// <returns>A task representing the asynchronous operation</returns>
-    public void UploadFirmwareAsync(string port, string pathToFirmware, bool isWireless, string ssid = "", string password = "", CancellationToken token = default)
+    public void UploadFirmware(string port, string pathToFirmware)
     {
         try
         {
-            // Check if Python is installed
-            var hasPython = RunPythonScript(arguments: "--version");
-            if (!hasPython)
-            {
-                OnFirmwareUpdateError?.Invoke("Python is not installed or not in PATH. Please install Python to continue.");
-                return;
-            }
-
             // Check if firmware file exists
             if (!File.Exists(pathToFirmware))
             {
-                OnFirmwareUpdateError?.Invoke($"Firmware file not found: {pathToFirmware}");
+                OnFirmwareUpdateError($"Firmware file not found: {pathToFirmware}");
                 return;
             }
 
-            // Check for updates to the esptool
-            RunPythonScript(arguments: $"-m pip install {ESPTOOL_COMMAND}");
-
             // Notify start of firmware update
-            OnFirmwareUpdateStart?.Invoke();
+            OnFirmwareUpdateStart();
 
             // Create process to run esptool.py
-            RunPythonScript(
-                arguments:
-                $"-m {ESPTOOL_COMMAND} --chip esp32-s3 --port {port} --baud {DEFAULT_BAUD_RATE} write_flash 0x0 \"{pathToFirmware}\"");
-
-            if (isWireless)
+            if (!RunEspSubprocess(
+                    arguments:
+                    $"write-bin 0x00 \"{pathToFirmware}\" --port {port} --baud {DefaultBaudRate}"))
             {
-                SendWirelessCredentials(port, ssid, password);
+                OnFirmwareUpdateError($"Firmware update failed!");
             }
 
-            // Firmware update completed successfully
-            OnFirmwareUpdateComplete?.Invoke();
+            // Wired firmware update completed successfully
+            OnFirmwareUpdateComplete();
         }
         catch (Exception ex)
         {
@@ -74,7 +62,7 @@ public class FirmwareService
         }
     }
 
-    private void SendWirelessCredentials(string port, string ssid, string password, string hostname = MdnsData.DefaultHostName)
+    public void SendWirelessCredentials(string port, string ssid, string password, string hostname = MdnsData.DefaultHostName)
     {
         // Create payload
         Payload payload = new Payload
@@ -100,13 +88,13 @@ public class FirmwareService
 
         string jsonPayload = JsonSerializer.Serialize(payload, new JsonSerializerOptions
         {
-            WriteIndented = true
+            WriteIndented = false
         });
 
         try
         {
             // Create a new SerialPort object with the specified port name and baud rate
-            using SerialPort serialPort = new SerialPort(port, DEFAULT_BAUD_RATE);
+            using SerialPort serialPort = new SerialPort(port, DefaultBaudRate);
 
             // Set serial port parameters
             serialPort.DataBits = 8;
@@ -115,31 +103,32 @@ public class FirmwareService
             serialPort.Handshake = Handshake.None;
 
             // Set read/write timeouts
-            serialPort.ReadTimeout = 2000;
-            serialPort.WriteTimeout = 2000;
+            serialPort.ReadTimeout = 5000;
+            serialPort.WriteTimeout = 5000;
 
             try
             {
                 // Open the port
                 serialPort.Open();
+                serialPort.DiscardInBuffer();
+                serialPort.DiscardOutBuffer();
 
                 // Convert the payload to bytes
                 byte[] payloadBytes = Encoding.UTF8.GetBytes(jsonPayload);
 
                 // Write the payload to the serial port
-                serialPort.Write(payloadBytes, 0, payloadBytes.Length);
+                const int chunkSize = 64;
+                for (int i = 0; i < payloadBytes.Length; i += chunkSize)
+                {
+                    int length = Math.Min(chunkSize, payloadBytes.Length - i);
+                    serialPort.Write(payloadBytes, i, length);
+                    Thread.Sleep(50); // Small pause between chunks
+                }
 
                 // Add a newline to indicate end of message
                 serialPort.Write("\n");
 
-                // Allow time for the device to process
-                Thread.Sleep(500);
-
-                // Check for response
-                if (!(serialPort.BytesToRead > 0))
-                {
-                    OnFirmwareUpdateError?.Invoke($"Firmware update failed: No response from serial port");
-                }
+                Thread.Sleep(1000);
             }
             finally
             {
@@ -152,16 +141,16 @@ public class FirmwareService
         }
         catch (Exception ex)
         {
-            OnFirmwareUpdateError?.Invoke($"Firmware update failed: {ex.Message}");
+            OnFirmwareUpdateError($"Firmware update failed: {ex.Message}");
         }
     }
 
-    private bool RunPythonScript(string arguments)
+    private bool RunEspSubprocess(string arguments)
     {
         try
         {
             using var process = new Process();
-            process.StartInfo.FileName = PYTHON_COMMAND;
+            process.StartInfo.FileName = EsptoolCommand;
             process.StartInfo.Arguments = arguments;
             process.StartInfo.UseShellExecute = true;
             process.StartInfo.CreateNoWindow = true;
@@ -172,7 +161,7 @@ public class FirmwareService
         }
         catch (Exception ex)
         {
-            OnFirmwareUpdateError?.Invoke($"Firmware update failed: {ex.Message}");
+            OnFirmwareUpdateError($"Firmware update failed: {ex.Message}");
             return false;
         }
     }

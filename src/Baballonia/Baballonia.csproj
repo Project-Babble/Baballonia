@@ -58,6 +58,9 @@
         <None Update="onnx_artifacts\baball_model.onnx">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="Firmware\Windows\espflash.exe">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 
@@ -140,6 +143,11 @@
 	  <EmbeddedResource Include="eyeModel.onnx">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </EmbeddedResource>
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Firmware\Linux\" />
+	  <Folder Include="Firmware\MacOS\" />
+	  <Folder Include="Firmware\Windows\" />
 	</ItemGroup>
 
 </Project>

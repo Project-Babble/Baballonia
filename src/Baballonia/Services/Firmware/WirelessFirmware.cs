@@ -9,7 +9,7 @@ public class WifiData
 
 public class MdnsData
 {
-    public const string DefaultHostName = "openiris.local";
+    public const string DefaultHostName = "openiristracker";
     public string hostname { get; set; }
 }
 
