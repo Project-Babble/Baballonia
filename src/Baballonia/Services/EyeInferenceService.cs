@@ -22,6 +22,10 @@ public class EyeInferenceService : InferenceService, IEyeInferenceService
     public override (PlatformSettings, PlatformConnector)[] PlatformConnectors { get; }
         = new (PlatformSettings settings, PlatformConnector connector)[3];
 
+    private int[] _combinedDimensions;
+    private DenseTensor<float> _combinedTensor;
+    private byte[] _matBytes = [];
+
     // Queue for each camera to hold incoming frames
     private readonly ConcurrentQueue<FrameData> _frameQueues = new();
 
@@ -44,7 +48,6 @@ public class EyeInferenceService : InferenceService, IEyeInferenceService
 
             SetupInference(eyeModel, Camera.Left, minCutoff, speedCoeff, sessionOptions);
             SetupInference(eyeModel, Camera.Right, minCutoff, speedCoeff, sessionOptions);
-            SetupInference(eyeModel, Camera.Combined, minCutoff, speedCoeff, sessionOptions);
 
             logger.LogInformation("Inference started!");
         });
@@ -70,8 +73,13 @@ public class EyeInferenceService : InferenceService, IEyeInferenceService
         var inputName = session.InputMetadata.Keys.First();
         var dimensions = session.InputMetadata.Values.First().Dimensions;
         var inputSize = new Size(dimensions[2], dimensions[3]);
+        var magicAiNumberSize = 4;
 
-        DenseTensor<float> tensor = new DenseTensor<float>([1, 4, dimensions[2], dimensions[3]]);
+        DenseTensor<float> tensor = new DenseTensor<float>([1, magicAiNumberSize, dimensions[2], dimensions[3]]);
+
+        // This is set up twice but I do not care
+        _combinedDimensions = [1, magicAiNumberSize * 2, dimensions[2], dimensions[3]];
+        _combinedTensor = new DenseTensor<float>(_combinedDimensions);
 
         var platformSettings = new PlatformSettings(inputSize, session, tensor, filter, 0f, inputName, model);
         PlatformConnectors[(int)camera] = (platformSettings, null)!;
@@ -158,20 +166,22 @@ public class EyeInferenceService : InferenceService, IEyeInferenceService
             _frameQueues.TryDequeue(out _);
         }
 
+        // This will update _combinedTensor
+        ConvertMatsArrayToDenseTensor(_frameQueues.Select(fd => fd.Mat).ToArray());
+
         // Run inference on the dequeued frame's tensor
         var inputs = new List<NamedOnnxValue>
         {
-            NamedOnnxValue.CreateFromTensor(PlatformConnectors[(int)Camera.Combined].Item1.InputName, ConvertMatsArrayToDenseTensor(_frameQueues.Select(fd => fd.Mat).ToArray(), [1, 8, 128, 128]))
+            NamedOnnxValue.CreateFromTensor(PlatformConnectors[(int)Camera.Left].Item1.InputName, _combinedTensor)
         };
 
         // Run inference!
-        using var results = PlatformConnectors[(int)Camera.Combined].Item1.Session!.Run(inputs);
+        using var results = PlatformConnectors[(int)Camera.Left].Item1.Session!.Run(inputs);
         arKitExpressions = results[0].AsEnumerable<float>().ToArray();
 
         float currentTime = (float)sw.Elapsed.TotalSeconds;
         PlatformConnectors[(int)Camera.Left].Item1.Ms = currentTime -  PlatformConnectors[(int)Camera.Left].Item1.LastTime * 1000f;
         PlatformConnectors[(int)Camera.Right].Item1.Ms = currentTime -  PlatformConnectors[(int)Camera.Right].Item1.LastTime * 1000f;
-        PlatformConnectors[(int)Camera.Combined].Item1.Ms = currentTime -  PlatformConnectors[(int)Camera.Combined].Item1.LastTime * 1000f;
 
         // Filter ARKit Expressions. This is broken rn!
         //for (int i = 0; i < arKitExpressions.Length; i++)
@@ -181,11 +191,10 @@ public class EyeInferenceService : InferenceService, IEyeInferenceService
 
         PlatformConnectors[(int)Camera.Left].Item1.LastTime = currentTime;
         PlatformConnectors[(int)Camera.Right].Item1.LastTime = currentTime;
-        PlatformConnectors[(int)Camera.Combined].Item1.LastTime = currentTime;
         return true;
     }
 
-    private static DenseTensor<float> ConvertMatsArrayToDenseTensor(Mat[] mats, int[] dimensions)
+    private void ConvertMatsArrayToDenseTensor(Mat[] mats)
     {
         // Verify the input array has exactly 4 mats
         if (mats.Length != 4)
@@ -217,10 +226,9 @@ public class EyeInferenceService : InferenceService, IEyeInferenceService
         // Create new tensor with specified dimensions
         // The tensor will have shape [batchSize, channels, height, width]
         // where channels = 2 channels per mat * 4 mats = 8 total channels
-        DenseTensor<float> tensor = new DenseTensor<float>(dimensions);
 
-        int batchSize = dimensions[0];
-        int tensorChannels = dimensions[1];
+        int batchSize = _combinedDimensions[0];
+        int tensorChannels = _combinedDimensions[1];
 
         // We expect tensorChannels to be 8 (2 channels * 4 mats)
         if (tensorChannels != 8)
@@ -234,8 +242,11 @@ public class EyeInferenceService : InferenceService, IEyeInferenceService
             Mat continuousMat = mats[matIndex].IsContinuous() ? mats[matIndex] : mats[matIndex].Clone();
 
             // Get the raw data bytes from the Mat
-            byte[] matBytes = new byte[continuousMat.Total() * continuousMat.ElemSize()];
-            Marshal.Copy(continuousMat.Data, matBytes, 0, matBytes.Length);
+            var size = continuousMat.Total() * continuousMat.ElemSize();
+            if (_matBytes.Length != size)
+                Array.Resize(ref _matBytes, (int)size);
+
+            Marshal.Copy(continuousMat.Data, _matBytes, 0, _matBytes.Length);
 
             // Process each pixel's two channels
             for (int b = 0; b < batchSize; b++)
@@ -248,18 +259,16 @@ public class EyeInferenceService : InferenceService, IEyeInferenceService
                         int matOffset = (y * width + x) * 2; // 2 channels per pixel
 
                         // Channel 0 of current mat
-                        float normalizedValue0 = matBytes[matOffset] / 255.0f;
-                        tensor[b, matIndex * 2, y, x] = normalizedValue0;
+                        float normalizedValue0 = _matBytes[matOffset] / 255.0f;
+                        _combinedTensor[b, matIndex * 2, y, x] = normalizedValue0;
 
                         // Channel 1 of current mat
-                        float normalizedValue1 = matBytes[matOffset + 1] / 255.0f;
-                        tensor[b, matIndex * 2 + 1, y, x] = normalizedValue1;
+                        float normalizedValue1 = _matBytes[matOffset + 1] / 255.0f;
+                        _combinedTensor[b, matIndex * 2 + 1, y, x] = normalizedValue1;
                     }
                 }
             }
         }
-
-        return tensor;
     }
 
     /// <summary>

@@ -385,8 +385,6 @@ public partial class HomePageView : UserControl
         _eyeInferenceService.ConfigurePlatformConnectors(Camera.Left, _viewModel.LeftCameraAddress);
         _eyeInferenceService.SetupInference(modelName, Camera.Right, minCutoff, speedCoeff, sessionOptions);
         _eyeInferenceService.ConfigurePlatformConnectors(Camera.Right, _viewModel.RightCameraAddress);
-        _eyeInferenceService.SetupInference(modelName, Camera.Combined, minCutoff, speedCoeff, sessionOptions);
-        _eyeInferenceService.ConfigurePlatformConnectors(Camera.Combined, "");
     }
 
     private void CameraAddressEntry_TextChanged(object? sender, TextChangedEventArgs e)
