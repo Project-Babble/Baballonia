@@ -71,7 +71,7 @@ public class ParameterSenderService(
 
         foreach (var (remappedExpression, weight) in calibrationItems.Zip(expressions))
         {
-            var msg = new OscMessage(remappedExpression.ShapeName!, Math.Clamp(weight, remappedExpression.Min, remappedExpression.Max));
+            var msg = new OscMessage(remappedExpression.ShapeName!, weight.Remap(0, 1, remappedExpression.Min, remappedExpression.Max));
             _sendQueue.Enqueue(msg);
         }
     }
