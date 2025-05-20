@@ -122,14 +122,14 @@ public partial class EyeCalibrationViewModel : ViewModelBase
 
     public readonly CalibrationItem[] LeftEyeCalibrationItems =
     [
-        new CalibrationItem { ShapeName = "/LeftEyeX", Min = -1f, Max = 1f },
-        new CalibrationItem { ShapeName = "/LeftEyeY", Min = 1f, Max = -1f },
+        new CalibrationItem { ShapeName = "/LeftEyeY", Min = 0f, Max = 1f },
+        new CalibrationItem { ShapeName = "/LeftEyeX", Min = 0f, Max = 1f },
     ];
 
     public readonly CalibrationItem[] RightEyeCalibrationItems =
     [
-        new CalibrationItem { ShapeName = "/RightEyeX", Min = -1f, Max = 1f },
-        new CalibrationItem { ShapeName = "/RightEyeY", Min = 1f, Max = -1f },
+        new CalibrationItem { ShapeName = "/RightEyeY", Min = 0f, Max = 1f },
+        new CalibrationItem { ShapeName = "/RightEyeX", Min = 0f, Max = 1f },
     ];
 
     private ILocalSettingsService _settingsService { get; }
