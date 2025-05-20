@@ -1,5 +1,7 @@
 using System.Reflection;
+using VRCFaceTracking.Core.Params.Data;
 using VRCFaceTracking.Core.Params.Expressions;
+using VRCFaceTracking.Core.Types;
 
 namespace VRCFaceTracking.Babble;
 
@@ -24,7 +26,7 @@ public class BabbleVrc : ExtTrackingModule
         list.Add(manifestResourceStream);
         ModuleInformation = new ModuleMetadata
         {
-            Name = "Project Babble Eye and Face Module v1.0.1",
+            Name = "Project Babble Eye and Face Module v1.0.2",
             StaticImages = list
         };
         return (true, true);
@@ -37,10 +39,10 @@ public class BabbleVrc : ExtTrackingModule
 
     public override void Update()
     {
-        UnifiedTracking.Data.Eye.Left.Gaze.x = BabbleOsc.Expressions[0];
-        UnifiedTracking.Data.Eye.Left.Gaze.y = BabbleOsc.Expressions[1];
-        UnifiedTracking.Data.Eye.Right.Gaze.x = BabbleOsc.Expressions[2];
-        UnifiedTracking.Data.Eye.Right.Gaze.x = BabbleOsc.Expressions[3];
+        UnifiedTracking.Data.Eye.Left.Gaze.x = BabbleOsc.Expressions[0].Remap(0f, 1f, -1f, 1f);
+        UnifiedTracking.Data.Eye.Left.Gaze.y = BabbleOsc.Expressions[1].Remap(0f, 1f, -1f, 1f);
+        UnifiedTracking.Data.Eye.Right.Gaze.x = BabbleOsc.Expressions[2].Remap(0f, 1f, -1f, 1f);
+        UnifiedTracking.Data.Eye.Right.Gaze.y = BabbleOsc.Expressions[3].Remap(0f, 1f, -1f, 1f);
         UnifiedTracking.Data.Eye.Left.Openness = 1f;
         UnifiedTracking.Data.Eye.Right.Openness = 1f;
 

@@ -258,13 +258,11 @@ public class EyeInferenceService : InferenceService, IEyeInferenceService
                         // Get the byte offset for the current pixel in the Mat
                         int matOffset = (y * width + x) * 2; // 2 channels per pixel
 
-                        // Channel 0 of current mat
                         float normalizedValue0 = _matBytes[matOffset] / 255.0f;
-                        _combinedTensor[b, matIndex * 2, y, x] = normalizedValue0;
-
-                        // Channel 1 of current mat
                         float normalizedValue1 = _matBytes[matOffset + 1] / 255.0f;
-                        _combinedTensor[b, matIndex * 2 + 1, y, x] = normalizedValue1;
+
+                        _combinedTensor[b, matIndex * 2, y, x] = normalizedValue1;
+                        _combinedTensor[b, matIndex * 2 + 1, y, x] = normalizedValue0;
                     }
                 }
             }
