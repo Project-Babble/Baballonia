@@ -1,18 +1,11 @@
 using System.Reflection;
-using VRCFaceTracking.Core.Params.Data;
 using VRCFaceTracking.Core.Params.Expressions;
-using VRCFaceTracking.Core.Types;
 
 namespace VRCFaceTracking.Babble;
 
 public class BabbleVrc : ExtTrackingModule
 {
     private BabbleOsc babbleOSC;
-
-    public BabbleVrc(BabbleOsc babbleOsc)
-    {
-        babbleOSC = babbleOsc;
-    }
 
     public override (bool SupportsEye, bool SupportsExpression) Supported => (true, true);
 

@@ -71,31 +71,29 @@ public class BabbleOsc
                     {
                         continue;
                     }
-                    if (oscMessage.Value is float)
+                    if (oscMessage.Value is float value)
                     {
                         switch (oscMessage.Address)
                         {
                             case "/LeftEyeX":
-                                Expressions[0] = (float)oscMessage.Value;
+                                Expressions[0] = value;
                                 break;
                             case "/LeftEyeY":
-                                Expressions[1] = (float)oscMessage.Value;
+                                Expressions[1] = value;
                                 break;
                             case "/RightEyeX":
-                                Expressions[2] = (float)oscMessage.Value;
+                                Expressions[2] = value;
                                 break;
                             case "/RightEyeY":
-                                Expressions[3] = (float)oscMessage.Value;
+                                Expressions[3] = value;
+                                break;
+                            case "/mouthFunnel":
+                            case "/mouthPucker":
+                                BabbleExpressions.BabbleExpressionMap.SetByKey2(oscMessage.Address, value * 4f);
                                 break;
                             default:
-                                if (oscMessage.Address == "/mouthFunnel" || oscMessage.Address == "/mouthPucker")
-                                {
-                                    BabbleExpressions.BabbleExpressionMap.SetByKey2(oscMessage.Address, (float)oscMessage.Value * 4f);
-                                }
-                                else if (BabbleExpressions.BabbleExpressionMap.ContainsKey2(oscMessage.Address!))
-                                {
-                                    BabbleExpressions.BabbleExpressionMap.SetByKey2(oscMessage.Address!, (float)oscMessage.Value);
-                                }
+                                if (BabbleExpressions.BabbleExpressionMap.ContainsKey2(oscMessage.Address))
+                                    BabbleExpressions.BabbleExpressionMap.SetByKey2(oscMessage.Address, value);
                                 break;
                         }
                     }
