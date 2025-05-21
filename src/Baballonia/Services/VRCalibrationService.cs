@@ -133,9 +133,10 @@ public class VrCalibrationService : IVrService, IDisposable
         _logger.LogInformation($"Successfully started {processName}");
 
         if (waitForExit)
+        {
             await process.WaitForExitAsync();
-
-        _logger.LogInformation($"{processName} exited gracefully!");
+            _logger.LogInformation($"{processName} exited gracefully!");
+        }
 
         return true;
     }

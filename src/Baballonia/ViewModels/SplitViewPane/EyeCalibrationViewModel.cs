@@ -120,18 +120,6 @@ public partial class EyeCalibrationViewModel : ViewModelBase
     [property: SavedSetting("EyeCalibration_EyebrowsRaise", 1f)]
     private float _eyeBrowsUpper = 1f;
 
-    public readonly CalibrationItem[] LeftEyeCalibrationItems =
-    [
-        new CalibrationItem { ShapeName = "/LeftEyeX", Min = -1f, Max = 1f },
-        new CalibrationItem { ShapeName = "/LeftEyeY", Min = -1f, Max = 1f },
-    ];
-
-    public readonly CalibrationItem[] RightEyeCalibrationItems =
-    [
-        new CalibrationItem { ShapeName = "/RightEyeX", Min = -1f, Max = 1f },
-        new CalibrationItem { ShapeName = "/RightEyeY", Min = -1f, Max = 1f },
-    ];
-
     private ILocalSettingsService _settingsService { get; }
 
     public EyeCalibrationViewModel()

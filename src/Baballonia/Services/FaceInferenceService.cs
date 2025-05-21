@@ -107,15 +107,16 @@ public class FaceInferenceService : InferenceService, IFaceInferenceService
         // Run inference!
         using var results = platformSettings.Session!.Run(inputs);
         arKitExpressions = results[0].AsEnumerable<float>().ToArray();
+
         float time = (float)sw.Elapsed.TotalSeconds;
         var delta = time - platformSettings.LastTime;
         platformSettings.Ms = delta * 1000;
 
-        // Filter ARKit Expressions. This is broken rn!
-        //for (int i = 0; i < arKitExpressions.Length; i++)
-        //{
-        //    arKitExpressions[i] = platformSettings.Filter.Filter(arKitExpressions[i], delta);
-        //}
+        // Filter ARKit Expressions.
+        /*for (int i = 0; i < arKitExpressions.Length; i++)
+        {
+            arKitExpressions[i] = platformSettings.Filter.Filter(arKitExpressions[i], delta);
+        }*/
 
         platformSettings.LastTime = time;
         return true;

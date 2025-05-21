@@ -17,7 +17,7 @@
                 <TextBlock
                     Classes="Header"
                     Grid.Column="0"
-                    Text="Face Tracking Calibration" />
+                    Text="Calibration" />
                 <StackPanel
                     Grid.Column="1"
                     HorizontalAlignment="Right"
@@ -37,6 +37,109 @@
                 <Run>• Raising the</Run> <Run FontWeight="SemiBold">Minimum</Run> <Run>value requires a stronger expression before it starts to show.</Run><LineBreak />
                 <Run>• Lowering the</Run> <Run FontWeight="SemiBold">Maximum</Run> <Run>value means a smaller expression will reach 100% faster.</Run>
             </TextBlock>
+
+          <!--  Eye Expressions Expander  -->
+            <Expander HorizontalAlignment="Stretch" Margin="0,12,0,0">
+                <Expander.Header>
+                    <TextBlock FontWeight="SemiBold" Text="Eye Expressions" />
+                </Expander.Header>
+                <StackPanel Margin="0,5">
+                    <!--  Left Eye X  -->
+                    <Border
+                        Background="{DynamicResource SystemChromeMediumLowColor}"
+                        CornerRadius="8"
+                        Margin="0,0,0,8"
+                        Padding="16">
+                        <Grid>
+                            <StackPanel>
+                                <TextBlock Margin="0,0,10,0" VerticalAlignment="Center">
+                                    <Run FontWeight="SemiBold" Text="Left Eye X: " />
+                                    <Run Text="{Binding LeftEyeXLower, StringFormat={}{0:0.00}}" />
+                                    <Run Text="-" />
+                                    <Run Text="{Binding LeftEyeXUpper, StringFormat={}{0:0.00}}" />
+                                </TextBlock>
+                                <twoRangeSlider:RangeSlider
+                                    LowerSelectedValue="{Binding LeftEyeXLower, Mode=TwoWay}"
+                                    Maximum="1"
+                                    Minimum="-1"
+                                    TickFrequency="0.01"
+                                    UpperSelectedValue="{Binding LeftEyeXUpper, Mode=TwoWay}" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!--  Left Eye Y -->
+                    <Border
+                        Background="{DynamicResource SystemChromeMediumLowColor}"
+                        CornerRadius="8"
+                        Margin="0,0,0,8"
+                        Padding="16">
+                        <Grid>
+                            <StackPanel>
+                                <TextBlock Margin="0,0,10,0" VerticalAlignment="Center">
+                                    <Run FontWeight="SemiBold" Text="Left Eye Y: " />
+                                    <Run Text="{Binding LeftEyeYLower, StringFormat={}{0:0.00}}" />
+                                    <Run Text="-" />
+                                    <Run Text="{Binding LeftEyeYUpper, StringFormat={}{0:0.00}}" />
+                                </TextBlock>
+                                <twoRangeSlider:RangeSlider
+                                    LowerSelectedValue="{Binding LeftEyeYLower, Mode=TwoWay}"
+                                    Maximum="1"
+                                    Minimum="-1"
+                                    TickFrequency="0.01"
+                                    UpperSelectedValue="{Binding LeftEyeYUpper, Mode=TwoWay}" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!--  Right Eye X  -->
+                    <Border
+                        Background="{DynamicResource SystemChromeMediumLowColor}"
+                        CornerRadius="8"
+                        Margin="0,0,0,8"
+                        Padding="16">
+                        <Grid>
+                            <StackPanel>
+                                <TextBlock Margin="0,0,10,0" VerticalAlignment="Center">
+                                    <Run FontWeight="SemiBold" Text="Right Eye X: " />
+                                    <Run Text="{Binding RightEyeXLower, StringFormat={}{0:0.00}}" />
+                                    <Run Text="-" />
+                                    <Run Text="{Binding RightEyeXUpper, StringFormat={}{0:0.00}}" />
+                                </TextBlock>
+                                <twoRangeSlider:RangeSlider
+                                    LowerSelectedValue="{Binding RightEyeXLower, Mode=TwoWay}"
+                                    Maximum="1"
+                                    Minimum="-1"
+                                    TickFrequency="0.01"
+                                    UpperSelectedValue="{Binding RightEyeXUpper, Mode=TwoWay}" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!--  Right Eye Y  -->
+                    <Border
+                        Background="{DynamicResource SystemChromeMediumLowColor}"
+                        CornerRadius="8"
+                        Padding="16">
+                        <Grid>
+                            <StackPanel>
+                                <TextBlock Margin="0,0,10,0" VerticalAlignment="Center">
+                                    <Run FontWeight="SemiBold" Text="Right Eye Y: " />
+                                    <Run Text="{Binding RightEyeYLower, StringFormat={}{0:0.00}}" />
+                                    <Run Text="-" />
+                                    <Run Text="{Binding RightEyeYUpper, StringFormat={}{0:0.00}}" />
+                                </TextBlock>
+                                <twoRangeSlider:RangeSlider
+                                    LowerSelectedValue="{Binding RightEyeYLower, Mode=TwoWay}"
+                                    Maximum="1"
+                                    Minimum="-1"
+                                    TickFrequency="0.01"
+                                    UpperSelectedValue="{Binding RightEyeYUpper, Mode=TwoWay}" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Expander>
 
             <!--  Cheek Expressions Expander  -->
             <Expander HorizontalAlignment="Stretch" Margin="0,12,0,0">

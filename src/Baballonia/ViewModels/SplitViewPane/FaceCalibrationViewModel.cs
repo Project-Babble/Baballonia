@@ -10,6 +10,18 @@ namespace Baballonia.ViewModels.SplitViewPane;
 
 public partial class FaceCalibrationViewModel : ViewModelBase
 {
+    [ObservableProperty] [property: SavedSetting("LeftEyeXLower", -1f)] private float _leftEyeXLower;
+    [ObservableProperty] [property: SavedSetting("LeftEyeYLower", 1f)] private float _leftEyeYLower;
+
+    [ObservableProperty] [property: SavedSetting("RightEyeXLower", -1f)] private float _rightEyeXLower;
+    [ObservableProperty] [property: SavedSetting("RightEyeYLower", 1f)] private float _rightEyeYLower;
+
+    [ObservableProperty] [property: SavedSetting("LeftEyeXUpper", -1f)] private float _leftEyeXUpper;
+    [ObservableProperty] [property: SavedSetting("LeftEyeYUpper", 1f)] private float _leftEyeYUpper;
+
+    [ObservableProperty] [property: SavedSetting("RightEyeXUpper", -1f)] private float _rightEyeXUpper;
+    [ObservableProperty] [property: SavedSetting("RightEyeYUpper", 1f)] private float _rightEyeYUpper;
+
     [ObservableProperty] [property: SavedSetting("CheekPuffLeftLower", 0f)] private float _cheekPuffLeftLower;
     [ObservableProperty] [property: SavedSetting("CheekPuffLeftUpper", 1f)] private float _cheekPuffLeftUpper;
 
@@ -152,13 +164,32 @@ public partial class FaceCalibrationViewModel : ViewModelBase
         _settingsService = Ioc.Default.GetService<ILocalSettingsService>()!;
         _settingsService.Load(this);
 
+
         PropertyChanged += (_, _) =>
         {
             _settingsService.Save(this);
         };
     }
 
-    public Dictionary<string, (float Lower, float Upper)> GetCalibrationValues()
+    public Dictionary<string, (float Lower, float Upper)> GetLeftEyeCalibrationValues()
+    {
+        return new Dictionary<string, (float, float)>
+        {
+            { "/LeftEyeY", (LeftEyeYLower, LeftEyeYLower) },
+            { "/LeftEyeX", (LeftEyeYLower, LeftEyeYLower) },
+        };
+    }
+
+    public Dictionary<string, (float Lower, float Upper)> GetRightEyeCalibrationValues()
+    {
+        return new Dictionary<string, (float, float)>
+        {
+            { "/RightEyeY", (RightEyeYLower, RightEyeYUpper) },
+            { "/RightEyeX", (RightEyeXLower, RightEyeXUpper) },
+        };
+    }
+
+    public Dictionary<string, (float Lower, float Upper)> GetFaceCalibrationValues()
     {
         return new Dictionary<string, (float, float)>
         {
@@ -215,6 +246,10 @@ public partial class FaceCalibrationViewModel : ViewModelBase
         switch (selection)
         {
             case Selection.Min:
+                LeftEyeXLower = -1f;
+                LeftEyeYLower = -1f;
+                RightEyeXLower = -1f;
+                RightEyeYLower = -1f;
                 CheekPuffLeftLower = 0f;
                 CheekPuffRightLower = 0f;
                 CheekSuckLeftLower = 0f;
@@ -248,6 +283,10 @@ public partial class FaceCalibrationViewModel : ViewModelBase
                 TongueTwistRightLower = 0f;
                 break;
             case Selection.Max:
+                LeftEyeXUpper = 1f;
+                LeftEyeYUpper = 1f;
+                RightEyeXUpper = 1f;
+                RightEyeYUpper = 1f;
                 CheekPuffLeftUpper = 1f;
                 CheekPuffRightUpper = 1f;
                 CheekSuckLeftUpper = 1f;

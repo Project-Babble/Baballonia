@@ -14,7 +14,6 @@ namespace Baballonia.Services;
 
 public class ParameterSenderService(
     OscSendService sendService,
-    EyeCalibrationViewModel eyeCalibrationViewModel,
     FaceCalibrationViewModel faceCalibrationViewModel) : BackgroundService
 {
     private readonly Queue<OscMessage> _sendQueue = new();
@@ -38,9 +37,9 @@ public class ParameterSenderService(
         {
             try
             {
-                if (_leftCameraController != null)  ProcessExpressionData(_leftCameraController.ArExpressions, eyeCalibrationViewModel.LeftEyeCalibrationItems);
-                if (_rightCameraController != null) ProcessExpressionData( _rightCameraController.ArExpressions, eyeCalibrationViewModel.RightEyeCalibrationItems);
-                if (_faceCameraController != null) ProcessExpressionData(_faceCameraController.ArExpressions, faceCalibrationViewModel.GetCalibrationValues());
+                if (_leftCameraController != null)  ProcessExpressionData(_leftCameraController.ArExpressions, faceCalibrationViewModel.GetLeftEyeCalibrationValues(), -1f, 1f);
+                if (_rightCameraController != null) ProcessExpressionData( _rightCameraController.ArExpressions, faceCalibrationViewModel.GetRightEyeCalibrationValues(), -1f, 1f);
+                if (_faceCameraController != null) ProcessExpressionData(_faceCameraController.ArExpressions, faceCalibrationViewModel.GetFaceCalibrationValues(), 0f, 1f);
 
                 await SendAndClearQueue(cancellationToken);
                 await Task.Delay(10, cancellationToken);
@@ -52,26 +51,14 @@ public class ParameterSenderService(
         }
     }
 
-    private void ProcessExpressionData(float[] expressions, Dictionary<string, (float Lower, float Upper)> calibrationItems)
+    private void ProcessExpressionData(float[] expressions, Dictionary<string, (float Lower, float Upper)> calibrationItems, float min = 0f, float max = 1f)
     {
         if (expressions is null) return;
         if (expressions.Length == 0) return;
 
         foreach (var (remappedExpression, weight) in calibrationItems.Zip(expressions))
         {
-            var msg = new OscMessage(remappedExpression.Key!, weight.Remap(0, 1, remappedExpression.Value.Lower, remappedExpression.Value.Upper));
-            _sendQueue.Enqueue(msg);
-        }
-    }
-
-    private void ProcessExpressionData(float[] expressions, CalibrationItem[] calibrationItems)
-    {
-        if (expressions is null) return;
-        if (expressions.Length == 0) return;
-
-        foreach (var (remappedExpression, weight) in calibrationItems.Zip(expressions))
-        {
-            var msg = new OscMessage(remappedExpression.ShapeName!, Math.Clamp(weight, remappedExpression.Min, remappedExpression.Max));
+            var msg = new OscMessage(remappedExpression.Key!, weight.Remap(min, max, remappedExpression.Value.Lower, remappedExpression.Value.Upper));
             _sendQueue.Enqueue(msg);
         }
     }

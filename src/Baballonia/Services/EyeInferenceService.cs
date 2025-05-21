@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.ML.OnnxRuntime;
@@ -20,23 +20,21 @@ namespace Baballonia.Services;
 public class EyeInferenceService : InferenceService, IEyeInferenceService
 {
     public override (PlatformSettings, PlatformConnector)[] PlatformConnectors { get; }
-        = new (PlatformSettings settings, PlatformConnector connector)[2];
+        = new (PlatformSettings settings, PlatformConnector connector)[3];
+
+    private int[] _combinedDimensions;
+    private DenseTensor<float> _combinedTensor;
+    private byte[] _matBytes = [];
 
     // Queue for each camera to hold incoming frames
-    private readonly ConcurrentQueue<FrameData>[] _frameQueues = new ConcurrentQueue<FrameData>[3];
+    private readonly ConcurrentQueue<FrameData> _frameQueues = new();
 
     // Minimum number of frames required before processing
-    private const int MinFramesForInference = 3;
+    private const int FramesForInference = 4;
 
     public EyeInferenceService(ILogger<InferenceService> logger, ILocalSettingsService settingsService)
         : base(logger, settingsService)
     {
-        // Initialize frame queues for each camera
-        for (int i = 0; i < _frameQueues.Length; i++)
-        {
-            _frameQueues[i] = new ConcurrentQueue<FrameData>();
-        }
-
         Task.Run(async () =>
         {
             logger.LogInformation("Starting Eye Inference Service...");
@@ -46,8 +44,7 @@ public class EyeInferenceService : InferenceService, IEyeInferenceService
 
             var minCutoff = await settingsService.ReadSettingAsync<float>("AppSettings_OneEuroMinFreqCutoff");
             var speedCoeff = await settingsService.ReadSettingAsync<float>("AppSettings_OneEuroSpeedCutoff");
-
-            var eyeModel = await settingsService.ReadSettingAsync<string>("EyeHome_EyeModel") ?? "eyeModel.onnx";
+            var eyeModel = await settingsService.ReadSettingAsync<string>("EyeHome_EyeModel");
 
             SetupInference(eyeModel, Camera.Left, minCutoff, speedCoeff, sessionOptions);
             SetupInference(eyeModel, Camera.Right, minCutoff, speedCoeff, sessionOptions);
@@ -64,22 +61,27 @@ public class EyeInferenceService : InferenceService, IEyeInferenceService
     /// <param name="minCutoff"></param>
     /// <param name="speedCoeff"></param>
     /// <param name="sessionOptions"></param>
-    public override void SetupInference(string model, Camera camera, float minCutoff, float speedCoeff, SessionOptions sessionOptions)
+    public override void SetupInference(string model, Camera camera, float minCutoff, float speedCoeff,
+        SessionOptions sessionOptions)
     {
-        var modelName = model;
         var filter = new OneEuroFilter(
             minCutoff: minCutoff,
             beta: speedCoeff
         );
 
-        var session = new InferenceSession(Path.Combine(AppContext.BaseDirectory, modelName), sessionOptions);
+        var session = new InferenceSession(Path.Combine(AppContext.BaseDirectory, model), sessionOptions);
         var inputName = session.InputMetadata.Keys.First();
         var dimensions = session.InputMetadata.Values.First().Dimensions;
         var inputSize = new Size(dimensions[2], dimensions[3]);
+        var magicAiNumberSize = 4;
 
-        DenseTensor<float> tensor = new DenseTensor<float>([1, 8, dimensions[2], dimensions[3]]);
+        DenseTensor<float> tensor = new DenseTensor<float>([1, magicAiNumberSize, dimensions[2], dimensions[3]]);
 
-        var platformSettings = new PlatformSettings(inputSize, session, tensor, filter, 0f, inputName, modelName);
+        // This is set up twice but I do not care
+        _combinedDimensions = [1, magicAiNumberSize * 2, dimensions[2], dimensions[3]];
+        _combinedTensor = new DenseTensor<float>(_combinedDimensions);
+
+        var platformSettings = new PlatformSettings(inputSize, session, tensor, filter, 0f, inputName, model);
         PlatformConnectors[(int)camera] = (platformSettings, null)!;
     }
 
@@ -88,34 +90,44 @@ public class EyeInferenceService : InferenceService, IEyeInferenceService
     /// </summary>
     /// <param name="cameraSettings"></param>
     /// <returns>True if frame was successfully captured and added to queue</returns>
-    public bool CaptureFrame(CameraSettings cameraSettings)
+    private bool CaptureFrame(CameraSettings cameraSettings)
     {
-        var index = (int)cameraSettings.Camera;
-        var platformSettings = PlatformConnectors[index].Item1;
-        var platformConnector = PlatformConnectors[index].Item2;
-
-        if (platformConnector?.Capture is null || !platformConnector.Capture.IsReady)
+        if (PlatformConnectors[(int)Camera.Left].Item2 is null ||
+            PlatformConnectors[(int)Camera.Left].Item2.Capture is null ||
+            !PlatformConnectors[(int)Camera.Left].Item2.Capture!.IsReady ||
+            PlatformConnectors[(int)Camera.Right].Item2 is null ||
+            PlatformConnectors[(int)Camera.Right].Item2.Capture is null ||
+            !PlatformConnectors[(int)Camera.Right].Item2.Capture!.IsReady)
         {
             return false;
         }
 
-        var frameData = new FrameData
+        Mat matLeft = new Mat<byte>(PlatformConnectors[(int)Camera.Left].Item1.InputSize.Height,
+            PlatformConnectors[(int)Camera.Left].Item1.InputSize.Width);
+        PlatformConnectors[(int)Camera.Left].Item2.TransformRawImage(matLeft, cameraSettings);
+        if (matLeft.Empty()) return false;
+
+        Mat matRight = new Mat<byte>(PlatformConnectors[(int)Camera.Right].Item1.InputSize.Height,
+            PlatformConnectors[(int)Camera.Right].Item1.InputSize.Width);
+        PlatformConnectors[(int)Camera.Right].Item2.TransformRawImage(matRight, cameraSettings);
+        if (matRight.Empty()) return false;
+
+        Mat matCombined = new Mat();
+        Cv2.Merge([matLeft, matRight], matCombined);
+
+        var frameDataCombined = new FrameData
         {
             CameraSettings = cameraSettings,
-            Timestamp = sw.Elapsed.TotalSeconds
+            Timestamp = sw.Elapsed.TotalSeconds,
+            Mat = matCombined,
         };
 
-        // Create a copy of tensor for this frame
-        frameData.Tensor = new DenseTensor<float>([1, 8, platformSettings.InputSize.Height, platformSettings.InputSize.Width]);
-
-        // Extract frame data to the tensor
-        if (!platformConnector.ExtractFrameData(frameData.Tensor.Buffer.Span, platformSettings.InputSize, cameraSettings))
+        if (_frameQueues.Count > FramesForInference)
         {
-            return false;
+            _frameQueues.TryDequeue(out _);
         }
 
-        // Add frame to the queue
-        _frameQueues[index].Enqueue(frameData);
+        _frameQueues.Enqueue(frameDataCombined);
 
         return true;
     }
@@ -123,7 +135,6 @@ public class EyeInferenceService : InferenceService, IEyeInferenceService
     /// <summary>
     /// Poll expression data, frames
     /// </summary>
-    /// <param name="camera"></param>
     /// <param name="cameraSettings"></param>
     /// <param name="arKitExpressions"></param>
     /// <returns></returns>
@@ -131,11 +142,8 @@ public class EyeInferenceService : InferenceService, IEyeInferenceService
     {
         arKitExpressions = null!;
 
-        var index = (int)cameraSettings.Camera;
-        var platformSettings = PlatformConnectors[index].Item1;
-        var platformConnector = PlatformConnectors[index].Item2;
-
-        if (platformConnector is null || platformConnector.Capture is null || !platformConnector.Capture.IsReady)
+        if (PlatformConnectors[(int)Camera.Left].Item2 is null || PlatformConnectors[(int)Camera.Left].Item2.Capture is null || !PlatformConnectors[(int)Camera.Left].Item2.Capture!.IsReady ||
+            PlatformConnectors[(int)Camera.Right].Item2 is null || PlatformConnectors[(int)Camera.Right].Item2.Capture is null || !PlatformConnectors[(int)Camera.Right].Item2.Capture!.IsReady)
         {
             return false;
         }
@@ -147,40 +155,119 @@ public class EyeInferenceService : InferenceService, IEyeInferenceService
         }
 
         // Check if we have enough frames in the queue
-        if (_frameQueues[index].Count < MinFramesForInference)
+        if (_frameQueues.Count < FramesForInference)
         {
-            logger.LogDebug($"Not enough frames in queue for camera {cameraSettings.Camera}. Current count: {_frameQueues[index].Count}");
             return false;
         }
 
-        // Process the oldest frame in the queue
-        if (!_frameQueues[index].TryDequeue(out var frameData))
+        // Pop old frames until we have FramesForInference
+        while (_frameQueues.Count != FramesForInference)
         {
-            return false;
+            _frameQueues.TryDequeue(out _);
         }
+
+        // This will update _combinedTensor
+        ConvertMatsArrayToDenseTensor(_frameQueues.Select(fd => fd.Mat).ToArray());
 
         // Run inference on the dequeued frame's tensor
         var inputs = new List<NamedOnnxValue>
         {
-            NamedOnnxValue.CreateFromTensor(platformSettings.InputName, frameData.Tensor)
+            NamedOnnxValue.CreateFromTensor(PlatformConnectors[(int)Camera.Left].Item1.InputName, _combinedTensor)
         };
 
         // Run inference!
-        using var results = platformSettings.Session!.Run(inputs);
+        using var results = PlatformConnectors[(int)Camera.Left].Item1.Session!.Run(inputs);
         arKitExpressions = results[0].AsEnumerable<float>().ToArray();
 
-        float currentTime = (float)sw.Elapsed.TotalSeconds;
-        float delta = currentTime - platformSettings.LastTime;
-        platformSettings.Ms = delta * 1000;
+        float time = (float)sw.Elapsed.TotalSeconds;
+        var delta = time - PlatformConnectors[(int)Camera.Left].Item1.LastTime;
+        PlatformConnectors[(int)Camera.Left].Item1.Ms = delta * 1000f;
+        PlatformConnectors[(int)Camera.Right].Item1.Ms = delta * 1000f;
 
         // Filter ARKit Expressions. This is broken rn!
-        //for (int i = 0; i < arKitExpressions.Length; i++)
-        //{
-        //    arKitExpressions[i] = platformSettings.Filter.Filter(arKitExpressions[i], delta);
-        //}
+        /*for (int i = 0; i < arKitExpressions.Length; i++)
+        {
+            arKitExpressions[i] = PlatformConnectors[(int)Camera.Left].Item1.Filter.Filter(arKitExpressions[i], delta);
+        }*/
 
-        platformSettings.LastTime = currentTime;
+        PlatformConnectors[(int)Camera.Left].Item1.LastTime = time;
+        PlatformConnectors[(int)Camera.Right].Item1.LastTime = time;
         return true;
+    }
+
+    private void ConvertMatsArrayToDenseTensor(Mat[] mats)
+    {
+        // Verify the input array has exactly 4 mats
+        if (mats.Length != 4)
+        {
+            throw new ArgumentException($"Expected 4 mats, but got: {mats.Length}");
+        }
+
+        // Verify each mat is CV_8UC2
+        foreach (var mat in mats)
+        {
+            if (mat.Type() != MatType.CV_8UC2)
+            {
+                throw new ArgumentException($"Expected CV_8UC2 mat, but got: {mat.Type()}");
+            }
+        }
+
+        // Ensure all mats have the same dimensions
+        int width = mats[0].Width;
+        int height = mats[0].Height;
+
+        foreach (var mat in mats)
+        {
+            if (mat.Width != width || mat.Height != height)
+            {
+                throw new ArgumentException("All mats must have the same dimensions");
+            }
+        }
+
+        // Create new tensor with specified dimensions
+        // The tensor will have shape [batchSize, channels, height, width]
+        // where channels = 2 channels per mat * 4 mats = 8 total channels
+
+        int batchSize = _combinedDimensions[0];
+        int tensorChannels = _combinedDimensions[1];
+
+        // We expect tensorChannels to be 8 (2 channels * 4 mats)
+        if (tensorChannels != 8)
+        {
+            throw new ArgumentException($"Tensor channels dimension should be 8 (2 channels * 4 mats), but got: {tensorChannels}");
+        }
+
+        // Process each mat
+        for (int matIndex = 0; matIndex < mats.Length; matIndex++)
+        {
+            Mat continuousMat = mats[matIndex].IsContinuous() ? mats[matIndex] : mats[matIndex].Clone();
+
+            // Get the raw data bytes from the Mat
+            var size = continuousMat.Total() * continuousMat.ElemSize();
+            if (_matBytes.Length != size)
+                Array.Resize(ref _matBytes, (int)size);
+
+            Marshal.Copy(continuousMat.Data, _matBytes, 0, _matBytes.Length);
+
+            // Process each pixel's two channels
+            for (int b = 0; b < batchSize; b++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    for (int x = 0; x < width; x++)
+                    {
+                        // Get the byte offset for the current pixel in the Mat
+                        int matOffset = (y * width + x) * 2; // 2 channels per pixel
+
+                        float normalizedValue0 = _matBytes[matOffset] / 255.0f;
+                        float normalizedValue1 = _matBytes[matOffset + 1] / 255.0f;
+
+                        _combinedTensor[b, matIndex * 2, y, x] = normalizedValue1;
+                        _combinedTensor[b, matIndex * 2 + 1, y, x] = normalizedValue0;
+                    }
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -269,23 +356,12 @@ public class EyeInferenceService : InferenceService, IEyeInferenceService
     }
 
     /// <summary>
-    /// Clear all frame queues, useful when changing camera sources or resetting
-    /// </summary>
-    public void ClearFrameQueues()
-    {
-        for (int i = 0; i < _frameQueues.Length; i++)
-        {
-            while (_frameQueues[i].TryDequeue(out _)) { }
-        }
-    }
-
-    /// <summary>
     /// Class to store frame data in the queue
     /// </summary>
     private class FrameData
     {
         public CameraSettings CameraSettings { get; set; }
-        public DenseTensor<float> Tensor { get; set; }
+        public Mat Mat { get; init; }
         public double Timestamp { get; set; }
     }
 }
