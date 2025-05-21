@@ -185,10 +185,10 @@ public class EyeInferenceService : InferenceService, IEyeInferenceService
         PlatformConnectors[(int)Camera.Right].Item1.Ms = delta * 1000f;
 
         // Filter ARKit Expressions. This is broken rn!
-        for (int i = 0; i < arKitExpressions.Length; i++)
+        /*for (int i = 0; i < arKitExpressions.Length; i++)
         {
             arKitExpressions[i] = PlatformConnectors[(int)Camera.Left].Item1.Filter.Filter(arKitExpressions[i], delta);
-        }
+        }*/
 
         PlatformConnectors[(int)Camera.Left].Item1.LastTime = time;
         PlatformConnectors[(int)Camera.Right].Item1.LastTime = time;

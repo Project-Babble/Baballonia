@@ -113,10 +113,10 @@ public class FaceInferenceService : InferenceService, IFaceInferenceService
         platformSettings.Ms = delta * 1000;
 
         // Filter ARKit Expressions.
-        for (int i = 0; i < arKitExpressions.Length; i++)
+        /*for (int i = 0; i < arKitExpressions.Length; i++)
         {
             arKitExpressions[i] = platformSettings.Filter.Filter(arKitExpressions[i], delta);
-        }
+        }*/
 
         platformSettings.LastTime = time;
         return true;
