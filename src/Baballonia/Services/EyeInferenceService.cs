@@ -142,8 +142,8 @@ public class EyeInferenceService : InferenceService, IEyeInferenceService
     {
         arKitExpressions = null!;
 
-        if (PlatformConnectors[(int)Camera.Left].Item2 is null || PlatformConnectors[(int)Camera.Left].Item2.Capture is null || !PlatformConnectors[(int)Camera.Left].Item2.Capture.IsReady ||
-            PlatformConnectors[(int)Camera.Right].Item2 is null || PlatformConnectors[(int)Camera.Right].Item2.Capture is null || !PlatformConnectors[(int)Camera.Right].Item2.Capture.IsReady)
+        if (PlatformConnectors[(int)Camera.Left].Item2 is null || PlatformConnectors[(int)Camera.Left].Item2.Capture is null || !PlatformConnectors[(int)Camera.Left].Item2.Capture!.IsReady ||
+            PlatformConnectors[(int)Camera.Right].Item2 is null || PlatformConnectors[(int)Camera.Right].Item2.Capture is null || !PlatformConnectors[(int)Camera.Right].Item2.Capture!.IsReady)
         {
             return false;
         }
@@ -179,18 +179,19 @@ public class EyeInferenceService : InferenceService, IEyeInferenceService
         using var results = PlatformConnectors[(int)Camera.Left].Item1.Session!.Run(inputs);
         arKitExpressions = results[0].AsEnumerable<float>().ToArray();
 
-        float currentTime = (float)sw.Elapsed.TotalSeconds;
-        PlatformConnectors[(int)Camera.Left].Item1.Ms = currentTime -  PlatformConnectors[(int)Camera.Left].Item1.LastTime * 1000f;
-        PlatformConnectors[(int)Camera.Right].Item1.Ms = currentTime -  PlatformConnectors[(int)Camera.Right].Item1.LastTime * 1000f;
+        float time = (float)sw.Elapsed.TotalSeconds;
+        var delta = time - PlatformConnectors[(int)Camera.Left].Item1.LastTime;
+        PlatformConnectors[(int)Camera.Left].Item1.Ms = delta * 1000f;
+        PlatformConnectors[(int)Camera.Right].Item1.Ms = delta * 1000f;
 
         // Filter ARKit Expressions. This is broken rn!
-        //for (int i = 0; i < arKitExpressions.Length; i++)
-        //{
-        //    arKitExpressions[i] = platformSettings.Filter.Filter(arKitExpressions[i], delta);
-        //}
+        for (int i = 0; i < arKitExpressions.Length; i++)
+        {
+            arKitExpressions[i] = PlatformConnectors[(int)Camera.Left].Item1.Filter.Filter(arKitExpressions[i], delta);
+        }
 
-        PlatformConnectors[(int)Camera.Left].Item1.LastTime = currentTime;
-        PlatformConnectors[(int)Camera.Right].Item1.LastTime = currentTime;
+        PlatformConnectors[(int)Camera.Left].Item1.LastTime = time;
+        PlatformConnectors[(int)Camera.Right].Item1.LastTime = time;
         return true;
     }
 
