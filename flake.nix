@@ -18,6 +18,7 @@
           dotnet_sdk fontconfig
           libjpeg onnxruntime libGL
           xorg.libX11 xorg.libSM xorg.libICE
+          (pkgs.callPackage ./nix/opencvsharp.nix {})
         ];
 
         shellHook = ''

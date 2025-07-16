@@ -53,10 +53,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="libOpenCvSharpExtern.so" />
-      <Content Include="libOpenCvSharpExtern.so">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
       <None Update="assets\BannerOpaque_90x58.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
