@@ -18,7 +18,9 @@
 mono_crash.*
 
 # Build results
+/.direnv/
 [Dd]ebug/
+[Rr]esult/
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
