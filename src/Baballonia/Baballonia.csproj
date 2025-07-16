@@ -41,7 +41,7 @@
         <PackageReference Include="Microsoft.ML" Version="4.0.2" />
         <PackageReference Include="Microsoft.ML.OnnxTransformer" Version="4.0.2" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageReference Include="OpenCvSharp4" Version="4.8.0.20230708" />
+        <PackageReference Include="OpenCvSharp4" Version="4.11.0.20250507" />
         <PackageReference Include="OscCore" Version="1.0.5" />
         <PackageReference Include="RangeSlider.Avalonia" Version="2.1.0" />
         <PackageReference Include="SkiaSharp" Version="3.119.0" />

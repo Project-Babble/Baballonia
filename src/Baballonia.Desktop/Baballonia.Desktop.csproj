@@ -24,12 +24,12 @@
         <PackageReference Include="SkiaSharp" Version="3.119.0" />
 
 	    <!-- Windows-specific -->
-        <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.8.0.20230708" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />
+        <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.11.0.20250507" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />
 	    <PackageReference Include="Microsoft.ML.OnnxRuntime.DirectML" Version="1.22.0" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />
         <PackageReference Include="SkiaSharp.NativeAssets.Win32" Version="3.119.0" Condition="$([MSBuild]::IsOSPlatform('Windows'))"/>
 
         <!-- macOS-specific -->
-        <PackageReference Include="OpenCvSharp4.runtime.osx.10.15-universal" Version="4.7.0.20230224" Condition="$([MSBuild]::IsOSPlatform('OSX'))"/>
+        <PackageReference Include="OpenCvSharp4.runtime.osx.10.15-universal" Version="4.11.0.20250507" Condition="$([MSBuild]::IsOSPlatform('OSX'))"/>
 	    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.22.0" Condition="$([MSBuild]::IsOSPlatform('OSX'))" />
         <PackageReference Include="SkiaSharp.NativeAssets.macOS" Version="3.119.0" Condition="$([MSBuild]::IsOSPlatform('OSX'))"/>
 

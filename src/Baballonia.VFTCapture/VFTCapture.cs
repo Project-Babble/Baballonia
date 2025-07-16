@@ -70,7 +70,7 @@ public partial class VftCapture : Capture
                 IsReady = _videoCapture?.Read(_orignalMat) == true;
                 if (IsReady)
                 {
-                    Mat yuvConvert = new Mat(400, 400, MatType.CV_8UC2, _orignalMat.Data);
+                    Mat yuvConvert = Mat.FromPixelData(new[] { 400, 400 }, MatType.CV_8UC2, _orignalMat.Data);
                     yuvConvert = yuvConvert.CvtColor(ColorConversionCodes.YUV2GRAY_Y422, 0);
                     yuvConvert = yuvConvert.ColRange(new OpenCvSharp.Range(0, 200));
                     yuvConvert = yuvConvert.Resize(new Size(400, 400));
