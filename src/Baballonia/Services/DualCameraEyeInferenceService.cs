@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Baballonia.Contracts;
 using Baballonia.Services.Inference.Enums;
 using Baballonia.Services.Inference.Filters;
@@ -12,6 +7,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
 using OpenCvSharp;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Baballonia.Services;
 
@@ -152,7 +152,7 @@ public class DualCameraEyeInferenceService(ILogger<InferenceService> logger, ILo
             arKitExpressions = PlatformConnectors[(int)Camera.Left].Item1.Filter.Filter(arKitExpressions);
 
         // Process and convert the expressions to the expected format
-        return ProcessExpressions(ref arKitExpressions);;
+        return ProcessExpressions(ref arKitExpressions); ;
     }
 
     private bool ProcessExpressions(ref float[] arKitExpressions)
@@ -176,16 +176,16 @@ public class DualCameraEyeInferenceService(ILogger<InferenceService> logger, ILo
         var leftEyeYawCorrected = rightYaw * (1 - leftLid) + leftYaw * leftLid;
         var rightEyeYawCorrected = leftYaw * (1 - rightLid) + rightYaw * rightLid;
 
-        // [left pitch, left yaw, left lid...
+        // [left yaw, left pitch, left lid...
         float[] convertedExpressions = new float[ExpectedRawExpressions];
 
         // swap eyes at this point
-        convertedExpressions[0] = rightEyeYawCorrected; // left pitch
-        convertedExpressions[1] = eyeY;                   // left yaw
-        convertedExpressions[2] = rightLid;               // left lid
-        convertedExpressions[3] = leftEyeYawCorrected;  // right pitch
-        convertedExpressions[4] = eyeY;                   // right yaw
-        convertedExpressions[5] = leftLid;                // right lid
+        convertedExpressions[0] = rightEyeYawCorrected; // left yaw (LeftEyeX)
+        convertedExpressions[1] = eyeY;                 // left pitch (LeftEyeY)
+        convertedExpressions[2] = rightLid;             // left lid
+        convertedExpressions[3] = leftEyeYawCorrected;  // right yaw (RightEyeX)
+        convertedExpressions[4] = eyeY;                 // right pitch (RightEyeY)
+        convertedExpressions[5] = leftLid;              // right lid
 
         arKitExpressions = convertedExpressions;
 

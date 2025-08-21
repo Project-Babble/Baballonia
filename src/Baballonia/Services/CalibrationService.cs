@@ -8,19 +8,15 @@ namespace Baballonia.Services;
 
 public class CalibrationService : ICalibrationService
 {
-    // Expression parameter names
+    // Expression parameter names (only eyelids - gaze goes directly to OSC)
     private readonly Dictionary<string, string> _eyeExpressionMap = new()
     {
-        { "LeftEyeX", "/LeftEyeX" },
-        { "LeftEyeY", "/LeftEyeY" },
-        { "RightEyeX", "/RightEyeX" },
-        { "RightEyeY", "/RightEyeY" },
+        { "LeftEyeLid", "/LeftEyeLid" },
+        { "RightEyeLid", "/RightEyeLid" },
     };
 
     private readonly Dictionary<string, string> _faceExpressionMap = new()
     {
-        { "LeftEyeLid", "/LeftEyeLid" },
-        { "RightEyeLid", "/RightEyeLid" },
         { "CheekPuffLeft", "/cheekPuffLeft" },
         { "CheekPuffRight", "/cheekPuffRight" },
         { "CheekSuckLeft", "/cheekSuckLeft" },
@@ -94,9 +90,15 @@ public class CalibrationService : ICalibrationService
 
         _expressionSettings.TryGetValue(parameterName, out var currentSettings);
 
-        var lower = isUpper ? currentSettings!.Lower : value;
-        var upper = isUpper ? value : currentSettings!.Upper;
-        var min = currentSettings!.Min;
+        if (currentSettings == null)
+        {
+            // Create default settings if parameter doesn't exist
+            currentSettings = new CalibrationParameter(0f, 1f, 0f, 1f);
+        }
+
+        var lower = isUpper ? currentSettings.Lower : value;
+        var upper = isUpper ? value : currentSettings.Upper;
+        var min = currentSettings.Min;
         var max = currentSettings.Max;
 
         var param = new CalibrationParameter(lower, upper, min, max);

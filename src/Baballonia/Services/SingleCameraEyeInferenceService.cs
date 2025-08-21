@@ -210,16 +210,16 @@ public class SingleCameraEyeInferenceService(ILogger<InferenceService> logger, I
         var leftEyeYawCorrected = rightYaw * (1 - leftLid) + leftYaw * leftLid;
         var rightEyeYawCorrected = leftYaw * (1 - rightLid) + rightYaw * rightLid;
 
-        // [left pitch, left yaw, left lid...
+        // [left yaw, left pitch, left lid...
         float[] convertedExpressions = new float[ExpectedRawExpressions];
 
         // swap eyes at this point
-        convertedExpressions[0] = rightEyeYawCorrected; // left pitch
-        convertedExpressions[1] = eyeY;                   // left yaw
-        convertedExpressions[2] = rightLid;               // left lid
-        convertedExpressions[3] = leftEyeYawCorrected;  // right pitch
-        convertedExpressions[4] = eyeY;                   // right yaw
-        convertedExpressions[5] = leftLid;                // right lid
+        convertedExpressions[0] = rightEyeYawCorrected; // left yaw (LeftEyeX)
+        convertedExpressions[1] = eyeY;                 // left pitch (LeftEyeY)
+        convertedExpressions[2] = rightLid;             // left lid
+        convertedExpressions[3] = leftEyeYawCorrected;  // right yaw (RightEyeX)
+        convertedExpressions[4] = eyeY;                 // right pitch (RightEyeY)
+        convertedExpressions[5] = leftLid;              // right lid
 
         arKitExpressions = convertedExpressions;
 

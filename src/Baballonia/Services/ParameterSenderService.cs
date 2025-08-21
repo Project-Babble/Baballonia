@@ -29,6 +29,12 @@ public class ParameterSenderService(
         { "RightEyeLid", "/RightEyeLid" },
     };
 
+    // Eye gaze expressions that bypass calibration (sent directly)
+    private readonly HashSet<string> _directEyeExpressions = new()
+    {
+        "LeftEyeX", "LeftEyeY", "RightEyeX", "RightEyeY"
+    };
+
     public readonly Dictionary<string, string> FaceExpressionMap = new()
     {
         { "CheekPuffLeft", "/cheekPuffLeft" },
@@ -107,13 +113,21 @@ public class ParameterSenderService(
         {
             var weight = expressions[i];
             var eyeElement = EyeExpressionMap.ElementAt(i);
-            var settings = calibrationService.GetExpressionSettings(eyeElement.Key);
-
-            var msg = new OscMessage(prefix + eyeElement.Value,
-                Math.Clamp(
-                    weight.Remap(settings.Lower, settings.Upper, settings.Min, settings.Max),
-                    settings.Min,
-                    settings.Max));
+            
+            OscMessage msg;
+            if (_directEyeExpressions.Contains(eyeElement.Key))
+            {
+                // Send gaze expressions directly without calibration remapping
+                msg = new OscMessage(prefix + eyeElement.Value, weight);
+            }
+            else
+            {
+                // Apply calibration remapping for eyelid expressions
+                var settings = calibrationService.GetExpressionSettings(eyeElement.Key);
+                msg = new OscMessage(prefix + eyeElement.Value,
+                    weight.Remap(settings.Lower, settings.Upper, settings.Min, settings.Max));
+            }
+            
             _sendQueue.Enqueue(msg);
         }
     }
@@ -130,10 +144,7 @@ public class ParameterSenderService(
             var settings = calibrationService.GetExpressionSettings(faceElement.Key);
 
             var msg = new OscMessage(prefix + faceElement.Value,
-                Math.Clamp(
-                    weight.Remap(settings.Lower, settings.Upper, settings.Min, settings.Max),
-                    settings.Min,
-                    settings.Max));
+                weight.Remap(settings.Lower, settings.Upper, settings.Min, settings.Max));
             _sendQueue.Enqueue(msg);
         }
     }

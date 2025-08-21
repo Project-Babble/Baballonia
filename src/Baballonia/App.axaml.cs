@@ -131,7 +131,6 @@ public class App : Application
                     .Build();
                 services.Configure<LocalSettingsOptions>(config);
             });
-
         if (Utils.IsSupportedDesktopOS)
         {
             var settingsLocation = Path.Combine(
