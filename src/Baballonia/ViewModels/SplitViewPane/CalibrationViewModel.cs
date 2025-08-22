@@ -132,9 +132,9 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
         {
             { "LeftEyeX", 0 },
             { "LeftEyeY", 1 },
-            { "RightEyeX", 2 },
-            { "RightEyeY", 3 },
-            { "LeftEyeLid", 4 },
+            { "RightEyeX", 3 },
+            { "RightEyeY", 4 },
+            { "LeftEyeLid", 2 },
             { "RightEyeLid", 5 }
         };
 
