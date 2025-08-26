@@ -20,7 +20,7 @@ public class CropManager()
 
     public CameraSettings.RegionOfInterest CropZone => _cropZone;
     public bool IsCropping => _isCropping;
-    public CameraSize CameraSize { get; set; } = new();
+    public CameraSize MaxSize { get; set; } = new();
 
     public void StartCrop(Point startPosition)
     {
@@ -34,8 +34,8 @@ public class CropManager()
         if (!_isCropping) return;
 
         // Clamp currentPosition to the image boundaries
-        double clampedX = Math.Max(0, Math.Min(currentPosition.X, CameraSize.Width));
-        double clampedY = Math.Max(0, Math.Min(currentPosition.Y, CameraSize.Height));
+        double clampedX = Math.Max(0, Math.Min(currentPosition.X, MaxSize.Width));
+        double clampedY = Math.Max(0, Math.Min(currentPosition.Y, MaxSize.Height));
 
         double x, y, w, h;
 
@@ -82,14 +82,14 @@ public class CropManager()
     public void SelectEntireFrame(Camera camera)
     {
         // Special BSB2E-like stereo camera logic
-        var halfWidth = CameraSize.Width / 2;
+        var halfWidth = MaxSize.Width / 2;
 
         int x;
         int y;
         int width;
         int height;
 
-        if (CameraSize.Width / 2 == CameraSize.Height)
+        if (halfWidth == MaxSize.Height)
         {
             switch (camera)
             {
@@ -97,19 +97,19 @@ public class CropManager()
                     x = 0;
                     y = 0;
                     width = halfWidth - 1;
-                    height = CameraSize.Height - 1;
+                    height = MaxSize.Height - 1;
                     break;
                 case Camera.Right:
                     x = halfWidth;
                     y = 0;
                     width = halfWidth - 1;
-                    height = CameraSize.Height - 1;
+                    height = MaxSize.Height - 1;
                     break;
                 default: // Face
                     x = 0;
                     y = 0;
-                    width = CameraSize.Width;
-                    height = CameraSize.Width;
+                    width = MaxSize.Width;
+                    height = MaxSize.Width;
                     break;
             }
         }
@@ -117,8 +117,8 @@ public class CropManager()
         {
             x = 0;
             y = 0;
-            width = CameraSize.Width;
-            height = CameraSize.Height;
+            width = MaxSize.Width;
+            height = MaxSize.Height;
         }
 
         _cropZone = new CameraSettings.RegionOfInterest(x, y, width, height);

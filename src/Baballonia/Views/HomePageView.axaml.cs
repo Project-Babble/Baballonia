@@ -24,25 +24,39 @@ public partial class HomePageView : UserControl
             {
                 if (this.GetVisualRoot() is not Window window) return;
 
-                var grid = this.FindControl<Grid>("CameraControlsGrid");
+                var camerasGrid = this.FindControl<Grid>("CameraControlsGrid");
+                var eyesGrid = this.FindControl<Grid>("EyesGrid");
                 var isVertical = window.ClientSize.Width < Utils.MobileWidth;
 
                 // Clear existing row/column definitions
-                grid!.RowDefinitions.Clear();
-                grid.ColumnDefinitions.Clear();
+                camerasGrid!.RowDefinitions.Clear();
+                camerasGrid.ColumnDefinitions.Clear();
+
+                eyesGrid!.RowDefinitions.Clear();
+                eyesGrid.ColumnDefinitions.Clear();
 
                 if (isVertical)
                 {
                     // Vertical layout - one column, three rows
-                    grid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-                    grid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-                    grid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-                    grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+                    camerasGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+                    camerasGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+                    camerasGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+
+                    eyesGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+                    eyesGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+                    eyesGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
 
                     // Set grid positions for all children
-                    for (var i = 0; i < grid.Children.Count; i++)
+                    for (var i = 0; i < camerasGrid.Children.Count; i++)
                     {
-                        var child = grid.Children[i];
+                        var child = camerasGrid.Children[i];
+                        Grid.SetRow(child, i);
+                        Grid.SetColumn(child, 0);
+                        child.Margin = new Avalonia.Thickness(0, 0, 0, 16);
+                    }
+                    for (var i = 0; i < eyesGrid.Children.Count; i++)
+                    {
+                        var child = eyesGrid.Children[i];
                         Grid.SetRow(child, i);
                         Grid.SetColumn(child, 0);
                         child.Margin = new Avalonia.Thickness(0, 0, 0, 16);
@@ -51,15 +65,25 @@ public partial class HomePageView : UserControl
                 else
                 {
                     // Horizontal layout - three columns, one row
-                    grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
-                    grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
-                    grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
-                    grid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+                    camerasGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Parse("2*")));
+                    camerasGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+                    camerasGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+
+                    eyesGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+                    eyesGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+                    eyesGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
 
                     // Set grid positions for all children
-                    for (var i = 0; i < grid.Children.Count; i++)
+                    for (var i = 0; i < camerasGrid.Children.Count; i++)
                     {
-                        var child = grid.Children[i];
+                        var child = camerasGrid.Children[i];
+                        Grid.SetRow(child, 0);
+                        Grid.SetColumn(child, i);
+                        child.Margin = new Avalonia.Thickness(0, 0, i < 2 ? 12 : 0, 0);
+                    }
+                    for (var i = 0; i < eyesGrid.Children.Count; i++)
+                    {
+                        var child = eyesGrid.Children[i];
                         Grid.SetRow(child, 0);
                         Grid.SetColumn(child, i);
                         child.Margin = new Avalonia.Thickness(0, 0, i < 2 ? 12 : 0, 0);
@@ -86,25 +110,25 @@ public partial class HomePageView : UserControl
         // in theory should be cleaned up by the GC so no need to manually unsubscribe
         image.PointerPressed += (sender, e) =>
         {
-            if (model.Controller.CamViewMode != CamViewMode.Cropping) return;
+            if (model.CamViewMode != CamViewMode.Cropping) return;
             var pos = e.GetPosition(image);
-            model.Controller.CropManager.StartCrop(pos);
-            model.OverlayRectangle = model.Controller.CropManager.CropZone.GetRect();
+            model.CropManager.StartCrop(pos);
+            model.OverlayRectangle = model.CropManager.CropZone.GetRect();
         };
         image.PointerMoved += (sender, e) =>
         {
-            if (model.Controller.CamViewMode != CamViewMode.Cropping) return;
+            if (model.CamViewMode != CamViewMode.Cropping) return;
 
             var pos = e.GetPosition(image);
-            model.Controller.CropManager.UpdateCrop(pos);
-            model.OverlayRectangle = model.Controller.CropManager.CropZone.GetRect();
+            model.CropManager.UpdateCrop(pos);
+            model.OverlayRectangle = model.CropManager.CropZone.GetRect();
         };
         image.PointerReleased += (sender, e) =>
         {
-            if (model.Controller.CamViewMode != CamViewMode.Cropping) return;
+            if (model.CamViewMode != CamViewMode.Cropping) return;
 
-            model.Controller.CropManager.EndCrop();
-            model.OverlayRectangle = model.Controller.CropManager.CropZone.GetRect();
+            model.CropManager.EndCrop();
+            model.OnCropUpdated();
         };
     }
 

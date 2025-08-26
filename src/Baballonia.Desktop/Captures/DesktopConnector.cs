@@ -19,18 +19,18 @@ namespace Baballonia.Desktop.Captures;
 /// </summary>
 public class DesktopConnector : PlatformConnector, IPlatformConnector
 {
-    public DesktopConnector(string url, ILogger logger, ILocalSettingsService settingsService) : base(url, logger, settingsService)
+    public DesktopConnector(string source, ILogger logger, ILocalSettingsService settingsService) : base(source, logger, settingsService)
     {
-        Captures = new Dictionary<HashSet<Regex>, Type>();
+        Captures = new Dictionary<Capture, Type>();
 
         // Load all modules
         var dlls = Directory.GetFiles(AppContext.BaseDirectory, "*.dll");
         Captures = LoadAssembliesFromPath(dlls);
     }
 
-    private Dictionary<HashSet<Regex>, Type> LoadAssembliesFromPath(string[] paths)
+    private Dictionary<Capture, Type> LoadAssembliesFromPath(string[] paths)
     {
-        var returnList = new Dictionary<HashSet<Regex>, Type>();
+        var returnList = new Dictionary<Capture, Type>();
 
         foreach (var dll in paths)
         {
@@ -41,23 +41,15 @@ public class DesktopConnector : PlatformConnector, IPlatformConnector
 
                 foreach (var type in loaded.GetExportedTypes())
                 {
-                    if (typeof(Baballonia.SDK.Capture).IsAssignableFrom(type) && !type.IsAbstract)
-                    {
-                        // Check if the type has a constructor that takes a string parameter (for url)
-                        var constructor = type.GetConstructor(new[] { typeof(string) });
-                        if (constructor != null)
-                        {
-                            // Get the Connections property from the type (instance property)
-                            var connectionsProperty = type.GetProperty("Connections", BindingFlags.Public | BindingFlags.Instance);
-                            if (connectionsProperty != null && connectionsProperty.PropertyType == typeof(HashSet<Regex>))
-                            {
-                                // Create a temporary instance to access the Connections property
-                                var tempInstance = (Capture)Activator.CreateInstance(type, "temp")!;
-                                var connections = (HashSet<Regex>)connectionsProperty.GetValue(tempInstance)!;
-                                returnList.Add(connections, type);
-                            }
-                        }
-                    }
+                    if (!typeof(Capture).IsAssignableFrom(type) || type.IsAbstract) continue;
+
+                    // Check if the type has a constructor that takes a string parameter (for source)
+                    var constructor = type.GetConstructor([typeof(string)]);
+                    if (constructor == null) continue;
+
+                    // Create a temporary instance to access the Connections property
+                    var tempInstance = (Capture)Activator.CreateInstance(type, "temp")!;
+                    returnList.Add(tempInstance, type);
                 }
             }
             catch (Exception e)

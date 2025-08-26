@@ -11,6 +11,10 @@ namespace Baballonia;
 
 public static class Utils
 {
+    public const int EyeRawExpressions = 6;
+    public const int FaceRawExpressions = 45;
+    public const int FramesForEyeInference = 4;
+
     public static readonly bool IsSupportedDesktopOS = OperatingSystem.IsWindows() || OperatingSystem.IsMacOS() || OperatingSystem.IsLinux();
 
     public const int MobileWidth = 900;

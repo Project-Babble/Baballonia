@@ -11,11 +11,14 @@ using OscCore;
 
 namespace Baballonia.Services;
 
-public class ParameterSenderService(
-    OscSendService sendService,
-    ILocalSettingsService localSettingsService,
-    ICalibrationService calibrationService) : BackgroundService
+public class ParameterSenderService : BackgroundService
 {
+    private readonly OscSendService oscSendService;
+    private readonly ILocalSettingsService localSettingsService;
+    private readonly ICalibrationService calibrationService;
+    private readonly ProcessingLoopService processingLoopService;
+
+    private string prefix = "";
     private readonly Queue<OscMessage> _sendQueue = new();
 
     // Expression parameter names
@@ -78,16 +81,27 @@ public class ParameterSenderService(
         { "TongueTwistRight", "/tongueTwistRight" }
     };
 
+    public ParameterSenderService(
+        OscSendService sendService,
+        ILocalSettingsService localSettingsService,
+        ICalibrationService calibrationService,
+        ProcessingLoopService processingLoopService)
+    {
+        this.oscSendService = sendService;
+        this.localSettingsService = localSettingsService;
+        this.calibrationService = calibrationService;
+        this.processingLoopService = processingLoopService;
+
+         processingLoopService.ExpressionChangeEvent += ExpressionUpdateHandler;
+    }
+
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         while (!cancellationToken.IsCancellationRequested)
         {
             try
             {
-                var prefix = await localSettingsService.ReadSettingAsync<string>("AppSettings_OSCPrefix");
-                ProcessEyeExpressionData(CameraController.EyeExpressions, prefix);
-                ProcessFaceExpressionData(CameraController.FaceExpressions, prefix);
-
+                prefix = await localSettingsService.ReadSettingAsync<string>("AppSettings_OSCPrefix");
                 await SendAndClearQueue(cancellationToken);
                 await Task.Delay(10, cancellationToken);
             }
@@ -96,6 +110,14 @@ public class ParameterSenderService(
                 // ignore!
             }
         }
+    }
+
+    private void ExpressionUpdateHandler(ProcessingLoopService.Expressions expressions)
+    {
+        if (expressions.EyeExpression != null)
+            ProcessEyeExpressionData(expressions.EyeExpression, prefix);
+        if (expressions.FaceExpression != null)
+            ProcessFaceExpressionData(expressions.FaceExpression, prefix);
     }
 
     private void ProcessEyeExpressionData(float[] expressions, string prefix = "")
@@ -110,10 +132,7 @@ public class ParameterSenderService(
             var settings = calibrationService.GetExpressionSettings(eyeElement.Key);
 
             var msg = new OscMessage(prefix + eyeElement.Value,
-                Math.Clamp(
-                    weight.Remap(settings.Lower, settings.Upper, settings.Min, settings.Max),
-                    settings.Min,
-                    settings.Max));
+                weight.Remap(settings.Lower, settings.Upper, settings.Min, settings.Max));
             _sendQueue.Enqueue(msg);
         }
     }
@@ -143,7 +162,7 @@ public class ParameterSenderService(
         if (_sendQueue.Count == 0)
             return;
 
-        await sendService.Send(_sendQueue.ToArray(), cancellationToken);
+        await oscSendService.Send(_sendQueue.ToArray(), cancellationToken);
         _sendQueue.Clear();
     }
 }

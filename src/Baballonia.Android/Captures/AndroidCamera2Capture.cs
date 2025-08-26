@@ -24,8 +24,6 @@ namespace Baballonia.Android.Captures;
 /// </summary>
 public class AndroidCamera2Capture : Capture
 {
-    public override HashSet<Regex> Connections { get; set; }
-
     private readonly Context _context;
     private UsbDevice _usbDevice;
     private UsbDeviceConnection _usbConnection;
@@ -45,6 +43,11 @@ public class AndroidCamera2Capture : Capture
         _cameraManager = (CameraManager)_context.GetSystemService(Context.CameraService)!;
     }
 
+
+    public override bool CanConnect(string connectionString)
+    {
+        return int.TryParse(connectionString, out _);
+    }
 
     public override async Task<bool> StartCapture()
     {
@@ -115,8 +118,8 @@ public class AndroidCamera2Capture : Capture
         {
             // Setup ImageReader for frame capture
             _imageReader = ImageReader.NewInstance(
-                Dimensions.width,
-                Dimensions.height,
+                256,
+                256,
                 ImageFormatType.Yuv420888,
                 2);
 
@@ -129,7 +132,7 @@ public class AndroidCamera2Capture : Capture
 
             if (cameraIds.Length > 0)
             {
-                if (int.TryParse(Url, out var index))
+                if (int.TryParse(Source, out var index))
                 {
                     var clampedIndex = System.Math.Clamp(index, 0, cameraIds.Length);
                     targetCameraId = cameraIds[clampedIndex];
@@ -281,21 +284,11 @@ public class AndroidCamera2Capture : Capture
         vBuffer.Get(yuvBytes, ySize + uSize, vSize);
 
         // Create Mat from YUV data
-        var yuvMat = new Mat(image.Height + image.Height / 2, image.Width, MatType.CV_8UC1, yuvBytes);
+        var yuvMat = Mat.FromArray(yuvBytes);
 
         // Convert YUV to BGR
         var bgrMat = new Mat();
         Cv2.CvtColor(yuvMat, bgrMat, ColorConversionCodes.YUV2BGR_I420);
-
-        // Resize to expected dimensions if needed
-        if (bgrMat.Width != Dimensions.width || bgrMat.Height != Dimensions.height)
-        {
-            var resizedMat = new Mat();
-            Cv2.Resize(bgrMat, resizedMat, new OpenCvSharp.Size(Dimensions.width, Dimensions.height));
-            bgrMat.Dispose();
-            yuvMat.Dispose();
-            return resizedMat;
-        }
 
         yuvMat.Dispose();
         return bgrMat;

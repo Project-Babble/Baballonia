@@ -13,14 +13,6 @@ namespace Baballonia.SerialCameraCapture;
 /// </summary>
 public sealed class SerialCameraCapture(string portName) : Capture(portName), IDisposable
 {
-    public override HashSet<Regex> Connections { get; set; } =
-    [
-        new(@"^com", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant),
-        new(@"^/dev/ttyacm", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant),
-        new(@"^/dev/tty\.usb", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant),
-        new(@"^/dev/cu\.usb", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)
-    ];
-
     private const int BaudRate = 3000000;
     private const ulong EtvrHeader = 0xd8ff0000a1ffa0ff, EtvrHeaderMask = 0xffff0000ffffffff;
     private bool _isDisposed;
@@ -32,6 +24,15 @@ public sealed class SerialCameraCapture(string portName) : Capture(portName), ID
         ReadTimeout = SerialPort.InfiniteTimeout,
     };
 
+
+    public override bool CanConnect(string connectionString)
+    {
+        var lowered = connectionString.ToLower();
+        return lowered.StartsWith("com") ||
+               lowered.StartsWith("/dev/tty") ||
+               lowered.StartsWith("/dev/cu") ||
+               lowered.StartsWith("/dev/ttyacm");;
+    }
 
     public override Task<bool> StartCapture()
     {

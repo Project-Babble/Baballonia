@@ -6,15 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
-using Avalonia.Controls;
 using Avalonia.Threading;
 using Baballonia.Helpers;
 using Baballonia.Services;
 using CommunityToolkit.Mvvm.Input;
-using Google.Protobuf.WellKnownTypes;
 
 namespace Baballonia.ViewModels.SplitViewPane;
 
@@ -153,7 +149,7 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
             }
         };
 
-        _processingLoopService.ExpressionUpdateEvent += ExpressionUpdateHandler;
+        _processingLoopService.ExpressionChangeEvent += ExpressionUpdateHandler;
 
         LoadInitialSettings();
     }
@@ -273,6 +269,6 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
 
     public void Dispose()
     {
-        _processingLoopService.ExpressionUpdateEvent -= ExpressionUpdateHandler;
+        // _processingLoopService.ExpressionUpdateEvent -= ExpressionUpdateHandler;
     }
 }

@@ -54,45 +54,6 @@
         </StackPanel>
       </StackPanel>
 
-      <!--  Gaze Expressions Expander  -->
-      <Expander Margin="0,12,0,0" HorizontalAlignment="Stretch">
-        <Expander.Header>
-          <TextBlock FontWeight="SemiBold" Text="Gaze Expressions" />
-        </Expander.Header>
-        <StackPanel Margin="0,5">
-          <ItemsControl ItemsSource="{Binding GazeSettings}">
-            <ItemsControl.ItemTemplate>
-              <DataTemplate x:DataType="models:SliderBindableSetting">
-                <Border
-                  Margin="0,0,0,8"
-                  Padding="16"
-                  Background="{DynamicResource SystemChromeMediumLowColor}"
-                  CornerRadius="8">
-                  <Grid>
-                    <StackPanel>
-                      <TextBlock Margin="0,0,10,0" VerticalAlignment="Center">
-                        <Run FontWeight="SemiBold" Text="{Binding Name}" />
-                        <Run Text="{Binding Lower, StringFormat={}{0:0.00}}" />
-                        <Run Text="-" />
-                        <Run Text="{Binding Upper, StringFormat={}{0:0.00}}" />
-                      </TextBlock>
-                      <twoRangeSlider:RangeSlider
-                        LowerSelectedValue="{Binding Lower, Mode=TwoWay}"
-                        Maximum="1"
-                        Minimum="-1"
-                        TickFrequency="0.01"
-                        ShowMiddleThumb="True"
-                        MiddleSelectedValue="{Binding CurrentExpression, Mode=OneWay}"
-                        UpperSelectedValue="{Binding Upper, Mode=TwoWay}" />
-                    </StackPanel>
-                  </Grid>
-                </Border>
-              </DataTemplate>
-            </ItemsControl.ItemTemplate>
-          </ItemsControl>
-        </StackPanel>
-      </Expander>
-
       <!--  Eye Expressions Expander  -->
       <Expander Margin="0,12,0,0" HorizontalAlignment="Stretch">
         <Expander.Header>

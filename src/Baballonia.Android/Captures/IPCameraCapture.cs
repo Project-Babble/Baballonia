@@ -21,9 +21,6 @@ namespace Baballonia.Android.Captures;
 /// </summary>
 public sealed class IpCameraCapture(string url) : Capture(url)
 {
-    public override HashSet<Regex> Connections { get; set; }
-
-
     private readonly CancellationTokenSource _cancellationTokenSource = new();
 
     // JPEG delimiters
@@ -31,10 +28,15 @@ public sealed class IpCameraCapture(string url) : Capture(url)
     private const byte PicStart = 0xD8;
     private const byte PicEnd = 0xD9;
 
+    public override bool CanConnect(string connectionString)
+    {
+        return Uri.TryCreate(connectionString, UriKind.RelativeOrAbsolute, out _);
+    }
+
     public override Task<bool> StartCapture()
     {
-        Task.Run(() => StartStreaming(Url, null, null, _cancellationTokenSource.Token, 1024,
-            Dimensions.width * Dimensions.height));
+        Task.Run(() => StartStreaming(Source, null, null, _cancellationTokenSource.Token, 1024,
+            256 * 256)); // Size of Babble frame
         IsReady = true;
         return Task.FromResult(true);
     }

@@ -38,7 +38,7 @@ public class CameraSettings
     public Enums.Camera Camera { get; set; }
     public RegionOfInterest Roi { get; set; } = new RegionOfInterest();
     public float RotationRadians { get; set; } = 0;
-    public float Gamma { get; set; } = 0.5f;
+    public float Gamma { get; set; } = 1f;
     public bool UseRedChannel { get; set; } = false;
     public bool UseHorizontalFlip { get; set; } = false;
     public bool UseVerticalFlip { get; set; } = false;

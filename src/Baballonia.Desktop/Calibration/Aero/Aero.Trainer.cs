@@ -3,18 +3,19 @@ using System.IO;
 using System.Threading.Tasks;
 using Baballonia.Contracts;
 using Baballonia.Desktop.Calibration.Aero.Overlay;
-using Baballonia.Helpers;
 using Baballonia.Models;
+using Baballonia.Services;
 using Baballonia.Services.Inference;
-using Baballonia.Services.Inference.Enums;
-using Baballonia.ViewModels.SplitViewPane;
-using Microsoft.ML.OnnxRuntime;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Newtonsoft.Json;
+using OpenCvSharp;
 
 namespace Baballonia.Desktop.Calibration.Aero;
 
 public partial class AeroOverlayTrainerCombo
 {
+    private MjpegStreamingService leftStreamService = new();
+    private MjpegStreamingService rightStreamService = new();
     private async Task<bool> StartCamerasAsync(VrCalibration calibration)
     {
         var response = await _httpClient.GetStringAsync(new Uri($"{_baseUrl}/start_cameras?left={calibration.LeftEyeMjpegSource}&right={calibration.RightEyeMjpegSource}"));
@@ -30,8 +31,23 @@ public partial class AeroOverlayTrainerCombo
         return result!.Result == "ok";
     }
 
-    public async Task EyeTrackingCalibrationRequested(string calibrationRoutine, CameraController leftCameraController, CameraController rightCameraController, ILocalSettingsService localSettingsService, IInferenceService eyeInferenceService)
+    private void HandleEyeImageEvent(Mat image)
     {
+        int channels = image.Channels();
+        if (channels != 2)
+            return;
+
+        var images = image.Split();
+        leftStreamService.UpdateMjpegFrame(images[0]);
+        rightStreamService.UpdateMjpegFrame(images[1]);
+
+    }
+    public async Task EyeTrackingCalibrationRequested(string calibrationRoutine)
+    {
+        var processingLoop = Ioc.Default.GetService<ProcessingLoopService>()!;
+
+        processingLoop.EyesProcessingPipeline.TransformedFrameEvent += HandleEyeImageEvent;
+
         const int leftPort = 8080;
         const int rightPort = 8081;
         var modelPath = Directory.GetCurrentDirectory();
@@ -45,8 +61,8 @@ public partial class AeroOverlayTrainerCombo
         };
 
         // Now for the IPC. Spool up our MJPEG streams
-        leftCameraController.StartMjpegStreaming(leftPort);
-        rightCameraController.StartMjpegStreaming(rightPort);
+        leftStreamService.StartStreaming(leftPort);
+        rightStreamService.StartStreaming(rightPort);
 
         // Tell the calibrator/overlay to accept our streams, then start calibration
         await StartOverlay();
@@ -68,8 +84,11 @@ public partial class AeroOverlayTrainerCombo
 
         // Stop the MJPEG streams, we don't need them anymore
         StopOverlay();
-        leftCameraController.StopMjpegStreaming();
-        rightCameraController.StopMjpegStreaming();
+
+        processingLoop.EyesProcessingPipeline.TransformedFrameEvent -= HandleEyeImageEvent;
+
+        leftStreamService.StopStreaming();
+        rightStreamService.StopStreaming();
 
         // Cleanup any leftover capture.bin files
         DeleteCaptureFiles(modelPath);

@@ -8,19 +8,17 @@ namespace Baballonia.VFTCapture;
 /// <summary>
 /// Vive Facial Tracker camera capture
 /// </summary>
-public partial class VftCapture : Capture
+public sealed class VftCapture(string source) : Capture(source)
 {
-    [GeneratedRegex(@"^/dev/video", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant)]
-    private static partial Regex MyRegex();
-
-    public override HashSet<Regex> Connections { get; set; }= [MyRegex()];
-
     private VideoCapture? _videoCapture;
-    private readonly Mat _orignalMat = new();
-
-    public VftCapture(string url) : base(url) { }
-
+    private readonly Mat _originalMat = new();
     private bool _loop;
+
+    public override bool CanConnect(string connectionString)
+    {
+        var lowered = connectionString.ToLower();
+        return lowered.StartsWith("/dev/video");
+    }
 
     /// <summary>
     /// Starts video capture and applies custom resolution and framerate settings.
@@ -38,7 +36,7 @@ public partial class VftCapture : Capture
                 // Initialize VideoCapture with URL, timeout for robustness
                 // Set capture mode to YUYV
                 // Prevent automatic conversion to RGB
-                _videoCapture = await Task.Run(() => new VideoCapture(Url, VideoCaptureAPIs.V4L2), cts.Token);
+                _videoCapture = await Task.Run(() => new VideoCapture(Source, VideoCaptureAPIs.V4L2), cts.Token);
                 _videoCapture.Set(VideoCaptureProperties.Mode, 3);
                 _videoCapture.Set(VideoCaptureProperties.ConvertRgb, 0);
 
@@ -67,10 +65,10 @@ public partial class VftCapture : Capture
         {
             try
             {
-                IsReady = _videoCapture?.Read(_orignalMat) == true;
+                IsReady = _videoCapture?.Read(_originalMat) == true;
                 if (IsReady)
                 {
-                    Mat yuvConvert = Mat.FromPixelData(400, 400, MatType.CV_8UC2, _orignalMat.Data);
+                    Mat yuvConvert = Mat.FromPixelData(400, 400, MatType.CV_8UC2, _originalMat.Data);
                     yuvConvert = yuvConvert.CvtColor(ColorConversionCodes.YUV2GRAY_Y422, 0);
                     yuvConvert = yuvConvert.ColRange(new OpenCvSharp.Range(0, 200));
                     yuvConvert = yuvConvert.Resize(new Size(400, 400));
@@ -91,7 +89,7 @@ public partial class VftCapture : Capture
     private void SetTrackerState(bool setActive)
     {
         // Prev: var fd = ViveFacialTracker.open(Url, ViveFacialTracker.FileOpenFlags.O_RDWR);
-        var vftFileStream = File.Open(Url, FileMode.Open, FileAccess.ReadWrite);
+        var vftFileStream = File.Open(Source, FileMode.Open, FileAccess.ReadWrite);
         var fd = vftFileStream.SafeFileHandle.DangerousGetHandle();
         if (fd != IntPtr.Zero)
         {

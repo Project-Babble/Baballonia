@@ -20,10 +20,7 @@ public abstract class PlatformConnector
     protected ILogger Logger { get; }
     protected ILocalSettingsService LocalSettingsService { get; }
 
-    /// <summary>
-    /// The path to where the "data" lies
-    /// </summary>
-    public string Url { get; private set; }
+    public string Source { get; private set; }
 
     /// <summary>
     /// A Platform may have many Capture sources, but only one may ever be active at a time.
@@ -36,11 +33,11 @@ public abstract class PlatformConnector
     /// Add (or remove) from this collection to support platform specific connectors at runtime
     /// Or support weird hardware setups
     /// </summary>
-    public Dictionary<HashSet<Regex>, Type> Captures;
+    public Dictionary<Capture, Type> Captures;
 
-    public PlatformConnector(string url, ILogger logger, ILocalSettingsService localSettingsService)
+    public PlatformConnector(string source, ILogger logger, ILocalSettingsService localSettingsService)
     {
-        Url = url;
+        Source = source;
         Logger = logger;
         LocalSettingsService = localSettingsService;
     }
@@ -48,35 +45,36 @@ public abstract class PlatformConnector
     /// <summary>
     /// Initializes a Platform Connector
     /// </summary>
-    public virtual void Initialize(string url)
+    public virtual bool Initialize(string source)
     {
-        if (string.IsNullOrEmpty(url)) return;
+        if (string.IsNullOrEmpty(source)) return false;
 
-        this.Url = url;
+        this.Source = source;
 
         try
         {
-            foreach (var capture in Captures)
+            foreach (var capture in Captures
+                         .Where(capture => capture.Key.CanConnect(source)))
             {
-                if (capture.Key.Any(regex => regex.IsMatch(url)))
-                {
-                    Capture = (Capture)Activator.CreateInstance(capture.Value, url)!;
-                    Logger.LogInformation($"Changed capture source to {capture.Value.Name} with url {url}.");
-                    break;
-                }
+                Capture = (Capture)Activator.CreateInstance(capture.Value, source)!;
+                Logger.LogInformation($"Changed capture source to {capture.Value.Name} with url {source}.");
+                break;
             }
 
-            if (Capture is not null)
-            {
-                Capture.StartCapture();
-                Logger.LogInformation($"Starting {Capture.GetType().Name} capture source...");
-            }
+            if (Capture is null) return false;
+
+            Capture.StartCapture();
+            Logger.LogInformation($"Starting {Capture.GetType().Name} capture source...");
+            return true;
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
+            return false;
             throw;
         }
+
+        return false;
     }
 
     /// <summary>

@@ -1,117 +1,166 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using Baballonia.Contracts;
 using Baballonia.Services.Inference;
-using Baballonia.Services.Inference.Enums;
-using Baballonia.Services.Inference.Models;
+using Baballonia.Services.Inference.Filters;
+using CommunityToolkit.Mvvm.DependencyInjection;
+using HarfBuzzSharp;
+using Microsoft.Extensions.Logging;
+using OpenCvSharp;
 
 namespace Baballonia.Services;
 
 public class ProcessingLoopService : IDisposable
 {
-    public record struct Bitmaps(WriteableBitmap? FaceBitmap, WriteableBitmap? LeftBitmap, WriteableBitmap? RightBitmap);
-
     public record struct Expressions(float[]? FaceExpression, float[]? EyeExpression);
 
-    public event Action<Bitmaps> BitmapUpdateEvent;
-    public event Action<Expressions> ExpressionUpdateEvent;
-    public CameraController LeftCameraController { get; set; }
-    public CameraController RightCameraController { get; set; }
-    public CameraController FaceCameraController { get; set; }
+    public event Action<Expressions> ExpressionChangeEvent;
 
-    public IInferenceService EyeInferenceService { get; private set; }
+    public readonly FaceProcessingPipeline FaceProcessingPipeline = new();
+    public readonly EyeProcessingPipeline EyesProcessingPipeline = new();
 
     private readonly ILocalSettingsService _localSettingsService;
-    private readonly IFaceInferenceService _faceInferenceService;
-    private IServiceProvider _serviceProvider;
+
+    public event Action<Exception> PipelineExceptionEvent;
 
     private readonly DispatcherTimer _drawTimer = new()
     {
         Interval = TimeSpan.FromMilliseconds(10)
     };
 
+    private readonly ILogger<ProcessingLoopService> _logger;
+
     public ProcessingLoopService(
-        ILocalSettingsService localSettingsService,
-        IFaceInferenceService faceInferenceService,
-        IServiceProvider serviceProvider)
+        ILogger<ProcessingLoopService> logger,
+        ILocalSettingsService localSettingsService)
     {
         _localSettingsService = localSettingsService;
-        _faceInferenceService = faceInferenceService;
-        _serviceProvider = serviceProvider;
+        _logger = logger;
+
+        FaceProcessingPipeline.ImageConverter = new MatToFloatTensorConverter();
+        FaceProcessingPipeline.ImageTransformer = new ImageTransformer();
+        EyesProcessingPipeline.ImageConverter = new MatToFloatTensorConverter();
+        var dualTransformer = new DualImageTransformer();
+        dualTransformer.LeftTransformer.TargetSize = new Size(128, 128);
+        dualTransformer.RightTransformer.TargetSize = new Size(128, 128);
+        EyesProcessingPipeline.ImageTransformer = dualTransformer;
+
+        _ = SetupFaceInference();
+        _ = SetupEyeInference();
+        _ = LoadFilters();
 
         _drawTimer.Tick += TimerEvent;
-    }
-
-    public async Task SetupCameraSettings(Dictionary<Camera, string>? cameraUrls)
-    {
-        var leftSettings = await _localSettingsService.ReadSettingAsync<CameraSettings>("LeftCamera",
-            new CameraSettings { Camera = Camera.Left });
-        var rightSettings = await _localSettingsService.ReadSettingAsync<CameraSettings>("RightCamera",
-            new CameraSettings { Camera = Camera.Right });
-        var faceSettings = await _localSettingsService.ReadSettingAsync<CameraSettings>("FaceCamera",
-            new CameraSettings { Camera = Camera.Face });
-
-        // Create the appropriate eye inference service based on camera configuration
-        EyeInferenceService =
-            EyeInferenceServiceFactory.Create(_serviceProvider, cameraUrls, leftSettings, rightSettings);
-
-        LeftCameraController = new CameraController(
-            EyeInferenceService,
-            Camera.Left,
-            leftSettings
-        );
-
-        RightCameraController = new CameraController(
-            EyeInferenceService,
-            Camera.Right,
-            rightSettings
-        );
-
-        FaceCameraController = new CameraController(
-            _faceInferenceService,
-            Camera.Face,
-            faceSettings
-        );
-
         _drawTimer.Start();
     }
 
-    private async void TimerEvent(object? s, EventArgs e)
+    private async Task LoadFilters()
     {
+        var enabled = await _localSettingsService.ReadSettingAsync<bool>("AppSettings_OneEuroEnabled");
+        var cutoff = await _localSettingsService.ReadSettingAsync<float>("AppSettings_OneEuroMinFreqCutoff");
+        var speedCutoff = await _localSettingsService.ReadSettingAsync<float>("AppSettings_OneEuroSpeedCutoff");
+
+        if (!enabled)
+            return;
+
+        float[] faceArray = new float[Utils.FaceRawExpressions];
+        var faceFilter = new OneEuroFilter(
+            faceArray,
+            minCutoff: cutoff,
+            beta: speedCutoff
+        );
+        float[] eyeArray = new float[Utils.EyeRawExpressions];
+        var eyeFilter = new OneEuroFilter(
+            eyeArray,
+            minCutoff: cutoff,
+            beta: speedCutoff
+        );
+        await Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            FaceProcessingPipeline.Filter = faceFilter;
+            EyesProcessingPipeline.Filter = eyeFilter;
+        });
+    }
+
+    public async Task SetupEyeInference()
+    {
+        var eyeModel = await _localSettingsService.ReadSettingAsync<string>("EyeHome_EyeModel", "eyeModel.onnx");
+        var useGpu = await _localSettingsService.ReadSettingAsync<bool>("AppSettings_UseGPU", false);
+
+        await Task.Run(() =>
+        {
+            var l = Ioc.Default.GetService<ILogger<DefaultInferenceRunner>>()!;
+            var eyeInference = new DefaultInferenceRunner(l);
+            eyeInference.Setup(eyeModel, useGpu);
+            Dispatcher.UIThread.Post(() => { EyesProcessingPipeline.InferenceService = eyeInference; });
+        });
+    }
+
+    public async Task SetupFaceInference()
+    {
+        var useGpu = await _localSettingsService.ReadSettingAsync<bool>("AppSettings_UseGPU", false);
+
+        await Task.Run(() =>
+        {
+            var l = Ioc.Default.GetService<ILogger<DefaultInferenceRunner>>()!;
+            var faceInference = new DefaultInferenceRunner(l);
+            faceInference.Setup("faceModel.onnx", useGpu);
+
+            Dispatcher.UIThread.Post(() => { FaceProcessingPipeline.InferenceService = faceInference; });
+        });
+    }
+
+    private void TimerEvent(object? s, EventArgs e)
+    {
+        var expressions = new Expressions();
+
         try
         {
-            Bitmaps bitmaps = new Bitmaps();
-            Expressions expressions = new Expressions();
-
-            var leftSettings = await _localSettingsService.ReadSettingAsync<CameraSettings>("LeftCamera",
-                new CameraSettings { Camera = Camera.Left });
-            var rightSettings = await _localSettingsService.ReadSettingAsync<CameraSettings>("RightCamera",
-                new CameraSettings { Camera = Camera.Right });
-            var faceSettings = await _localSettingsService.ReadSettingAsync<CameraSettings>("FaceCamera",
-                new CameraSettings { Camera = Camera.Face });
-
-            var isDualCamera = EyeInferenceService is DualCameraEyeInferenceService;
-            bitmaps.LeftBitmap = await LeftCameraController.UpdateImage(leftSettings, rightSettings, faceSettings, isDualCamera);
-            bitmaps.RightBitmap = await RightCameraController.UpdateImage(leftSettings, rightSettings, faceSettings, isDualCamera);
-            bitmaps.FaceBitmap = await FaceCameraController.UpdateImage(leftSettings, rightSettings, faceSettings, false);
-
-            expressions.FaceExpression = CameraController.FaceExpressions;
-            expressions.EyeExpression = CameraController.EyeExpressions;
-
-            ExpressionUpdateEvent?.Invoke(expressions);
-            BitmapUpdateEvent?.Invoke(bitmaps);
+            var faceExpression = FaceProcessingPipeline.RunUpdate();
+            if (faceExpression != null)
+                expressions.FaceExpression = faceExpression;
         }
         catch (Exception ex)
         {
-            _drawTimer.Stop();
+            _logger.LogError("Unexpected exception in Face Tracking pipeline, stopping... : {}", ex);
+            FaceProcessingPipeline.VideoSource?.Dispose();
+            FaceProcessingPipeline.VideoSource = null;
+            PipelineExceptionEvent?.Invoke(ex);
         }
+
+        try
+        {
+            var eyeExpression = EyesProcessingPipeline.RunUpdate();
+            if (eyeExpression != null)
+                expressions.EyeExpression = eyeExpression;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Unexpected exception in Eye Tracking pipeline, stopping... : {}", ex);
+            EyesProcessingPipeline.VideoSource?.Dispose();
+            EyesProcessingPipeline.VideoSource = null;
+            PipelineExceptionEvent?.Invoke(ex);
+        }
+
+        if (expressions.FaceExpression != null || expressions.EyeExpression != null)
+            ExpressionChangeEvent?.Invoke(expressions);
+    }
+
+    public void Start()
+    {
+        _drawTimer.Start();
+    }
+
+    public void Pause()
+    {
+        _drawTimer.Stop();
     }
 
     public void Dispose()
     {
         _drawTimer.Stop();
+        FaceProcessingPipeline.VideoSource?.Dispose();
+        EyesProcessingPipeline.VideoSource?.Dispose();
     }
 }

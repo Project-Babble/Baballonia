@@ -6,17 +6,19 @@ namespace Baballonia.SDK;
 /// <summary>
 /// Defines custom camera stream behavior
 /// </summary>
-public abstract class Capture(string url)
+public abstract class Capture(string source)
 {
     /// <summary>
-    /// What unique strings are used to open this device?
+    /// Checks if the specified connection string can be used to open this device
     /// </summary>
-    public abstract HashSet<Regex> Connections { get; set; }
+    /// <param name="connectionString">The connection string to check</param>
+    /// <returns>True if the connection string can be used to open this device, false otherwise</returns>
+    public abstract bool CanConnect(string connectionString);
 
     /// <summary>
     /// Where this Capture source is currently pulling data from
     /// </summary>
-    public string Url { get; set; } = url;
+    public string Source { get; set; } = source;
 
     /// <summary>
     /// Represents the incoming frame data for this capture source.

@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Baballonia\Baballonia.csproj" />
+      <ProjectReference Include="..\Baballonia.Desktop\Baballonia.Desktop.csproj" />
   </ItemGroup>
 
     <ItemGroup>
@@ -38,6 +39,26 @@
     <ItemGroup>
         <Folder Include="Firmware\Linux\" />
         <Folder Include="Firmware\MacOS\" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="..\Baballonia\eyeModel.onnx" />
+        <EmbeddedResource Include="..\Baballonia\eyeModel.onnx">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </EmbeddedResource>
+        <None Remove="..\Baballonia\faceModel.onnx" />
+        <EmbeddedResource Include="..\Baballonia\faceModel.onnx">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="..\Baballonia.Desktop\Calibration\Windows\onnxruntime.dll">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="..\Baballonia.Desktop\Calibration\Windows\onnxruntime_providers_shared.dll">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

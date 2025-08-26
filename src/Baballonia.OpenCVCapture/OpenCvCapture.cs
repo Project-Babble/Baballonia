@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using OpenCvSharp;
+﻿using OpenCvSharp;
 using Capture = Baballonia.SDK.Capture;
 
 namespace Baballonia.OpenCVCapture;
@@ -7,14 +6,8 @@ namespace Baballonia.OpenCVCapture;
 /// <summary>
 /// Wrapper class for OpenCV
 /// </summary>
-public sealed partial class OpenCvCapture(string url) : Capture(url)
+public sealed class OpenCvCapture(string source) : Capture(source)
 {
-    // Numbers only, http or GStreamer pipeline
-    [GeneratedRegex(@"^\d+$|^https?://.*|^/dev/video\d+$|\s+!\s*appsink$|\.local$", RegexOptions.Compiled | RegexOptions.CultureInvariant)]
-    private static partial Regex MyRegex();
-
-    public override HashSet<Regex> Connections { get; set; } = [MyRegex()];
-
     private VideoCapture? _videoCapture;
     private static readonly VideoCaptureAPIs PreferredBackend;
 
@@ -44,16 +37,31 @@ public sealed partial class OpenCvCapture(string url) : Capture(url)
         }
     }
 
+    public override bool CanConnect(string connectionString)
+    {
+        var lowered = connectionString.ToLower();
+        var serial = lowered.StartsWith("com") ||
+                     lowered.StartsWith("/dev/tty") ||
+                     lowered.StartsWith("/dev/cu") ||
+                     lowered.StartsWith("/dev/ttyacm");;
+        if (serial) return false;
+
+        return lowered.StartsWith("/dev/video") ||
+               lowered.EndsWith("appsink") ||
+               int.TryParse(connectionString, out _) ||
+               Uri.TryCreate(connectionString, UriKind.Absolute, out _);
+    }
+
     public override async Task<bool> StartCapture()
     {
         using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5)))
         {
             try
             {
-                if (int.TryParse(Url, out var index))
+                if (int.TryParse(Source, out var index))
                     _videoCapture = await Task.Run(() => VideoCapture.FromCamera(index, PreferredBackend), cts.Token);
                 else
-                    _videoCapture = await Task.Run(() => new VideoCapture(Url), cts.Token);
+                    _videoCapture = await Task.Run(() => new VideoCapture(Source), cts.Token);
             }
             catch (Exception)
             {
@@ -80,7 +88,6 @@ public sealed partial class OpenCvCapture(string url) : Capture(url)
             try
             {
                 IsReady = capture.Read(RawMat);
-                Task.Delay(20, ct).Wait(ct);
             }
             catch (Exception)
             {

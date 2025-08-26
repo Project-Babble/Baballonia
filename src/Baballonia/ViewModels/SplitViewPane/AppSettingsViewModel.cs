@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Baballonia.Contracts;
 using Baballonia.Services;
+using Baballonia.Services.Inference.Filters;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 
@@ -32,7 +33,7 @@ public partial class AppSettingsViewModel : ViewModelBase
     private string _oscPrefix;
 
     [ObservableProperty]
-    [property: SavedSetting("AppSettings_OneEuroMinEnabled", false)]
+    [property: SavedSetting("AppSettings_OneEuroEnabled", false)]
     private bool _oneEuroMinEnabled;
 
     [ObservableProperty]
@@ -53,12 +54,14 @@ public partial class AppSettingsViewModel : ViewModelBase
 
     [ObservableProperty] private bool _onboardingEnabled;
 
+    private ProcessingLoopService _processingLoopService;
     public AppSettingsViewModel()
     {
         // General/Calibration Settings
         OscTarget = Ioc.Default.GetService<IOscTarget>()!;
         GithubService = Ioc.Default.GetService<GithubService>()!;
         SettingsService = Ioc.Default.GetService<ILocalSettingsService>()!;
+        _processingLoopService = Ioc.Default.GetService<ProcessingLoopService>()!;
         SettingsService.Load(this);
 
         // Handle edge case where OSC port is used and the system freaks out
@@ -76,7 +79,40 @@ public partial class AppSettingsViewModel : ViewModelBase
 
         PropertyChanged += (_, _) =>
         {
+            if (!_oneEuroMinEnabled)
+            {
+                _processingLoopService.FaceProcessingPipeline.Filter = null;
+                _processingLoopService.EyesProcessingPipeline.Filter = null;
+            }
+            else
+            {
+                float[] faceArray = new float[Utils.FaceRawExpressions];
+                var faceFilter = new OneEuroFilter(
+                    faceArray,
+                    minCutoff: _oneEuroMinFreqCutoff,
+                    beta: _oneEuroSpeedCutoff
+                );
+                float[] eyeArray = new float[Utils.EyeRawExpressions];
+                var eyeFilter = new OneEuroFilter(
+                    eyeArray,
+                    minCutoff: _oneEuroMinFreqCutoff,
+                    beta: _oneEuroSpeedCutoff
+                );
+                _processingLoopService.FaceProcessingPipeline.Filter = faceFilter;
+                _processingLoopService.EyesProcessingPipeline.Filter = eyeFilter;
+            }
+
             SettingsService.Save(this);
         };
+    }
+
+    partial void OnUseGPUChanged(bool value)
+    {
+        Task.Run(async () =>
+        {
+            await SettingsService.SaveSettingAsync("AppSettings_UseGPU", value);
+            await _processingLoopService.SetupFaceInference();
+            await _processingLoopService.SetupEyeInference();
+        });
     }
 }

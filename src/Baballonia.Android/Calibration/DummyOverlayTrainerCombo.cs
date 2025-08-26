@@ -8,9 +8,7 @@ namespace Baballonia.Android.Calibration;
 
 public class DummyOverlayTrainerCombo : IVROverlay, IVRCalibrator, IDisposable
 {
-    public Task EyeTrackingCalibrationRequested(string calibrationRoutine, CameraController leftCameraController,
-        CameraController rightCameraController, ILocalSettingsService localSettingsService,
-        IEyeInferenceService eyeInferenceService, HomePageViewModel viewModel)
+    public Task EyeTrackingCalibrationRequested(string calibrationRoutine)
     {
         return Task.CompletedTask;
     }
