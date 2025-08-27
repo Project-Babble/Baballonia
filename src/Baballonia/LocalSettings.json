@@ -11,7 +11,7 @@
       "Height": 256
     },
     "RotationRadians": 0,
-    "Gamma": 0.5,
+    "Gamma": 1,
     "UseRedChannel": false,
     "UseHorizontalFlip": false,
     "UseVerticalFlip": false
@@ -25,7 +25,7 @@
       "Height": 256
     },
     "RotationRadians": 0,
-    "Gamma": 0.5,
+    "Gamma": 1,
     "UseRedChannel": false,
     "UseHorizontalFlip": false,
     "UseVerticalFlip": false
@@ -39,7 +39,7 @@
       "Height": 256
     },
     "RotationRadians": 0,
-    "Gamma": 0.5,
+    "Gamma": 1,
     "UseRedChannel": false,
     "UseHorizontalFlip": false,
     "UseVerticalFlip": false
@@ -357,7 +357,7 @@
   },
   "LastOpenedFaceCamera": "",
   "AppBackgroundRequestedLanguage": "DefaultLanguage",
-  "AppBackgroundRequestedTheme": "Dark",
+  "AppBackgroundRequestedTheme": "Default",
   "AppSettings_RecalibrateAddress": "/avatar/parameters/etvr_recenter",
   "AppSettings_UseOSCQuery": false,
   "AppSettings_OSCPrefix": "",
@@ -365,5 +365,6 @@
   "AppSettings_OneEuroMinFreqCutoff": 1,
   "AppSettings_OneEuroSpeedCutoff": 1,
   "AppSettings_UseGPU": true,
-  "AppSettings_CheckForUpdates": false
+  "AppSettings_CheckForUpdates": true,
+  "AppSettings_LogLevel": "Information"
 }
