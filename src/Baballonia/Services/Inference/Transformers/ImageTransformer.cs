@@ -22,7 +22,7 @@ public class ImageTransformer : IImageTransformer
         Rect roi;
         if (roiX < 0 || roiY < 0 || roiWidth <= 0 || roiHeight <= 0 ||
             roiX + roiWidth > maxWidth || roiY + roiHeight > maxHeight ||
-            roiWidth == maxWidth || roiHeight == maxHeight)
+            roiWidth > maxWidth || roiHeight > maxHeight)
         {
             roi = new Rect(0, 0, maxWidth, maxHeight);
         }

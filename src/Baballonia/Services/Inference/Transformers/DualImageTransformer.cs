@@ -25,7 +25,6 @@ public class DualImageTransformer : IImageTransformer
         using var leftRoi = new Mat(image, leftHalf);
         using var rightRoi = new Mat(image, rightHalf);
 
-        // transform both simultaneously with same settings
         var leftTransformed = LeftTransformer.Apply(leftRoi);
         var rightTransformed =  RightTransformer.Apply(rightRoi);
         if (leftTransformed == null || rightTransformed == null)

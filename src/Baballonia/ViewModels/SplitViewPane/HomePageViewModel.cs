@@ -68,23 +68,42 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             _processingPipeline.TransformedFrameEvent += ImageUpdateEventHandler;
         }
 
+        public void SetCamSettings(CameraSettings settings)
+        {
+            FlipHorizontally = settings.UseHorizontalFlip;
+            FlipVertically = settings.UseVerticalFlip;
+            Rotation = settings.RotationRadians;
+            Gamma = settings.Gamma;
+            CropManager.SetCropZone(settings.Roi);
+            OverlayRectangle = CropManager.CropZone.GetRect();
+            OnCropUpdated();
+
+            if (_processingPipeline.ImageTransformer is ImageTransformer imageTransformer)
+            {
+                imageTransformer.Transformation = settings;
+
+            } else if (_processingPipeline.ImageTransformer is DualImageTransformer dualImageTransformer)
+            {
+                if (this.Camera == Camera.Left)
+                    dualImageTransformer.LeftTransformer.Transformation = settings;
+                else
+                    dualImageTransformer.RightTransformer.Transformation = settings;
+            }
+        }
+
+
         private async Task InitializeAsync(string[] cameras)
         {
             var displayAddress = await _localSettingsService.ReadSettingAsync<string>("LastOpened" + Name);
-            var camSettings = await _localSettingsService.ReadSettingAsync<CameraSettings>(Name);
+            var camSettings = await _localSettingsService.ReadSettingAsync<CameraSettings>(Name + displayAddress, new CameraSettings());
+
             await Dispatcher.UIThread.InvokeAsync(() =>
             {
                 UpdateCameraDropDown(cameras);
 
                 DisplayAddress = displayAddress;
-                FlipHorizontally = camSettings.UseHorizontalFlip;
-                FlipVertically = camSettings.UseVerticalFlip;
-                Rotation = camSettings.RotationRadians;
-                Gamma = camSettings.Gamma;
+                SetCamSettings(camSettings);
 
-                CropManager.SetCropZone(camSettings.Roi);
-                OverlayRectangle = CropManager.CropZone.GetRect();
-                OnCropUpdated();
 
                 switch (_processingPipeline.VideoSource)
                 {
@@ -126,7 +145,6 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             DisplayAddress = prev;
         }
 
-
         public void OnCropUpdated()
         {
             OverlayRectangle = CropManager.CropZone.GetRect();
@@ -143,7 +161,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
                     dualTransformer.RightTransformer.Transformation.Roi = CropManager.CropZone;
             }
 
-            SaveTransformer();
+            SaveUniqueTransformer();
         }
 
         [RelayCommand]
@@ -249,11 +267,6 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             Bitmap = tmp;
         }
 
-        partial void OnBitmapChanged(WriteableBitmap? value)
-        {
-            // IsCameraRunning = value != null;
-        }
-
         partial void OnFlipHorizontallyChanged(bool value)
         {
             var t = _processingPipeline.ImageTransformer;
@@ -269,7 +282,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
                     dualTransformer.RightTransformer.Transformation.UseHorizontalFlip = value;
             }
 
-            SaveTransformer();
+            SaveUniqueTransformer();
         }
 
         partial void OnFlipVerticallyChanged(bool value)
@@ -287,7 +300,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
                     dualTransformer.RightTransformer.Transformation.UseVerticalFlip = value;
             }
 
-            SaveTransformer();
+            SaveUniqueTransformer();
         }
 
         partial void OnRotationChanged(float value)
@@ -305,22 +318,22 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
                     dualTransformer.RightTransformer.Transformation.RotationRadians = value;
             }
 
-            SaveTransformer();
+            SaveUniqueTransformer();
         }
 
-        void SaveTransformer()
+        void SaveUniqueTransformer()
         {
             var t = _processingPipeline.ImageTransformer;
             if (t is ImageTransformer transformer)
             {
-                _localSettingsService.SaveSettingAsync(Name, transformer.Transformation);
+                _localSettingsService.SaveSettingAsync(Name + _displayAddress, transformer.Transformation);
             }
             else if (t is DualImageTransformer dualTransformer)
             {
                 if (Camera == Camera.Left)
-                    _localSettingsService.SaveSettingAsync(Name, dualTransformer.LeftTransformer.Transformation);
+                    _localSettingsService.SaveSettingAsync(Name + _displayAddress, dualTransformer.LeftTransformer.Transformation);
                 if (Camera == Camera.Right)
-                    _localSettingsService.SaveSettingAsync(Name, dualTransformer.RightTransformer.Transformation);
+                    _localSettingsService.SaveSettingAsync(Name + _displayAddress, dualTransformer.RightTransformer.Transformation);
             }
         }
 
@@ -342,7 +355,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
                     dualTransformer.RightTransformer.Transformation.Gamma = value;
             }
 
-            SaveTransformer();
+            SaveUniqueTransformer();
         }
 
         partial void OnIsCropModeChanged(bool value)
@@ -478,6 +491,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     {
         var camera = address;
         if (string.IsNullOrEmpty(camera)) return null;
+
 
         App.DeviceEnumerator.Cameras ??= await App.DeviceEnumerator.UpdateCameras();
 
@@ -625,6 +639,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     private async Task StartCameraAsync(CameraControllerModel model)
     {
         var type = model.Camera;
+        var cameraSettings = await _localSettingsService.ReadSettingAsync<CameraSettings>(model.Name + model.DisplayAddress, new CameraSettings());
 
         var isSameEye = await Dispatcher.UIThread.InvokeAsync(() =>
         {
@@ -658,6 +673,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             {
                 UpdateEyePipeline(cameraSource, type);
             }
+            model.SetCamSettings(cameraSettings);
 
             model.IsCameraRunning = true;
             SetButtons(model, false, true);
@@ -665,6 +681,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
         await SaveLastOpenedAsync(model);
     }
+
 
     private void UpdateFacePipeline(IVideoSource cameraSource)
     {

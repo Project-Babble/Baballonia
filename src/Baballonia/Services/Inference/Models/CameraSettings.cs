@@ -8,8 +8,8 @@ public class CameraSettings
     {
         public int X { get; set; } = 0;
         public int Y { get; set; } = 0;
-        public int Width { get; set; } = 192;
-        public int Height { get; set; } = 192;
+        public int Width { get; set; } = 0;
+        public int Height { get; set; } = 0;
 
         public RegionOfInterest(){}
 
