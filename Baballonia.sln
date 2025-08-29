@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baballonia.Tests", "src\Bab
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VRCFaceTracking", "src\VRCFaceTracking\VRCFaceTracking\VRCFaceTracking.csproj", "{D8C25797-49BC-4024-A812-F44AB0B77BD1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaloniaSearchableComboBox", "src\AvaloniaSearchableComboBox\AvaloniaSearchableComboBox\AvaloniaSearchableComboBox.csproj", "{3E159426-7E13-48EE-ABF0-A4E72EE2CC8E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -102,6 +104,10 @@ Global
 		{D8C25797-49BC-4024-A812-F44AB0B77BD1}.Debug|Any CPU.Build.0 = Debug|x86
 		{D8C25797-49BC-4024-A812-F44AB0B77BD1}.Release|Any CPU.ActiveCfg = Release|x86
 		{D8C25797-49BC-4024-A812-F44AB0B77BD1}.Release|Any CPU.Build.0 = Release|x86
+		{3E159426-7E13-48EE-ABF0-A4E72EE2CC8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E159426-7E13-48EE-ABF0-A4E72EE2CC8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E159426-7E13-48EE-ABF0-A4E72EE2CC8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E159426-7E13-48EE-ABF0-A4E72EE2CC8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -115,6 +121,7 @@ Global
 		{BA0A656D-FF1D-4E15-B43C-9BE5AE692256} = {82C6A0B4-5014-4BE4-9F52-7DC1989134E3}
 		{42922296-1CEC-4136-9D6B-1396CF84E95A} = {82C6A0B4-5014-4BE4-9F52-7DC1989134E3}
 		{D8C25797-49BC-4024-A812-F44AB0B77BD1} = {82C6A0B4-5014-4BE4-9F52-7DC1989134E3}
+		{3E159426-7E13-48EE-ABF0-A4E72EE2CC8E} = {82C6A0B4-5014-4BE4-9F52-7DC1989134E3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8D6643ED-DDC1-4236-9471-024DCCFC81F6}

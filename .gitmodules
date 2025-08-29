@@ -7,3 +7,6 @@
 [submodule "src/espflash"]
 	path = src/espflash
 	url = https://github.com/esp-rs/espflash.git
+[submodule "AvaloniaSearchableComboBox"]
+	path = AvaloniaSearchableComboBox
+	url = src/https://github.com/Project-Babble/AvaloniaSearchableComboBox
