@@ -8,8 +8,9 @@
     xmlns:splitViewPane="clr-namespace:Baballonia.ViewModels.SplitViewPane"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:utils="clr-namespace:Baballonia"
+    xmlns:avaloniaSearchableComboBox="https://searchable-combobox.com"
     d:DesignHeight="450"
-    d:DesignWidth="800"
+    d:DesignWidth="1200"
     x:DataType="splitViewPane:HomePageViewModel"
     mc:Ignorable="d">
 
@@ -80,17 +81,16 @@
                               <TextBlock FontSize="14" Text="Left Camera Address" />
 
                               <Grid RowDefinitions="Auto,Auto,Auto">
-                                  <AutoCompleteBox
+                                  <avaloniaSearchableComboBox:SearchableComboBox
                                       x:Name="LeftCameraAddressEntry"
                                       Grid.Row="0"
-                                      Height="36"
+                                      HorizontalAlignment="Stretch"
                                       Margin="0,6"
-                                      FilterMode="Contains"
-                                      FontSize="13"
                                       ItemsSource="{Binding LeftCamera.Suggestions}"
-                                      Text="{Binding LeftCamera.DisplayAddress, Mode=TwoWay}"
-                                      TextChanged="EyeAddressEntry_OnTextChanged"
-                                      Watermark="Start typing..." />
+                                      SelectedItem="{Binding LeftCamera.DisplayAddress, Mode=TwoWay}"
+                                      DropDownClosed="RefreshLeftEyeConnectedDevices"
+                                      SelectionChanged="EyeAddressEntry_OnTextChanged"
+                                      PlaceholderText="Start typing..." />
 
                                   <TextBlock
                                       x:Name="LeftAddressHint"
@@ -309,17 +309,16 @@
                               <TextBlock FontSize="14" Text="Right Camera Address" />
 
                               <Grid RowDefinitions="Auto,Auto,Auto">
-                                  <AutoCompleteBox
+                                  <avaloniaSearchableComboBox:SearchableComboBox
                                       x:Name="RightCameraAddressEntry"
                                       Grid.Row="0"
-                                      Height="36"
                                       Margin="0,6"
-                                      FilterMode="Contains"
-                                      FontSize="13"
+                                      HorizontalAlignment="Stretch"
                                       ItemsSource="{Binding RightCamera.Suggestions}"
-                                      Text="{Binding RightCamera.DisplayAddress, Mode=TwoWay}"
-                                      TextChanged="EyeAddressEntry_OnTextChanged"
-                                      Watermark="Start typing..." />
+                                      SelectedItem="{Binding RightCamera.DisplayAddress, Mode=TwoWay}"
+                                      DropDownClosed="RefreshRightEyeDevices"
+                                      SelectionChanged="EyeAddressEntry_OnTextChanged"
+                                      PlaceholderText="Start typing..." />
 
                                   <TextBlock
                                       x:Name="RightAddressHint"
@@ -535,17 +534,16 @@
                             <TextBlock FontSize="14" Text="Face Camera Address" />
 
                             <Grid RowDefinitions="Auto,Auto,Auto">
-                                <AutoCompleteBox
+                                <avaloniaSearchableComboBox:SearchableComboBox
                                     x:Name="FaceCameraAddressEntry"
                                     Grid.Row="0"
-                                    Height="36"
                                     Margin="0,6"
-                                    FilterMode="Contains"
-                                    FontSize="13"
+                                    HorizontalAlignment="Stretch"
                                     ItemsSource="{Binding FaceCamera.Suggestions}"
-                                    Text="{Binding FaceCamera.DisplayAddress, Mode=TwoWay}"
-                                    TextChanged="FaceAddressEntry_OnTextChanged"
-                                    Watermark="Start typing..." />
+                                    SelectedItem="{Binding FaceCamera.DisplayAddress, Mode=TwoWay}"
+                                    DropDownClosed="RefreshConnectedFaceDevices"
+                                    SelectionChanged="FaceAddressEntry_OnTextChanged"
+                                    PlaceholderText="Start typing..." />
 
                                 <TextBlock
                                     x:Name="FaceAddressHint"

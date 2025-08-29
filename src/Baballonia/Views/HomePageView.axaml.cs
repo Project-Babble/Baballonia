@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
+using AvaloniaSearchableComboBox;
 using Baballonia.Helpers;
 using Baballonia.ViewModels.SplitViewPane;
 using CommunityToolkit.Mvvm.DependencyInjection;
@@ -132,38 +133,38 @@ public partial class HomePageView : UserControl
         };
     }
 
-    private void EyeAddressEntry_OnTextChanged(object? sender, TextChangedEventArgs e)
+    private void EyeAddressEntry_OnTextChanged(object? sender, SelectionChangedEventArgs e)
     {
+        if (e is null) return; // Skip DeviceEnumerator calls
         if (DataContext is not HomePageViewModel vm) return;
 
-        if (!string.IsNullOrEmpty(vm.LeftCamera.DisplayAddress) &&
-            !string.IsNullOrEmpty(vm.RightCamera.DisplayAddress))
+        if (string.IsNullOrEmpty(vm.LeftCamera.DisplayAddress) ||
+            string.IsNullOrEmpty(vm.RightCamera.DisplayAddress)) return;
+
+        if (vm.LeftCamera.DisplayAddress.Length == 0)
         {
-            if (vm.LeftCamera.DisplayAddress.Length == 0)
-            {
-                LeftAddressHint.Text = "Please enter addresses for both eyes before starting!";
-                vm.LeftCamera.HintEnabled = true;
-                vm.LeftCamera.InferEnabled = false;
-            }
+            LeftAddressHint.Text = "Please enter addresses for both eyes before starting!";
+            vm.LeftCamera.HintEnabled = true;
+            vm.LeftCamera.InferEnabled = false;
+        }
 
-            if (vm.RightCamera.DisplayAddress.Length == 0)
-            {
-                RightAddressHint.Text = "Please enter addresses for both eyes before starting!";
-                vm.RightCamera.HintEnabled = true;
-                vm.RightCamera.InferEnabled = false;
-            }
+        if (vm.RightCamera.DisplayAddress.Length == 0)
+        {
+            RightAddressHint.Text = "Please enter addresses for both eyes before starting!";
+            vm.RightCamera.HintEnabled = true;
+            vm.RightCamera.InferEnabled = false;
+        }
 
-            if (vm.LeftCamera.DisplayAddress.Length > 0 && vm.RightCamera.DisplayAddress.Length > 0)
-            {
-                vm.LeftCamera.HintEnabled = false;
-                vm.RightCamera.HintEnabled = false;
-                vm.LeftCamera.InferEnabled = true;
-                vm.RightCamera.InferEnabled = true;
-            }
+        if (vm.LeftCamera.DisplayAddress.Length > 0 && vm.RightCamera.DisplayAddress.Length > 0)
+        {
+            vm.LeftCamera.HintEnabled = false;
+            vm.RightCamera.HintEnabled = false;
+            vm.LeftCamera.InferEnabled = true;
+            vm.RightCamera.InferEnabled = true;
         }
     }
 
-    private void FaceAddressEntry_OnTextChanged(object? sender, TextChangedEventArgs e)
+    private void FaceAddressEntry_OnTextChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (this.DataContext is not HomePageViewModel vm) return;
 
@@ -203,5 +204,38 @@ public partial class HomePageView : UserControl
         InvalidateMeasure();
 
         _isLayoutUpdating = false;
+    }
+
+    private async void RefreshLeftEyeConnectedDevices(object? sender, EventArgs e)
+    {
+        if (DataContext is not HomePageViewModel vm) return;
+        if (sender is not SearchableComboBox) return;
+
+        var cameras = await App.DeviceEnumerator.UpdateCameras();
+        var cameraNames = cameras.Keys.ToArray();
+
+        vm.LeftCamera.UpdateCameraDropDown(cameraNames);
+    }
+
+    private async void RefreshRightEyeDevices(object? sender, EventArgs e)
+    {
+        if (DataContext is not HomePageViewModel vm) return;
+        if (sender is not SearchableComboBox) return;
+
+        var cameras = await App.DeviceEnumerator.UpdateCameras();
+        var cameraNames = cameras.Keys.ToArray();
+
+        vm.RightCamera.UpdateCameraDropDown(cameraNames);
+    }
+
+    private async void RefreshConnectedFaceDevices(object? sender, EventArgs e)
+    {
+        if (DataContext is not HomePageViewModel vm) return;
+        if (sender is not SearchableComboBox) return;
+
+        var cameras = await App.DeviceEnumerator.UpdateCameras();
+        var cameraNames = cameras.Keys.ToArray();
+
+        vm.FaceCamera.UpdateCameraDropDown(cameraNames);
     }
 }

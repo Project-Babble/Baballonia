@@ -16,7 +16,6 @@ namespace Baballonia.ViewModels.SplitViewPane;
 
 public partial class CalibrationViewModel : ViewModelBase, IDisposable
 {
-    public ObservableCollection<SliderBindableSetting> GazeSettings { get; set; }
     public ObservableCollection<SliderBindableSetting> EyeSettings { get; set; }
     public ObservableCollection<SliderBindableSetting> JawSettings { get; set; }
     public ObservableCollection<SliderBindableSetting> MouthSettings { get; set; }
@@ -37,14 +36,6 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
         _calibrationService = Ioc.Default.GetService<ICalibrationService>()!;
         _parameterSenderService = Ioc.Default.GetService<ParameterSenderService>()!;
         _processingLoopService = Ioc.Default.GetService<ProcessingLoopService>()!;
-
-        GazeSettings =
-        [
-            new("LeftEyeX", -1f, 1f, -1f, 1f),
-            new("LeftEyeY", -1f, 1f, -1f, 1f),
-            new("RightEyeX", -1f, 1f, -1f, 1f),
-            new("RightEyeY", -1f, 1f, -1f, 1f),
-        ];
 
         EyeSettings =
         [
@@ -117,7 +108,7 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
             new("TongueTwistRight")
         ];
 
-        foreach (var setting in GazeSettings.Concat(EyeSettings).Concat(JawSettings).Concat(CheekSettings)
+        foreach (var setting in EyeSettings.Concat(JawSettings).Concat(CheekSettings)
                      .Concat(NoseSettings).Concat(MouthSettings).Concat(TongueSettings))
         {
             setting.PropertyChanged += OnSettingChanged;
@@ -128,9 +119,9 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
         {
             { "LeftEyeX", 0 },
             { "LeftEyeY", 1 },
-            { "RightEyeX", 2 },
-            { "RightEyeY", 3 },
-            { "LeftEyeLid", 4 },
+            { "RightEyeX", 3 },
+            { "RightEyeY", 4 },
+            { "LeftEyeLid", 2 },
             { "RightEyeLid", 5 }
         };
 
@@ -168,7 +159,6 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
         if(expressions.EyeExpression != null)
             Dispatcher.UIThread.Post(() =>
             {
-                ApplyCurrentEyeExpressionValues(expressions.EyeExpression, GazeSettings);
                 ApplyCurrentEyeExpressionValues(expressions.EyeExpression, EyeSettings);
             });
     }
@@ -246,7 +236,6 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
 
     private void LoadInitialSettings()
     {
-        LoadInitialSettings(GazeSettings);
         LoadInitialSettings(EyeSettings);
         LoadInitialSettings(CheekSettings);
         LoadInitialSettings(JawSettings);

@@ -27,6 +27,7 @@ public class ImageCollector : IImageTransformer
         var removed = ImageQueue.Dequeue();
         removed.Dispose();
 
+        // feed the most recent matrix here at the start
         var last4 = ImageQueue.Skip(ImageQueue.Count - 4).Take(4).Reverse().ToArray();
 
         var channels = new List<Mat>();

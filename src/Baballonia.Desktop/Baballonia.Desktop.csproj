@@ -152,4 +152,27 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>
+	
+    <Target Name="ExtractZipIfNeeded" AfterTargets="Build" Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+        <PropertyGroup>
+            <ZipFilePath>$(ProjectDir)_internal.zip</ZipFilePath>
+            <ExtractToPath>$(OutputPath)_internal</ExtractToPath>
+        </PropertyGroup>
+        
+        <Message Text="Extracting $(ZipFilePath) to $(ExtractToPath)" 
+                 Condition="Exists('$(ZipFilePath)') AND !Exists('$(ExtractToPath)')" 
+                 Importance="high" />
+        
+        <Unzip SourceFiles="$(ZipFilePath)" 
+               DestinationFolder="$(ExtractToPath)" 
+               Condition="Exists('$(ZipFilePath)') AND !Exists('$(ExtractToPath)')" 
+               OverwriteReadOnlyFiles="true" />
+        
+        <Message Text="Extraction folder already exists: $(ExtractToPath)" 
+                 Condition="Exists('$(ExtractToPath)')" 
+                 Importance="normal" />
+                 
+        <Warning Text="Zip file not found: $(ZipFilePath)" 
+                 Condition="!Exists('$(ZipFilePath)')" />
+    </Target>
 </Project>

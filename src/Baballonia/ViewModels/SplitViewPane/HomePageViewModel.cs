@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
@@ -54,30 +56,31 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         private readonly DefaultProcessingPipeline _processingPipeline;
 
         public CameraControllerModel(ILocalSettingsService localSettingsService, string name,
-            DefaultProcessingPipeline processingPipeline, Camera camera)
+            DefaultProcessingPipeline processingPipeline, string[] cameras, Camera camera)
         {
             _localSettingsService = localSettingsService;
             _processingPipeline = processingPipeline;
             Name = name;
             Camera = camera;
 
-            _ = InitializeAsync();
+            _ = InitializeAsync(cameras);
 
             _processingPipeline.TransformedFrameEvent += ImageUpdateEventHandler;
         }
 
-        private async Task InitializeAsync()
+        private async Task InitializeAsync(string[] cameras)
         {
             var displayAddress = await _localSettingsService.ReadSettingAsync<string>("LastOpened" + Name);
             var camSettings = await _localSettingsService.ReadSettingAsync<CameraSettings>(Name);
             await Dispatcher.UIThread.InvokeAsync(() =>
             {
+                UpdateCameraDropDown(cameras);
+
                 DisplayAddress = displayAddress;
                 FlipHorizontally = camSettings.UseHorizontalFlip;
                 FlipVertically = camSettings.UseVerticalFlip;
                 Rotation = camSettings.RotationRadians;
                 Gamma = camSettings.Gamma;
-
 
                 CropManager.SetCropZone(camSettings.Roi);
                 OverlayRectangle = CropManager.CropZone.GetRect();
@@ -108,6 +111,19 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
                         break;
                 }
             });
+        }
+
+        public void UpdateCameraDropDown(string[] cameras)
+        {
+            var prev = DisplayAddress;
+
+            Suggestions.Clear();
+            foreach (var key in cameras)
+            {
+                Suggestions.Add(key);
+            }
+
+            DisplayAddress = prev;
         }
 
 
@@ -418,16 +434,19 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         };
         _msgCounterTimer.Start();
 
-        LeftCamera = new CameraControllerModel(_localSettingsService, "LeftCamera",
-            _processingLoopService.EyesProcessingPipeline, Camera.Left);
-        RightCamera = new CameraControllerModel(_localSettingsService, "RightCamera",
-            _processingLoopService.EyesProcessingPipeline, Camera.Right);
-        FaceCamera = new CameraControllerModel(_localSettingsService, "FaceCamera",
-            _processingLoopService.FaceProcessingPipeline, Camera.Face);
+        Task.Run(async () =>
+        {
+            var cameras = await App.DeviceEnumerator.UpdateCameras();
+            var cameraNames = cameras.Keys.ToArray();
+            LeftCamera = new CameraControllerModel(_localSettingsService, "LeftCamera",
+                _processingLoopService.EyesProcessingPipeline, cameraNames, Camera.Left);
+            RightCamera = new CameraControllerModel(_localSettingsService, "RightCamera",
+                _processingLoopService.EyesProcessingPipeline, cameraNames, Camera.Right);
+            FaceCamera = new CameraControllerModel(_localSettingsService, "FaceCamera",
+                _processingLoopService.FaceProcessingPipeline, cameraNames, Camera.Face);
+        });
 
         _processingLoopService.PipelineExceptionEvent += PipelineExceptionEventHandler;
-
-        Dispatcher.UIThread.Post(async () => { await SetupCameraControllers(); });
     }
 
     private void PipelineExceptionEventHandler(Exception ex)
@@ -455,27 +474,12 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         }
     }
 
-    private async Task SetupCameraControllers()
-    {
-        Task.Run(async () =>
-        {
-            App.DeviceEnumerator.Cameras = await App.DeviceEnumerator.UpdateCameras();
-            Dispatcher.UIThread.Post(() =>
-            {
-                foreach (var camerasKey in App.DeviceEnumerator.Cameras.Keys)
-                {
-                    LeftCamera.Suggestions.Add(camerasKey);
-                    RightCamera.Suggestions.Add(camerasKey);
-                    FaceCamera.Suggestions.Add(camerasKey);
-                }
-            });
-        });
-    }
-
     private async Task<IVideoSource?> StartCameraAsync(string address)
     {
         var camera = address;
         if (string.IsNullOrEmpty(camera)) return null;
+
+        App.DeviceEnumerator.Cameras ??= await App.DeviceEnumerator.UpdateCameras();
 
         if (App.DeviceEnumerator.Cameras.TryGetValue(camera, out var mappedAddress))
         {
