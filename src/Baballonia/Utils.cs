@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
+using System.Security.Cryptography;
 using System.Security.Principal;
 
 namespace Baballonia;
@@ -20,6 +21,8 @@ public static class Utils
     public const int MobileWidth = 900;
 
     private const string k_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+    private static readonly MD5 hasher = MD5.Create();
 
     // Timer resolution helpers
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage"), SuppressUnmanagedCodeSecurity]
@@ -103,5 +106,13 @@ public static class Utils
     public static string RandomString(int length = 6)
     {
         return new string(Enumerable.Repeat(k_chars, length).Select(s => s[Random.Shared.Next(s.Length)]).ToArray());
+    }
+
+    public static string GenerateMD5(string filepath)
+    {
+        // Credit to delta for this method https://github.com/XDelta/
+        var stream = File.OpenRead(filepath);
+        var hash = hasher.ComputeHash(stream);
+        return BitConverter.ToString(hash).Replace("-", "");
     }
 }

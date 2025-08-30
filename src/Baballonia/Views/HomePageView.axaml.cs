@@ -1,13 +1,10 @@
 using System;
 using System.Linq;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
-using AvaloniaSearchableComboBox;
 using Baballonia.Helpers;
 using Baballonia.ViewModels.SplitViewPane;
-using CommunityToolkit.Mvvm.DependencyInjection;
 
 namespace Baballonia.Views;
 
@@ -100,7 +97,6 @@ public partial class HomePageView : UserControl
             SetupCropEvents(vm.LeftCamera, LeftMouthWindow);
             SetupCropEvents(vm.RightCamera, RightMouthWindow);
             SetupCropEvents(vm.FaceCamera, FaceWindow);
-            EyeAddressEntry_OnTextChanged(null, null!);
             FaceAddressEntry_OnTextChanged(null, null!);
 
             vm.SelectedCalibrationText = "Eye Calibration";
@@ -169,7 +165,8 @@ public partial class HomePageView : UserControl
     {
         if (this.DataContext is not HomePageViewModel vm) return;
 
-        if (vm.FaceCamera.DisplayAddress != null)
+        if (vm.FaceCamera == null) return;
+        if (!string.IsNullOrEmpty(vm.FaceCamera.DisplayAddress))
         {
             vm.FaceCamera.InferEnabled = vm.FaceCamera.DisplayAddress.Length > 0;
         }
@@ -210,7 +207,6 @@ public partial class HomePageView : UserControl
     private async void RefreshLeftEyeConnectedDevices(object? sender, EventArgs e)
     {
         if (DataContext is not HomePageViewModel vm) return;
-        if (sender is not SearchableComboBox) return;
 
         var cameras = await App.DeviceEnumerator.UpdateCameras();
         var cameraNames = cameras.Keys.ToArray();
@@ -221,7 +217,6 @@ public partial class HomePageView : UserControl
     private async void RefreshRightEyeDevices(object? sender, EventArgs e)
     {
         if (DataContext is not HomePageViewModel vm) return;
-        if (sender is not SearchableComboBox) return;
 
         var cameras = await App.DeviceEnumerator.UpdateCameras();
         var cameraNames = cameras.Keys.ToArray();
@@ -232,7 +227,6 @@ public partial class HomePageView : UserControl
     private async void RefreshConnectedFaceDevices(object? sender, EventArgs e)
     {
         if (DataContext is not HomePageViewModel vm) return;
-        if (sender is not SearchableComboBox) return;
 
         var cameras = await App.DeviceEnumerator.UpdateCameras();
         var cameraNames = cameras.Keys.ToArray();

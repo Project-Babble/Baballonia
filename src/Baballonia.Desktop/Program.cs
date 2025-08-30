@@ -8,6 +8,7 @@ using Baballonia.Views;
 using System;
 using Baballonia.Helpers;
 using Velopack;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Baballonia.Desktop;
 
@@ -26,7 +27,7 @@ sealed class Program
         App.Overlay = new AeroOverlayTrainerCombo();
         App.Calibrator = new AeroOverlayTrainerCombo();
         App.PlatformConnectorType = typeof(DesktopConnector);
-        App.DeviceEnumerator = new DesktopDeviceEnumerator();
+        App.DeviceEnumerator = new DesktopDeviceEnumerator(null!);
 
         return builder.StartWithClassicDesktopLifetime(args);
     }

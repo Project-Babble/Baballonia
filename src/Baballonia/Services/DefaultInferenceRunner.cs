@@ -10,19 +10,12 @@ using OpenCvSharp;
 
 namespace Baballonia.Services;
 
-public class DefaultInferenceRunner : IInferenceRunner
+public class DefaultInferenceRunner(ILogger<DefaultInferenceRunner> logger) : IInferenceRunner
 {
-    private ILogger<DefaultInferenceRunner> _logger;
-
     private string _inputName;
     private InferenceSession _session;
     public DenseTensor<float> InputTensor;
     public Size InputSize { get; private set; }
-
-    public DefaultInferenceRunner(ILogger<DefaultInferenceRunner> logger)
-    {
-        _logger = logger;
-    }
 
     /// <summary>
     /// Loads/reloads the ONNX model and setups the environment
@@ -31,7 +24,7 @@ public class DefaultInferenceRunner : IInferenceRunner
     {
         SessionOptions sessionOptions = SetupSessionOptions();
         if (useGpu)
-            ConfigurePlatformSpecificGpu(sessionOptions);
+            ConfigurePlatformSpecificGpu(sessionOptions, modelName);
         else
             sessionOptions.AppendExecutionProvider_CPU();
 
@@ -42,14 +35,15 @@ public class DefaultInferenceRunner : IInferenceRunner
 
         InputTensor = new DenseTensor<float>([1, dimensions[1], dimensions[2], dimensions[3]]);
 
-        _logger.LogInformation("{} initialization finished", modelName);
+        logger.LogInformation("{} initialization finished", modelName);
     }
 
     /// <summary>
     /// Per-platform hardware accel. detection/activation
     /// </summary>
     /// <param name="sessionOptions"></param>
-    private void ConfigurePlatformSpecificGpu(SessionOptions sessionOptions)
+    /// <param name="modelName"></param>
+    private void ConfigurePlatformSpecificGpu(SessionOptions sessionOptions, string modelName)
     {
         // "The Android Neural Networks API (NNAPI) is an Android C API designed for
         // running computationally intensive operations for machine learning on Android devices."
@@ -59,7 +53,7 @@ public class DefaultInferenceRunner : IInferenceRunner
             !OperatingSystem.IsAndroidVersionAtLeast(15)) // At most 15
         {
             sessionOptions.AppendExecutionProvider_Nnapi();
-            _logger.LogInformation("Initialized ExecutionProvider: nnAPI");
+            logger.LogInformation("Initialized ExecutionProvider: nnAPI for {ModelName}", modelName);
             return;
         }
 
@@ -70,7 +64,7 @@ public class DefaultInferenceRunner : IInferenceRunner
             OperatingSystem.IsTvOS())
         {
             sessionOptions.AppendExecutionProvider_CoreML();
-            _logger.LogInformation("Initialized ExecutionProvider: CoreML");
+            logger.LogInformation("Initialized ExecutionProvider: CoreML for {ModelName}", modelName);
             return;
         }
 
@@ -81,13 +75,13 @@ public class DefaultInferenceRunner : IInferenceRunner
             try
             {
                 sessionOptions.AppendExecutionProvider_DML();
-                _logger.LogInformation("Initialized ExecutionProvider: DirectML");
+                logger.LogInformation("Initialized ExecutionProvider: DirectML for {ModelName}", modelName);
                 return;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to configure Gpu.");
-                _logger.LogWarning("Failed to create DML Execution Provider on Windows. Falling back to CUDA...");
+                logger.LogError(ex, "Failed to configure Gpu.");
+                logger.LogWarning("Failed to create DML Execution Provider on Windows. Falling back to CUDA...");
             }
         }
 
@@ -97,13 +91,13 @@ public class DefaultInferenceRunner : IInferenceRunner
         try
         {
             sessionOptions.AppendExecutionProvider_CUDA();
-            _logger.LogInformation("Initialized ExecutionProvider: CUDA");
+            logger.LogInformation("Initialized ExecutionProvider: CUDA for {ModelName}", modelName);
             return;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to configure Gpu.");
-            _logger.LogWarning("Failed to create CUDA Execution Provider.");
+            logger.LogError(ex, "Failed to configure Gpu.");
+            logger.LogWarning("Failed to create CUDA Execution Provider.");
         }
 
         // And, if CUDA fails (or we have an AMD card)
@@ -111,16 +105,16 @@ public class DefaultInferenceRunner : IInferenceRunner
         try
         {
             sessionOptions.AppendExecutionProvider_ROCm();
-            _logger.LogInformation("Initialized ExecutionProvider: ROCm");
+            logger.LogInformation("Initialized ExecutionProvider: ROCm for {ModelName}", modelName);
             return;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to configure ROCm.");
-            _logger.LogWarning("Failed to create ROCm Execution Provider.");
+            logger.LogError(ex, "Failed to configure ROCm.");
+            logger.LogWarning("Failed to create ROCm Execution Provider.");
         }
 
-        _logger.LogWarning("No GPU acceleration will be applied.");
+        logger.LogWarning("No GPU acceleration will be applied.");
         sessionOptions.AppendExecutionProvider_CPU();
     }
 

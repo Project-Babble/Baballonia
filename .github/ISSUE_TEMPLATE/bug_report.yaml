@@ -1,0 +1,78 @@
+﻿name: Bug report
+description: File a bug report
+title: '[Bug]: '
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        Please search for existing/duplicate issues before posting yours,
+        someone else might have reported the same issue here. Thank you!
+  - type: input
+    id: version
+    attributes:
+      label: Version Number
+      value: latest
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Describe the bug
+      description: (A clear and concise description of what the bug is)
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: >-
+        (Steps to reproduce the behavior. Use bullet points and keep them as
+        simple as possible - any steps that are not necessary to reproduce the
+        issue should be omitted.)
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: (A clear and concise description of what you expected to happen.)
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      options:
+        - Windows 10
+        - Windows 11
+        - MacOS
+        - Linux (supported by us)
+        - Linux (other, please specify in notes)
+        - Other (please specify in notes)
+    validations:
+      required: true
+  - type: dropdown
+    id: hardware
+    attributes:
+      label: Hardware setup
+      multiple: true
+      options:
+        - Babble Tracker (wired)
+        - Babble Tracker (wifi)
+        - ETVR (wired)
+        - ETVR (wifi)
+        - Bsb2 native ET
+        - Other (please specify in notes)
+        - N/A
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log Files
+      description: You can find the log file under your Documents/ProjectBabble folder
+      placeholder: Copy-paste logs or parts of them here
+  - type: textarea
+    id: notes
+    attributes:
+      label: Other Notes
