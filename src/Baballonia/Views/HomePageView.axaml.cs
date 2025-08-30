@@ -92,9 +92,10 @@ public partial class HomePageView : UserControl
                 }
             };
         }
-        Loaded += (_, _) =>
+        Loaded += async (_, _) =>
         {
             if (DataContext is not HomePageViewModel vm) return;
+            await vm.camerasInitialized.Task;
 
             SetupCropEvents(vm.LeftCamera, LeftMouthWindow);
             SetupCropEvents(vm.RightCamera, RightMouthWindow);
@@ -136,7 +137,7 @@ public partial class HomePageView : UserControl
     private void EyeAddressEntry_OnTextChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (e is null) return; // Skip DeviceEnumerator calls
-        if (DataContext is not HomePageViewModel vm) return;
+        if (DataContext is not HomePageViewModel vm || vm.FaceCamera == null) return;
 
         if (string.IsNullOrEmpty(vm.LeftCamera.DisplayAddress) ||
             string.IsNullOrEmpty(vm.RightCamera.DisplayAddress)) return;
