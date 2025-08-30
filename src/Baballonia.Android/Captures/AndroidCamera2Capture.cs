@@ -244,11 +244,7 @@ public class AndroidCamera2Capture : Capture
         {
             // Convert Android Image to OpenCV Mat
             var mat = ConvertImageToMat(image);
-
-            lock (_frameLock)
-            {
-                RawMat = mat;
-            }
+            SetRawMat(mat);
         }
         catch (Exception ex)
         {

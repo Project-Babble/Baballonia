@@ -141,7 +141,8 @@ public sealed class IpCameraCapture(string url) : Capture(url)
                 {
                     try
                     {
-                        Mat.FromImageData(TrimEnd(frameBuffer), ImreadModes.Color).CopyTo(RawMat);
+                        var mat = Mat.FromImageData(TrimEnd(frameBuffer));
+                        SetRawMat(mat);
                     }
                     catch (Exception)
                     {

@@ -31,7 +31,8 @@ public sealed class SerialCameraCapture(string portName) : Capture(portName), ID
         return lowered.StartsWith("com") ||
                lowered.StartsWith("/dev/tty") ||
                lowered.StartsWith("/dev/cu") ||
-               lowered.StartsWith("/dev/ttyacm");;
+               lowered.StartsWith("/dev/ttyacm");
+        ;
     }
 
     public override Task<bool> StartCapture()
@@ -62,7 +63,8 @@ public sealed class SerialCameraCapture(string portName) : Capture(portName), ID
                     bufferPosition += await stream.ReadAsync(buffer, bufferPosition, sizeof(ulong) - bufferPosition);
                 ulong header = BinaryPrimitives.ReadUInt64LittleEndian(buffer);
                 for (; (header & EtvrHeaderMask) != EtvrHeader; header = header >> 8 | (ulong)buffer[0] << 56)
-                    while (await stream.ReadAsync(buffer, 0, 1) == 0) /**/;
+                    while (await stream.ReadAsync(buffer, 0, 1) == 0) /**/
+                        ;
 
                 ushort jpegSize = (ushort)(header >> BitOperations.TrailingZeroCount(~EtvrHeaderMask));
                 if (buffer.Length < jpegSize)
@@ -74,9 +76,9 @@ public sealed class SerialCameraCapture(string portName) : Capture(portName), ID
                 var newFrame = Mat.FromImageData(buffer);
                 // Only update the frame count if the image data has actually changed
                 if (newFrame.Width > 0 && newFrame.Height > 0)
-                {
-                    newFrame.CopyTo(RawMat);
-                }
+                    SetRawMat(newFrame);
+                else
+                    newFrame.Dispose();
             }
         }
         catch (ObjectDisposedException)
@@ -84,7 +86,6 @@ public sealed class SerialCameraCapture(string portName) : Capture(portName), ID
             // Handle when the device is unplugged
             await StopCapture();
             Dispose();
-
         }
         catch (Exception)
         {
@@ -115,6 +116,7 @@ public sealed class SerialCameraCapture(string portName) : Capture(portName), ID
             StopCapture(); // xlinka 11/8/24: Ensure capture stops before disposing resources
             _serialPort?.Dispose(); // xlinka 11/8/24: Dispose of serial port if initialized
         }
+
         _isDisposed = true;
     }
 

@@ -87,7 +87,13 @@ public sealed class OpenCvCapture(string source) : Capture(source)
         {
             try
             {
-                IsReady = capture.Read(RawMat);
+                var frame = new Mat();
+                IsReady = capture.Read(frame);
+                // no need to push empty Mat
+                if(IsReady)
+                    SetRawMat(frame);
+                else
+                    frame.Dispose();
             }
             catch (Exception)
             {
