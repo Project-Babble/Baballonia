@@ -1,4 +1,5 @@
 ﻿using Baballonia.Factories;
+using Baballonia.Services.Inference.VideoSources;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Extensions.Logging;
 

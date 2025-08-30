@@ -2,6 +2,7 @@
 using System.IO.Ports;
 using System.Numerics;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Logging;
 using OpenCvSharp;
 using Capture = Baballonia.SDK.Capture;
 
@@ -11,7 +12,7 @@ namespace Baballonia.SerialCameraCapture;
 /// Serial Camera capture class intended for use on Desktop platforms
 /// Babble-board specific implementation, assumes a fixed camera size of 240x240
 /// </summary>
-public sealed class SerialCameraCapture(string portName) : Capture(portName), IDisposable
+public sealed class SerialCameraCapture(string source, ILogger logger) : Capture(source, logger), IDisposable
 {
     private const int BaudRate = 3000000;
     private const ulong EtvrHeader = 0xd8ff0000a1ffa0ff, EtvrHeaderMask = 0xffff0000ffffffff;
@@ -19,7 +20,7 @@ public sealed class SerialCameraCapture(string portName) : Capture(portName), ID
 
     private readonly SerialPort _serialPort = new()
     {
-        PortName = portName,
+        PortName = source,
         BaudRate = BaudRate,
         ReadTimeout = SerialPort.InfiniteTimeout,
     };
@@ -36,14 +37,24 @@ public sealed class SerialCameraCapture(string portName) : Capture(portName), ID
 
     public override Task<bool> StartCapture()
     {
+        Logger.LogDebug("Starting serial camera capture...");
+        Logger.LogDebug("Port Name: '" + source + "'");
+
         try
         {
+            Logger.LogDebug("Opening serial port '" + source + "'");
             _serialPort.Open();
+            Logger.LogDebug("Serial port opened successfully");
+
             IsReady = true;
+            Logger.LogDebug("Starting data loop for serial camera");
             DataLoop();
+
+            Logger.LogDebug("Starting serial camera started!");
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            Logger.LogError(ex, "Failed to start serial camera capture on port '" + source + "'");
             IsReady = false;
         }
 
@@ -52,6 +63,7 @@ public sealed class SerialCameraCapture(string portName) : Capture(portName), ID
 
     private async void DataLoop()
     {
+        Logger.LogDebug("Serial camera data loop started");
         byte[] buffer = new byte[2048];
         try
         {
@@ -82,12 +94,14 @@ public sealed class SerialCameraCapture(string portName) : Capture(portName), ID
         catch (ObjectDisposedException)
         {
             // Handle when the device is unplugged
+            Logger.LogWarning("Serial port was disposed - device likely unplugged");
             await StopCapture();
             Dispose();
 
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            Logger.LogError(ex, "Error stopping serial camera capture");
             await StopCapture();
         }
     }
@@ -112,8 +126,10 @@ public sealed class SerialCameraCapture(string portName) : Capture(portName), ID
 
         if (disposing)
         {
+            Logger.LogDebug("Disposing serial camera capture resources...");
             StopCapture(); // xlinka 11/8/24: Ensure capture stops before disposing resources
             _serialPort?.Dispose(); // xlinka 11/8/24: Dispose of serial port if initialized
+            Logger.LogDebug("Serial camera capture resources disposed");
         }
         _isDisposed = true;
     }

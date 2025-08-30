@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using Microsoft.Extensions.Logging;
 using OpenCvSharp;
 
 namespace Baballonia.SDK;
@@ -6,8 +7,10 @@ namespace Baballonia.SDK;
 /// <summary>
 /// Defines custom camera stream behavior
 /// </summary>
-public abstract class Capture(string source)
+public abstract class Capture(string source, ILogger logger)
 {
+    protected ILogger Logger = logger;
+
     /// <summary>
     /// Checks if the specified connection string can be used to open this device
     /// </summary>

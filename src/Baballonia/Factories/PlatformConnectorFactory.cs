@@ -8,6 +8,6 @@ public class PlatformConnectorFactory
 {
     public PlatformConnector Create(ILogger logger, string cameraAddress)
     {
-        return (PlatformConnector)Activator.CreateInstance(App.PlatformConnectorType, cameraAddress, logger, null)!;
+        return (PlatformConnector)Activator.CreateInstance(App.PlatformConnectorType, cameraAddress, logger)!;
     }
 }

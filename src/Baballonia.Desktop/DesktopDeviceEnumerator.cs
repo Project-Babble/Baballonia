@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Threading.Tasks;
 using Baballonia.Contracts;
+using Microsoft.Extensions.Logging;
 using OpenCvSharp;
 
 #if WINDOWS
@@ -16,49 +17,60 @@ using DirectShowLib;
 
 namespace Baballonia.Desktop;
 
-public sealed class DesktopDeviceEnumerator : IDeviceEnumerator
+public sealed class DesktopDeviceEnumerator(ILogger<DesktopDeviceEnumerator> logger) : IDeviceEnumerator
 {
+    public ILogger Logger { get; set; } = logger;
     public Dictionary<string, string> Cameras { get; set; } = null!;
 
     /// <summary>
     /// Lists available cameras with friendly names as dictionary keys and device identifiers as values.
     /// </summary>
     /// <returns>Dictionary with friendly names as keys and device IDs as values</returns>
-    public async Task<Dictionary<string, string>> UpdateCameras()
+    public Task<Dictionary<string, string>> UpdateCameras()
     {
+        Logger.LogDebug("Starting camera device enumeration...");
         Dictionary<string, string> cameraDict = new Dictionary<string, string>();
 
         try
         {
+            Logger.LogDebug("Detecting operating system for camera enumeration");
             if (OperatingSystem.IsWindows())
             {
+                Logger.LogDebug("Running on Windows - using DirectShow camera detection");
                 AddWindowsDsCameras(cameraDict);
-                AddRevisionCamera(cameraDict);
             }
             else if (OperatingSystem.IsMacOS())
             {
+                Logger.LogDebug("Running on macOS - using OpenCV camera detection");
                 AddOpenCvCameras(cameraDict);
             }
             else if (OperatingSystem.IsLinux())
             {
+                Logger.LogDebug("Running on Linux - using UVC device");
                 AddLinuxUvcDevices(cameraDict);
-                AddRevisionCamera(cameraDict);
+            }
+            else
+            {
+                Logger.LogWarning("Unknown operating system detected for camera enumeration");
             }
 
             // Add serial ports as potential camera sources
+            Logger.LogDebug("Adding serial ports as potential camera sources");
             AddSerialPorts(cameraDict);
         }
         catch (Exception ex)
         {
+            Logger.LogError(ex, "Error during camera enumeration: {ErrorMessage}", ex.Message);
             cameraDict.Add($"Error: {ex.Message}", "error");
         }
 
-        return cameraDict;
-    }
+        Logger.LogInformation("Camera enumeration completed. Found {CameraCount} devices", cameraDict.Count);
+        foreach (var camera in cameraDict)
+        {
+            Logger.LogDebug("Detected camera: '{FriendlyName}' -> '{DeviceId}'", camera.Key, camera.Value);
+        }
 
-    private void AddRevisionCamera(Dictionary<string, string> cameraDict)
-    {
-
+        return Task.FromResult(cameraDict);
     }
 
     private void AddOpenCvCameras(Dictionary<string, string> cameraDict)

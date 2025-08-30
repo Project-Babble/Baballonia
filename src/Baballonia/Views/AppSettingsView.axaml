@@ -173,7 +173,7 @@
                                 Margin="5"
                                 FontSize="14"
                                 Foreground="{DynamicResource SystemChromeGrayColor}"
-                                Text="Filter Settings. Changing these requires a restart!" />
+                                Text="Filter Settings" />
                         </StackPanel>
                     </Grid>
                 </Expander.Header>
@@ -257,9 +257,22 @@
 
             <controls:SettingsToggle
                 Title="Use GPU acceleration"
-                Description="Use your GPU to make things run faster! Requires a restart"
+                Description="Use your GPU to make things run faster! Requires restart"
                 IconPath="TopSpeedRegular"
                 SettingToggled="{Binding UseGPU, Mode=TwoWay}" />
+
+            <controls:SettingsBlock
+              Title="Log Level Verbosity"
+              Description="Minimum logging level. Requires restart"
+              IconPath="SendLoggingRegular">
+              <controls:SettingsBlock.SettingsContent>
+                <ComboBox
+                  x:Name="LogLevelCombo"
+                  VerticalAlignment="Center"
+                  ItemsSource="{Binding LowestLogLevel}"
+                  SelectedItem="{Binding LogLevel}" />
+              </controls:SettingsBlock.SettingsContent>
+            </controls:SettingsBlock>
 
             <controls:SettingsToggle
                 Title="Check For Updates"

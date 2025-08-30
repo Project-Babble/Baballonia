@@ -85,7 +85,13 @@ public class ProcessingLoopService : IDisposable
 
     public async Task SetupEyeInference()
     {
-        var eyeModel = await _localSettingsService.ReadSettingAsync<string>("EyeHome_EyeModel", "eyeModel.onnx");
+        const string defaultEyeModel = "eyeModel.onnx";
+        var eyeModel = await _localSettingsService.ReadSettingAsync<string>("EyeHome_EyeModel", defaultEyeModel);
+        if (eyeModel == defaultEyeModel)
+        {
+            _logger.LogDebug("Loaded default eye model with hash {EyeModelHash}", Utils.GenerateMD5(eyeModel));
+        }
+
         var useGpu = await _localSettingsService.ReadSettingAsync<bool>("AppSettings_UseGPU", false);
 
         await Task.Run(() =>
@@ -105,7 +111,10 @@ public class ProcessingLoopService : IDisposable
         {
             var l = Ioc.Default.GetService<ILogger<DefaultInferenceRunner>>()!;
             var faceInference = new DefaultInferenceRunner(l);
-            faceInference.Setup("faceModel.onnx", useGpu);
+
+            const string defaultFaceModel = "faceModel.onnx";
+            faceInference.Setup(defaultFaceModel, useGpu);
+            _logger.LogDebug("Loaded default face model with hash {FaceModelHash}", Utils.GenerateMD5(defaultFaceModel));
 
             Dispatcher.UIThread.Post(() => { FaceProcessingPipeline.InferenceService = faceInference; });
         });

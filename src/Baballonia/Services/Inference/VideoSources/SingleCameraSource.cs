@@ -3,7 +3,7 @@ using Baballonia.Services.Inference.Platforms;
 using Microsoft.Extensions.Logging;
 using OpenCvSharp;
 
-namespace Baballonia.Services.Inference;
+namespace Baballonia.Services.Inference.VideoSources;
 
 public class SingleCameraSource : IVideoSource
 {

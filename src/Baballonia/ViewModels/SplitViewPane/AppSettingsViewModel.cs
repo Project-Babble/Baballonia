@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Baballonia.Contracts;
@@ -21,7 +22,7 @@ public partial class AppSettingsViewModel : ViewModelBase
     private string _recalibrateAddress;
 
     [ObservableProperty]
-    [property: SavedSetting("AppSettings_RecalibrateAddress", "/avatar/parameters/etvr_recenter")]
+    [property: SavedSetting("AppSettings_RecenterAddress", "/avatar/parameters/etvr_recenter")]
     private string _recenterAddress;
 
     [ObservableProperty]
@@ -51,6 +52,18 @@ public partial class AppSettingsViewModel : ViewModelBase
     [ObservableProperty]
     [property: SavedSetting("AppSettings_CheckForUpdates", false)]
     private bool _checkForUpdates;
+
+    [ObservableProperty]
+    [property: SavedSetting("AppSettings_LogLevel", "Debug")]
+    private string _logLevel;
+
+    public List<string> LowestLogLevel { get; } =
+    [
+        "Debug",
+        "Information",
+        "Warning",
+        "Error"
+    ];
 
     [ObservableProperty] private bool _onboardingEnabled;
 

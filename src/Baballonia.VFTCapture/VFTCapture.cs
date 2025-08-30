@@ -1,5 +1,6 @@
 
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Logging;
 using OpenCvSharp;
 using Capture = Baballonia.SDK.Capture;
 
@@ -8,7 +9,7 @@ namespace Baballonia.VFTCapture;
 /// <summary>
 /// Vive Facial Tracker camera capture
 /// </summary>
-public sealed class VftCapture(string source) : Capture(source)
+public sealed class VftCapture(string source, ILogger logger) : Capture(source, logger)
 {
     private VideoCapture? _videoCapture;
     private readonly Mat _originalMat = new();
@@ -26,6 +27,8 @@ public sealed class VftCapture(string source) : Capture(source)
     /// <returns>True if the video capture started successfully, otherwise false.</returns>
     public override async Task<bool> StartCapture()
     {
+        Logger.LogDebug("Starting VFT camera capture...");
+
         using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(20)))
         {
             try
@@ -43,14 +46,16 @@ public sealed class VftCapture(string source) : Capture(source)
                 _loop = true;
                 _ = Task.Run(VideoCapture_UpdateLoop);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Logger.LogError(ex, "Failed to start VFT camera capture");
                 IsReady = false;
                 return IsReady;
             }
         }
 
         IsReady = _videoCapture!.IsOpened();
+        Logger.LogDebug("VFT camera capture started successfully: " + IsReady);
         return IsReady;
     }
 
@@ -116,8 +121,13 @@ public sealed class VftCapture(string source) : Capture(source)
     /// <returns>True if capture stopped successfully, otherwise false.</returns>
     public override Task<bool> StopCapture()
     {
+        Logger.LogDebug("Stopping VFT camera capture...");
+
         if (_videoCapture is null)
+        {
+            Logger.LogDebug("VFT VideoCapture is already null, returning false");
             return Task.FromResult(false);
+        }
 
         _loop = false;
         IsReady = false;
@@ -125,6 +135,7 @@ public sealed class VftCapture(string source) : Capture(source)
         _videoCapture.Dispose();
         _videoCapture = null;
         SetTrackerState(false);
+        Logger.LogDebug("VFT camera capture stopped successfully");
         return Task.FromResult(true);
     }
 }

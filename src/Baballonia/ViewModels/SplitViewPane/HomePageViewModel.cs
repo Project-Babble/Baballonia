@@ -16,6 +16,7 @@ using Baballonia.Services;
 using Baballonia.Services.Inference;
 using Baballonia.Services.Inference.Enums;
 using Baballonia.Services.Inference.Models;
+using Baballonia.Services.Inference.VideoSources;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
@@ -397,6 +398,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     [ObservableProperty] private CameraControllerModel _leftCamera;
     [ObservableProperty] private CameraControllerModel _rightCamera;
     [ObservableProperty] private CameraControllerModel _faceCamera;
+    public readonly TaskCompletionSource camerasInitialized = new();
 
     private readonly DispatcherTimer _msgCounterTimer;
     private readonly ILocalSettingsService _localSettingsService;
@@ -444,6 +446,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
                 _processingLoopService.EyesProcessingPipeline, cameraNames, Camera.Right);
             FaceCamera = new CameraControllerModel(_localSettingsService, "FaceCamera",
                 _processingLoopService.FaceProcessingPipeline, cameraNames, Camera.Face);
+            camerasInitialized.SetResult();
         });
 
         _processingLoopService.PipelineExceptionEvent += PipelineExceptionEventHandler;

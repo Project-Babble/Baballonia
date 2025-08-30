@@ -45,9 +45,9 @@
       <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.119.0" Condition="$([MSBuild]::IsOSPlatform('Linux'))"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Baballonia.OpenCVCapture\Baballonia.OpenCVCapture.csproj" />
+        <ProjectReference Include="..\Baballonia.OpenCVCapture\Baballonia.OpenCVCapture.csproj"/>
         <ProjectReference Include="..\Baballonia.SDK\Baballonia.SDK.csproj" />
-        <ProjectReference Include="..\Baballonia.SerialCameraCapture\Baballonia.SerialCameraCapture.csproj" />
+        <ProjectReference Include="..\Baballonia.SerialCameraCapture\Baballonia.SerialCameraCapture.csproj"/>
         <ProjectReference Include="..\Baballonia\Baballonia.csproj" />
     </ItemGroup>
 
@@ -153,26 +153,39 @@
       </None>
     </ItemGroup>
 	
-    <Target Name="ExtractZipIfNeeded" AfterTargets="Build" Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-        <PropertyGroup>
-            <ZipFilePath>$(ProjectDir)_internal.zip</ZipFilePath>
-            <ExtractToPath>$(OutputPath)_internal</ExtractToPath>
-        </PropertyGroup>
-        
-        <Message Text="Extracting $(ZipFilePath) to $(ExtractToPath)" 
-                 Condition="Exists('$(ZipFilePath)') AND !Exists('$(ExtractToPath)')" 
-                 Importance="high" />
-        
-        <Unzip SourceFiles="$(ZipFilePath)" 
-               DestinationFolder="$(ExtractToPath)" 
+
+	<Target Name="CopyModulesToFolder" AfterTargets="AfterBuild">
+	  <ItemGroup>
+		<ModuleDlls Include="$(OutputPath)Baballonia.SerialCameraCapture.dll" />
+		<ModuleDlls Include="$(OutputPath)Baballonia.OpenCVCapture.dll" />
+	  </ItemGroup>
+	  <MakeDir Directories="$(OutputPath)Modules" />
+	  <Copy SourceFiles="@(ModuleDlls)" DestinationFolder="$(OutputPath)Modules\" />
+	  <!-- Remove the DLLs from the root output directory -->
+	  <Delete Files="@(ModuleDlls)" />
+	</Target>
+
+  <Target Name="ExtractZipIfNeeded" AfterTargets="Build" Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+      <PropertyGroup>
+          <ZipFilePath>$(ProjectDir)_internal.zip</ZipFilePath>
+          <ExtractToPath>$(OutputPath)_internal</ExtractToPath>
+      </PropertyGroup>
+
+      <Message Text="Extracting $(ZipFilePath) to $(ExtractToPath)" 
                Condition="Exists('$(ZipFilePath)') AND !Exists('$(ExtractToPath)')" 
-               OverwriteReadOnlyFiles="true" />
-        
-        <Message Text="Extraction folder already exists: $(ExtractToPath)" 
-                 Condition="Exists('$(ExtractToPath)')" 
-                 Importance="normal" />
-                 
-        <Warning Text="Zip file not found: $(ZipFilePath)" 
-                 Condition="!Exists('$(ZipFilePath)')" />
-    </Target>
+               Importance="high" />
+
+      <Unzip SourceFiles="$(ZipFilePath)" 
+             DestinationFolder="$(ExtractToPath)" 
+             Condition="Exists('$(ZipFilePath)') AND !Exists('$(ExtractToPath)')" 
+             OverwriteReadOnlyFiles="true" />
+
+      <Message Text="Extraction folder already exists: $(ExtractToPath)" 
+               Condition="Exists('$(ExtractToPath)')" 
+               Importance="normal" />
+
+      <Warning Text="Zip file not found: $(ZipFilePath)" 
+               Condition="!Exists('$(ZipFilePath)')" />
+  </Target>
+
 </Project>

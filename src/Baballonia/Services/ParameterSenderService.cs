@@ -7,6 +7,7 @@ using Baballonia.Contracts;
 using Baballonia.Helpers;
 using Baballonia.Services.Inference;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using OscCore;
 
 namespace Baballonia.Services;
@@ -16,7 +17,7 @@ public class ParameterSenderService : BackgroundService
     private readonly OscSendService oscSendService;
     private readonly ILocalSettingsService localSettingsService;
     private readonly ICalibrationService calibrationService;
-    private readonly ProcessingLoopService processingLoopService;
+    private readonly ILogger<ParameterSenderService> logger;
 
     private string prefix = "";
     private readonly Queue<OscMessage> _sendQueue = new();
@@ -85,18 +86,23 @@ public class ParameterSenderService : BackgroundService
         OscSendService sendService,
         ILocalSettingsService localSettingsService,
         ICalibrationService calibrationService,
-        ProcessingLoopService processingLoopService)
+        ProcessingLoopService processingLoopService,
+        ILogger<ParameterSenderService> logger)
     {
         this.oscSendService = sendService;
         this.localSettingsService = localSettingsService;
         this.calibrationService = calibrationService;
-        this.processingLoopService = processingLoopService;
+        this.logger = logger;
 
          processingLoopService.ExpressionChangeEvent += ExpressionUpdateHandler;
     }
 
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
+        logger.LogDebug("Starting Parameter Sender Service...");
+        logger.LogDebug("OSC parameter mapping initialized with {EyeCount} eye expressions and {FaceCount} face expressions",
+            EyeExpressionMap.Count, FaceExpressionMap.Count);
+
         while (!cancellationToken.IsCancellationRequested)
         {
             try
