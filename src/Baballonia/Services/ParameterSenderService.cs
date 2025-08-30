@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Baballonia.Contracts;
 using Baballonia.Helpers;
-using Baballonia.Services.Inference;
 using Microsoft.Extensions.Hosting;
 using OscCore;
 
@@ -97,11 +96,18 @@ public class ParameterSenderService : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
+        var lastRefresh = DateTime.UtcNow;
         while (!cancellationToken.IsCancellationRequested)
         {
             try
             {
-                prefix = await localSettingsService.ReadSettingAsync<string>("AppSettings_OSCPrefix");
+                // TODO: find a better way to do this
+                // duct tape fix of SOH warnings which also helps the GC a bit
+                // only refresh sometimes instead of 100 times per second
+                if ((DateTime.UtcNow - lastRefresh).TotalSeconds > 2)
+                {
+                    prefix = await localSettingsService.ReadSettingAsync<string>("AppSettings_OSCPrefix");
+                }
                 await SendAndClearQueue(cancellationToken);
                 await Task.Delay(10, cancellationToken);
             }

@@ -7,6 +7,7 @@ namespace Baballonia.Services.Inference;
 
 public class MatToFloatTensorConverter : IImageConverter
 {
+    private float[]? buffer;
     public void Convert(Mat input, DenseTensor<float> outTensor)
     {
         Mat resultMat;
@@ -33,7 +34,9 @@ public class MatToFloatTensorConverter : IImageConverter
 
         int totalElements = height * width * channels;
 
-        float[] buffer = new float[totalElements];
+        if (buffer == null || buffer.Length != totalElements)
+            buffer = new float[totalElements];
+
         Marshal.Copy(matPtr, buffer, 0, totalElements);
 
         // Convert HWC to NCHW
