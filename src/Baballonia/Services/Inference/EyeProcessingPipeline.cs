@@ -37,6 +37,7 @@ public class EyeProcessingPipeline : DefaultProcessingPipeline
             return null;
 
         ImageConverter?.Convert(collected, InferenceService.GetInputTensor());
+        collected.Dispose();
 
         var inferenceResult = InferenceService?.Run();
         if(inferenceResult == null)

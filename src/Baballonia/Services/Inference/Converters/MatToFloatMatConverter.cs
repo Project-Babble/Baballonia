@@ -11,10 +11,13 @@ public class MatToFloatTensorConverter : IImageConverter
     public void Convert(Mat input, DenseTensor<float> outTensor)
     {
         Mat resultMat;
+        var shouldFree = false;
+
         if (input.Type() != MatType.CV_32FC(input.Channels()))
         {
             resultMat = new Mat();
             input.ConvertTo(resultMat, MatType.CV_32FC(input.Channels()), 1f / 255f);
+            shouldFree = true;
         }
         else
         {
@@ -23,7 +26,10 @@ public class MatToFloatTensorConverter : IImageConverter
         Cv2.Resize(resultMat, resultMat, new Size(outTensor.Dimensions[2], outTensor.Dimensions[3]));
         if (!resultMat.IsContinuous())
         {
-            resultMat = resultMat.Clone(); // Make it continuous
+            var tmp = resultMat;
+            resultMat = tmp.Clone(); // Make it continuous
+            tmp.Dispose();
+            shouldFree = true;
         }
 
         int height = resultMat.Rows;
@@ -51,5 +57,10 @@ public class MatToFloatTensorConverter : IImageConverter
                 }
             }
         }
+
+        // free the allocated map only if we converted it
+        // we should not manage the callers memory
+        if (shouldFree)
+            resultMat.Dispose();
     }
 }
