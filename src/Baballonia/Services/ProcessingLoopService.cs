@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
@@ -87,6 +89,11 @@ public class ProcessingLoopService : IDisposable
     {
         const string defaultEyeModel = "eyeModel.onnx";
         var eyeModel = await _localSettingsService.ReadSettingAsync<string>("EyeHome_EyeModel", defaultEyeModel);
+        if (!File.Exists(Path.Combine(AppContext.BaseDirectory, eyeModel)))
+        {
+            _logger.LogError("{} Does not exits", eyeModel);
+            eyeModel = defaultEyeModel;
+        }
         if (eyeModel == defaultEyeModel)
         {
             _logger.LogDebug("Loaded default eye model with hash {EyeModelHash}", Utils.GenerateMD5(eyeModel));
