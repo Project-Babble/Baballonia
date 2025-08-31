@@ -60,7 +60,7 @@ public sealed class OpenCvCapture(string source, ILogger logger) : Capture(sourc
         Logger.LogDebug("Preferred Backend: " + PreferredBackend);
         Logger.LogDebug("OpenCV Version: " + Cv2.GetVersionString());
 
-        using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5)))
+        using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(15)))
         {
             try
             {

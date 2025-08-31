@@ -502,7 +502,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             }
 
             Stopwatch sw = Stopwatch.StartNew();
-            var timeout = TimeSpan.FromSeconds(3);
+            var timeout = TimeSpan.FromSeconds(13);
             while (sw.Elapsed < timeout)
             {
                 var testFrame = cameraSource.GetFrame();
