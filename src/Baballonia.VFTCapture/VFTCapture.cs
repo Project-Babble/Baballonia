@@ -73,13 +73,16 @@ public sealed class VftCapture(string source, ILogger logger) : Capture(source, 
                 IsReady = _videoCapture?.Read(_originalMat) == true;
                 if (IsReady)
                 {
-                    Mat yuvConvert = Mat.FromPixelData(400, 400, MatType.CV_8UC2, _originalMat.Data);
+                    var yuvConvert = Mat.FromPixelData(400, 400, MatType.CV_8UC2, _originalMat.Data);
                     yuvConvert = yuvConvert.CvtColor(ColorConversionCodes.YUV2GRAY_Y422, 0);
                     yuvConvert = yuvConvert.ColRange(new OpenCvSharp.Range(0, 200));
                     yuvConvert = yuvConvert.Resize(new Size(400, 400));
                     yuvConvert = yuvConvert.GaussianBlur(new Size(15, 15), 0);
 
-                    RawMat = yuvConvert.LUT(lut);
+                    var rawMat = yuvConvert.LUT(lut);
+                    SetRawMat(rawMat);
+
+                    yuvConvert.Dispose();
                 }
             }
             catch (Exception)
@@ -87,6 +90,7 @@ public sealed class VftCapture(string source, ILogger logger) : Capture(source, 
                 // ignored
             }
         }
+        lut.Dispose();
 
         return Task.CompletedTask;
     }

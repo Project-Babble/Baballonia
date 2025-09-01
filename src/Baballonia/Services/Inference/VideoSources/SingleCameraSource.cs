@@ -46,11 +46,15 @@ public class SingleCameraSource : IVideoSource
 
         if (!_platformConnector.Capture.IsReady) return null;
 
-        Mat image;
 
-        Mat rawMat = _platformConnector.Capture.RawMat;
+        var rawMat = _platformConnector.Capture.AcquireRawMat();
+        if (rawMat == null)
+            return null;
+
         CameraSize.Width = rawMat.Width;
         CameraSize.Height = rawMat.Height;
+
+        Mat image;
         if (color == null ||
             color == (rawMat.Channels() == 1 ? ColorType.Gray8 : ColorType.Bgr24))
         {

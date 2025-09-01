@@ -13,6 +13,7 @@ using OpenCvSharp;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Capture = Baballonia.SDK.Capture;
 using Exception = System.Exception;
 
@@ -34,10 +35,9 @@ public class AndroidCamera2Capture : Capture
     private Handler _backgroundHandler;
     private HandlerThread _backgroundThread;
 
-    private readonly object _frameLock = new();
     private bool _isCapturing;
 
-    public AndroidCamera2Capture(string url) : base(url)
+    public AndroidCamera2Capture(string url, ILogger logger) : base(url, logger)
     {
         _context = Application.Context;
         _cameraManager = (CameraManager)_context.GetSystemService(Context.CameraService)!;
@@ -244,11 +244,7 @@ public class AndroidCamera2Capture : Capture
         {
             // Convert Android Image to OpenCV Mat
             var mat = ConvertImageToMat(image);
-
-            lock (_frameLock)
-            {
-                RawMat = mat;
-            }
+            SetRawMat(mat);
         }
         catch (Exception ex)
         {

@@ -6,13 +6,15 @@ using Android.Hardware.Camera2;
 using Android.Hardware.Usb;
 using Android.Util;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Baballonia.Android;
 
 public sealed class AndroidDeviceEnumerator : IDeviceEnumerator
 {
+    public ILogger Logger { get; set; }
     public Dictionary<string, string> Cameras { get; set; }
-    
+
     /// <summary>
     /// Lists available cameras with friendly names as dictionary keys and device identifiers as values.
     /// </summary>

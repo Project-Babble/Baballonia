@@ -55,6 +55,7 @@ body:
     id: hardware
     attributes:
       label: Hardware setup
+      description: Select multiple if needed
       multiple: true
       options:
         - Babble Tracker (wired)
@@ -71,8 +72,9 @@ body:
     attributes:
       label: Log Files
       description: You can find the log file under your Documents/ProjectBabble folder
-      placeholder: Copy-paste logs or parts of them here
+      placeholder: Copy-paste logs or parts of them here (or attach files)
   - type: textarea
     id: notes
     attributes:
       label: Other Notes
+      description: You can also attach screenshots and videos here

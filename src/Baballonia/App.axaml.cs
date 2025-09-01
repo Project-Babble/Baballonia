@@ -278,6 +278,8 @@ public class App : Application
 
         var settings = Ioc.Default.GetRequiredService<ILocalSettingsService>();
         settings.ForceSave();
+
+        Overlay.Dispose();
     }
 
     private void OnTrayShutdownClicked(object? sender, EventArgs e)

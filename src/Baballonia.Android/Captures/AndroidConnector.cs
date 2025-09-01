@@ -23,7 +23,7 @@ public class AndroidConnector : PlatformConnector, IPlatformConnector
     private static readonly HashSet<Regex> AndroidCamera2CapturePrefixes
         = new() { new Regex(@"^\d+$") };
 
-    public AndroidConnector(string url, ILogger logger, ILocalSettingsService settingsService) : base(url, logger, settingsService)
+    public AndroidConnector(string url, ILogger logger, ILocalSettingsService settingsService) : base(url, logger)
     {
         Captures = new()
         {
