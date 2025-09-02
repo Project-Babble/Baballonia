@@ -73,7 +73,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         {
             var displayAddress = await _localSettingsService.ReadSettingAsync<string>("LastOpened" + Name);
             var camSettings = await _localSettingsService.ReadSettingAsync<CameraSettings>(Name);
-            await Dispatcher.UIThread.InvokeAsync(() =>
+            Dispatcher.UIThread.Post(() =>
             {
                 UpdateCameraDropDown(cameras);
 
@@ -111,7 +111,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
                         break;
                 }
-            });
+            }, DispatcherPriority.Background);
         }
 
         public void UpdateCameraDropDown(string[] cameras)
