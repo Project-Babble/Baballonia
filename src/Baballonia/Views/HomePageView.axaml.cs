@@ -136,8 +136,10 @@ public partial class HomePageView : UserControl
         if (e is null) return; // Skip DeviceEnumerator calls
         if (DataContext is not HomePageViewModel vm || vm.FaceCamera == null) return;
 
+        /*
         if (string.IsNullOrEmpty(vm.LeftCamera.DisplayAddress) ||
             string.IsNullOrEmpty(vm.RightCamera.DisplayAddress)) return;
+            */
 
         if (vm.LeftCamera.DisplayAddress.Length == 0)
         {

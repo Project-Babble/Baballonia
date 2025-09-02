@@ -88,6 +88,7 @@
                                         Text="{Binding LeftCamera.DisplayAddress, Mode=TwoWay}"
                                         Watermark="Start typing..."
                                         DropDownOpening="RefreshLeftEyeConnectedDevices"
+                                        SelectionChanged="EyeAddressEntry_OnTextChanged"
                                         x:Name="LeftCameraAddressEntry">
                                         <Interaction.Behaviors>
                                             <controls:AutoCompleteZeroMinimumPrefixLengthDropdownBehaviour />
@@ -320,6 +321,7 @@
                                         Text="{Binding RightCamera.DisplayAddress, Mode=TwoWay}"
                                         Watermark="Start typing..."
                                         DropDownOpening="RefreshRightEyeDevices"
+                                        SelectionChanged="EyeAddressEntry_OnTextChanged"
                                         x:Name="RightCameraAddressEntry">
                                         <Interaction.Behaviors>
                                             <controls:AutoCompleteZeroMinimumPrefixLengthDropdownBehaviour />
