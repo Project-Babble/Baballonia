@@ -28,6 +28,11 @@ public class FirmwareService(ILogger<FirmwareService> logger, ICommandSenderFact
         EsptoolCommand = OperatingSystem.IsWindows() ? "espflash.exe" : "espflash";
     }
 
+    public FirmwareSession StartSession(CommandSenderType type, string port)
+    {
+        return new FirmwareSession(commandSenderFactory.Create(type, port), logger);
+    }
+
     /// <summary>
     /// Uploads firmware to an ESP32-S3 device using a subprocess esptool-rs
     /// </summary>
@@ -66,95 +71,6 @@ public class FirmwareService(ILogger<FirmwareService> logger, ICommandSenderFact
         }
     }
 
-    public void SetWirelessCredentials(string port, string ssid, string password, string hostname = MdnsData.DefaultHostName)
-    {
-        // Create payload
-        Payload payload = new Payload
-        {
-            commands =
-            [
-                new Command
-                {
-                    command = "set_wifi",
-                    data = new WifiData { ssid = ssid, password = password }
-                }
-            ]
-        };
-
-        if (!string.IsNullOrWhiteSpace(hostname))
-        {
-            payload.commands = payload.commands.Append(new Command
-            {
-                command = "set_mdns",
-                data = new MdnsData { hostname = hostname }
-            }).ToArray();
-        }
-
-        string jsonPayload = JsonSerializer.Serialize(payload, new JsonSerializerOptions
-        {
-            WriteIndented = false
-        });
-
-        try
-        {
-            // Create a new SerialPort object with the specified port name and baud rate
-            using SerialPort serialPort = new SerialPort(port, DefaultBaudRate);
-
-            // Set serial port parameters
-            serialPort.DataBits = 8;
-            serialPort.StopBits = StopBits.One;
-            serialPort.Parity = Parity.None;
-            serialPort.Handshake = Handshake.None;
-
-            // Set read/write timeouts
-            serialPort.ReadTimeout = 5000;
-            serialPort.WriteTimeout = 5000;
-
-            try
-            {
-                // Open the port
-                serialPort.Open();
-                serialPort.DiscardInBuffer();
-                serialPort.DiscardOutBuffer();
-
-                // Convert the payload to bytes
-                byte[] payloadBytes = Encoding.UTF8.GetBytes(jsonPayload);
-
-                // Write the payload to the serial port
-                const int chunkSize = 64;
-                for (int i = 0; i < payloadBytes.Length; i += chunkSize)
-                {
-                    int length = Math.Min(chunkSize, payloadBytes.Length - i);
-                    serialPort.Write(payloadBytes, i, length);
-                    Thread.Sleep(50); // Small pause between chunks
-                }
-
-                // Add a newline to indicate end of message
-                serialPort.Write("\n");
-
-                Thread.Sleep(1000);
-            }
-            finally
-            {
-                // Close the port
-                if (serialPort.IsOpen)
-                {
-                    serialPort.Close();
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            OnFirmwareUpdateError($"Firmware update failed: {ex.Message}");
-        }
-    }
-
-    // TODO: Make this pull Wifi names from our ESP32s
-    public string[] GetWirelessCredentials(string port)
-    {
-        return [];
-    }
-
     private bool RunEspSubprocess(string arguments)
     {
         try
@@ -177,21 +93,16 @@ public class FirmwareService(ILogger<FirmwareService> logger, ICommandSenderFact
     }
 
 
-    private string[] FindAvalibleComPorts()
+    private string[] FindAvailableComPorts()
     {
         // GetPortNames() may return single port multiple times
         // https://stackoverflow.com/questions/33401217/serialport-getportnames-returns-same-port-multiple-times
         return SerialPort.GetPortNames().Distinct().ToArray();
     }
 
-    public FirmwareSession StartSession(CommandSenderType type, string port)
-    {
-        return new FirmwareSession(commandSenderFactory.Create(type, port), logger);
-    }
-
     public string[] ProbeComPorts(TimeSpan timeout)
     {
-        var ports = FindAvalibleComPorts();
+        var ports = FindAvailableComPorts();
         List<string> goodPorts = [];
         foreach (var port in ports)
         {
