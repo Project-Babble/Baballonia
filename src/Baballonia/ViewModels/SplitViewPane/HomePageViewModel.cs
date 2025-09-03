@@ -447,6 +447,16 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             FaceCamera = new CameraControllerModel(_localSettingsService, "FaceCamera",
                 _processingLoopService.FaceProcessingPipeline, cameraNames, Camera.Face);
             camerasInitialized.SetResult();
+        }).ContinueWith(async _ =>
+        {
+            await Task.Delay(TimeSpan.FromSeconds(2));
+
+            if (!string.IsNullOrEmpty(LeftCamera.DisplayAddress))
+                await StartCameraAsync(LeftCamera);
+            if (!string.IsNullOrEmpty(RightCamera.DisplayAddress))
+                await StartCameraAsync(RightCamera);
+            if (!string.IsNullOrEmpty(FaceCamera.DisplayAddress))
+                await StartCameraAsync(FaceCamera);
         });
 
         _processingLoopService.PipelineExceptionEvent += PipelineExceptionEventHandler;
