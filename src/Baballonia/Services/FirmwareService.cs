@@ -93,13 +93,6 @@ public class FirmwareService(ILogger<FirmwareService> logger, ICommandSenderFact
     }
 
 
-    private string[] FindAvailableComPorts()
-    {
-        // GetPortNames() may return single port multiple times
-        // https://stackoverflow.com/questions/33401217/serialport-getportnames-returns-same-port-multiple-times
-        return SerialPort.GetPortNames().Distinct().ToArray();
-    }
-
     public string[] ProbeComPorts(TimeSpan timeout)
     {
         var ports = FindAvailableComPorts();
@@ -133,6 +126,13 @@ public class FirmwareService(ILogger<FirmwareService> logger, ICommandSenderFact
         }
 
         return [.. goodPorts];
+    }
+
+    private static string[] FindAvailableComPorts()
+    {
+        // GetPortNames() may return single port multiple times
+        // https://stackoverflow.com/questions/33401217/serialport-getportnames-returns-same-port-multiple-times
+        return SerialPort.GetPortNames().Distinct().ToArray();
     }
 }
 

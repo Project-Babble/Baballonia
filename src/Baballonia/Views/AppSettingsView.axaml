@@ -26,7 +26,7 @@
 
             <controls:SettingsBlock
                 Title="Language"
-                Description="Set the app's language. It will update when you leave this page."
+                Description="Set the app's language"
                 IconPath="LanguageRegular">
                 <controls:SettingsBlock.SettingsContent>
                     <ComboBox x:Name="LangCombo" VerticalAlignment="Center">

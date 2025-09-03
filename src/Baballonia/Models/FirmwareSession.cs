@@ -178,10 +178,18 @@ public class FirmwareSession
         );
     }
 
+    public async Task<string> SendCommandAsync(IFirmwareRequest request, TimeSpan timeSpan)
+    {
+        return await Task.Run(() =>
+            SendCommand(request, timeSpan)
+        );
+    }
+
     public async Task<FirmwareResponses.Heartbeat?> WaitForHeartbeatAsync()
     {
         return await Task.Run(() => WaitForHeartbeat());
     }
+
     public async Task<FirmwareResponses.Heartbeat?> WaitForHeartbeatAsync(TimeSpan timeout)
     {
         return await Task.Run(() => WaitForHeartbeat(timeout));

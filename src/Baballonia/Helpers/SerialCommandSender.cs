@@ -38,6 +38,11 @@ namespace Baballonia.Helpers
                     _serialPort.DiscardOutBuffer();
                     break;
                 }
+                catch (IOException)
+                {
+                    // Timeout
+                    maxRetries = 0;
+                }
                 catch (Exception ex)
                 {
                     if (ex is not FileNotFoundException && ex is not UnauthorizedAccessException) throw;
