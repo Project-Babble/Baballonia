@@ -178,7 +178,7 @@ public class FirmwareSession
         );
     }
 
-    public async Task<string> SendCommandAsync(IFirmwareRequest request, TimeSpan timeSpan)
+    public async Task<string?> SendCommandAsync(IFirmwareRequest request, TimeSpan timeSpan)
     {
         return await Task.Run(() =>
             SendCommand(request, timeSpan)

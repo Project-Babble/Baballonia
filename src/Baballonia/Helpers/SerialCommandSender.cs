@@ -72,7 +72,7 @@ namespace Baballonia.Helpers
                 // Read available data
                 if (_serialPort.BytesToRead > 0)
                 {
-                    string receivedData = _serialPort.ReadLine();
+                    string receivedData = _serialPort.ReadExisting();
                     responseBuilder.Append(receivedData);
                 }
                 else
@@ -84,6 +84,7 @@ namespace Baballonia.Helpers
 
             return responseBuilder.ToString().Trim();
         }
+
         public void WriteLine(string payload)
         {
             _serialPort.DiscardInBuffer();
@@ -92,14 +93,13 @@ namespace Baballonia.Helpers
             byte[] payloadBytes = Encoding.UTF8.GetBytes(payload);
 
             // Write the payload to the serial port
-            const int chunkSize = 64;
+            const int chunkSize = 256;
             for (int i = 0; i < payloadBytes.Length; i += chunkSize)
             {
                 int length = Math.Min(chunkSize, payloadBytes.Length - i);
                 _serialPort.Write(payloadBytes, i, length);
                 Thread.Sleep(50); // Small pause between chunks
             }
-            _serialPort.Write("\n");
 
         }
     }

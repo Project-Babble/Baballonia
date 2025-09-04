@@ -42,8 +42,8 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     [ObservableProperty]
     private string _wifiPassword;
 
-    [ObservableProperty]
-    private string _mdns = "openiris";
+    // [ObservableProperty]
+    // private string _mdns = "openiris";
 
     [ObservableProperty]
     private bool _isValidDeviceSelected;
@@ -57,6 +57,9 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     [ObservableProperty]
     private string? _wifiScanButton = "Refresh Wifi Networks";
 
+    [ObservableProperty]
+    private string? _onRefreshDevicesButton = "Refresh Devices";
+
     [ObservableProperty] private object? _deviceModeSelectedItem;
 
     public FirmwareViewModel()
@@ -69,23 +72,32 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
         IsValidDeviceSelected = !string.IsNullOrEmpty(newValue);
         if (!IsValidDeviceSelected) return;
         SelectedSerialPort = newValue;
-        _firmwareSessions[SelectedSerialPort!].SendCommand(new FirmwareRequests.SetPausedRequest(true), TimeSpan.FromSeconds(5));
+        Task.Run(async () =>
+        {
+            await _firmwareSessions[SelectedSerialPort!]
+                .SendCommandAsync(new FirmwareRequests.SetPausedRequest(true), TimeSpan.FromSeconds(5));
+        });
     }
 
     [RelayCommand]
-    private void RefreshSerialPorts()
+    private async Task RefreshSerialPorts()
     {
         AvailableSerialPorts.Clear();
         _firmwareSessions.Clear();
 
-        var response = _firmwareService.ProbeComPorts(TimeSpan.FromSeconds(3));
-        TrackerComboBox = $"Found {response.Length} device(s).";
-        foreach (var port in response)
+        await Task.Run(async () =>
         {
-            // Only add devices that need a first time set up - IE ones with a heartbeat
-            AvailableSerialPorts.Add(port);
-            _firmwareSessions.Add(port, _firmwareService.StartSession(CommandSenderType.Serial, port));
-        }
+            OnRefreshDevicesButton = "Refreshing...";
+            var response = await _firmwareService.ProbeComPortsAsync(TimeSpan.FromSeconds(10));
+            TrackerComboBox = $"Found {response.Length} device(s).";
+            foreach (var port in response)
+            {
+                // Only add devices that need a first time set up - IE ones with a heartbeat
+                AvailableSerialPorts.Add(port);
+                _firmwareSessions.Add(port, _firmwareService.StartSession(CommandSenderType.Serial, port));
+            }
+            OnRefreshDevicesButton = "Refresh Devices";
+        });
     }
 
     [RelayCommand]
@@ -117,6 +129,7 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
             return;
 
         var m = StringToMode(comboBoxItem.Tag!.ToString()!);
+        ModeSetButton = "Setting mode...";
         await _firmwareSessions[SelectedSerialPort!].SendCommandAsync(new FirmwareRequests.SetModeRequest(m), TimeSpan.FromSeconds(30));
 
         ModeSetButton = "Set!";
@@ -125,16 +138,17 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     }
 
     [RelayCommand]
-    private void SendDeviceWifiCredentials()
+    private async Task SendDeviceWifiCredentials()
     {
-        _firmwareSessions[SelectedSerialPort!].SendCommand(new FirmwareRequests.SetWifiRequest(WifiSsid, WifiPassword), TimeSpan.FromSeconds(30));
+        var res = await _firmwareSessions[SelectedSerialPort!].SendCommandAsync(new FirmwareRequests.SetWifiRequest(WifiSsid, WifiPassword), TimeSpan.FromSeconds(30));
+        WifiSetButton = string.IsNullOrEmpty(res) ? "Something went wrong..." : "Sent!";
+        await Task.Delay(2000);
+        WifiSetButton = "Set Wifi Creds";
 
-        if (!string.IsNullOrEmpty(Mdns))
-        {
-            _firmwareSessions[SelectedSerialPort!].SendCommand(new FirmwareRequests.SetMdns(Mdns), TimeSpan.FromSeconds(30));
-        }
-
-        WifiSetButton = "Set Wifi Creds!";
+        //if (!string.IsNullOrEmpty(Mdns))
+        //{
+        //    _firmwareSessions[SelectedSerialPort!].SendCommand(new FirmwareRequests.SetMdns(Mdns), TimeSpan.FromSeconds(30));
+        //}
     }
 
     private static FirmwareRequests.Mode StringToMode(string mode)

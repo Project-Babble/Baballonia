@@ -18,13 +18,17 @@
             <controls:ContentExample>
                 <StackPanel Spacing="12">
                     <TextBlock FontWeight="Bold" Text="Select your tracker" />
-                    <TextBlock Text="This will take a little bit!" />
+                    <TextBlock TextWrapping="Wrap">
+                      <Run>• After powering on/connecting your device you will have 20 seconds to press "Refresh" and select your device from the dropdown.</Run>
+                      <LineBreak/>
+                      <Run>• Certain configuration operations will take a little bit!</Run>
+                    </TextBlock>
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <ComboBox
                            ItemsSource="{Binding AvailableSerialPorts, Mode=TwoWay}"
                            SelectedItem="{Binding SelectedSerialPort, Mode=TwoWay}"
                            PlaceholderText="{Binding TrackerComboBox}"/>
-                        <Button Command="{Binding RefreshSerialPortsCommand}" Content="Refresh" />
+                        <Button Command="{Binding RefreshSerialPortsCommand}" Content="{Binding OnRefreshDevicesButton}" />
                     </StackPanel>
                 </StackPanel>
             </controls:ContentExample>
@@ -60,11 +64,17 @@
                   <StackPanel Spacing="24">
                     <StackPanel Spacing="12">
                       <TextBlock FontWeight="Bold" Text="Toggle wired/wireless mode" />
+                      <TextBlock TextWrapping="Wrap">
+                        <Run>• You WILL need to restart your tracker after a flash</Run><LineBreak />
+                        <Run>• You MAY need to restart the app after a flash for trackers to show</Run>
+                      </TextBlock>
                       <StackPanel Orientation="Horizontal" Spacing="12">
                         <ComboBox x:Name="DeviceModeComboBox"
                                   SelectedItem="{Binding DeviceModeSelectedItem}"
                                   PlaceholderText="Select a mode...">
+                          <!--
                           <ComboBoxItem Tag="auto" x:Name="Hybrid" Content="Auto" />
+                          -->
                           <ComboBoxItem Tag="uvc" x:Name="Wired" Content="Wired" />
                           <ComboBoxItem Tag="wifi" x:Name="Wireless" Content="Wireless" />
                         </ComboBox>
@@ -149,7 +159,7 @@
                               Text="{Binding WifiPassword, Mode=TwoWay}"
                               Watermark="Enter WiFi password..." />
 
-                          <TextBlock
+                          <!--<TextBlock
                             FontSize="12"
                             FontWeight="Bold"
                             Text="Change MDNS (Optional)" />
@@ -157,7 +167,7 @@
                             HorizontalAlignment="Left"
                             Width="200"
                             Text="{Binding Mdns, Mode=TwoWay}"
-                            Watermark="Enter MDNS..." />
+                            Watermark="Enter MDNS..." />-->
                       </StackPanel>
 
                       <StackPanel Orientation="Horizontal" Spacing="12">

@@ -7,9 +7,11 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Baballonia.Contracts;
 using Baballonia.Models;
 using Baballonia.Services.Firmware;
+using MeaMod.DNS.Server;
 using Microsoft.Extensions.Logging;
 
 namespace Baballonia.Services;
@@ -91,6 +93,49 @@ public class FirmwareService(ILogger<FirmwareService> logger, ICommandSenderFact
             return false;
         }
     }
+
+    public async Task<string[]> ProbeComPortsAsync(TimeSpan timeout)
+    {
+        var ports = FindAvailableComPorts();
+        var goodPorts = new List<string>();
+        var tasks = new ConcurrentSet<Task>();
+
+        foreach (var port in ports)
+        {
+            tasks.Add(Task.Run(() =>
+            {
+                var session = StartSession(CommandSenderType.Serial, port);
+                try
+                {
+                    logger.LogInformation("Probing {Port}", port);
+                    var heartbeat = session.WaitForHeartbeat(timeout);
+                    if (heartbeat != null)
+                    {
+                        lock (goodPorts) // protect against race conditions
+                        {
+                            goodPorts.Add(port);
+                        }
+                    }
+                }
+                catch (TimeoutException)
+                {
+                    logger.LogInformation("Probing port {Port}: timeout reached", port);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "Error probing port {Port}", port);
+                }
+                finally
+                {
+                    session.Dispose();
+                }
+            }));
+        }
+
+        await Task.WhenAll(tasks);
+        return goodPorts.ToArray();
+    }
+
 
 
     public string[] ProbeComPorts(TimeSpan timeout)
