@@ -52,9 +52,9 @@ jobs:
           dotnet publish -r win-x64 -c Release --self-contained -f net8.0
 
       - name: Run makensis
-        uses: joncloud/makensis-action@v4.1
-        with:
-          script-file: "src/Baballonia.Desktop/main.nsi"
+        run: |
+          cd src/Baballonia.Desktop
+          "C:\Program Files (x86)\NSIS\makensis.exe" main.nsi
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
