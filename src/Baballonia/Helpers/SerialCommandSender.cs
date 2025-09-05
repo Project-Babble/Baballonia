@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.IO.Ports;
 using System.Text;
 using System.Threading;
@@ -9,48 +10,69 @@ namespace Baballonia.Helpers
     public class SerialCommandSender : ICommandSender
     {
         private const int DefaultBaudRate = 115200; // esptool-rs: Setting baud rate higher than 115,200 can cause issues
-        private string port;
-        private SerialPort serialPort;
+        private readonly SerialPort _serialPort;
 
         public SerialCommandSender(string port)
         {
-            this.port = port;
-
-            serialPort = new SerialPort(port, DefaultBaudRate);
+            _serialPort = new SerialPort(port, DefaultBaudRate);
 
             // Set serial port parameters
-            serialPort.DataBits = 8;
-            serialPort.StopBits = StopBits.One;
-            serialPort.Parity = Parity.None;
-            serialPort.Handshake = Handshake.None;
+            _serialPort.DataBits = 8;
+            _serialPort.StopBits = StopBits.One;
+            _serialPort.Parity = Parity.None;
+            _serialPort.Handshake = Handshake.None;
 
             // Set read/write timeouts
-            serialPort.ReadTimeout = 30000;
-            serialPort.WriteTimeout = 30000;
-            serialPort.Encoding = Encoding.UTF8;
+            _serialPort.ReadTimeout = 30000;
+            _serialPort.WriteTimeout = 30000;
+            _serialPort.Encoding = Encoding.UTF8;
 
-            serialPort.Open();
-            serialPort.DiscardInBuffer();
-            serialPort.DiscardOutBuffer();
+            int maxRetries = 5;
+            const int sleepTimeInMs = 50;
+            while (maxRetries > 0)
+            {
+                try
+                {
+                    _serialPort.Open();
+                    _serialPort.DiscardInBuffer();
+                    _serialPort.DiscardOutBuffer();
+                    break;
+                }
+                catch (IOException)
+                {
+                    // Timeout
+                    maxRetries = 0;
+                }
+                catch (Exception ex)
+                {
+                    if (ex is not FileNotFoundException && ex is not UnauthorizedAccessException) throw;
+                    maxRetries--;
+                    Thread.Sleep(sleepTimeInMs);
+                }
+            }
         }
 
         public void Dispose()
         {
-            if (serialPort.IsOpen)
-                serialPort.Close();
+            if (_serialPort.IsOpen)
+                _serialPort.Close();
 
-            serialPort.Dispose();
+            _serialPort.Dispose();
         }
 
-        public string ReadLine()
+        public string ReadLine(TimeSpan timeout)
         {
             StringBuilder responseBuilder = new StringBuilder();
+            var startTime = DateTime.Now;
             do
             {
+                if (DateTime.Now - startTime > timeout)
+                    throw new TimeoutException("Timeout reached");
+
                 // Read available data
-                if (serialPort.BytesToRead > 0)
+                if (_serialPort.BytesToRead > 0)
                 {
-                    string receivedData = serialPort.ReadLine();
+                    string receivedData = _serialPort.ReadExisting();
                     responseBuilder.Append(receivedData);
                 }
                 else
@@ -62,22 +84,22 @@ namespace Baballonia.Helpers
 
             return responseBuilder.ToString().Trim();
         }
+
         public void WriteLine(string payload)
         {
-            serialPort.DiscardInBuffer();
+            _serialPort.DiscardInBuffer();
 
             // Convert the payload to bytes
             byte[] payloadBytes = Encoding.UTF8.GetBytes(payload);
 
             // Write the payload to the serial port
-            const int chunkSize = 64;
+            const int chunkSize = 256;
             for (int i = 0; i < payloadBytes.Length; i += chunkSize)
             {
                 int length = Math.Min(chunkSize, payloadBytes.Length - i);
-                serialPort.Write(payloadBytes, i, length);
+                _serialPort.Write(payloadBytes, i, length);
                 Thread.Sleep(50); // Small pause between chunks
             }
-            serialPort.Write("\n");
 
         }
     }

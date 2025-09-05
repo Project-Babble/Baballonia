@@ -67,7 +67,13 @@ namespace Baballonia.Models
         public record SetWifiRequest(string ssid, string password) : IFirmwareRequest
         {
             public string command => "set_wifi";
-            public object? data => new { ssid = ssid, password = password };
+            public object? data => new { name = "main", ssid = ssid, password = password, channel = 0, power = 0 };
+        }
+
+        public record SetMdns(string mdns) : IFirmwareRequest
+        {
+            public string command => "set_mdns";
+            public object? data => new { hostname = mdns };
         }
 
         public record SetPausedRequest(bool state) : IFirmwareRequest
