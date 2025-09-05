@@ -408,6 +408,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     private readonly DispatcherTimer _msgCounterTimer;
     private readonly ILocalSettingsService _localSettingsService;
     private readonly ProcessingLoopService _processingLoopService;
+    private readonly DropOverlayService _dropOverlayService;
 
 
     private ILogger<HomePageViewModel> _logger;
@@ -421,6 +422,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         _localSettingsService = Ioc.Default.GetRequiredService<ILocalSettingsService>()!;
         _processingLoopService = Ioc.Default.GetService<ProcessingLoopService>()!;
         _logger = Ioc.Default.GetService<ILogger<HomePageViewModel>>()!;
+        _dropOverlayService = Ioc.Default.GetService<DropOverlayService>()!;
         LocalSettingsService.Load(this);
 
         MessagesInPerSecCount = "0";
@@ -443,6 +445,12 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
         Task.Run(async () =>
         {
+            bool hasRead = await _localSettingsService.ReadSettingAsync<bool>("SecondsWarningRead");
+            if (!hasRead)
+            {
+                _dropOverlayService.Show();
+            }
+
             var cameras = await App.DeviceEnumerator.UpdateCameras();
             var cameraNames = cameras.Keys.ToArray();
             await Dispatcher.UIThread.InvokeAsync(() =>

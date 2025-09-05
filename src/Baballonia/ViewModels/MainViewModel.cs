@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Baballonia.Views;
 using Baballonia.Models;
+using Baballonia.Services;
 using Baballonia.ViewModels.SplitViewPane;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
@@ -15,6 +17,8 @@ namespace Baballonia.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
+    private readonly DropOverlayService _dropOverlayService;
+
     public MainViewModel(IMessenger messenger)
     {
         Items = Utils.IsSupportedDesktopOS ?
@@ -22,6 +26,14 @@ public partial class MainViewModel : ViewModelBase
             new ObservableCollection<ListItemTemplate>(_mobileTemplates);
 
         SelectedListItem = Items.First(vm => vm.ModelType == typeof(HomePageViewModel));
+
+        _dropOverlayService = Ioc.Default.GetService<DropOverlayService>()!;
+        _dropOverlayService.ShowOverlayChanged += SetOverlay;
+    }
+
+    private void SetOverlay(bool show)
+    {
+        IsDropOverlayVisible = show;
     }
 
     private readonly List<ListItemTemplate> _desktopTemplates =
@@ -46,6 +58,8 @@ public partial class MainViewModel : ViewModelBase
 
     [ObservableProperty]
     private bool _isPaneOpen;
+    [ObservableProperty]
+    private bool _isDropOverlayVisible;
 
     [ObservableProperty] private ViewModelBase _currentPage;
 
@@ -76,7 +90,7 @@ public partial class MainViewModel : ViewModelBase
         var parameters = constructor.GetParameters()
             .Select(p => Ioc.Default.GetService(p.ParameterType))
             .ToArray();
-        return Activator.CreateInstance(type, parameters);
+        return Activator.CreateInstance(type, parameters)!;
     }
 
     public ObservableCollection<ListItemTemplate> Items { get; }
@@ -85,5 +99,11 @@ public partial class MainViewModel : ViewModelBase
     private void TriggerPane()
     {
         IsPaneOpen = !IsPaneOpen;
+    }
+
+    public void DetachedFromVisualTree()
+    {
+        _dropOverlayService.Hide();
+        _dropOverlayService.ShowOverlayChanged -= SetOverlay;
     }
 }

@@ -96,6 +96,7 @@ public class App : Application
                 services.AddTransient<FirmwareService>();
                 services.AddSingleton<IMainService, MainStandalone>();
                 services.AddSingleton<ICalibrationService, CalibrationService>();
+                services.AddSingleton<DropOverlayService>();
 
                 services.AddSingleton<MainViewModel>();
                 services.AddSingleton<MainWindow>();
