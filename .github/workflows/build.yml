@@ -49,7 +49,7 @@ jobs:
       - name: Build project
         run: |
           cd src/Baballonia.Desktop
-          dotnet build -r win-x64 -c Release --self-contained -f net8.0
+          dotnet publish -r win-x64 -c Release --self-contained -f net8.0
 
       - name: Run makensis
         run: |
