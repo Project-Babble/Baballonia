@@ -53,7 +53,7 @@ jobs:
 
       - name: List build files
         run: |
-          cd src/Baballonia.Desktop/Release
+          cd src/Baballonia.Desktop/bin/Release
           ls -R
 
       - name: Run makensis
