@@ -47,6 +47,7 @@ jobs:
 
       - name: Publish project
         run: |
+          cd src/Baballonia.Desktop
           dotnet publish -r win-x64 -c Release --self-contained -f net8.0
 
       - name: Run makensis
