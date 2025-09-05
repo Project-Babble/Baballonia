@@ -46,10 +46,10 @@ jobs:
           submodules: 'recursive'
           lfs: true
 
-      - name: Publish project
+      - name: Build project
         run: |
           cd src/Baballonia.Desktop
-          dotnet publish -r win-x64 -c Release --self-contained -f net8.0
+          dotnet build -r win-x64 -c Release --self-contained -f net8.0
 
       - name: Run makensis
         run: |
