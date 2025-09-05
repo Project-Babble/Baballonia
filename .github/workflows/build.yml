@@ -51,11 +51,6 @@ jobs:
           cd src/Baballonia.Desktop
           dotnet publish -r win-x64 -c Release --self-contained -f net8.0
 
-      - name: List build files
-        run: |
-          cd src/Baballonia.Desktop/bin/Release
-          ls -R
-
       - name: Run makensis
         run: |
           cd src/Baballonia.Desktop
