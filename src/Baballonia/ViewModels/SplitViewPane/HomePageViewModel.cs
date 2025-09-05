@@ -388,7 +388,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     public IOscTarget OscTarget { get; }
     private OscRecvService OscRecvService { get; }
     private OscSendService OscSendService { get; }
-    private ILocalSettingsService LocalSettingsService { get; }
+    public ILocalSettingsService LocalSettingsService { get; }
 
     private int _messagesRecvd;
     [ObservableProperty] private string _messagesInPerSecCount;

@@ -1,5 +1,5 @@
 <UserControl
-    d:DesignHeight="450"
+    d:DesignHeight="800"
     d:DesignWidth="1200"
     mc:Ignorable="d"
     x:Class="Baballonia.Views.HomePageView"
@@ -14,7 +14,20 @@
     xmlns:utils="clr-namespace:Baballonia"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <ScrollViewer>
+    <UserControl.Resources>
+      <ResourceDictionary>
+        <ResourceDictionary.ThemeDictionaries>
+          <ResourceDictionary x:Key="Light">
+            <SolidColorBrush Color="#80000000" x:Key="DialogOverlayBrush" />
+          </ResourceDictionary>
+          <ResourceDictionary x:Key="Dark">
+            <SolidColorBrush Color="#80000000" x:Key="DialogOverlayBrush" />
+          </ResourceDictionary>
+        </ResourceDictionary.ThemeDictionaries>
+      </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
         <StackPanel Classes="Page" Margin="16">
 
             <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,12">
@@ -752,6 +765,46 @@
             </Grid>
 
         </StackPanel>
-    </ScrollViewer>
+
+      <!--  WiFi Connection Overlay  -->
+        <Panel x:Name="SecondsWarningPanel" ZIndex="100">
+            <Rectangle Fill="{DynamicResource DialogOverlayBrush}" />
+            <Border
+                Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                BorderThickness="1"
+                BoxShadow="0 4 20 #40000000"
+                CornerRadius="8"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Width="450"
+                ZIndex="100">
+
+              <StackPanel Spacing="16" Margin="20">
+                  <TextBlock
+                    FontSize="22"
+                    FontWeight="Bold"
+                    TextWrapping="Wrap"
+                    Text="Important!" />
+
+                  <TextBlock TextWrapping="Wrap">
+                        Newer babble trackers have a 20 second delay after being plugged in before they can be used.
+                        It will make a USB plugging-in sound when it is ready!</TextBlock>
+
+                  <Grid>
+                    <CheckBox x:Name="WarningCheckbox" IsCheckedChanged="Changed">Don't show this warning again</CheckBox>
+                    <Button
+                      Click="SecondWarningUnderstood"
+                      Content="Dismiss"
+                      CornerRadius="4"
+                      HorizontalAlignment="Right"
+                      Padding="16,8" />
+                  </Grid>
+
+
+                </StackPanel>
+            </Border>
+        </Panel>
+    </Grid>
 
 </UserControl>

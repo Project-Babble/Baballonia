@@ -101,6 +101,10 @@ public partial class HomePageView : UserControl
             FaceAddressEntry_OnTextChanged(null, null!);
 
             vm.SelectedCalibrationText = "Eye Calibration";
+
+            var hasRead = await vm.LocalSettingsService.ReadSettingAsync<bool>("SecondsWarningRead");
+            SecondsWarningPanel.IsEnabled = !hasRead;
+            SecondsWarningPanel.IsVisible = !hasRead;
         };
     }
 
@@ -230,5 +234,17 @@ public partial class HomePageView : UserControl
         var cameraNames = cameras.Keys.ToArray();
 
         vm.FaceCamera.UpdateCameraDropDown(cameraNames);
+    }
+
+    private void SecondWarningUnderstood(object? sender, RoutedEventArgs e)
+    {
+        SecondsWarningPanel.IsEnabled = false;
+        SecondsWarningPanel.IsVisible = false;
+    }
+
+    private async void Changed(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not HomePageViewModel vm) return;
+        await vm.LocalSettingsService.SaveSettingAsync("SecondsWarningRead", WarningCheckbox.IsChecked);
     }
 }
