@@ -7,164 +7,225 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:controls="clr-namespace:Baballonia.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:hyperlinkControls="clr-namespace:HyperText.Avalonia.Controls;assembly=HyperText.Avalonia"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:splitViewPane="clr-namespace:Baballonia.ViewModels.SplitViewPane"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.ThemeDictionaries>
-                <ResourceDictionary x:Key="Light">
-                    <SolidColorBrush Color="#80000000" x:Key="DialogOverlayBrush" />
-                </ResourceDictionary>
-                <ResourceDictionary x:Key="Dark">
-                    <SolidColorBrush Color="#80000000" x:Key="DialogOverlayBrush" />
-                </ResourceDictionary>
-            </ResourceDictionary.ThemeDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
-
-    <Grid>
-        <!--  Main Content  -->
+    <ScrollViewer>
         <StackPanel Classes="Page">
             <TextBlock Classes="Header" Text="Firmware" />
 
             <controls:ContentExample>
                 <StackPanel Spacing="12">
-                    <TextBlock FontWeight="Bold" Text="Step 1) Select your tracker" />
+                    <TextBlock FontWeight="Bold" Text="Select your tracker" />
                     <TextBlock TextWrapping="Wrap">
-                        <Run>• Your tracker's name will start with</Run> <Run FontWeight="Bold">COM, /dev/ttyACM</Run> <Run>or something similar!</Run>
+                      <Run>• After powering on/connecting your device you will have 20 seconds to press "Refresh" and select your device from the dropdown.</Run>
+                      <LineBreak/>
+                      <Run>• Certain configuration operations will take a little bit!</Run>
                     </TextBlock>
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <ComboBox
-                            ItemsSource="{Binding AvailableSerialPorts}"
-                            PlaceholderText="Click to see trackers..."
-                            SelectedItem="{Binding SelectedSerialPort, Mode=TwoWay}" />
-                        <Button Command="{Binding RefreshSerialPorts}" Content="Refresh Trackers" />
+                           ItemsSource="{Binding AvailableSerialPorts, Mode=TwoWay}"
+                           SelectedItem="{Binding SelectedSerialPort, Mode=TwoWay}"
+                           PlaceholderText="{Binding TrackerComboBox}"/>
+                        <Button Command="{Binding RefreshSerialPortsCommand}" Content="{Binding OnRefreshDevicesButton}" />
                     </StackPanel>
                 </StackPanel>
             </controls:ContentExample>
 
-            <controls:ContentExample IsVisible="{Binding IsDeviceSelected}">
-                <StackPanel Spacing="12">
-                    <TextBlock FontWeight="Bold" Text="Step 2) Select your desired Firmware" />
-                    <TextBlock TextWrapping="Wrap">
-                        <Run>• For wired, we recommend</Run> <Run FontWeight="Bold">Babble_USB-wrooms-s3</Run> <LineBreak />
-                        <Run>• For wireless, we recommend</Run> <Run FontWeight="Bold">Babble-wrooms-s3</Run> </TextBlock>
-                    <ComboBox
-                        ItemsSource="{Binding AvailableFirmwareTypes}"
-                        PlaceholderText="Click me for options..."
-                        SelectedItem="{Binding SelectedFirmwareType, Mode=TwoWay}" />
+             <!-- Set the device mode -->
+            <Expander HorizontalAlignment="Stretch" IsEnabled="{Binding IsValidDeviceSelected}">
+                <Expander.Header>
+                    <Grid ColumnDefinitions="Auto,Auto,*">
+                        <PathIcon
+                            Grid.Column="0"
+                            Width="32"
+                            Margin="10,10,20,10"
+                            VerticalAlignment="Center"
+                            Data="{StaticResource WrenchRegular}" />
+                        <StackPanel
+                            Grid.Column="1"
+                            Margin="0,10,0,10"
+                            HorizontalAlignment="Stretch">
+                            <TextBlock
+                                Margin="5"
+                                FontSize="16"
+                                FontWeight="SemiBold"
+                                Text="Device Configuration" />
+                            <TextBlock
+                                Margin="5"
+                                FontSize="14"
+                                Foreground="{DynamicResource SystemChromeGrayColor}"
+                                Text="Toggle wired/wireless mode" />
+                        </StackPanel>
+                    </Grid>
+                </Expander.Header>
+                <StackPanel Spacing="24">
+                  <StackPanel Spacing="24">
+                    <StackPanel Spacing="12">
+                      <TextBlock FontWeight="Bold" Text="Toggle wired/wireless mode" />
+                      <TextBlock TextWrapping="Wrap">
+                        <Run>• You WILL need to restart your tracker after a flash</Run><LineBreak />
+                        <Run>• You MAY need to restart the app after a flash for trackers to show</Run>
+                      </TextBlock>
+                      <StackPanel Orientation="Horizontal" Spacing="12">
+                        <ComboBox x:Name="DeviceModeComboBox"
+                                  SelectedItem="{Binding DeviceModeSelectedItem}"
+                                  PlaceholderText="Select a mode...">
+                          <!--
+                          <ComboBoxItem Tag="auto" x:Name="Hybrid" Content="Auto" />
+                          -->
+                          <ComboBoxItem Tag="uvc" x:Name="Wired" Content="Wired" />
+                          <ComboBoxItem Tag="wifi" x:Name="Wireless" Content="Wireless" />
+                        </ComboBox>
+                        <Button Command="{Binding SetDeviceModeCommand}"
+                                Content="{Binding ModeSetButton}"/>
+                      </StackPanel>
+                    </StackPanel>
+                  </StackPanel>
+
                 </StackPanel>
-            </controls:ContentExample>
+            </Expander>
 
-            <controls:ContentExample IsVisible="{Binding IsWirelessFirmware}">
-              <StackPanel Spacing="12">
-                <TextBlock FontWeight="Bold" Text="Step 3) Input your Wi-Fi credentials" />
-                <TextBlock TextWrapping="Wrap">
-                  <Run>• Your tracker will use these credentials to connect to your wifi</Run>
-                  <LineBreak />
-                  <Run>• Please enter the credentials of your wifi network</Run>
-                </TextBlock>
+            <!-- Wifi -->
+            <Expander HorizontalAlignment="Stretch" IsEnabled="{Binding IsValidDeviceSelected}">
+                <Expander.Header>
+                    <Grid ColumnDefinitions="Auto,Auto,*">
+                        <PathIcon
+                            Grid.Column="0"
+                            Width="32"
+                            Margin="10,10,20,10"
+                            VerticalAlignment="Center"
+                            Data="{StaticResource WirelessRegular}" />
+                        <StackPanel
+                            Grid.Column="1"
+                            Margin="0,10,0,10"
+                            HorizontalAlignment="Stretch">
+                            <TextBlock
+                                Margin="5"
+                                FontSize="16"
+                                FontWeight="SemiBold"
+                                Text="Wifi Configuration" />
+                            <TextBlock
+                                Margin="5"
+                                FontSize="14"
+                                Foreground="{DynamicResource SystemChromeGrayColor}"
+                                Text="Connect to Wifi and more" />
+                        </StackPanel>
+                    </Grid>
+                </Expander.Header>
+               <StackPanel Spacing="24">
+                      <StackPanel Spacing="12">
+                          <TextBlock FontWeight="Bold" Text="Set your Wi-Fi credentials" />
+                          <TextBlock TextWrapping="Wrap">
+                              <Run>• Your tracker will use these credentials to connect to your wifi</Run>
+                              <LineBreak />
+                              <Run>• Please enter the credentials of your wifi network</Run>
+                          </TextBlock>
 
-                <TextBlock FontSize="12" FontWeight="Bold" Text="WiFi Network Name (SSID)" />
-                <Grid ColumnDefinitions="Auto,Auto" HorizontalAlignment="Left" ColumnSpacing="8">
-                  <AutoCompleteBox
-                    x:Name="WifiNameAutoComplete"
-                    Grid.Column="0"
-                    Width="200"
-                    Watermark="Enter WiFi Name..."
-                    Text="{Binding WifiSsid, Mode=TwoWay}"
-                    ItemsSource="{Binding AvailableWifiNetworks}" />
-                  <Button
-                    IsVisible="False"
-                    Grid.Column="1"
-                    Content="Refresh Wifi Names"
-                    Command="{Binding RefreshWifiNetworks}" />
-                </Grid>
+                          <TextBlock
+                              FontSize="12"
+                              FontWeight="Bold"
+                              Text="WiFi Network Name (SSID)" />
+                          <Grid
+                              HorizontalAlignment="Left"
+                              ColumnDefinitions="Auto,Auto"
+                              ColumnSpacing="8">
+                              <AutoCompleteBox
+                                  x:Name="WifiNameAutoComplete"
+                                  Grid.Column="0"
+                                  Width="200"
+                                  ItemsSource="{Binding AvailableWifiNetworks}"
+                                  Text="{Binding WifiSsid, Mode=TwoWay}"
+                                  Watermark="Start typing to see WiFi networks...">
+                                    <Interaction.Behaviors>
+                                      <controls:AutoCompleteZeroMinimumPrefixLengthDropdownBehaviour />
+                                    </Interaction.Behaviors>
+                                </AutoCompleteBox>
+                              <Button
+                                  Grid.Column="1"
+                                  Command="{Binding RefreshWifiNetworksCommand}"
+                                  Content="{Binding WifiScanButton}"/>
+                          </Grid>
 
-                <TextBlock FontSize="12" FontWeight="Bold" Text="WiFi Password" />
-                <TextBox
-                  HorizontalAlignment="Left"
-                  PasswordChar="*"
-                  Text="{Binding WifiPassword, Mode=TwoWay}"
-                  Watermark="Enter WiFi password..." />
-              </StackPanel>
-            </controls:ContentExample>
+                          <TextBlock
+                              FontSize="12"
+                              FontWeight="Bold"
+                              Text="WiFi Password" />
+                          <TextBox
+                              HorizontalAlignment="Left"
+                              PasswordChar="*"
+                              Width="200"
+                              Text="{Binding WifiPassword, Mode=TwoWay}"
+                              Watermark="Enter WiFi password..." />
 
+                          <!--<TextBlock
+                            FontSize="12"
+                            FontWeight="Bold"
+                            Text="Change MDNS (Optional)" />
+                          <TextBox
+                            HorizontalAlignment="Left"
+                            Width="200"
+                            Text="{Binding Mdns, Mode=TwoWay}"
+                            Watermark="Enter MDNS..." />-->
+                      </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Spacing="8">
-                <Button
-                    Command="{Binding FlashFirmwareCommand}"
-                    Content="Flash Device Firmware"
-                    IsEnabled="{Binding !IsFlashing}"
-                    IsVisible="{Binding IsReadyToFlashFirmware}" />
-                <Button
-                  Command="{Binding SendWifiCredsCommand}"
-                  Content="Update Wifi Name/Password Only"
-                  IsVisible="{Binding IsReadyToFlashFirmwareButWireless}" />
-            </StackPanel>
+                      <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Button Content="{Binding WifiSetButton}" Command="{Binding SendDeviceWifiCredentialsCommand}"/>
+                      </StackPanel>
+                    </StackPanel>
+            </Expander>
 
-            <TextBlock HorizontalAlignment="Center" IsVisible="{Binding IsReadyToFlashFirmware}" VerticalAlignment="Center">This will take around ~10 seconds. Don't leave this page!</TextBlock>
+            <!-- Firmware flashing -->
+            <!-- <Expander HorizontalAlignment="Stretch" IsEnabled="{Binding IsValidDeviceSelected}">
+                <Expander.Header>
+                    <Grid ColumnDefinitions="Auto,Auto,*">
+                        <PathIcon
+                            Grid.Column="0"
+                            Width="32"
+                            Margin="10,10,20,10"
+                            VerticalAlignment="Center"
+                            Data="{StaticResource DeveloperBoardRegular}" />
+                        <StackPanel
+                            Grid.Column="1"
+                            Margin="0,10,0,10"
+                            HorizontalAlignment="Stretch">
+                            <TextBlock
+                                Margin="5"
+                                FontSize="16"
+                                FontWeight="SemiBold"
+                                Text="Flashing Options" />
+                            <TextBlock
+                                Margin="5"
+                                FontSize="14"
+                                Foreground="{DynamicResource SystemChromeGrayColor}"
+                                Text="Flash your device's firmware" />
+                        </StackPanel>
+                    </Grid>
+                </Expander.Header>
+                <StackPanel Spacing="24">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Button
+                            Content="Flash Firmware"/>
 
-            <ProgressBar
-                Height="30"
-                IsIndeterminate="True"
-                IsVisible="{Binding IsFlashing}"
-                ShowProgressText="False" />
-
-            <TextBlock
-                HorizontalAlignment="Center"
-                IsVisible="{Binding IsFinished}"
-                Text="Done! You may need to restart your tracker/the Babble App :)" />
-        </StackPanel>
-
-        <!--  WiFi Connection Overlay  -->
-        <Panel IsVisible="{Binding WirelessWarningVisible}" ZIndex="100">
-            <Rectangle Fill="{DynamicResource DialogOverlayBrush}" />
-            <Border
-                Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
-                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
-                BorderThickness="1"
-                BoxShadow="0 4 20 #40000000"
-                CornerRadius="8"
-                Height="270"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Width="450"
-                ZIndex="100">
-
-              <StackPanel Spacing="16" Margin="20">
-                  <TextBlock
-                    FontSize="22"
-                    FontWeight="Bold"
-                    TextWrapping="Wrap"
-                    Text="Important!" />
-
-                  <TextBlock TextWrapping="Wrap">
-                        Before proceeding, you <Run FontWeight="Bold">must</Run>
-                        first restart your board. Simply disconnect it and plug it back in, no buttons need to be held.</TextBlock>
-
-                    <StackPanel Spacing="8">
-                        <TextBlock TextWrapping="Wrap">
-                            Once done, press <Run FontWeight="Bold">Send Credentials</Run>
-                            and give it a couple of seconds until it finishes.</TextBlock>
-
-                        <TextBlock TextWrapping="Wrap">
-                            This should setup your board proper wifi and mdns name check if it connected!
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                            This will take around ~10 seconds. Don't leave this page!
                         </TextBlock>
                     </StackPanel>
 
-                  <!--  Footer  -->
-                  <Button
-                    Command="{Binding DismissWirelessWarningCommand}"
-                    Content="Send credentials"
-                    CornerRadius="4"
-                    HorizontalAlignment="Right"
-                    Padding="16,8" />
+                    <ProgressBar
+                      Height="30"
+                      IsIndeterminate="True"
+                      ShowProgressText="False" />
+
+                    <TextBlock
+                      HorizontalAlignment="Center"
+                      Text="Done! You may need to restart your tracker/the Babble App :)" />
                 </StackPanel>
-            </Border>
-        </Panel>
-    </Grid>
+            </Expander> -->
+
+           </StackPanel>
+    </ScrollViewer>
 </UserControl>

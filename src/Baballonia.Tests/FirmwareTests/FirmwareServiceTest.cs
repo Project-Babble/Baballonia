@@ -26,7 +26,7 @@ namespace Baballonia.Tests.FirmwareTests
 
         }
 
-        public string ReadLine()
+        public string ReadLine(TimeSpan timeout)
         {
             string line = lines[0];
             lines.RemoveAt(0);
@@ -89,7 +89,7 @@ namespace Baballonia.Tests.FirmwareTests
             var session = firmwareService.StartSession(CommandSenderType.Serial, "COM4");
             session.WaitForHeartbeat();
 
-            var results = session.SendCommand(new FirmwareRequests.GetWifiStatusRequest());
+            var results = session.SendCommand(new FirmwareRequests.GetWifiStatusRequest(), TimeSpan.FromSeconds(10));
             Assert.AreEqual("192.168.0.246", results.IpAddress);
         }
 
@@ -130,7 +130,7 @@ namespace Baballonia.Tests.FirmwareTests
             var session = firmwareService.StartSession(CommandSenderType.Serial, "COM4");
             session.WaitForHeartbeat();
 
-            var commandResult = session.SendCommand(new FirmwareRequests.SetPausedRequest(true));
+            var commandResult = session.SendCommand(new FirmwareRequests.SetPausedRequest(true), TimeSpan.FromSeconds(10));
             Assert.AreEqual("""
                             {"command_name":"pause", "status":"SUCCESS"}
                             """, commandResult);
