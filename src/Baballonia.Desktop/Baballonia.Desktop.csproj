@@ -42,7 +42,7 @@
 
         <!-- Linux-specific -->
         <PackageReference Include="Project-Babble.OpenCvSharp4.mini.runtime.ubuntu.22.04-x64" Version="4.11.0.1" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
-	    <PackageReference Include="Microsoft.ML.OnnxRuntime.Gpu" Version="1.22.0" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
+	    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.22.0" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
         <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.119.0" Condition="$([MSBuild]::IsOSPlatform('Linux'))"/>
     </ItemGroup>
     <ItemGroup>
