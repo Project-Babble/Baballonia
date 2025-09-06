@@ -21,6 +21,7 @@
               Description="Should we send only eye, only face or both?">
               <controls:SettingsBlock.SettingsContent>
                 <ComboBox x:Name="ModeCombo" VerticalAlignment="Center"
+                          SelectionChanged="ModeComboBox_SelectionChanged"
                           SelectedItem="{Binding SelectedModuleMode, Mode=TwoWay}"
                           PlaceholderText="Select a mode...">
                   <ComboBoxItem x:Name="Both" Content="Both" />

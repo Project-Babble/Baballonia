@@ -24,7 +24,6 @@
             BorderThickness="1"
             CornerRadius="8"
             HorizontalAlignment="Center"
-            MaxHeight="500"
             MaxWidth="500"
             Padding="24"
             VerticalAlignment="Center">
@@ -79,56 +78,28 @@
                                 Data="{StaticResource DeveloperBoardRegular}"
                                 Height="64"
                                 Width="64" />
-                            <PathIcon
-                                Data="{StaticResource WirelessRegular}"
-                                Height="64"
-                                Width="64" />
                         </StackPanel>
 
                         <TextBlock
                             FontSize="20"
                             FontWeight="Bold"
-                            Text="Wired or wireless?" />
+                            Text="Wired or Wireless?" />
 
                         <TextBlock
                             FontSize="16"
-                            Text="If you want to use your tracker wirelessly, you'll need to flash your device. You can download the firmware flashing app below."
+                            Text="With newer Babbles, you'll need to perform a first time setup in the Firmware tab (Icon above)."
                             TextWrapping="Wrap" />
-
-                        <Grid ColumnDefinitions="Auto,12,*" RowDefinitions="Auto,Auto">
-                            <TextBlock
-                                FontSize="16"
-                                Grid.Column="0"
-                                Grid.Row="0"
-                                Text="Download link:"
-                                VerticalAlignment="Center" />
-                            <controls:Hyperlink
-                                Alias="EyeTrackVR Firmware Flashing Tool"
-                                Command="{Binding OpenEtvrModuleUrl}"
-                                FontSize="16"
-                                Grid.Column="2"
-                                Grid.Row="0"
-                                Url="{Binding EtvrFirmwareFlashingTool}" />
-
-                            <TextBlock
-                                FontSize="16"
-                                Grid.Column="0"
-                                Grid.Row="1"
-                                Text="How to use it:"
-                                VerticalAlignment="Center" />
-                            <controls:Hyperlink
-                                Alias="Babble Docs Page"
-                                Command="{Binding OpenBabbleModuleUrl}"
-                                FontSize="16"
-                                Grid.Column="2"
-                                Grid.Row="1"
-                                Url="{Binding BabbleFirmwareDocs}" />
-                        </Grid>
 
                         <TextBlock
-                            FontSize="16"
-                            Text="If you want to use your tracker wired, continue!"
-                            TextWrapping="Wrap" />
+                          FontSize="16"
+                          Text="It only takes 2 minutes! Select your tracker and mode (wired or wireless). It's that simple."
+                          TextWrapping="Wrap" />
+
+                        <TextBlock
+                          FontSize="16"
+                          FontStyle="Italic"
+                          Text="Please note newer trackers have a 20-second window before they enter camera mode."
+                          TextWrapping="Wrap" />
                     </StackPanel>
 
                     <!--  Assembly Slide  -->
@@ -175,23 +146,28 @@
                             <LineBreak />
 
                             <Run Text="2. The" />
-                            <Run FontWeight="Bold" Text="Eye Calibration Page" />
-                            <Run Text="can be used to tweak your eye tracking beyond a standard calibration." />
+                            <Run FontWeight="Bold" Text="Calibration Page" />
+                            <Run Text="can be used to tweak your eye/face expressions individually." />
                             <LineBreak />
 
                             <Run Text="3. The" />
-                            <Run FontWeight="Bold" Text="Face Calibration Page" />
-                            <Run Text="similar to the Eye Calibration Page, lets you tweak your face tracking." />
+                            <Run FontWeight="Bold" Text="Firmware Page" />
+                            <Run Text="is used to set up your device, or reset it." />
                             <LineBreak />
 
                             <Run Text="4. The" />
+                            <Run FontWeight="Bold" Text="VRChat Page" />
+                            <Run Text="is used to alter VRChat/VRCFaceTracking specific settings." />
+                            <LineBreak />
+
+                            <Run Text="5. The" />
                             <Run FontWeight="Bold" Text="Output Page" />
                             <Run Text="shows the status of the app," />
                             <Run FontStyle="Italic" Text="errors" />
                             <Run Text="and other useful information." />
                             <LineBreak />
 
-                            <Run Text="5. The" />
+                            <Run Text="6. The" />
                             <Run FontWeight="Bold" Text="Settings Page" />
                             <Run Text="is for general app settings, such as" />
                             <Run FontStyle="Italic" Text="theme, language," />

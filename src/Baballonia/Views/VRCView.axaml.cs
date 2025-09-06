@@ -37,7 +37,6 @@ public partial class VrcView : UserControl
         InitializeComponent();
 
         _trackingMode = this.Find<ComboBox>("ModeCombo")!;
-        _trackingMode.SelectionChanged += ModeComboBox_SelectionChanged;
 
         Dispatcher.UIThread.InvokeAsync(async () =>
         {
@@ -66,7 +65,7 @@ public partial class VrcView : UserControl
         if (DataContext is not VrcViewModel vm) return;
 
         var oldConfig = JsonSerializer.Deserialize<ModuleConfig>(await File.ReadAllTextAsync(BaballoniaModulePath));
-        var newConfig = comboBoxItem.Content switch
+        var newConfig = comboBoxItem.Name switch
         {
             "Both" => new ModuleConfig(oldConfig!.Host, oldConfig.Port, true, true),
             "Eyes" => new ModuleConfig(oldConfig!.Host, oldConfig.Port, true, false),
@@ -76,7 +75,7 @@ public partial class VrcView : UserControl
 
         await vm.LocalSettingsService.SaveSettingAsync(
             "VRC_SelectedModuleMode",
-            comboBoxItem.Content.ToString());
+            comboBoxItem.Name);
         await File.WriteAllTextAsync(BaballoniaModulePath, JsonSerializer.Serialize(newConfig));
     }
 }

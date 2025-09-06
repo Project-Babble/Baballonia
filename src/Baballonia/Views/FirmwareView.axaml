@@ -19,7 +19,7 @@
                 <StackPanel Spacing="12">
                     <TextBlock FontWeight="Bold" Text="Select your tracker" />
                     <TextBlock TextWrapping="Wrap">
-                      <Run>• After powering on/connecting your device you will have 20 seconds to press "Refresh" and select your device from the dropdown.</Run>
+                      <Run>• After powering on/connecting your device you will have 20 seconds to press "Refresh" and select your device from the dropdown</Run>
                       <LineBreak/>
                       <Run>• Certain configuration operations will take a little bit!</Run>
                     </TextBlock>
@@ -118,9 +118,9 @@
                       <StackPanel Spacing="12">
                           <TextBlock FontWeight="Bold" Text="Set your Wi-Fi credentials" />
                           <TextBlock TextWrapping="Wrap">
-                              <Run>• Your tracker will use these credentials to connect to your wifi</Run>
+                              <Run>• If you want to use your tracker wirelessly, you NEED to set its Wifi credentials</Run>
                               <LineBreak />
-                              <Run>• Please enter the credentials of your wifi network</Run>
+                              <Run>• You MUST scan for Wifi networks BEFORE you can set your Wifi credentials</Run>
                           </TextBlock>
 
                           <TextBlock
@@ -171,7 +171,7 @@
                       </StackPanel>
 
                       <StackPanel Orientation="Horizontal" Spacing="12">
-                        <Button Content="{Binding WifiSetButton}" Command="{Binding SendDeviceWifiCredentialsCommand}"/>
+                        <Button IsEnabled="{Binding HasScanned}" Content="{Binding WifiSetButton}" Command="{Binding SendDeviceWifiCredentialsCommand}"/>
                       </StackPanel>
                     </StackPanel>
             </Expander>
