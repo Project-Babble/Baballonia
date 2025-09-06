@@ -11,10 +11,10 @@
         <StackPanel Classes="Page">
             <TextBlock Classes="Header" Text="VRChat + VRCFaceTracking Settings" />
 
-            <!--<controls:SettingsToggle
+            <controls:SettingsToggle
               Title="Use Native VRC Eye Tracking"
               Description="Brings eye tracking to avatars that do not have VRCFaceTracking"
-              SettingToggled="{Binding UseNativeVrcEyeTracking, Mode=TwoWay}" />-->
+              SettingToggled="{Binding UseNativeVrcEyeTracking, Mode=TwoWay}" />
 
             <controls:SettingsBlock
               Title="Set Baballonia's VRCFT module mode"
