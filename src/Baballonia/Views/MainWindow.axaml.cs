@@ -17,6 +17,7 @@ public partial class MainWindow : Window
         InitializeComponent();
         AdjustTitleBarForPlatform();
         AppNameAndVersion.Text = $"Project Babble v{Assembly.GetExecutingAssembly().GetName().Version}";
+        Window.Title = AppNameAndVersion.Text;
     }
 
     private void AdjustTitleBarForPlatform()
