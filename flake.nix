@@ -23,15 +23,14 @@
     packages = forAllSystems (system: let
       pkgs = pkgsFor system;
       dotnet = pkgs.dotnetCorePackages.dotnet_8;
-    in {
-      default = pkgs.buildDotnetModule rec {
+      base = pkgs.buildDotnetModule {
         version = "0.0.0";
         pname = "baballonia";
 
         buildInputs = with pkgs; [
           cmake opencv udev
           xorg.libX11 xorg.libSM xorg.libICE
-          libjpeg onnxruntime libGL fontconfig
+          libjpeg libGL fontconfig
           (pkgs.callPackage ./nix/opencvsharp.nix {})
         ];
 
@@ -61,6 +60,13 @@
           description = "Repo for the new Babble App, free and open source eye and face tracking for social VR";
         };
       };
+    in {
+      default = base.overrideAttrs (old: {
+        buildInputs = old.buildInputs ++ [ pkgs.onnxruntime ];
+      });
+      baballonia-cuda = base.overrideAttrs (old: {
+        buildInputs = old.buildInputs ++ [ pkgs.pkgsCuda.onnxruntime ];
+      });
     });
 
     devShells = forAllSystems (system: let
