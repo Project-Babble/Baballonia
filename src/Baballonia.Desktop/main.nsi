@@ -60,8 +60,8 @@
     File /r /x "Calibration" "bin\Release\net8.0\*"
 
     ; Create Calibration directory and copy only Windows calibration files
-    CreateDirectory "$INSTDIR\Calibration"
-    SetOutPath "$INSTDIR\Calibration"
+    CreateDirectory "$INSTDIR\win-x64\Calibration"
+    SetOutPath "$INSTDIR\win-x64\Calibration"
     File /r "bin\Release\net8.0\win-x64\Calibration\Windows"
 
     ; Reset output path and write registry values
