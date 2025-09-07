@@ -401,3 +401,6 @@ FodyWeavers.xsd
 /src/AvaloniaMiaDev.Desktop/.publish
 /src/Baballonia.Desktop/installers
 /src/Baballonia.Desktop/_internal
+
+# macOS files
+.DS_Store
