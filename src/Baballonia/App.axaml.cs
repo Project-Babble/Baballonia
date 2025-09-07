@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -144,6 +145,12 @@ public class App : Application
                 var defaultSettings = Path.Combine(AppContext.BaseDirectory, LocalSettingsService.DefaultLocalSettingsFile);
                 Directory.CreateDirectory(Path.GetDirectoryName(settingsLocation)!);
                 File.Copy(defaultSettings, settingsLocation);
+                if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                    // Make file read-write if not on Windows as the source file might be in read-only.
+                    File.SetUnixFileMode(
+                        settingsLocation,
+                        UnixFileMode.UserRead | UnixFileMode.UserWrite | File.GetUnixFileMode(settingsLocation));
+                }
             }
         }
         else // extract default models for mobile
