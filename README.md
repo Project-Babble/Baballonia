@@ -14,6 +14,10 @@ You may be prompted to download the .NET runtime for desktop apps, install it if
 
 Baballonia does not currently have an installer for MacOS or Linux. You will need to follow our build instructions and run it from source.
 
+#### NixOS (Flakes)
+
+You can run Baballonia with just ``nix run github:Project-Babble/Baballonia``
+
 ## Use
 
 ### VRChat
