@@ -83,14 +83,17 @@
 
         <SplitView.Content>
           <Grid>
-          <Border
-            Background="{DynamicResource SystemChromeMediumColor}"
-            CornerRadius="16 0 0 0"
-            Padding="5"
-            x:Name="ViewContainer">
-                <TransitioningContentControl Content="{Binding CurrentPage}" />
-            </Border>
-           <controls:DropOverlay IsOverlayVisible="{Binding IsDropOverlayVisible}"/>
+            <Border
+              Background="{DynamicResource SystemChromeMediumColor}"
+              CornerRadius="16 0 0 0"
+              Padding="5"
+              x:Name="ViewContainer">
+                  <TransitioningContentControl Content="{Binding CurrentPage}" />
+              </Border>
+             <controls:DropOverlay IsOverlayVisible="{Binding IsDropOverlayVisible}"/>
+             <Grid RowDefinitions="Auto">
+               <controls:DropdownMessage Title="Censored" Message="Censored" AcceptText="YES!" DeclineText="no" />
+             </Grid>
            </Grid>
         </SplitView.Content>
     </SplitView>

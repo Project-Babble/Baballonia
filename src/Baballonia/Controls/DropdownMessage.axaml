@@ -1,0 +1,44 @@
+﻿<UserControl
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:templates="clr-namespace:Baballonia.Controls"
+  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="200"
+  x:Class="Baballonia.Controls.DropdownMessage">
+
+  <Grid>
+    <Border Background="{DynamicResource SystemChromeMediumColor}" x:DataType="templates:DropdownMessage"
+            BorderThickness="3"
+            BorderBrush="{DynamicResource SystemChromeBlackLowColor}" CornerRadius="16" Padding="10"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Center">
+      <Grid ColumnDefinitions="Auto, *" MaxHeight="120">
+        <Border Padding="10" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="0">
+          <Image Source="/Assets/Icon_512x512.png" />
+        </Border>
+        <Grid Grid.Column="1" RowDefinitions="Auto, *" VerticalAlignment="Center">
+          <TextBlock Grid.Row="0" FontSize="20" FontWeight="Bold" TextWrapping="Wrap"
+                     Text="{Binding $parent[templates:DropdownMessage].Title}" />
+          <Grid Grid.Row="1" ColumnDefinitions="*, Auto" VerticalAlignment="Center">
+            <TextBlock VerticalAlignment="Center" FontSize="16"
+                       Text="{Binding $parent[templates:DropdownMessage].Message}"
+                       TextWrapping="Wrap" />
+            <StackPanel Margin="10 0" Grid.Column="1" Orientation="Horizontal" Spacing="10">
+              <Button VerticalAlignment="Center" Background="#539E8A" Padding="15 10"
+                      Command="{Binding $parent[templates:DropdownMessage].AcceptCommand}"
+                      CornerRadius="99">
+                <TextBlock FontSize="15" FontWeight="Bold"
+                           Text="{Binding $parent[templates:DropdownMessage].AcceptText}" Foreground="White" />
+              </Button>
+              <Button VerticalAlignment="Center" Padding="15 10" CornerRadius="99"
+                      Command="{Binding $parent[templates:DropdownMessage].DeclineCommand}">
+                <TextBlock FontSize="15" Text="{Binding $parent[templates:DropdownMessage].DeclineText}" />
+              </Button>
+            </StackPanel>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Border>
+  </Grid>
+</UserControl>
