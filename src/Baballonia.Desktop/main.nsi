@@ -74,7 +74,7 @@
 ; Section - Shortcut
 
   Section "Desktop Shortcut" DeskShort
-    CreateShortCut "$DESKTOP\${NAME}.lnk" "$INSTDIR\${APPFILE}"
+    CreateShortCut "$DESKTOP\${NAME}.lnk" "$INSTDIR\win-x64\${APPFILE}"
   SectionEnd
 
 ;--------------------------------
