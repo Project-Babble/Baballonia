@@ -32,6 +32,8 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     // This feels unorthodox but... i kinda like it?
     public partial class CameraControllerModel : ObservableObject, IDisposable
     {
+        public readonly TaskCompletionSource IsInitialized = new();
+
         public string Name;
         public readonly CropManager CropManager = new();
         public CamViewMode CamViewMode = CamViewMode.Tracking;
@@ -73,7 +75,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         {
             var displayAddress = await _localSettingsService.ReadSettingAsync<string>("LastOpened" + Name);
             var camSettings = await _localSettingsService.ReadSettingAsync<CameraSettings>(Name);
-            await Dispatcher.UIThread.InvokeAsync(() =>
+            Dispatcher.UIThread.Post(() =>
             {
                 UpdateCameraDropDown(cameras);
 
@@ -87,6 +89,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
                 OverlayRectangle = CropManager.CropZone.GetRect();
                 OnCropUpdated();
 
+                IsInitialized.SetResult();
                 switch (_processingPipeline.VideoSource)
                 {
                     case null:
@@ -111,7 +114,8 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
                         break;
                 }
-            });
+
+            }, DispatcherPriority.Background);
         }
 
         public void UpdateCameraDropDown(string[] cameras)
@@ -398,11 +402,13 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     [ObservableProperty] private CameraControllerModel _leftCamera;
     [ObservableProperty] private CameraControllerModel _rightCamera;
     [ObservableProperty] private CameraControllerModel _faceCamera;
+
     public readonly TaskCompletionSource camerasInitialized = new();
 
     private readonly DispatcherTimer _msgCounterTimer;
     private readonly ILocalSettingsService _localSettingsService;
     private readonly ProcessingLoopService _processingLoopService;
+    private readonly DropOverlayService _dropOverlayService;
 
 
     private ILogger<HomePageViewModel> _logger;
@@ -416,6 +422,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         _localSettingsService = Ioc.Default.GetRequiredService<ILocalSettingsService>()!;
         _processingLoopService = Ioc.Default.GetService<ProcessingLoopService>()!;
         _logger = Ioc.Default.GetService<ILogger<HomePageViewModel>>()!;
+        _dropOverlayService = Ioc.Default.GetService<DropOverlayService>()!;
         LocalSettingsService.Load(this);
 
         MessagesInPerSecCount = "0";
@@ -438,15 +445,32 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
         Task.Run(async () =>
         {
+            bool hasRead = await _localSettingsService.ReadSettingAsync<bool>("SecondsWarningRead");
+            if (!hasRead)
+            {
+                _dropOverlayService.Show();
+            }
+
             var cameras = await App.DeviceEnumerator.UpdateCameras();
             var cameraNames = cameras.Keys.ToArray();
-            LeftCamera = new CameraControllerModel(_localSettingsService, "LeftCamera",
-                _processingLoopService.EyesProcessingPipeline, cameraNames, Camera.Left);
-            RightCamera = new CameraControllerModel(_localSettingsService, "RightCamera",
-                _processingLoopService.EyesProcessingPipeline, cameraNames, Camera.Right);
-            FaceCamera = new CameraControllerModel(_localSettingsService, "FaceCamera",
-                _processingLoopService.FaceProcessingPipeline, cameraNames, Camera.Face);
-            camerasInitialized.SetResult();
+            await Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                LeftCamera = new CameraControllerModel(_localSettingsService, "LeftCamera",
+                    _processingLoopService.EyesProcessingPipeline, cameraNames, Camera.Left);
+                RightCamera = new CameraControllerModel(_localSettingsService, "RightCamera",
+                    _processingLoopService.EyesProcessingPipeline, cameraNames, Camera.Right);
+                FaceCamera = new CameraControllerModel(_localSettingsService, "FaceCamera",
+                    _processingLoopService.FaceProcessingPipeline, cameraNames, Camera.Face);
+                camerasInitialized.SetResult();
+            });
+
+            await camerasInitialized.Task;
+            await LeftCamera.IsInitialized.Task;
+            await StartCameraAsync(LeftCamera);
+            await RightCamera.IsInitialized.Task;
+            await StartCameraAsync(RightCamera);
+            await FaceCamera.IsInitialized.Task;
+            await StartCameraAsync(FaceCamera);
         });
 
         _processingLoopService.PipelineExceptionEvent += PipelineExceptionEventHandler;
@@ -502,7 +526,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             }
 
             Stopwatch sw = Stopwatch.StartNew();
-            var timeout = TimeSpan.FromSeconds(3);
+            var timeout = TimeSpan.FromSeconds(13);
             while (sw.Elapsed < timeout)
             {
                 var testFrame = cameraSource.GetFrame();

@@ -63,13 +63,18 @@
     SectionIn RO
     SetOutPath "$INSTDIR"
 
-    ; Copy all files except Calibration folders
-    File /r /x "Calibration" "bin\Release\net8.0\*"
+    ; Copy all files except runtimes and Calibration folders
+    File /r /x "runtimes" /x "Calibration" "bin\Release\net8.0\*"
+
+    ; Create runtimes directory and copy only Windows runtimes
+    CreateDirectory "$INSTDIR\runtimes"
+    SetOutPath "$INSTDIR\runtimes"
+    File /r "bin\Release\net8.0\runtimes\win*"
 
     ; Create Calibration directory and copy only Windows calibration files
-    CreateDirectory "$INSTDIR\win-x64\Calibration"
-    SetOutPath "$INSTDIR\win-x64\Calibration"
-    File /r "bin\Release\net8.0\win-x64\Calibration\Windows"
+    CreateDirectory "$INSTDIR\Calibration"
+    SetOutPath "$INSTDIR\Calibration"
+    File /r "bin\Release\net8.0\Calibration\Windows"
 
     ; Reset output path and write registry values
     SetOutPath "$INSTDIR"
@@ -81,7 +86,7 @@
 ; Section - Shortcut
 
   Section "Desktop Shortcut" DeskShort
-    CreateShortCut "$DESKTOP\${NAME}.lnk" "$INSTDIR\win-x64\${APPFILE}"
+    CreateShortCut "$DESKTOP\${NAME}.lnk" "$INSTDIR\${APPFILE}"
   SectionEnd
 
 ;--------------------------------

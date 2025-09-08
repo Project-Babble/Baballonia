@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Baballonia.Services.Inference;
+using Microsoft.Extensions.Logging;
 using OpenCvSharp;
 using Capture = Baballonia.SDK.Capture;
 
@@ -19,7 +20,7 @@ namespace Baballonia.Android.Captures;
 /// https://github.com/Larry57/SimpleMJPEGStreamViewer
 /// https://stackoverflow.com/questions/3801275/how-to-convert-image-to-byte-array
 /// </summary>
-public sealed class IpCameraCapture(string url) : Capture(url)
+public sealed class IpCameraCapture(string url, ILogger logger) : Capture(url, logger)
 {
     private readonly CancellationTokenSource _cancellationTokenSource = new();
 
@@ -141,7 +142,8 @@ public sealed class IpCameraCapture(string url) : Capture(url)
                 {
                     try
                     {
-                        Mat.FromImageData(TrimEnd(frameBuffer), ImreadModes.Color).CopyTo(RawMat);
+                        var mat = Mat.FromImageData(TrimEnd(frameBuffer));
+                        SetRawMat(mat);
                     }
                     catch (Exception)
                     {

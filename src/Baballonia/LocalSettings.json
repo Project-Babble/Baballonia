@@ -1,4 +1,8 @@
 {
+  "VRC_UseNativeTracking": false,
+  "VRC_SelectedModuleMode": "Face",
+  "SecondsWarningRead": false,
+  "ShowOnboardingOnStartup" : true,
   "OSCInPort": 8889,
   "OSCOutPort": 8888,
   "OSCAddress": "127.0.0.1",
@@ -361,7 +365,7 @@
   "AppSettings_RecalibrateAddress": "/avatar/parameters/etvr_recenter",
   "AppSettings_UseOSCQuery": false,
   "AppSettings_OSCPrefix": "",
-  "AppSettings_OneEuroMinEnabled": true,
+  "AppSettings_OneEuroEnabled": true,
   "AppSettings_OneEuroMinFreqCutoff": 1,
   "AppSettings_OneEuroSpeedCutoff": 1,
   "AppSettings_UseGPU": true,

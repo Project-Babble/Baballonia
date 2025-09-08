@@ -23,6 +23,10 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
     public ObservableCollection<SliderBindableSetting> NoseSettings { get; set; }
     public ObservableCollection<SliderBindableSetting> CheekSettings { get; set; }
 
+    [ObservableProperty]
+    [property: SavedSetting("AppSettings_StabilizeEyes", false)]
+    private bool _stabilizeEyes;
+
     private ILocalSettingsService _settingsService { get; }
     private readonly ICalibrationService _calibrationService;
     private readonly ParameterSenderService _parameterSenderService;
@@ -143,6 +147,16 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
         _processingLoopService.ExpressionChangeEvent += ExpressionUpdateHandler;
 
         LoadInitialSettings();
+        _settingsService.Load(this);
+        
+        PropertyChanged += async (o, p) =>
+        {
+            if (p.PropertyName == nameof(StabilizeEyes))
+            {
+                await _settingsService.SaveSettingAsync("AppSettings_StabilizeEyes", StabilizeEyes);
+                _processingLoopService.EyesProcessingPipeline.StabilizeEyes = StabilizeEyes;
+            }
+        };
     }
 
     private void ExpressionUpdateHandler(ProcessingLoopService.Expressions expressions)

@@ -7,8 +7,8 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	<NoWarn>CS8618;CS8509;CS0067;CS8613;CS8622;MVVMTK0034</NoWarn>
 	<Company>Paradigm Reality Enhancement Labs</Company>
-	<AssemblyVersion>1.0.1.1</AssemblyVersion>
-	<FileVersion>1.0.1.1</FileVersion>
+	<AssemblyVersion>1.1.0.1</AssemblyVersion>
+	<FileVersion>1.1.0.1</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -20,6 +20,9 @@
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="LocalSettings.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Firmware\babble_multimodal_firmware_1.0.0.bin">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
@@ -119,28 +122,29 @@
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</EmbeddedResource>
 		<EmbeddedResource Update="Assets\Resources.resx">
-		  <Generator>PublicResXFileCodeGenerator</Generator>
-		  <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-		</EmbeddedResource>
-		<EmbeddedResource Update="Assets\Resources.resx">
-		  <Generator>ResXFileCodeGenerator</Generator>
-		  <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+		    <Generator>PublicResXFileCodeGenerator</Generator>
+		    <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+            <LogicalName>Baballonia.Assets.Resources.resources</LogicalName>
 		</EmbeddedResource>
 		<EmbeddedResource Update="Assets\Resources.es.resx">
-		  <Generator>ResXFileCodeGenerator</Generator>
-		  <LastGenOutput>Resources.es.Designer.cs</LastGenOutput>
+		    <Generator>ResXFileCodeGenerator</Generator>
+		    <LastGenOutput>Resources.es.Designer.cs</LastGenOutput>
+            <LogicalName>Baballonia.Assets.Resources.es.resources</LogicalName>
 		</EmbeddedResource>
 		<EmbeddedResource Update="Assets\Resources.ja.resx">
-		  <Generator>ResXFileCodeGenerator</Generator>
-		  <LastGenOutput>Resources.ja.Designer.cs</LastGenOutput>
+		    <Generator>ResXFileCodeGenerator</Generator>
+		    <LastGenOutput>Resources.ja.Designer.cs</LastGenOutput>
+            <LogicalName>Baballonia.Assets.Resources.ja.resources</LogicalName>
 		</EmbeddedResource>
 		<EmbeddedResource Update="Assets\Resources.pl.resx">
-		  <Generator>ResXFileCodeGenerator</Generator>
-		  <LastGenOutput>Resources.pl.Designer.cs</LastGenOutput>
+		    <Generator>ResXFileCodeGenerator</Generator>
+		    <LastGenOutput>Resources.pl.Designer.cs</LastGenOutput>
+            <LogicalName>Baballonia.Assets.Resources.pl.resources</LogicalName>
 		</EmbeddedResource>
 		<EmbeddedResource Update="Assets\Resources.zh-cn.resx">
-		  <Generator>ResXFileCodeGenerator</Generator>
-		  <LastGenOutput>Resources.zh-cn.Designer.cs</LastGenOutput>
+		    <Generator>ResXFileCodeGenerator</Generator>
+		    <LastGenOutput>Resources.zh-cn.Designer.cs</LastGenOutput>
+            <LogicalName>Baballonia.Assets.Resources.zh-cn.resources</LogicalName>
 		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>

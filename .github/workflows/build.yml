@@ -1,0 +1,63 @@
+name: Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-linux-x64:
+    defaults:
+      run:
+        shell: bash
+
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout latest
+        uses: actions/checkout@v5
+        with:
+          submodules: 'recursive'
+
+      - name: Install dependencies
+        run: |
+          dotnet tool install -g vpk
+
+      - name: Run publish script
+        run: |
+          cd src/Baballonia.Desktop/Publish
+          python publish_linux.py
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Baballonia.AppImage
+          path: src/Baballonia.Desktop/installers/linux-x64/Baballonia.AppImage
+
+  build-windows-x64:
+    defaults:
+      run:
+        shell: bash
+
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout latest
+        uses: actions/checkout@v5
+        with:
+          submodules: 'recursive'
+          lfs: true
+
+      - name: Build project
+        run: |
+          cd src/Baballonia.Desktop
+          dotnet publish -r win-x64 -c Release --self-contained -f net8.0
+
+      - name: Run makensis
+        run: |
+          cd src/Baballonia.Desktop
+          "C:\Program Files (x86)\NSIS\makensis.exe" main.nsi
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: "Baballonia Setup.exe"
+          path: "src/Baballonia.Desktop/Baballonia Setup.exe"

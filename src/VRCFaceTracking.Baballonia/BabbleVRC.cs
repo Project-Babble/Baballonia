@@ -1,5 +1,5 @@
-using Microsoft.Extensions.Logging;
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 
 namespace VRCFaceTracking.Baballonia;
 
@@ -7,6 +7,8 @@ public class BabbleVrc : ExtTrackingModule
 {
     private BabbleOsc babbleOSC;
     private Config config;
+    private bool needsEye;
+    private bool needsExpression;
 
     // We need to call GetBabbleConfig ahead of Initialize
     public override (bool SupportsEye, bool SupportsExpression) Supported => (true, true);
@@ -15,22 +17,33 @@ public class BabbleVrc : ExtTrackingModule
     {
         config = BabbleConfig.GetBabbleConfig();
         babbleOSC = new BabbleOsc(Logger, config.Host, config.Port);
+
         List<Stream> list = new List<Stream>();
         Assembly executingAssembly = Assembly.GetExecutingAssembly();
-        Stream manifestResourceStream = executingAssembly.GetManifestResourceStream("VRCFaceTracking.Baballonia.BabbleLogo.png")!;
-        list.Add(manifestResourceStream);
+        if (eyeAvailable && config.IsEyeSupported)
+        {
+            Logger.LogInformation("Baballonia will use Eye Tracking.");
+            Stream manifestResourceStream = executingAssembly.GetManifestResourceStream("VRCFaceTracking.Baballonia.BabbleEyeLogo.png")!;
+            list.Add(manifestResourceStream);
+            needsEye = true;
+        }
+        if (expressionAvailable && config.IsFaceSupported)
+        {
+            Logger.LogInformation("Baballonia will use Face Tracking.");
+            Stream manifestResourceStream = executingAssembly.GetManifestResourceStream("VRCFaceTracking.Baballonia.BabbleFaceLogo.png")!;
+            list.Add(manifestResourceStream);
+            needsExpression = true;
+        }
+
+        executingAssembly.GetManifestResourceNames();
+
         ModuleInformation = new ModuleMetadata
         {
-            Name = "Baballonia Module v1.0.5",
+            Name = "Project Babble Module v3.0.0",
             StaticImages = list
         };
 
-        if (config.IsEyeSupported)
-            Logger.LogInformation("Baballonia will use Eye Tracking.");
-        if (config.IsFaceSupported)
-            Logger.LogInformation("Baballonia will use Face Tracking.");
-
-        return (config.IsEyeSupported, config.IsFaceSupported);
+        return (needsEye, needsExpression);
     }
 
     public override void Teardown()
@@ -40,7 +53,7 @@ public class BabbleVrc : ExtTrackingModule
 
     public override void Update()
     {
-        if (config.IsEyeSupported)
+        if (needsEye)
         {
             UnifiedTracking.Data.Eye.Left.Gaze.x = BabbleOsc.EyeExpressions[(int)ExpressionMapping.EyeLeftX];
             UnifiedTracking.Data.Eye.Left.Gaze.y = BabbleOsc.EyeExpressions[(int)ExpressionMapping.EyeLeftY];
@@ -51,8 +64,7 @@ public class BabbleVrc : ExtTrackingModule
             UnifiedTracking.Data.Eye.Right.Openness = BabbleOsc.EyeExpressions[(int)ExpressionMapping.EyeRightLid];
         }
 
-
-        if (config.IsFaceSupported)
+        if (needsExpression)
         {
             foreach (var expression in BabbleExpressions.BabbleExpressionMap!)
             {

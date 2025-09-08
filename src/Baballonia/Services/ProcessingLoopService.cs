@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
@@ -41,7 +43,9 @@ public class ProcessingLoopService : IDisposable
 
         FaceProcessingPipeline.ImageConverter = new MatToFloatTensorConverter();
         FaceProcessingPipeline.ImageTransformer = new ImageTransformer();
+ 
         EyesProcessingPipeline.ImageConverter = new MatToFloatTensorConverter();
+        
         var dualTransformer = new DualImageTransformer();
         dualTransformer.LeftTransformer.TargetSize = new Size(128, 128);
         dualTransformer.RightTransformer.TargetSize = new Size(128, 128);
@@ -50,6 +54,7 @@ public class ProcessingLoopService : IDisposable
         _ = SetupFaceInference();
         _ = SetupEyeInference();
         _ = LoadFilters();
+        _ = LoadEyeStabilizationSetting();
 
         _drawTimer.Tick += TimerEvent;
         _drawTimer.Start();
@@ -87,6 +92,11 @@ public class ProcessingLoopService : IDisposable
     {
         const string defaultEyeModel = "eyeModel.onnx";
         var eyeModel = await _localSettingsService.ReadSettingAsync<string>("EyeHome_EyeModel", defaultEyeModel);
+        if (!File.Exists(Path.Combine(AppContext.BaseDirectory, eyeModel)))
+        {
+            _logger.LogError("{} Does not exits", eyeModel);
+            eyeModel = defaultEyeModel;
+        }
         if (eyeModel == defaultEyeModel)
         {
             _logger.LogDebug("Loaded default eye model with hash {EyeModelHash}", Utils.GenerateMD5(eyeModel));
@@ -118,6 +128,12 @@ public class ProcessingLoopService : IDisposable
 
             Dispatcher.UIThread.Post(() => { FaceProcessingPipeline.InferenceService = faceInference; });
         });
+    }
+
+    private async Task LoadEyeStabilizationSetting()
+    {
+        var stabilizeEyes = await _localSettingsService.ReadSettingAsync<bool>("AppSettings_StabilizeEyes", false);
+        EyesProcessingPipeline.StabilizeEyes = stabilizeEyes;
     }
 
     private void TimerEvent(object? s, EventArgs e)

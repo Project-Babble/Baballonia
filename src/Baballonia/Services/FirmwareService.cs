@@ -2,14 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Baballonia.Contracts;
 using Baballonia.Models;
 using Baballonia.Services.Firmware;
+using MeaMod.DNS.Server;
 using Microsoft.Extensions.Logging;
 
 namespace Baballonia.Services;
@@ -25,7 +28,23 @@ public class FirmwareService(ILogger<FirmwareService> logger, ICommandSenderFact
 
     static FirmwareService()
     {
-        EsptoolCommand = OperatingSystem.IsWindows() ? "espflash.exe" : "espflash";
+        if (OperatingSystem.IsWindows())
+        {
+            EsptoolCommand = Path.Combine("Firmware", "Windows", "espflash.exe");
+        }
+        else if (OperatingSystem.IsLinux())
+        {
+            EsptoolCommand = Path.Combine("Firmware", "Linux", "espflash");
+        }
+        else if (OperatingSystem.IsMacOS())
+        {
+            EsptoolCommand = Path.Combine("Firmware", "MacOS", "espflash");
+        }
+    }
+
+    public FirmwareSession StartSession(CommandSenderType type, string port)
+    {
+        return new FirmwareSession(commandSenderFactory.Create(type, port), logger);
     }
 
     /// <summary>
@@ -33,32 +52,31 @@ public class FirmwareService(ILogger<FirmwareService> logger, ICommandSenderFact
     /// </summary>
     /// <param name="port">COM port where the device is connected</param>
     /// <param name="pathToFirmware">Path to the firmware file to upload</param>
-    /// <param name="token">Cancellation token</param>
     /// <returns>A task representing the asynchronous operation</returns>
-    public void UploadFirmware(string port, string pathToFirmware)
+    public async Task UploadFirmwareAsync(string port, string pathToFirmware)
     {
         try
         {
             // Check if firmware file exists
             if (!File.Exists(pathToFirmware))
             {
-                OnFirmwareUpdateError($"Firmware file not found: {pathToFirmware}");
+                OnFirmwareUpdateError?.Invoke($"Firmware file not found: {pathToFirmware}");
                 return;
             }
 
             // Notify start of firmware update
-            OnFirmwareUpdateStart();
+            OnFirmwareUpdateStart?.Invoke();
 
-            // Create process to run esptool.py
-            if (!RunEspSubprocess(
+            // Create process to run espflash
+            if (!await RunEspSubprocess(
                     arguments:
                     $"write-bin 0x00 \"{pathToFirmware}\" --port {port} --baud {DefaultBaudRate}"))
             {
-                OnFirmwareUpdateError($"Firmware update failed!");
+                OnFirmwareUpdateError?.Invoke($"Firmware update failed!");
             }
 
             // Wired firmware update completed successfully
-            OnFirmwareUpdateComplete();
+            OnFirmwareUpdateComplete?.Invoke();
         }
         catch (Exception ex)
         {
@@ -66,107 +84,20 @@ public class FirmwareService(ILogger<FirmwareService> logger, ICommandSenderFact
         }
     }
 
-    public void SetWirelessCredentials(string port, string ssid, string password, string hostname = MdnsData.DefaultHostName)
-    {
-        // Create payload
-        Payload payload = new Payload
-        {
-            commands =
-            [
-                new Command
-                {
-                    command = "set_wifi",
-                    data = new WifiData { ssid = ssid, password = password }
-                }
-            ]
-        };
-
-        if (!string.IsNullOrWhiteSpace(hostname))
-        {
-            payload.commands = payload.commands.Append(new Command
-            {
-                command = "set_mdns",
-                data = new MdnsData { hostname = hostname }
-            }).ToArray();
-        }
-
-        string jsonPayload = JsonSerializer.Serialize(payload, new JsonSerializerOptions
-        {
-            WriteIndented = false
-        });
-
-        try
-        {
-            // Create a new SerialPort object with the specified port name and baud rate
-            using SerialPort serialPort = new SerialPort(port, DefaultBaudRate);
-
-            // Set serial port parameters
-            serialPort.DataBits = 8;
-            serialPort.StopBits = StopBits.One;
-            serialPort.Parity = Parity.None;
-            serialPort.Handshake = Handshake.None;
-
-            // Set read/write timeouts
-            serialPort.ReadTimeout = 5000;
-            serialPort.WriteTimeout = 5000;
-
-            try
-            {
-                // Open the port
-                serialPort.Open();
-                serialPort.DiscardInBuffer();
-                serialPort.DiscardOutBuffer();
-
-                // Convert the payload to bytes
-                byte[] payloadBytes = Encoding.UTF8.GetBytes(jsonPayload);
-
-                // Write the payload to the serial port
-                const int chunkSize = 64;
-                for (int i = 0; i < payloadBytes.Length; i += chunkSize)
-                {
-                    int length = Math.Min(chunkSize, payloadBytes.Length - i);
-                    serialPort.Write(payloadBytes, i, length);
-                    Thread.Sleep(50); // Small pause between chunks
-                }
-
-                // Add a newline to indicate end of message
-                serialPort.Write("\n");
-
-                Thread.Sleep(1000);
-            }
-            finally
-            {
-                // Close the port
-                if (serialPort.IsOpen)
-                {
-                    serialPort.Close();
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            OnFirmwareUpdateError($"Firmware update failed: {ex.Message}");
-        }
-    }
-
-    // TODO: Make this pull Wifi names from our ESP32s
-    public string[] GetWirelessCredentials(string port)
-    {
-        return [];
-    }
-
-    private bool RunEspSubprocess(string arguments)
+    private async Task<bool> RunEspSubprocess(string arguments)
     {
         try
         {
             using var process = new Process();
             process.StartInfo.FileName = EsptoolCommand;
             process.StartInfo.Arguments = arguments;
-            process.StartInfo.UseShellExecute = true;
+            process.StartInfo.UseShellExecute = false;
             process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
             process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             process.Start();
-            process.WaitForExit();
+            await process.WaitForExitAsync();
             return process.ExitCode == 0;
         }
         catch (Exception ex)
@@ -176,22 +107,53 @@ public class FirmwareService(ILogger<FirmwareService> logger, ICommandSenderFact
         }
     }
 
-
-    private string[] FindAvalibleComPorts()
+    public async Task<string[]> ProbeComPortsAsync(TimeSpan timeout)
     {
-        // GetPortNames() may return single port multiple times
-        // https://stackoverflow.com/questions/33401217/serialport-getportnames-returns-same-port-multiple-times
-        return SerialPort.GetPortNames().Distinct().ToArray();
+        var ports = FindAvailableComPorts();
+        var goodPorts = new List<string>();
+        var tasks = new ConcurrentSet<Task>();
+
+        foreach (var port in ports)
+        {
+            tasks.Add(Task.Run(() =>
+            {
+                var session = StartSession(CommandSenderType.Serial, port);
+                try
+                {
+                    logger.LogInformation("Probing {Port}", port);
+                    var heartbeat = session.WaitForHeartbeat(timeout);
+                    if (heartbeat != null)
+                    {
+                        lock (goodPorts) // protect against race conditions
+                        {
+                            goodPorts.Add(port);
+                        }
+                    }
+                }
+                catch (TimeoutException)
+                {
+                    logger.LogInformation("Probing port {Port}: timeout reached", port);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "Error probing port {Port}", port);
+                }
+                finally
+                {
+                    session.Dispose();
+                }
+            }));
+        }
+
+        await Task.WhenAll(tasks);
+        return goodPorts.ToArray();
     }
 
-    public FirmwareSession StartSession(CommandSenderType type, string port)
-    {
-        return new FirmwareSession(commandSenderFactory.Create(type, port), logger);
-    }
+
 
     public string[] ProbeComPorts(TimeSpan timeout)
     {
-        var ports = FindAvalibleComPorts();
+        var ports = FindAvailableComPorts();
         List<string> goodPorts = [];
         foreach (var port in ports)
         {
@@ -222,6 +184,13 @@ public class FirmwareService(ILogger<FirmwareService> logger, ICommandSenderFact
         }
 
         return [.. goodPorts];
+    }
+
+    private static string[] FindAvailableComPorts()
+    {
+        // GetPortNames() may return single port multiple times
+        // https://stackoverflow.com/questions/33401217/serialport-getportnames-returns-same-port-multiple-times
+        return SerialPort.GetPortNames().Distinct().ToArray();
     }
 }
 

@@ -1,4 +1,4 @@
-                 Babble Software Distribution License 1.0
+﻿                 Babble Software Distribution License 1.0
                        Version 1.0, January 2025
 
 TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION

@@ -96,6 +96,7 @@ public class App : Application
                 services.AddTransient<FirmwareService>();
                 services.AddSingleton<IMainService, MainStandalone>();
                 services.AddSingleton<ICalibrationService, CalibrationService>();
+                services.AddSingleton<DropOverlayService>();
 
                 services.AddSingleton<MainViewModel>();
                 services.AddSingleton<MainWindow>();
@@ -113,6 +114,8 @@ public class App : Application
                 {
                     services.AddSingleton<ICommandSenderFactory, CommandSenderFactory>();
                     services.AddSingleton<ICommandSender, SerialCommandSender>();
+                    services.AddTransient<VrcViewModel>();
+                    services.AddTransient<VrcView>();
                     services.AddTransient<FirmwareViewModel>();
                     services.AddTransient<FirmwareView>();
                     services.AddTransient<OnboardingViewModel>();
@@ -141,6 +144,12 @@ public class App : Application
                 var defaultSettings = Path.Combine(AppContext.BaseDirectory, LocalSettingsService.DefaultLocalSettingsFile);
                 Directory.CreateDirectory(Path.GetDirectoryName(settingsLocation)!);
                 File.Copy(defaultSettings, settingsLocation);
+                if (!OperatingSystem.IsWindows()) {
+                    // Make file read-write if not on Windows as the source file might be in read-only.
+                    File.SetUnixFileMode(
+                        settingsLocation,
+                        UnixFileMode.UserRead | UnixFileMode.UserWrite | File.GetUnixFileMode(settingsLocation));
+                }
             }
         }
         else // extract default models for mobile
@@ -278,6 +287,8 @@ public class App : Application
 
         var settings = Ioc.Default.GetRequiredService<ILocalSettingsService>();
         settings.ForceSave();
+
+        Overlay.Dispose();
     }
 
     private void OnTrayShutdownClicked(object? sender, EventArgs e)

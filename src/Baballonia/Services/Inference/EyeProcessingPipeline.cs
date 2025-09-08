@@ -3,6 +3,7 @@ using Baballonia.Contracts;
 using Baballonia.Helpers;
 using Baballonia.Services.Inference.Enums;
 using OpenCvSharp;
+using System.Threading.Tasks;
 
 namespace Baballonia.Services.Inference;
 
@@ -10,6 +11,7 @@ public class EyeProcessingPipeline : DefaultProcessingPipeline
 {
     private readonly FastCorruptionDetector _fastCorruptionDetector = new();
     private readonly ImageCollector _imageCollector = new();
+    public bool StabilizeEyes { get; set; } = false;
 
     public float[]? RunUpdate()
     {
@@ -76,11 +78,22 @@ public class EyeProcessingPipeline : DefaultProcessingPipeline
         var leftEyeYawCorrected = rightYaw * (1 - leftLid) + leftYaw * leftLid;
         var rightEyeYawCorrected = leftYaw * (1 - rightLid) + rightYaw * rightLid;
 
+        if (StabilizeEyes)
+        {
+            var rawConvergence = (rightEyeYawCorrected - leftEyeYawCorrected) / 2.0f;
+            var convergence = Math.Max(rawConvergence, 0.0f); //We clamp the value here to avoid accidental divergence, as the model sometimes decides that's a thing
+
+            var averagedYaw = (rightEyeYawCorrected + leftEyeYawCorrected) / 2.0f;
+
+            leftEyeYawCorrected = averagedYaw - convergence;
+            rightEyeYawCorrected = averagedYaw + convergence;
+        }
+
         // [left pitch, left yaw, left lid...
         float[] convertedExpressions = new float[Utils.EyeRawExpressions];
 
         // swap eyes at this point
-        convertedExpressions[0] = rightEyeYawCorrected; // left pitch
+        convertedExpressions[0] = rightEyeYawCorrected; // left pitch 
         convertedExpressions[1] = eyeY;                   // left yaw
         convertedExpressions[2] = rightLid;               // left lid
         convertedExpressions[3] = leftEyeYawCorrected;  // right pitch

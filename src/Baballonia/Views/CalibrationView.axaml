@@ -60,6 +60,19 @@
           <TextBlock FontWeight="SemiBold" Text="Eye Expressions" />
         </Expander.Header>
         <StackPanel Margin="0,5">
+
+          <Border Background="{DynamicResource SystemChromeMediumLowColor}" CornerRadius="6" Padding="12" Margin="0,4">
+            <StackPanel Spacing="8">
+              <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Grid.Column="0">
+                  <TextBlock Text="Stabilize Eyes" FontWeight="SemiBold"/>
+                  <TextBlock Text="Averages eye position, but preserves convergence" FontSize="12" Foreground="{DynamicResource SystemBaseMediumColor}"/>
+                </StackPanel>
+                <CheckBox Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding StabilizeEyes, Mode=TwoWay}"/>
+              </Grid>
+            </StackPanel>
+          </Border>
+          
           <ItemsControl ItemsSource="{Binding EyeSettings}">
             <ItemsControl.ItemTemplate>
               <DataTemplate x:DataType="models:SliderBindableSetting">
