@@ -20,7 +20,11 @@ public class LocalSettingsService : ILocalSettingsService
     private readonly string _localSettingsFile;
 
     private Dictionary<string, JsonElement> _settings;
-    private DebounceFunction debouncedSave;
+    private readonly DebounceFunction _debouncedSave;
+    private readonly JsonSerializerOptions _jsonSerializerOptions = new()
+    {
+        WriteIndented = true
+    };
 
     private readonly Task _isInitializedTask;
     private readonly ILogger<LocalSettingsService> _logger;
@@ -29,16 +33,14 @@ public class LocalSettingsService : ILocalSettingsService
     {
         var opt = options.Value;
 
+        _logger = logger;
         var applicationDataFolder =
             Path.Combine(_localApplicationData, opt.ApplicationDataFolder ?? DefaultApplicationDataFolder);
         _localSettingsFile = opt.LocalSettingsFile ?? Path.Combine(applicationDataFolder, DefaultLocalSettingsFile);
 
-        debouncedSave = new DebounceFunction(async () =>
+        _debouncedSave = new DebounceFunction(async () =>
         {
-            var json = JsonSerializer.Serialize(_settings, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
+            var json = JsonSerializer.Serialize(_settings, _jsonSerializerOptions);
             // Despite what the docs say, the below does not in fact create a new file if it does not exist
             // However, we can safely assume this file will always exist (created by App.axaml.cs)
             await File.WriteAllTextAsync(_localSettingsFile, json);
@@ -91,7 +93,7 @@ public class LocalSettingsService : ILocalSettingsService
 
     public void ForceSave()
     {
-        debouncedSave.Force();
+        _debouncedSave.Force();
     }
 
     public async Task SaveSettingAsync<T>(string key, T value, bool forceLocal = false)
@@ -110,7 +112,7 @@ public class LocalSettingsService : ILocalSettingsService
             return;
         }
 
-        debouncedSave.Call();
+        _debouncedSave.Call();
     }
 
     public async Task Load(object instance)
