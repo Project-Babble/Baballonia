@@ -36,7 +36,7 @@
                           </Interaction.Behaviors>
                         </AutoCompleteBox>
                         <Button Command="{Binding RefreshSerialPortsCommand}" Content="{Binding OnRefreshDevicesButton}" />
-                        <Button Command="{Binding SelectSerialPortCommand}" Content="{Binding SelectTracker}" IsEnabled="{Binding IsValidDevicePresent}" />
+                        <Button Command="{Binding SelectSerialPortCommand}" Content="{Binding SelectTracker}" IsEnabled="{Binding IsDeviceSelectionPresent}" />
                     </StackPanel>
                 </StackPanel>
             </controls:ContentExample>

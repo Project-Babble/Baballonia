@@ -174,32 +174,16 @@ public class FirmwareSession
 
     public async Task<T?> SendCommandAsync<T>(IFirmwareRequest<T> request, TimeSpan timeSpan)
     {
-        try
-        {
-            return await Task.Run(() =>
-                SendCommand(request, timeSpan)
-            );
-        }
-        catch (Exception e)
-        {
-            _logger.LogError("Error while sending command {Exception}", e);
-            return await Task.FromResult(default(T));
-        }
+        return await Task.Run(() =>
+            SendCommand(request, timeSpan)
+        );
     }
 
     public async Task<string?> SendCommandAsync(IFirmwareRequest request, TimeSpan timeSpan)
     {
-        try
-        {
-            return await Task.Run(() =>
-                SendCommand(request, timeSpan)
-            );
-        }
-        catch (Exception e)
-        {
-            _logger.LogError("Error while sending command {Exception}", e);
-            return await Task.FromResult(string.Empty);
-        }
+        return await Task.Run(() =>
+            SendCommand(request, timeSpan)
+        );
     }
 
     public async Task<FirmwareResponses.Heartbeat?> WaitForHeartbeatAsync()
