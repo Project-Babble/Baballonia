@@ -20,7 +20,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0">
-            <TextBlock Classes="Header" Text="{x:Static assets:Resources.Shell_Output_Content}" />
+            <TextBlock Classes="Header" Text="Output" />
             <controls:ContentExample>
                 <StackPanel Orientation="Horizontal" Spacing="12">
                     <Button

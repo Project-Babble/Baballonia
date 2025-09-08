@@ -66,13 +66,13 @@
               <Grid ColumnDefinitions="*,Auto">
                 <StackPanel Grid.Column="0">
                   <TextBlock Text="Stabilize Eyes" FontWeight="SemiBold"/>
-                  <TextBlock Text="Averages eye position, but preserves convergence" FontSize="12" Foreground="{DynamicResource SystemBaseMediumColor}"/>
+                  <TextBlock Text="Prevents eyes from looking out in opposite directions, may overcorrect." FontSize="12" Foreground="{DynamicResource SystemBaseMediumColor}"/>
                 </StackPanel>
                 <CheckBox Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding StabilizeEyes, Mode=TwoWay}"/>
               </Grid>
             </StackPanel>
           </Border>
-          
+
           <ItemsControl ItemsSource="{Binding EyeSettings}">
             <ItemsControl.ItemTemplate>
               <DataTemplate x:DataType="models:SliderBindableSetting">

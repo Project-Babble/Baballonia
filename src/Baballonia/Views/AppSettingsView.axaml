@@ -16,8 +16,8 @@
             <TextBlock Classes="Header" Text="App Settings" />
 
             <controls:SettingsBlock
-                Title="{x:Static assets:Resources.ThemeSettings_Header}"
-                Description="{x:Static assets:Resources.ThemeSettings_Description}"
+                Title="{x:Static assets:Resources.Settings_Theme_Header}"
+                Description="{x:Static assets:Resources.Settings_Theme_Description}"
                 IconPath="DarkLightTheme">
                 <controls:SettingsBlock.SettingsContent>
                     <ComboBox x:Name="ThemeCombo" VerticalAlignment="Center" />
@@ -61,12 +61,12 @@
                                 Margin="5"
                                 FontSize="16"
                                 FontWeight="SemiBold"
-                                Text="{x:Static assets:Resources.OscSettings_Description}" />
+                                Text="{x:Static assets:Resources.Settings_OSC_Description}" />
                             <TextBlock
                                 Margin="5"
                                 FontSize="14"
                                 Foreground="{DynamicResource SystemChromeGrayColor}"
-                                Text="{x:Static assets:Resources.OscSettings_Header}" />
+                                Text="{x:Static assets:Resources.Settings_OSC_Header}" />
                         </StackPanel>
                     </Grid>
                 </Expander.Header>
