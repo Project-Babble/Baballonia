@@ -98,7 +98,6 @@ public partial class HomePageView : UserControl
             SetupCropEvents(vm.LeftCamera, LeftMouthWindow);
             SetupCropEvents(vm.RightCamera, RightMouthWindow);
             SetupCropEvents(vm.FaceCamera, FaceWindow);
-            FaceAddressEntry_OnTextChanged(null, null!);
 
             vm.SelectedCalibrationText = "Eye Calibration";
         };
@@ -131,7 +130,8 @@ public partial class HomePageView : UserControl
         };
     }
 
-    private void EyeAddressEntry_OnTextChanged(object? sender, SelectionChangedEventArgs e)
+    // Add these back if we need hint text again
+    /*private void EyeAddressEntry_OnTextChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (e is null) return; // Skip DeviceEnumerator calls
         if (DataContext is not HomePageViewModel vm || vm.FaceCamera == null) return;
@@ -140,35 +140,32 @@ public partial class HomePageView : UserControl
         {
             LeftAddressHint.Text = "You must enter cameras for both eyes before using eye tracking!";
             vm.LeftCamera.HintEnabled = true;
-            vm.LeftCamera.InferEnabled = false;
         }
 
         if (vm.RightCamera.DisplayAddress.Length == 0)
         {
             RightAddressHint.Text = "You must enter cameras for both eyes before using eye tracking!";
             vm.RightCamera.HintEnabled = true;
-            vm.RightCamera.InferEnabled = false;
         }
 
         if (vm.LeftCamera.DisplayAddress.Length > 0 && vm.RightCamera.DisplayAddress.Length > 0)
         {
             vm.LeftCamera.HintEnabled = false;
             vm.RightCamera.HintEnabled = false;
-            vm.LeftCamera.InferEnabled = true;
-            vm.RightCamera.InferEnabled = true;
         }
-    }
+    }*/
 
-    private void FaceAddressEntry_OnTextChanged(object? sender, SelectionChangedEventArgs e)
+    // Add these back if we need hint text again
+    /*private void FaceAddressEntry_OnTextChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (this.DataContext is not HomePageViewModel vm) return;
 
         if (vm.FaceCamera == null) return;
         if (!string.IsNullOrEmpty(vm.FaceCamera.DisplayAddress))
         {
-            vm.FaceCamera.InferEnabled = vm.FaceCamera.DisplayAddress.Length > 0;
+            vm.FaceCamera.HintEnabled = vm.FaceCamera.DisplayAddress.Length > 0;
         }
-    }
+    }*/
 
     private void OnCalibrationMenuItemClick(object? sender, RoutedEventArgs e)
     {

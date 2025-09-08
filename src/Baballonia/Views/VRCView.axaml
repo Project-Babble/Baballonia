@@ -17,8 +17,8 @@
               SettingToggled="{Binding UseNativeVrcEyeTracking, Mode=TwoWay}" />
 
             <controls:SettingsBlock
-              Title="Set Baballonia's VRCFT module mode"
-              Description="Should we send only eye, only face or both?">
+              Title="Set VRCFT module mode"
+              Description="Send only eye, only face or both? (Change requires VRCFT restart)">
               <controls:SettingsBlock.SettingsContent>
                 <ComboBox x:Name="ModeCombo" VerticalAlignment="Center"
                           ItemsSource="{Binding ModuleModeOptions}"

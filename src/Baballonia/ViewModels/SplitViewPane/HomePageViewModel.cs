@@ -44,7 +44,6 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         [ObservableProperty] private bool _startButtonEnabled = true;
         [ObservableProperty] private bool _stopButtonEnabled = false;
         [ObservableProperty] private bool _hintEnabled = false;
-        [ObservableProperty] private bool _inferEnabled = false;
         [ObservableProperty] private string _displayAddress;
         [ObservableProperty] private Rect _overlayRectangle;
         [ObservableProperty] private bool _flipHorizontally = false;
@@ -396,7 +395,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     private int _messagesSent;
     [ObservableProperty] private string _messagesOutPerSecCount;
 
-    [ObservableProperty] private bool _shouldShowEyeCalibration;
+    [ObservableProperty] private bool _shouldEnableEyeCalibration;
     [ObservableProperty] private string _selectedCalibrationText;
 
     [ObservableProperty] private CameraControllerModel _leftCamera;
