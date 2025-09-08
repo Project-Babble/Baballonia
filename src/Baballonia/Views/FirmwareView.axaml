@@ -204,15 +204,22 @@
                     </Grid>
                 </Expander.Header>
                 <StackPanel Spacing="24">
-                    <StackPanel Orientation="Horizontal" Spacing="12">
-                        <Button
-                            Command="{Binding FlashFirmwareCommand}"
-                            Content="Flash Firmware"/>
+                  <TextBlock
+                    TextWrapping="Wrap"
+                    FontWeight="ExtraBold">
+                    CAUTION!! THIS WILL FACTORY RESET YOUR TRACKER. YOU WILL NEED TO PERFORM A FIRST TIME SET UP AFTER FLASHING YOUR TRACKER.
 
-                        <TextBlock
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center">
-                            This will take around ~10 seconds. Don't leave this page!
+                  </TextBlock>
+                  <StackPanel Orientation="Horizontal" Spacing="12">
+                      <Button
+                        Command="{Binding FlashFirmwareCommand}"
+                        Content="Flash Firmware"/>
+
+                      <TextBlock
+                        TextWrapping="Wrap"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                          This will take around ~10 seconds. Don't leave this page!
                         </TextBlock>
                     </StackPanel>
 
