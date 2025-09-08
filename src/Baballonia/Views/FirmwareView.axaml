@@ -24,11 +24,19 @@
                       <Run>• Certain configuration operations will take a little bit!</Run>
                     </TextBlock>
                     <StackPanel Orientation="Horizontal" Spacing="12">
-                        <ComboBox
+                        <AutoCompleteBox
+                           FilterMode="None"
+                           HorizontalAlignment="Stretch"
+                           Width="200"
                            ItemsSource="{Binding AvailableSerialPorts, Mode=TwoWay}"
-                           SelectedItem="{Binding SelectedSerialPort, Mode=TwoWay}"
-                           PlaceholderText="{Binding TrackerComboBox}"/>
+                           Text="{Binding SelectedSerialPort, Mode=TwoWay}"
+                           Watermark="{Binding TrackerComboBox}">
+                          <Interaction.Behaviors>
+                            <controls:AutoCompleteZeroMinimumPrefixLengthDropdownBehaviour />
+                          </Interaction.Behaviors>
+                        </AutoCompleteBox>
                         <Button Command="{Binding RefreshSerialPortsCommand}" Content="{Binding OnRefreshDevicesButton}" />
+                        <Button Command="{Binding SelectSerialPortCommand}" Content="{Binding SelectTracker}" IsEnabled="{Binding IsValidDevicePresent}" />
                     </StackPanel>
                 </StackPanel>
             </controls:ContentExample>

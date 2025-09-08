@@ -47,6 +47,9 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     // private string _mdns = "openiris";
 
     [ObservableProperty]
+    private bool _isValidDevicePresent;
+
+    [ObservableProperty]
     private bool _isValidDeviceSelected;
 
     [ObservableProperty]
@@ -63,6 +66,9 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
 
     [ObservableProperty]
     private string? _wifiScanButton = "Refresh Wifi Networks";
+
+    [ObservableProperty]
+    private string? _selectTracker = "Select Tracker";
 
     [ObservableProperty]
     private bool _hasScanned;
@@ -141,14 +147,46 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
 
     partial void OnSelectedSerialPortChanged(string? oldValue, string? newValue)
     {
-        IsValidDeviceSelected = !string.IsNullOrEmpty(newValue);
-        if (!IsValidDeviceSelected) return;
-        SelectedSerialPort = newValue;
-        Task.Run(async () =>
+        IsValidDevicePresent = !string.IsNullOrEmpty(newValue);
+        if (IsValidDevicePresent)
         {
-            await _firmwareSessions[SelectedSerialPort!]
-                .SendCommandAsync(new FirmwareRequests.SetPausedRequest(true), TimeSpan.FromSeconds(5));
-        });
+            SelectedSerialPort = newValue;
+        }
+        else
+        {
+            IsValidDeviceSelected = false;
+        }
+    }
+
+    [RelayCommand]
+    private async Task SelectSerialPort()
+    {
+        if (IsValidDevicePresent)
+        {
+            await Task.Run(async () =>
+            {
+                // If we haven't already refreshed, create the new firmware service for the
+                // Manually typed in tracker
+                if (!_firmwareSessions.ContainsKey(SelectedSerialPort!))
+                    _firmwareSessions.Add(SelectedSerialPort!, _firmwareService.StartSession(CommandSenderType.Serial, SelectedSerialPort!));
+
+                var res = await _firmwareSessions[SelectedSerialPort!]
+                    .SendCommandAsync(new FirmwareRequests.SetPausedRequest(true), TimeSpan.FromSeconds(5));
+                IsValidDeviceSelected = !string.IsNullOrWhiteSpace(res);
+                if (IsValidDeviceSelected)
+                {
+                    SelectTracker = "Tracker connected!";
+                    await Task.Delay(3000);
+                    SelectTracker = "Select Tracker";
+                }
+                else
+                {
+                    SelectTracker = "The tracker did not respond.";
+                    await Task.Delay(3000);
+                    SelectTracker = "Select Tracker";
+                }
+            });
+        }
     }
 
     [RelayCommand]
@@ -166,7 +204,7 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
             foreach (var port in response)
             {
                 // Only add devices that need a first time set up - IE ones with a heartbeat
-                AvailableSerialPorts.Add(port);
+                await Dispatcher.UIThread.InvokeAsync(() => AvailableSerialPorts.Add(port));
                 _firmwareSessions.Add(port, _firmwareService.StartSession(CommandSenderType.Serial, port));
             }
 
