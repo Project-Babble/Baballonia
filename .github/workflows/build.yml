@@ -6,17 +6,14 @@ on:
       publish-release:
         description: 'Publish Release'
         type: boolean
-        required: true
         default: false
       publish-pre-release:
         description: 'Publish as Pre-Release'
         type: boolean
-        required: true
         default: false
       version-number:
         description: 'Version Number for Release'
         type: string
-        required: true
       release-name-info:
         description: 'Additional info to put at the end of the release name'
         type: string
@@ -97,6 +94,12 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
+      - name: Validate version number exists
+        run: |
+          if [ -z "${{ github.event.inputs.version-number }}" ]; then
+            exit 1
+          fi
+
       - name: Download Windows artifact
         uses: actions/download-artifact@v4
         with:
