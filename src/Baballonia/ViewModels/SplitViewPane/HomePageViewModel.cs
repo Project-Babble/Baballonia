@@ -398,6 +398,8 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     [ObservableProperty] private bool _shouldEnableEyeCalibration;
     [ObservableProperty] private string _selectedCalibrationText;
 
+    public bool IsRunningAsAdmin => Utils.HasAdmin;
+
     [ObservableProperty] private CameraControllerModel _leftCamera;
     [ObservableProperty] private CameraControllerModel _rightCamera;
     [ObservableProperty] private CameraControllerModel _faceCamera;
