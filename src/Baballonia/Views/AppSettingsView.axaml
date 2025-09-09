@@ -13,7 +13,7 @@
     mc:Ignorable="d">
   <ScrollViewer>
     <StackPanel Classes="Page">
-      <TextBlock Classes="Header" Text="App Settings" />
+      <TextBlock Classes="Header" Text="{x:Static assets:Resources.Settings_Title_Header}" />
 
       <controls:SettingsBlock
           Title="{x:Static assets:Resources.Settings_Theme_Header}"
@@ -25,17 +25,17 @@
       </controls:SettingsBlock>
 
       <controls:SettingsBlock
-          Title="Language"
-          Description="Set the app's language"
+          Title="{x:Static assets:Resources.Settings_Language_Header}"
+          Description="{x:Static assets:Resources.Settings_Language_Description}"
           IconPath="LanguageRegular">
         <controls:SettingsBlock.SettingsContent>
           <ComboBox x:Name="LangCombo" VerticalAlignment="Center">
-            <ComboBoxItem x:Name="DefaultLanguage" Content="Default" />
-            <ComboBoxItem x:Name="en" Content="English" />
-            <ComboBoxItem x:Name="es" Content="Español" />
-            <ComboBoxItem x:Name="ja" Content="日本語" />
-            <ComboBoxItem x:Name="pl" Content="Polski" />
-            <ComboBoxItem x:Name="zh" Content="中文" />
+            <ComboBoxItem x:Name="DefaultLanguage" Content="{x:Static assets:Resources.Settings_Language_Default}" />
+            <ComboBoxItem x:Name="en" Content="{x:Static assets:Resources.Settings_Language_English}" />
+            <ComboBoxItem x:Name="es" Content="{x:Static assets:Resources.Settings_Language_Spanish}" />
+            <ComboBoxItem x:Name="ja" Content="{x:Static assets:Resources.Settings_Language_Japanese}" />
+            <ComboBoxItem x:Name="pl" Content="{x:Static assets:Resources.Settings_Language_Polish}" />
+            <ComboBoxItem x:Name="zh" Content="{x:Static assets:Resources.Settings_Language_Chinese}" />
           </ComboBox>
         </controls:SettingsBlock.SettingsContent>
       </controls:SettingsBlock>
@@ -98,7 +98,7 @@
           <TextBlock
               Grid.Row="2"
               Grid.Column="0"
-              Text="IP Address" />
+              Text="{x:Static assets:Resources.Settings_OSC_IP_Label}" />
           <TextBox
               x:Name="OscTargetIpAddress"
               Grid.Row="2"
@@ -108,7 +108,7 @@
           <TextBlock
               Grid.Row="3"
               Grid.Column="0"
-              Text="Send Port" />
+              Text="{x:Static assets:Resources.Settings_OSC_SendPort_Label}" />
           <TextBox
               x:Name="OscTargetOutPort"
               Grid.Row="3"
@@ -118,7 +118,7 @@
           <TextBlock
               Grid.Row="4"
               Grid.Column="0"
-              Text="OSC Prefix" />
+              Text="{x:Static assets:Resources.Settings_OSC_Prefix_Label}" />
           <TextBox
               x:Name="OscPrefix"
               Grid.Row="4"
@@ -128,7 +128,7 @@
           <TextBlock
               Grid.Row="5"
               Grid.Column="0"
-              Text="Recalibrate Address" />
+              Text="{x:Static assets:Resources.Settings_OSC_Recalibrate_Label}" />
           <TextBox
               x:Name="RecalibrateAddress"
               Grid.Row="5"
@@ -138,7 +138,7 @@
           <TextBlock
               Grid.Row="6"
               Grid.Column="0"
-              Text="Recenter Address" />
+              Text="{x:Static assets:Resources.Settings_OSC_Recenter_Label}" />
           <TextBox
               x:Name="RecenterAddress"
               Grid.Row="6"
@@ -168,12 +168,12 @@
                   Margin="5"
                   FontSize="16"
                   FontWeight="SemiBold"
-                  Text="One-Euro filter settings" />
+                  Text="{x:Static assets:Resources.Settings_Filter_Header}" />
               <TextBlock
                   Margin="5"
                   FontSize="14"
                   Foreground="{DynamicResource SystemChromeGrayColor}"
-                  Text="Filter Settings" />
+                  Text="{x:Static assets:Resources.Settings_Filter_Description}" />
             </StackPanel>
           </Grid>
         </Expander.Header>
@@ -182,8 +182,8 @@
               Grid.Row="0"
               Grid.Column="0"
               Margin="0,8">
-            <TextBlock FontWeight="Bold" Text="Enabled" />
-            <TextBlock Text="Turn filtering on or off." />
+            <TextBlock FontWeight="Bold" Text="{x:Static assets:Resources.Settings_Filter_Enabled_Label}" />
+            <TextBlock Text="{x:Static assets:Resources.Settings_Filter_Enabled_Description}" />
           </StackPanel>
           <CheckBox
               Grid.Row="0"
@@ -195,8 +195,8 @@
               Grid.Row="1"
               Grid.Column="0"
               Margin="0,8">
-            <TextBlock FontWeight="Bold" Text="Minimum frequency cutoff" />
-            <TextBlock Text="Controls how much smoothing is applied to slow movements" />
+            <TextBlock FontWeight="Bold" Text="{x:Static assets:Resources.Settings_Filter_MinFreq_Label}" />
+            <TextBlock Text="{x:Static assets:Resources.Settings_Filter_MinFreq_Description}" />
           </StackPanel>
           <StackPanel
               Grid.Row="1"
@@ -206,11 +206,11 @@
             <ComboBox
                 x:Name="SelectedMinFreqCutoffComboBox"
                 Margin="0,8"
-                PlaceholderText="Select from a template"
+                PlaceholderText="{x:Static assets:Resources.Settings_Filter_Template_Placeholder}"
                 SelectionChanged="SelectedMinFreqCutoffComboBox_OnSelectionChanged">
-              <ComboBoxItem Tag="0.5">Low (0.5)</ComboBoxItem>
-              <ComboBoxItem Tag="1.0">Medium (1.0)</ComboBoxItem>
-              <ComboBoxItem Tag="2.0">High (2.0)</ComboBoxItem>
+              <ComboBoxItem Tag="0.5"><TextBlock Text="{x:Static assets:Resources.Settings_Filter_Template_Low}" DataContext="0.5" /></ComboBoxItem>
+              <ComboBoxItem Tag="1.0"><TextBlock Text="{x:Static assets:Resources.Settings_Filter_Template_Medium}" DataContext="1.0" /></ComboBoxItem>
+              <ComboBoxItem Tag="2.0"><TextBlock Text="{x:Static assets:Resources.Settings_Filter_Template_High}" DataContext="2.0" /></ComboBoxItem>
             </ComboBox>
             <NumericUpDown
                 x:Name="SelectedMinFreqCutoffUpDown"
@@ -226,8 +226,8 @@
               Grid.Row="2"
               Grid.Column="0"
               Margin="0,8">
-            <TextBlock FontWeight="Bold" Text="Speed coefficient" />
-            <TextBlock Text="Determines how the filter adapts when you move faster" />
+            <TextBlock FontWeight="Bold" Text="{x:Static assets:Resources.Settings_Filter_Speed_Label}" />
+            <TextBlock Text="{x:Static assets:Resources.Settings_Filter_Speed_Description}" />
           </StackPanel>
           <StackPanel
               Grid.Row="2"
@@ -237,11 +237,11 @@
             <ComboBox
                 x:Name="SelectedSpeedCutoffComboBox"
                 Margin="0,8"
-                PlaceholderText="Select from a template"
+                PlaceholderText="{x:Static assets:Resources.Settings_Filter_Template_Placeholder}"
                 SelectionChanged="SelectedSpeedCutoffComboBox_OnSelectionChanged">
-              <ComboBoxItem Tag="0.5">Low (0.5)</ComboBoxItem>
-              <ComboBoxItem Tag="1.0">Medium (1.0)</ComboBoxItem>
-              <ComboBoxItem Tag="2.0">High (2.0)</ComboBoxItem>
+              <ComboBoxItem Tag="0.5"><TextBlock Text="{x:Static assets:Resources.Settings_Filter_Template_Low}" DataContext="0.5" /></ComboBoxItem>
+              <ComboBoxItem Tag="1.0"><TextBlock Text="{x:Static assets:Resources.Settings_Filter_Template_Medium}" DataContext="1.0" /></ComboBoxItem>
+              <ComboBoxItem Tag="2.0"><TextBlock Text="{x:Static assets:Resources.Settings_Filter_Template_High}" DataContext="2.0" /></ComboBoxItem>
             </ComboBox>
             <NumericUpDown
                 x:Name="SelectedSpeedCutoffUpDown"
@@ -256,14 +256,14 @@
       </Expander>
 
       <controls:SettingsToggle
-          Title="Use GPU acceleration"
-          Description="Use your GPU to make things run faster! Requires restart"
+          Title="{x:Static assets:Resources.Settings_GPU_Header}"
+          Description="{x:Static assets:Resources.Settings_GPU_Description}"
           IconPath="TopSpeedRegular"
           SettingToggled="{Binding UseGPU, Mode=TwoWay}" />
 
       <controls:SettingsBlock
-        Title="Log Level Verbosity"
-        Description="Minimum logging level. Requires restart"
+        Title="{x:Static assets:Resources.Settings_LogLevel_Header}"
+        Description="{x:Static assets:Resources.Settings_LogLevel_Description}"
         IconPath="SendLoggingRegular">
         <controls:SettingsBlock.SettingsContent>
           <ComboBox
@@ -275,8 +275,8 @@
       </controls:SettingsBlock>
 
       <controls:SettingsToggle
-          Title="Check For Updates"
-          Description="Should the app check for updates on start?"
+          Title="{x:Static assets:Resources.Settings_Updates_Header}"
+          Description="{x:Static assets:Resources.Settings_Updates_Description}"
           IconPath="ArrowSyncRegular"
           SettingToggled="{Binding CheckForUpdates, Mode=TwoWay}" />
 
@@ -301,18 +301,18 @@
                 Margin="5"
                 FontSize="16"
                 FontWeight="SemiBold"
-                Text="Launch first time setup" />
+                Text="{x:Static assets:Resources.Settings_FirstTime_Header}" />
             <TextBlock
                 Margin="5"
                 FontSize="14"
                 Foreground="{DynamicResource SystemChromeGrayColor}"
-                Text="Relaunches the first time setup" />
+                Text="{x:Static assets:Resources.Settings_FirstTime_Description}" />
           </StackPanel>
           <Button
               Grid.Column="3"
               x:DataType="controls:SettingsToggle"
               Click="LaunchFirstTimeSetUp"
-              Content="Launch" />
+              Content="{x:Static assets:Resources.Settings_FirstTime_Button}" />
         </Grid>
       </Border>
 

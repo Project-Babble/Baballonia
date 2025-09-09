@@ -411,4 +411,94 @@
   <data name="Output_OpenLoggingDirectoryButton_Tooltip" xml:space="preserve">
     <value>Open the logging directory</value>
   </data>
+  <data name="Settings_Title_Header" xml:space="preserve">
+    <value>App Settings</value>
+  </data>
+  <data name="Settings_Language_Header" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Settings_Language_Description" xml:space="preserve">
+    <value>Set the app's language</value>
+  </data>
+  <data name="Settings_Language_Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Settings_Language_English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Settings_Language_Spanish" xml:space="preserve">
+    <value>Español</value>
+  </data>
+  <data name="Settings_Language_Japanese" xml:space="preserve">
+    <value>日本語</value>
+  </data>
+  <data name="Settings_Language_Polish" xml:space="preserve">
+    <value>Polski</value>
+  </data>
+  <data name="Settings_Language_Chinese" xml:space="preserve">
+    <value>中文</value>
+  </data>
+  <data name="Settings_Filter_Header" xml:space="preserve">
+    <value>One-Euro filter settings</value>
+  </data>
+  <data name="Settings_Filter_Description" xml:space="preserve">
+    <value>Filter Settings</value>
+  </data>
+  <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
+    <value>Turn filtering on or off.</value>
+  </data>
+  <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
+    <value>Minimum frequency cutoff</value>
+  </data>
+  <data name="Settings_Filter_MinFreq_Description" xml:space="preserve">
+    <value>Controls how much smoothing is applied to slow movements</value>
+  </data>
+  <data name="Settings_Filter_Template_Placeholder" xml:space="preserve">
+    <value>Select from a template</value>
+  </data>
+  <data name="Settings_Filter_Template_Low" xml:space="preserve">
+    <value>Low ({0})</value>
+  </data>
+  <data name="Settings_Filter_Template_Medium" xml:space="preserve">
+    <value>Medium ({0})</value>
+  </data>
+  <data name="Settings_Filter_Template_High" xml:space="preserve">
+    <value>High ({0})</value>
+  </data>
+  <data name="Settings_Filter_Speed_Label" xml:space="preserve">
+    <value>Speed coefficient</value>
+  </data>
+  <data name="Settings_Filter_Speed_Description" xml:space="preserve">
+    <value>Determines how the filter adapts when you move faster</value>
+  </data>
+  <data name="Settings_GPU_Header" xml:space="preserve">
+    <value>Use GPU acceleration</value>
+  </data>
+  <data name="Settings_GPU_Description" xml:space="preserve">
+    <value>Use your GPU to make things run faster! Requires restart</value>
+  </data>
+  <data name="Settings_LogLevel_Header" xml:space="preserve">
+    <value>Log Level Verbosity</value>
+  </data>
+  <data name="Settings_LogLevel_Description" xml:space="preserve">
+    <value>Minimum logging level. Requires restart</value>
+  </data>
+  <data name="Settings_Updates_Header" xml:space="preserve">
+    <value>Check For Updates</value>
+  </data>
+  <data name="Settings_Updates_Description" xml:space="preserve">
+    <value>Should the app check for updates on start?</value>
+  </data>
+  <data name="Settings_FirstTime_Header" xml:space="preserve">
+    <value>Launch first time setup</value>
+  </data>
+  <data name="Settings_FirstTime_Description" xml:space="preserve">
+    <value>Relaunches the first time setup</value>
+  </data>
+  <data name="Settings_FirstTime_Button" xml:space="preserve">
+    <value>Launch</value>
+  </data>
 </root>
