@@ -169,6 +169,393 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Toggle wired/wireless mode.
+        /// </summary>
+        public static string Firmware_Device_Configuration_Description {
+            get {
+                return ResourceManager.GetString("Firmware_Device_Configuration_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Device Configuration.
+        /// </summary>
+        public static string Firmware_Device_Configuration_Header {
+            get {
+                return ResourceManager.GetString("Firmware_Device_Configuration_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to • After powering on/connecting your device you will have 20 seconds to press &quot;Refresh&quot; and select your device from the dropdown.
+        /// </summary>
+        public static string Firmware_Device_Instructions_1 {
+            get {
+                return ResourceManager.GetString("Firmware_Device_Instructions_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to • Certain configuration operations will take a little bit!.
+        /// </summary>
+        public static string Firmware_Device_Instructions_2 {
+            get {
+                return ResourceManager.GetString("Firmware_Device_Instructions_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle wired/wireless mode.
+        /// </summary>
+        public static string Firmware_Device_Mode_Header {
+            get {
+                return ResourceManager.GetString("Firmware_Device_Mode_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to • You WILL need to restart your tracker after changing the mode.
+        /// </summary>
+        public static string Firmware_Device_Mode_Instruction_1 {
+            get {
+                return ResourceManager.GetString("Firmware_Device_Mode_Instruction_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to • You MAY need to restart the app after a flash for trackers to show.
+        /// </summary>
+        public static string Firmware_Device_Mode_Instruction_2 {
+            get {
+                return ResourceManager.GetString("Firmware_Device_Mode_Instruction_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a mode....
+        /// </summary>
+        public static string Firmware_Device_Mode_Select_Placeholder {
+            get {
+                return ResourceManager.GetString("Firmware_Device_Mode_Select_Placeholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Flash Firmware.
+        /// </summary>
+        public static string Firmware_Flashing_Button {
+            get {
+                return ResourceManager.GetString("Firmware_Flashing_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Done! You will need to restart your tracker.
+        /// </summary>
+        public static string Firmware_Flashing_Complete {
+            get {
+                return ResourceManager.GetString("Firmware_Flashing_Complete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Flash your device&apos;s firmware.
+        /// </summary>
+        public static string Firmware_Flashing_Description {
+            get {
+                return ResourceManager.GetString("Firmware_Flashing_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Flashing Options.
+        /// </summary>
+        public static string Firmware_Flashing_Header {
+            get {
+                return ResourceManager.GetString("Firmware_Flashing_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This will take around ~10 seconds. Don&apos;t leave this page!.
+        /// </summary>
+        public static string Firmware_Flashing_Note {
+            get {
+                return ResourceManager.GetString("Firmware_Flashing_Note", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CAUTION!! THIS WILL FACTORY RESET YOUR TRACKER. YOU WILL NEED TO PERFORM A FIRST TIME SET UP AFTER FLASHING YOUR TRACKER..
+        /// </summary>
+        public static string Firmware_Flashing_Warning {
+            get {
+                return ResourceManager.GetString("Firmware_Flashing_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Mode.
+        /// </summary>
+        public static string Firmware_ModeSetButton_Default {
+            get {
+                return ResourceManager.GetString("Firmware_ModeSetButton_Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setting mode.
+        /// </summary>
+        public static string Firmware_ModeSetButton_Setting {
+            get {
+                return ResourceManager.GetString("Firmware_ModeSetButton_Setting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set!.
+        /// </summary>
+        public static string Firmware_ModeSetButton_Success {
+            get {
+                return ResourceManager.GetString("Firmware_ModeSetButton_Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh Devices.
+        /// </summary>
+        public static string Firmware_RefreshDevices_Default {
+            get {
+                return ResourceManager.GetString("Firmware_RefreshDevices_Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Found {0} device(s)..
+        /// </summary>
+        public static string Firmware_RefreshDevices_Found {
+            get {
+                return ResourceManager.GetString("Firmware_RefreshDevices_Found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refreshing.
+        /// </summary>
+        public static string Firmware_RefreshDevices_Refreshing {
+            get {
+                return ResourceManager.GetString("Firmware_RefreshDevices_Refreshing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select your tracker.
+        /// </summary>
+        public static string Firmware_Select_Tracker_Header {
+            get {
+                return ResourceManager.GetString("Firmware_Select_Tracker_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tracker connected!.
+        /// </summary>
+        public static string Firmware_SelectTracker_Connected {
+            get {
+                return ResourceManager.GetString("Firmware_SelectTracker_Connected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Tracker.
+        /// </summary>
+        public static string Firmware_SelectTracker_Default {
+            get {
+                return ResourceManager.GetString("Firmware_SelectTracker_Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The tracker did not respond..
+        /// </summary>
+        public static string Firmware_SelectTracker_NoResponse {
+            get {
+                return ResourceManager.GetString("Firmware_SelectTracker_NoResponse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Firmware.
+        /// </summary>
+        public static string Firmware_Title_Header {
+            get {
+                return ResourceManager.GetString("Firmware_Title_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click to see trackers....
+        /// </summary>
+        public static string Firmware_TrackerComboBox_Default {
+            get {
+                return ResourceManager.GetString("Firmware_TrackerComboBox_Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connect to Wifi and more.
+        /// </summary>
+        public static string Firmware_Wifi_Configuration_Description {
+            get {
+                return ResourceManager.GetString("Firmware_Wifi_Configuration_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wifi Configuration.
+        /// </summary>
+        public static string Firmware_Wifi_Configuration_Header {
+            get {
+                return ResourceManager.GetString("Firmware_Wifi_Configuration_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set your Wi-Fi credentials.
+        /// </summary>
+        public static string Firmware_Wifi_Credentials_Header {
+            get {
+                return ResourceManager.GetString("Firmware_Wifi_Credentials_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to • If you want to use your tracker wirelessly, you NEED to set its Wifi credentials.
+        /// </summary>
+        public static string Firmware_Wifi_Instructions_1 {
+            get {
+                return ResourceManager.GetString("Firmware_Wifi_Instructions_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to • You MUST scan for Wifi networks BEFORE you can set your Wifi credentials.
+        /// </summary>
+        public static string Firmware_Wifi_Instructions_2 {
+            get {
+                return ResourceManager.GetString("Firmware_Wifi_Instructions_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WiFi Password.
+        /// </summary>
+        public static string Firmware_Wifi_Password_Label {
+            get {
+                return ResourceManager.GetString("Firmware_Wifi_Password_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter WiFi password....
+        /// </summary>
+        public static string Firmware_Wifi_Password_Placeholder {
+            get {
+                return ResourceManager.GetString("Firmware_Wifi_Password_Placeholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WiFi Network Name (SSID).
+        /// </summary>
+        public static string Firmware_Wifi_SSID_Label {
+            get {
+                return ResourceManager.GetString("Firmware_Wifi_SSID_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start typing to see WiFi networks....
+        /// </summary>
+        public static string Firmware_Wifi_SSID_Placeholder {
+            get {
+                return ResourceManager.GetString("Firmware_Wifi_SSID_Placeholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh Wifi Networks.
+        /// </summary>
+        public static string Firmware_WifiScanButton_Default {
+            get {
+                return ResourceManager.GetString("Firmware_WifiScanButton_Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scan failed. Click to try again..
+        /// </summary>
+        public static string Firmware_WifiScanButton_Error {
+            get {
+                return ResourceManager.GetString("Firmware_WifiScanButton_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scanning. This will take at most 30 seconds.
+        /// </summary>
+        public static string Firmware_WifiScanButton_Scanning {
+            get {
+                return ResourceManager.GetString("Firmware_WifiScanButton_Scanning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Found {0} networks. Click to scan again..
+        /// </summary>
+        public static string Firmware_WifiScanButton_Success {
+            get {
+                return ResourceManager.GetString("Firmware_WifiScanButton_Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Wifi Creds.
+        /// </summary>
+        public static string Firmware_WifiSetButton_Default {
+            get {
+                return ResourceManager.GetString("Firmware_WifiSetButton_Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Something went wrong....
+        /// </summary>
+        public static string Firmware_WifiSetButton_Error {
+            get {
+                return ResourceManager.GetString("Firmware_WifiSetButton_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setting WiFi credentials.
+        /// </summary>
+        public static string Firmware_WifiSetButton_Setting {
+            get {
+                return ResourceManager.GetString("Firmware_WifiSetButton_Setting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sent!.
+        /// </summary>
+        public static string Firmware_WifiSetButton_Success {
+            get {
+                return ResourceManager.GetString("Firmware_WifiSetButton_Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Adjust the brightness of the image.
         /// </summary>
         public static string Home_Cameras_Brightness_Description {

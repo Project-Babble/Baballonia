@@ -252,4 +252,133 @@
   <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Description" xml:space="preserve">
     <value>Prevents eyes from looking out in opposite directions, but may overcorrect.</value>
   </data>
+  <data name="Firmware_Title_Header" xml:space="preserve">
+    <value>Firmware</value>
+  </data>
+  <data name="Firmware_Select_Tracker_Header" xml:space="preserve">
+    <value>Select your tracker</value>
+  </data>
+  <data name="Firmware_Device_Instructions_1" xml:space="preserve">
+    <value>• After powering on/connecting your device you will have 20 seconds to press "Refresh" and select your device from the dropdown</value>
+  </data>
+  <data name="Firmware_Device_Instructions_2" xml:space="preserve">
+    <value>• Certain configuration operations will take a little bit!</value>
+  </data>
+  <data name="Firmware_Device_Configuration_Header" xml:space="preserve">
+    <value>Device Configuration</value>
+  </data>
+  <data name="Firmware_Device_Configuration_Description" xml:space="preserve">
+    <value>Toggle wired/wireless mode</value>
+  </data>
+  <data name="Firmware_Device_Mode_Header" xml:space="preserve">
+    <value>Toggle wired/wireless mode</value>
+  </data>
+  <data name="Firmware_Device_Mode_Instruction_1" xml:space="preserve">
+    <value>• You WILL need to restart your tracker after changing the mode</value>
+  </data>
+  <data name="Firmware_Device_Mode_Instruction_2" xml:space="preserve">
+    <value>• You MAY need to restart the app after a flash for trackers to show</value>
+  </data>
+  <data name="Firmware_Device_Mode_Select_Placeholder" xml:space="preserve">
+    <value>Select a mode...</value>
+  </data>
+  <data name="Firmware_Wifi_Configuration_Header" xml:space="preserve">
+    <value>Wifi Configuration</value>
+  </data>
+  <data name="Firmware_Wifi_Configuration_Description" xml:space="preserve">
+    <value>Connect to Wifi and more</value>
+  </data>
+  <data name="Firmware_Wifi_Credentials_Header" xml:space="preserve">
+    <value>Set your Wi-Fi credentials</value>
+  </data>
+  <data name="Firmware_Wifi_Instructions_1" xml:space="preserve">
+    <value>• If you want to use your tracker wirelessly, you NEED to set its Wifi credentials</value>
+  </data>
+  <data name="Firmware_Wifi_Instructions_2" xml:space="preserve">
+    <value>• You MUST scan for Wifi networks BEFORE you can set your Wifi credentials</value>
+  </data>
+  <data name="Firmware_Wifi_SSID_Label" xml:space="preserve">
+    <value>WiFi Network Name (SSID)</value>
+  </data>
+  <data name="Firmware_Wifi_SSID_Placeholder" xml:space="preserve">
+    <value>Start typing to see WiFi networks...</value>
+  </data>
+  <data name="Firmware_Wifi_Password_Label" xml:space="preserve">
+    <value>WiFi Password</value>
+  </data>
+  <data name="Firmware_Wifi_Password_Placeholder" xml:space="preserve">
+    <value>Enter WiFi password...</value>
+  </data>
+  <data name="Firmware_Flashing_Header" xml:space="preserve">
+    <value>Flashing Options</value>
+  </data>
+  <data name="Firmware_Flashing_Description" xml:space="preserve">
+    <value>Flash your device's firmware</value>
+  </data>
+  <data name="Firmware_Flashing_Warning" xml:space="preserve">
+    <value>CAUTION!! THIS WILL FACTORY RESET YOUR TRACKER. YOU WILL NEED TO PERFORM A FIRST TIME SET UP AFTER FLASHING YOUR TRACKER.</value>
+  </data>
+  <data name="Firmware_Flashing_Button" xml:space="preserve">
+    <value>Flash Firmware</value>
+  </data>
+  <data name="Firmware_Flashing_Note" xml:space="preserve">
+    <value>This will take around ~10 seconds. Don't leave this page!</value>
+  </data>
+  <data name="Firmware_Flashing_Complete" xml:space="preserve">
+    <value>Done! You will need to restart your tracker</value>
+  </data>
+  <data name="Firmware_TrackerComboBox_Default" xml:space="preserve">
+    <value>Click to see trackers...</value>
+  </data>
+  <data name="Firmware_RefreshDevices_Default" xml:space="preserve">
+    <value>Refresh Devices</value>
+  </data>
+  <data name="Firmware_RefreshDevices_Refreshing" xml:space="preserve">
+    <value>Refreshing</value>
+  </data>
+  <data name="Firmware_RefreshDevices_Found" xml:space="preserve">
+    <value>Found {0} device(s).</value>
+  </data>
+  <data name="Firmware_SelectTracker_Default" xml:space="preserve">
+    <value>Select Tracker</value>
+  </data>
+  <data name="Firmware_SelectTracker_Connected" xml:space="preserve">
+    <value>Tracker connected!</value>
+  </data>
+  <data name="Firmware_SelectTracker_NoResponse" xml:space="preserve">
+    <value>The tracker did not respond.</value>
+  </data>
+  <data name="Firmware_ModeSetButton_Default" xml:space="preserve">
+    <value>Set Mode</value>
+  </data>
+  <data name="Firmware_ModeSetButton_Setting" xml:space="preserve">
+    <value>Setting mode</value>
+  </data>
+  <data name="Firmware_ModeSetButton_Success" xml:space="preserve">
+    <value>Set!</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Default" xml:space="preserve">
+    <value>Set Wifi Creds</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Setting" xml:space="preserve">
+    <value>Setting WiFi credentials</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Success" xml:space="preserve">
+    <value>Sent!</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Error" xml:space="preserve">
+    <value>Something went wrong...</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Default" xml:space="preserve">
+    <value>Refresh Wifi Networks</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Scanning" xml:space="preserve">
+    <value>Scanning. This will take at most 30 seconds</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Error" xml:space="preserve">
+    <value>Scan failed. Click to try again.</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
+    <value>Found {0} networks. Click to scan again.</value>
+  </data>
 </root>

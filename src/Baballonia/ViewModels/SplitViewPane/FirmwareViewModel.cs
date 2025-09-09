@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Threading;
+using Baballonia.Assets;
 using Baballonia.Contracts;
 using Baballonia.Models;
 using Baballonia.Services;
@@ -37,7 +38,7 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     private string? _selectedSerialPort;
 
     [ObservableProperty]
-    private string? _trackerComboBox = "Click to see trackers...";
+    private string? _trackerComboBox = Resources.Firmware_TrackerComboBox_Default;
 
     [ObservableProperty]
     private string _wifiSsid;
@@ -61,22 +62,22 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     private bool _isFinished;
 
     [ObservableProperty]
-    private string? _modeSetButton = "Set Mode";
+    private string? _modeSetButton = Resources.Firmware_ModeSetButton_Default;
 
     [ObservableProperty]
-    private string? _wifiSetButton = "Set Wifi Creds";
+    private string? _wifiSetButton = Resources.Firmware_WifiSetButton_Default;
 
     [ObservableProperty]
-    private string? _wifiScanButton = "Refresh Wifi Networks";
+    private string? _wifiScanButton = Resources.Firmware_WifiScanButton_Default;
 
     [ObservableProperty]
-    private string? _selectTracker = "Select Tracker";
+    private string? _selectTracker = Resources.Firmware_SelectTracker_Default;
 
     [ObservableProperty]
     private bool _hasScanned;
 
     [ObservableProperty]
-    private string? _onRefreshDevicesButton = "Refresh Devices";
+    private string? _onRefreshDevicesButton = Resources.Firmware_RefreshDevices_Default;
 
     [ObservableProperty] private object? _deviceModeSelectedItem;
 
@@ -171,15 +172,15 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
                 IsValidDeviceSelected = !string.IsNullOrWhiteSpace(res);
                 if (IsValidDeviceSelected)
                 {
-                    SelectTracker = "Tracker connected!";
+                    SelectTracker = Resources.Firmware_SelectTracker_Connected;
                     await Task.Delay(3000);
-                    SelectTracker = "Select Tracker";
+                    SelectTracker = Resources.Firmware_SelectTracker_Default;
                 }
                 else
                 {
-                    SelectTracker = "The tracker did not respond.";
+                    SelectTracker = Resources.Firmware_SelectTracker_NoResponse;
                     await Task.Delay(3000);
-                    SelectTracker = "Select Tracker";
+                    SelectTracker = Resources.Firmware_SelectTracker_Default;
                 }
             });
         }
@@ -193,10 +194,10 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
 
         await Task.Run(async () =>
         {
-            StartButtonAnimation("Refreshing", nameof(OnRefreshDevicesButton));
+            StartButtonAnimation(Resources.Firmware_RefreshDevices_Refreshing, nameof(OnRefreshDevicesButton));
 
             var response = await _firmwareService.ProbeComPortsAsync(TimeSpan.FromSeconds(10));
-            TrackerComboBox = $"Found {response.Length} device(s).";
+            TrackerComboBox = string.Format(Resources.Firmware_RefreshDevices_Found, response.Length);
             foreach (var port in response)
             {
                 // Only add devices that need a first time set up - IE ones with a heartbeat
@@ -205,7 +206,7 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
             }
 
             StopButtonAnimation(nameof(OnRefreshDevicesButton));
-            await Dispatcher.UIThread.InvokeAsync(() => OnRefreshDevicesButton = "Refresh Devices");
+            await Dispatcher.UIThread.InvokeAsync(() => OnRefreshDevicesButton = Resources.Firmware_RefreshDevices_Default);
         });
     }
 
@@ -214,14 +215,14 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     {
         AvailableWifiNetworks.Clear();
 
-        StartButtonAnimation("Scanning. This will take at most 30 seconds", nameof(WifiScanButton));
+        StartButtonAnimation(Resources.Firmware_WifiScanButton_Scanning, nameof(WifiScanButton));
 
         // By this point we should have a valid serial port, no need to do any error wrapping here
         var response = await _firmwareSessions[SelectedSerialPort!].SendCommandAsync(new FirmwareRequests.ScanWifiRequest(), TimeSpan.FromSeconds(30));
         if (response == null)
         {
             StopButtonAnimation(nameof(WifiScanButton));
-            WifiScanButton = "Scan failed. Click to try again.";
+            WifiScanButton = Resources.Firmware_WifiScanButton_Error;
             return;
         }
 
@@ -235,7 +236,7 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
         }
 
         StopButtonAnimation(nameof(WifiScanButton));
-        WifiScanButton = $"Found {networks.Count} networks. Click to scan again.";
+        WifiScanButton = string.Format(Resources.Firmware_WifiScanButton_Success, networks.Count);
         HasScanned = true;
     }
 
@@ -247,27 +248,27 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
 
         var m = StringToMode(comboBoxItem.Tag!.ToString()!);
 
-        StartButtonAnimation("Setting mode", nameof(ModeSetButton));
+        StartButtonAnimation(Resources.Firmware_ModeSetButton_Setting, nameof(ModeSetButton));
 
         await TrySendCommandAsync(new FirmwareRequests.SetModeRequest(m), TimeSpan.FromSeconds(30));
 
         StopButtonAnimation(nameof(ModeSetButton));
-        ModeSetButton = "Set!";
+        ModeSetButton = Resources.Firmware_ModeSetButton_Success;
         await Task.Delay(2000);
-        ModeSetButton = "Set Mode";
+        ModeSetButton = Resources.Firmware_ModeSetButton_Default;
     }
 
     [RelayCommand]
     private async Task SendDeviceWifiCredentials()
     {
-        StartButtonAnimation("Setting WiFi credentials", nameof(WifiSetButton));
+        StartButtonAnimation(Resources.Firmware_WifiSetButton_Setting, nameof(WifiSetButton));
 
         var res = await TrySendCommandAsync(new FirmwareRequests.SetWifiRequest(WifiSsid, WifiPassword), TimeSpan.FromSeconds(30));
 
         StopButtonAnimation(nameof(WifiSetButton));
-        WifiSetButton = string.IsNullOrEmpty(res) ? "Something went wrong..." : "Sent!";
+        WifiSetButton = string.IsNullOrEmpty(res) ? Resources.Firmware_WifiSetButton_Error : Resources.Firmware_WifiSetButton_Success;
         await Task.Delay(2000);
-        WifiSetButton = "Set Wifi Creds";
+        WifiSetButton = Resources.Firmware_WifiSetButton_Default;
 
         //if (!string.IsNullOrEmpty(Mdns))
         //{

@@ -1,4 +1,4 @@
-﻿<UserControl
+<UserControl
     d:DesignHeight="800"
     d:DesignWidth="800"
     mc:Ignorable="d"
@@ -8,20 +8,21 @@
     xmlns:controls="clr-namespace:Baballonia.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:assets="clr-namespace:Baballonia.Assets"
     xmlns:splitViewPane="clr-namespace:Baballonia.ViewModels.SplitViewPane"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <ScrollViewer>
         <StackPanel Classes="Page">
-            <TextBlock Classes="Header" Text="Firmware" />
+            <TextBlock Classes="Header" Text="{x:Static assets:Resources.Firmware_Title_Header}" />
 
             <controls:ContentExample>
                 <StackPanel Spacing="12">
-                    <TextBlock FontWeight="Bold" Text="Select your tracker" />
+                    <TextBlock FontWeight="Bold" Text="{x:Static assets:Resources.Firmware_Select_Tracker_Header}" />
                     <TextBlock TextWrapping="Wrap">
-                      <Run>• After powering on/connecting your device you will have 20 seconds to press "Refresh" and select your device from the dropdown</Run>
+                      <Run Text="{x:Static assets:Resources.Firmware_Device_Instructions_1}" />
                       <LineBreak/>
-                      <Run>• Certain configuration operations will take a little bit!</Run>
+                      <Run Text="{x:Static assets:Resources.Firmware_Device_Instructions_2}" />
                     </TextBlock>
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <AutoCompleteBox
@@ -59,27 +60,27 @@
                                 Margin="5"
                                 FontSize="16"
                                 FontWeight="SemiBold"
-                                Text="Device Configuration" />
+                                Text="{x:Static assets:Resources.Firmware_Device_Configuration_Header}" />
                             <TextBlock
                                 Margin="5"
                                 FontSize="14"
                                 Foreground="{DynamicResource SystemChromeGrayColor}"
-                                Text="Toggle wired/wireless mode" />
+                                Text="{x:Static assets:Resources.Firmware_Device_Configuration_Description}" />
                         </StackPanel>
                     </Grid>
                 </Expander.Header>
                 <StackPanel Spacing="24">
                   <StackPanel Spacing="24">
                     <StackPanel Spacing="12">
-                      <TextBlock FontWeight="Bold" Text="Toggle wired/wireless mode" />
+                      <TextBlock FontWeight="Bold" Text="{x:Static assets:Resources.Firmware_Device_Mode_Header}" />
                       <TextBlock TextWrapping="Wrap">
-                        <Run>• You WILL need to restart your tracker after changing the mode</Run><LineBreak />
-                        <Run>• You MAY need to restart the app after a flash for trackers to show</Run>
+                        <Run Text="{x:Static assets:Resources.Firmware_Device_Mode_Instruction_1}" /><LineBreak />
+                        <Run Text="{x:Static assets:Resources.Firmware_Device_Mode_Instruction_2}" />
                       </TextBlock>
                       <StackPanel Orientation="Horizontal" Spacing="12">
                         <ComboBox x:Name="DeviceModeComboBox"
                                   SelectedItem="{Binding DeviceModeSelectedItem}"
-                                  PlaceholderText="Select a mode...">
+                                  PlaceholderText="{x:Static assets:Resources.Firmware_Device_Mode_Select_Placeholder}">
                           <!--
                           <ComboBoxItem Tag="auto" x:Name="Hybrid" Content="Auto" />
                           -->
@@ -113,28 +114,28 @@
                                 Margin="5"
                                 FontSize="16"
                                 FontWeight="SemiBold"
-                                Text="Wifi Configuration" />
+                                Text="{x:Static assets:Resources.Firmware_Wifi_Configuration_Header}" />
                             <TextBlock
                                 Margin="5"
                                 FontSize="14"
                                 Foreground="{DynamicResource SystemChromeGrayColor}"
-                                Text="Connect to Wifi and more" />
+                                Text="{x:Static assets:Resources.Firmware_Wifi_Configuration_Description}" />
                         </StackPanel>
                     </Grid>
                 </Expander.Header>
                <StackPanel Spacing="24">
                       <StackPanel Spacing="12">
-                          <TextBlock FontWeight="Bold" Text="Set your Wi-Fi credentials" />
+                          <TextBlock FontWeight="Bold" Text="{x:Static assets:Resources.Firmware_Wifi_Credentials_Header}" />
                           <TextBlock TextWrapping="Wrap">
-                              <Run>• If you want to use your tracker wirelessly, you NEED to set its Wifi credentials</Run>
+                              <Run Text="{x:Static assets:Resources.Firmware_Wifi_Instructions_1}" />
                               <LineBreak />
-                              <Run>• You MUST scan for Wifi networks BEFORE you can set your Wifi credentials</Run>
+                              <Run Text="{x:Static assets:Resources.Firmware_Wifi_Instructions_2}" />
                           </TextBlock>
 
                           <TextBlock
                               FontSize="12"
                               FontWeight="Bold"
-                              Text="WiFi Network Name (SSID)" />
+                              Text="{x:Static assets:Resources.Firmware_Wifi_SSID_Label}" />
                           <Grid
                               HorizontalAlignment="Left"
                               ColumnDefinitions="Auto,Auto"
@@ -145,7 +146,7 @@
                                   Width="200"
                                   ItemsSource="{Binding AvailableWifiNetworks}"
                                   Text="{Binding WifiSsid, Mode=TwoWay}"
-                                  Watermark="Start typing to see WiFi networks...">
+                                  Watermark="{x:Static assets:Resources.Firmware_Wifi_SSID_Placeholder}">
                                     <Interaction.Behaviors>
                                       <controls:AutoCompleteZeroMinimumPrefixLengthDropdownBehaviour />
                                     </Interaction.Behaviors>
@@ -159,13 +160,13 @@
                           <TextBlock
                               FontSize="12"
                               FontWeight="Bold"
-                              Text="WiFi Password" />
+                              Text="{x:Static assets:Resources.Firmware_Wifi_Password_Label}" />
                           <TextBox
                               HorizontalAlignment="Left"
                               PasswordChar="*"
                               Width="200"
                               Text="{Binding WifiPassword, Mode=TwoWay}"
-                              Watermark="Enter WiFi password..." />
+                              Watermark="{x:Static assets:Resources.Firmware_Wifi_Password_Placeholder}" />
 
                           <!--<TextBlock
                             FontSize="12"
@@ -202,33 +203,30 @@
                                 Margin="5"
                                 FontSize="16"
                                 FontWeight="SemiBold"
-                                Text="Flashing Options" />
+                                Text="{x:Static assets:Resources.Firmware_Flashing_Header}" />
                             <TextBlock
                                 Margin="5"
                                 FontSize="14"
                                 Foreground="{DynamicResource SystemChromeGrayColor}"
-                                Text="Flash your device's firmware" />
+                                Text="{x:Static assets:Resources.Firmware_Flashing_Description}" />
                         </StackPanel>
                     </Grid>
                 </Expander.Header>
                 <StackPanel Spacing="24">
                   <TextBlock
                     TextWrapping="Wrap"
-                    FontWeight="ExtraBold">
-                    CAUTION!! THIS WILL FACTORY RESET YOUR TRACKER. YOU WILL NEED TO PERFORM A FIRST TIME SET UP AFTER FLASHING YOUR TRACKER.
-
-                  </TextBlock>
+                    FontWeight="ExtraBold"
+                    Text="{x:Static assets:Resources.Firmware_Flashing_Warning}" />
                   <StackPanel Orientation="Horizontal" Spacing="12">
                       <Button
                         Command="{Binding FlashFirmwareCommand}"
-                        Content="Flash Firmware"/>
+                        Content="{x:Static assets:Resources.Firmware_Flashing_Button}"/>
 
                       <TextBlock
                         TextWrapping="Wrap"
                         HorizontalAlignment="Center"
-                        VerticalAlignment="Center">
-                          This will take around ~10 seconds. Don't leave this page!
-                        </TextBlock>
+                        VerticalAlignment="Center"
+                        Text="{x:Static assets:Resources.Firmware_Flashing_Note}" />
                     </StackPanel>
 
                     <ProgressBar
@@ -240,7 +238,7 @@
                     <TextBlock
                       IsVisible="{Binding IsFinished}"
                       HorizontalAlignment="Center"
-                      Text="Done! You will need to restart your tracker" />
+                      Text="{x:Static assets:Resources.Firmware_Flashing_Complete}" />
                 </StackPanel>
             </Expander>
 
