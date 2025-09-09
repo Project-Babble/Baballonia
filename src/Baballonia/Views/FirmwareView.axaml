@@ -24,11 +24,19 @@
                       <Run>• Certain configuration operations will take a little bit!</Run>
                     </TextBlock>
                     <StackPanel Orientation="Horizontal" Spacing="12">
-                        <ComboBox
+                        <AutoCompleteBox
+                           FilterMode="None"
+                           HorizontalAlignment="Stretch"
+                           Width="200"
                            ItemsSource="{Binding AvailableSerialPorts, Mode=TwoWay}"
-                           SelectedItem="{Binding SelectedSerialPort, Mode=TwoWay}"
-                           PlaceholderText="{Binding TrackerComboBox}"/>
+                           Text="{Binding SelectedSerialPort, Mode=TwoWay}"
+                           Watermark="{Binding TrackerComboBox}">
+                          <Interaction.Behaviors>
+                            <controls:AutoCompleteZeroMinimumPrefixLengthDropdownBehaviour />
+                          </Interaction.Behaviors>
+                        </AutoCompleteBox>
                         <Button Command="{Binding RefreshSerialPortsCommand}" Content="{Binding OnRefreshDevicesButton}" />
+                        <Button Command="{Binding SelectSerialPortCommand}" Content="{Binding SelectTracker}" IsEnabled="{Binding IsDeviceSelectionPresent}" />
                     </StackPanel>
                 </StackPanel>
             </controls:ContentExample>
@@ -204,15 +212,22 @@
                     </Grid>
                 </Expander.Header>
                 <StackPanel Spacing="24">
-                    <StackPanel Orientation="Horizontal" Spacing="12">
-                        <Button
-                            Command="{Binding FlashFirmwareCommand}"
-                            Content="Flash Firmware"/>
+                  <TextBlock
+                    TextWrapping="Wrap"
+                    FontWeight="ExtraBold">
+                    CAUTION!! THIS WILL FACTORY RESET YOUR TRACKER. YOU WILL NEED TO PERFORM A FIRST TIME SET UP AFTER FLASHING YOUR TRACKER.
 
-                        <TextBlock
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center">
-                            This will take around ~10 seconds. Don't leave this page!
+                  </TextBlock>
+                  <StackPanel Orientation="Horizontal" Spacing="12">
+                      <Button
+                        Command="{Binding FlashFirmwareCommand}"
+                        Content="Flash Firmware"/>
+
+                      <TextBlock
+                        TextWrapping="Wrap"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                          This will take around ~10 seconds. Don't leave this page!
                         </TextBlock>
                     </StackPanel>
 

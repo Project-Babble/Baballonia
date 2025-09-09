@@ -5,7 +5,12 @@
     xmlns:avalonia="clr-namespace:HyperText.Avalonia;assembly=HyperText.Avalonia"
     xmlns:baballonia="clr-namespace:Baballonia"
     xmlns:themes="using:Baballonia.Themes.Fluent"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:Baballonia.Converters">
+
+    <Application.Resources>
+      <converters:BooleanOrConverter x:Key="BooleanOrConverter"/>
+    </Application.Resources>
 
     <Application.DataTemplates>
         <baballonia:ViewLocator />

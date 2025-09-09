@@ -16,12 +16,14 @@ using Baballonia.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Logging;
 
 namespace Baballonia.ViewModels.SplitViewPane;
 
 public partial class FirmwareViewModel : ViewModelBase, IDisposable
 {
-    private readonly FirmwareService _firmwareService;
+    private readonly FirmwareService _firmwareService = Ioc.Default.GetRequiredService<FirmwareService>();
+    private readonly ILogger<FirmwareViewModel> _logger = Ioc.Default.GetRequiredService<ILogger<FirmwareViewModel>>();
     private readonly Dictionary<string, FirmwareSession> _firmwareSessions = new();
     private readonly Dictionary<string, CancellationTokenSource> _animationCancellationTokens = new();
 
@@ -47,6 +49,9 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     // private string _mdns = "openiris";
 
     [ObservableProperty]
+    private bool _isDeviceSelectionPresent;
+
+    [ObservableProperty]
     private bool _isValidDeviceSelected;
 
     [ObservableProperty]
@@ -65,6 +70,9 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     private string? _wifiScanButton = "Refresh Wifi Networks";
 
     [ObservableProperty]
+    private string? _selectTracker = "Select Tracker";
+
+    [ObservableProperty]
     private bool _hasScanned;
 
     [ObservableProperty]
@@ -73,11 +81,6 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     [ObservableProperty] private object? _deviceModeSelectedItem;
 
     private readonly ProgressBar _progressBar;
-
-    public FirmwareViewModel()
-    {
-        _firmwareService = Ioc.Default.GetRequiredService<FirmwareService>();
-    }
 
     private async Task AnimateEllipsesAsync(string baseText, string propertyName, CancellationToken cancellationToken = default)
     {
@@ -141,14 +144,45 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
 
     partial void OnSelectedSerialPortChanged(string? oldValue, string? newValue)
     {
-        IsValidDeviceSelected = !string.IsNullOrEmpty(newValue);
-        if (!IsValidDeviceSelected) return;
-        SelectedSerialPort = newValue;
-        Task.Run(async () =>
+        IsDeviceSelectionPresent = !string.IsNullOrEmpty(newValue);
+        if (IsDeviceSelectionPresent)
         {
-            await _firmwareSessions[SelectedSerialPort!]
-                .SendCommandAsync(new FirmwareRequests.SetPausedRequest(true), TimeSpan.FromSeconds(5));
-        });
+            SelectedSerialPort = newValue;
+        }
+        else
+        {
+            IsValidDeviceSelected = false;
+        }
+    }
+
+    [RelayCommand]
+    private async Task SelectSerialPort()
+    {
+        if (IsDeviceSelectionPresent)
+        {
+            await Task.Run(async () =>
+            {
+                // If we haven't already refreshed, create the new firmware session for the
+                // Manually typed in tracker
+                if (!_firmwareSessions.ContainsKey(SelectedSerialPort!))
+                    _firmwareSessions.Add(SelectedSerialPort!, _firmwareService.StartSession(CommandSenderType.Serial, SelectedSerialPort!));
+
+                var res = await TrySendCommandAsync(new FirmwareRequests.SetPausedRequest(true), TimeSpan.FromSeconds(5));
+                IsValidDeviceSelected = !string.IsNullOrWhiteSpace(res);
+                if (IsValidDeviceSelected)
+                {
+                    SelectTracker = "Tracker connected!";
+                    await Task.Delay(3000);
+                    SelectTracker = "Select Tracker";
+                }
+                else
+                {
+                    SelectTracker = "The tracker did not respond.";
+                    await Task.Delay(3000);
+                    SelectTracker = "Select Tracker";
+                }
+            });
+        }
     }
 
     [RelayCommand]
@@ -166,7 +200,7 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
             foreach (var port in response)
             {
                 // Only add devices that need a first time set up - IE ones with a heartbeat
-                AvailableSerialPorts.Add(port);
+                await Dispatcher.UIThread.InvokeAsync(() => AvailableSerialPorts.Add(port));
                 _firmwareSessions.Add(port, _firmwareService.StartSession(CommandSenderType.Serial, port));
             }
 
@@ -182,6 +216,7 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
 
         StartButtonAnimation("Scanning. This will take at most 30 seconds", nameof(WifiScanButton));
 
+        // By this point we should have a valid serial port, no need to do any error wrapping here
         var response = await _firmwareSessions[SelectedSerialPort!].SendCommandAsync(new FirmwareRequests.ScanWifiRequest(), TimeSpan.FromSeconds(30));
         if (response == null)
         {
@@ -214,7 +249,7 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
 
         StartButtonAnimation("Setting mode", nameof(ModeSetButton));
 
-        await _firmwareSessions[SelectedSerialPort!].SendCommandAsync(new FirmwareRequests.SetModeRequest(m), TimeSpan.FromSeconds(30));
+        await TrySendCommandAsync(new FirmwareRequests.SetModeRequest(m), TimeSpan.FromSeconds(30));
 
         StopButtonAnimation(nameof(ModeSetButton));
         ModeSetButton = "Set!";
@@ -227,7 +262,7 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     {
         StartButtonAnimation("Setting WiFi credentials", nameof(WifiSetButton));
 
-        var res = await _firmwareSessions[SelectedSerialPort!].SendCommandAsync(new FirmwareRequests.SetWifiRequest(WifiSsid, WifiPassword), TimeSpan.FromSeconds(30));
+        var res = await TrySendCommandAsync(new FirmwareRequests.SetWifiRequest(WifiSsid, WifiPassword), TimeSpan.FromSeconds(30));
 
         StopButtonAnimation(nameof(WifiSetButton));
         WifiSetButton = string.IsNullOrEmpty(res) ? "Something went wrong..." : "Sent!";
@@ -244,7 +279,7 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     private async Task FlashFirmware()
     {
         IsFlashing = true;
-        await _firmwareSessions[SelectedSerialPort!].SendCommandAsync(new FirmwareRequests.SetPausedRequest(false), TimeSpan.FromSeconds(5));
+        await TrySendCommandAsync(new FirmwareRequests.SetPausedRequest(false), TimeSpan.FromSeconds(5));
         _firmwareSessions[SelectedSerialPort!].Dispose();
         await _firmwareService.UploadFirmwareAsync(SelectedSerialPort!, Path.Combine("Firmware", "babble_multimodal_firmware_1.0.0.bin"));
         IsFlashing = false;
@@ -264,6 +299,20 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
             "uvc" => FirmwareRequests.Mode.UVC,
             _ => FirmwareRequests.Mode.Auto
         };
+    }
+
+    private async Task<string?> TrySendCommandAsync(IFirmwareRequest request, TimeSpan timeSpan)
+    {
+        try
+        {
+            return await _firmwareSessions[SelectedSerialPort!].SendCommandAsync(request, timeSpan);
+
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("Error while sending command {Exception}", e);
+            return await Task.FromResult(string.Empty);
+        }
     }
 
     public void Dispose()
