@@ -11,312 +11,311 @@
     d:DesignWidth="800"
     x:DataType="splitViewPane:AppSettingsViewModel"
     mc:Ignorable="d">
-    <ScrollViewer>
-        <StackPanel Classes="Page">
-            <TextBlock Classes="Header" Text="App Settings" />
+  <ScrollViewer>
+    <StackPanel Classes="Page">
+      <TextBlock Classes="Header" Text="App Settings" />
 
-            <controls:SettingsBlock
-                Title="{x:Static assets:Resources.ThemeSettings_Header}"
-                Description="{x:Static assets:Resources.ThemeSettings_Description}"
-                IconPath="DarkLightTheme">
-                <controls:SettingsBlock.SettingsContent>
-                    <ComboBox x:Name="ThemeCombo" VerticalAlignment="Center" />
-                </controls:SettingsBlock.SettingsContent>
-            </controls:SettingsBlock>
+      <controls:SettingsBlock
+          Title="{x:Static assets:Resources.Settings_Theme_Header}"
+          Description="{x:Static assets:Resources.Settings_Theme_Description}"
+          IconPath="DarkLightTheme">
+        <controls:SettingsBlock.SettingsContent>
+          <ComboBox x:Name="ThemeCombo" VerticalAlignment="Center" />
+        </controls:SettingsBlock.SettingsContent>
+      </controls:SettingsBlock>
 
-            <controls:SettingsBlock
-                Title="Language"
-                Description="Set the app's language"
-                IconPath="LanguageRegular">
-                <controls:SettingsBlock.SettingsContent>
-                    <ComboBox x:Name="LangCombo" VerticalAlignment="Center">
-                        <ComboBoxItem x:Name="DefaultLanguage" Content="Default" />
-                        <ComboBoxItem x:Name="en" Content="English" />
-                        <ComboBoxItem x:Name="es" Content="Español" />
-                        <ComboBoxItem x:Name="ja" Content="日本語" />
-                        <ComboBoxItem x:Name="pl" Content="Polski" />
-                        <ComboBoxItem x:Name="zh" Content="中文" />
-                    </ComboBox>
-                </controls:SettingsBlock.SettingsContent>
-            </controls:SettingsBlock>
+      <controls:SettingsBlock
+          Title="Language"
+          Description="Set the app's language"
+          IconPath="LanguageRegular">
+        <controls:SettingsBlock.SettingsContent>
+          <ComboBox x:Name="LangCombo" VerticalAlignment="Center">
+            <ComboBoxItem x:Name="DefaultLanguage" Content="Default" />
+            <ComboBoxItem x:Name="en" Content="English" />
+            <ComboBoxItem x:Name="es" Content="Español" />
+            <ComboBoxItem x:Name="ja" Content="日本語" />
+            <ComboBoxItem x:Name="pl" Content="Polski" />
+            <ComboBoxItem x:Name="zh" Content="中文" />
+          </ComboBox>
+        </controls:SettingsBlock.SettingsContent>
+      </controls:SettingsBlock>
 
-            <Expander
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                HorizontalContentAlignment="Stretch"
-                IsExpanded="{Binding IsExpandedByDefault, RelativeSource={RelativeSource AncestorType=controls:SettingsExpander}}">
-                <Expander.Header>
-                    <Grid ColumnDefinitions="Auto,Auto,*">
-                        <PathIcon
-                            Grid.Column="0"
-                            Width="32"
-                            Margin="10,10,20,10"
-                            VerticalAlignment="Center"
-                            Data="{StaticResource WirelessRegular}" />
-                        <StackPanel
-                            Grid.Column="1"
-                            Margin="0,10,0,10"
-                            HorizontalAlignment="Stretch">
-                            <TextBlock
-                                Margin="5"
-                                FontSize="16"
-                                FontWeight="SemiBold"
-                                Text="{x:Static assets:Resources.OscSettings_Description}" />
-                            <TextBlock
-                                Margin="5"
-                                FontSize="14"
-                                Foreground="{DynamicResource SystemChromeGrayColor}"
-                                Text="{x:Static assets:Resources.OscSettings_Header}" />
-                        </StackPanel>
-                    </Grid>
-                </Expander.Header>
-                <Grid
-                    Margin="0,4"
-                    ColumnDefinitions="Auto,*,Auto"
-                    RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto">
-                    <Grid.Styles>
-                        <Style Selector="TextBlock">
-                            <Setter Property="HorizontalAlignment" Value="Left" />
-                            <Setter Property="VerticalAlignment" Value="Bottom" />
-                            <Setter Property="Margin" Value="0,8" />
-                        </Style>
-                        <Style Selector="TextBox">
-                            <Setter Property="Margin" Value="0,8" />
-                        </Style>
-                    </Grid.Styles>
+      <Expander
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch"
+          HorizontalContentAlignment="Stretch"
+          IsExpanded="{Binding IsExpandedByDefault, RelativeSource={RelativeSource AncestorType=controls:SettingsExpander}}">
+        <Expander.Header>
+          <Grid ColumnDefinitions="Auto,Auto,*">
+            <PathIcon
+                Grid.Column="0"
+                Width="32"
+                Margin="10,10,20,10"
+                VerticalAlignment="Center"
+                Data="{StaticResource WirelessRegular}" />
+            <StackPanel
+                Grid.Column="1"
+                Margin="0,10,0,10"
+                HorizontalAlignment="Stretch">
+              <TextBlock
+                  Margin="5"
+                  FontSize="16"
+                  FontWeight="SemiBold"
+                  Text="{x:Static assets:Resources.Settings_OSC_Description}" />
+              <TextBlock
+                  Margin="5"
+                  FontSize="14"
+                  Foreground="{DynamicResource SystemChromeGrayColor}"
+                  Text="{x:Static assets:Resources.Settings_OSC_Header}" />
+            </StackPanel>
+          </Grid>
+        </Expander.Header>
+        <Grid
+            Margin="0,4"
+            ColumnDefinitions="Auto,*,Auto"
+            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+          <Grid.Styles>
+            <Style Selector="TextBlock">
+              <Setter Property="HorizontalAlignment" Value="Left" />
+              <Setter Property="VerticalAlignment" Value="Bottom" />
+              <Setter Property="Margin" Value="0,8" />
+            </Style>
+            <Style Selector="TextBox">
+              <Setter Property="Margin" Value="0,8" />
+            </Style>
+          </Grid.Styles>
 
-                    <TextBlock
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        Text="Receive Port" />
-                    <TextBox
-                        x:Name="OscTargetInPort"
-                        Grid.Row="1"
-                        Grid.Column="2"
-                        Text="{Binding OscTarget.InPort, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue='9001'}" />
+          <TextBlock
+              Grid.Row="1"
+              Grid.Column="0"
+              Text="Receive Port" />
+          <TextBox
+              x:Name="OscTargetInPort"
+              Grid.Row="1"
+              Grid.Column="2"
+              Text="{Binding OscTarget.InPort, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue='9001'}" />
 
-                    <TextBlock
-                        Grid.Row="2"
-                        Grid.Column="0"
-                        Text="IP Address" />
-                    <TextBox
-                        x:Name="OscTargetIpAddress"
-                        Grid.Row="2"
-                        Grid.Column="2"
-                        Text="{Binding OscTarget.DestinationAddress, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue='127.0.0.1'}" />
+          <TextBlock
+              Grid.Row="2"
+              Grid.Column="0"
+              Text="IP Address" />
+          <TextBox
+              x:Name="OscTargetIpAddress"
+              Grid.Row="2"
+              Grid.Column="2"
+              Text="{Binding OscTarget.DestinationAddress, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue='127.0.0.1'}" />
 
-                    <TextBlock
-                        Grid.Row="3"
-                        Grid.Column="0"
-                        Text="Send Port" />
-                    <TextBox
-                        x:Name="OscTargetOutPort"
-                        Grid.Row="3"
-                        Grid.Column="2"
-                        Text="{Binding OscTarget.OutPort, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue='9000'}" />
+          <TextBlock
+              Grid.Row="3"
+              Grid.Column="0"
+              Text="Send Port" />
+          <TextBox
+              x:Name="OscTargetOutPort"
+              Grid.Row="3"
+              Grid.Column="2"
+              Text="{Binding OscTarget.OutPort, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue='9000'}" />
 
-                    <TextBlock
-                        Grid.Row="4"
-                        Grid.Column="0"
-                        Text="OSC Prefix" />
-                    <TextBox
-                        x:Name="OscPrefix"
-                        Grid.Row="4"
-                        Grid.Column="2"
-                        Text="{Binding OscPrefix, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue=''}" />
+          <TextBlock
+              Grid.Row="4"
+              Grid.Column="0"
+              Text="OSC Prefix" />
+          <TextBox
+              x:Name="OscPrefix"
+              Grid.Row="4"
+              Grid.Column="2"
+              Text="{Binding OscPrefix, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue=''}" />
 
-                    <TextBlock
-                        Grid.Row="5"
-                        Grid.Column="0"
-                        Text="Recalibrate Address" />
-                    <TextBox
-                        x:Name="RecalibrateAddress"
-                        Grid.Row="5"
-                        Grid.Column="2"
-                        Text="{Binding RecalibrateAddress, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue='/avatar/parameters/etvr_recalibrate'}" />
+          <TextBlock
+              Grid.Row="5"
+              Grid.Column="0"
+              Text="Recalibrate Address" />
+          <TextBox
+              x:Name="RecalibrateAddress"
+              Grid.Row="5"
+              Grid.Column="2"
+              Text="{Binding RecalibrateAddress, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue='/avatar/parameters/etvr_recalibrate'}" />
 
-                    <TextBlock
-                        Grid.Row="6"
-                        Grid.Column="0"
-                        Text="Recenter Address" />
-                    <TextBox
-                        x:Name="RecenterAddress"
-                        Grid.Row="6"
-                        Grid.Column="2"
-                        Text="{Binding RecenterAddress, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue='/avatar/parameters/etvr_recenter'}" />
-                </Grid>
-            </Expander>
+          <TextBlock
+              Grid.Row="6"
+              Grid.Column="0"
+              Text="Recenter Address" />
+          <TextBox
+              x:Name="RecenterAddress"
+              Grid.Row="6"
+              Grid.Column="2"
+              Text="{Binding RecenterAddress, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue='/avatar/parameters/etvr_recenter'}" />
+        </Grid>
+      </Expander>
 
-            <Expander
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                HorizontalContentAlignment="Stretch"
-                IsExpanded="{Binding IsExpandedByDefault, RelativeSource={RelativeSource AncestorType=controls:SettingsExpander}}">
-                <Expander.Header>
-                    <Grid ColumnDefinitions="Auto,Auto,*">
-                        <PathIcon
-                            Grid.Column="0"
-                            Width="32"
-                            Margin="10,10,20,10"
-                            VerticalAlignment="Center"
-                            Data="{StaticResource DataFunnelRegular}" />
-                        <StackPanel
-                            Grid.Column="1"
-                            Margin="0,10,0,10"
-                            HorizontalAlignment="Stretch">
-                            <TextBlock
-                                Margin="5"
-                                FontSize="16"
-                                FontWeight="SemiBold"
-                                Text="One-Euro filter settings" />
-                            <TextBlock
-                                Margin="5"
-                                FontSize="14"
-                                Foreground="{DynamicResource SystemChromeGrayColor}"
-                                Text="Filter Settings" />
-                        </StackPanel>
-                    </Grid>
-                </Expander.Header>
-                <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto">
-                    <StackPanel
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        Margin="0,8">
-                        <TextBlock FontWeight="Bold" Text="Enabled" />
-                        <TextBlock Text="Turn filtering on or off." />
-                    </StackPanel>
-                    <CheckBox
-                        Grid.Row="0"
-                        Grid.Column="2"
-                        Margin="0,8"
-                        IsChecked="{Binding OneEuroMinEnabled, Mode=TwoWay}" />
+      <Expander
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch"
+          HorizontalContentAlignment="Stretch"
+          IsExpanded="{Binding IsExpandedByDefault, RelativeSource={RelativeSource AncestorType=controls:SettingsExpander}}">
+        <Expander.Header>
+          <Grid ColumnDefinitions="Auto,Auto,*">
+            <PathIcon
+                Grid.Column="0"
+                Width="32"
+                Margin="10,10,20,10"
+                VerticalAlignment="Center"
+                Data="{StaticResource DataFunnelRegular}" />
+            <StackPanel
+                Grid.Column="1"
+                Margin="0,10,0,10"
+                HorizontalAlignment="Stretch">
+              <TextBlock
+                  Margin="5"
+                  FontSize="16"
+                  FontWeight="SemiBold"
+                  Text="One-Euro filter settings" />
+              <TextBlock
+                  Margin="5"
+                  FontSize="14"
+                  Foreground="{DynamicResource SystemChromeGrayColor}"
+                  Text="Filter Settings" />
+            </StackPanel>
+          </Grid>
+        </Expander.Header>
+        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto">
+          <StackPanel
+              Grid.Row="0"
+              Grid.Column="0"
+              Margin="0,8">
+            <TextBlock FontWeight="Bold" Text="Enabled" />
+            <TextBlock Text="Turn filtering on or off." />
+          </StackPanel>
+          <CheckBox
+              Grid.Row="0"
+              Grid.Column="2"
+              Margin="0,8"
+              IsChecked="{Binding OneEuroMinEnabled, Mode=TwoWay}" />
 
-                    <StackPanel
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        Margin="0,8">
-                        <TextBlock FontWeight="Bold" Text="Minimum frequency cutoff" />
-                        <TextBlock Text="Controls how much smoothing is applied to slow movements" />
-                    </StackPanel>
-                    <StackPanel
-                        Grid.Row="1"
-                        Grid.Column="2"
-                        Orientation="Horizontal"
-                        Spacing="8">
-                        <ComboBox
-                            x:Name="SelectedMinFreqCutoffComboBox"
-                            Margin="0,8"
-                            PlaceholderText="Select from a template"
-                            SelectionChanged="SelectedMinFreqCutoffComboBox_OnSelectionChanged">
-                            <ComboBoxItem Tag="0.5">Low (0.5)</ComboBoxItem>
-                            <ComboBoxItem Tag="1.0">Medium (1.0)</ComboBoxItem>
-                            <ComboBoxItem Tag="2.0">High (2.0)</ComboBoxItem>
-                        </ComboBox>
-                        <NumericUpDown
-                            x:Name="SelectedMinFreqCutoffUpDown"
-                            Margin="0,8"
-                            FormatString="F1"
-                            Increment="0.1"
-                            Maximum="10"
-                            Minimum="0.1"
-                            Value="{Binding OneEuroMinFreqCutoff, Mode=TwoWay}" />
-                    </StackPanel>
+          <StackPanel
+              Grid.Row="1"
+              Grid.Column="0"
+              Margin="0,8">
+            <TextBlock FontWeight="Bold" Text="Minimum frequency cutoff" />
+            <TextBlock Text="Controls how much smoothing is applied to slow movements" />
+          </StackPanel>
+          <StackPanel
+              Grid.Row="1"
+              Grid.Column="2"
+              Orientation="Horizontal"
+              Spacing="8">
+            <ComboBox
+                x:Name="SelectedMinFreqCutoffComboBox"
+                Margin="0,8"
+                PlaceholderText="Select from a template"
+                SelectionChanged="SelectedMinFreqCutoffComboBox_OnSelectionChanged">
+              <ComboBoxItem Tag="0.5">Low (0.5)</ComboBoxItem>
+              <ComboBoxItem Tag="1.0">Medium (1.0)</ComboBoxItem>
+              <ComboBoxItem Tag="2.0">High (2.0)</ComboBoxItem>
+            </ComboBox>
+            <NumericUpDown
+                x:Name="SelectedMinFreqCutoffUpDown"
+                Margin="0,8"
+                FormatString="F1"
+                Increment="0.1"
+                Maximum="10"
+                Minimum="0.1"
+                Value="{Binding OneEuroMinFreqCutoff, Mode=TwoWay}" />
+          </StackPanel>
 
-                    <StackPanel
-                        Grid.Row="2"
-                        Grid.Column="0"
-                        Margin="0,8">
-                        <TextBlock FontWeight="Bold" Text="Speed coefficient" />
-                        <TextBlock Text="Determines how the filter adapts when you move faster" />
-                    </StackPanel>
-                    <StackPanel
-                        Grid.Row="2"
-                        Grid.Column="2"
-                        Orientation="Horizontal"
-                        Spacing="8">
-                        <ComboBox
-                            x:Name="SelectedSpeedCutoffComboBox"
-                            Margin="0,8"
-                            PlaceholderText="Select from a template"
-                            SelectionChanged="SelectedSpeedCutoffComboBox_OnSelectionChanged">
-                            <ComboBoxItem Tag="0.5">Low (0.5)</ComboBoxItem>
-                            <ComboBoxItem Tag="1.0">Medium (1.0)</ComboBoxItem>
-                            <ComboBoxItem Tag="2.0">High (2.0)</ComboBoxItem>
-                        </ComboBox>
-                        <NumericUpDown
-                            x:Name="SelectedSpeedCutoffUpDown"
-                            Margin="0,8"
-                            FormatString="F1"
-                            Increment="0.1"
-                            Maximum="10"
-                            Minimum="0.1"
-                            Value="{Binding OneEuroSpeedCutoff, Mode=TwoWay}" />
-                    </StackPanel>
-                </Grid>
-            </Expander>
+          <StackPanel
+              Grid.Row="2"
+              Grid.Column="0"
+              Margin="0,8">
+            <TextBlock FontWeight="Bold" Text="Speed coefficient" />
+            <TextBlock Text="Determines how the filter adapts when you move faster" />
+          </StackPanel>
+          <StackPanel
+              Grid.Row="2"
+              Grid.Column="2"
+              Orientation="Horizontal"
+              Spacing="8">
+            <ComboBox
+                x:Name="SelectedSpeedCutoffComboBox"
+                Margin="0,8"
+                PlaceholderText="Select from a template"
+                SelectionChanged="SelectedSpeedCutoffComboBox_OnSelectionChanged">
+              <ComboBoxItem Tag="0.5">Low (0.5)</ComboBoxItem>
+              <ComboBoxItem Tag="1.0">Medium (1.0)</ComboBoxItem>
+              <ComboBoxItem Tag="2.0">High (2.0)</ComboBoxItem>
+            </ComboBox>
+            <NumericUpDown
+                x:Name="SelectedSpeedCutoffUpDown"
+                Margin="0,8"
+                FormatString="F1"
+                Increment="0.1"
+                Maximum="10"
+                Minimum="0.1"
+                Value="{Binding OneEuroSpeedCutoff, Mode=TwoWay}" />
+          </StackPanel>
+        </Grid>
+      </Expander>
 
-            <controls:SettingsToggle
-                Title="Use GPU acceleration"
-                Description="Use your GPU to make things run faster! Requires restart"
-                IconPath="TopSpeedRegular"
-                SettingToggled="{Binding UseGPU, Mode=TwoWay}" />
+      <controls:SettingsToggle
+          Title="Use GPU acceleration"
+          Description="Use your GPU to make things run faster! Requires restart"
+          IconPath="TopSpeedRegular"
+          SettingToggled="{Binding UseGPU, Mode=TwoWay}" />
 
-            <controls:SettingsBlock
-              Title="Log Level Verbosity"
-              Description="Minimum logging level. Requires restart"
-              IconPath="SendLoggingRegular">
-              <controls:SettingsBlock.SettingsContent>
-                <ComboBox
-                  x:Name="LogLevelCombo"
-                  VerticalAlignment="Center"
-                  ItemsSource="{Binding LowestLogLevel}"
-                  SelectedItem="{Binding LogLevel}" />
-              </controls:SettingsBlock.SettingsContent>
-            </controls:SettingsBlock>
+      <controls:SettingsBlock
+        Title="Log Level Verbosity"
+        Description="Minimum logging level. Requires restart"
+        IconPath="SendLoggingRegular">
+        <controls:SettingsBlock.SettingsContent>
+          <ComboBox
+            x:Name="LogLevelCombo"
+            VerticalAlignment="Center"
+            ItemsSource="{Binding LowestLogLevel}"
+            SelectedItem="{Binding LogLevel}" />
+        </controls:SettingsBlock.SettingsContent>
+      </controls:SettingsBlock>
 
-            <controls:SettingsToggle
-                Title="Check For Updates"
-                Description="Should the app check for updates on start?"
-                IconPath="ArrowSyncRegular"
-                SettingToggled="{Binding CheckForUpdates, Mode=TwoWay}" />
+      <controls:SettingsToggle
+          Title="Check For Updates"
+          Description="Should the app check for updates on start?"
+          IconPath="ArrowSyncRegular"
+          SettingToggled="{Binding CheckForUpdates, Mode=TwoWay}" />
 
-            <Border
-                Padding="15,5,15,5"
-                Background="{DynamicResource SystemChromeMediumLowColor}"
-                CornerRadius="6"
-                IsEnabled="{Binding OnboardingEnabled}"
-                IsVisible="{Binding OnboardingEnabled}">
-                <Grid VerticalAlignment="Center" ColumnDefinitions="Auto, Auto,*,Auto">
-                    <PathIcon
-                        Grid.Column="0"
-                        Width="32"
-                        Margin="10,10,20,10"
-                        VerticalAlignment="Center"
-                        Data="{StaticResource QuestionCircleRegular}" />
-                    <StackPanel
-                        Grid.Column="1"
-                        Margin="0,10,0,10"
-                        HorizontalAlignment="Stretch">
-                        <TextBlock
-                            Margin="5"
-                            FontSize="16"
-                            FontWeight="SemiBold"
-                            Text="Launch first time setup" />
-                        <TextBlock
-                            Margin="5"
-                            FontSize="14"
-                            Foreground="{DynamicResource SystemChromeGrayColor}"
-                            Text="Relaunches the first time setup" />
-                    </StackPanel>
-                    <Button
-                        Grid.Column="3"
-                        x:DataType="controls:SettingsToggle"
-                        Click="LaunchFirstTimeSetUp"
-                        Content="Launch" />
-                </Grid>
-            </Border>
+      <Border
+          Padding="15,5,15,5"
+          Background="{DynamicResource SystemChromeMediumLowColor}"
+          CornerRadius="6"
+          IsEnabled="{Binding OnboardingEnabled}"
+          IsVisible="{Binding OnboardingEnabled}">
+        <Grid VerticalAlignment="Center" ColumnDefinitions="Auto, Auto,*,Auto">
+          <PathIcon
+              Grid.Column="0"
+              Width="32"
+              Margin="10,10,20,10"
+              VerticalAlignment="Center"
+              Data="{StaticResource QuestionCircleRegular}" />
+          <StackPanel
+              Grid.Column="1"
+              Margin="0,10,0,10"
+              HorizontalAlignment="Stretch">
+            <TextBlock
+                Margin="5"
+                FontSize="16"
+                FontWeight="SemiBold"
+                Text="Launch first time setup" />
+            <TextBlock
+                Margin="5"
+                FontSize="14"
+                Foreground="{DynamicResource SystemChromeGrayColor}"
+                Text="Relaunches the first time setup" />
+          </StackPanel>
+          <Button
+              Grid.Column="3"
+              x:DataType="controls:SettingsToggle"
+              Click="LaunchFirstTimeSetUp"
+              Content="Launch" />
+        </Grid>
+      </Border>
 
-        </StackPanel>
-    </ScrollViewer>
+    </StackPanel>
+  </ScrollViewer>
 </UserControl>
-
