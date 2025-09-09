@@ -381,4 +381,34 @@
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
     <value>Found {0} networks. Click to scan again.</value>
   </data>
+  <data name="VRC_Title_Header" xml:space="preserve">
+    <value>VRChat + VRCFaceTracking Settings</value>
+  </data>
+  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
+    <value>Use Native VRC Eye Tracking</value>
+  </data>
+  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
+    <value>Brings eye tracking to avatars that do not have VRCFaceTracking</value>
+  </data>
+  <data name="VRC_ModuleMode_Header" xml:space="preserve">
+    <value>Set VRCFT module mode</value>
+  </data>
+  <data name="VRC_ModuleMode_Description" xml:space="preserve">
+    <value>Send only eye, only face or both? (Change requires VRCFT restart)</value>
+  </data>
+  <data name="VRC_ModuleMode_Placeholder" xml:space="preserve">
+    <value>Select a mode...</value>
+  </data>
+  <data name="Output_Title_Header" xml:space="preserve">
+    <value>Output</value>
+  </data>
+  <data name="Output_CopyButton_Tooltip" xml:space="preserve">
+    <value>Copy the log's output to your clipboard</value> 
+  </data>
+  <data name="Output_SaveButton_Tooltip" xml:space="preserve">
+    <value>Save the log's output</value>
+  </data>
+  <data name="Output_OpenLoggingDirectoryButton_Tooltip" xml:space="preserve">
+    <value>Open the logging directory</value>
+  </data>
 </root>

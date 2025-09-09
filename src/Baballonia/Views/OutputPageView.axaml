@@ -20,13 +20,13 @@
     </Grid.RowDefinitions>
 
     <StackPanel Grid.Row="0">
-      <TextBlock Classes="Header" Text="Output" />
+      <TextBlock Classes="Header" Text="{x:Static assets:Resources.Output_Title_Header}" />
       <controls:ContentExample>
         <StackPanel Orientation="Horizontal" Spacing="12">
           <Button
               x:Name="CopyButton"
               Click="CopyRequested"
-              ToolTip.Tip="Copy the log's output to your clipboard">
+              ToolTip.Tip="{x:Static assets:Resources.Output_CopyButton_Tooltip}">
             <Button.Content>
               <StackPanel Orientation="Vertical">
                 <PathIcon Height="24" Data="{StaticResource DocumentCopyRegular}" />
@@ -36,7 +36,7 @@
           <Button
               x:Name="SaveButton"
               Click="SaveRequested"
-              ToolTip.Tip="Save the log's output">
+              ToolTip.Tip="{x:Static assets:Resources.Output_SaveButton_Tooltip}">
             <Button.Content>
               <StackPanel Orientation="Vertical">
                 <PathIcon Height="24" Data="{StaticResource SaveRegular}" />
@@ -47,7 +47,7 @@
               x:Name="OpenLoggingDirectoryButton"
               Click="OpenLogDirectory"
               IsEnabled="{x:Static utils:Utils.IsSupportedDesktopOS}"
-              ToolTip.Tip="Open the logging directory">
+              ToolTip.Tip="{x:Static assets:Resources.Output_OpenLoggingDirectoryButton_Tooltip}">
             <Button.Content>
               <StackPanel Orientation="Vertical">
                 <PathIcon Height="24" Data="{StaticResource FolderOpenVerticalRegular}" />
