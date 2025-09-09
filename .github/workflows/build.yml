@@ -142,9 +142,6 @@ jobs:
       - name: Publish release
         uses: softprops/action-gh-release@v2
           with:
-            #files: |
-            #  artifacts/Baballonia.Setup.${{ github.event.inputs.versionNumber }}.exe
-            #  artifacts/Baballonia.${{ github.event.inputs.versionNumber }}.AppImage
             files: artifacts/Baballonia.Setup.${{ github.event.inputs.version-number }}.exe
             tag_name: ${{ github.event.inputs.version-number }}
             name: ${{ steps.release-name.outputs.name }}
@@ -152,3 +149,6 @@ jobs:
             body: ${{ steps.release-body.outputs.body }}
             generate_release_notes: ${{ steps.release-body.outputs.generate_notes }}
 
+            #files: |
+            #  artifacts/Baballonia.Setup.${{ github.event.inputs.versionNumber }}.exe
+            #  artifacts/Baballonia.${{ github.event.inputs.versionNumber }}.AppImage
