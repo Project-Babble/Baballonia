@@ -73,11 +73,11 @@
                       FontSize="16"
                       FontWeight="SemiBold"
                       Foreground="Black"
-                      Text="Administrator Mode Warning" />
+                      Text="{x:Static assets:Resources.AdminWarning_Header}" />
                   <TextBlock
                       FontSize="14"
                       Foreground="Black"
-                      Text="Do not run Baballonia as admin! There is no need, and it prevents eye tracking calibrations from working."
+                      Text="{x:Static assets:Resources.AdminWarning_Message}"
                       TextWrapping="Wrap" />
               </StackPanel>
           </StackPanel>

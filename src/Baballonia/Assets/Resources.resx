@@ -573,6 +573,12 @@
   <data name="Settings_OSC_ReceivePort_Label" xml:space="preserve">
     <value>Receive Port</value>
   </data>
+  <data name="AdminWarning_Header" xml:space="preserve">
+    <value>Administrator Mode Warning</value>
+  </data>
+  <data name="AdminWarning_Message" xml:space="preserve">
+    <value>Do not run Baballonia as admin! There is no need, and it prevents eye tracking calibrations from working.</value>
+  </data>
   <data name="Calibration_Instructions_Line1" xml:space="preserve">
     <value>The below sliders are used to calibrate the</value>
   </data>
