@@ -120,4 +120,37 @@
   <data name="Common_Start_Typing" xml:space="preserve">
     <value />
   </data>
+  <data name="Calibration_Title_Header" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Calibration_Reset_Minimums" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Calibration_Reset_Maximums" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Calibration_Nose_Expressions_Header" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Calibration_Tongue_Expressions_Header" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Calibration_Mouth_Expressions_Header" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Calibration_Jaw_Expressions_Header" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Calibration_Cheek_Expressions_Header" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Header" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Description" xml:space="preserve">
+    <value />
+  </data>
 </root>

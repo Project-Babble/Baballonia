@@ -162,5 +162,11 @@
 	  <Folder Include="Firmware\MacOS\" />
 	  <Folder Include="Firmware\Windows\" />
 	</ItemGroup>
+	<ItemGroup>
+	  <AvaloniaResource Update="Assets\Resources.resx">
+	    <Generator>PublicResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+	  </AvaloniaResource>
+	</ItemGroup>
 
 </Project>

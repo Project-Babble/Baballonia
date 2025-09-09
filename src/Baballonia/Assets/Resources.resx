@@ -219,4 +219,37 @@
   <data name="Common_Start_Typing" xml:space="preserve">
     <value>Start typing...</value>
   </data>
+  <data name="Calibration_Title_Header" xml:space="preserve">
+    <value>Calibration</value>
+  </data>
+  <data name="Calibration_Reset_Minimums" xml:space="preserve">
+    <value>Reset Minimums</value>
+  </data>
+  <data name="Calibration_Reset_Maximums" xml:space="preserve">
+    <value>Reset Maximums</value>
+  </data>
+  <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
+    <value>Eye Expressions</value>
+  </data>
+  <data name="Calibration_Nose_Expressions_Header" xml:space="preserve">
+    <value>Nose Expressions</value>
+  </data>
+  <data name="Calibration_Tongue_Expressions_Header" xml:space="preserve">
+    <value>Tongue Expressions</value>
+  </data>
+  <data name="Calibration_Mouth_Expressions_Header" xml:space="preserve">
+    <value>Mouth Expressions</value>
+  </data>
+  <data name="Calibration_Jaw_Expressions_Header" xml:space="preserve">
+    <value>Jaw Expressions</value>
+  </data>
+  <data name="Calibration_Cheek_Expressions_Header" xml:space="preserve">
+    <value>Cheek Expressions</value>
+  </data>
+  <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Header" xml:space="preserve">
+    <value>Stabilize Eyes</value>
+  </data>
+  <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Description" xml:space="preserve">
+    <value>Prevents eyes from looking out in opposite directions, but may overcorrect.</value>
+  </data>
 </root>

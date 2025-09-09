@@ -61,6 +61,105 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cheek Expressions.
+        /// </summary>
+        public static string Calibration_Cheek_Expressions_Header {
+            get {
+                return ResourceManager.GetString("Calibration_Cheek_Expressions_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Eye Expressions.
+        /// </summary>
+        public static string Calibration_Eye_Expressions_Header {
+            get {
+                return ResourceManager.GetString("Calibration_Eye_Expressions_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prevents eyes from looking out in opposite directions, but may overcorrect..
+        /// </summary>
+        public static string Calibration_Eye_Expressions_Stabilize_Eyes_Description {
+            get {
+                return ResourceManager.GetString("Calibration_Eye_Expressions_Stabilize_Eyes_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stabilize Eyes.
+        /// </summary>
+        public static string Calibration_Eye_Expressions_Stabilize_Eyes_Header {
+            get {
+                return ResourceManager.GetString("Calibration_Eye_Expressions_Stabilize_Eyes_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Jaw Expressions.
+        /// </summary>
+        public static string Calibration_Jaw_Expressions_Header {
+            get {
+                return ResourceManager.GetString("Calibration_Jaw_Expressions_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mouth Expressions.
+        /// </summary>
+        public static string Calibration_Mouth_Expressions_Header {
+            get {
+                return ResourceManager.GetString("Calibration_Mouth_Expressions_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nose Expressions.
+        /// </summary>
+        public static string Calibration_Nose_Expressions_Header {
+            get {
+                return ResourceManager.GetString("Calibration_Nose_Expressions_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset Maximums.
+        /// </summary>
+        public static string Calibration_Reset_Maximums {
+            get {
+                return ResourceManager.GetString("Calibration_Reset_Maximums", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset Minimums.
+        /// </summary>
+        public static string Calibration_Reset_Minimums {
+            get {
+                return ResourceManager.GetString("Calibration_Reset_Minimums", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Calibration.
+        /// </summary>
+        public static string Calibration_Title_Header {
+            get {
+                return ResourceManager.GetString("Calibration_Title_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tongue Expressions.
+        /// </summary>
+        public static string Calibration_Tongue_Expressions_Header {
+            get {
+                return ResourceManager.GetString("Calibration_Tongue_Expressions_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start typing....
         /// </summary>
         public static string Common_Start_Typing {
