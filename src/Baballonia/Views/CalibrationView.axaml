@@ -33,17 +33,17 @@
       </Grid>
 
       <TextBlock TextWrapping="Wrap">
-        <Run>The below sliders are used to calibrate the</Run>
-        <Run FontStyle="Italic">sensitivity</Run>
-        <Run>of your face expressions.</Run>
+        <Run Text="{x:Static assets:Resources.Calibration_Instructions_Line1}" />
+        <Run FontStyle="Italic" Text="{x:Static assets:Resources.Calibration_Instructions_Sensitivity}" />
+        <Run Text="{x:Static assets:Resources.Calibration_Instructions_Line1_2}" />
         <LineBreak />
-        <Run>• Raising the</Run>
-        <Run FontWeight="SemiBold">Minimum</Run>
-        <Run>value requires a stronger expression before it starts to show.</Run>
+        <Run Text="{x:Static assets:Resources.Calibration_Instructions_Bullet1_1}" />
+        <Run FontWeight="SemiBold" Text="{x:Static assets:Resources.Calibration_Instructions_Minimum}" />
+        <Run Text="{x:Static assets:Resources.Calibration_Instructions_Bullet1_2}" />
         <LineBreak />
-        <Run>• Lowering the</Run>
-        <Run FontWeight="SemiBold">Maximum</Run>
-        <Run>value means a smaller expression will reach 100% faster.</Run>
+        <Run Text="{x:Static assets:Resources.Calibration_Instructions_Bullet2_1}" />
+        <Run FontWeight="SemiBold" Text="{x:Static assets:Resources.Calibration_Instructions_Maximum}" />
+        <Run Text="{x:Static assets:Resources.Calibration_Instructions_Bullet2_2}" />
       </TextBlock>
 
       <StackPanel

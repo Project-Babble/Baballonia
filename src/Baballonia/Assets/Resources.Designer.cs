@@ -97,6 +97,87 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to • Raising the.
+        /// </summary>
+        public static string Calibration_Instructions_Bullet1_1 {
+            get {
+                return ResourceManager.GetString("Calibration_Instructions_Bullet1_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to value requires a stronger expression before it starts to show..
+        /// </summary>
+        public static string Calibration_Instructions_Bullet1_2 {
+            get {
+                return ResourceManager.GetString("Calibration_Instructions_Bullet1_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to • Lowering the.
+        /// </summary>
+        public static string Calibration_Instructions_Bullet2_1 {
+            get {
+                return ResourceManager.GetString("Calibration_Instructions_Bullet2_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to value means a smaller expression will reach 100% faster..
+        /// </summary>
+        public static string Calibration_Instructions_Bullet2_2 {
+            get {
+                return ResourceManager.GetString("Calibration_Instructions_Bullet2_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The below sliders are used to calibrate the.
+        /// </summary>
+        public static string Calibration_Instructions_Line1 {
+            get {
+                return ResourceManager.GetString("Calibration_Instructions_Line1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to of your face expressions..
+        /// </summary>
+        public static string Calibration_Instructions_Line1_2 {
+            get {
+                return ResourceManager.GetString("Calibration_Instructions_Line1_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum.
+        /// </summary>
+        public static string Calibration_Instructions_Maximum {
+            get {
+                return ResourceManager.GetString("Calibration_Instructions_Maximum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimum.
+        /// </summary>
+        public static string Calibration_Instructions_Minimum {
+            get {
+                return ResourceManager.GetString("Calibration_Instructions_Minimum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to sensitivity.
+        /// </summary>
+        public static string Calibration_Instructions_Sensitivity {
+            get {
+                return ResourceManager.GetString("Calibration_Instructions_Sensitivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Jaw Expressions.
         /// </summary>
         public static string Calibration_Jaw_Expressions_Header {
@@ -165,6 +246,42 @@ namespace Baballonia.Assets {
         public static string Common_Start_Typing {
             get {
                 return ResourceManager.GetString("Common_Start_Typing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dismiss.
+        /// </summary>
+        public static string DropOverlay_Dismiss_Button {
+            get {
+                return ResourceManager.GetString("DropOverlay_Dismiss_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Don&apos;t show this warning again.
+        /// </summary>
+        public static string DropOverlay_DontShowAgain {
+            get {
+                return ResourceManager.GetString("DropOverlay_DontShowAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Important!.
+        /// </summary>
+        public static string DropOverlay_Important_Header {
+            get {
+                return ResourceManager.GetString("DropOverlay_Important_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Newer babble trackers have a 20 second delay after being plugged in before they can be used. It will make a USB plugging-in sound when it is ready!.
+        /// </summary>
+        public static string DropOverlay_Message {
+            get {
+                return ResourceManager.GetString("DropOverlay_Message", resourceCulture);
             }
         }
         
@@ -1159,7 +1276,7 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set the app&apos;s language.
+        ///   Looks up a localized string similar to Set the app&apos;s language. Switch pages to apply..
         /// </summary>
         public static string Settings_Language_Description {
             get {
