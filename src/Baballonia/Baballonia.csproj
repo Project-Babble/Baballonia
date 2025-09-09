@@ -13,6 +13,8 @@
 
     <ItemGroup>
         <AvaloniaResource Include="Assets\**" />
+        <AvaloniaResource Remove="Assets\Resources.es.resx" />
+        <AvaloniaResource Remove="Assets\Resources.resx" />
         <None Update="Firmware\Windows\espflash.exe">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
@@ -77,14 +79,14 @@
 
 
     <ItemGroup>
-      <Compile Update="Views\FirmwareView.axaml.cs">
-        <DependentUpon>FirmwareView.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
       <Compile Update="Assets\Resources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>Resources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Views\FirmwareView.axaml.cs">
+        <DependentUpon>FirmwareView.axaml</DependentUpon>
+        <SubType>Code</SubType>
       </Compile>
     </ItemGroup>
 
@@ -101,9 +103,11 @@
 		<EmbeddedResource Include="faceModel.onnx">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</EmbeddedResource>
+		<EmbeddedResource Update="Assets\Resources.es.resx">
+		  <Generator></Generator>
+		</EmbeddedResource>
 		<EmbeddedResource Update="Assets\Resources.resx">
 		    <Generator>PublicResXFileCodeGenerator</Generator>
-		    <LastGenOutput>Resources.Designer.cs</LastGenOutput>
             <LogicalName>Baballonia.Assets.Resources.resources</LogicalName>
 		</EmbeddedResource>
 	</ItemGroup>
@@ -123,10 +127,10 @@
 	  <Folder Include="Firmware\Windows\" />
 	</ItemGroup>
 	<ItemGroup>
-	  <AvaloniaResource Update="Assets\Resources.resx">
+	  <EmbeddedResource Update="Assets\Resources.resx">
 	    <Generator>PublicResXFileCodeGenerator</Generator>
 	    <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-	  </AvaloniaResource>
+	  </EmbeddedResource>
 	</ItemGroup>
 
 </Project>

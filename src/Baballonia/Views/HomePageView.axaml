@@ -72,7 +72,7 @@
                             FontWeight="Medium"
                             Grid.Row="0"
                             Margin="0,0,12,12"
-                            Text="Left Eye Camera" />
+                            Text="{x:Static assets:Resources.Home_Left_Camera_Header}" />
 
                         <!--  Camera address section  -->
                         <Border
@@ -82,7 +82,7 @@
                             Margin="0,0,0,16"
                             Padding="16,16,16,16">
                             <StackPanel>
-                                <TextBlock FontSize="14" Text="{x:Static assets:Resources.Home_Left_Camera_Display_Address}" />
+                                <TextBlock FontSize="14" Text="{x:Static assets:Resources.Home_Left_Camera_Address}" />
 
                                 <Grid RowDefinitions="Auto,Auto,Auto">
                                     <AutoCompleteBox
@@ -219,7 +219,7 @@
                             Collapsed="OnExpanderCollapsed"
                             Expanded="OnExpanderExpanded"
                             Grid.Row="3"
-                            Header="Left Camera Settings"
+                            Header="{x:Static assets:Resources.Home_Left_Camera_Address}"
                             HorizontalAlignment="Stretch"
                             IsExpanded="False"
                             IsVisible="{Binding !LeftCamera.IsCropMode}">
@@ -258,8 +258,8 @@
                                             <TextBlock
                                                 FontSize="14"
                                                 FontWeight="Medium"
-                                                Text="Image Rotation" />
-                                            <TextBlock FontSize="12" Text="Rotates the image in a circle" />
+                                                Text="{x:Static assets:Resources.Home_Cameras_Rotation_Header}" />
+                                            <TextBlock FontSize="12" Text="{x:Static assets:Resources.Home_Cameras_Rotation_Description}" />
                                         </StackPanel>
                                         <Slider
                                             Grid.Column="0"
@@ -274,8 +274,8 @@
                                             <TextBlock
                                                 FontSize="14"
                                                 FontWeight="Medium"
-                                                Text="Image Brightness" />
-                                            <TextBlock FontSize="12" Text="Adjust the brightness of the image" />
+                                                Text="{x:Static assets:Resources.Home_Cameras_Brightness_Header}" />
+                                            <TextBlock FontSize="12" Text="{x:Static assets:Resources.Home_Cameras_Brightness_Description}" />
                                         </StackPanel>
                                         <Slider
                                             Grid.Column="0"
@@ -304,7 +304,7 @@
                             FontWeight="Medium"
                             Grid.Row="0"
                             Margin="0,0,12,12"
-                            Text="Right Eye Camera" />
+                            Text="{x:Static assets:Resources.Home_Right_Camera_Header}" />
 
                         <!--  Camera address section  -->
                         <Border
@@ -314,7 +314,7 @@
                             Margin="0,0,0,16"
                             Padding="16,16,16,16">
                             <StackPanel>
-                                <TextBlock FontSize="14" Text="Right Camera Address" />
+                                <TextBlock FontSize="14" Text="{x:Static assets:Resources.Home_Right_Camera_Address}" />
 
                                 <Grid RowDefinitions="Auto,Auto,Auto">
                                     <AutoCompleteBox
@@ -324,7 +324,7 @@
                                         ItemsSource="{Binding RightCamera.Suggestions}"
                                         Margin="0,6"
                                         Text="{Binding RightCamera.DisplayAddress, Mode=TwoWay}"
-                                        Watermark="Start typing..."
+                                        Watermark="{x:Static assets:Resources.Common_Start_Typing}"
                                         DropDownOpening="RefreshRightEyeDevices"
                                         x:Name="RightCameraAddressEntry">
                                         <Interaction.Behaviors>
@@ -350,7 +350,7 @@
                                         <Button
                                             Command="{Binding StartCameraCommand}"
                                             CommandParameter="{Binding RightCamera}"
-                                            Content="Start Camera"
+                                            Content="{x:Static assets:Resources.Home_Cameras_Start_Camera}"
                                             FontSize="13"
                                             Grid.Column="0"
                                             HorizontalAlignment="Stretch"
@@ -362,7 +362,7 @@
                                         <Button
                                             Command="{Binding StopCameraCommand}"
                                             CommandParameter="{Binding RightCamera}"
-                                            Content="Stop Camera"
+                                            Content="{x:Static assets:Resources.Home_Cameras_Stop_Camera}"
                                             FontSize="13"
                                             Grid.Column="1"
                                             HorizontalAlignment="Stretch"
@@ -375,12 +375,12 @@
 
                                 <StackPanel Orientation="Horizontal" Spacing="8">
                                     <RadioButton
-                                        Content="Tracking"
+                                        Content="{x:Static assets:Resources.Home_Cameras_Tracking_Mode}"
                                         GroupName="RightImageControlGroup"
                                         IsChecked="{Binding !RightCamera.IsCropMode, Mode=TwoWay}"
                                         x:Name="RightTrackingModeButton" />
                                     <RadioButton
-                                        Content="Cropping"
+                                        Content="{x:Static assets:Resources.Home_Cameras_Cropping_Mode}"
                                         GroupName="RightImageControlGroup"
                                         IsChecked="{Binding RightCamera.IsCropMode, Mode=TwoWay}"
                                         x:Name="RightCroppingModeButton" />
@@ -451,7 +451,7 @@
                             Collapsed="OnExpanderCollapsed"
                             Expanded="OnExpanderExpanded"
                             Grid.Row="3"
-                            Header="Right Camera Settings"
+                            Header="{x:Static assets:Resources.Home_Right_Camera_Address}"
                             HorizontalAlignment="Stretch"
                             IsExpanded="False"
                             IsVisible="{Binding !RightCamera.IsCropMode}">
@@ -463,8 +463,8 @@
                                             <TextBlock
                                                 FontSize="14"
                                                 FontWeight="Medium"
-                                                Text="Vertical Flip" />
-                                            <TextBlock FontSize="12" Text="Flip the image vertically" />
+                                                Text="{x:Static assets:Resources.Home_Cameras_Vertical_Flip_Header}" />
+                                            <TextBlock FontSize="12" Text="{x:Static assets:Resources.Home_Cameras_Vertical_Flip_Description}" />
                                         </StackPanel>
                                         <CheckBox
                                             Grid.Column="2"
@@ -478,8 +478,8 @@
                                             <TextBlock
                                                 FontSize="14"
                                                 FontWeight="Medium"
-                                                Text="Horizontal Flip" />
-                                            <TextBlock FontSize="12" Text="Flip the image horizontally" />
+                                                Text="{x:Static assets:Resources.Home_Cameras_Horizontal_Flip_Header}" />
+                                            <TextBlock FontSize="12" Text="{x:Static assets:Resources.Home_Cameras_Horizontal_Flip_Description}" />
                                         </StackPanel>
                                         <CheckBox
                                             Grid.Column="2"
@@ -490,8 +490,8 @@
                                             <TextBlock
                                                 FontSize="14"
                                                 FontWeight="Medium"
-                                                Text="Image Rotation" />
-                                            <TextBlock FontSize="12" Text="Rotates the image in a circle" />
+                                                Text="{x:Static assets:Resources.Home_Cameras_Rotation_Header}" />
+                                            <TextBlock FontSize="12" Text="{x:Static assets:Resources.Home_Cameras_Rotation_Description}" />
                                         </StackPanel>
                                         <Slider
                                             Grid.Column="0"
@@ -506,8 +506,8 @@
                                             <TextBlock
                                                 FontSize="14"
                                                 FontWeight="Medium"
-                                                Text="Image Brightness" />
-                                            <TextBlock FontSize="12" Text="Adjust the brightness of the image" />
+                                                Text="{x:Static assets:Resources.Home_Cameras_Brightness_Header}" />
+                                            <TextBlock FontSize="12" Text="{x:Static assets:Resources.Home_Cameras_Brightness_Description}" />
                                         </StackPanel>
                                         <Slider
                                             Grid.Column="0"
@@ -533,7 +533,7 @@
                         FontWeight="Medium"
                         Grid.Row="0"
                         Margin="0,0,12,12"
-                        Text="Face Camera" />
+                        Text="{x:Static assets:Resources.Home_Face_Camera_Header}" />
 
                     <!--  Camera address section  -->
                     <Border
@@ -543,7 +543,7 @@
                         Margin="0,0,0,16"
                         Padding="16,16,16,16">
                         <StackPanel>
-                            <TextBlock FontSize="14" Text="Face Camera Address" />
+                            <TextBlock FontSize="14" Text="{x:Static assets:Resources.Home_Face_Camera_Address}" />
 
                             <Grid RowDefinitions="Auto,Auto,Auto">
                                 <AutoCompleteBox
@@ -553,7 +553,7 @@
                                     ItemsSource="{Binding FaceCamera.Suggestions}"
                                     Margin="0,6"
                                     Text="{Binding FaceCamera.DisplayAddress, Mode=TwoWay}"
-                                    Watermark="Start typing..."
+                                    Watermark="{x:Static assets:Resources.Common_Start_Typing}"
                                     DropDownOpening="RefreshConnectedFaceDevices"
                                     x:Name="FaceCameraAddressEntry">
                                     <Interaction.Behaviors>
@@ -579,7 +579,7 @@
                                     <Button
                                         Command="{Binding StartCameraCommand}"
                                         CommandParameter="{Binding FaceCamera}"
-                                        Content="Start Camera"
+                                        Content="{x:Static assets:Resources.Home_Cameras_Start_Camera}"
                                         FontSize="13"
                                         Grid.Column="0"
                                         HorizontalAlignment="Stretch"
@@ -590,7 +590,7 @@
 
                                     <Button
                                         Command="{Binding FaceCamera.StopCameraCommand}"
-                                        Content="Stop Camera"
+                                        Content="{x:Static assets:Resources.Home_Cameras_Stop_Camera}"
                                         FontSize="13"
                                         Grid.Column="1"
                                         HorizontalAlignment="Stretch"
@@ -603,12 +603,12 @@
 
                             <StackPanel Orientation="Horizontal" Spacing="8">
                                 <RadioButton
-                                    Content="Tracking"
+                                    Content="{x:Static assets:Resources.Home_Cameras_Tracking_Mode}"
                                     GroupName="FaceImageControlGroup"
                                     IsChecked="{Binding !FaceCamera.IsCropMode, Mode=TwoWay}"
                                     x:Name="FaceTrackingModeButton" />
                                 <RadioButton
-                                    Content="Cropping"
+                                    Content="{x:Static assets:Resources.Home_Cameras_Cropping_Mode}"
                                     GroupName="FaceImageControlGroup"
                                     IsChecked="{Binding FaceCamera.IsCropMode, Mode=TwoWay}"
                                     x:Name="FaceCroppingModeButton" />
@@ -617,7 +617,7 @@
                             <Button
                                 Command="{Binding SelectWholeFrameCommand}"
                                 CommandParameter="{Binding FaceCamera}"
-                                Content="Select Face Frame"
+                                Content="{x:Static assets:Resources.Home_Face_Camera_Select_Entire_Frame}"
                                 FontSize="13"
                                 HorizontalAlignment="Stretch"
                                 HorizontalContentAlignment="Center"
@@ -679,7 +679,7 @@
                         Collapsed="OnExpanderCollapsed"
                         Expanded="OnExpanderExpanded"
                         Grid.Row="3"
-                        Header="Face Camera Settings"
+                        Header="{x:Static assets:Resources.Home_Face_Camera_Settings}"
                         HorizontalAlignment="Stretch"
                         IsExpanded="False"
                         IsVisible="{Binding !FaceCamera.IsCropMode}">
@@ -691,8 +691,8 @@
                                         <TextBlock
                                             FontSize="14"
                                             FontWeight="Medium"
-                                            Text="Vertical Flip" />
-                                        <TextBlock FontSize="12" Text="Flip the image vertically" />
+                                            Text="{x:Static assets:Resources.Home_Cameras_Vertical_Flip_Header}" />
+                                        <TextBlock FontSize="12" Text="{x:Static assets:Resources.Home_Cameras_Vertical_Flip_Description}" />
                                     </StackPanel>
                                     <CheckBox
                                         Grid.Column="2"
@@ -706,8 +706,8 @@
                                         <TextBlock
                                             FontSize="14"
                                             FontWeight="Medium"
-                                            Text="Horizontal Flip" />
-                                        <TextBlock FontSize="12" Text="Flip the image horizontally" />
+                                            Text="{x:Static assets:Resources.Home_Cameras_Horizontal_Flip_Header}" />
+                                        <TextBlock FontSize="12" Text="{x:Static assets:Resources.Home_Cameras_Horizontal_Flip_Description}" />
                                     </StackPanel>
                                     <CheckBox
                                         Grid.Column="2"
@@ -718,8 +718,8 @@
                                         <TextBlock
                                             FontSize="14"
                                             FontWeight="Medium"
-                                            Text="Image Rotation" />
-                                        <TextBlock FontSize="12" Text="Rotates the image in a circle" />
+                                            Text="{x:Static assets:Resources.Home_Cameras_Rotation_Header}" />
+                                        <TextBlock FontSize="12" Text="{x:Static assets:Resources.Home_Cameras_Rotation_Description}" />
                                     </StackPanel>
                                     <Slider
                                         Grid.Column="0"
@@ -734,8 +734,8 @@
                                         <TextBlock
                                             FontSize="14"
                                             FontWeight="Medium"
-                                            Text="Image Brightness" />
-                                        <TextBlock FontSize="12" Text="Adjust the brightness of the image" />
+                                            Text="{x:Static assets:Resources.Home_Cameras_Brightness_Header}" />
+                                        <TextBlock FontSize="12" Text="{x:Static assets:Resources.Home_Cameras_Brightness_Description}" />
                                     </StackPanel>
                                     <Slider
                                         Grid.Column="0"

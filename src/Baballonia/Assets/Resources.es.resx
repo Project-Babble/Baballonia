@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -118,105 +118,105 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Settings_Theme_Dark_Content" xml:space="preserve">
-    <value>Dark</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Settings_Theme_Default_Content" xml:space="preserve">
-    <value>Default</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Settings_Theme_Light_Content" xml:space="preserve">
-    <value>Light</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Title_Header" xml:space="preserve">
-    <value>Home</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Settings_Theme_Header" xml:space="preserve">
-    <value>TBD</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Settings_Theme_Description" xml:space="preserve">
-    <value>TDB</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Settings_OSC_Description" xml:space="preserve">
-    <value>TBD</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Settings_OSC_Header" xml:space="preserve">
-    <value>TBD</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Eye_Calibration" xml:space="preserve">
-    <value>Eye Calibration</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Left_Camera_Address" xml:space="preserve">
-    <value>Left Camera Address</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Common_Start_Typing" xml:space="preserve">
-    <value>Start typing...</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Cameras_Start_Camera" xml:space="preserve">
-    <value>Start Camera</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Cameras_Stop_Camera" xml:space="preserve">
-    <value>Stop Camera</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Cameras_Tracking_Mode" xml:space="preserve">
-    <value>Tracking</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Cameras_Cropping_Mode" xml:space="preserve">
-    <value>Cropping</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Left_Camera_Select_Entire_Frame" xml:space="preserve">
-    <value>Select Left Frame</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Cameras_Vertical_Flip_Header" xml:space="preserve">
-    <value>Vertical Flip</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Cameras_Vertical_Flip_Description" xml:space="preserve">
-    <value>Flip the image vertically</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Cameras_Horizontal_Flip_Header" xml:space="preserve">
-    <value>Horizontal flip</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Cameras_Horizontal_Flip_Description" xml:space="preserve">
-    <value>Flip the image horizontally</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Cameras_Rotation_Description" xml:space="preserve">
-    <value>Rotates the image in a circle</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Cameras_Brightness_Header" xml:space="preserve">
-    <value>Image Brightness</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Cameras_Rotation_Header" xml:space="preserve">
-    <value>Image Rotation</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Cameras_Brightness_Description" xml:space="preserve">
-    <value>Adjust the brightness of the image</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Right_Camera_Address" xml:space="preserve">
-    <value>Right Camera Address</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Right_Camera_Select_Entire_Frame" xml:space="preserve">
-    <value>Select Right Frame</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Face_Camera_Address" xml:space="preserve">
-    <value>Face Camera Address</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Face_Camera_Select_Entire_Frame" xml:space="preserve">
-    <value>Select Face Frame</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Left_Camera_Header" xml:space="preserve">
-    <value>Left Eye Camera</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Face_Camera_Header" xml:space="preserve">
-    <value>Face Camera</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Right_Camera_Header" xml:space="preserve">
-    <value>Right Eye Camera</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Left_Camera_Settings" xml:space="preserve">
-    <value>Left Camera Settings</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Face_Camera_Settings" xml:space="preserve">
-    <value>Face Camera Settings</value>
+    <value>&lt;Text&gt;</value>
   </data>
   <data name="Home_Right_Camera_Settings" xml:space="preserve">
-    <value>Right Camera Settings</value>
+    <value>&lt;Text&gt;</value>
   </data>
 </root>

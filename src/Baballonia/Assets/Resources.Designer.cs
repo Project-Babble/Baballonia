@@ -70,6 +70,24 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Adjust the brightness of the image.
+        /// </summary>
+        public static string Home_Cameras_Brightness_Description {
+            get {
+                return ResourceManager.GetString("Home_Cameras_Brightness_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image Brightness.
+        /// </summary>
+        public static string Home_Cameras_Brightness_Header {
+            get {
+                return ResourceManager.GetString("Home_Cameras_Brightness_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cropping.
         /// </summary>
         public static string Home_Cameras_Cropping_Mode {
@@ -93,6 +111,24 @@ namespace Baballonia.Assets {
         public static string Home_Cameras_Horizontal_Flip_Header {
             get {
                 return ResourceManager.GetString("Home_Cameras_Horizontal_Flip_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rotates the image in a circle.
+        /// </summary>
+        public static string Home_Cameras_Rotation_Description {
+            get {
+                return ResourceManager.GetString("Home_Cameras_Rotation_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image Rotation.
+        /// </summary>
+        public static string Home_Cameras_Rotation_Header {
+            get {
+                return ResourceManager.GetString("Home_Cameras_Rotation_Header", resourceCulture);
             }
         }
         
@@ -151,11 +187,56 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Face Camera Address.
+        /// </summary>
+        public static string Home_Face_Camera_Address {
+            get {
+                return ResourceManager.GetString("Home_Face_Camera_Address", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Face Camera.
+        /// </summary>
+        public static string Home_Face_Camera_Header {
+            get {
+                return ResourceManager.GetString("Home_Face_Camera_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Face Frame.
+        /// </summary>
+        public static string Home_Face_Camera_Select_Entire_Frame {
+            get {
+                return ResourceManager.GetString("Home_Face_Camera_Select_Entire_Frame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Face Camera Settings.
+        /// </summary>
+        public static string Home_Face_Camera_Settings {
+            get {
+                return ResourceManager.GetString("Home_Face_Camera_Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Left Camera Address.
         /// </summary>
-        public static string Home_Left_Camera_Display_Address {
+        public static string Home_Left_Camera_Address {
             get {
-                return ResourceManager.GetString("Home_Left_Camera_Display_Address", resourceCulture);
+                return ResourceManager.GetString("Home_Left_Camera_Address", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Left Eye Camera.
+        /// </summary>
+        public static string Home_Left_Camera_Header {
+            get {
+                return ResourceManager.GetString("Home_Left_Camera_Header", resourceCulture);
             }
         }
         
@@ -165,6 +246,51 @@ namespace Baballonia.Assets {
         public static string Home_Left_Camera_Select_Entire_Frame {
             get {
                 return ResourceManager.GetString("Home_Left_Camera_Select_Entire_Frame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Left Camera Settings.
+        /// </summary>
+        public static string Home_Left_Camera_Settings {
+            get {
+                return ResourceManager.GetString("Home_Left_Camera_Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Right Camera Address.
+        /// </summary>
+        public static string Home_Right_Camera_Address {
+            get {
+                return ResourceManager.GetString("Home_Right_Camera_Address", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Right Eye Camera.
+        /// </summary>
+        public static string Home_Right_Camera_Header {
+            get {
+                return ResourceManager.GetString("Home_Right_Camera_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Right Frame.
+        /// </summary>
+        public static string Home_Right_Camera_Select_Entire_Frame {
+            get {
+                return ResourceManager.GetString("Home_Right_Camera_Select_Entire_Frame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Right Camera Settings.
+        /// </summary>
+        public static string Home_Right_Camera_Settings {
+            get {
+                return ResourceManager.GetString("Home_Right_Camera_Settings", resourceCulture);
             }
         }
         
