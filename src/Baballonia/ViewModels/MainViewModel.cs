@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Threading;
 using Baballonia.Views;
 using Baballonia.Models;
 using Baballonia.Services;
@@ -12,6 +13,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.Logging;
 
 namespace Baballonia.ViewModels;
 
@@ -19,16 +21,39 @@ public partial class MainViewModel : ViewModelBase
 {
     private readonly DropOverlayService _dropOverlayService;
 
-    public MainViewModel(IMessenger messenger)
+    public MainViewModel() : this(
+        Ioc.Default.GetRequiredService<UpdateService>(),
+        Ioc.Default.GetService<ILogger<MainViewModel>>()!
+    )
     {
-        Items = Utils.IsSupportedDesktopOS ?
-            new ObservableCollection<ListItemTemplate>(_desktopTemplates) :
-            new ObservableCollection<ListItemTemplate>(_mobileTemplates);
+    }
+
+    public MainViewModel(UpdateService updateService, ILogger<MainViewModel> logger)
+    {
+        Items = Utils.IsSupportedDesktopOS
+            ? new ObservableCollection<ListItemTemplate>(_desktopTemplates)
+            : new ObservableCollection<ListItemTemplate>(_mobileTemplates);
 
         SelectedListItem = Items.First(vm => vm.ModelType == typeof(HomePageViewModel));
 
         _dropOverlayService = Ioc.Default.GetService<DropOverlayService>()!;
         _dropOverlayService.ShowOverlayChanged += SetOverlay;
+
+
+        Task.Run(async () =>
+        {
+            var isLatest = await updateService.IsLatest();
+            Version? latestVer = null;
+            if (!isLatest)
+                latestVer = await updateService.TryGetLatestVersion();
+
+            await Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                logger.LogInformation(isLatest
+                    ? "The current version is latest!"
+                    : $"New version {latestVer!.ToString()} available");
+            });
+        });
     }
 
     private void SetOverlay(bool show)
@@ -54,17 +79,12 @@ public partial class MainViewModel : ViewModelBase
         new(typeof(AppSettingsViewModel), "SettingsRegular", "Settings"),
     ];
 
-    public MainViewModel() : this(new WeakReferenceMessenger()) { }
-
-    [ObservableProperty]
-    private bool _isPaneOpen;
-    [ObservableProperty]
-    private bool _isDropOverlayVisible;
+    [ObservableProperty] private bool _isPaneOpen;
+    [ObservableProperty] private bool _isDropOverlayVisible;
 
     [ObservableProperty] private ViewModelBase _currentPage;
 
-    [ObservableProperty]
-    private ListItemTemplate? _selectedListItem;
+    [ObservableProperty] private ListItemTemplate? _selectedListItem;
 
     partial void OnSelectedListItemChanged(ListItemTemplate? value)
     {
@@ -82,6 +102,7 @@ public partial class MainViewModel : ViewModelBase
         if (tmp is IDisposable disposable)
             disposable.Dispose();
     }
+
     private object CreateInstance(Type type)
     {
         // Manually resolve dependencies without container tracking

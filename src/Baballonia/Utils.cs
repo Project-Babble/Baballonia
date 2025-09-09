@@ -120,4 +120,34 @@ public static class Utils
         var hash = hasher.ComputeHash(stream);
         return BitConverter.ToString(hash).Replace("-", "");
     }
+
+
+    /// <summary>
+    /// Tries to find a Version in a string using sliding window search
+    /// </summary>
+    /// <param name="str">input string</param>
+    /// <returns>A valid Version or null on faliure</returns>
+    public static Version? FindVersionInString(string str)
+    {
+        if (str == null)
+            return null;
+        var semVersionSize = "1.2.3.4".Length;
+        if (str.Length < semVersionSize)
+            return null;
+
+        Version? ver = null;
+        for (var i = 0; i <= str.Length - semVersionSize; i++)
+        {
+            try
+            {
+                ver = new Version(str.Substring(i, semVersionSize));
+            }
+            catch(Exception)
+            {
+                //ignore
+            }
+        }
+
+        return ver;
+    }
 }

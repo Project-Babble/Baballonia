@@ -97,6 +97,7 @@ public class App : Application
                 services.AddSingleton<IMainService, MainStandalone>();
                 services.AddSingleton<ICalibrationService, CalibrationService>();
                 services.AddSingleton<DropOverlayService>();
+                services.AddSingleton<UpdateService>();
 
                 services.AddSingleton<MainViewModel>();
                 services.AddSingleton<MainWindow>();
