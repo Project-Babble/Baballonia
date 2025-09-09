@@ -88,7 +88,7 @@
           <TextBlock
               Grid.Row="1"
               Grid.Column="0"
-              Text="Receive Port" />
+              Text="{x:Static assets:Resources.Settings_OSC_ReceivePort_Label}" />
           <TextBox
               x:Name="OscTargetInPort"
               Grid.Row="1"

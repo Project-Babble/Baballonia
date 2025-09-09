@@ -130,16 +130,16 @@
     <value>Home</value>
   </data>
   <data name="Settings_Theme_Header" xml:space="preserve">
-    <value>TBD</value>
+    <value>App theme</value>
   </data>
   <data name="Settings_Theme_Description" xml:space="preserve">
-    <value>TDB</value>
+    <value>Select which app theme to display</value>
   </data>
   <data name="Settings_OSC_Description" xml:space="preserve">
-    <value>TBD</value>
+    <value>Where should OSC data be sent?</value>
   </data>
   <data name="Settings_OSC_Header" xml:space="preserve">
-    <value>TBD</value>
+    <value>OSC</value>
   </data>
   <data name="Home_Eye_Calibration" xml:space="preserve">
     <value>Eye Calibration</value>
@@ -403,13 +403,34 @@
     <value>Output</value>
   </data>
   <data name="Output_CopyButton_Tooltip" xml:space="preserve">
-    <value>Copy the log's output to your clipboard</value> 
+    <value>Copy the log's output to your clipboard</value>
   </data>
   <data name="Output_SaveButton_Tooltip" xml:space="preserve">
     <value>Save the log's output</value>
   </data>
   <data name="Output_OpenLoggingDirectoryButton_Tooltip" xml:space="preserve">
     <value>Open the logging directory</value>
+  </data>
+  <data name="Onboarding_Welcome_Message" xml:space="preserve">
+    <value>This wizard will guide you through setting up the new Babble App.</value>
+  </data>
+  <data name="Onboarding_Wireless_Header" xml:space="preserve">
+    <value>Wired or Wireless?</value>
+  </data>
+  <data name="Onboarding_Wireless_Description1" xml:space="preserve">
+    <value>With newer Babbles, you'll need to perform a first time setup in the Firmware tab (Icon above).</value>
+  </data>
+  <data name="Onboarding_Wireless_Description2" xml:space="preserve">
+    <value>It only takes 2 minutes! Select your tracker and mode (wired or wireless). It's that simple.</value>
+  </data>
+  <data name="Onboarding_Wireless_Note" xml:space="preserve">
+    <value>Please note newer trackers have a 20-second window before they enter camera mode.</value>
+  </data>
+  <data name="Onboarding_Assembly_Header" xml:space="preserve">
+    <value>Assemble Your Tracker</value>
+  </data>
+  <data name="Onboarding_Assembly_Description" xml:space="preserve">
+    <value>If you need help putting your tracker together, here's a useful Youtube tutorial!</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
     <value>App Settings</value>
@@ -500,5 +521,56 @@
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>Launch</value>
+  </data>
+  <data name="Onboarding_Skip_Button" xml:space="preserve">
+    <value>Skip</value>
+  </data>
+  <data name="Onboarding_UI_Header" xml:space="preserve">
+    <value>Where is everything?</value>
+  </data>
+  <data name="Onboarding_UI_Home_Description" xml:space="preserve">
+    <value>The {0} is where you can set up your cameras, and {1}.</value>
+  </data>
+  <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
+    <value>The {0} can be used to tweak your eye/face expressions individually.</value>
+  </data>
+  <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
+    <value>The {0} is used to set up your device, or reset it.</value>
+  </data>
+  <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
+    <value>The {0} is used to alter VRChat/VRCFaceTracking specific settings.</value>
+  </data>
+  <data name="Onboarding_UI_Output_Description" xml:space="preserve">
+    <value>The {0} shows the status of the app, {1} and other useful information.</value>
+  </data>
+  <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
+    <value>The {0} is for general app settings, such as {1} and more.</value>
+  </data>
+  <data name="Onboarding_Complete_Header" xml:space="preserve">
+    <value>Setup Complete!</value>
+  </data>
+  <data name="Onboarding_Complete_Description1" xml:space="preserve">
+    <value>You're all set to start using the new Babble App!</value>
+  </data>
+  <data name="Onboarding_Complete_Description2" xml:space="preserve">
+    <value>You can revisit this page in the settings.</value>
+  </data>
+  <data name="Settings_OSC_IP_Label" xml:space="preserve">
+    <value>IP Address</value>
+  </data>
+  <data name="Settings_OSC_Prefix_Label" xml:space="preserve">
+    <value>OSC Prefix</value>
+  </data>
+  <data name="Settings_OSC_Recalibrate_Label" xml:space="preserve">
+    <value>Recalibrate Address</value>
+  </data>
+  <data name="Settings_OSC_Recenter_Label" xml:space="preserve">
+    <value>Recenter Address</value>
+  </data>
+  <data name="Settings_OSC_SendPort_Label" xml:space="preserve">
+    <value>Send Port</value>
+  </data>
+  <data name="Settings_OSC_ReceivePort_Label" xml:space="preserve">
+    <value>Receive Port</value>
   </data>
 </root>

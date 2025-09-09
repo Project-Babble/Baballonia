@@ -4,6 +4,7 @@
     mc:Ignorable="d"
     x:Class="Baballonia.Views.OnboardingView"
     x:DataType="viewModels:OnboardingViewModel"
+    xmlns:assets="clr-namespace:Baballonia.Assets"
     xmlns="https://github.com/avaloniaui"
     xmlns:controls="clr-namespace:HyperText.Avalonia.Controls;assembly=HyperText.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -43,7 +44,7 @@
 
                     <Button
                         Command="{Binding FinishCommand}"
-                        Content="Skip"
+                        Content="{x:Static assets:Resources.Onboarding_Skip_Button}"
                         Grid.Column="1"
                         HorizontalAlignment="Right"
                         Padding="12,6"
@@ -65,7 +66,7 @@
                         <TextBlock
                             FontSize="16"
                             HorizontalAlignment="Center"
-                            Text="This wizard will guide you through setting up the new Babble App."
+                            Text="{x:Static assets:Resources.Onboarding_Welcome_Message}"
                             TextWrapping="Wrap" />
                     </StackPanel>
 
@@ -83,22 +84,22 @@
                         <TextBlock
                             FontSize="20"
                             FontWeight="Bold"
-                            Text="Wired or Wireless?" />
+                            Text="{x:Static assets:Resources.Onboarding_Wireless_Header}" />
 
                         <TextBlock
                             FontSize="16"
-                            Text="With newer Babbles, you'll need to perform a first time setup in the Firmware tab (Icon above)."
+                            Text="{x:Static assets:Resources.Onboarding_Wireless_Description1}"
                             TextWrapping="Wrap" />
 
                         <TextBlock
                           FontSize="16"
-                          Text="It only takes 2 minutes! Select your tracker and mode (wired or wireless). It's that simple."
+                          Text="{x:Static assets:Resources.Onboarding_Wireless_Description2}"
                           TextWrapping="Wrap" />
 
                         <TextBlock
                           FontSize="16"
                           FontStyle="Italic"
-                          Text="Please note newer trackers have a 20-second window before they enter camera mode."
+                          Text="{x:Static assets:Resources.Onboarding_Wireless_Note}"
                           TextWrapping="Wrap" />
                     </StackPanel>
 
@@ -111,10 +112,10 @@
                         <TextBlock
                             FontSize="20"
                             FontWeight="Bold"
-                            Text="Assemble Your Tracker" />
+                            Text="{x:Static assets:Resources.Onboarding_Assembly_Header}" />
                         <TextBlock
                             FontSize="16"
-                            Text="If you need help putting your tracker together, here's a useful Youtube tutorial!"
+                            Text="{x:Static assets:Resources.Onboarding_Assembly_Description}"
                             TextWrapping="Wrap" />
                         <controls:Hyperlink
                             Alias="Babble Youtube Page"
@@ -132,17 +133,23 @@
                         <TextBlock
                             FontSize="20"
                             FontWeight="Bold"
-                            Text="Where is everything?" />
+                            Text="{x:Static assets:Resources.Onboarding_UI_Header}" />
                         <TextBlock
                             FontSize="16"
                             HorizontalAlignment="Center"
                             MaxWidth="450"
                             TextWrapping="Wrap">
 
-                            <Run Text="1. The" />
-                            <Run FontWeight="Bold" Text="Home Page" />
-                            <Run Text="is where you can set up your cameras, and" />
-                            <Run FontStyle="Italic" Text="calibrate your eye tracking." />
+                            <Run Text="1. " />
+                            <Run>
+                                <Run.Text>
+                                    <MultiBinding StringFormat="{}">
+                                        <Binding Source="{x:Static assets:Resources.Onboarding_UI_Home_Description}" />
+                                        <Binding Source="Home Page" />
+                                        <Binding Source="calibrate your eye tracking" />
+                                    </MultiBinding>
+                                </Run.Text>
+                            </Run>
                             <LineBreak />
 
                             <Run Text="2. The" />
@@ -186,12 +193,14 @@
                             FontSize="24"
                             FontWeight="Bold"
                             HorizontalAlignment="Center"
-                            Text="Setup Complete!" />
+                            Text="{x:Static assets:Resources.Onboarding_Complete_Header}" />
                         <TextBlock
                             FontSize="16"
-                            Text="You're all set to start using the new Babble App!"
+                            Text="{x:Static assets:Resources.Onboarding_Complete_Description1}"
                             TextWrapping="Wrap" />
-                        <TextBlock FontSize="16" Text="You can revisit this page in the settings." />
+                        <TextBlock 
+                            FontSize="16" 
+                            Text="{x:Static assets:Resources.Onboarding_Complete_Description2}" />
                     </StackPanel>
                 </Carousel>
 

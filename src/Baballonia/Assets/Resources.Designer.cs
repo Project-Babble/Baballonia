@@ -790,7 +790,448 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TBD.
+        ///   Looks up a localized string similar to If you need help putting your tracker together, here&apos;s a useful Youtube tutorial!.
+        /// </summary>
+        public static string Onboarding_Assembly_Description {
+            get {
+                return ResourceManager.GetString("Onboarding_Assembly_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assemble Your Tracker.
+        /// </summary>
+        public static string Onboarding_Assembly_Header {
+            get {
+                return ResourceManager.GetString("Onboarding_Assembly_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You&apos;re all set to start using the new Babble App!.
+        /// </summary>
+        public static string Onboarding_Complete_Description1 {
+            get {
+                return ResourceManager.GetString("Onboarding_Complete_Description1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can revisit this page in the settings..
+        /// </summary>
+        public static string Onboarding_Complete_Description2 {
+            get {
+                return ResourceManager.GetString("Onboarding_Complete_Description2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setup Complete!.
+        /// </summary>
+        public static string Onboarding_Complete_Header {
+            get {
+                return ResourceManager.GetString("Onboarding_Complete_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skip.
+        /// </summary>
+        public static string Onboarding_Skip_Button {
+            get {
+                return ResourceManager.GetString("Onboarding_Skip_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The {0} can be used to tweak your eye/face expressions individually..
+        /// </summary>
+        public static string Onboarding_UI_Calibration_Description {
+            get {
+                return ResourceManager.GetString("Onboarding_UI_Calibration_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The {0} is used to set up your device, or reset it..
+        /// </summary>
+        public static string Onboarding_UI_Firmware_Description {
+            get {
+                return ResourceManager.GetString("Onboarding_UI_Firmware_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Where is everything?.
+        /// </summary>
+        public static string Onboarding_UI_Header {
+            get {
+                return ResourceManager.GetString("Onboarding_UI_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The {0} is where you can set up your cameras, and {1}..
+        /// </summary>
+        public static string Onboarding_UI_Home_Description {
+            get {
+                return ResourceManager.GetString("Onboarding_UI_Home_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The {0} shows the status of the app, {1} and other useful information..
+        /// </summary>
+        public static string Onboarding_UI_Output_Description {
+            get {
+                return ResourceManager.GetString("Onboarding_UI_Output_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The {0} is for general app settings, such as {1} and more..
+        /// </summary>
+        public static string Onboarding_UI_Settings_Description {
+            get {
+                return ResourceManager.GetString("Onboarding_UI_Settings_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The {0} is used to alter VRChat/VRCFaceTracking specific settings..
+        /// </summary>
+        public static string Onboarding_UI_VRChat_Description {
+            get {
+                return ResourceManager.GetString("Onboarding_UI_VRChat_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This wizard will guide you through setting up the new Babble App..
+        /// </summary>
+        public static string Onboarding_Welcome_Message {
+            get {
+                return ResourceManager.GetString("Onboarding_Welcome_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to With newer Babbles, you&apos;ll need to perform a first time setup in the Firmware tab (Icon above)..
+        /// </summary>
+        public static string Onboarding_Wireless_Description1 {
+            get {
+                return ResourceManager.GetString("Onboarding_Wireless_Description1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It only takes 2 minutes! Select your tracker and mode (wired or wireless). It&apos;s that simple..
+        /// </summary>
+        public static string Onboarding_Wireless_Description2 {
+            get {
+                return ResourceManager.GetString("Onboarding_Wireless_Description2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wired or Wireless?.
+        /// </summary>
+        public static string Onboarding_Wireless_Header {
+            get {
+                return ResourceManager.GetString("Onboarding_Wireless_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please note newer trackers have a 20-second window before they enter camera mode..
+        /// </summary>
+        public static string Onboarding_Wireless_Note {
+            get {
+                return ResourceManager.GetString("Onboarding_Wireless_Note", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy the log&apos;s output to your clipboard.
+        /// </summary>
+        public static string Output_CopyButton_Tooltip {
+            get {
+                return ResourceManager.GetString("Output_CopyButton_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open the logging directory.
+        /// </summary>
+        public static string Output_OpenLoggingDirectoryButton_Tooltip {
+            get {
+                return ResourceManager.GetString("Output_OpenLoggingDirectoryButton_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save the log&apos;s output.
+        /// </summary>
+        public static string Output_SaveButton_Tooltip {
+            get {
+                return ResourceManager.GetString("Output_SaveButton_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output.
+        /// </summary>
+        public static string Output_Title_Header {
+            get {
+                return ResourceManager.GetString("Output_Title_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter Settings.
+        /// </summary>
+        public static string Settings_Filter_Description {
+            get {
+                return ResourceManager.GetString("Settings_Filter_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Turn filtering on or off..
+        /// </summary>
+        public static string Settings_Filter_Enabled_Description {
+            get {
+                return ResourceManager.GetString("Settings_Filter_Enabled_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enabled.
+        /// </summary>
+        public static string Settings_Filter_Enabled_Label {
+            get {
+                return ResourceManager.GetString("Settings_Filter_Enabled_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One-Euro filter settings.
+        /// </summary>
+        public static string Settings_Filter_Header {
+            get {
+                return ResourceManager.GetString("Settings_Filter_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Controls how much smoothing is applied to slow movements.
+        /// </summary>
+        public static string Settings_Filter_MinFreq_Description {
+            get {
+                return ResourceManager.GetString("Settings_Filter_MinFreq_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimum frequency cutoff.
+        /// </summary>
+        public static string Settings_Filter_MinFreq_Label {
+            get {
+                return ResourceManager.GetString("Settings_Filter_MinFreq_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Determines how the filter adapts when you move faster.
+        /// </summary>
+        public static string Settings_Filter_Speed_Description {
+            get {
+                return ResourceManager.GetString("Settings_Filter_Speed_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Speed coefficient.
+        /// </summary>
+        public static string Settings_Filter_Speed_Label {
+            get {
+                return ResourceManager.GetString("Settings_Filter_Speed_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to High ({0}).
+        /// </summary>
+        public static string Settings_Filter_Template_High {
+            get {
+                return ResourceManager.GetString("Settings_Filter_Template_High", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Low ({0}).
+        /// </summary>
+        public static string Settings_Filter_Template_Low {
+            get {
+                return ResourceManager.GetString("Settings_Filter_Template_Low", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Medium ({0}).
+        /// </summary>
+        public static string Settings_Filter_Template_Medium {
+            get {
+                return ResourceManager.GetString("Settings_Filter_Template_Medium", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select from a template.
+        /// </summary>
+        public static string Settings_Filter_Template_Placeholder {
+            get {
+                return ResourceManager.GetString("Settings_Filter_Template_Placeholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Launch.
+        /// </summary>
+        public static string Settings_FirstTime_Button {
+            get {
+                return ResourceManager.GetString("Settings_FirstTime_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Relaunches the first time setup.
+        /// </summary>
+        public static string Settings_FirstTime_Description {
+            get {
+                return ResourceManager.GetString("Settings_FirstTime_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Launch first time setup.
+        /// </summary>
+        public static string Settings_FirstTime_Header {
+            get {
+                return ResourceManager.GetString("Settings_FirstTime_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use your GPU to make things run faster! Requires restart.
+        /// </summary>
+        public static string Settings_GPU_Description {
+            get {
+                return ResourceManager.GetString("Settings_GPU_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use GPU acceleration.
+        /// </summary>
+        public static string Settings_GPU_Header {
+            get {
+                return ResourceManager.GetString("Settings_GPU_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 中文.
+        /// </summary>
+        public static string Settings_Language_Chinese {
+            get {
+                return ResourceManager.GetString("Settings_Language_Chinese", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default.
+        /// </summary>
+        public static string Settings_Language_Default {
+            get {
+                return ResourceManager.GetString("Settings_Language_Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set the app&apos;s language.
+        /// </summary>
+        public static string Settings_Language_Description {
+            get {
+                return ResourceManager.GetString("Settings_Language_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to English.
+        /// </summary>
+        public static string Settings_Language_English {
+            get {
+                return ResourceManager.GetString("Settings_Language_English", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        public static string Settings_Language_Header {
+            get {
+                return ResourceManager.GetString("Settings_Language_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 日本語.
+        /// </summary>
+        public static string Settings_Language_Japanese {
+            get {
+                return ResourceManager.GetString("Settings_Language_Japanese", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Polski.
+        /// </summary>
+        public static string Settings_Language_Polish {
+            get {
+                return ResourceManager.GetString("Settings_Language_Polish", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Español.
+        /// </summary>
+        public static string Settings_Language_Spanish {
+            get {
+                return ResourceManager.GetString("Settings_Language_Spanish", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimum logging level. Requires restart.
+        /// </summary>
+        public static string Settings_LogLevel_Description {
+            get {
+                return ResourceManager.GetString("Settings_LogLevel_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log Level Verbosity.
+        /// </summary>
+        public static string Settings_LogLevel_Header {
+            get {
+                return ResourceManager.GetString("Settings_LogLevel_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Where should OSC data be sent?.
         /// </summary>
         public static string Settings_OSC_Description {
             get {
@@ -799,11 +1240,65 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TBD.
+        ///   Looks up a localized string similar to OSC.
         /// </summary>
         public static string Settings_OSC_Header {
             get {
                 return ResourceManager.GetString("Settings_OSC_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to IP Address.
+        /// </summary>
+        public static string Settings_OSC_IP_Label {
+            get {
+                return ResourceManager.GetString("Settings_OSC_IP_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OSC Prefix.
+        /// </summary>
+        public static string Settings_OSC_Prefix_Label {
+            get {
+                return ResourceManager.GetString("Settings_OSC_Prefix_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recalibrate Address.
+        /// </summary>
+        public static string Settings_OSC_Recalibrate_Label {
+            get {
+                return ResourceManager.GetString("Settings_OSC_Recalibrate_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Receive Port.
+        /// </summary>
+        public static string Settings_OSC_ReceivePort_Label {
+            get {
+                return ResourceManager.GetString("Settings_OSC_ReceivePort_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recenter Address.
+        /// </summary>
+        public static string Settings_OSC_Recenter_Label {
+            get {
+                return ResourceManager.GetString("Settings_OSC_Recenter_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send Port.
+        /// </summary>
+        public static string Settings_OSC_SendPort_Label {
+            get {
+                return ResourceManager.GetString("Settings_OSC_SendPort_Label", resourceCulture);
             }
         }
         
@@ -826,7 +1321,7 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TDB.
+        ///   Looks up a localized string similar to Select which app theme to display.
         /// </summary>
         public static string Settings_Theme_Description {
             get {
@@ -835,7 +1330,7 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TBD.
+        ///   Looks up a localized string similar to App theme.
         /// </summary>
         public static string Settings_Theme_Header {
             get {
@@ -849,6 +1344,87 @@ namespace Baballonia.Assets {
         public static string Settings_Theme_Light_Content {
             get {
                 return ResourceManager.GetString("Settings_Theme_Light_Content", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to App Settings.
+        /// </summary>
+        public static string Settings_Title_Header {
+            get {
+                return ResourceManager.GetString("Settings_Title_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should the app check for updates on start?.
+        /// </summary>
+        public static string Settings_Updates_Description {
+            get {
+                return ResourceManager.GetString("Settings_Updates_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check For Updates.
+        /// </summary>
+        public static string Settings_Updates_Header {
+            get {
+                return ResourceManager.GetString("Settings_Updates_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send only eye, only face or both? (Change requires VRCFT restart).
+        /// </summary>
+        public static string VRC_ModuleMode_Description {
+            get {
+                return ResourceManager.GetString("VRC_ModuleMode_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set VRCFT module mode.
+        /// </summary>
+        public static string VRC_ModuleMode_Header {
+            get {
+                return ResourceManager.GetString("VRC_ModuleMode_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a mode....
+        /// </summary>
+        public static string VRC_ModuleMode_Placeholder {
+            get {
+                return ResourceManager.GetString("VRC_ModuleMode_Placeholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to VRChat + VRCFaceTracking Settings.
+        /// </summary>
+        public static string VRC_Title_Header {
+            get {
+                return ResourceManager.GetString("VRC_Title_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Brings eye tracking to avatars that do not have VRCFaceTracking.
+        /// </summary>
+        public static string VRC_UseNativeEyeTracking_Description {
+            get {
+                return ResourceManager.GetString("VRC_UseNativeEyeTracking_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Native VRC Eye Tracking.
+        /// </summary>
+        public static string VRC_UseNativeEyeTracking_Header {
+            get {
+                return ResourceManager.GetString("VRC_UseNativeEyeTracking_Header", resourceCulture);
             }
         }
     }
