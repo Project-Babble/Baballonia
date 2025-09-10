@@ -1,0 +1,9 @@
+files:
+  - source: /src/Baballonia/Assets/
+    ignore:
+      - '*.ico'
+      - '*png'
+      - '*.db'
+      - '*.cs'
+      - '*axaml'
+    translation: '%original_path%'

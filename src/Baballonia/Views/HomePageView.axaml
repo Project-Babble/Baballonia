@@ -54,13 +54,41 @@
                 </SplitButton>
             </Grid>
 
+            <!-- Admin Warning Banner -->
+            <Border
+                Background="Orange"
+                CornerRadius="8"
+                IsVisible="{Binding IsRunningAsAdmin}"
+                Margin="0,0,0,16"
+                Padding="16,12">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <PathIcon
+                        Data="{StaticResource WarningRegular}"
+                        Foreground="Black"
+                        Height="20"
+                        Width="20" />
+                    <StackPanel Spacing="4">
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Foreground="Black"
+                            Text="Administrator Mode Warning" />
+                        <TextBlock
+                            FontSize="14"
+                            Foreground="Black"
+                            Text="Do not run Baballonia as admin! There is no need, and it prevents eye tracking calibrations from working."
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
             <Grid
                 ColumnDefinitions="2*,1*"
                 HorizontalAlignment="Stretch"
                 RowDefinitions="Auto"
                 x:Name="CameraControlsGrid">
                 <Grid ColumnDefinitions="1*,1*" x:Name="EyesGrid">
-                    <!--  Left Panel  -->
+                    <!--  Left Eye Panel  -->
                     <Grid
                         IsEnabled="{x:Static utils:Utils.IsSupportedDesktopOS}"
                         IsVisible="{x:Static utils:Utils.IsSupportedDesktopOS}"
@@ -292,7 +320,7 @@
                         </Expander>
                     </Grid>
 
-                    <!--  Center Panel  -->
+                    <!--  Right Eye Panel  -->
                     <Grid
                         IsEnabled="{x:Static utils:Utils.IsSupportedDesktopOS}"
                         IsVisible="{x:Static utils:Utils.IsSupportedDesktopOS}"
@@ -525,7 +553,8 @@
                     </Grid>
 
                 </Grid>
-                <!--  Right Panel  -->
+
+                <!--  Face Panel  -->
                 <Grid RowDefinitions="Auto,Auto,Auto,Auto" VerticalAlignment="Top">
                     <TextBlock
                         FontSize="20"
