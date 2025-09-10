@@ -12,6 +12,15 @@
   x:DataType="splitViewPane:CalibrationViewModel"
   mc:Ignorable="d">
 
+  <UserControl.Styles>
+    <Style Selector="twoRangeSlider|RangeSlider.EyeMovementReadOnly /template/ Thumb.LowerThumbStyle">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="twoRangeSlider|RangeSlider.EyeMovementReadOnly /template/ Thumb.UpperThumbStyle">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+  </UserControl.Styles>
+
   <ScrollViewer>
     <StackPanel Classes="Page">
       <Grid ColumnDefinitions="*,Auto">
@@ -113,13 +122,15 @@
                         <Run Text="{Binding Upper, StringFormat={}{0:0.00}}" />
                       </TextBlock>
                       <twoRangeSlider:RangeSlider
-                        LowerSelectedValue="{Binding Lower, Mode=TwoWay}"
+                        Classes="EyeMovementReadOnly"
+                        LowerSelectedValue="{Binding Lower, Mode=OneWay}"
                         Maximum="1"
                         Minimum="-1"
                         TickFrequency="0.01"
                         ShowMiddleThumb="True"
                         MiddleSelectedValue="{Binding CurrentExpression, Mode=OneWay}"
-                        UpperSelectedValue="{Binding Upper, Mode=TwoWay}" />
+                        UpperSelectedValue="{Binding Upper, Mode=OneWay}"
+                        IsHitTestVisible="False" />
                     </StackPanel>
                   </Grid>
                 </Border>
