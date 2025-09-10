@@ -19,7 +19,7 @@ public class GithubService
 
     private static readonly HttpClient Client = new();
 
-    public async Task<List<GithubContributor>> GetContributors(string owner, string repo)
+    public async Task<List<GithubContributor>> FetchContributors(string owner, string repo)
     {
         var response = await Client.GetAsync($"https://api.github.com/repos/{owner}/{repo}/contributors");
         if (!response.IsSuccessStatusCode)
@@ -30,7 +30,7 @@ public class GithubService
         return JsonSerializer.Deserialize<List<GithubContributor>>(content)!;
     }
 
-    public async Task<GithubRelease> GetReleases(string owner, string repo)
+    public async Task<GithubRelease> FetchLatestReleaseInfo(string owner, string repo)
     {
         var response = await Client.GetAsync($"https://api.github.com/repos/{owner}/{repo}/releases/latest");
         if (!response.IsSuccessStatusCode)

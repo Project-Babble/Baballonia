@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Threading;
+using Baballonia.Contracts;
 using Baballonia.Views;
 using Baballonia.Models;
 using Baballonia.Services;
@@ -20,16 +21,24 @@ namespace Baballonia.ViewModels;
 public partial class MainViewModel : ViewModelBase
 {
     private readonly DropOverlayService _dropOverlayService;
+    private readonly UpdateService _updateService;
+    private readonly ILocalSettingsService _localSettingsService;
+    private readonly ILogger<MainViewModel> _logger;
 
     public MainViewModel() : this(
         Ioc.Default.GetRequiredService<UpdateService>(),
-        Ioc.Default.GetService<ILogger<MainViewModel>>()!
-    )
+        Ioc.Default.GetService<ILogger<MainViewModel>>()!,
+        Ioc.Default.GetService<ILocalSettingsService>()!)
     {
     }
 
-    public MainViewModel(UpdateService updateService, ILogger<MainViewModel> logger)
+    public MainViewModel(UpdateService updateService, ILogger<MainViewModel> logger,
+        ILocalSettingsService localSettingsService)
     {
+        _updateService = updateService;
+        _logger = logger;
+        _localSettingsService = localSettingsService;
+
         Items = Utils.IsSupportedDesktopOS
             ? new ObservableCollection<ListItemTemplate>(_desktopTemplates)
             : new ObservableCollection<ListItemTemplate>(_mobileTemplates);
@@ -39,22 +48,43 @@ public partial class MainViewModel : ViewModelBase
         _dropOverlayService = Ioc.Default.GetService<DropOverlayService>()!;
         _dropOverlayService.ShowOverlayChanged += SetOverlay;
 
+        PromptUpdate();
+    }
 
+    private void PromptUpdate()
+    {
         Task.Run(async () =>
         {
-            var isLatest = await updateService.IsLatest();
+            var shouldCheck = await _localSettingsService.ReadSettingAsync<bool>("AppSettings_CheckForUpdates", false);
+            if (!shouldCheck)
+                return;
+
+            var isLatest = await _updateService.IsLatest();
             Version? latestVer = null;
             if (!isLatest)
-                latestVer = await updateService.TryGetLatestVersion();
+                latestVer = await _updateService.TryGetLatestVersion();
 
-            await Dispatcher.UIThread.InvokeAsync(() =>
-            {
-                logger.LogInformation(isLatest
-                    ? "The current version is latest!"
-                    : $"New version {latestVer!.ToString()} available");
-            });
+            _logger.LogInformation(isLatest
+                ? "The current version is latest!"
+                : $"New version {latestVer!.ToString()} available");
+
+            await Dispatcher.UIThread.InvokeAsync(() => { ShouldPromptUpdate = true; }, DispatcherPriority.Background);
         });
     }
+
+    [RelayCommand]
+    private async Task OpenBrowserOnLatest()
+    {
+        await Task.Run(() => { _updateService.NavigateToLatestWebPage(); });
+        await Dispatcher.UIThread.InvokeAsync(() => { ShouldPromptUpdate = false; });
+    }
+
+    [RelayCommand]
+    private void CloseUpdatePrompt()
+    {
+        ShouldPromptUpdate = false;
+    }
+
 
     private void SetOverlay(bool show)
     {
@@ -81,9 +111,9 @@ public partial class MainViewModel : ViewModelBase
 
     [ObservableProperty] private bool _isPaneOpen;
     [ObservableProperty] private bool _isDropOverlayVisible;
+    [ObservableProperty] private bool _shouldPromptUpdate = false;
 
     [ObservableProperty] private ViewModelBase _currentPage;
-
     [ObservableProperty] private ListItemTemplate? _selectedListItem;
 
     partial void OnSelectedListItemChanged(ListItemTemplate? value)

@@ -1,100 +1,123 @@
 ﻿<UserControl
-    d:DesignHeight="600"
-    d:DesignWidth="800"
-    mc:Ignorable="d"
-    x:Class="Baballonia.Views.MainView"
-    x:DataType="viewModels:MainViewModel"
-    xmlns="https://github.com/avaloniaui"
-    xmlns:converters="clr-namespace:Baballonia.Converters"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="clr-namespace:Baballonia.Models"
-    xmlns:viewModels="clr-namespace:Baballonia.ViewModels"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="clr-namespace:Baballonia.Controls">
-    <Design.DataContext>
-        <viewModels:MainViewModel />
-    </Design.DataContext>
+  d:DesignHeight="600"
+  d:DesignWidth="800"
+  mc:Ignorable="d"
+  x:Class="Baballonia.Views.MainView"
+  x:DataType="viewModels:MainViewModel"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:converters="clr-namespace:Baballonia.Converters"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:models="clr-namespace:Baballonia.Models"
+  xmlns:viewModels="clr-namespace:Baballonia.ViewModels"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:controls="clr-namespace:Baballonia.Controls">
+  <Design.DataContext>
+    <viewModels:MainViewModel />
+  </Design.DataContext>
 
-    <SplitView
-        Background="{DynamicResource SystemChromeLowColor}"
-        CompactPaneLength="45"
-        DisplayMode="CompactInline"
-        IsPaneOpen="{Binding IsPaneOpen}"
-        OpenPaneLength="300">
-        <SplitView.Pane>
-            <StackPanel
-                HorizontalAlignment="Stretch"
-                Orientation="Vertical"
-                Spacing="5"
-                VerticalAlignment="Top">
-                <Image
-                    IsVisible="False"
-                    Margin="1,9,1,1"
-                    MaxHeight="24"
-                    MaxWidth="24"
-                    MinHeight="24"
-                    MinWidth="24"
-                    Source="/Assets/IconOpaque_32x32.png"
-                    VerticalAlignment="Center"
-                    x:Name="ApplicationSidePanelLogo" />
-                <Button
-                    Background="#00ffffff"
-                    Command="{Binding TriggerPaneCommand}"
-                    Height="32"
-                    HorizontalAlignment="Left"
-                    Margin="7,10"
-                    Width="32">
-                    <PathIcon Data="{StaticResource LineHorizontal3Regular}" Height="11" />
-                </Button>
-                <ListBox
-                    ItemsSource="{Binding Items}"
-                    Margin="0,0,-100,0"
-                    Padding="0"
-                    SelectedItem="{Binding SelectedListItem}">
-                    <ListBox.Styles>
-                        <Style Selector="ListBox">
-                            <Setter Property="Background" Value="#00000000" />
-                        </Style>
-                        <Style Selector="ListBoxItem">
-                            <Setter Property="Padding" Value="12 8" />
-                        </Style>
-                    </ListBox.Styles>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate DataType="{x:Type models:ListItemTemplate}">
-                            <StackPanel
-                                Background="#00000000"
-                                Orientation="Horizontal"
-                                Spacing="17"
-                                VerticalAlignment="Center">
-                                <PathIcon
-                                    Background="#00000000"
-                                    Data="{Binding IconKey, Converter={x:Static converters:TypeConverters.IconConverter}}"
-                                    Margin="3,0,0,0"
-                                    VerticalAlignment="Center"
-                                    Width="16" />
-                                <TextBlock Background="#00ffffff" Text="{Binding Label}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </StackPanel>
-        </SplitView.Pane>
+  <SplitView
+    Background="{DynamicResource SystemChromeLowColor}"
+    CompactPaneLength="45"
+    DisplayMode="CompactInline"
+    IsPaneOpen="{Binding IsPaneOpen}"
+    OpenPaneLength="300">
+    <SplitView.Pane>
+      <StackPanel
+        HorizontalAlignment="Stretch"
+        Orientation="Vertical"
+        Spacing="5"
+        VerticalAlignment="Top">
+        <Image
+          IsVisible="False"
+          Margin="1,9,1,1"
+          MaxHeight="24"
+          MaxWidth="24"
+          MinHeight="24"
+          MinWidth="24"
+          Source="/Assets/IconOpaque_32x32.png"
+          VerticalAlignment="Center"
+          x:Name="ApplicationSidePanelLogo" />
+        <Button
+          Background="#00ffffff"
+          Command="{Binding TriggerPaneCommand}"
+          Height="32"
+          HorizontalAlignment="Left"
+          Margin="7,10"
+          Width="32">
+          <PathIcon Data="{StaticResource LineHorizontal3Regular}" Height="11" />
+        </Button>
+        <ListBox
+          ItemsSource="{Binding Items}"
+          Margin="0,0,-100,0"
+          Padding="0"
+          SelectedItem="{Binding SelectedListItem}">
+          <ListBox.Styles>
+            <Style Selector="ListBox">
+              <Setter Property="Background" Value="#00000000" />
+            </Style>
+            <Style Selector="ListBoxItem">
+              <Setter Property="Padding" Value="12 8" />
+            </Style>
+          </ListBox.Styles>
+          <ListBox.ItemTemplate>
+            <DataTemplate DataType="{x:Type models:ListItemTemplate}">
+              <StackPanel
+                Background="#00000000"
+                Orientation="Horizontal"
+                Spacing="17"
+                VerticalAlignment="Center">
+                <PathIcon
+                  Background="#00000000"
+                  Data="{Binding IconKey, Converter={x:Static converters:TypeConverters.IconConverter}}"
+                  Margin="3,0,0,0"
+                  VerticalAlignment="Center"
+                  Width="16" />
+                <TextBlock Background="#00ffffff" Text="{Binding Label}" />
+              </StackPanel>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </StackPanel>
+    </SplitView.Pane>
 
-        <SplitView.Content>
-          <Grid>
-            <Border
-              Background="{DynamicResource SystemChromeMediumColor}"
-              CornerRadius="16 0 0 0"
-              Padding="5"
-              x:Name="ViewContainer">
-                  <TransitioningContentControl Content="{Binding CurrentPage}" />
-              </Border>
-             <controls:DropOverlay IsOverlayVisible="{Binding IsDropOverlayVisible}"/>
-             <Grid RowDefinitions="Auto">
-               <controls:DropdownMessage Title="Censored" Message="Censored" AcceptText="YES!" DeclineText="no" />
-             </Grid>
-           </Grid>
-        </SplitView.Content>
-    </SplitView>
+    <SplitView.Content>
+      <Grid>
+        <Border
+          Background="{DynamicResource SystemChromeMediumColor}"
+          CornerRadius="16 0 0 0"
+          Padding="5"
+          x:Name="ViewContainer">
+          <TransitioningContentControl Content="{Binding CurrentPage}" />
+        </Border>
+        <controls:DropOverlay IsOverlayVisible="{Binding IsDropOverlayVisible}" />
+        <Grid Margin="0 40 0 0" Classes.triggered="{Binding ShouldPromptUpdate}" RowDefinitions="Auto" IsVisible="{Binding ShouldPromptUpdate}" >
+          <Grid.Styles>
+            <Style Selector="Grid.triggered">
+              <Style.Animations>
+                <Animation Duration="0:0:0.5" IterationCount="1" Easing="QuadraticEaseInOut">
+                  <KeyFrame Cue="0%">
+                    <Setter Property="Margin" Value="0 -40 0 0"/>
+                    <Setter Property="Opacity" Value="0.0"/>
+                  </KeyFrame>
+                  <KeyFrame Cue="100%">
+                    <Setter Property="Margin" Value="0 40 0 0"/>
+                    <Setter Property="Opacity" Value="1.0"/>
+                  </KeyFrame>
+                </Animation>
+              </Style.Animations>
+            </Style>
+          </Grid.Styles>
+
+          <controls:DropdownMessage
+            Title="New app version available!"
+            Message="Some text idk"
+            AcceptText="YES!"
+            AcceptCommand="{Binding OpenBrowserOnLatestCommand}"
+            DeclineText="no"
+            DeclineCommand="{Binding CloseUpdatePromptCommand}"/>
+        </Grid>
+      </Grid>
+    </SplitView.Content>
+  </SplitView>
 </UserControl>
