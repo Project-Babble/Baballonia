@@ -98,7 +98,8 @@ public partial class HomePageView : UserControl
             SetupCropEvents(vm.RightCamera, RightMouthWindow);
             SetupCropEvents(vm.FaceCamera, FaceWindow);
 
-            vm.SelectedCalibrationText = Assets.Resources.Home_Eye_Calibration;
+            vm.SelectedCalibrationTextBlock = this.Find<TextBlock>("SelectedCalibrationTextBlockColor")!;
+            vm.SelectedCalibrationTextBlock.Text = Assets.Resources.Home_Eye_Calibration;
         };
     }
 
@@ -170,7 +171,7 @@ public partial class HomePageView : UserControl
     {
         if (sender is MenuItem menuItem && DataContext is HomePageViewModel vm)
         {
-            vm.SelectedCalibrationText = menuItem.Header?.ToString() ?? "";
+            vm.SelectedCalibrationTextBlock.Text = menuItem.Header?.ToString() ?? "";
         }
     }
 

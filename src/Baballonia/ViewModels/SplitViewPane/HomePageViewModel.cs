@@ -7,8 +7,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using Avalonia.Themes.Fluent;
 using Avalonia.Threading;
 using Baballonia.Assets;
 using Baballonia.Contracts;
@@ -397,8 +400,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     [ObservableProperty] private string _messagesOutPerSecCount;
 
     [ObservableProperty] private bool _shouldEnableEyeCalibration;
-    [ObservableProperty] private string _selectedCalibrationText;
-    [ObservableProperty] private string _selectedCalibrationTextColor = Application.ActualThemeVariantProperty.Name;
+    public TextBlock SelectedCalibrationTextBlock;
 
     public bool IsRunningAsAdmin => Utils.HasAdmin;
 
@@ -425,6 +427,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         _processingLoopService = Ioc.Default.GetService<ProcessingLoopService>()!;
         _logger = Ioc.Default.GetService<ILogger<HomePageViewModel>>()!;
         _dropOverlayService = Ioc.Default.GetService<DropOverlayService>()!;
+
         LocalSettingsService.Load(this);
 
         MessagesInPerSecCount = "0";
@@ -757,23 +760,38 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     private async Task RequestVRCalibration()
     {
         var res = await App.Overlay.EyeTrackingCalibrationRequested(CalibrationRoutine.QuickCalibration);
-        var previousTextColor = SelectedCalibrationTextColor;
         if (res.success)
         {
             await _localSettingsService.SaveSettingAsync("EyeHome_EyeModel", "tuned_temporal_eye_tracking.onnx");
             await _processingLoopService.SetupEyeInference();
-            SelectedCalibrationTextColor = "Green";
+            SelectedCalibrationTextBlock.Foreground = new SolidColorBrush(Colors.Green);
         }
         else
         {
-            SelectedCalibrationTextColor = "Red";
+            SelectedCalibrationTextBlock.Foreground =  new SolidColorBrush(Colors.Red);
         }
 
-        var previousText = SelectedCalibrationText;
-        SelectedCalibrationText = res.status;
+        var previousText = SelectedCalibrationTextBlock.Text;
+        SelectedCalibrationTextBlock.Text = res.status;
         await Task.Delay(5000);
-        SelectedCalibrationText = previousText;
-        SelectedCalibrationTextColor = previousTextColor;
+        SelectedCalibrationTextBlock.Text = previousText;
+        SelectedCalibrationTextBlock.Foreground = new SolidColorBrush(GetBaseHighColor());
+    }
+
+    private Color GetBaseHighColor()
+    {
+        Color color = Colors.White;
+        switch (Application.Current!.ActualThemeVariant.ToString())
+        {
+            case "Light":
+                color = Colors.Black;
+                break;
+            case "Dark":
+                color = Colors.White;
+                break;
+        }
+
+        return color;
     }
 
     private void MessageDispatched(int msgCount) => _messagesSent += msgCount;

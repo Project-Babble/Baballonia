@@ -32,15 +32,14 @@ public partial class AeroOverlayTrainerCombo
         }
     }
 
-    private async Task<bool> StartProcess(string program,
+    private async Task<(bool success, string message)> StartProcess(string program,
         string[]? arguments = null,
-        string[]? blacklistedPrograms = null,
         bool waitForExit = false)
     {
         // Make sure the overlay program exists
         if (!File.Exists(program))
         {
-            return false;
+            return (false, "The gaze overlay program does not exist!");
         }
 
         string processName = Path.GetFileNameWithoutExtension(program);
@@ -48,26 +47,13 @@ public partial class AeroOverlayTrainerCombo
         // Make sure program isn't already running
         if (Process.GetProcesses().Any(p => p.ProcessName == processName))
         {
-            return false;
-        }
-
-        // Check if any blacklisted programs are running
-        if (blacklistedPrograms is { Length: > 0 })
-        {
-            foreach (var blacklisted in blacklistedPrograms)
-            {
-                if (Process.GetProcesses().Any(p => p.ProcessName == Path.GetFileNameWithoutExtension(blacklisted)))
-                {
-                    return false;
-                }
-            }
+            return (false, "The gaze overlay program is already running! Please close it and try again.");
         }
 
         // Check if SteamVR is running. The overlay needs it to be running prior!
         if (!Process.GetProcesses().Any(p => p.ProcessName.ToLower().Contains("vrserver")))
         {
-            Logger.LogError("SteamVR is not running. Required for VR operations.");
-            return false;
+            return (false, "SteamVR is not running. Please run it and try again.");
         }
 
         var startInfo = new ProcessStartInfo
@@ -104,7 +90,7 @@ public partial class AeroOverlayTrainerCombo
             await process.WaitForExitAsync();
         }
 
-        return true;
+        return (true, string.Empty);
     }
 
     private bool StopProcess(string program)

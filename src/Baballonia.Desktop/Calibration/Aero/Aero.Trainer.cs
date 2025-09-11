@@ -44,13 +44,14 @@ public partial class AeroOverlayTrainerCombo
         _rightStreamService.StartStreaming(rightPort);
 
         // Tell the calibrator/overlay start...
-        var success = await StartOverlay();
+        var status = await StartOverlay();
+        var success = status.success;
         if (!success)
         {
             processingLoop.EyesProcessingPipeline.TransformedFrameEvent -= HandleEyeImageEvent;
             _leftStreamService.StopStreaming();
             _rightStreamService.StopStreaming();
-            return await Task.FromResult((false, "Failed to start overlay!"));
+            return await Task.FromResult((false, status.message));
         }
 
         // Then connect the camera streams...
@@ -77,8 +78,8 @@ public partial class AeroOverlayTrainerCombo
         var loop = true;
         while (loop)
         {
-            var status = await GetStatusAsync();
-            if (status.IsTrained)
+            var res = await GetStatusAsync();
+            if (res.IsTrained)
             {
                 loop = false;
             }
@@ -102,9 +103,9 @@ public partial class AeroOverlayTrainerCombo
         return await Task.FromResult((success, outputMessage));
     }
 
-    private async Task<bool> StartOverlay(string[]? arguments = null, string[]? blacklistedPrograms = null, bool waitForExit = false)
+    private async Task<(bool success, string message)> StartOverlay(string[]? arguments = null, bool waitForExit = false)
     {
-        return await StartProcess(Overlay, arguments, blacklistedPrograms, waitForExit);
+        return await StartProcess(Overlay, arguments, waitForExit);
     }
 
     private bool StopOverlay()
