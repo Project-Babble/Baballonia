@@ -79,6 +79,69 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to start calibration!.
+        /// </summary>
+        public static string Aero_Calibration_Failed {
+            get {
+                return ResourceManager.GetString("Aero_Calibration_Failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Eye tracking calibration successful!.
+        /// </summary>
+        public static string Aero_Calibration_Success {
+            get {
+                return ResourceManager.GetString("Aero_Calibration_Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to start camera streaming!.
+        /// </summary>
+        public static string Aero_CameraStream_Failed {
+            get {
+                return ResourceManager.GetString("Aero_CameraStream_Failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The gaze overlay program is already running! Please close it and try again..
+        /// </summary>
+        public static string Aero_Overlay_AlreadyRunning {
+            get {
+                return ResourceManager.GetString("Aero_Overlay_AlreadyRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to stop/cleanup overlay!.
+        /// </summary>
+        public static string Aero_Overlay_CleanupFailed {
+            get {
+                return ResourceManager.GetString("Aero_Overlay_CleanupFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The gaze overlay program does not exist!.
+        /// </summary>
+        public static string Aero_Overlay_NotFound {
+            get {
+                return ResourceManager.GetString("Aero_Overlay_NotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SteamVR is not running. Please run it and try again..
+        /// </summary>
+        public static string Aero_SteamVR_NotRunning {
+            get {
+                return ResourceManager.GetString("Aero_SteamVR_NotRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cheek Expressions.
         /// </summary>
         public static string Calibration_Cheek_Expressions_Header {

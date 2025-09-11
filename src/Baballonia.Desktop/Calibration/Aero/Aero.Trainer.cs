@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -61,7 +61,7 @@ public partial class AeroOverlayTrainerCombo
             processingLoop.EyesProcessingPipeline.TransformedFrameEvent -= HandleEyeImageEvent;
             _leftStreamService.StopStreaming();
             _rightStreamService.StopStreaming();
-            return await Task.FromResult((false,  "Failed to start camera streaming!"));
+            return await Task.FromResult((false, Assets.Resources.Aero_CameraStream_Failed));
         }
 
         // If we have a good start on the overlay/streams, then start calibration
@@ -71,7 +71,7 @@ public partial class AeroOverlayTrainerCombo
             processingLoop.EyesProcessingPipeline.TransformedFrameEvent -= HandleEyeImageEvent;
             _leftStreamService.StopStreaming();
             _rightStreamService.StopStreaming();
-            return await Task.FromResult((false, "Failed to start calibration!"));
+            return await Task.FromResult((false, Assets.Resources.Aero_Calibration_Failed));
         }
 
         // Wait for the process to exit
@@ -90,8 +90,8 @@ public partial class AeroOverlayTrainerCombo
         // Stop the MJPEG streams, we don't need them anymore
         success = StopOverlay();
         var outputMessage = success ?
-            "Eye tracking calibration successful!" :
-            "Failed to stop/cleanup overlay!";
+            Assets.Resources.Aero_Calibration_Success :
+            Assets.Resources.Aero_Overlay_CleanupFailed;
 
         processingLoop.EyesProcessingPipeline.TransformedFrameEvent -= HandleEyeImageEvent;
 

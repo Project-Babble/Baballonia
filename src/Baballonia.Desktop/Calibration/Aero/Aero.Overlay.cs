@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -39,7 +39,8 @@ public partial class AeroOverlayTrainerCombo
         // Make sure the overlay program exists
         if (!File.Exists(program))
         {
-            return (false, "The gaze overlay program does not exist!");
+            Logger.LogError(Assets.Resources.Aero_Overlay_NotFound);
+            return (false, Assets.Resources.Aero_Overlay_NotFound);
         }
 
         string processName = Path.GetFileNameWithoutExtension(program);
@@ -47,13 +48,15 @@ public partial class AeroOverlayTrainerCombo
         // Make sure program isn't already running
         if (Process.GetProcesses().Any(p => p.ProcessName == processName))
         {
-            return (false, "The gaze overlay program is already running! Please close it and try again.");
+            Logger.LogError(Assets.Resources.Aero_Overlay_AlreadyRunning);
+            return (false, Assets.Resources.Aero_Overlay_AlreadyRunning);
         }
 
         // Check if SteamVR is running. The overlay needs it to be running prior!
         if (!Process.GetProcesses().Any(p => p.ProcessName.ToLower().Contains("vrserver")))
         {
-            return (false, "SteamVR is not running. Please run it and try again.");
+            Logger.LogError(Assets.Resources.Aero_SteamVR_NotRunning);
+            return (false, Assets.Resources.Aero_SteamVR_NotRunning);
         }
 
         var startInfo = new ProcessStartInfo

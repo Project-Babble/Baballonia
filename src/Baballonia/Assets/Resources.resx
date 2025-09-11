@@ -579,6 +579,27 @@
   <data name="AdminWarning_Message" xml:space="preserve">
     <value>Do not run Baballonia as admin! There is no need, and it prevents eye tracking calibrations from working.</value>
   </data>
+  <data name="Aero_Overlay_NotFound" xml:space="preserve">
+    <value>The gaze overlay program does not exist!</value>
+  </data>
+  <data name="Aero_Overlay_AlreadyRunning" xml:space="preserve">
+    <value>The gaze overlay program is already running! Please close it and try again.</value>
+  </data>
+  <data name="Aero_SteamVR_NotRunning" xml:space="preserve">
+    <value>SteamVR is not running. Please run it and try again.</value>
+  </data>
+  <data name="Aero_CameraStream_Failed" xml:space="preserve">
+    <value>Failed to start camera streaming!</value>
+  </data>
+  <data name="Aero_Calibration_Failed" xml:space="preserve">
+    <value>Failed to start calibration!</value>
+  </data>
+  <data name="Aero_Calibration_Success" xml:space="preserve">
+    <value>Eye tracking calibration successful!</value>
+  </data>
+  <data name="Aero_Overlay_CleanupFailed" xml:space="preserve">
+    <value>Failed to stop/cleanup overlay!</value>
+  </data>
   <data name="Calibration_Instructions_Line1" xml:space="preserve">
     <value>The below sliders are used to calibrate the</value>
   </data>

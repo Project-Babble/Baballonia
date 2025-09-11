@@ -769,6 +769,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         else
         {
             SelectedCalibrationTextBlock.Foreground =  new SolidColorBrush(Colors.Red);
+            _logger.LogError(res.status);
         }
 
         var previousText = SelectedCalibrationTextBlock.Text;
