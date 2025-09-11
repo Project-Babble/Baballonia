@@ -10,6 +10,7 @@ using Avalonia;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
+using Baballonia.Assets;
 using Baballonia.Contracts;
 using Baballonia.Helpers;
 using Baballonia.Services;
@@ -397,6 +398,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
     [ObservableProperty] private bool _shouldEnableEyeCalibration;
     [ObservableProperty] private string _selectedCalibrationText;
+    [ObservableProperty] private string _selectedCalibrationTextColor = Application.ActualThemeVariantProperty.Name;
 
     public bool IsRunningAsAdmin => Utils.HasAdmin;
 
@@ -404,13 +406,12 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     [ObservableProperty] private CameraControllerModel _rightCamera;
     [ObservableProperty] private CameraControllerModel _faceCamera;
 
-    public readonly TaskCompletionSource camerasInitialized = new();
+    public readonly TaskCompletionSource CamerasInitialized = new();
 
     private readonly DispatcherTimer _msgCounterTimer;
     private readonly ILocalSettingsService _localSettingsService;
     private readonly ProcessingLoopService _processingLoopService;
     private readonly DropOverlayService _dropOverlayService;
-
 
     private ILogger<HomePageViewModel> _logger;
 
@@ -462,10 +463,10 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
                     _processingLoopService.EyesProcessingPipeline, cameraNames, Camera.Right);
                 FaceCamera = new CameraControllerModel(_localSettingsService, "FaceCamera",
                     _processingLoopService.FaceProcessingPipeline, cameraNames, Camera.Face);
-                camerasInitialized.SetResult();
+                CamerasInitialized.SetResult();
             });
 
-            await camerasInitialized.Task;
+            await CamerasInitialized.Task;
             await LeftCamera.IsInitialized.Task;
             await StartCameraAsync(LeftCamera);
             await RightCamera.IsInitialized.Task;
@@ -755,9 +756,24 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     [RelayCommand]
     private async Task RequestVRCalibration()
     {
-        await App.Overlay.EyeTrackingCalibrationRequested(CalibrationRoutine.QuickCalibration);
-        await _localSettingsService.SaveSettingAsync("EyeHome_EyeModel", "tuned_temporal_eye_tracking.onnx");
-        await _processingLoopService.SetupEyeInference();
+        var res = await App.Overlay.EyeTrackingCalibrationRequested(CalibrationRoutine.QuickCalibration);
+        var previousTextColor = SelectedCalibrationTextColor;
+        if (res.success)
+        {
+            await _localSettingsService.SaveSettingAsync("EyeHome_EyeModel", "tuned_temporal_eye_tracking.onnx");
+            await _processingLoopService.SetupEyeInference();
+            SelectedCalibrationTextColor = "Green";
+        }
+        else
+        {
+            SelectedCalibrationTextColor = "Red";
+        }
+
+        var previousText = SelectedCalibrationText;
+        SelectedCalibrationText = res.status;
+        await Task.Delay(5000);
+        SelectedCalibrationText = previousText;
+        SelectedCalibrationTextColor = previousTextColor;
     }
 
     private void MessageDispatched(int msgCount) => _messagesSent += msgCount;

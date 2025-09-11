@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel;
 using System.Linq;
 using Avalonia.Controls;
@@ -93,13 +92,13 @@ public partial class HomePageView : UserControl
         Loaded += async (_, _) =>
         {
             if (DataContext is not HomePageViewModel vm) return;
-            await vm.camerasInitialized.Task;
+            await vm.CamerasInitialized.Task;
 
             SetupCropEvents(vm.LeftCamera, LeftMouthWindow);
             SetupCropEvents(vm.RightCamera, RightMouthWindow);
             SetupCropEvents(vm.FaceCamera, FaceWindow);
 
-            vm.SelectedCalibrationText = "Eye Calibration";
+            vm.SelectedCalibrationText = Assets.Resources.Home_Eye_Calibration;
         };
     }
 

@@ -1,15 +1,9 @@
 ﻿using Avalonia;
-using Baballonia.Contracts;
 using Baballonia.Desktop.Calibration.Aero;
 using Baballonia.Desktop.Captures;
-using Baballonia.Services;
-using Baballonia.Services.Inference.Platforms;
-using Baballonia.Views;
 using System;
 using System.Threading;
-using Baballonia.Helpers;
 using Velopack;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Baballonia.Desktop;
 
