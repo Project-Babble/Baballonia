@@ -65,7 +65,8 @@ public partial class AeroOverlayTrainerCombo
             UseShellExecute = false,
             CreateNoWindow = true,
             RedirectStandardOutput = true,
-            RedirectStandardError = true
+            RedirectStandardError = true,
+            WorkingDirectory = AppContext.BaseDirectory,
         };
 
         if (arguments != null)

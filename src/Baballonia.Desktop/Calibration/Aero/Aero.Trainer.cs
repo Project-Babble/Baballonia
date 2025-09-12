@@ -27,8 +27,8 @@ public partial class AeroOverlayTrainerCombo
 
         processingLoop.EyesProcessingPipeline.TransformedFrameEvent += HandleEyeImageEvent;
 
-        const int leftPort = 8080;
-        const int rightPort = 8081;
+        const int leftPort = 23952;
+        const int rightPort = 23953;
         var modelPath = Directory.GetCurrentDirectory();
         var calibration = new VrCalibration
         {
