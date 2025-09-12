@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -117,58 +117,604 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Settings_Theme_Dark_Content" xml:space="preserve">
+    <value>深色</value>
+  </data>
+  <data name="Settings_Theme_Default_Content" xml:space="preserve">
+    <value>默认设置</value>
+  </data>
+  <data name="Settings_Theme_Light_Content" xml:space="preserve">
+    <value>亮色的</value>
+  </data>
+  <data name="Home_Title_Header" xml:space="preserve">
+    <value>首页</value>
+  </data>
+  <data name="Settings_Theme_Header" xml:space="preserve">
+    <value>应用主题</value>
+  </data>
+  <data name="Settings_Theme_Description" xml:space="preserve">
+    <value>选择要显示的应用主题</value>
+  </data>
+  <data name="Settings_OSC_Description" xml:space="preserve">
+    <value>OSC数据应从何处发送？</value>
+  </data>
+  <data name="Settings_OSC_Header" xml:space="preserve">
+    <value>OSC</value>
+  </data>
+  <data name="Home_Eye_Calibration" xml:space="preserve">
+    <value>眼睛校准</value>
+  </data>
+  <data name="Home_Left_Camera_Address" xml:space="preserve">
+    <value>左侧相机地址</value>
+  </data>
+  <data name="Home_Cameras_Start_Camera" xml:space="preserve">
+    <value>启动相机</value>
+  </data>
+  <data name="Home_Cameras_Stop_Camera" xml:space="preserve">
+    <value>停止摄像头</value>
+  </data>
+  <data name="Home_Cameras_Tracking_Mode" xml:space="preserve">
+    <value>跟踪</value>
+  </data>
+  <data name="Home_Cameras_Cropping_Mode" xml:space="preserve">
+    <value>裁剪中</value>
+  </data>
+  <data name="Home_Left_Camera_Select_Entire_Frame" xml:space="preserve">
+    <value>选择左边帧</value>
+  </data>
+  <data name="Home_Cameras_Vertical_Flip_Header" xml:space="preserve">
+    <value>垂直翻转</value>
+  </data>
+  <data name="Home_Cameras_Vertical_Flip_Description" xml:space="preserve">
+    <value>垂直翻转图像</value>
+  </data>
+  <data name="Home_Cameras_Horizontal_Flip_Header" xml:space="preserve">
+    <value>水平翻转</value>
+  </data>
+  <data name="Home_Cameras_Horizontal_Flip_Description" xml:space="preserve">
+    <value>水平翻转图像</value>
+  </data>
+  <data name="Home_Cameras_Rotation_Description" xml:space="preserve">
+    <value>旋转一个圆形的图像</value>
+  </data>
+  <data name="Home_Cameras_Brightness_Header" xml:space="preserve">
+    <value>图像亮度</value>
+  </data>
+  <data name="Home_Cameras_Rotation_Header" xml:space="preserve">
+    <value>图像旋转</value>
+  </data>
+  <data name="Home_Cameras_Brightness_Description" xml:space="preserve">
+    <value>调整图像亮度</value>
+  </data>
+  <data name="Home_Right_Camera_Address" xml:space="preserve">
+    <value>右侧相机地址</value>
+  </data>
+  <data name="Home_Right_Camera_Select_Entire_Frame" xml:space="preserve">
+    <value>选择右边帧</value>
+  </data>
+  <data name="Home_Face_Camera_Address" xml:space="preserve">
+    <value>面部相机地址</value>
+  </data>
+  <data name="Home_Face_Camera_Select_Entire_Frame" xml:space="preserve">
+    <value>选择人脸帧</value>
+  </data>
+  <data name="Home_Left_Camera_Header" xml:space="preserve">
+    <value>左眼相机</value>
+  </data>
+  <data name="Home_Face_Camera_Header" xml:space="preserve">
+    <value>面部相机</value>
+  </data>
+  <data name="Home_Right_Camera_Header" xml:space="preserve">
+    <value>右眼相机</value>
+  </data>
+  <data name="Home_Left_Camera_Settings" xml:space="preserve">
+    <value>左侧相机设置</value>
+  </data>
+  <data name="Home_Face_Camera_Settings" xml:space="preserve">
+    <value>面部相机设置</value>
+  </data>
+  <data name="Home_Right_Camera_Settings" xml:space="preserve">
+    <value>右侧相机设置</value>
+  </data>
   <data name="Common_Start_Typing" xml:space="preserve">
-    <value />
+    <value>开始输入...</value>
   </data>
   <data name="Calibration_Title_Header" xml:space="preserve">
-    <value />
+    <value>校准</value>
   </data>
   <data name="Calibration_Reset_Minimums" xml:space="preserve">
-    <value />
+    <value>Reset Minimums</value>
   </data>
   <data name="Calibration_Reset_Maximums" xml:space="preserve">
-    <value />
+    <value>Reset Maximums</value>
   </data>
   <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
-    <value />
+    <value>眼睛表达式</value>
   </data>
   <data name="Calibration_Nose_Expressions_Header" xml:space="preserve">
-    <value />
+    <value>Nose 表达式</value>
   </data>
   <data name="Calibration_Tongue_Expressions_Header" xml:space="preserve">
-    <value />
+    <value>Tongue 表达式</value>
   </data>
   <data name="Calibration_Mouth_Expressions_Header" xml:space="preserve">
-    <value />
+    <value>鼠标表达式</value>
   </data>
   <data name="Calibration_Jaw_Expressions_Header" xml:space="preserve">
-    <value />
+    <value>Jaw 表达式</value>
   </data>
   <data name="Calibration_Cheek_Expressions_Header" xml:space="preserve">
-    <value />
+    <value>支票表达式</value>
   </data>
   <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Header" xml:space="preserve">
-    <value />
+    <value>稳定眼镜</value>
   </data>
   <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Description" xml:space="preserve">
-    <value />
+    <value>阻止眼睛朝相反方向看，但可能是错误的。</value>
+  </data>
+  <data name="Firmware_Title_Header" xml:space="preserve">
+    <value>固件</value>
+  </data>
+  <data name="Firmware_Select_Tracker_Header" xml:space="preserve">
+    <value>选择您的追踪器</value>
+  </data>
+  <data name="Firmware_Device_Instructions_1" xml:space="preserve">
+    <value>• 启动/连接您的设备后，您将有 20 秒按“刷新”并从下拉列表中选择您的设备</value>
+  </data>
+  <data name="Firmware_Device_Instructions_2" xml:space="preserve">
+    <value>• 某些配置操作将花一点点时间！</value>
+  </data>
+  <data name="Firmware_Device_Configuration_Header" xml:space="preserve">
+    <value>设备配置</value>
+  </data>
+  <data name="Firmware_Device_Configuration_Description" xml:space="preserve">
+    <value>切换有线/无线模式</value>
+  </data>
+  <data name="Firmware_Device_Mode_Header" xml:space="preserve">
+    <value>切换有线/无线模式</value>
+  </data>
+  <data name="Firmware_Device_Mode_Instruction_1" xml:space="preserve">
+    <value>• 您需要在更改模式后重新启动您的追踪器</value>
+  </data>
+  <data name="Firmware_Device_Mode_Instruction_2" xml:space="preserve">
+    <value>• 您可能需要在刷入后重启应用才能显示</value>
+  </data>
+  <data name="Firmware_Device_Mode_Select_Placeholder" xml:space="preserve">
+    <value>选择一个模式...</value>
+  </data>
+  <data name="Firmware_Wifi_Configuration_Header" xml:space="preserve">
+    <value>Wifi配置</value>
+  </data>
+  <data name="Firmware_Wifi_Configuration_Description" xml:space="preserve">
+    <value>连接到 Wifi 及更多</value>
+  </data>
+  <data name="Firmware_Wifi_Credentials_Header" xml:space="preserve">
+    <value>设置您的 Wi-Fi 凭据</value>
+  </data>
+  <data name="Firmware_Wifi_Instructions_1" xml:space="preserve">
+    <value>• 如果你想要无线地使用你的追踪器，你需要设置它的 Wifi 凭据</value>
+  </data>
+  <data name="Firmware_Wifi_Instructions_2" xml:space="preserve">
+    <value>• 您必须扫描Wifi网络BEFORE 可以设置您的 Wifi 凭据</value>
+  </data>
+  <data name="Firmware_Wifi_SSID_Label" xml:space="preserve">
+    <value>WiFi 网络名称 (SSID)</value>
+  </data>
+  <data name="Firmware_Wifi_SSID_Placeholder" xml:space="preserve">
+    <value>开始输入查看WiFi网络...</value>
+  </data>
+  <data name="Firmware_Wifi_Password_Label" xml:space="preserve">
+    <value>WiFi密码</value>
+  </data>
+  <data name="Firmware_Wifi_Password_Placeholder" xml:space="preserve">
+    <value>输入WiFi密码...</value>
+  </data>
+  <data name="Firmware_Flashing_Header" xml:space="preserve">
+    <value>升级/反射固件</value>
+  </data>
+  <data name="Firmware_Flashing_Description" xml:space="preserve">
+    <value>刷入您设备的固件</value>
+  </data>
+  <data name="Firmware_Flashing_Warning" xml:space="preserve">
+    <value>警告！！这个问题将会使您的跟踪恢复。您将需要完成第一个任务设置在您之前的闪光灯中。</value>
+  </data>
+  <data name="Firmware_Flashing_Button" xml:space="preserve">
+    <value>闪光固件</value>
+  </data>
+  <data name="Firmware_Flashing_Note" xml:space="preserve">
+    <value>这将需要 ~10 秒左右。不要离开这个页面！</value>
+  </data>
+  <data name="Firmware_Flashing_Complete" xml:space="preserve">
+    <value>完成！您将需要重新启动您的追踪器</value>
+  </data>
+  <data name="Firmware_TrackerComboBox_Default" xml:space="preserve">
+    <value>点击查看跟踪者...</value>
+  </data>
+  <data name="Firmware_RefreshDevices_Default" xml:space="preserve">
+    <value>刷新设备</value>
+  </data>
+  <data name="Firmware_RefreshDevices_Refreshing" xml:space="preserve">
+    <value>正在刷新</value>
+  </data>
+  <data name="Firmware_RefreshDevices_Found" xml:space="preserve">
+    <value>找到 {0} 设备 (s)。</value>
+  </data>
+  <data name="Firmware_SelectTracker_Default" xml:space="preserve">
+    <value>选择追踪器</value>
+  </data>
+  <data name="Firmware_SelectTracker_Connected" xml:space="preserve">
+    <value>追踪器已连接！</value>
+  </data>
+  <data name="Firmware_SelectTracker_NoResponse" xml:space="preserve">
+    <value>Tracker 没有响应。</value>
+  </data>
+  <data name="Firmware_ModeSetButton_Default" xml:space="preserve">
+    <value>设置模式</value>
+  </data>
+  <data name="Firmware_ModeSetButton_Setting" xml:space="preserve">
+    <value>设置模式</value>
+  </data>
+  <data name="Firmware_ModeSetButton_Success" xml:space="preserve">
+    <value>设置！</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Default" xml:space="preserve">
+    <value>设置 Wifi Creds</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Setting" xml:space="preserve">
+    <value>正在设置 WiFi 凭据</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Success" xml:space="preserve">
+    <value>已发送！</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Error" xml:space="preserve">
+    <value>出了错...</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Default" xml:space="preserve">
+    <value>刷新 Wifi 网络</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Scanning" xml:space="preserve">
+    <value>扫描。最多需要30秒钟。</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Error" xml:space="preserve">
+    <value>扫描失败。点击重试。</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
+    <value>找到 {0} 网络。点击再次扫描。</value>
+  </data>
+  <data name="VRC_Title_Header" xml:space="preserve">
+    <value>VRChat + VRCFacebook跟踪设置</value>
+  </data>
+  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
+    <value>使用原生VRC 眼睛跟踪</value>
+  </data>
+  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
+    <value>将眼睛跟踪带到没有VRC追踪的头像</value>
+  </data>
+  <data name="VRC_ModuleMode_Header" xml:space="preserve">
+    <value>设置 VRCFT 模块模式</value>
+  </data>
+  <data name="VRC_ModuleMode_Description" xml:space="preserve">
+    <value>只发送眼睛，只有脸还是双面？(更改需要重新启动VRCFT)</value>
+  </data>
+  <data name="VRC_ModuleMode_Placeholder" xml:space="preserve">
+    <value>选择一个模式...</value>
+  </data>
+  <data name="Output_Title_Header" xml:space="preserve">
+    <value>产出</value>
+  </data>
+  <data name="Output_CopyButton_Tooltip" xml:space="preserve">
+    <value>复制日志输出到剪贴板</value>
+  </data>
+  <data name="Output_SaveButton_Tooltip" xml:space="preserve">
+    <value>保存日志输出</value>
+  </data>
+  <data name="Output_OpenLoggingDirectoryButton_Tooltip" xml:space="preserve">
+    <value>打开日志目录</value>
+  </data>
+  <data name="Onboarding_Welcome_Message" xml:space="preserve">
+    <value>这个向导将通过设置新的 Babble 应用引导您。</value>
+  </data>
+  <data name="Onboarding_Wireless_Header" xml:space="preserve">
+    <value>有线或无线网络？</value>
+  </data>
+  <data name="Onboarding_Wireless_Description1" xml:space="preserve">
+    <value>随着较新的 Babbles, 您需要在固件标签页(Icon上面) 进行首次设置。</value>
+  </data>
+  <data name="Onboarding_Wireless_Description2" xml:space="preserve">
+    <value>它只需要2分钟！选择您的跟踪器和模式 (有线或无线)。这很简单。</value>
+  </data>
+  <data name="Onboarding_Wireless_Note" xml:space="preserve">
+    <value>请注意较新的跟踪器在进入相机模式之前有一个20秒的窗口。</value>
+  </data>
+  <data name="Onboarding_Assembly_Header" xml:space="preserve">
+    <value>召集您的追踪器</value>
+  </data>
+  <data name="Onboarding_Assembly_Description" xml:space="preserve">
+    <value>如果你需要帮助你的跟踪者集合起来，这里是一个有用的 Youtube 教程！</value>
+  </data>
+  <data name="Settings_Title_Header" xml:space="preserve">
+    <value>应用设置</value>
+  </data>
+  <data name="Settings_Language_Header" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="Settings_Language_Description" xml:space="preserve">
+    <value>设置应用程序的语言。切换页面以应用。</value>
+  </data>
+  <data name="Settings_Language_Default" xml:space="preserve">
+    <value>默认设置</value>
+  </data>
+  <data name="Settings_Language_English" xml:space="preserve">
+    <value>Distr.</value>
+  </data>
+  <data name="Settings_Language_Spanish" xml:space="preserve">
+    <value>Español</value>
+  </data>
+  <data name="Settings_Language_Japanese" xml:space="preserve">
+    <value>日本語</value>
+  </data>
+  <data name="Settings_Language_Polish" xml:space="preserve">
+    <value>Polski</value>
+  </data>
+  <data name="Settings_Language_Chinese" xml:space="preserve">
+    <value>中文</value>
+  </data>
+  <data name="Settings_Filter_Header" xml:space="preserve">
+    <value>Euro 过滤器设置</value>
+  </data>
+  <data name="Settings_Filter_Description" xml:space="preserve">
+    <value>过滤器设置</value>
+  </data>
+  <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
+    <value>已启用</value>
+  </data>
+  <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
+    <value>打开或关闭过滤。</value>
+  </data>
+  <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
+    <value>最小频率剪切数</value>
+  </data>
+  <data name="Settings_Filter_MinFreq_Description" xml:space="preserve">
+    <value>控制移动速度慢的平滑程度</value>
+  </data>
+  <data name="Settings_Filter_Template_Placeholder" xml:space="preserve">
+    <value>从模板选择</value>
+  </data>
+  <data name="Settings_Filter_Template_Low" xml:space="preserve">
+    <value>低 ({0})</value>
+  </data>
+  <data name="Settings_Filter_Template_Medium" xml:space="preserve">
+    <value>中 ({0})</value>
+  </data>
+  <data name="Settings_Filter_Template_High" xml:space="preserve">
+    <value>高 ({0})</value>
+  </data>
+  <data name="Settings_Filter_Speed_Label" xml:space="preserve">
+    <value>速度系数</value>
+  </data>
+  <data name="Settings_Filter_Speed_Description" xml:space="preserve">
+    <value>确定当您移动更快时过滤器的适配方式</value>
+  </data>
+  <data name="Settings_GPU_Header" xml:space="preserve">
+    <value>使用 GPU 加速</value>
+  </data>
+  <data name="Settings_GPU_Description" xml:space="preserve">
+    <value>使用您的 GPU 来更快地运行！需要重启</value>
+  </data>
+  <data name="Settings_LogLevel_Header" xml:space="preserve">
+    <value>日志级别的详细信息</value>
+  </data>
+  <data name="Settings_LogLevel_Description" xml:space="preserve">
+    <value>日志级别最小。需要重启</value>
+  </data>
+  <data name="Settings_Updates_Header" xml:space="preserve">
+    <value>检查更新</value>
+  </data>
+  <data name="Settings_Updates_Description" xml:space="preserve">
+    <value>应用程序是否应该在开始时检查更新？</value>
+  </data>
+  <data name="Settings_FirstTime_Header" xml:space="preserve">
+    <value>启动首次设置</value>
+  </data>
+  <data name="Settings_FirstTime_Description" xml:space="preserve">
+    <value>重置首次设置</value>
+  </data>
+  <data name="Settings_FirstTime_Button" xml:space="preserve">
+    <value>启动</value>
+  </data>
+  <data name="Onboarding_Skip_Button" xml:space="preserve">
+    <value>跳过</value>
+  </data>
+  <data name="Onboarding_UI_Header" xml:space="preserve">
+    <value>每件事在哪里？</value>
+  </data>
+  <data name="Onboarding_UI_Home_Description" xml:space="preserve">
+    <value>1. 主页是您可以设置相机并进行眼睛跟踪校准的地方。</value>
+  </data>
+  <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
+    <value>2. 校准可以单独调整您的眼睛/脸表达式。</value>
+  </data>
+  <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
+    <value>3. 固件页面用于设置或重置您的设备。</value>
+  </data>
+  <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
+    <value>4. VRChat 页面用于更改 VRChat/VRCFacebook跟踪特定设置。</value>
+  </data>
+  <data name="Onboarding_UI_Output_Description" xml:space="preserve">
+    <value>5. 输出页面显示应用的状态和其他有用信息。</value>
+  </data>
+  <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
+    <value>6. 设置是用于主题、语言等一般应用设置。</value>
+  </data>
+  <data name="Onboarding_Complete_Header" xml:space="preserve">
+    <value>安装完成！</value>
+  </data>
+  <data name="Onboarding_Complete_Description1" xml:space="preserve">
+    <value>您都已设置为开始使用新的 Babble 应用程序！</value>
+  </data>
+  <data name="Onboarding_Complete_Description2" xml:space="preserve">
+    <value>您可以在设置中重新查看此页面。</value>
   </data>
   <data name="Settings_OSC_IP_Label" xml:space="preserve">
-    <value />
+    <value>IP 地址</value>
   </data>
   <data name="Settings_OSC_Prefix_Label" xml:space="preserve">
-    <value />
+    <value>OSC Prefix</value>
   </data>
   <data name="Settings_OSC_Recalibrate_Label" xml:space="preserve">
-    <value />
+    <value>重整地址</value>
   </data>
   <data name="Settings_OSC_Recenter_Label" xml:space="preserve">
-    <value />
+    <value>Recenter 地址</value>
   </data>
   <data name="Settings_OSC_SendPort_Label" xml:space="preserve">
-    <value />
+    <value>发送端口</value>
   </data>
   <data name="Settings_OSC_ReceivePort_Label" xml:space="preserve">
-    <value />
+    <value>接收端口</value>
+  </data>
+  <data name="AdminWarning_Header" xml:space="preserve">
+    <value>管理员模式警告</value>
+  </data>
+  <data name="AdminWarning_Message" xml:space="preserve">
+    <value>不要以管理员身份运行 Baballonia ！没有必要，它阻止眼睛跟踪校准工作。</value>
+  </data>
+  <data name="Aero_Overlay_NotFound" xml:space="preserve">
+    <value>游戏叠加程序不存在！</value>
+  </data>
+  <data name="Aero_Overlay_AlreadyRunning" xml:space="preserve">
+    <value>游戏叠加程序已在运行！请关闭后重试。</value>
+  </data>
+  <data name="Aero_SteamVR_NotRunning" xml:space="preserve">
+    <value>SteamVR 未运行。请运行后重试。</value>
+  </data>
+  <data name="Aero_CameraStream_Failed" xml:space="preserve">
+    <value>启动相机流失败！</value>
+  </data>
+  <data name="Aero_Calibration_Failed" xml:space="preserve">
+    <value>启动校准失败！</value>
+  </data>
+  <data name="Aero_Calibration_Success" xml:space="preserve">
+    <value>眼睛跟踪校准成功！</value>
+  </data>
+  <data name="Aero_Overlay_CleanupFailed" xml:space="preserve">
+    <value>停止/清理覆盖失败！</value>
+  </data>
+  <data name="Calibration_Instructions_Line1" xml:space="preserve">
+    <value>下面的滑块用于校准</value>
+  </data>
+  <data name="Calibration_Instructions_Sensitivity" xml:space="preserve">
+    <value>灵敏度</value>
+  </data>
+  <data name="Calibration_Instructions_Line1_2" xml:space="preserve">
+    <value>你的脸部表达式。</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet1_1" xml:space="preserve">
+    <value>• 提高妇女地位</value>
+  </data>
+  <data name="Calibration_Instructions_Minimum" xml:space="preserve">
+    <value>最小值</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet1_2" xml:space="preserve">
+    <value>值需要一个更强的表达式才能开始显示。</value>
+  </data>
+  <data name="Settings_Language_Chinese_Simplified" xml:space="preserve">
+    <value>中文(简体)</value>
+  </data>
+  <data name="Settings_Language_Chinese_Traditional" xml:space="preserve">
+    <value>中文(繁体)</value>
+  </data>
+  <data name="Settings_Language_German" xml:space="preserve">
+    <value>德文</value>
+  </data>
+  <data name="Settings_Language_French" xml:space="preserve">
+    <value>法文</value>
+  </data>
+  <data name="Settings_Language_Italian" xml:space="preserve">
+    <value>意大利语</value>
+  </data>
+  <data name="Settings_Language_Korean" xml:space="preserve">
+    <value>韩语</value>
+  </data>
+  <data name="Settings_Language_Portuguese_Brazil" xml:space="preserve">
+    <value>葡萄牙语(巴西)</value>
+  </data>
+  <data name="Settings_Language_Portuguese_Portugal" xml:space="preserve">
+    <value>葡萄牙语(葡萄牙)</value>
+  </data>
+  <data name="Settings_Language_Russian" xml:space="preserve">
+    <value>俄文</value>
+  </data>
+  <data name="Settings_Language_Arabic" xml:space="preserve">
+    <value>阿拉伯语</value>
+  </data>
+  <data name="Settings_Language_Turkish" xml:space="preserve">
+    <value>土耳其语</value>
+  </data>
+  <data name="Settings_Language_Dutch" xml:space="preserve">
+    <value>荷兰语</value>
+  </data>
+  <data name="Settings_Language_Swedish" xml:space="preserve">
+    <value>瑞典语</value>
+  </data>
+  <data name="Settings_Language_Finnish" xml:space="preserve">
+    <value>芬兰语</value>
+  </data>
+  <data name="Settings_Language_Danish" xml:space="preserve">
+    <value>丹麦语</value>
+  </data>
+  <data name="Settings_Language_Norwegian" xml:space="preserve">
+    <value>挪威语</value>
+  </data>
+  <data name="Settings_Language_Czech" xml:space="preserve">
+    <value>捷克语</value>
+  </data>
+  <data name="Settings_Language_Hungarian" xml:space="preserve">
+    <value>匈牙利</value>
+  </data>
+  <data name="Settings_Language_Romanian" xml:space="preserve">
+    <value>罗马尼亚语</value>
+  </data>
+  <data name="Settings_Language_Vietnamese" xml:space="preserve">
+    <value>Vietnamese</value>
+  </data>
+  <data name="Settings_Language_Ukrainian" xml:space="preserve">
+    <value>乌克兰语</value>
+  </data>
+  <data name="Settings_Language_Greek" xml:space="preserve">
+    <value>希腊语</value>
+  </data>
+  <data name="Settings_Language_Hebrew" xml:space="preserve">
+    <value>希伯来语</value>
+  </data>
+  <data name="Settings_Language_Afrikaans" xml:space="preserve">
+    <value>南非荷兰语</value>
+  </data>
+  <data name="Settings_Language_Catalan" xml:space="preserve">
+    <value>加泰罗尼亚语</value>
+  </data>
+  <data name="Settings_Language_Serbian" xml:space="preserve">
+    <value>塞尔维亚语</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet2_1" xml:space="preserve">
+    <value>• 降低价格</value>
+  </data>
+  <data name="Calibration_Instructions_Maximum" xml:space="preserve">
+    <value>最大值</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet2_2" xml:space="preserve">
+    <value>值意味着一个较小的表达式会更快地达到100%。</value>
+  </data>
+  <data name="DropOverlay_Important_Header" xml:space="preserve">
+    <value>重要！</value>
+  </data>
+  <data name="DropOverlay_Message" xml:space="preserve">
+    <value>较新的可携带追踪器在使用前被接通后会被延迟20秒。 一旦准备好，它将使USB插入声音！</value>
+  </data>
+  <data name="DropOverlay_DontShowAgain" xml:space="preserve">
+    <value>不再显示此警告</value>
+  </data>
+  <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
+    <value>关闭</value>
   </data>
 </root>
