@@ -118,109 +118,109 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Settings_Theme_Dark_Content" xml:space="preserve">
-    <value>Dark</value>
+    <value>Ciemny</value>
   </data>
   <data name="Settings_Theme_Default_Content" xml:space="preserve">
-    <value>Default</value>
+    <value>Domyślny</value>
   </data>
   <data name="Settings_Theme_Light_Content" xml:space="preserve">
-    <value>Light</value>
+    <value>Światło</value>
   </data>
   <data name="Home_Title_Header" xml:space="preserve">
-    <value>Home</value>
+    <value>Strona główna</value>
   </data>
   <data name="Settings_Theme_Header" xml:space="preserve">
-    <value>App theme</value>
+    <value>Motyw aplikacji</value>
   </data>
   <data name="Settings_Theme_Description" xml:space="preserve">
-    <value>Select which app theme to display</value>
+    <value>Wybierz motyw aplikacji do wyświetlenia</value>
   </data>
   <data name="Settings_OSC_Description" xml:space="preserve">
-    <value>Where should OSC data be sent?</value>
+    <value>Gdzie powinny być przesyłane dane OSC?</value>
   </data>
   <data name="Settings_OSC_Header" xml:space="preserve">
     <value>OSC</value>
   </data>
   <data name="Home_Eye_Calibration" xml:space="preserve">
-    <value>Eye Calibration</value>
+    <value>Kalibracja oczu</value>
   </data>
   <data name="Home_Left_Camera_Address" xml:space="preserve">
-    <value>Left Camera Address</value>
+    <value>Lewy adres kamery</value>
   </data>
   <data name="Home_Cameras_Start_Camera" xml:space="preserve">
-    <value>Start Camera</value>
+    <value>Uruchom kamerę</value>
   </data>
   <data name="Home_Cameras_Stop_Camera" xml:space="preserve">
-    <value>Stop Camera</value>
+    <value>Zatrzymaj kamerę</value>
   </data>
   <data name="Home_Cameras_Tracking_Mode" xml:space="preserve">
-    <value>Tracking</value>
+    <value>Śledzenie</value>
   </data>
   <data name="Home_Cameras_Cropping_Mode" xml:space="preserve">
-    <value>Cropping</value>
+    <value>Przycinanie</value>
   </data>
   <data name="Home_Left_Camera_Select_Entire_Frame" xml:space="preserve">
-    <value>Select Left Frame</value>
+    <value>Wybierz lewą ramkę</value>
   </data>
   <data name="Home_Cameras_Vertical_Flip_Header" xml:space="preserve">
-    <value>Vertical Flip</value>
+    <value>Pionowe odwrócenie</value>
   </data>
   <data name="Home_Cameras_Vertical_Flip_Description" xml:space="preserve">
-    <value>Flip the image vertically</value>
+    <value>Przerzuć obraz pionowo</value>
   </data>
   <data name="Home_Cameras_Horizontal_Flip_Header" xml:space="preserve">
-    <value>Horizontal flip</value>
+    <value>Odwrót poziomy</value>
   </data>
   <data name="Home_Cameras_Horizontal_Flip_Description" xml:space="preserve">
-    <value>Flip the image horizontally</value>
+    <value>Przerzuć obraz w poziomie</value>
   </data>
   <data name="Home_Cameras_Rotation_Description" xml:space="preserve">
-    <value>Rotates the image in a circle</value>
+    <value>Obraca obraz w okręgu</value>
   </data>
   <data name="Home_Cameras_Brightness_Header" xml:space="preserve">
-    <value>Image Brightness</value>
+    <value>Jasność obrazu</value>
   </data>
   <data name="Home_Cameras_Rotation_Header" xml:space="preserve">
-    <value>Image Rotation</value>
+    <value>Obrót obrazu</value>
   </data>
   <data name="Home_Cameras_Brightness_Description" xml:space="preserve">
-    <value>Adjust the brightness of the image</value>
+    <value>Dostosuj jasność obrazu</value>
   </data>
   <data name="Home_Right_Camera_Address" xml:space="preserve">
-    <value>Right Camera Address</value>
+    <value>Adres prawej kamery</value>
   </data>
   <data name="Home_Right_Camera_Select_Entire_Frame" xml:space="preserve">
-    <value>Select Right Frame</value>
+    <value>Wybierz prawą ramkę</value>
   </data>
   <data name="Home_Face_Camera_Address" xml:space="preserve">
-    <value>Face Camera Address</value>
+    <value>Adres kamery twarzy</value>
   </data>
   <data name="Home_Face_Camera_Select_Entire_Frame" xml:space="preserve">
-    <value>Select Face Frame</value>
+    <value>Wybierz ramkę twarzy</value>
   </data>
   <data name="Home_Left_Camera_Header" xml:space="preserve">
-    <value>Left Eye Camera</value>
+    <value>Lewa kamera oczu</value>
   </data>
   <data name="Home_Face_Camera_Header" xml:space="preserve">
-    <value>Face Camera</value>
+    <value>Kamera twarzy</value>
   </data>
   <data name="Home_Right_Camera_Header" xml:space="preserve">
-    <value>Right Eye Camera</value>
+    <value>Aparat prawego oka</value>
   </data>
   <data name="Home_Left_Camera_Settings" xml:space="preserve">
-    <value>Left Camera Settings</value>
+    <value>Ustawienia lewej kamery</value>
   </data>
   <data name="Home_Face_Camera_Settings" xml:space="preserve">
-    <value>Face Camera Settings</value>
+    <value>Ustawienia kamery twarzy</value>
   </data>
   <data name="Home_Right_Camera_Settings" xml:space="preserve">
-    <value>Right Camera Settings</value>
+    <value>Ustawienia prawej kamery</value>
   </data>
   <data name="Common_Start_Typing" xml:space="preserve">
-    <value>Start typing...</value>
+    <value>Zacznij pisać...</value>
   </data>
   <data name="Calibration_Title_Header" xml:space="preserve">
-    <value>Calibration</value>
+    <value>Kalibracja</value>
   </data>
   <data name="Calibration_Reset_Minimums" xml:space="preserve">
     <value>Reset Minimums</value>
@@ -229,226 +229,226 @@
     <value>Reset Maximums</value>
   </data>
   <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
-    <value>Eye Expressions</value>
+    <value>Wyrażenia oczu</value>
   </data>
   <data name="Calibration_Nose_Expressions_Header" xml:space="preserve">
-    <value>Nose Expressions</value>
+    <value>Wyrażenia Nose</value>
   </data>
   <data name="Calibration_Tongue_Expressions_Header" xml:space="preserve">
-    <value>Tongue Expressions</value>
+    <value>Wyrażenia języka</value>
   </data>
   <data name="Calibration_Mouth_Expressions_Header" xml:space="preserve">
-    <value>Mouth Expressions</value>
+    <value>Wyrażenia na południu</value>
   </data>
   <data name="Calibration_Jaw_Expressions_Header" xml:space="preserve">
-    <value>Jaw Expressions</value>
+    <value>Wyrażenia Szczęki</value>
   </data>
   <data name="Calibration_Cheek_Expressions_Header" xml:space="preserve">
-    <value>Cheek Expressions</value>
+    <value>Wyrażenia czeku</value>
   </data>
   <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Header" xml:space="preserve">
-    <value>Stabilize Eyes</value>
+    <value>Stabilizuj oczy</value>
   </data>
   <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Description" xml:space="preserve">
-    <value>Prevents eyes from looking out in opposite directions, but may overcorrect.</value>
+    <value>Zapobiega spojrzeniu oczu w przeciwnych kierunkach, ale może to być nadmiernie poprawne.</value>
   </data>
   <data name="Firmware_Title_Header" xml:space="preserve">
-    <value>Firmware</value>
+    <value>Firmowe oprogramowanie</value>
   </data>
   <data name="Firmware_Select_Tracker_Header" xml:space="preserve">
-    <value>Select your tracker</value>
+    <value>Wybierz swój tracker</value>
   </data>
   <data name="Firmware_Device_Instructions_1" xml:space="preserve">
-    <value>• After powering on/connecting your device you will have 20 seconds to press "Refresh" and select your device from the dropdown</value>
+    <value>• Po włączeniu / podłączeniu urządzenia będziesz miał 20 sekund na naciśnięcie "Odświeżenie" i wybranie urządzenia z listy rozwijanej</value>
   </data>
   <data name="Firmware_Device_Instructions_2" xml:space="preserve">
-    <value>• Certain configuration operations will take a little bit!</value>
+    <value>• Niektóre operacje konfiguracyjne potrwają trochę czasu!</value>
   </data>
   <data name="Firmware_Device_Configuration_Header" xml:space="preserve">
-    <value>Device Configuration</value>
+    <value>Konfiguracja urządzenia</value>
   </data>
   <data name="Firmware_Device_Configuration_Description" xml:space="preserve">
-    <value>Toggle wired/wireless mode</value>
+    <value>Przełącz tryb przewodowy/bezprzewodowy</value>
   </data>
   <data name="Firmware_Device_Mode_Header" xml:space="preserve">
-    <value>Toggle wired/wireless mode</value>
+    <value>Przełącz tryb przewodowy/bezprzewodowy</value>
   </data>
   <data name="Firmware_Device_Mode_Instruction_1" xml:space="preserve">
-    <value>• You WILL need to restart your tracker after changing the mode</value>
+    <value>• Musisz zrestartować swój tracker po zmianie trybu</value>
   </data>
   <data name="Firmware_Device_Mode_Instruction_2" xml:space="preserve">
-    <value>• You MAY need to restart the app after a flash for trackers to show</value>
+    <value>• MOŻE zrestartować aplikację po flashowaniu, aby wyświetlić trackery</value>
   </data>
   <data name="Firmware_Device_Mode_Select_Placeholder" xml:space="preserve">
-    <value>Select a mode...</value>
+    <value>Wybierz tryb...</value>
   </data>
   <data name="Firmware_Wifi_Configuration_Header" xml:space="preserve">
-    <value>Wifi Configuration</value>
+    <value>Konfiguracja WiFi</value>
   </data>
   <data name="Firmware_Wifi_Configuration_Description" xml:space="preserve">
-    <value>Connect to Wifi and more</value>
+    <value>Połącz się z Wifi i więcej</value>
   </data>
   <data name="Firmware_Wifi_Credentials_Header" xml:space="preserve">
-    <value>Set your Wi-Fi credentials</value>
+    <value>Ustaw swoje dane logowania Wi-Fi</value>
   </data>
   <data name="Firmware_Wifi_Instructions_1" xml:space="preserve">
-    <value>• If you want to use your tracker wirelessly, you NEED to set its Wifi credentials</value>
+    <value>• Jeśli chcesz korzystać z trackera bezprzewodowo, NEED aby ustawić jego poświadczenia Wifi</value>
   </data>
   <data name="Firmware_Wifi_Instructions_2" xml:space="preserve">
-    <value>• You MUST scan for Wifi networks BEFORE you can set your Wifi credentials</value>
+    <value>• Skanowanie w poszukiwaniu sieci WiFi PRZED możesz ustawić swoje dane logowania</value>
   </data>
   <data name="Firmware_Wifi_SSID_Label" xml:space="preserve">
-    <value>WiFi Network Name (SSID)</value>
+    <value>Nazwa sieci WiFi (SSID)</value>
   </data>
   <data name="Firmware_Wifi_SSID_Placeholder" xml:space="preserve">
-    <value>Start typing to see WiFi networks...</value>
+    <value>Zacznij pisać, aby zobaczyć sieci WiFi...</value>
   </data>
   <data name="Firmware_Wifi_Password_Label" xml:space="preserve">
-    <value>WiFi Password</value>
+    <value>Hasło WiFi</value>
   </data>
   <data name="Firmware_Wifi_Password_Placeholder" xml:space="preserve">
-    <value>Enter WiFi password...</value>
+    <value>Wprowadź hasło WiFi...</value>
   </data>
   <data name="Firmware_Flashing_Header" xml:space="preserve">
     <value>Flashing Options</value>
   </data>
   <data name="Firmware_Flashing_Description" xml:space="preserve">
-    <value>Flash your device's firmware</value>
+    <value>Wgraj oprogramowanie Twojego urządzenia</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>CAUTION!! THIS WILL FACTORY RESET YOUR TRACKER. YOU WILL NEED TO PERFORM A FIRST TIME SET UP AFTER FLASHING YOUR TRACKER.</value>
+    <value>UWAGA!! TEN WSPÓŁCZYNNIK ZRESETUJ TWOJE TRACKER. OCZEKUJ SIĘ DO ZEZWOLENIA PIERWSZEGO CZASU PO PASZU TWOJEGO TRACKERA.</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>Flash Firmware</value>
   </data>
   <data name="Firmware_Flashing_Note" xml:space="preserve">
-    <value>This will take around ~10 seconds. Don't leave this page!</value>
+    <value>To zajmie około ~10 sekund. Nie opuszczaj tej strony!</value>
   </data>
   <data name="Firmware_Flashing_Complete" xml:space="preserve">
-    <value>Done! You will need to restart your tracker</value>
+    <value>Gotowe! Musisz zrestartować swój tracker</value>
   </data>
   <data name="Firmware_TrackerComboBox_Default" xml:space="preserve">
-    <value>Click to see trackers...</value>
+    <value>Kliknij, aby zobaczyć trackery...</value>
   </data>
   <data name="Firmware_RefreshDevices_Default" xml:space="preserve">
-    <value>Refresh Devices</value>
+    <value>Odśwież urządzenia</value>
   </data>
   <data name="Firmware_RefreshDevices_Refreshing" xml:space="preserve">
-    <value>Refreshing</value>
+    <value>Odświeżanie</value>
   </data>
   <data name="Firmware_RefreshDevices_Found" xml:space="preserve">
-    <value>Found {0} device(s).</value>
+    <value>Znaleziono urządzenia {0}.</value>
   </data>
   <data name="Firmware_SelectTracker_Default" xml:space="preserve">
-    <value>Select Tracker</value>
+    <value>Wybierz tracker</value>
   </data>
   <data name="Firmware_SelectTracker_Connected" xml:space="preserve">
-    <value>Tracker connected!</value>
+    <value>Tracker podłączony!</value>
   </data>
   <data name="Firmware_SelectTracker_NoResponse" xml:space="preserve">
-    <value>The tracker did not respond.</value>
+    <value>Śledzenie nie odpowiedziało.</value>
   </data>
   <data name="Firmware_ModeSetButton_Default" xml:space="preserve">
-    <value>Set Mode</value>
+    <value>Ustaw tryb</value>
   </data>
   <data name="Firmware_ModeSetButton_Setting" xml:space="preserve">
-    <value>Setting mode</value>
+    <value>Tryb ustawiania</value>
   </data>
   <data name="Firmware_ModeSetButton_Success" xml:space="preserve">
-    <value>Set!</value>
+    <value>Ustawione!</value>
   </data>
   <data name="Firmware_WifiSetButton_Default" xml:space="preserve">
-    <value>Set Wifi Creds</value>
+    <value>Ustaw Kreatory WiFi</value>
   </data>
   <data name="Firmware_WifiSetButton_Setting" xml:space="preserve">
-    <value>Setting WiFi credentials</value>
+    <value>Ustawienie poświadczeń WiFi</value>
   </data>
   <data name="Firmware_WifiSetButton_Success" xml:space="preserve">
-    <value>Sent!</value>
+    <value>Wysłane!</value>
   </data>
   <data name="Firmware_WifiSetButton_Error" xml:space="preserve">
-    <value>Something went wrong...</value>
+    <value>Coś poszło nie tak...</value>
   </data>
   <data name="Firmware_WifiScanButton_Default" xml:space="preserve">
-    <value>Refresh Wifi Networks</value>
+    <value>Odśwież sieci Wi-Fi</value>
   </data>
   <data name="Firmware_WifiScanButton_Scanning" xml:space="preserve">
-    <value>Scanning. This will take at most 30 seconds</value>
+    <value>Skanowanie. To zajmie nie więcej niż 30 sekund</value>
   </data>
   <data name="Firmware_WifiScanButton_Error" xml:space="preserve">
-    <value>Scan failed. Click to try again.</value>
+    <value>Skanowanie nie powiodło się. Kliknij, aby spróbować ponownie.</value>
   </data>
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
     <value>Found {0} networks. Click to scan again.</value>
   </data>
   <data name="VRC_Title_Header" xml:space="preserve">
-    <value>VRChat + VRCFaceTracking Settings</value>
+    <value>VRChat + ustawienia VRCFaceTracking</value>
   </data>
   <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
-    <value>Use Native VRC Eye Tracking</value>
+    <value>Użyj Natywnego Śledzenia Oczu VRC</value>
   </data>
   <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
-    <value>Brings eye tracking to avatars that do not have VRCFaceTracking</value>
+    <value>Śledzenie oczu do awatarów, które nie mają VRCFaceTracking</value>
   </data>
   <data name="VRC_ModuleMode_Header" xml:space="preserve">
-    <value>Set VRCFT module mode</value>
+    <value>Ustaw tryb modułu VRCFT</value>
   </data>
   <data name="VRC_ModuleMode_Description" xml:space="preserve">
-    <value>Send only eye, only face or both? (Change requires VRCFT restart)</value>
+    <value>Wysłać tylko oko, tylko twarz czy obojg? (Zmiana wymaga restartu VRCFT)</value>
   </data>
   <data name="VRC_ModuleMode_Placeholder" xml:space="preserve">
-    <value>Select a mode...</value>
+    <value>Wybierz tryb...</value>
   </data>
   <data name="Output_Title_Header" xml:space="preserve">
-    <value>Output</value>
+    <value>Wyjście</value>
   </data>
   <data name="Output_CopyButton_Tooltip" xml:space="preserve">
-    <value>Copy the log's output to your clipboard</value>
+    <value>Skopiuj dane wyjściowe dziennika do schowka</value>
   </data>
   <data name="Output_SaveButton_Tooltip" xml:space="preserve">
-    <value>Save the log's output</value>
+    <value>Zapisz wyjście dziennika</value>
   </data>
   <data name="Output_OpenLoggingDirectoryButton_Tooltip" xml:space="preserve">
-    <value>Open the logging directory</value>
+    <value>Otwórz katalog logowania</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>This wizard will guide you through setting up the new Babble App.</value>
+    <value>Ten kreator poprowadzi Cię poprzez skonfigurowanie nowej aplikacji Babble.</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
-    <value>Wired or Wireless?</value>
+    <value>Przewody czy bezprzewodowe?</value>
   </data>
   <data name="Onboarding_Wireless_Description1" xml:space="preserve">
-    <value>With newer Babbles, you'll need to perform a first time setup in the Firmware tab (Icon above).</value>
+    <value>Z nowszymi absolwentami musisz wykonać pierwszą konfigurację w zakładce Firmware (Ikona powyżej).</value>
   </data>
   <data name="Onboarding_Wireless_Description2" xml:space="preserve">
-    <value>It only takes 2 minutes! Select your tracker and mode (wired or wireless). It's that simple.</value>
+    <value>To zajmuje tylko 2 minuty! Wybierz swój tracker i tryb (przewodowy lub bezprzewodowy). To proste.</value>
   </data>
   <data name="Onboarding_Wireless_Note" xml:space="preserve">
-    <value>Please note newer trackers have a 20-second window before they enter camera mode.</value>
+    <value>Pamiętaj, że nowsze trackery mają 20-sekundowe okno zanim przejdą do trybu aparatu.</value>
   </data>
   <data name="Onboarding_Assembly_Header" xml:space="preserve">
-    <value>Assemble Your Tracker</value>
+    <value>Zainstaluj swój tracker</value>
   </data>
   <data name="Onboarding_Assembly_Description" xml:space="preserve">
-    <value>If you need help putting your tracker together, here's a useful Youtube tutorial!</value>
+    <value>Jeśli potrzebujesz pomocy w połączeniu ze swoim trackerem, oto przydatny samouczek z YouTubul!</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
-    <value>App Settings</value>
+    <value>Ustawienia aplikacji</value>
   </data>
   <data name="Settings_Language_Header" xml:space="preserve">
-    <value>Language</value>
+    <value>Język</value>
   </data>
   <data name="Settings_Language_Description" xml:space="preserve">
-    <value>Set the app's language. Switch pages to apply.</value>
+    <value>Ustaw język aplikacji. Przełącz strony na aplikację.</value>
   </data>
   <data name="Settings_Language_Default" xml:space="preserve">
-    <value>Default</value>
+    <value>Domyślny</value>
   </data>
   <data name="Settings_Language_English" xml:space="preserve">
-    <value>English</value>
+    <value>Angielski</value>
   </data>
   <data name="Settings_Language_Spanish" xml:space="preserve">
-    <value>Español</value>
+    <value>Español</value>
   </data>
   <data name="Settings_Language_Japanese" xml:space="preserve">
     <value>日本語</value>
@@ -460,91 +460,76 @@
     <value>中文</value>
   </data>
   <data name="Settings_Filter_Header" xml:space="preserve">
-    <value>One-Euro filter settings</value>
+    <value>Ustawienia jednego filtra Euro</value>
   </data>
   <data name="Settings_Filter_Description" xml:space="preserve">
-    <value>Filter Settings</value>
+    <value>Ustawienia filtra</value>
   </data>
   <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
-    <value>Enabled</value>
+    <value>Włączone</value>
   </data>
   <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
-    <value>Turn filtering on or off.</value>
+    <value>Włącz lub wyłącz filtrowanie.</value>
   </data>
   <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
-    <value>Minimum frequency cutoff</value>
+    <value>Minimalna częstotliwość odcięcia</value>
   </data>
   <data name="Settings_Filter_MinFreq_Description" xml:space="preserve">
-    <value>Controls how much smoothing is applied to slow movements</value>
+    <value>Kontroluje jak dużo wygładzania jest nakładane na powolne ruchy</value>
   </data>
   <data name="Settings_Filter_Template_Placeholder" xml:space="preserve">
-    <value>Select from a template</value>
+    <value>Wybierz z szablonu</value>
   </data>
   <data name="Settings_Filter_Template_Low" xml:space="preserve">
-    <value>Low ({0})</value>
+    <value>Niski ({0})</value>
   </data>
   <data name="Settings_Filter_Template_Medium" xml:space="preserve">
-    <value>Medium ({0})</value>
+    <value>Średni ({0})</value>
   </data>
   <data name="Settings_Filter_Template_High" xml:space="preserve">
-    <value>High ({0})</value>
+    <value>Wysokie ({0})</value>
   </data>
   <data name="Settings_Filter_Speed_Label" xml:space="preserve">
-    <value>Speed coefficient</value>
+    <value>Współczynnik prędkości</value>
   </data>
   <data name="Settings_Filter_Speed_Description" xml:space="preserve">
-    <value>Determines how the filter adapts when you move faster</value>
+    <value>Określa jak filtr dostosowuje się, gdy poruszasz się szybciej</value>
   </data>
   <data name="Settings_GPU_Header" xml:space="preserve">
-    <value>Use GPU acceleration</value>
+    <value>Użyj przyspieszenia GPU</value>
   </data>
   <data name="Settings_GPU_Description" xml:space="preserve">
-    <value>Use your GPU to make things run faster! Requires restart</value>
+    <value>Użyj swojego GPU, aby działać szybciej! Wymaga restartu</value>
   </data>
   <data name="Settings_LogLevel_Header" xml:space="preserve">
-    <value>Log Level Verbosity</value>
+    <value>Zapisuj poziom wizualizacji</value>
   </data>
   <data name="Settings_LogLevel_Description" xml:space="preserve">
-    <value>Minimum logging level. Requires restart</value>
+    <value>Minimalny poziom logowania. Wymaga ponownego uruchomienia</value>
   </data>
   <data name="Settings_Updates_Header" xml:space="preserve">
-    <value>Check For Updates</value>
+    <value>Sprawdź aktualizacje</value>
   </data>
   <data name="Settings_Updates_Description" xml:space="preserve">
-    <value>Should the app check for updates on start?</value>
+    <value>Czy aplikacja powinna sprawdzać aktualizacje przy starcie?</value>
   </data>
   <data name="Settings_FirstTime_Header" xml:space="preserve">
-    <value>Launch first time setup</value>
+    <value>Uruchom konfigurację po raz pierwszy</value>
   </data>
   <data name="Settings_FirstTime_Description" xml:space="preserve">
-    <value>Relaunches the first time setup</value>
+    <value>Ponownie uruchamia konfigurację po raz pierwszy</value>
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
-    <value>Launch</value>
+    <value>Uruchom</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
-    <value>Skip</value>
+    <value>Pomiń</value>
   </data>
   <data name="Onboarding_UI_Header" xml:space="preserve">
-    <value>Where is everything?</value>
+    <value>Gdzie jest wszystko?</value>
   </data>
   <data name="Onboarding_UI_Home_Description" xml:space="preserve">
-    <value>1. The Home Page is where you can set up your cameras, and perform an eye tracking calibration.</value>
-  </data>
-  <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
-    <value>2. The Calibration Page can be used to tweak your eye/face expressions individually.</value>
-  </data>
-  <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
-    <value>3. The Firmware Page is used to set up your device, or reset it.</value>
-  </data>
-  <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
-    <value>4. The VRChat Page is used to alter VRChat/VRCFaceTracking specific settings.</value>
-  </data>
-  <data name="Onboarding_UI_Output_Description" xml:space="preserve">
-    <value>5. The Output Page shows the status of the app errors and other useful information.</value>
-  </data>
-  <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
-    <value>6. The Settings Page is for general app settings, such as theme, language, and more.</value>
+    <value>1. Strona główna to miejsce, w którym możesz skonfigurować kamery i wykonać kalibrację śledzenia oczu.</value>
   </data>
   <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
     <value>The {0} can be used to tweak your eye/face expressions individually.</value>
@@ -562,96 +547,174 @@
     <value>The {0} is for general app settings, such as {1} and more.</value>
   </data>
   <data name="Onboarding_Complete_Header" xml:space="preserve">
-    <value>Setup Complete!</value>
+    <value>Konfiguracja zakończona!</value>
   </data>
   <data name="Onboarding_Complete_Description1" xml:space="preserve">
-    <value>You're all set to start using the new Babble App!</value>
+    <value>Jesteś gotowy zacząć używać nowej aplikacji Babble!</value>
   </data>
   <data name="Onboarding_Complete_Description2" xml:space="preserve">
-    <value>You can revisit this page in the settings.</value>
+    <value>Możesz ponownie odwiedzić tę stronę w ustawieniach.</value>
   </data>
   <data name="Settings_OSC_IP_Label" xml:space="preserve">
-    <value>IP Address</value>
+    <value>Adres IP</value>
   </data>
   <data name="Settings_OSC_Prefix_Label" xml:space="preserve">
     <value>OSC Prefix</value>
   </data>
   <data name="Settings_OSC_Recalibrate_Label" xml:space="preserve">
-    <value>Recalibrate Address</value>
+    <value>Ponownie skalibrować adres</value>
   </data>
   <data name="Settings_OSC_Recenter_Label" xml:space="preserve">
-    <value>Recenter Address</value>
+    <value>Adres wyśrodkowany</value>
   </data>
   <data name="Settings_OSC_SendPort_Label" xml:space="preserve">
-    <value>Send Port</value>
+    <value>Wyślij port</value>
   </data>
   <data name="Settings_OSC_ReceivePort_Label" xml:space="preserve">
-    <value>Receive Port</value>
+    <value>Port odbioru</value>
   </data>
   <data name="AdminWarning_Header" xml:space="preserve">
-    <value>Administrator Mode Warning</value>
+    <value>Ostrzeżenie trybu administratora</value>
   </data>
   <data name="AdminWarning_Message" xml:space="preserve">
-    <value>Do not run Baballonia as admin! There is no need, and it prevents eye tracking calibrations from working.</value>
+    <value>Nie uruchamiaj Baballonii jako administratora! Nie ma potrzeby, a to zapobiega wykrywaniu kalibracji oczu.</value>
   </data>
   <data name="Aero_Overlay_NotFound" xml:space="preserve">
-    <value>The gaze overlay program does not exist!</value>
+    <value>Program nakładki na spojrzenie nie istnieje!</value>
   </data>
   <data name="Aero_Overlay_AlreadyRunning" xml:space="preserve">
-    <value>The gaze overlay program is already running! Please close it and try again.</value>
+    <value>Nakładka widzenia jest już uruchomiona! Zamknij ją i spróbuj ponownie.</value>
   </data>
   <data name="Aero_SteamVR_NotRunning" xml:space="preserve">
-    <value>SteamVR is not running. Please run it and try again.</value>
+    <value>SteamVR nie jest uruchomiony. Uruchom go i spróbuj ponownie.</value>
   </data>
   <data name="Aero_CameraStream_Failed" xml:space="preserve">
-    <value>Failed to start camera streaming!</value>
+    <value>Nie udało się uruchomić strumieniowania aparatu!</value>
   </data>
   <data name="Aero_Calibration_Failed" xml:space="preserve">
-    <value>Failed to start calibration!</value>
+    <value>Nie udało się rozpocząć kalibracji!</value>
   </data>
   <data name="Aero_Calibration_Success" xml:space="preserve">
-    <value>Eye tracking calibration successful!</value>
+    <value>Kalibracja śledzenia oczu zakończona powodzeniem!</value>
   </data>
   <data name="Aero_Overlay_CleanupFailed" xml:space="preserve">
-    <value>Failed to stop/cleanup overlay!</value>
+    <value>Nie udało się zatrzymać/oczyścić nakładki!</value>
   </data>
   <data name="Calibration_Instructions_Line1" xml:space="preserve">
-    <value>The below sliders are used to calibrate the</value>
+    <value>Poniższe suwaki są używane do kalibracji</value>
   </data>
   <data name="Calibration_Instructions_Sensitivity" xml:space="preserve">
-    <value>sensitivity</value>
+    <value>wrażliwość</value>
   </data>
   <data name="Calibration_Instructions_Line1_2" xml:space="preserve">
-    <value>of your face expressions.</value>
+    <value>wyrażeń Twojej twarzy.</value>
   </data>
   <data name="Calibration_Instructions_Bullet1_1" xml:space="preserve">
-    <value>• Raising the</value>
+    <value>• Podwyższenie</value>
   </data>
   <data name="Calibration_Instructions_Minimum" xml:space="preserve">
-    <value>Minimum</value>
+    <value>Minimalny</value>
   </data>
   <data name="Calibration_Instructions_Bullet1_2" xml:space="preserve">
-    <value>value requires a stronger expression before it starts to show.</value>
+    <value>wartość wymaga silniejszego wyrażenia zanim zacznie się pokazywać.</value>
+  </data>
+  <data name="Settings_Language_Chinese_Simplified" xml:space="preserve">
+    <value>Chiński (uproszczony)</value>
+  </data>
+  <data name="Settings_Language_Chinese_Traditional" xml:space="preserve">
+    <value>Chiński (Tradycyjny)</value>
+  </data>
+  <data name="Settings_Language_German" xml:space="preserve">
+    <value>niemiecki</value>
+  </data>
+  <data name="Settings_Language_French" xml:space="preserve">
+    <value>Francuski</value>
+  </data>
+  <data name="Settings_Language_Italian" xml:space="preserve">
+    <value>włoski</value>
+  </data>
+  <data name="Settings_Language_Korean" xml:space="preserve">
+    <value>koreański</value>
+  </data>
+  <data name="Settings_Language_Portuguese_Brazil" xml:space="preserve">
+    <value>Portugalski (Brazylia)</value>
+  </data>
+  <data name="Settings_Language_Portuguese_Portugal" xml:space="preserve">
+    <value>Portugalski (Portugalia)</value>
+  </data>
+  <data name="Settings_Language_Russian" xml:space="preserve">
+    <value>rosyjski</value>
+  </data>
+  <data name="Settings_Language_Arabic" xml:space="preserve">
+    <value>arabski</value>
+  </data>
+  <data name="Settings_Language_Turkish" xml:space="preserve">
+    <value>turecki</value>
+  </data>
+  <data name="Settings_Language_Dutch" xml:space="preserve">
+    <value>Holenderski</value>
+  </data>
+  <data name="Settings_Language_Swedish" xml:space="preserve">
+    <value>Szwedzki</value>
+  </data>
+  <data name="Settings_Language_Finnish" xml:space="preserve">
+    <value>fiński</value>
+  </data>
+  <data name="Settings_Language_Danish" xml:space="preserve">
+    <value>duński</value>
+  </data>
+  <data name="Settings_Language_Norwegian" xml:space="preserve">
+    <value>norweski</value>
+  </data>
+  <data name="Settings_Language_Czech" xml:space="preserve">
+    <value>czeski</value>
+  </data>
+  <data name="Settings_Language_Hungarian" xml:space="preserve">
+    <value>węgierski</value>
+  </data>
+  <data name="Settings_Language_Romanian" xml:space="preserve">
+    <value>rumuński</value>
+  </data>
+  <data name="Settings_Language_Vietnamese" xml:space="preserve">
+    <value>Vietnamese</value>
+  </data>
+  <data name="Settings_Language_Ukrainian" xml:space="preserve">
+    <value>ukraiński</value>
+  </data>
+  <data name="Settings_Language_Greek" xml:space="preserve">
+    <value>grecki</value>
+  </data>
+  <data name="Settings_Language_Hebrew" xml:space="preserve">
+    <value>Hebrajski</value>
+  </data>
+  <data name="Settings_Language_Afrikaans" xml:space="preserve">
+    <value>Afrikaans</value>
+  </data>
+  <data name="Settings_Language_Catalan" xml:space="preserve">
+    <value>kataloński</value>
+  </data>
+  <data name="Settings_Language_Serbian" xml:space="preserve">
+    <value>serbski</value>
   </data>
   <data name="Calibration_Instructions_Bullet2_1" xml:space="preserve">
-    <value>• Lowering the</value>
+    <value>• Obniżenie</value>
   </data>
   <data name="Calibration_Instructions_Maximum" xml:space="preserve">
-    <value>Maximum</value>
+    <value>Maksymalnie</value>
   </data>
   <data name="Calibration_Instructions_Bullet2_2" xml:space="preserve">
-    <value>value means a smaller expression will reach 100% faster.</value>
+    <value>wartość oznacza, że mniejsze wyrażenie osiągnie 100% szybciej.</value>
   </data>
   <data name="DropOverlay_Important_Header" xml:space="preserve">
-    <value>Important!</value>
+    <value>Ważne!</value>
   </data>
   <data name="DropOverlay_Message" xml:space="preserve">
-    <value>Newer babble trackers have a 20 second delay after being plugged in before they can be used. It will make a USB plugging-in sound when it is ready!</value>
+    <value>Nowsze tropiciele mają 20 sekundowe opóźnienie po podłączeniu, zanim będą mogły zostać użyte. Spowoduje to dźwięk wtyczki USB, gdy będzie gotowy!</value>
   </data>
   <data name="DropOverlay_DontShowAgain" xml:space="preserve">
-    <value>Don't show this warning again</value>
+    <value>Nie pokazuj tego ostrzeżenia ponownie</value>
   </data>
   <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
-    <value>Dismiss</value>
+    <value>Odrzuć</value>
   </data>
 </root>
