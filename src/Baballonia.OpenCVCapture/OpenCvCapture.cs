@@ -46,6 +46,7 @@ public sealed class OpenCvCapture(string source, ILogger logger) : Capture(sourc
                      lowered.StartsWith("/dev/cu") ||
                      lowered.StartsWith("/dev/ttyacm");;
         if (serial) return false;
+        if (OperatingSystem.IsLinux()) return false;
 
         return lowered.StartsWith("/dev/video") ||
                lowered.EndsWith("appsink") ||
