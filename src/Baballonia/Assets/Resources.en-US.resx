@@ -544,7 +544,7 @@
     <value>The {0} shows the status of the app, {1} and other useful information.</value>
   </data>
   <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
-    <value>The {0} is for general app settings, such as {1} and more.</value>
+    <value></value>
   </data>
   <data name="Onboarding_Complete_Header" xml:space="preserve">
     <value>Setup Complete!</value>
