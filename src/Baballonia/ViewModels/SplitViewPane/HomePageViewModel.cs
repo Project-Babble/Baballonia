@@ -415,6 +415,8 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     private readonly ProcessingLoopService _processingLoopService;
     private readonly DropOverlayService _dropOverlayService;
 
+    public string RequestedVRCalibration = CalibrationRoutine.Map["QuickCalibration"];
+
     private ILogger<HomePageViewModel> _logger;
 
     public HomePageViewModel()
@@ -759,7 +761,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     [RelayCommand]
     private async Task RequestVRCalibration()
     {
-        var res = await App.Overlay.EyeTrackingCalibrationRequested(CalibrationRoutine.QuickCalibration);
+        var res = await App.Overlay.EyeTrackingCalibrationRequested(RequestedVRCalibration);
         if (res.success)
         {
             await _localSettingsService.SaveSettingAsync("EyeHome_EyeModel", "tuned_temporal_eye_tracking.onnx");

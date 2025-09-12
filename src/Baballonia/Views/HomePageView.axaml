@@ -44,12 +44,17 @@
             </StackPanel>
           </SplitButton.Content>
           <SplitButton.Flyout>
-            <MenuFlyout>
-              <MenuItem Click="OnCalibrationMenuItemClick" Header="{x:Static assets:Resources.Home_Eye_Calibration}">
+            <MenuFlyout> <!-- Names come from CalibrationRoutine.cs -->
+              <MenuItem Click="OnCalibrationMenuItemClick" x:Name="QuickCalibration" Header="{x:Static assets:Resources.Home_Eye_Calibration}">
                 <MenuItem.Icon>
                   <PathIcon Data="{StaticResource HeadsetVrRegular}" />
                 </MenuItem.Icon>
               </MenuItem>
+              <!--<MenuItem Click="OnCalibrationMenuItemClick" x:Name="QuickCalibrationNoTutorial" Header="Eye Calibration (No Tutorial)">
+                <MenuItem.Icon>
+                  <PathIcon Data="{StaticResource HeadsetVrRegular}" />
+                </MenuItem.Icon>
+              </MenuItem>-->
             </MenuFlyout>
           </SplitButton.Flyout>
         </SplitButton>

@@ -169,10 +169,10 @@ public partial class HomePageView : UserControl
 
     private void OnCalibrationMenuItemClick(object? sender, RoutedEventArgs e)
     {
-        if (sender is MenuItem menuItem && DataContext is HomePageViewModel vm)
-        {
-            vm.SelectedCalibrationTextBlock.Text = menuItem.Header?.ToString() ?? "";
-        }
+        if (sender is not MenuItem menuItem || DataContext is not HomePageViewModel vm) return;
+
+        vm.SelectedCalibrationTextBlock.Text = menuItem.Header?.ToString()!;
+        vm.RequestedVRCalibration = CalibrationRoutine.Map[menuItem.Name!];
     }
 
     private void OnExpanderCollapsed(object? sender, RoutedEventArgs e)
