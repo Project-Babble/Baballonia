@@ -118,109 +118,109 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Settings_Theme_Dark_Content" xml:space="preserve">
-    <value>Dark</value>
+    <value>Mørk</value>
   </data>
   <data name="Settings_Theme_Default_Content" xml:space="preserve">
-    <value>Default</value>
+    <value>Standard</value>
   </data>
   <data name="Settings_Theme_Light_Content" xml:space="preserve">
-    <value>Light</value>
+    <value>Lys</value>
   </data>
   <data name="Home_Title_Header" xml:space="preserve">
-    <value>Home</value>
+    <value>Hjem</value>
   </data>
   <data name="Settings_Theme_Header" xml:space="preserve">
-    <value>App theme</value>
+    <value>App tema</value>
   </data>
   <data name="Settings_Theme_Description" xml:space="preserve">
-    <value>Select which app theme to display</value>
+    <value>Vælg hvilket apptema der skal vises</value>
   </data>
   <data name="Settings_OSC_Description" xml:space="preserve">
-    <value>Where should OSC data be sent?</value>
+    <value>Hvor skal OSC data sendes?</value>
   </data>
   <data name="Settings_OSC_Header" xml:space="preserve">
     <value>OSC</value>
   </data>
   <data name="Home_Eye_Calibration" xml:space="preserve">
-    <value>Eye Calibration</value>
+    <value>Kalibrering Af Øjne</value>
   </data>
   <data name="Home_Left_Camera_Address" xml:space="preserve">
-    <value>Left Camera Address</value>
+    <value>Venstre Kamera Adresse</value>
   </data>
   <data name="Home_Cameras_Start_Camera" xml:space="preserve">
-    <value>Start Camera</value>
+    <value>Start Kamera</value>
   </data>
   <data name="Home_Cameras_Stop_Camera" xml:space="preserve">
-    <value>Stop Camera</value>
+    <value>Stop Kamera</value>
   </data>
   <data name="Home_Cameras_Tracking_Mode" xml:space="preserve">
-    <value>Tracking</value>
+    <value>Sporing</value>
   </data>
   <data name="Home_Cameras_Cropping_Mode" xml:space="preserve">
-    <value>Cropping</value>
+    <value>Beskæring</value>
   </data>
   <data name="Home_Left_Camera_Select_Entire_Frame" xml:space="preserve">
-    <value>Select Left Frame</value>
+    <value>Vælg Venstre Ramme</value>
   </data>
   <data name="Home_Cameras_Vertical_Flip_Header" xml:space="preserve">
-    <value>Vertical Flip</value>
+    <value>Lodret Vend</value>
   </data>
   <data name="Home_Cameras_Vertical_Flip_Description" xml:space="preserve">
-    <value>Flip the image vertically</value>
+    <value>Vend billedet lodret</value>
   </data>
   <data name="Home_Cameras_Horizontal_Flip_Header" xml:space="preserve">
-    <value>Horizontal flip</value>
+    <value>Vandret flip</value>
   </data>
   <data name="Home_Cameras_Horizontal_Flip_Description" xml:space="preserve">
-    <value>Flip the image horizontally</value>
+    <value>Vend billedet vandret</value>
   </data>
   <data name="Home_Cameras_Rotation_Description" xml:space="preserve">
-    <value>Rotates the image in a circle</value>
+    <value>Roterer billedet i en cirkel</value>
   </data>
   <data name="Home_Cameras_Brightness_Header" xml:space="preserve">
-    <value>Image Brightness</value>
+    <value>Billedlysstyrke</value>
   </data>
   <data name="Home_Cameras_Rotation_Header" xml:space="preserve">
-    <value>Image Rotation</value>
+    <value>Rotation Af Billede</value>
   </data>
   <data name="Home_Cameras_Brightness_Description" xml:space="preserve">
-    <value>Adjust the brightness of the image</value>
+    <value>Justér lysstyrken på billedet</value>
   </data>
   <data name="Home_Right_Camera_Address" xml:space="preserve">
-    <value>Right Camera Address</value>
+    <value>Højre Kamera Adresse</value>
   </data>
   <data name="Home_Right_Camera_Select_Entire_Frame" xml:space="preserve">
-    <value>Select Right Frame</value>
+    <value>Vælg Højre Ramme</value>
   </data>
   <data name="Home_Face_Camera_Address" xml:space="preserve">
-    <value>Face Camera Address</value>
+    <value>Ansigtskamera Adresse</value>
   </data>
   <data name="Home_Face_Camera_Select_Entire_Frame" xml:space="preserve">
-    <value>Select Face Frame</value>
+    <value>Vælg Ansigt Ramme</value>
   </data>
   <data name="Home_Left_Camera_Header" xml:space="preserve">
-    <value>Left Eye Camera</value>
+    <value>Venstre Øjenkamera</value>
   </data>
   <data name="Home_Face_Camera_Header" xml:space="preserve">
-    <value>Face Camera</value>
+    <value>Ansigtskamera</value>
   </data>
   <data name="Home_Right_Camera_Header" xml:space="preserve">
-    <value>Right Eye Camera</value>
+    <value>Højre Øjenkamera</value>
   </data>
   <data name="Home_Left_Camera_Settings" xml:space="preserve">
-    <value>Left Camera Settings</value>
+    <value>Indstillinger For Venstre Kamera</value>
   </data>
   <data name="Home_Face_Camera_Settings" xml:space="preserve">
-    <value>Face Camera Settings</value>
+    <value>Indstillinger For Ansigtskamera</value>
   </data>
   <data name="Home_Right_Camera_Settings" xml:space="preserve">
-    <value>Right Camera Settings</value>
+    <value>Indstillinger For Højre Kamera</value>
   </data>
   <data name="Common_Start_Typing" xml:space="preserve">
-    <value>Start typing...</value>
+    <value>Begynd at skrive...</value>
   </data>
   <data name="Calibration_Title_Header" xml:space="preserve">
-    <value>Calibration</value>
+    <value>Kalibrering</value>
   </data>
   <data name="Calibration_Reset_Minimums" xml:space="preserve">
     <value>Reset Minimums</value>
@@ -229,226 +229,226 @@
     <value>Reset Maximums</value>
   </data>
   <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
-    <value>Eye Expressions</value>
+    <value>Øjne Udtryk</value>
   </data>
   <data name="Calibration_Nose_Expressions_Header" xml:space="preserve">
-    <value>Nose Expressions</value>
+    <value>Næseudtryk</value>
   </data>
   <data name="Calibration_Tongue_Expressions_Header" xml:space="preserve">
-    <value>Tongue Expressions</value>
+    <value>Tunge Udtryk</value>
   </data>
   <data name="Calibration_Mouth_Expressions_Header" xml:space="preserve">
-    <value>Mouth Expressions</value>
+    <value>Mouth Udtryk</value>
   </data>
   <data name="Calibration_Jaw_Expressions_Header" xml:space="preserve">
-    <value>Jaw Expressions</value>
+    <value>Jaw Udtryk</value>
   </data>
   <data name="Calibration_Cheek_Expressions_Header" xml:space="preserve">
-    <value>Cheek Expressions</value>
+    <value>Tykke Udtryk</value>
   </data>
   <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Header" xml:space="preserve">
-    <value>Stabilize Eyes</value>
+    <value>Stabilisere Øjne</value>
   </data>
   <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Description" xml:space="preserve">
-    <value>Prevents eyes from looking out in opposite directions, but may overcorrect.</value>
+    <value>Forhindrer øjne i at se ud i modsatte retninger, men kan overkorrekte.</value>
   </data>
   <data name="Firmware_Title_Header" xml:space="preserve">
     <value>Firmware</value>
   </data>
   <data name="Firmware_Select_Tracker_Header" xml:space="preserve">
-    <value>Select your tracker</value>
+    <value>Vælg din tracker</value>
   </data>
   <data name="Firmware_Device_Instructions_1" xml:space="preserve">
-    <value>• After powering on/connecting your device you will have 20 seconds to press "Refresh" and select your device from the dropdown</value>
+    <value>• Når du har tændt eller tilsluttet din enhed, vil du have 20 sekunder til at trykke på "Opdatér" og vælge din enhed fra rullemenuen</value>
   </data>
   <data name="Firmware_Device_Instructions_2" xml:space="preserve">
-    <value>• Certain configuration operations will take a little bit!</value>
+    <value>• Visse konfigurationsoperationer vil tage lidt lidt!</value>
   </data>
   <data name="Firmware_Device_Configuration_Header" xml:space="preserve">
-    <value>Device Configuration</value>
+    <value>Konfiguration Af Enhed</value>
   </data>
   <data name="Firmware_Device_Configuration_Description" xml:space="preserve">
-    <value>Toggle wired/wireless mode</value>
+    <value>Slå kablet/trådløs tilstand til/fra</value>
   </data>
   <data name="Firmware_Device_Mode_Header" xml:space="preserve">
-    <value>Toggle wired/wireless mode</value>
+    <value>Slå kablet/trådløs tilstand til/fra</value>
   </data>
   <data name="Firmware_Device_Mode_Instruction_1" xml:space="preserve">
-    <value>• You WILL need to restart your tracker after changing the mode</value>
+    <value>• Du vil være nødt til at genstarte din tracker efter at have skiftet tilstand</value>
   </data>
   <data name="Firmware_Device_Mode_Instruction_2" xml:space="preserve">
-    <value>• You MAY need to restart the app after a flash for trackers to show</value>
+    <value>• Du KAN have brug for at genstarte app'en efter en flash til trackers for at vise</value>
   </data>
   <data name="Firmware_Device_Mode_Select_Placeholder" xml:space="preserve">
-    <value>Select a mode...</value>
+    <value>Vælg en tilstand...</value>
   </data>
   <data name="Firmware_Wifi_Configuration_Header" xml:space="preserve">
-    <value>Wifi Configuration</value>
+    <value>Wi-Fi Konfiguration</value>
   </data>
   <data name="Firmware_Wifi_Configuration_Description" xml:space="preserve">
-    <value>Connect to Wifi and more</value>
+    <value>Opret forbindelse til Wi-Fi og meget mere</value>
   </data>
   <data name="Firmware_Wifi_Credentials_Header" xml:space="preserve">
-    <value>Set your Wi-Fi credentials</value>
+    <value>Indstil dine Wi-Fi-legitimationsoplysninger</value>
   </data>
   <data name="Firmware_Wifi_Instructions_1" xml:space="preserve">
-    <value>• If you want to use your tracker wirelessly, you NEED to set its Wifi credentials</value>
+    <value>• Hvis du ønsker at bruge din tracker trådløst, skal du indstille dens Wifi-legitimationsoplysninger</value>
   </data>
   <data name="Firmware_Wifi_Instructions_2" xml:space="preserve">
-    <value>• You MUST scan for Wifi networks BEFORE you can set your Wifi credentials</value>
+    <value>• Du SKAL scanne efter Wi-Fi-netværk, FØR du kan indstille dine Wi-Fi-oplysninger</value>
   </data>
   <data name="Firmware_Wifi_SSID_Label" xml:space="preserve">
-    <value>WiFi Network Name (SSID)</value>
+    <value>WiFi Netværksnavn (SSID)</value>
   </data>
   <data name="Firmware_Wifi_SSID_Placeholder" xml:space="preserve">
-    <value>Start typing to see WiFi networks...</value>
+    <value>Begynd at skrive for at se Wi-Fi-netværk...</value>
   </data>
   <data name="Firmware_Wifi_Password_Label" xml:space="preserve">
-    <value>WiFi Password</value>
+    <value>WiFi Adgangskode</value>
   </data>
   <data name="Firmware_Wifi_Password_Placeholder" xml:space="preserve">
-    <value>Enter WiFi password...</value>
+    <value>Indtast WiFi adgangskode...</value>
   </data>
   <data name="Firmware_Flashing_Header" xml:space="preserve">
     <value>Flashing Options</value>
   </data>
   <data name="Firmware_Flashing_Description" xml:space="preserve">
-    <value>Flash your device's firmware</value>
+    <value>Flash din enheds firmware</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>CAUTION!! THIS WILL FACTORY RESET YOUR TRACKER. YOU WILL NEED TO PERFORM A FIRST TIME SET UP AFTER FLASHING YOUR TRACKER.</value>
+    <value>ADVARSEL!! DETTE VIL FAKTORI GENNEMFØRELSE DIN TRACKER. DU VIL VIL TIL AT PERFORM EN FØRSTE TID SÆT OP EFTER SPILLER DIN TRACKER.</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>Flash Firmware</value>
   </data>
   <data name="Firmware_Flashing_Note" xml:space="preserve">
-    <value>This will take around ~10 seconds. Don't leave this page!</value>
+    <value>Dette vil tage omkring ~ 10 sekunder. Forlad ikke denne side!</value>
   </data>
   <data name="Firmware_Flashing_Complete" xml:space="preserve">
-    <value>Done! You will need to restart your tracker</value>
+    <value>Færdig! Du skal genstarte din tracker</value>
   </data>
   <data name="Firmware_TrackerComboBox_Default" xml:space="preserve">
-    <value>Click to see trackers...</value>
+    <value>Klik for at se trackere...</value>
   </data>
   <data name="Firmware_RefreshDevices_Default" xml:space="preserve">
-    <value>Refresh Devices</value>
+    <value>Opdater Enheder</value>
   </data>
   <data name="Firmware_RefreshDevices_Refreshing" xml:space="preserve">
-    <value>Refreshing</value>
+    <value>Opdaterer</value>
   </data>
   <data name="Firmware_RefreshDevices_Found" xml:space="preserve">
-    <value>Found {0} device(s).</value>
+    <value>Fandt {0} enhed(er).</value>
   </data>
   <data name="Firmware_SelectTracker_Default" xml:space="preserve">
-    <value>Select Tracker</value>
+    <value>Vælg Tracker</value>
   </data>
   <data name="Firmware_SelectTracker_Connected" xml:space="preserve">
-    <value>Tracker connected!</value>
+    <value>Tracker tilsluttet!</value>
   </data>
   <data name="Firmware_SelectTracker_NoResponse" xml:space="preserve">
-    <value>The tracker did not respond.</value>
+    <value>Trackeren svarede ikke.</value>
   </data>
   <data name="Firmware_ModeSetButton_Default" xml:space="preserve">
-    <value>Set Mode</value>
+    <value>Sæt Tilstand</value>
   </data>
   <data name="Firmware_ModeSetButton_Setting" xml:space="preserve">
-    <value>Setting mode</value>
+    <value>Indstilling af tilstand</value>
   </data>
   <data name="Firmware_ModeSetButton_Success" xml:space="preserve">
-    <value>Set!</value>
+    <value>Sæt!</value>
   </data>
   <data name="Firmware_WifiSetButton_Default" xml:space="preserve">
-    <value>Set Wifi Creds</value>
+    <value>Sæt Wi-Fi-opskrifter</value>
   </data>
   <data name="Firmware_WifiSetButton_Setting" xml:space="preserve">
-    <value>Setting WiFi credentials</value>
+    <value>Indstilling af WiFi-akkreditiver</value>
   </data>
   <data name="Firmware_WifiSetButton_Success" xml:space="preserve">
-    <value>Sent!</value>
+    <value>Sendt!</value>
   </data>
   <data name="Firmware_WifiSetButton_Error" xml:space="preserve">
-    <value>Something went wrong...</value>
+    <value>Noget gik galt...</value>
   </data>
   <data name="Firmware_WifiScanButton_Default" xml:space="preserve">
-    <value>Refresh Wifi Networks</value>
+    <value>Opdater Wi-Fi-netværk</value>
   </data>
   <data name="Firmware_WifiScanButton_Scanning" xml:space="preserve">
-    <value>Scanning. This will take at most 30 seconds</value>
+    <value>Scanning. Dette vil tage højst 30 sekunder</value>
   </data>
   <data name="Firmware_WifiScanButton_Error" xml:space="preserve">
-    <value>Scan failed. Click to try again.</value>
+    <value>Scanning mislykkedes. Klik for at prøve igen.</value>
   </data>
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
-    <value>Found {0} networks. Click to scan again.</value>
+    <value>Fandt {0} -netværk. Klik for at scanne igen.</value>
   </data>
   <data name="VRC_Title_Header" xml:space="preserve">
-    <value>VRChat + VRCFaceTracking Settings</value>
+    <value>VRChat + VRCFaceTracking Indstillinger</value>
   </data>
   <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
-    <value>Use Native VRC Eye Tracking</value>
+    <value>Brug Native VRC Eye Tracking</value>
   </data>
   <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
-    <value>Brings eye tracking to avatars that do not have VRCFaceTracking</value>
+    <value>Bringer øjensporing til avatarer, der ikke har VRCFaceTracking</value>
   </data>
   <data name="VRC_ModuleMode_Header" xml:space="preserve">
-    <value>Set VRCFT module mode</value>
+    <value>Indstil VRCFT modul tilstand</value>
   </data>
   <data name="VRC_ModuleMode_Description" xml:space="preserve">
-    <value>Send only eye, only face or both? (Change requires VRCFT restart)</value>
+    <value>Send kun øje, kun ansigt eller begge? (Ændring kræver VRCFT genstart)</value>
   </data>
   <data name="VRC_ModuleMode_Placeholder" xml:space="preserve">
-    <value>Select a mode...</value>
+    <value>Vælg en tilstand...</value>
   </data>
   <data name="Output_Title_Header" xml:space="preserve">
     <value>Output</value>
   </data>
   <data name="Output_CopyButton_Tooltip" xml:space="preserve">
-    <value>Copy the log's output to your clipboard</value>
+    <value>Kopier logs output til din udklipsholder</value>
   </data>
   <data name="Output_SaveButton_Tooltip" xml:space="preserve">
-    <value>Save the log's output</value>
+    <value>Gem logs output</value>
   </data>
   <data name="Output_OpenLoggingDirectoryButton_Tooltip" xml:space="preserve">
-    <value>Open the logging directory</value>
+    <value>Åbn logmappen</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>This wizard will guide you through setting up the new Babble App.</value>
+    <value>Denne guide vil guide dig gennem opsætning af den nye Babble App.</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
-    <value>Wired or Wireless?</value>
+    <value>Kablet eller trådløs?</value>
   </data>
   <data name="Onboarding_Wireless_Description1" xml:space="preserve">
-    <value>With newer Babbles, you'll need to perform a first time setup in the Firmware tab (Icon above).</value>
+    <value>Med nyere Babbles, skal du udføre en første opsætning i fanen Firmware (Icon ovenfor).</value>
   </data>
   <data name="Onboarding_Wireless_Description2" xml:space="preserve">
-    <value>It only takes 2 minutes! Select your tracker and mode (wired or wireless). It's that simple.</value>
+    <value>Det tager kun 2 minutter! Vælg din tracker og tilstand (kablet eller trådløs). Det er så simpelt.</value>
   </data>
   <data name="Onboarding_Wireless_Note" xml:space="preserve">
-    <value>Please note newer trackers have a 20-second window before they enter camera mode.</value>
+    <value>Bemærk venligst at nyere trackere har et 20-sekunders vindue, før de indtaster kameratilstand.</value>
   </data>
   <data name="Onboarding_Assembly_Header" xml:space="preserve">
-    <value>Assemble Your Tracker</value>
+    <value>Saml Din Tracker</value>
   </data>
   <data name="Onboarding_Assembly_Description" xml:space="preserve">
-    <value>If you need help putting your tracker together, here's a useful Youtube tutorial!</value>
+    <value>Hvis du har brug for hjælp til at sætte din tracker sammen, her er en nyttig Youtube tutorial!</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
-    <value>App Settings</value>
+    <value>Indstillinger For App</value>
   </data>
   <data name="Settings_Language_Header" xml:space="preserve">
-    <value>Language</value>
+    <value>Sprog</value>
   </data>
   <data name="Settings_Language_Description" xml:space="preserve">
-    <value>Set the app's language. Switch pages to apply.</value>
+    <value>Indstil appens sprog. Skift sider for at anvende.</value>
   </data>
   <data name="Settings_Language_Default" xml:space="preserve">
-    <value>Default</value>
+    <value>Standard</value>
   </data>
   <data name="Settings_Language_English" xml:space="preserve">
-    <value>English</value>
+    <value>Engelsk</value>
   </data>
   <data name="Settings_Language_Spanish" xml:space="preserve">
-    <value>Español</value>
+    <value>Español</value>
   </data>
   <data name="Settings_Language_Japanese" xml:space="preserve">
     <value>日本語</value>
@@ -460,91 +460,76 @@
     <value>中文</value>
   </data>
   <data name="Settings_Filter_Header" xml:space="preserve">
-    <value>One-Euro filter settings</value>
+    <value>One-Euro filter indstillinger</value>
   </data>
   <data name="Settings_Filter_Description" xml:space="preserve">
-    <value>Filter Settings</value>
+    <value>Filtrer Indstillinger</value>
   </data>
   <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
-    <value>Enabled</value>
+    <value>Aktiveret</value>
   </data>
   <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
-    <value>Turn filtering on or off.</value>
+    <value>Slå filtrering til eller fra.</value>
   </data>
   <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
-    <value>Minimum frequency cutoff</value>
+    <value>Mindste afskæring af frekvens</value>
   </data>
   <data name="Settings_Filter_MinFreq_Description" xml:space="preserve">
-    <value>Controls how much smoothing is applied to slow movements</value>
+    <value>Styrer hvor meget udjævning der anvendes til langsomme bevægelser</value>
   </data>
   <data name="Settings_Filter_Template_Placeholder" xml:space="preserve">
-    <value>Select from a template</value>
+    <value>Vælg fra en skabelon</value>
   </data>
   <data name="Settings_Filter_Template_Low" xml:space="preserve">
-    <value>Low ({0})</value>
+    <value>Lav ({0})</value>
   </data>
   <data name="Settings_Filter_Template_Medium" xml:space="preserve">
     <value>Medium ({0})</value>
   </data>
   <data name="Settings_Filter_Template_High" xml:space="preserve">
-    <value>High ({0})</value>
+    <value>Høj ({0})</value>
   </data>
   <data name="Settings_Filter_Speed_Label" xml:space="preserve">
-    <value>Speed coefficient</value>
+    <value>Hastighedskoefficient</value>
   </data>
   <data name="Settings_Filter_Speed_Description" xml:space="preserve">
-    <value>Determines how the filter adapts when you move faster</value>
+    <value>Bestemmer, hvordan filteret tilpasser sig, når du bevæger dig hurtigere</value>
   </data>
   <data name="Settings_GPU_Header" xml:space="preserve">
-    <value>Use GPU acceleration</value>
+    <value>Brug GPU acceleration</value>
   </data>
   <data name="Settings_GPU_Description" xml:space="preserve">
-    <value>Use your GPU to make things run faster! Requires restart</value>
+    <value>Brug din GPU til at få tingene til at køre hurtigere! Kræver genstart</value>
   </data>
   <data name="Settings_LogLevel_Header" xml:space="preserve">
-    <value>Log Level Verbosity</value>
+    <value>Log Niveau Verbosity</value>
   </data>
   <data name="Settings_LogLevel_Description" xml:space="preserve">
-    <value>Minimum logging level. Requires restart</value>
+    <value>Minimum logføringsniveau. Kræver genstart</value>
   </data>
   <data name="Settings_Updates_Header" xml:space="preserve">
-    <value>Check For Updates</value>
+    <value>Tjek For Opdateringer</value>
   </data>
   <data name="Settings_Updates_Description" xml:space="preserve">
-    <value>Should the app check for updates on start?</value>
+    <value>Skal app'en søge efter opdateringer ved start?</value>
   </data>
   <data name="Settings_FirstTime_Header" xml:space="preserve">
-    <value>Launch first time setup</value>
+    <value>Start første gang opsætning</value>
   </data>
   <data name="Settings_FirstTime_Description" xml:space="preserve">
-    <value>Relaunches the first time setup</value>
+    <value>Genstarter første gang opsætning</value>
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
-    <value>Launch</value>
+    <value>Start</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
-    <value>Skip</value>
+    <value>Overspring</value>
   </data>
   <data name="Onboarding_UI_Header" xml:space="preserve">
-    <value>Where is everything?</value>
+    <value>Hvor er alt?</value>
   </data>
   <data name="Onboarding_UI_Home_Description" xml:space="preserve">
-    <value>1. The Home Page is where you can set up your cameras, and perform an eye tracking calibration.</value>
-  </data>
-  <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
-    <value>2. The Calibration Page can be used to tweak your eye/face expressions individually.</value>
-  </data>
-  <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
-    <value>3. The Firmware Page is used to set up your device, or reset it.</value>
-  </data>
-  <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
-    <value>4. The VRChat Page is used to alter VRChat/VRCFaceTracking specific settings.</value>
-  </data>
-  <data name="Onboarding_UI_Output_Description" xml:space="preserve">
-    <value>5. The Output Page shows the status of the app errors and other useful information.</value>
-  </data>
-  <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
-    <value>6. The Settings Page is for general app settings, such as theme, language, and more.</value>
+    <value>1. Hjemmesiden er, hvor du kan konfigurere dine kameraer og udføre en øjensporing kalibrering.</value>
   </data>
   <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
     <value>The {0} can be used to tweak your eye/face expressions individually.</value>
@@ -562,96 +547,174 @@
     <value>The {0} is for general app settings, such as {1} and more.</value>
   </data>
   <data name="Onboarding_Complete_Header" xml:space="preserve">
-    <value>Setup Complete!</value>
+    <value>Opsætning Fuldført!</value>
   </data>
   <data name="Onboarding_Complete_Description1" xml:space="preserve">
-    <value>You're all set to start using the new Babble App!</value>
+    <value>Du er alle indstillet til at begynde at bruge den nye Babble App!</value>
   </data>
   <data name="Onboarding_Complete_Description2" xml:space="preserve">
-    <value>You can revisit this page in the settings.</value>
+    <value>Du kan se denne side i indstillingerne.</value>
   </data>
   <data name="Settings_OSC_IP_Label" xml:space="preserve">
-    <value>IP Address</value>
+    <value>Ip Adresse</value>
   </data>
   <data name="Settings_OSC_Prefix_Label" xml:space="preserve">
     <value>OSC Prefix</value>
   </data>
   <data name="Settings_OSC_Recalibrate_Label" xml:space="preserve">
-    <value>Recalibrate Address</value>
+    <value>Rekalibrér Adresse</value>
   </data>
   <data name="Settings_OSC_Recenter_Label" xml:space="preserve">
-    <value>Recenter Address</value>
+    <value>Seneste Adresse</value>
   </data>
   <data name="Settings_OSC_SendPort_Label" xml:space="preserve">
     <value>Send Port</value>
   </data>
   <data name="Settings_OSC_ReceivePort_Label" xml:space="preserve">
-    <value>Receive Port</value>
+    <value>Modtag Port</value>
   </data>
   <data name="AdminWarning_Header" xml:space="preserve">
-    <value>Administrator Mode Warning</value>
+    <value>Advarsel Om Administratortilstand</value>
   </data>
   <data name="AdminWarning_Message" xml:space="preserve">
-    <value>Do not run Baballonia as admin! There is no need, and it prevents eye tracking calibrations from working.</value>
+    <value>Kør ikke Baballonia som administrator! Der er ingen behov, og det forhindrer øjensporing kalibreringer i at fungere.</value>
   </data>
   <data name="Aero_Overlay_NotFound" xml:space="preserve">
-    <value>The gaze overlay program does not exist!</value>
+    <value>Sygen overlay programmet eksisterer ikke!</value>
   </data>
   <data name="Aero_Overlay_AlreadyRunning" xml:space="preserve">
-    <value>The gaze overlay program is already running! Please close it and try again.</value>
+    <value>Sygen overlay programmet kører allerede! Luk det venligst og prøv igen.</value>
   </data>
   <data name="Aero_SteamVR_NotRunning" xml:space="preserve">
-    <value>SteamVR is not running. Please run it and try again.</value>
+    <value>SteamVR kører ikke. Kør det og prøv igen.</value>
   </data>
   <data name="Aero_CameraStream_Failed" xml:space="preserve">
-    <value>Failed to start camera streaming!</value>
+    <value>Mislykkedes at starte kamerastreaming!</value>
   </data>
   <data name="Aero_Calibration_Failed" xml:space="preserve">
-    <value>Failed to start calibration!</value>
+    <value>Kunne ikke starte kalibrering!</value>
   </data>
   <data name="Aero_Calibration_Success" xml:space="preserve">
-    <value>Eye tracking calibration successful!</value>
+    <value>Kalibrering af øjensporing lykkedes!</value>
   </data>
   <data name="Aero_Overlay_CleanupFailed" xml:space="preserve">
-    <value>Failed to stop/cleanup overlay!</value>
+    <value>Mislykkedes at stoppe/oprydning overlay!</value>
   </data>
   <data name="Calibration_Instructions_Line1" xml:space="preserve">
-    <value>The below sliders are used to calibrate the</value>
+    <value>Nedenstående skydere bruges til at kalibrere</value>
   </data>
   <data name="Calibration_Instructions_Sensitivity" xml:space="preserve">
-    <value>sensitivity</value>
+    <value>sensitivitet</value>
   </data>
   <data name="Calibration_Instructions_Line1_2" xml:space="preserve">
-    <value>of your face expressions.</value>
+    <value>af dine ansigtsudtryk.</value>
   </data>
   <data name="Calibration_Instructions_Bullet1_1" xml:space="preserve">
-    <value>• Raising the</value>
+    <value>• Forhøjelse af</value>
   </data>
   <data name="Calibration_Instructions_Minimum" xml:space="preserve">
-    <value>Minimum</value>
+    <value>Mindste</value>
   </data>
   <data name="Calibration_Instructions_Bullet1_2" xml:space="preserve">
-    <value>value requires a stronger expression before it starts to show.</value>
+    <value>værdi kræver et stærkere udtryk, før det begynder at vise.</value>
+  </data>
+  <data name="Settings_Language_Chinese_Simplified" xml:space="preserve">
+    <value>Kinesisk (forenklet)</value>
+  </data>
+  <data name="Settings_Language_Chinese_Traditional" xml:space="preserve">
+    <value>Kinesisk (traditionelt)</value>
+  </data>
+  <data name="Settings_Language_German" xml:space="preserve">
+    <value>Tysk</value>
+  </data>
+  <data name="Settings_Language_French" xml:space="preserve">
+    <value>Fransk</value>
+  </data>
+  <data name="Settings_Language_Italian" xml:space="preserve">
+    <value>Italiensk</value>
+  </data>
+  <data name="Settings_Language_Korean" xml:space="preserve">
+    <value>Koreansk</value>
+  </data>
+  <data name="Settings_Language_Portuguese_Brazil" xml:space="preserve">
+    <value>Portugisisk (Brasilien)</value>
+  </data>
+  <data name="Settings_Language_Portuguese_Portugal" xml:space="preserve">
+    <value>Portugisisk (Portugal)</value>
+  </data>
+  <data name="Settings_Language_Russian" xml:space="preserve">
+    <value>Russisk</value>
+  </data>
+  <data name="Settings_Language_Arabic" xml:space="preserve">
+    <value>Arabisk</value>
+  </data>
+  <data name="Settings_Language_Turkish" xml:space="preserve">
+    <value>Tyrkisk</value>
+  </data>
+  <data name="Settings_Language_Dutch" xml:space="preserve">
+    <value>Hollandsk</value>
+  </data>
+  <data name="Settings_Language_Swedish" xml:space="preserve">
+    <value>Svensk</value>
+  </data>
+  <data name="Settings_Language_Finnish" xml:space="preserve">
+    <value>Finsk</value>
+  </data>
+  <data name="Settings_Language_Danish" xml:space="preserve">
+    <value>Dansk</value>
+  </data>
+  <data name="Settings_Language_Norwegian" xml:space="preserve">
+    <value>Norsk</value>
+  </data>
+  <data name="Settings_Language_Czech" xml:space="preserve">
+    <value>Tjekkisk</value>
+  </data>
+  <data name="Settings_Language_Hungarian" xml:space="preserve">
+    <value>Ungarsk</value>
+  </data>
+  <data name="Settings_Language_Romanian" xml:space="preserve">
+    <value>Rumænsk</value>
+  </data>
+  <data name="Settings_Language_Vietnamese" xml:space="preserve">
+    <value>Vietnamese</value>
+  </data>
+  <data name="Settings_Language_Ukrainian" xml:space="preserve">
+    <value>Ukrainsk</value>
+  </data>
+  <data name="Settings_Language_Greek" xml:space="preserve">
+    <value>Græsk</value>
+  </data>
+  <data name="Settings_Language_Hebrew" xml:space="preserve">
+    <value>Hebraisk</value>
+  </data>
+  <data name="Settings_Language_Afrikaans" xml:space="preserve">
+    <value>Afrikaans</value>
+  </data>
+  <data name="Settings_Language_Catalan" xml:space="preserve">
+    <value>Catalansk</value>
+  </data>
+  <data name="Settings_Language_Serbian" xml:space="preserve">
+    <value>Serbisk</value>
   </data>
   <data name="Calibration_Instructions_Bullet2_1" xml:space="preserve">
-    <value>• Lowering the</value>
+    <value>• Sænkning af</value>
   </data>
   <data name="Calibration_Instructions_Maximum" xml:space="preserve">
-    <value>Maximum</value>
+    <value>Maksimum</value>
   </data>
   <data name="Calibration_Instructions_Bullet2_2" xml:space="preserve">
-    <value>value means a smaller expression will reach 100% faster.</value>
+    <value>værdi betyder et mindre udtryk vil nå 100% hurtigere.</value>
   </data>
   <data name="DropOverlay_Important_Header" xml:space="preserve">
-    <value>Important!</value>
+    <value>Vigtigt!</value>
   </data>
   <data name="DropOverlay_Message" xml:space="preserve">
-    <value>Newer babble trackers have a 20 second delay after being plugged in before they can be used. It will make a USB plugging-in sound when it is ready!</value>
+    <value>Nyere babble trackers har en 20 sekunders forsinkelse efter at være tilsluttet før de kan bruges. Det vil lave en USB-stikkontakt, når det er klar!</value>
   </data>
   <data name="DropOverlay_DontShowAgain" xml:space="preserve">
-    <value>Don't show this warning again</value>
+    <value>Vis ikke denne advarsel igen</value>
   </data>
   <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
-    <value>Dismiss</value>
+    <value>Afvis</value>
   </data>
 </root>
