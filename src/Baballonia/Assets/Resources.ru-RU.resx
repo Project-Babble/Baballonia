@@ -118,109 +118,109 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Settings_Theme_Dark_Content" xml:space="preserve">
-    <value>Dark</value>
+    <value>Тёмная</value>
   </data>
   <data name="Settings_Theme_Default_Content" xml:space="preserve">
-    <value>Default</value>
+    <value>По умолчанию</value>
   </data>
   <data name="Settings_Theme_Light_Content" xml:space="preserve">
-    <value>Light</value>
+    <value>Светлая</value>
   </data>
   <data name="Home_Title_Header" xml:space="preserve">
-    <value>Home</value>
+    <value>Домашний</value>
   </data>
   <data name="Settings_Theme_Header" xml:space="preserve">
-    <value>App theme</value>
+    <value>Тема приложения</value>
   </data>
   <data name="Settings_Theme_Description" xml:space="preserve">
-    <value>Select which app theme to display</value>
+    <value>Выберите тему, которая будет отображаться</value>
   </data>
   <data name="Settings_OSC_Description" xml:space="preserve">
-    <value>Where should OSC data be sent?</value>
+    <value>Где должны быть отправлены данные OSC?</value>
   </data>
   <data name="Settings_OSC_Header" xml:space="preserve">
     <value>OSC</value>
   </data>
   <data name="Home_Eye_Calibration" xml:space="preserve">
-    <value>Eye Calibration</value>
+    <value>Калибровка глаз</value>
   </data>
   <data name="Home_Left_Camera_Address" xml:space="preserve">
-    <value>Left Camera Address</value>
+    <value>Адрес левой камеры</value>
   </data>
   <data name="Home_Cameras_Start_Camera" xml:space="preserve">
-    <value>Start Camera</value>
+    <value>Запустить камеру</value>
   </data>
   <data name="Home_Cameras_Stop_Camera" xml:space="preserve">
-    <value>Stop Camera</value>
+    <value>Остановить камеру</value>
   </data>
   <data name="Home_Cameras_Tracking_Mode" xml:space="preserve">
-    <value>Tracking</value>
+    <value>Отслеживание</value>
   </data>
   <data name="Home_Cameras_Cropping_Mode" xml:space="preserve">
-    <value>Cropping</value>
+    <value>Обрезка</value>
   </data>
   <data name="Home_Left_Camera_Select_Entire_Frame" xml:space="preserve">
-    <value>Select Left Frame</value>
+    <value>Выберите левый кадр</value>
   </data>
   <data name="Home_Cameras_Vertical_Flip_Header" xml:space="preserve">
-    <value>Vertical Flip</value>
+    <value>Вертикальный поворот</value>
   </data>
   <data name="Home_Cameras_Vertical_Flip_Description" xml:space="preserve">
-    <value>Flip the image vertically</value>
+    <value>Отразить изображение по вертикали</value>
   </data>
   <data name="Home_Cameras_Horizontal_Flip_Header" xml:space="preserve">
-    <value>Horizontal flip</value>
+    <value>Горизонтальная переворот</value>
   </data>
   <data name="Home_Cameras_Horizontal_Flip_Description" xml:space="preserve">
-    <value>Flip the image horizontally</value>
+    <value>Отразить изображение по горизонтали</value>
   </data>
   <data name="Home_Cameras_Rotation_Description" xml:space="preserve">
-    <value>Rotates the image in a circle</value>
+    <value>Поворачивает изображение в круг</value>
   </data>
   <data name="Home_Cameras_Brightness_Header" xml:space="preserve">
-    <value>Image Brightness</value>
+    <value>Яркость изображения</value>
   </data>
   <data name="Home_Cameras_Rotation_Header" xml:space="preserve">
-    <value>Image Rotation</value>
+    <value>Поворот изображения</value>
   </data>
   <data name="Home_Cameras_Brightness_Description" xml:space="preserve">
-    <value>Adjust the brightness of the image</value>
+    <value>Регулировка яркости изображения</value>
   </data>
   <data name="Home_Right_Camera_Address" xml:space="preserve">
-    <value>Right Camera Address</value>
+    <value>Адрес правой камеры</value>
   </data>
   <data name="Home_Right_Camera_Select_Entire_Frame" xml:space="preserve">
-    <value>Select Right Frame</value>
+    <value>Выберите правый кадр</value>
   </data>
   <data name="Home_Face_Camera_Address" xml:space="preserve">
-    <value>Face Camera Address</value>
+    <value>Адрес Лицы камеры</value>
   </data>
   <data name="Home_Face_Camera_Select_Entire_Frame" xml:space="preserve">
-    <value>Select Face Frame</value>
+    <value>Выбрать грани рамки</value>
   </data>
   <data name="Home_Left_Camera_Header" xml:space="preserve">
-    <value>Left Eye Camera</value>
+    <value>Камера левого глаза</value>
   </data>
   <data name="Home_Face_Camera_Header" xml:space="preserve">
-    <value>Face Camera</value>
+    <value>Лицо камеры</value>
   </data>
   <data name="Home_Right_Camera_Header" xml:space="preserve">
-    <value>Right Eye Camera</value>
+    <value>Камера правого глаза</value>
   </data>
   <data name="Home_Left_Camera_Settings" xml:space="preserve">
-    <value>Left Camera Settings</value>
+    <value>Настройки левой камеры</value>
   </data>
   <data name="Home_Face_Camera_Settings" xml:space="preserve">
-    <value>Face Camera Settings</value>
+    <value>Настройки грани камеры</value>
   </data>
   <data name="Home_Right_Camera_Settings" xml:space="preserve">
-    <value>Right Camera Settings</value>
+    <value>Настройки правой камеры</value>
   </data>
   <data name="Common_Start_Typing" xml:space="preserve">
-    <value>Start typing...</value>
+    <value>Начните печатать...</value>
   </data>
   <data name="Calibration_Title_Header" xml:space="preserve">
-    <value>Calibration</value>
+    <value>Калибровка</value>
   </data>
   <data name="Calibration_Reset_Minimums" xml:space="preserve">
     <value>Reset Minimums</value>
@@ -229,226 +229,226 @@
     <value>Reset Maximums</value>
   </data>
   <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
-    <value>Eye Expressions</value>
+    <value>Выражения глаз</value>
   </data>
   <data name="Calibration_Nose_Expressions_Header" xml:space="preserve">
-    <value>Nose Expressions</value>
+    <value>Выражения носа</value>
   </data>
   <data name="Calibration_Tongue_Expressions_Header" xml:space="preserve">
-    <value>Tongue Expressions</value>
+    <value>Выражения языка</value>
   </data>
   <data name="Calibration_Mouth_Expressions_Header" xml:space="preserve">
-    <value>Mouth Expressions</value>
+    <value>Выражения рта</value>
   </data>
   <data name="Calibration_Jaw_Expressions_Header" xml:space="preserve">
-    <value>Jaw Expressions</value>
+    <value>Челюстные выражения</value>
   </data>
   <data name="Calibration_Cheek_Expressions_Header" xml:space="preserve">
-    <value>Cheek Expressions</value>
+    <value>Выражения чиков</value>
   </data>
   <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Header" xml:space="preserve">
-    <value>Stabilize Eyes</value>
+    <value>Стабилизация глаз</value>
   </data>
   <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Description" xml:space="preserve">
-    <value>Prevents eyes from looking out in opposite directions, but may overcorrect.</value>
+    <value>Не позволяет глаза смотреть в противоположных направлениях, но может быть неправильным.</value>
   </data>
   <data name="Firmware_Title_Header" xml:space="preserve">
-    <value>Firmware</value>
+    <value>Прошивка</value>
   </data>
   <data name="Firmware_Select_Tracker_Header" xml:space="preserve">
-    <value>Select your tracker</value>
+    <value>Выберите трекер</value>
   </data>
   <data name="Firmware_Device_Instructions_1" xml:space="preserve">
-    <value>• After powering on/connecting your device you will have 20 seconds to press "Refresh" and select your device from the dropdown</value>
+    <value>• После включения/подключения к устройству у вас будет 20 секунд, чтобы обновить и выбрать устройство из выпадающего списка</value>
   </data>
   <data name="Firmware_Device_Instructions_2" xml:space="preserve">
-    <value>• Certain configuration operations will take a little bit!</value>
+    <value>• Некоторые операции конфигурации займут немного времени!</value>
   </data>
   <data name="Firmware_Device_Configuration_Header" xml:space="preserve">
-    <value>Device Configuration</value>
+    <value>Конфигурация устройства</value>
   </data>
   <data name="Firmware_Device_Configuration_Description" xml:space="preserve">
-    <value>Toggle wired/wireless mode</value>
+    <value>Переключить проводной/беспроводной режим</value>
   </data>
   <data name="Firmware_Device_Mode_Header" xml:space="preserve">
-    <value>Toggle wired/wireless mode</value>
+    <value>Переключить проводной/беспроводной режим</value>
   </data>
   <data name="Firmware_Device_Mode_Instruction_1" xml:space="preserve">
-    <value>• You WILL need to restart your tracker after changing the mode</value>
+    <value>• Вам необходимо перезапустить трекер после изменения режима</value>
   </data>
   <data name="Firmware_Device_Mode_Instruction_2" xml:space="preserve">
-    <value>• You MAY need to restart the app after a flash for trackers to show</value>
+    <value>• Необходимо перезапустить приложение после вспышки для отображения трекеров</value>
   </data>
   <data name="Firmware_Device_Mode_Select_Placeholder" xml:space="preserve">
-    <value>Select a mode...</value>
+    <value>Выберите режим...</value>
   </data>
   <data name="Firmware_Wifi_Configuration_Header" xml:space="preserve">
-    <value>Wifi Configuration</value>
+    <value>Конфигурация Wi-Fi</value>
   </data>
   <data name="Firmware_Wifi_Configuration_Description" xml:space="preserve">
-    <value>Connect to Wifi and more</value>
+    <value>Подключиться к Wi-Fi и многое другое</value>
   </data>
   <data name="Firmware_Wifi_Credentials_Header" xml:space="preserve">
-    <value>Set your Wi-Fi credentials</value>
+    <value>Настройка учётных данных Wi-Fi</value>
   </data>
   <data name="Firmware_Wifi_Instructions_1" xml:space="preserve">
-    <value>• If you want to use your tracker wirelessly, you NEED to set its Wifi credentials</value>
+    <value>• Если вы хотите использовать трекер по беспроводной сети, вам необходимо установить его данные Wifi</value>
   </data>
   <data name="Firmware_Wifi_Instructions_2" xml:space="preserve">
-    <value>• You MUST scan for Wifi networks BEFORE you can set your Wifi credentials</value>
+    <value>• Вы ДОЛЖНЫ сканировать сети Wifi, иначе вы можете задать учетные данные Wifi</value>
   </data>
   <data name="Firmware_Wifi_SSID_Label" xml:space="preserve">
-    <value>WiFi Network Name (SSID)</value>
+    <value>Имя сети WiFi (SSID)</value>
   </data>
   <data name="Firmware_Wifi_SSID_Placeholder" xml:space="preserve">
-    <value>Start typing to see WiFi networks...</value>
+    <value>Начните вводить, чтобы увидеть сети WiFi...</value>
   </data>
   <data name="Firmware_Wifi_Password_Label" xml:space="preserve">
-    <value>WiFi Password</value>
+    <value>Пароль WiFi</value>
   </data>
   <data name="Firmware_Wifi_Password_Placeholder" xml:space="preserve">
-    <value>Enter WiFi password...</value>
+    <value>Введите пароль WiFi...</value>
   </data>
   <data name="Firmware_Flashing_Header" xml:space="preserve">
     <value>Flashing Options</value>
   </data>
   <data name="Firmware_Flashing_Description" xml:space="preserve">
-    <value>Flash your device's firmware</value>
+    <value>Прошивка устройства</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>CAUTION!! THIS WILL FACTORY RESET YOUR TRACKER. YOU WILL NEED TO PERFORM A FIRST TIME SET UP AFTER FLASHING YOUR TRACKER.</value>
+    <value>ПРЕДУПРЕЖДЕНИЕ!! ЭТО БУДЕТ СБОРИТЕ ВАШЕГО ТРекера. ВЫ ПОДПИСАТЬСЯ ВРЕМЯ ПРЕДОСТАВЛЯЕТСЯ ПОСЛЕДУЮЩИМ ТРекером.</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
-    <value>Flash Firmware</value>
+    <value>Прошивка Flash</value>
   </data>
   <data name="Firmware_Flashing_Note" xml:space="preserve">
-    <value>This will take around ~10 seconds. Don't leave this page!</value>
+    <value>Это займет около ~10 секунд. Не закрывайте эту страницу!</value>
   </data>
   <data name="Firmware_Flashing_Complete" xml:space="preserve">
-    <value>Done! You will need to restart your tracker</value>
+    <value>Готово! Вам нужно будет перезапустить трекер</value>
   </data>
   <data name="Firmware_TrackerComboBox_Default" xml:space="preserve">
-    <value>Click to see trackers...</value>
+    <value>Нажмите, чтобы увидеть трекеры...</value>
   </data>
   <data name="Firmware_RefreshDevices_Default" xml:space="preserve">
-    <value>Refresh Devices</value>
+    <value>Обновить устройства</value>
   </data>
   <data name="Firmware_RefreshDevices_Refreshing" xml:space="preserve">
-    <value>Refreshing</value>
+    <value>Обновление</value>
   </data>
   <data name="Firmware_RefreshDevices_Found" xml:space="preserve">
-    <value>Found {0} device(s).</value>
+    <value>Найдено устройство(а) {0}.</value>
   </data>
   <data name="Firmware_SelectTracker_Default" xml:space="preserve">
-    <value>Select Tracker</value>
+    <value>Выберите трекер</value>
   </data>
   <data name="Firmware_SelectTracker_Connected" xml:space="preserve">
-    <value>Tracker connected!</value>
+    <value>Трекер подключен!</value>
   </data>
   <data name="Firmware_SelectTracker_NoResponse" xml:space="preserve">
-    <value>The tracker did not respond.</value>
+    <value>Трекер не ответил.</value>
   </data>
   <data name="Firmware_ModeSetButton_Default" xml:space="preserve">
-    <value>Set Mode</value>
+    <value>Установка режима</value>
   </data>
   <data name="Firmware_ModeSetButton_Setting" xml:space="preserve">
-    <value>Setting mode</value>
+    <value>Настройка режима</value>
   </data>
   <data name="Firmware_ModeSetButton_Success" xml:space="preserve">
-    <value>Set!</value>
+    <value>Настроить!</value>
   </data>
   <data name="Firmware_WifiSetButton_Default" xml:space="preserve">
-    <value>Set Wifi Creds</value>
+    <value>Создать Wifi</value>
   </data>
   <data name="Firmware_WifiSetButton_Setting" xml:space="preserve">
-    <value>Setting WiFi credentials</value>
+    <value>Настройка учётных данных WiFi</value>
   </data>
   <data name="Firmware_WifiSetButton_Success" xml:space="preserve">
-    <value>Sent!</value>
+    <value>Отправлено!</value>
   </data>
   <data name="Firmware_WifiSetButton_Error" xml:space="preserve">
-    <value>Something went wrong...</value>
+    <value>Что-то пошло не так...</value>
   </data>
   <data name="Firmware_WifiScanButton_Default" xml:space="preserve">
-    <value>Refresh Wifi Networks</value>
+    <value>Обновить сети Wi-Fi</value>
   </data>
   <data name="Firmware_WifiScanButton_Scanning" xml:space="preserve">
-    <value>Scanning. This will take at most 30 seconds</value>
+    <value>Сканирование. Это займет не более 30 секунд</value>
   </data>
   <data name="Firmware_WifiScanButton_Error" xml:space="preserve">
-    <value>Scan failed. Click to try again.</value>
+    <value>Сканирование не удалось. Нажмите, чтобы попробовать еще раз.</value>
   </data>
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
-    <value>Found {0} networks. Click to scan again.</value>
+    <value>Найдены сети {0} . Нажмите, чтобы просканировать снова.</value>
   </data>
   <data name="VRC_Title_Header" xml:space="preserve">
-    <value>VRChat + VRCFaceTracking Settings</value>
+    <value>VRChat + Настройки VRCFaceTracking</value>
   </data>
   <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
-    <value>Use Native VRC Eye Tracking</value>
+    <value>Использовать отслеживание глаз VRC</value>
   </data>
   <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
-    <value>Brings eye tracking to avatars that do not have VRCFaceTracking</value>
+    <value>Привлекает к аватарам, которые не имеют VRCFaceTracking</value>
   </data>
   <data name="VRC_ModuleMode_Header" xml:space="preserve">
-    <value>Set VRCFT module mode</value>
+    <value>Установка режима модуля VRCFT</value>
   </data>
   <data name="VRC_ModuleMode_Description" xml:space="preserve">
-    <value>Send only eye, only face or both? (Change requires VRCFT restart)</value>
+    <value>Отправить только глаза, только лицом или об? (Изменение требует перезапуска VRCFT)</value>
   </data>
   <data name="VRC_ModuleMode_Placeholder" xml:space="preserve">
-    <value>Select a mode...</value>
+    <value>Выберите режим...</value>
   </data>
   <data name="Output_Title_Header" xml:space="preserve">
-    <value>Output</value>
+    <value>Вывод</value>
   </data>
   <data name="Output_CopyButton_Tooltip" xml:space="preserve">
-    <value>Copy the log's output to your clipboard</value>
+    <value>Скопируйте вывод журнала в буфер обмена</value>
   </data>
   <data name="Output_SaveButton_Tooltip" xml:space="preserve">
-    <value>Save the log's output</value>
+    <value>Сохранить вывод журнала</value>
   </data>
   <data name="Output_OpenLoggingDirectoryButton_Tooltip" xml:space="preserve">
-    <value>Open the logging directory</value>
+    <value>Открыть директорию ведения логов</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>This wizard will guide you through setting up the new Babble App.</value>
+    <value>Этот мастер поможет вам настроить новое приложение Babble.</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
-    <value>Wired or Wireless?</value>
+    <value>Проводка или Wireless?</value>
   </data>
   <data name="Onboarding_Wireless_Description1" xml:space="preserve">
-    <value>With newer Babbles, you'll need to perform a first time setup in the Firmware tab (Icon above).</value>
+    <value>С новыми приложениями вам нужно выполнить первую настройку на вкладке "Прошивка" (значок выше).</value>
   </data>
   <data name="Onboarding_Wireless_Description2" xml:space="preserve">
-    <value>It only takes 2 minutes! Select your tracker and mode (wired or wireless). It's that simple.</value>
+    <value>Это займет всего 2 минуты! Выберите ваш трекер и режим (проводной или беспроводной). Это так просто.</value>
   </data>
   <data name="Onboarding_Wireless_Note" xml:space="preserve">
-    <value>Please note newer trackers have a 20-second window before they enter camera mode.</value>
+    <value>Обратите внимание, что новые трекеры имеют 20-секундное окно перед переходом в режим камеры.</value>
   </data>
   <data name="Onboarding_Assembly_Header" xml:space="preserve">
-    <value>Assemble Your Tracker</value>
+    <value>&lt;unk&gt; Подбери своего трекера</value>
   </data>
   <data name="Onboarding_Assembly_Description" xml:space="preserve">
-    <value>If you need help putting your tracker together, here's a useful Youtube tutorial!</value>
+    <value>Если вам нужна помощь в создании трекера вместе, вот полезный учебник по Youtube!</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
-    <value>App Settings</value>
+    <value>Настройки приложения</value>
   </data>
   <data name="Settings_Language_Header" xml:space="preserve">
-    <value>Language</value>
+    <value>Язык</value>
   </data>
   <data name="Settings_Language_Description" xml:space="preserve">
-    <value>Set the app's language. Switch pages to apply.</value>
+    <value>Установите язык приложения. Переключить страницы, чтобы применить.</value>
   </data>
   <data name="Settings_Language_Default" xml:space="preserve">
-    <value>Default</value>
+    <value>По умолчанию</value>
   </data>
   <data name="Settings_Language_English" xml:space="preserve">
-    <value>English</value>
+    <value>Russian</value>
   </data>
   <data name="Settings_Language_Spanish" xml:space="preserve">
-    <value>Español</value>
+    <value>Español</value>
   </data>
   <data name="Settings_Language_Japanese" xml:space="preserve">
     <value>日本語</value>
@@ -460,91 +460,76 @@
     <value>中文</value>
   </data>
   <data name="Settings_Filter_Header" xml:space="preserve">
-    <value>One-Euro filter settings</value>
+    <value>Настройки фильтрации в один евро</value>
   </data>
   <data name="Settings_Filter_Description" xml:space="preserve">
-    <value>Filter Settings</value>
+    <value>Настройки фильтра</value>
   </data>
   <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
-    <value>Enabled</value>
+    <value>Включено</value>
   </data>
   <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
-    <value>Turn filtering on or off.</value>
+    <value>Включить или выключить фильтрацию.</value>
   </data>
   <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
-    <value>Minimum frequency cutoff</value>
+    <value>Минимальная частота отсечения</value>
   </data>
   <data name="Settings_Filter_MinFreq_Description" xml:space="preserve">
-    <value>Controls how much smoothing is applied to slow movements</value>
+    <value>Контролирует, сколько сглаживания применяется к медленному движению</value>
   </data>
   <data name="Settings_Filter_Template_Placeholder" xml:space="preserve">
-    <value>Select from a template</value>
+    <value>Выберите из шаблона</value>
   </data>
   <data name="Settings_Filter_Template_Low" xml:space="preserve">
-    <value>Low ({0})</value>
+    <value>Низкий ({0})</value>
   </data>
   <data name="Settings_Filter_Template_Medium" xml:space="preserve">
-    <value>Medium ({0})</value>
+    <value>Средний ({0})</value>
   </data>
   <data name="Settings_Filter_Template_High" xml:space="preserve">
-    <value>High ({0})</value>
+    <value>Высокий ({0})</value>
   </data>
   <data name="Settings_Filter_Speed_Label" xml:space="preserve">
-    <value>Speed coefficient</value>
+    <value>Коэффициент скорости</value>
   </data>
   <data name="Settings_Filter_Speed_Description" xml:space="preserve">
-    <value>Determines how the filter adapts when you move faster</value>
+    <value>Определяет, как фильтр адаптируется при перемещении быстрее</value>
   </data>
   <data name="Settings_GPU_Header" xml:space="preserve">
-    <value>Use GPU acceleration</value>
+    <value>Использовать GPU ускорение</value>
   </data>
   <data name="Settings_GPU_Description" xml:space="preserve">
-    <value>Use your GPU to make things run faster! Requires restart</value>
+    <value>Используйте GPU, чтобы вещи работали быстрее! Требуется перезагрузка</value>
   </data>
   <data name="Settings_LogLevel_Header" xml:space="preserve">
-    <value>Log Level Verbosity</value>
+    <value>Уровень лога</value>
   </data>
   <data name="Settings_LogLevel_Description" xml:space="preserve">
-    <value>Minimum logging level. Requires restart</value>
+    <value>Минимальный уровень журнала. Требуется перезагрузка</value>
   </data>
   <data name="Settings_Updates_Header" xml:space="preserve">
-    <value>Check For Updates</value>
+    <value>Проверить обновления</value>
   </data>
   <data name="Settings_Updates_Description" xml:space="preserve">
-    <value>Should the app check for updates on start?</value>
+    <value>Проверять наличие обновлений при запуске?</value>
   </data>
   <data name="Settings_FirstTime_Header" xml:space="preserve">
-    <value>Launch first time setup</value>
+    <value>Запустить первый раз</value>
   </data>
   <data name="Settings_FirstTime_Description" xml:space="preserve">
-    <value>Relaunches the first time setup</value>
+    <value>Перезапускает первую настройку</value>
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
-    <value>Launch</value>
+    <value>Запуск</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
-    <value>Skip</value>
+    <value>Пропустить</value>
   </data>
   <data name="Onboarding_UI_Header" xml:space="preserve">
-    <value>Where is everything?</value>
+    <value>Где всё?</value>
   </data>
   <data name="Onboarding_UI_Home_Description" xml:space="preserve">
-    <value>1. The Home Page is where you can set up your cameras, and perform an eye tracking calibration.</value>
-  </data>
-  <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
-    <value>2. The Calibration Page can be used to tweak your eye/face expressions individually.</value>
-  </data>
-  <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
-    <value>3. The Firmware Page is used to set up your device, or reset it.</value>
-  </data>
-  <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
-    <value>4. The VRChat Page is used to alter VRChat/VRCFaceTracking specific settings.</value>
-  </data>
-  <data name="Onboarding_UI_Output_Description" xml:space="preserve">
-    <value>5. The Output Page shows the status of the app errors and other useful information.</value>
-  </data>
-  <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
-    <value>6. The Settings Page is for general app settings, such as theme, language, and more.</value>
+    <value>Домашняя страница - это место, где вы можете настроить камеры, и выполнить калибровку слежения.</value>
   </data>
   <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
     <value>The {0} can be used to tweak your eye/face expressions individually.</value>
@@ -562,96 +547,174 @@
     <value>The {0} is for general app settings, such as {1} and more.</value>
   </data>
   <data name="Onboarding_Complete_Header" xml:space="preserve">
-    <value>Setup Complete!</value>
+    <value>Установка завершена!</value>
   </data>
   <data name="Onboarding_Complete_Description1" xml:space="preserve">
-    <value>You're all set to start using the new Babble App!</value>
+    <value>Вы все настроены на использование нового Babble App!</value>
   </data>
   <data name="Onboarding_Complete_Description2" xml:space="preserve">
-    <value>You can revisit this page in the settings.</value>
+    <value>Вы можете вернуться к этой странице в настройках.</value>
   </data>
   <data name="Settings_OSC_IP_Label" xml:space="preserve">
-    <value>IP Address</value>
+    <value>IP-адрес</value>
   </data>
   <data name="Settings_OSC_Prefix_Label" xml:space="preserve">
     <value>OSC Prefix</value>
   </data>
   <data name="Settings_OSC_Recalibrate_Label" xml:space="preserve">
-    <value>Recalibrate Address</value>
+    <value>Перекалибровать адрес</value>
   </data>
   <data name="Settings_OSC_Recenter_Label" xml:space="preserve">
-    <value>Recenter Address</value>
+    <value>Адрес отправителя</value>
   </data>
   <data name="Settings_OSC_SendPort_Label" xml:space="preserve">
-    <value>Send Port</value>
+    <value>Порт отправки</value>
   </data>
   <data name="Settings_OSC_ReceivePort_Label" xml:space="preserve">
-    <value>Receive Port</value>
+    <value>Прием порта</value>
   </data>
   <data name="AdminWarning_Header" xml:space="preserve">
-    <value>Administrator Mode Warning</value>
+    <value>Предупреждение о режиме администратора</value>
   </data>
   <data name="AdminWarning_Message" xml:space="preserve">
-    <value>Do not run Baballonia as admin! There is no need, and it prevents eye tracking calibrations from working.</value>
+    <value>Не запускайте Baballonia как admin! Нет необходимости и предотвращает работу калибровки глаз.</value>
   </data>
   <data name="Aero_Overlay_NotFound" xml:space="preserve">
-    <value>The gaze overlay program does not exist!</value>
+    <value>Программа оверлея взгляда не существует!</value>
   </data>
   <data name="Aero_Overlay_AlreadyRunning" xml:space="preserve">
-    <value>The gaze overlay program is already running! Please close it and try again.</value>
+    <value>Программа накладывания gaze уже запущена! Пожалуйста, закройте её и повторите попытку.</value>
   </data>
   <data name="Aero_SteamVR_NotRunning" xml:space="preserve">
-    <value>SteamVR is not running. Please run it and try again.</value>
+    <value>SteamVR не запущен. Пожалуйста, запустите его и повторите попытку.</value>
   </data>
   <data name="Aero_CameraStream_Failed" xml:space="preserve">
-    <value>Failed to start camera streaming!</value>
+    <value>Не удалось запустить потоковую камеру!</value>
   </data>
   <data name="Aero_Calibration_Failed" xml:space="preserve">
-    <value>Failed to start calibration!</value>
+    <value>Не удалось запустить калибровку!</value>
   </data>
   <data name="Aero_Calibration_Success" xml:space="preserve">
-    <value>Eye tracking calibration successful!</value>
+    <value>Калибровка глаз прошла успешно!</value>
   </data>
   <data name="Aero_Overlay_CleanupFailed" xml:space="preserve">
-    <value>Failed to stop/cleanup overlay!</value>
+    <value>Не удалось остановить/очистить наслоения!</value>
   </data>
   <data name="Calibration_Instructions_Line1" xml:space="preserve">
-    <value>The below sliders are used to calibrate the</value>
+    <value>Ниже ползунки используются для калибровки</value>
   </data>
   <data name="Calibration_Instructions_Sensitivity" xml:space="preserve">
-    <value>sensitivity</value>
+    <value>чувствительность</value>
   </data>
   <data name="Calibration_Instructions_Line1_2" xml:space="preserve">
-    <value>of your face expressions.</value>
+    <value>из ваших выражений лица.</value>
   </data>
   <data name="Calibration_Instructions_Bullet1_1" xml:space="preserve">
-    <value>• Raising the</value>
+    <value>• повышение уровня</value>
   </data>
   <data name="Calibration_Instructions_Minimum" xml:space="preserve">
-    <value>Minimum</value>
+    <value>Минимум</value>
   </data>
   <data name="Calibration_Instructions_Bullet1_2" xml:space="preserve">
-    <value>value requires a stronger expression before it starts to show.</value>
+    <value>значение требует более сильное выражение, прежде чем оно начнет показать.</value>
+  </data>
+  <data name="Settings_Language_Chinese_Simplified" xml:space="preserve">
+    <value>Китайский (упрощенный)</value>
+  </data>
+  <data name="Settings_Language_Chinese_Traditional" xml:space="preserve">
+    <value>Китайский (традиционный)</value>
+  </data>
+  <data name="Settings_Language_German" xml:space="preserve">
+    <value>Немецкий</value>
+  </data>
+  <data name="Settings_Language_French" xml:space="preserve">
+    <value>Французский</value>
+  </data>
+  <data name="Settings_Language_Italian" xml:space="preserve">
+    <value>Итальянский</value>
+  </data>
+  <data name="Settings_Language_Korean" xml:space="preserve">
+    <value>Корейский</value>
+  </data>
+  <data name="Settings_Language_Portuguese_Brazil" xml:space="preserve">
+    <value>Португальский (Бразилия)</value>
+  </data>
+  <data name="Settings_Language_Portuguese_Portugal" xml:space="preserve">
+    <value>Португальский (Португалия)</value>
+  </data>
+  <data name="Settings_Language_Russian" xml:space="preserve">
+    <value>Русский</value>
+  </data>
+  <data name="Settings_Language_Arabic" xml:space="preserve">
+    <value>Арабский</value>
+  </data>
+  <data name="Settings_Language_Turkish" xml:space="preserve">
+    <value>Турецкий</value>
+  </data>
+  <data name="Settings_Language_Dutch" xml:space="preserve">
+    <value>Голландский</value>
+  </data>
+  <data name="Settings_Language_Swedish" xml:space="preserve">
+    <value>Шведский</value>
+  </data>
+  <data name="Settings_Language_Finnish" xml:space="preserve">
+    <value>Финский</value>
+  </data>
+  <data name="Settings_Language_Danish" xml:space="preserve">
+    <value>Датский</value>
+  </data>
+  <data name="Settings_Language_Norwegian" xml:space="preserve">
+    <value>Норвежский</value>
+  </data>
+  <data name="Settings_Language_Czech" xml:space="preserve">
+    <value>Чешский</value>
+  </data>
+  <data name="Settings_Language_Hungarian" xml:space="preserve">
+    <value>Венгерский</value>
+  </data>
+  <data name="Settings_Language_Romanian" xml:space="preserve">
+    <value>Румынский</value>
+  </data>
+  <data name="Settings_Language_Vietnamese" xml:space="preserve">
+    <value>Vietnamese</value>
+  </data>
+  <data name="Settings_Language_Ukrainian" xml:space="preserve">
+    <value>Украинский</value>
+  </data>
+  <data name="Settings_Language_Greek" xml:space="preserve">
+    <value>Греческий</value>
+  </data>
+  <data name="Settings_Language_Hebrew" xml:space="preserve">
+    <value>Иврит</value>
+  </data>
+  <data name="Settings_Language_Afrikaans" xml:space="preserve">
+    <value>Африкаанс</value>
+  </data>
+  <data name="Settings_Language_Catalan" xml:space="preserve">
+    <value>Каталанский</value>
+  </data>
+  <data name="Settings_Language_Serbian" xml:space="preserve">
+    <value>Сербский</value>
   </data>
   <data name="Calibration_Instructions_Bullet2_1" xml:space="preserve">
-    <value>• Lowering the</value>
+    <value>• Уменьшение</value>
   </data>
   <data name="Calibration_Instructions_Maximum" xml:space="preserve">
-    <value>Maximum</value>
+    <value>Максимум</value>
   </data>
   <data name="Calibration_Instructions_Bullet2_2" xml:space="preserve">
-    <value>value means a smaller expression will reach 100% faster.</value>
+    <value>значение означает, что меньшее выражение достигнет 100% быстрее.</value>
   </data>
   <data name="DropOverlay_Important_Header" xml:space="preserve">
-    <value>Important!</value>
+    <value>Важно!</value>
   </data>
   <data name="DropOverlay_Message" xml:space="preserve">
-    <value>Newer babble trackers have a 20 second delay after being plugged in before they can be used. It will make a USB plugging-in sound when it is ready!</value>
+    <value>Более новые трекеры имеют 20 секунд задержки после подсоединения, прежде чем они могут быть использованы. Он сделает звук USB-подключаемого устройства, когда он будет готова!</value>
   </data>
   <data name="DropOverlay_DontShowAgain" xml:space="preserve">
-    <value>Don't show this warning again</value>
+    <value>Больше не показывать это предупреждение</value>
   </data>
   <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
-    <value>Dismiss</value>
+    <value>Отклонить</value>
   </data>
 </root>
