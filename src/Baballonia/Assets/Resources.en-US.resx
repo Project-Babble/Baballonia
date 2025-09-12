@@ -532,21 +532,6 @@
     <value>1. The Home Page is where you can set up your cameras, and perform an eye tracking calibration.</value>
   </data>
   <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
-    <value>2. The Calibration Page can be used to tweak your eye/face expressions individually.</value>
-  </data>
-  <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
-    <value>3. The Firmware Page is used to set up your device, or reset it.</value>
-  </data>
-  <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
-    <value>4. The VRChat Page is used to alter VRChat/VRCFaceTracking specific settings.</value>
-  </data>
-  <data name="Onboarding_UI_Output_Description" xml:space="preserve">
-    <value>5. The Output Page shows the status of the app errors and other useful information.</value>
-  </data>
-  <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
-    <value>6. The Settings Page is for general app settings, such as theme, language, and more.</value>
-  </data>
-  <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
     <value>The {0} can be used to tweak your eye/face expressions individually.</value>
   </data>
   <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
@@ -632,6 +617,84 @@
   </data>
   <data name="Calibration_Instructions_Bullet1_2" xml:space="preserve">
     <value>value requires a stronger expression before it starts to show.</value>
+  </data>
+  <data name="Settings_Language_Chinese_Simplified" xml:space="preserve">
+    <value>Chinese (Simplified)</value>
+  </data>
+  <data name="Settings_Language_Chinese_Traditional" xml:space="preserve">
+    <value>Chinese (Traditional)</value>
+  </data>
+  <data name="Settings_Language_German" xml:space="preserve">
+    <value>German</value>
+  </data>
+  <data name="Settings_Language_French" xml:space="preserve">
+    <value>French</value>
+  </data>
+  <data name="Settings_Language_Italian" xml:space="preserve">
+    <value>Italian</value>
+  </data>
+  <data name="Settings_Language_Korean" xml:space="preserve">
+    <value>Korean</value>
+  </data>
+  <data name="Settings_Language_Portuguese_Brazil" xml:space="preserve">
+    <value>Portuguese (Brazil)</value>
+  </data>
+  <data name="Settings_Language_Portuguese_Portugal" xml:space="preserve">
+    <value>Portuguese (Portugal)</value>
+  </data>
+  <data name="Settings_Language_Russian" xml:space="preserve">
+    <value>Russian</value>
+  </data>
+  <data name="Settings_Language_Arabic" xml:space="preserve">
+    <value>Arabic</value>
+  </data>
+  <data name="Settings_Language_Turkish" xml:space="preserve">
+    <value>Turkish</value>
+  </data>
+  <data name="Settings_Language_Dutch" xml:space="preserve">
+    <value>Dutch</value>
+  </data>
+  <data name="Settings_Language_Swedish" xml:space="preserve">
+    <value>Swedish</value>
+  </data>
+  <data name="Settings_Language_Finnish" xml:space="preserve">
+    <value>Finnish</value>
+  </data>
+  <data name="Settings_Language_Danish" xml:space="preserve">
+    <value>Danish</value>
+  </data>
+  <data name="Settings_Language_Norwegian" xml:space="preserve">
+    <value>Norwegian</value>
+  </data>
+  <data name="Settings_Language_Czech" xml:space="preserve">
+    <value>Czech</value>
+  </data>
+  <data name="Settings_Language_Hungarian" xml:space="preserve">
+    <value>Hungarian</value>
+  </data>
+  <data name="Settings_Language_Romanian" xml:space="preserve">
+    <value>Romanian</value>
+  </data>
+  <data name="Settings_Language_Vietnamese" xml:space="preserve">
+    <value>Vietnamese</value>
+  </data>
+  <data name="Settings_Language_Ukrainian" xml:space="preserve">
+    <value>Ukrainian</value>
+  </data>
+  <data name="Settings_Language_Greek" xml:space="preserve">
+    <value>Greek</value>
+  </data>
+  <data name="Settings_Language_Hebrew" xml:space="preserve">
+    <value>Hebrew</value>
+  </data>
+  <data name="Settings_Language_Afrikaans" xml:space="preserve">
+    <value>Afrikaans</value>
+  </data>
+  <data name="Settings_Language_Catalan" xml:space="preserve">
+    <value>Catalan</value>
+  </data>
+  <data name="Settings_Language_Serbian" xml:space="preserve">
+    <value>Serbian</value>
   </data>
   <data name="Calibration_Instructions_Bullet2_1" xml:space="preserve">
     <value>• Lowering the</value>
