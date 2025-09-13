@@ -310,7 +310,7 @@
     <value>Indtast WiFi adgangskode...</value>
   </data>
   <data name="Firmware_Flashing_Header" xml:space="preserve">
-    <value>Flashing Options</value>
+    <value>Opgradering/Reflash Firmware</value>
   </data>
   <data name="Firmware_Flashing_Description" xml:space="preserve">
     <value>Flash din enheds firmware</value>
@@ -532,19 +532,19 @@
     <value>1. Hjemmesiden er, hvor du kan konfigurere dine kameraer og udføre en øjensporing kalibrering.</value>
   </data>
   <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
-    <value>The {0} can be used to tweak your eye/face expressions individually.</value>
+    <value>2. Kalibreringen kan bruges til at finjustere dine øjen-/ansigtsudtryk individuelt.</value>
   </data>
   <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
-    <value>The {0} is used to set up your device, or reset it.</value>
+    <value>3. Firmware-siden bruges til at konfigurere din enhed eller nulstille den.</value>
   </data>
   <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
-    <value>The {0} is used to alter VRChat/VRCFaceTracking specific settings.</value>
+    <value>4. VRChat-siden bruges til at ændre specifikke indstillinger for VRChat/VRCFaceTracking.</value>
   </data>
   <data name="Onboarding_UI_Output_Description" xml:space="preserve">
-    <value>The {0} shows the status of the app, {1} and other useful information.</value>
+    <value>5. Output-siden viser appens status og anden nyttig information.</value>
   </data>
   <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
-    <value>The {0} is for general app settings, such as {1} and more.</value>
+    <value>6. Indstillinger er til generelle app-indstillinger, såsom tema, sprog og mere.</value>
   </data>
   <data name="Onboarding_Complete_Header" xml:space="preserve">
     <value>Opsætning Fuldført!</value>
