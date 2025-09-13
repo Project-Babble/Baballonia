@@ -310,7 +310,7 @@
     <value>Inserisci password WiFi...</value>
   </data>
   <data name="Firmware_Flashing_Header" xml:space="preserve">
-    <value>Flashing Options</value>
+    <value>Aggiornamento/Reflash Firmware</value>
   </data>
   <data name="Firmware_Flashing_Description" xml:space="preserve">
     <value>Flash del firmware del dispositivo</value>
@@ -532,19 +532,19 @@
     <value>1. La Home Page è dove è possibile impostare le telecamere, ed eseguire una calibrazione di monitoraggio degli occhi.</value>
   </data>
   <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
-    <value>The {0} can be used to tweak your eye/face expressions individually.</value>
+    <value>2. La calibrazione può essere utilizzata per regolare individualmente le tue espressioni oculari/del viso.</value>
   </data>
   <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
-    <value>The {0} is used to set up your device, or reset it.</value>
+    <value>3. La pagina del firmware viene utilizzata per configurare il tuo dispositivo o reimpostarlo.</value>
   </data>
   <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
-    <value>The {0} is used to alter VRChat/VRCFaceTracking specific settings.</value>
+    <value>4. La pagina VRChat viene utilizzata per modificare le impostazioni specifiche di VRChat/VRCFaceTracking.</value>
   </data>
   <data name="Onboarding_UI_Output_Description" xml:space="preserve">
-    <value>The {0} shows the status of the app, {1} and other useful information.</value>
+    <value>5. La pagina di output mostra lo stato dell'applicazione e altre informazioni utili.</value>
   </data>
   <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
-    <value>The {0} is for general app settings, such as {1} and more.</value>
+    <value>6. Le impostazioni sono per le impostazioni generali dell'applicazione, come tema, lingua e altro ancora.</value>
   </data>
   <data name="Onboarding_Complete_Header" xml:space="preserve">
     <value>Configurazione Completata!</value>
