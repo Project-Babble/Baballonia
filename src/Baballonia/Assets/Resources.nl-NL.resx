@@ -310,7 +310,7 @@
     <value>Voer wifi-wachtwoord in...</value>
   </data>
   <data name="Firmware_Flashing_Header" xml:space="preserve">
-    <value>Flashing Options</value>
+    <value>Upgrade/Reflash Firmware</value>
   </data>
   <data name="Firmware_Flashing_Description" xml:space="preserve">
     <value>Flash de firmware van je apparaat</value>
@@ -532,19 +532,19 @@
     <value>1. Op de Startpagina kunt u uw camera's instellen en een oogmeting kalibratie uitvoeren.</value>
   </data>
   <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
-    <value>The {0} can be used to tweak your eye/face expressions individually.</value>
+    <value>2. Kalibratie kan worden gebruikt om oog- en gezichtsuitdrukkingen individueel aan te passen.</value>
   </data>
   <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
-    <value>The {0} is used to set up your device, or reset it.</value>
+    <value>3. De firmwarepagina wordt gebruikt om uw apparaat in te stellen of te resetten.</value>
   </data>
   <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
-    <value>The {0} is used to alter VRChat/VRCFaceTracking specific settings.</value>
+    <value>4. De VRChat-pagina wordt gebruikt om specifieke instellingen voor VRChat/VRCFaceTracking aan te passen.</value>
   </data>
   <data name="Onboarding_UI_Output_Description" xml:space="preserve">
-    <value>The {0} shows the status of the app, {1} and other useful information.</value>
+    <value>5. De uitvoerpagina toont de status van de app en andere nuttige informatie.</value>
   </data>
   <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
-    <value>The {0} is for general app settings, such as {1} and more.</value>
+    <value>6. Instellingen bevat algemene app-instellingen, zoals thema, taal en meer.</value>
   </data>
   <data name="Onboarding_Complete_Header" xml:space="preserve">
     <value>Installatie voltooid!</value>
