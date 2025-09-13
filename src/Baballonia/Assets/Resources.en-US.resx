@@ -310,7 +310,7 @@
     <value>Enter WiFi password...</value>
   </data>
   <data name="Firmware_Flashing_Header" xml:space="preserve">
-    <value>Flashing Options</value>
+    <value>Upgrade/Reflash Firmware</value>
   </data>
   <data name="Firmware_Flashing_Description" xml:space="preserve">
     <value>Flash your device's firmware</value>
