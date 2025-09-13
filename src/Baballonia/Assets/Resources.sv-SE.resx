@@ -310,7 +310,7 @@
     <value>Ange Wi-Fi-lösenord...</value>
   </data>
   <data name="Firmware_Flashing_Header" xml:space="preserve">
-    <value>Flashing Options</value>
+    <value>Uppgradera/Reflash Firmware</value>
   </data>
   <data name="Firmware_Flashing_Description" xml:space="preserve">
     <value>Blinka enhetens inbyggda programvara</value>
@@ -532,19 +532,19 @@
     <value>1. Hemsidan är där du kan ställa in dina kameror och utföra en kalibrering av eyetracking.</value>
   </data>
   <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
-    <value>The {0} can be used to tweak your eye/face expressions individually.</value>
+    <value>2. Kalibrering kan användas för att justera dina ögon- och ansiktsuttryck individuellt.</value>
   </data>
   <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
-    <value>The {0} is used to set up your device, or reset it.</value>
+    <value>3. Firmwaresidan används för att konfigurera din enhet eller återställa den.</value>
   </data>
   <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
-    <value>The {0} is used to alter VRChat/VRCFaceTracking specific settings.</value>
+    <value>4. VRChat-sidan används för att ändra specifika inställningar för VRChat/VRCFaceTracking.</value>
   </data>
   <data name="Onboarding_UI_Output_Description" xml:space="preserve">
-    <value>The {0} shows the status of the app, {1} and other useful information.</value>
+    <value>5. Utdatasidan visar appens status och annan användbar information.</value>
   </data>
   <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
-    <value>The {0} is for general app settings, such as {1} and more.</value>
+    <value>6. Inställningarna innehåller allmänna appinställningar, som tema, språk och mer.</value>
   </data>
   <data name="Onboarding_Complete_Header" xml:space="preserve">
     <value>Konfigurationen slutförd!</value>
