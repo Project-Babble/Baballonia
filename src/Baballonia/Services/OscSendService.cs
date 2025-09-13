@@ -30,6 +30,7 @@ public class OscSendService
         _cts = new CancellationTokenSource();
 
         _oscTarget = oscTarget;
+        UpdateTarget(new IPEndPoint(IPAddress.Parse(_oscTarget.DestinationAddress), _oscTarget.OutPort));
 
         _oscTarget.PropertyChanged += (_, args) =>
         {
