@@ -310,7 +310,7 @@
     <value>Εισάγετε κωδικό WiF...</value>
   </data>
   <data name="Firmware_Flashing_Header" xml:space="preserve">
-    <value>Flashing Options</value>
+    <value>Αναβάθμιση/Επανασύνδεση Υλικολογισμικού</value>
   </data>
   <data name="Firmware_Flashing_Description" xml:space="preserve">
     <value>Flash firmware της συσκευής σας</value>
@@ -526,25 +526,25 @@
     <value>Παράλειψη</value>
   </data>
   <data name="Onboarding_UI_Header" xml:space="preserve">
-    <value>Πού είναι τα πάντα?</value>
+    <value>Πού είναι τα πάντα;</value>
   </data>
   <data name="Onboarding_UI_Home_Description" xml:space="preserve">
     <value>1. Η Αρχική Σελίδα είναι όπου μπορείτε να ρυθμίσετε τις κάμερες σας και να εκτελέσετε μια βαθμονόμηση παρακολούθησης ματιών.</value>
   </data>
   <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
-    <value>The {0} can be used to tweak your eye/face expressions individually.</value>
+    <value>2. Η Βαθμονόμηση μπορεί να χρησιμοποιηθεί για να προσαρμόσετε τις εκφράσεις ματιών/προσώπου σας ατομικά.</value>
   </data>
   <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
-    <value>The {0} is used to set up your device, or reset it.</value>
+    <value>3. Η Σελίδα Firmware χρησιμοποιείται για τη ρύθμιση της συσκευής σας ή για την επαναφορά της.</value>
   </data>
   <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
-    <value>The {0} is used to alter VRChat/VRCFaceTracking specific settings.</value>
+    <value>4. Η Σελίδα VRChat χρησιμοποιείται για την αλλαγή συγκεκριμένων ρυθμίσεων VRChat/VRCFaceTracking.</value>
   </data>
   <data name="Onboarding_UI_Output_Description" xml:space="preserve">
-    <value>The {0} shows the status of the app, {1} and other useful information.</value>
+    <value>5. Η Σελίδα Εξόδου δείχνει την κατάσταση της εφαρμογής και άλλες χρήσιμες πληροφορίες.</value>
   </data>
   <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
-    <value>The {0} is for general app settings, such as {1} and more.</value>
+    <value>6. Οι Ρυθμίσεις είναι για γενικές ρυθμίσεις εφαρμογής, όπως το θέμα, η γλώσσα και άλλα.</value>
   </data>
   <data name="Onboarding_Complete_Header" xml:space="preserve">
     <value>Η Ρύθμιση Ολοκληρώθηκε!</value>
