@@ -310,7 +310,7 @@
     <value>Введіть пароль Wi-Fi...</value>
   </data>
   <data name="Firmware_Flashing_Header" xml:space="preserve">
-    <value>Flashing Options</value>
+    <value>Оновити/оновити прошивку</value>
   </data>
   <data name="Firmware_Flashing_Description" xml:space="preserve">
     <value>Підсвічувати прошивку вашого пристрою</value>
@@ -532,19 +532,19 @@
     <value>1. Домашня Сторінка - це місце, де ви можете налаштувати свої камери та виконати калібрування відстеження очей.</value>
   </data>
   <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
-    <value>The {0} can be used to tweak your eye/face expressions individually.</value>
+    <value>2. Калібрування можна використовувати для тонкого налаштування виразу очей та обличчя окремо.</value>
   </data>
   <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
-    <value>The {0} is used to set up your device, or reset it.</value>
+    <value>3. Сторінка прошивки використовується для налаштування вашого пристрою або його скидання.</value>
   </data>
   <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
-    <value>The {0} is used to alter VRChat/VRCFaceTracking specific settings.</value>
+    <value>4. Сторінка VRChat використовується для зміни специфічних налаштувань VRChat/VRCFaceTracking.</value>
   </data>
   <data name="Onboarding_UI_Output_Description" xml:space="preserve">
-    <value>The {0} shows the status of the app, {1} and other useful information.</value>
+    <value>5. На сторінці виводу відображається стан програми та інша корисна інформація.</value>
   </data>
   <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
-    <value>The {0} is for general app settings, such as {1} and more.</value>
+    <value>6. Налаштування містять загальні параметри програми, такі як тема, мова та інше.</value>
   </data>
   <data name="Onboarding_Complete_Header" xml:space="preserve">
     <value>Налаштування завершено!</value>
