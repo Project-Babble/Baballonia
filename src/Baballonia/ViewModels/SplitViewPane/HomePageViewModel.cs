@@ -92,11 +92,10 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
                 OverlayRectangle = CropManager.CropZone.GetRect();
                 OnCropUpdated();
 
-                IsInitialized.SetResult();
                 switch (_processingPipeline.VideoSource)
                 {
                     case null:
-                        return;
+                        break;
                     case SingleCameraSource singleCamera:
                         IsCameraRunning = true;
                         StartButtonEnabled = false;
@@ -107,17 +106,16 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
                         {
                             case Camera.Left when dualCamera.LeftCam == null:
                             case Camera.Right when dualCamera.RightCam == null:
-                                return;
+                                break;
                             default:
                                 IsCameraRunning = true;
                                 StartButtonEnabled = false;
                                 StopButtonEnabled = true;
                                 break;
                         }
-
                         break;
                 }
-
+                IsInitialized.SetResult();
             }, DispatcherPriority.Background);
         }
 
@@ -255,11 +253,6 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             var tmp = Bitmap;
             Bitmap = null;
             Bitmap = tmp;
-        }
-
-        partial void OnBitmapChanged(WriteableBitmap? value)
-        {
-            // IsCameraRunning = value != null;
         }
 
         partial void OnFlipHorizontallyChanged(bool value)
@@ -473,10 +466,13 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
             await CamerasInitialized.Task;
             await LeftCamera.IsInitialized.Task;
-            await StartCameraAsync(LeftCamera);
+            if (!LeftCamera.IsCameraRunning)
+                await StartCameraAsync(LeftCamera);
             await RightCamera.IsInitialized.Task;
-            await StartCameraAsync(RightCamera);
-            await FaceCamera.IsInitialized.Task;
+            if (!RightCamera.IsCameraRunning)
+                await StartCameraAsync(RightCamera);
+            if (!FaceCamera.IsCameraRunning)
+                await FaceCamera.IsInitialized.Task;
             await StartCameraAsync(FaceCamera);
         });
 
@@ -540,6 +536,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
                 if (testFrame != null)
                     return cameraSource;
             }
+
             _logger.LogError("No data was received from {}, closing...", address);
             cameraSource.Dispose();
             return null;
@@ -590,6 +587,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
 
     private SemaphoreSlim _cameraStartLock = new(1, 1);
+
     [RelayCommand(AllowConcurrentExecutions = true)]
     public async Task StartCamera(CameraControllerModel model)
     {
