@@ -269,8 +269,6 @@ public class App : Application
                 break;
         }
 
-        _host.Services.GetRequiredService<IThemeSelectorService>().SetRequestedThemeAsync();
-
         base.OnFrameworkInitializationCompleted();
     }
 
@@ -278,8 +276,8 @@ public class App : Application
     {
         if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime) return;
 
-        var vrcft = Ioc.Default.GetRequiredService<IMainService>();
-        Task.Run(vrcft.Teardown);
+        var mainService = Ioc.Default.GetRequiredService<IMainService>();
+        Task.Run(mainService.Teardown);
 
         var loop = Ioc.Default.GetRequiredService<ProcessingLoopService>();
         loop.FaceProcessingPipeline.VideoSource?.Dispose();

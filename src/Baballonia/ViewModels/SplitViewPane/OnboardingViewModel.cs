@@ -24,9 +24,6 @@ public partial class OnboardingViewModel : ObservableObject
     [ObservableProperty]
     private string _nextButtonText = "Next";
 
-    [ObservableProperty] private string _etvrFirmwareFlashingTool =
-        "https://github.com/EyeTrackVR/FirmwareFlashingTool/";
-
     [ObservableProperty] private string _babbleFirmwareDocs =
         "https://docs.babble.diy/docs/hardware/Firmware";
 
@@ -107,11 +104,6 @@ public partial class OnboardingViewModel : ObservableObject
         {
             FinishOnboarding();
         }
-    }
-
-    public void OpenEtvrModuleUrl()
-    {
-        Utils.OpenUrl(EtvrFirmwareFlashingTool);
     }
 
     public void OpenBabbleModuleUrl()

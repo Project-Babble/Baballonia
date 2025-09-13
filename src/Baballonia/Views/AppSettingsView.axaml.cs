@@ -60,11 +60,36 @@ public partial class AppSettingsView : UserControl
         index = _languageSelectorService.Language switch
         {
             "DefaultLanguage" => 0,
-            "en" => 1,
-            "es" => 2,
-            "ja" => 3,
-            "pl" => 4,
-            "zh" => 5,
+            "en-US" => 1,
+            "es-ES" => 2,
+            "ja-JP" => 3,
+            "pl-PL" => 4,
+            "zh-CN" => 5,
+            "zh-TW" => 6,
+            "de-DE" => 7,
+            "fr-FR" => 8,
+            "it-IT" => 9,
+            "ko-KR" => 10,
+            "pt-BR" => 11,
+            "pt-PT" => 12,
+            "ru-RU" => 13,
+            "ar-SA" => 14,
+            "tr-TR" => 15,
+            "nl-NL" => 16,
+            "sv-SE" => 17,
+            "fi-FI" => 18,
+            "da-DK" => 19,
+            "no-NO" => 20,
+            "cs-CZ" => 21,
+            "hu-HU" => 22,
+            "ro-RO" => 23,
+            "vi-VN" => 24,
+            "uk-UA" => 25,
+            "el-GR" => 26,
+            "he-IL" => 27,
+            "af-ZA" => 28,
+            "ca-ES" => 29,
+            "sr-SP" => 30,
             _ => 0
         };
         _langComboBox.SelectedIndex = index;
@@ -96,7 +121,7 @@ public partial class AppSettingsView : UserControl
         var item = _langComboBox.SelectedItem as ComboBoxItem;
         Dispatcher.UIThread.InvokeAsync(async () =>
         {
-            await _languageSelectorService.SetLanguageAsync(item!.Name!);
+            await _languageSelectorService.SetLanguageAsync(item!.Tag!.ToString()!);
         });
     }
 

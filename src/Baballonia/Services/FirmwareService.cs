@@ -109,7 +109,7 @@ public class FirmwareService(ILogger<FirmwareService> logger, ICommandSenderFact
 
     public async Task<string[]> ProbeComPortsAsync(TimeSpan timeout)
     {
-        var ports = FindAvailableComPorts();
+        var ports = FindAvailableSerialPorts();
         var goodPorts = new List<string>();
         var tasks = new ConcurrentSet<Task>();
 
@@ -153,7 +153,7 @@ public class FirmwareService(ILogger<FirmwareService> logger, ICommandSenderFact
 
     public string[] ProbeComPorts(TimeSpan timeout)
     {
-        var ports = FindAvailableComPorts();
+        var ports = FindAvailableSerialPorts();
         List<string> goodPorts = [];
         foreach (var port in ports)
         {
@@ -186,7 +186,7 @@ public class FirmwareService(ILogger<FirmwareService> logger, ICommandSenderFact
         return [.. goodPorts];
     }
 
-    private static string[] FindAvailableComPorts()
+    public string[] FindAvailableSerialPorts()
     {
         // GetPortNames() may return single port multiple times
         // https://stackoverflow.com/questions/33401217/serialport-getportnames-returns-same-port-multiple-times

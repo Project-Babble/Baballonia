@@ -86,26 +86,6 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>Resources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Assets\Resources.es.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Resources.es.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Assets\Resources.ja.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Resources.ja.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Assets\Resources.pl.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Resources.pl.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Assets\Resources.zh-cn.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Resources.zh-cn.resx</DependentUpon>
-      </Compile>
     </ItemGroup>
 
 
@@ -141,11 +121,6 @@
 		    <LastGenOutput>Resources.pl.Designer.cs</LastGenOutput>
             <LogicalName>Baballonia.Assets.Resources.pl.resources</LogicalName>
 		</EmbeddedResource>
-		<EmbeddedResource Update="Assets\Resources.zh-cn.resx">
-		    <Generator>ResXFileCodeGenerator</Generator>
-		    <LastGenOutput>Resources.zh-cn.Designer.cs</LastGenOutput>
-            <LogicalName>Baballonia.Assets.Resources.zh-cn.resources</LogicalName>
-		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\Baballonia.SDK\Baballonia.SDK.csproj" />
@@ -161,6 +136,12 @@
 	  <Folder Include="Firmware\Linux\" />
 	  <Folder Include="Firmware\MacOS\" />
 	  <Folder Include="Firmware\Windows\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <AvaloniaResource Update="Assets\Resources.resx">
+	    <Generator>PublicResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+	  </AvaloniaResource>
 	</ItemGroup>
 
 </Project>

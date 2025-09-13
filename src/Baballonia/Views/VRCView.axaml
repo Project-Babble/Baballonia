@@ -1,4 +1,4 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -6,24 +6,25 @@
              xmlns:splitViewPane="clr-namespace:Baballonia.ViewModels.SplitViewPane"
              x:DataType="splitViewPane:VrcViewModel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Baballonia.Views.VrcView">
+             x:Class="Baballonia.Views.VrcView"
+             xmlns:assets="clr-namespace:Baballonia.Assets">
     <ScrollViewer>
         <StackPanel Classes="Page">
-            <TextBlock Classes="Header" Text="VRChat + VRCFaceTracking Settings" />
+            <TextBlock Classes="Header" Text="{x:Static assets:Resources.VRC_Title_Header}" />
 
             <controls:SettingsToggle
-              Title="Use Native VRC Eye Tracking"
-              Description="Brings eye tracking to avatars that do not have VRCFaceTracking"
+              Title="{x:Static assets:Resources.VRC_UseNativeEyeTracking_Header}"
+              Description="{x:Static assets:Resources.VRC_UseNativeEyeTracking_Description}"
               SettingToggled="{Binding UseNativeVrcEyeTracking, Mode=TwoWay}" />
 
             <controls:SettingsBlock
-              Title="Set VRCFT module mode"
-              Description="Send only eye, only face or both? (Change requires VRCFT restart)">
+              Title="{x:Static assets:Resources.VRC_ModuleMode_Header}"
+              Description="{x:Static assets:Resources.VRC_ModuleMode_Description}">
               <controls:SettingsBlock.SettingsContent>
                 <ComboBox x:Name="ModeCombo" VerticalAlignment="Center"
                           ItemsSource="{Binding ModuleModeOptions}"
                           SelectedItem="{Binding SelectedModuleMode, Mode=TwoWay}"
-                          PlaceholderText="Select a mode..."/>
+                          PlaceholderText="{x:Static assets:Resources.VRC_ModuleMode_Placeholder}"/>
               </controls:SettingsBlock.SettingsContent>
             </controls:SettingsBlock>
 

@@ -7,6 +7,7 @@
   xmlns:splitViewPane="clr-namespace:Baballonia.ViewModels.SplitViewPane"
   xmlns:models="clr-namespace:Baballonia.Models"
   xmlns:twoRangeSlider="clr-namespace:Baballonia.Controls"
+  xmlns:assets="clr-namespace:Baballonia.Assets"
   d:DesignHeight="450"
   d:DesignWidth="800"
   x:DataType="splitViewPane:CalibrationViewModel"
@@ -18,7 +19,7 @@
         <TextBlock
           Grid.Column="0"
           Classes="Header"
-          Text="Calibration" />
+          Text="{x:Static assets:Resources.Calibration_Title_Header}" />
         <StackPanel
           x:Name="ResetDesktopStackPanel"
           Grid.Column="1"
@@ -26,38 +27,39 @@
           IsVisible="False"
           Orientation="Horizontal"
           Spacing="12">
-          <Button Command="{Binding ResetMinimumsCommand}" Content="Reset Minimums" />
-          <Button Command="{Binding ResetMaximumsCommand}" Content="Reset Maximums" />
+          <Button Command="{Binding ResetMinimumsCommand}" Content="{x:Static assets:Resources.Calibration_Reset_Minimums}" />
+          <Button Command="{Binding ResetMaximumsCommand}" Content="{x:Static assets:Resources.Calibration_Reset_Maximums}" />
         </StackPanel>
       </Grid>
 
       <TextBlock TextWrapping="Wrap">
-        <Run>The below sliders are used to calibrate the</Run> <Run FontStyle="Italic">sensitivity</Run>
-        <Run>of your face expressions.</Run><LineBreak />
-        <Run>• Raising the</Run> <Run FontWeight="SemiBold">Minimum</Run>
-        <Run>value requires a stronger expression before it starts to show.</Run><LineBreak />
-        <Run>• Lowering the</Run> <Run FontWeight="SemiBold">Maximum</Run>
-        <Run>value means a smaller expression will reach 100% faster.</Run>
+        <Run Text="{x:Static assets:Resources.Calibration_Instructions_Line1}" />
+        <Run FontStyle="Italic" Text="{x:Static assets:Resources.Calibration_Instructions_Sensitivity}" />
+        <Run Text="{x:Static assets:Resources.Calibration_Instructions_Line1_2}" />
+        <LineBreak />
+        <Run Text="{x:Static assets:Resources.Calibration_Instructions_Bullet1_1}" />
+        <Run FontWeight="SemiBold" Text="{x:Static assets:Resources.Calibration_Instructions_Minimum}" />
+        <Run Text="{x:Static assets:Resources.Calibration_Instructions_Bullet1_2}" />
+        <LineBreak />
+        <Run Text="{x:Static assets:Resources.Calibration_Instructions_Bullet2_1}" />
+        <Run FontWeight="SemiBold" Text="{x:Static assets:Resources.Calibration_Instructions_Maximum}" />
+        <Run Text="{x:Static assets:Resources.Calibration_Instructions_Bullet2_2}" />
       </TextBlock>
 
       <StackPanel
         x:Name="ResetMobileStackPanel"
         Orientation="Vertical"
         Spacing="12">
-        <TextBlock
-          VerticalAlignment="Center"
-          FontStyle="Italic"
-          Text="(Reload page to see changes)" />
         <StackPanel Orientation="Horizontal" Spacing="12">
-          <Button Command="{Binding ResetMinimumsCommand}" Content="Reset Minimums" />
-          <Button Command="{Binding ResetMaximumsCommand}" Content="Reset Maximums" />
+          <Button Command="{Binding ResetMinimumsCommand}" Content="{x:Static assets:Resources.Calibration_Reset_Minimums}" />
+          <Button Command="{Binding ResetMaximumsCommand}" Content="{x:Static assets:Resources.Calibration_Reset_Maximums}" />
         </StackPanel>
       </StackPanel>
 
       <!--  Eye Expressions Expander  -->
       <Expander Margin="0,12,0,0" HorizontalAlignment="Stretch">
         <Expander.Header>
-          <TextBlock FontWeight="SemiBold" Text="Eye Expressions" />
+          <TextBlock FontWeight="SemiBold" Text="{x:Static assets:Resources.Calibration_Eye_Expressions_Header}" />
         </Expander.Header>
         <StackPanel Margin="0,5">
 
@@ -65,14 +67,14 @@
             <StackPanel Spacing="8">
               <Grid ColumnDefinitions="*,Auto">
                 <StackPanel Grid.Column="0">
-                  <TextBlock Text="Stabilize Eyes" FontWeight="SemiBold"/>
-                  <TextBlock Text="Averages eye position, but preserves convergence" FontSize="12" Foreground="{DynamicResource SystemBaseMediumColor}"/>
+                  <TextBlock Text="{x:Static assets:Resources.Calibration_Eye_Expressions_Stabilize_Eyes_Header}" FontWeight="SemiBold"/>
+                  <TextBlock Text="{x:Static assets:Resources.Calibration_Eye_Expressions_Stabilize_Eyes_Description}" FontSize="12" Foreground="{DynamicResource SystemBaseMediumColor}"/>
                 </StackPanel>
                 <CheckBox Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding StabilizeEyes, Mode=TwoWay}"/>
               </Grid>
             </StackPanel>
           </Border>
-          
+
           <ItemsControl ItemsSource="{Binding EyeSettings}">
             <ItemsControl.ItemTemplate>
               <DataTemplate x:DataType="models:SliderBindableSetting">
@@ -109,7 +111,7 @@
       <!--  Cheek Expressions Expander  -->
       <Expander Margin="0,12,0,0" HorizontalAlignment="Stretch">
         <Expander.Header>
-          <TextBlock FontWeight="SemiBold" Text="Cheek Expressions" />
+          <TextBlock FontWeight="SemiBold" Text="{x:Static assets:Resources.Calibration_Cheek_Expressions_Header}" />
         </Expander.Header>
         <StackPanel Margin="0,5">
           <ItemsControl ItemsSource="{Binding CheekSettings}">
@@ -148,7 +150,7 @@
       <!--  Jaw Expressions Expander  -->
       <Expander Margin="0,12,0,0" HorizontalAlignment="Stretch">
         <Expander.Header>
-          <TextBlock FontWeight="SemiBold" Text="Jaw Expressions" />
+          <TextBlock FontWeight="SemiBold" Text="{x:Static assets:Resources.Calibration_Jaw_Expressions_Header}" />
         </Expander.Header>
         <StackPanel Margin="0,5">
           <ItemsControl ItemsSource="{Binding JawSettings}">
@@ -187,7 +189,7 @@
       <!--  Nose Expressions Expander  -->
       <Expander Margin="0,12,0,0" HorizontalAlignment="Stretch">
         <Expander.Header>
-          <TextBlock FontWeight="SemiBold" Text="Nose Expressions" />
+          <TextBlock FontWeight="SemiBold" Text="{x:Static assets:Resources.Calibration_Nose_Expressions_Header}" />
         </Expander.Header>
         <StackPanel Margin="0,5">
           <ItemsControl ItemsSource="{Binding NoseSettings}">
@@ -226,7 +228,7 @@
       <!--  Mouth Expressions Expander  -->
       <Expander Margin="0,12,0,0" HorizontalAlignment="Stretch">
         <Expander.Header>
-          <TextBlock FontWeight="SemiBold" Text="Mouth Expressions" />
+          <TextBlock FontWeight="SemiBold" Text="{x:Static assets:Resources.Calibration_Mouth_Expressions_Header}" />
         </Expander.Header>
         <StackPanel Margin="0,5">
           <ItemsControl ItemsSource="{Binding MouthSettings}">
@@ -265,7 +267,7 @@
       <!--  Tongue Expressions Expander  -->
       <Expander Margin="0,12,0,0" HorizontalAlignment="Stretch">
         <Expander.Header>
-          <TextBlock FontWeight="SemiBold" Text="Tongue Expressions" />
+          <TextBlock FontWeight="SemiBold" Text="{x:Static assets:Resources.Calibration_Tongue_Expressions_Header}" />
         </Expander.Header>
         <StackPanel Margin="0,5">
           <ItemsControl ItemsSource="{Binding TongueSettings}">

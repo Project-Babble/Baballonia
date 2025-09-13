@@ -1,8 +1,9 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:Baballonia.Controls"
+             xmlns:assets="clr-namespace:Baballonia.Assets"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Baballonia.Controls.DropOverlay">
 
@@ -33,17 +34,17 @@
             FontSize="22"
             FontWeight="Bold"
             TextWrapping="Wrap"
-            Text="Important!" />
+            Text="{x:Static assets:Resources.DropOverlay_Important_Header}" />
 
-          <TextBlock TextWrapping="Wrap">
-            Newer babble trackers have a 20 second delay after being plugged in before they can be used.
-            It will make a USB plugging-in sound when it is ready!</TextBlock>
+          <TextBlock 
+            TextWrapping="Wrap"
+            Text="{x:Static assets:Resources.DropOverlay_Message}" />
 
           <Grid>
-            <CheckBox x:Name="WarningCheckbox" IsCheckedChanged="Changed">Don't show this warning again</CheckBox>
+            <CheckBox x:Name="WarningCheckbox" IsCheckedChanged="Changed" Content="{x:Static assets:Resources.DropOverlay_DontShowAgain}" />
             <Button
               Click="SecondWarningUnderstood"
-              Content="Dismiss"
+              Content="{x:Static assets:Resources.DropOverlay_Dismiss_Button}"
               CornerRadius="4"
               HorizontalAlignment="Right"
               Padding="16,8" />

@@ -7,9 +7,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using Avalonia.Themes.Fluent;
 using Avalonia.Threading;
+using Baballonia.Assets;
 using Baballonia.Contracts;
 using Baballonia.Helpers;
 using Baballonia.Services;
@@ -396,7 +400,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     [ObservableProperty] private string _messagesOutPerSecCount;
 
     [ObservableProperty] private bool _shouldEnableEyeCalibration;
-    [ObservableProperty] private string _selectedCalibrationText;
+    public TextBlock SelectedCalibrationTextBlock;
 
     public bool IsRunningAsAdmin => Utils.HasAdmin;
 
@@ -404,13 +408,14 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     [ObservableProperty] private CameraControllerModel _rightCamera;
     [ObservableProperty] private CameraControllerModel _faceCamera;
 
-    public readonly TaskCompletionSource camerasInitialized = new();
+    public readonly TaskCompletionSource CamerasInitialized = new();
 
     private readonly DispatcherTimer _msgCounterTimer;
     private readonly ILocalSettingsService _localSettingsService;
     private readonly ProcessingLoopService _processingLoopService;
     private readonly DropOverlayService _dropOverlayService;
 
+    public string RequestedVRCalibration = CalibrationRoutine.Map["QuickCalibration"];
 
     private ILogger<HomePageViewModel> _logger;
 
@@ -424,6 +429,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         _processingLoopService = Ioc.Default.GetService<ProcessingLoopService>()!;
         _logger = Ioc.Default.GetService<ILogger<HomePageViewModel>>()!;
         _dropOverlayService = Ioc.Default.GetService<DropOverlayService>()!;
+
         LocalSettingsService.Load(this);
 
         MessagesInPerSecCount = "0";
@@ -462,10 +468,10 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
                     _processingLoopService.EyesProcessingPipeline, cameraNames, Camera.Right);
                 FaceCamera = new CameraControllerModel(_localSettingsService, "FaceCamera",
                     _processingLoopService.FaceProcessingPipeline, cameraNames, Camera.Face);
-                camerasInitialized.SetResult();
+                CamerasInitialized.SetResult();
             });
 
-            await camerasInitialized.Task;
+            await CamerasInitialized.Task;
             await LeftCamera.IsInitialized.Task;
             await StartCameraAsync(LeftCamera);
             await RightCamera.IsInitialized.Task;
@@ -755,9 +761,40 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     [RelayCommand]
     private async Task RequestVRCalibration()
     {
-        await App.Overlay.EyeTrackingCalibrationRequested(CalibrationRoutine.QuickCalibration);
-        await _localSettingsService.SaveSettingAsync("EyeHome_EyeModel", "tuned_temporal_eye_tracking.onnx");
-        await _processingLoopService.SetupEyeInference();
+        var res = await App.Overlay.EyeTrackingCalibrationRequested(RequestedVRCalibration);
+        if (res.success)
+        {
+            await _localSettingsService.SaveSettingAsync("EyeHome_EyeModel", "tuned_temporal_eye_tracking.onnx");
+            await _processingLoopService.SetupEyeInference();
+            SelectedCalibrationTextBlock.Foreground = new SolidColorBrush(Colors.Green);
+        }
+        else
+        {
+            SelectedCalibrationTextBlock.Foreground =  new SolidColorBrush(Colors.Red);
+            _logger.LogError(res.status);
+        }
+
+        var previousText = SelectedCalibrationTextBlock.Text;
+        SelectedCalibrationTextBlock.Text = res.status;
+        await Task.Delay(5000);
+        SelectedCalibrationTextBlock.Text = previousText;
+        SelectedCalibrationTextBlock.Foreground = new SolidColorBrush(GetBaseHighColor());
+    }
+
+    private Color GetBaseHighColor()
+    {
+        Color color = Colors.White;
+        switch (Application.Current!.ActualThemeVariant.ToString())
+        {
+            case "Light":
+                color = Colors.Black;
+                break;
+            case "Dark":
+                color = Colors.White;
+                break;
+        }
+
+        return color;
     }
 
     private void MessageDispatched(int msgCount) => _messagesSent += msgCount;

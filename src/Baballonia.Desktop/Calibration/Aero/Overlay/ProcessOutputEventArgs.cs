@@ -2,16 +2,9 @@
 
 namespace Baballonia.Desktop.Calibration.Aero.Overlay;
 
-public class ProcessOutputEventArgs : EventArgs
+public class ProcessOutputEventArgs(string output, bool isError) : EventArgs
 {
-    public string Output { get; }
-    public bool IsError { get; }
-    public DateTime Timestamp { get; }
-
-    public ProcessOutputEventArgs(string output, bool isError)
-    {
-        Output = output;
-        IsError = isError;
-        Timestamp = DateTime.Now;
-    }
+    public string Output { get; } = output;
+    public bool IsError { get; } = isError;
+    public DateTime Timestamp { get; } = DateTime.Now;
 }

@@ -12,74 +12,74 @@
     d:DesignWidth="800"
     x:DataType="splitViewPane:OutputPageViewModel"
     mc:Ignorable="d">
-    <Grid Margin="24">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="12" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+  <Grid Margin="24">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="12" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0">
-            <TextBlock Classes="Header" Text="{x:Static assets:Resources.Shell_Output_Content}" />
-            <controls:ContentExample>
-                <StackPanel Orientation="Horizontal" Spacing="12">
-                    <Button
-                        x:Name="CopyButton"
-                        Click="CopyRequested"
-                        ToolTip.Tip="Copy the log's output to your clipboard">
-                        <Button.Content>
-                            <StackPanel Orientation="Vertical">
-                                <PathIcon Height="24" Data="{StaticResource DocumentCopyRegular}" />
-                            </StackPanel>
-                        </Button.Content>
-                    </Button>
-                    <Button
-                        x:Name="SaveButton"
-                        Click="SaveRequested"
-                        ToolTip.Tip="Save the log's output">
-                        <Button.Content>
-                            <StackPanel Orientation="Vertical">
-                                <PathIcon Height="24" Data="{StaticResource SaveRegular}" />
-                            </StackPanel>
-                        </Button.Content>
-                    </Button>
-                    <Button
-                        x:Name="OpenLoggingDirectoryButton"
-                        Click="OpenLogDirectory"
-                        IsEnabled="{x:Static utils:Utils.IsSupportedDesktopOS}"
-                        ToolTip.Tip="Open the logging directory">
-                        <Button.Content>
-                            <StackPanel Orientation="Vertical">
-                                <PathIcon Height="24" Data="{StaticResource FolderOpenVerticalRegular}" />
-                            </StackPanel>
-                        </Button.Content>
-                    </Button>
-                </StackPanel>
-            </controls:ContentExample>
+    <StackPanel Grid.Row="0">
+      <TextBlock Classes="Header" Text="{x:Static assets:Resources.Output_Title_Header}" />
+      <controls:ContentExample>
+        <StackPanel Orientation="Horizontal" Spacing="12">
+          <Button
+              x:Name="CopyButton"
+              Click="CopyRequested"
+              ToolTip.Tip="{x:Static assets:Resources.Output_CopyButton_Tooltip}">
+            <Button.Content>
+              <StackPanel Orientation="Vertical">
+                <PathIcon Height="24" Data="{StaticResource DocumentCopyRegular}" />
+              </StackPanel>
+            </Button.Content>
+          </Button>
+          <Button
+              x:Name="SaveButton"
+              Click="SaveRequested"
+              ToolTip.Tip="{x:Static assets:Resources.Output_SaveButton_Tooltip}">
+            <Button.Content>
+              <StackPanel Orientation="Vertical">
+                <PathIcon Height="24" Data="{StaticResource SaveRegular}" />
+              </StackPanel>
+            </Button.Content>
+          </Button>
+          <Button
+              x:Name="OpenLoggingDirectoryButton"
+              Click="OpenLogDirectory"
+              IsEnabled="{x:Static utils:Utils.IsSupportedDesktopOS}"
+              ToolTip.Tip="{x:Static assets:Resources.Output_OpenLoggingDirectoryButton_Tooltip}">
+            <Button.Content>
+              <StackPanel Orientation="Vertical">
+                <PathIcon Height="24" Data="{StaticResource FolderOpenVerticalRegular}" />
+              </StackPanel>
+            </Button.Content>
+          </Button>
         </StackPanel>
+      </controls:ContentExample>
+    </StackPanel>
 
-        <controls:ContentExample Grid.Row="2">
-            <ScrollViewer
-                x:Name="LogScroller"
-                HorizontalScrollBarVisibility="Auto"
-                IsTabStop="False"
-                VerticalScrollBarVisibility="Auto">
-                <StackPanel
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    Orientation="Vertical">
-                    <ItemsControl
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        ItemsSource="{Binding View.FilteredLog}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding}" />
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
-            </ScrollViewer>
-        </controls:ContentExample>
-    </Grid>
+    <controls:ContentExample Grid.Row="2">
+      <ScrollViewer
+          x:Name="LogScroller"
+          HorizontalScrollBarVisibility="Auto"
+          IsTabStop="False"
+          VerticalScrollBarVisibility="Auto">
+        <StackPanel
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Orientation="Vertical">
+          <ItemsControl
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch"
+              ItemsSource="{Binding View.FilteredLog}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding}" />
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </ScrollViewer>
+    </controls:ContentExample>
+  </Grid>
 </UserControl>

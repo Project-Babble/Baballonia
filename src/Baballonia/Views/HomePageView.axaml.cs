@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel;
 using System.Linq;
 using Avalonia.Controls;
@@ -93,13 +92,14 @@ public partial class HomePageView : UserControl
         Loaded += async (_, _) =>
         {
             if (DataContext is not HomePageViewModel vm) return;
-            await vm.camerasInitialized.Task;
+            await vm.CamerasInitialized.Task;
 
             SetupCropEvents(vm.LeftCamera, LeftMouthWindow);
             SetupCropEvents(vm.RightCamera, RightMouthWindow);
             SetupCropEvents(vm.FaceCamera, FaceWindow);
 
-            vm.SelectedCalibrationText = "Eye Calibration";
+            vm.SelectedCalibrationTextBlock = this.Find<TextBlock>("SelectedCalibrationTextBlockColor")!;
+            vm.SelectedCalibrationTextBlock.Text = Assets.Resources.Home_Eye_Calibration;
         };
     }
 
@@ -169,10 +169,10 @@ public partial class HomePageView : UserControl
 
     private void OnCalibrationMenuItemClick(object? sender, RoutedEventArgs e)
     {
-        if (sender is MenuItem menuItem && DataContext is HomePageViewModel vm)
-        {
-            vm.SelectedCalibrationText = menuItem.Header?.ToString() ?? "";
-        }
+        if (sender is not MenuItem menuItem || DataContext is not HomePageViewModel vm) return;
+
+        vm.SelectedCalibrationTextBlock.Text = menuItem.Header?.ToString()!;
+        vm.RequestedVRCalibration = CalibrationRoutine.Map[menuItem.Name!];
     }
 
     private void OnExpanderCollapsed(object? sender, RoutedEventArgs e)

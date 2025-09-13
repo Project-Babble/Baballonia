@@ -1,0 +1,720 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Settings_Theme_Dark_Content" xml:space="preserve">
+    <value>Donker</value>
+  </data>
+  <data name="Settings_Theme_Default_Content" xml:space="preserve">
+    <value>Standaard</value>
+  </data>
+  <data name="Settings_Theme_Light_Content" xml:space="preserve">
+    <value>Licht</value>
+  </data>
+  <data name="Home_Title_Header" xml:space="preserve">
+    <value>Startpagina</value>
+  </data>
+  <data name="Settings_Theme_Header" xml:space="preserve">
+    <value>App thema</value>
+  </data>
+  <data name="Settings_Theme_Description" xml:space="preserve">
+    <value>Selecteer welk app-thema moet worden weergegeven</value>
+  </data>
+  <data name="Settings_OSC_Description" xml:space="preserve">
+    <value>Waar moeten OSC-gegevens worden verzonden?</value>
+  </data>
+  <data name="Settings_OSC_Header" xml:space="preserve">
+    <value>OSC</value>
+  </data>
+  <data name="Home_Eye_Calibration" xml:space="preserve">
+    <value>Oog kalibreren</value>
+  </data>
+  <data name="Home_Left_Camera_Address" xml:space="preserve">
+    <value>Linker Camera Adres</value>
+  </data>
+  <data name="Home_Cameras_Start_Camera" xml:space="preserve">
+    <value>Camera starten</value>
+  </data>
+  <data name="Home_Cameras_Stop_Camera" xml:space="preserve">
+    <value>Camera stoppen</value>
+  </data>
+  <data name="Home_Cameras_Tracking_Mode" xml:space="preserve">
+    <value>Volgen</value>
+  </data>
+  <data name="Home_Cameras_Cropping_Mode" xml:space="preserve">
+    <value>Bijsnijden</value>
+  </data>
+  <data name="Home_Left_Camera_Select_Entire_Frame" xml:space="preserve">
+    <value>Linker frame selecteren</value>
+  </data>
+  <data name="Home_Cameras_Vertical_Flip_Header" xml:space="preserve">
+    <value>Verticale spiegeling</value>
+  </data>
+  <data name="Home_Cameras_Vertical_Flip_Description" xml:space="preserve">
+    <value>Afbeelding verticaal spiegelen</value>
+  </data>
+  <data name="Home_Cameras_Horizontal_Flip_Header" xml:space="preserve">
+    <value>Horizontale omdraaien</value>
+  </data>
+  <data name="Home_Cameras_Horizontal_Flip_Description" xml:space="preserve">
+    <value>Afbeelding horizontaal spiegelen</value>
+  </data>
+  <data name="Home_Cameras_Rotation_Description" xml:space="preserve">
+    <value>Draait de afbeelding in een cirkel</value>
+  </data>
+  <data name="Home_Cameras_Brightness_Header" xml:space="preserve">
+    <value>Helderheid afbeelding</value>
+  </data>
+  <data name="Home_Cameras_Rotation_Header" xml:space="preserve">
+    <value>Afbeelding rotatie</value>
+  </data>
+  <data name="Home_Cameras_Brightness_Description" xml:space="preserve">
+    <value>Helderheid van de afbeelding aanpassen</value>
+  </data>
+  <data name="Home_Right_Camera_Address" xml:space="preserve">
+    <value>Cameraadres rechts</value>
+  </data>
+  <data name="Home_Right_Camera_Select_Entire_Frame" xml:space="preserve">
+    <value>Rechterframe selecteren</value>
+  </data>
+  <data name="Home_Face_Camera_Address" xml:space="preserve">
+    <value>Gezicht Camera Adres</value>
+  </data>
+  <data name="Home_Face_Camera_Select_Entire_Frame" xml:space="preserve">
+    <value>Selecteer Gezicht Frame</value>
+  </data>
+  <data name="Home_Left_Camera_Header" xml:space="preserve">
+    <value>Linker Oog Camera</value>
+  </data>
+  <data name="Home_Face_Camera_Header" xml:space="preserve">
+    <value>Gezicht camera</value>
+  </data>
+  <data name="Home_Right_Camera_Header" xml:space="preserve">
+    <value>Rechter Oog Camera</value>
+  </data>
+  <data name="Home_Left_Camera_Settings" xml:space="preserve">
+    <value>Camera instellingen links</value>
+  </data>
+  <data name="Home_Face_Camera_Settings" xml:space="preserve">
+    <value>Face Camera Instellingen</value>
+  </data>
+  <data name="Home_Right_Camera_Settings" xml:space="preserve">
+    <value>Rechter Camera Instellingen</value>
+  </data>
+  <data name="Common_Start_Typing" xml:space="preserve">
+    <value>Begin met typen...</value>
+  </data>
+  <data name="Calibration_Title_Header" xml:space="preserve">
+    <value>Kalibratie</value>
+  </data>
+  <data name="Calibration_Reset_Minimums" xml:space="preserve">
+    <value>Reset Minimums</value>
+  </data>
+  <data name="Calibration_Reset_Maximums" xml:space="preserve">
+    <value>Reset Maximums</value>
+  </data>
+  <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
+    <value>Oogexpressies</value>
+  </data>
+  <data name="Calibration_Nose_Expressions_Header" xml:space="preserve">
+    <value>Nose expressies</value>
+  </data>
+  <data name="Calibration_Tongue_Expressions_Header" xml:space="preserve">
+    <value>Tong Expressies</value>
+  </data>
+  <data name="Calibration_Mouth_Expressions_Header" xml:space="preserve">
+    <value>Mouth expressies</value>
+  </data>
+  <data name="Calibration_Jaw_Expressions_Header" xml:space="preserve">
+    <value>Kaak expressies</value>
+  </data>
+  <data name="Calibration_Cheek_Expressions_Header" xml:space="preserve">
+    <value>Cheek expressies</value>
+  </data>
+  <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Header" xml:space="preserve">
+    <value>Stabiliseer Ogen</value>
+  </data>
+  <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Description" xml:space="preserve">
+    <value>Voorkomt dat ogen uitkijken in tegengestelde richtingen, maar misschien te ver gaan.</value>
+  </data>
+  <data name="Firmware_Title_Header" xml:space="preserve">
+    <value>Firmware</value>
+  </data>
+  <data name="Firmware_Select_Tracker_Header" xml:space="preserve">
+    <value>Selecteer uw tracker</value>
+  </data>
+  <data name="Firmware_Device_Instructions_1" xml:space="preserve">
+    <value>• Na het opstarten/koppelen van je apparaat heeft je 20 seconden om op "Vernieuwen" te drukken en je apparaat te selecteren uit het dropdown menu</value>
+  </data>
+  <data name="Firmware_Device_Instructions_2" xml:space="preserve">
+    <value>• Bepaalde configuratiebewerkingen nemen een klein beetje!</value>
+  </data>
+  <data name="Firmware_Device_Configuration_Header" xml:space="preserve">
+    <value>Apparaat configuratie</value>
+  </data>
+  <data name="Firmware_Device_Configuration_Description" xml:space="preserve">
+    <value>Wisselknop draad/draadloze modus</value>
+  </data>
+  <data name="Firmware_Device_Mode_Header" xml:space="preserve">
+    <value>Wisselknop draad/draadloze modus</value>
+  </data>
+  <data name="Firmware_Device_Mode_Instruction_1" xml:space="preserve">
+    <value>• U moet uw tracker herstarten na het wijzigen van de modus</value>
+  </data>
+  <data name="Firmware_Device_Mode_Instruction_2" xml:space="preserve">
+    <value>• Je moet de app herstarten na een flash om trackers weer te geven</value>
+  </data>
+  <data name="Firmware_Device_Mode_Select_Placeholder" xml:space="preserve">
+    <value>Selecteer een modus...</value>
+  </data>
+  <data name="Firmware_Wifi_Configuration_Header" xml:space="preserve">
+    <value>Wifi configuratie</value>
+  </data>
+  <data name="Firmware_Wifi_Configuration_Description" xml:space="preserve">
+    <value>Maak verbinding met wifi en meer</value>
+  </data>
+  <data name="Firmware_Wifi_Credentials_Header" xml:space="preserve">
+    <value>Stel uw wifi-inloggegevens in</value>
+  </data>
+  <data name="Firmware_Wifi_Instructions_1" xml:space="preserve">
+    <value>• Als je draadloos wilt gebruikmaken van je tracker, moet je de wifi-inloggegevens instellen</value>
+  </data>
+  <data name="Firmware_Wifi_Instructions_2" xml:space="preserve">
+    <value>• U MOET scannen naar wifi-netwerken BEFORE U kunt uw wifi-aanmeldgegevens instellen</value>
+  </data>
+  <data name="Firmware_Wifi_SSID_Label" xml:space="preserve">
+    <value>WiFi netwerknaam (SSID)</value>
+  </data>
+  <data name="Firmware_Wifi_SSID_Placeholder" xml:space="preserve">
+    <value>Begin met typen om wifi-netwerken te zien...</value>
+  </data>
+  <data name="Firmware_Wifi_Password_Label" xml:space="preserve">
+    <value>WiFi wachtwoord</value>
+  </data>
+  <data name="Firmware_Wifi_Password_Placeholder" xml:space="preserve">
+    <value>Voer wifi-wachtwoord in...</value>
+  </data>
+  <data name="Firmware_Flashing_Header" xml:space="preserve">
+    <value>Flashing Options</value>
+  </data>
+  <data name="Firmware_Flashing_Description" xml:space="preserve">
+    <value>Flash de firmware van je apparaat</value>
+  </data>
+  <data name="Firmware_Flashing_Warning" xml:space="preserve">
+    <value>VOORZICHTIG! DEZE ZAL UW TRACKERS VERWIJDEREN. U MOET EEN EEN EERSTE TIJD EEN AFTER VLAKER WORDEN VERWIJDEREN UW TRACKER.</value>
+  </data>
+  <data name="Firmware_Flashing_Button" xml:space="preserve">
+    <value>Firmware flashen</value>
+  </data>
+  <data name="Firmware_Flashing_Note" xml:space="preserve">
+    <value>Dit duurt ongeveer ~10 seconden. Laat deze pagina niet achter!</value>
+  </data>
+  <data name="Firmware_Flashing_Complete" xml:space="preserve">
+    <value>Klaar! U moet uw tracker herstarten</value>
+  </data>
+  <data name="Firmware_TrackerComboBox_Default" xml:space="preserve">
+    <value>Klik om trackers te bekijken...</value>
+  </data>
+  <data name="Firmware_RefreshDevices_Default" xml:space="preserve">
+    <value>Apparaten vernieuwen</value>
+  </data>
+  <data name="Firmware_RefreshDevices_Refreshing" xml:space="preserve">
+    <value>Verversen</value>
+  </data>
+  <data name="Firmware_RefreshDevices_Found" xml:space="preserve">
+    <value>Gevonden {0} apparaten(en).</value>
+  </data>
+  <data name="Firmware_SelectTracker_Default" xml:space="preserve">
+    <value>Selecteer Tracker</value>
+  </data>
+  <data name="Firmware_SelectTracker_Connected" xml:space="preserve">
+    <value>Tracker verbonden!</value>
+  </data>
+  <data name="Firmware_SelectTracker_NoResponse" xml:space="preserve">
+    <value>De tracker reageerde niet.</value>
+  </data>
+  <data name="Firmware_ModeSetButton_Default" xml:space="preserve">
+    <value>Modus instellen</value>
+  </data>
+  <data name="Firmware_ModeSetButton_Setting" xml:space="preserve">
+    <value>Instelling modus</value>
+  </data>
+  <data name="Firmware_ModeSetButton_Success" xml:space="preserve">
+    <value>Ingesteld!</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Default" xml:space="preserve">
+    <value>Wifi Creds instellen</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Setting" xml:space="preserve">
+    <value>WiFi inloggegevens instellen</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Success" xml:space="preserve">
+    <value>Verstuurd!</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Error" xml:space="preserve">
+    <value>Er ging iets mis...</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Default" xml:space="preserve">
+    <value>Wifi-netwerken vernieuwen</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Scanning" xml:space="preserve">
+    <value>Scannen. Dit duurt maximaal 30 seconden</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Error" xml:space="preserve">
+    <value>Scan mislukt. Klik om opnieuw te proberen.</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
+    <value>{0} netwerken gevonden. Klik om opnieuw te scannen.</value>
+  </data>
+  <data name="VRC_Title_Header" xml:space="preserve">
+    <value>VRChat + VRCFaceTracking Instellingen</value>
+  </data>
+  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
+    <value>Gebruik Originele VRC Oogtracking</value>
+  </data>
+  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
+    <value>Breng oogmeting naar avatars die geen VRCFaceTracking hebben</value>
+  </data>
+  <data name="VRC_ModuleMode_Header" xml:space="preserve">
+    <value>VRCFT module instellen</value>
+  </data>
+  <data name="VRC_ModuleMode_Description" xml:space="preserve">
+    <value>Stuur alleen oog, alleen gezicht of beide? (Wijziging vereist VRCFT herstart)</value>
+  </data>
+  <data name="VRC_ModuleMode_Placeholder" xml:space="preserve">
+    <value>Selecteer een modus...</value>
+  </data>
+  <data name="Output_Title_Header" xml:space="preserve">
+    <value>Uitvoer</value>
+  </data>
+  <data name="Output_CopyButton_Tooltip" xml:space="preserve">
+    <value>Kopieer de uitvoer van het logboek naar uw klembord</value>
+  </data>
+  <data name="Output_SaveButton_Tooltip" xml:space="preserve">
+    <value>Bewaar de output van de log</value>
+  </data>
+  <data name="Output_OpenLoggingDirectoryButton_Tooltip" xml:space="preserve">
+    <value>Open de logboekmap</value>
+  </data>
+  <data name="Onboarding_Welcome_Message" xml:space="preserve">
+    <value>Deze wizard zal je begeleiden bij het instellen van de nieuwe Babble App.</value>
+  </data>
+  <data name="Onboarding_Wireless_Header" xml:space="preserve">
+    <value>Bedrag of draadloos?</value>
+  </data>
+  <data name="Onboarding_Wireless_Description1" xml:space="preserve">
+    <value>Met nieuwere Babbles, moet u een eerste keer instellen op het tabblad Firmware (Icon hierboven).</value>
+  </data>
+  <data name="Onboarding_Wireless_Description2" xml:space="preserve">
+    <value>Het duurt slechts 2 minuten! Selecteer je tracker en modus (bekabeld of draadloos). Zo eenvoudig is het.</value>
+  </data>
+  <data name="Onboarding_Wireless_Note" xml:space="preserve">
+    <value>Houd er rekening mee dat nieuwere trackers een 20-seconde venster hebben voordat ze naar de camera modus gaan.</value>
+  </data>
+  <data name="Onboarding_Assembly_Header" xml:space="preserve">
+    <value>Stel je tracker samen</value>
+  </data>
+  <data name="Onboarding_Assembly_Description" xml:space="preserve">
+    <value>Als je hulp nodig hebt om je tracker samen te voegen, dan is hier een nuttige Youtube tutorial!</value>
+  </data>
+  <data name="Settings_Title_Header" xml:space="preserve">
+    <value>App instellingen</value>
+  </data>
+  <data name="Settings_Language_Header" xml:space="preserve">
+    <value>Taal</value>
+  </data>
+  <data name="Settings_Language_Description" xml:space="preserve">
+    <value>Stel de taal van de app in. Verander de pagina's om toe te passen.</value>
+  </data>
+  <data name="Settings_Language_Default" xml:space="preserve">
+    <value>Standaard</value>
+  </data>
+  <data name="Settings_Language_English" xml:space="preserve">
+    <value>Nederlands</value>
+  </data>
+  <data name="Settings_Language_Spanish" xml:space="preserve">
+    <value>Español</value>
+  </data>
+  <data name="Settings_Language_Japanese" xml:space="preserve">
+    <value>日本語</value>
+  </data>
+  <data name="Settings_Language_Polish" xml:space="preserve">
+    <value>Polski</value>
+  </data>
+  <data name="Settings_Language_Chinese" xml:space="preserve">
+    <value>中文</value>
+  </data>
+  <data name="Settings_Filter_Header" xml:space="preserve">
+    <value>Eén-Euro filter instellingen</value>
+  </data>
+  <data name="Settings_Filter_Description" xml:space="preserve">
+    <value>Filter instellingen</value>
+  </data>
+  <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
+    <value>Ingeschakeld</value>
+  </data>
+  <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
+    <value>Filteren in- of uitschakelen.</value>
+  </data>
+  <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
+    <value>Minimale frequentie cutoff</value>
+  </data>
+  <data name="Settings_Filter_MinFreq_Description" xml:space="preserve">
+    <value>Bepaalt hoeveel smoothing wordt toegepast op langzame bewegingen</value>
+  </data>
+  <data name="Settings_Filter_Template_Placeholder" xml:space="preserve">
+    <value>Selecteer van een template</value>
+  </data>
+  <data name="Settings_Filter_Template_Low" xml:space="preserve">
+    <value>Laag ({0})</value>
+  </data>
+  <data name="Settings_Filter_Template_Medium" xml:space="preserve">
+    <value>Gemiddeld ({0})</value>
+  </data>
+  <data name="Settings_Filter_Template_High" xml:space="preserve">
+    <value>Hoog ({0})</value>
+  </data>
+  <data name="Settings_Filter_Speed_Label" xml:space="preserve">
+    <value>Snelheid coëfficiënt</value>
+  </data>
+  <data name="Settings_Filter_Speed_Description" xml:space="preserve">
+    <value>Bepaalt hoe het filter zich aanpast als je sneller beweegt</value>
+  </data>
+  <data name="Settings_GPU_Header" xml:space="preserve">
+    <value>Gebruik GPU-versnelling</value>
+  </data>
+  <data name="Settings_GPU_Description" xml:space="preserve">
+    <value>Gebruik uw GPU om dingen sneller te laten functioneren! Vereist herstart</value>
+  </data>
+  <data name="Settings_LogLevel_Header" xml:space="preserve">
+    <value>Log niveau verbondenheid</value>
+  </data>
+  <data name="Settings_LogLevel_Description" xml:space="preserve">
+    <value>Minimum logniveau vereist. Herstart vereist</value>
+  </data>
+  <data name="Settings_Updates_Header" xml:space="preserve">
+    <value>Controleren op updates</value>
+  </data>
+  <data name="Settings_Updates_Description" xml:space="preserve">
+    <value>Moet de app controleren op updates bij het starten?</value>
+  </data>
+  <data name="Settings_FirstTime_Header" xml:space="preserve">
+    <value>Installatie eerste keer starten</value>
+  </data>
+  <data name="Settings_FirstTime_Description" xml:space="preserve">
+    <value>Herlaadt de eerste instelling</value>
+  </data>
+  <data name="Settings_FirstTime_Button" xml:space="preserve">
+    <value>Starten</value>
+  </data>
+  <data name="Onboarding_Skip_Button" xml:space="preserve">
+    <value>Overslaan</value>
+  </data>
+  <data name="Onboarding_UI_Header" xml:space="preserve">
+    <value>Waar is alles?</value>
+  </data>
+  <data name="Onboarding_UI_Home_Description" xml:space="preserve">
+    <value>1. Op de Startpagina kunt u uw camera's instellen en een oogmeting kalibratie uitvoeren.</value>
+  </data>
+  <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
+    <value>2. Kalibratie kan worden gebruikt om oog- en gezichtsuitdrukkingen individueel aan te passen.</value>
+  </data>
+  <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
+    <value>3. De firmwarepagina wordt gebruikt om uw apparaat in te stellen of te resetten.</value>
+  </data>
+  <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
+    <value>4. De VRChat-pagina wordt gebruikt om specifieke instellingen voor VRChat/VRCFaceTracking aan te passen.</value>
+  </data>
+  <data name="Onboarding_UI_Output_Description" xml:space="preserve">
+    <value>5. De uitvoerpagina toont de status van de app en andere nuttige informatie.</value>
+  </data>
+  <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
+    <value>6. Instellingen bevat algemene app-instellingen, zoals thema, taal en meer.</value>
+  </data>
+  <data name="Onboarding_Complete_Header" xml:space="preserve">
+    <value>Installatie voltooid!</value>
+  </data>
+  <data name="Onboarding_Complete_Description1" xml:space="preserve">
+    <value>U bent helemaal klaar om de nieuwe Babble App te gebruiken!</value>
+  </data>
+  <data name="Onboarding_Complete_Description2" xml:space="preserve">
+    <value>Je kunt deze pagina opnieuw bezoeken in de instellingen.</value>
+  </data>
+  <data name="Settings_OSC_IP_Label" xml:space="preserve">
+    <value>IP adres</value>
+  </data>
+  <data name="Settings_OSC_Prefix_Label" xml:space="preserve">
+    <value>OSC Prefix</value>
+  </data>
+  <data name="Settings_OSC_Recalibrate_Label" xml:space="preserve">
+    <value>Adres opnieuw kalibreren</value>
+  </data>
+  <data name="Settings_OSC_Recenter_Label" xml:space="preserve">
+    <value>Adres opnieuw instellen</value>
+  </data>
+  <data name="Settings_OSC_SendPort_Label" xml:space="preserve">
+    <value>Verstuur poort</value>
+  </data>
+  <data name="Settings_OSC_ReceivePort_Label" xml:space="preserve">
+    <value>Ontvang Poort</value>
+  </data>
+  <data name="AdminWarning_Header" xml:space="preserve">
+    <value>Waarschuwing beheermodus</value>
+  </data>
+  <data name="AdminWarning_Message" xml:space="preserve">
+    <value>Voer Baballonia niet uit als admin! Dit is niet nodig en voorkomt dat kalibraties van de oogopname werken.</value>
+  </data>
+  <data name="Aero_Overlay_NotFound" xml:space="preserve">
+    <value>Het overlay programma bestaat niet!</value>
+  </data>
+  <data name="Aero_Overlay_AlreadyRunning" xml:space="preserve">
+    <value>Het overlay programma is al bezig! Sluit het programma en probeer het opnieuw.</value>
+  </data>
+  <data name="Aero_SteamVR_NotRunning" xml:space="preserve">
+    <value>SteamVR is niet actief. Voer het uit en probeer het opnieuw.</value>
+  </data>
+  <data name="Aero_CameraStream_Failed" xml:space="preserve">
+    <value>Starten van camera streamen mislukt!</value>
+  </data>
+  <data name="Aero_Calibration_Failed" xml:space="preserve">
+    <value>Starten van kalibratie is mislukt!</value>
+  </data>
+  <data name="Aero_Calibration_Success" xml:space="preserve">
+    <value>Oogtracking kalibratie succesvol!</value>
+  </data>
+  <data name="Aero_Overlay_CleanupFailed" xml:space="preserve">
+    <value>Opschonen overlay stoppen mislukt!</value>
+  </data>
+  <data name="Calibration_Instructions_Line1" xml:space="preserve">
+    <value>De onderstaande schuifregelaars worden gebruikt om de kalibreren</value>
+  </data>
+  <data name="Calibration_Instructions_Sensitivity" xml:space="preserve">
+    <value>gevoeligheid</value>
+  </data>
+  <data name="Calibration_Instructions_Line1_2" xml:space="preserve">
+    <value>van uw gezicht expressies.</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet1_1" xml:space="preserve">
+    <value>• Verhoog de</value>
+  </data>
+  <data name="Calibration_Instructions_Minimum" xml:space="preserve">
+    <value>Minimum</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet1_2" xml:space="preserve">
+    <value>waarde vereist een sterkere expressie voordat het begint te tonen.</value>
+  </data>
+  <data name="Settings_Language_Chinese_Simplified" xml:space="preserve">
+    <value>Chinees (vereenvoudigd)</value>
+  </data>
+  <data name="Settings_Language_Chinese_Traditional" xml:space="preserve">
+    <value>Chinees (traditioneel)</value>
+  </data>
+  <data name="Settings_Language_German" xml:space="preserve">
+    <value>Duits</value>
+  </data>
+  <data name="Settings_Language_French" xml:space="preserve">
+    <value>Frans</value>
+  </data>
+  <data name="Settings_Language_Italian" xml:space="preserve">
+    <value>Italiaans</value>
+  </data>
+  <data name="Settings_Language_Korean" xml:space="preserve">
+    <value>Koreaans</value>
+  </data>
+  <data name="Settings_Language_Portuguese_Brazil" xml:space="preserve">
+    <value>Portugees (Brazilië)</value>
+  </data>
+  <data name="Settings_Language_Portuguese_Portugal" xml:space="preserve">
+    <value>Portugees (Portugal)</value>
+  </data>
+  <data name="Settings_Language_Russian" xml:space="preserve">
+    <value>Russisch</value>
+  </data>
+  <data name="Settings_Language_Arabic" xml:space="preserve">
+    <value>Arabisch</value>
+  </data>
+  <data name="Settings_Language_Turkish" xml:space="preserve">
+    <value>Turks</value>
+  </data>
+  <data name="Settings_Language_Dutch" xml:space="preserve">
+    <value>Nederlands</value>
+  </data>
+  <data name="Settings_Language_Swedish" xml:space="preserve">
+    <value>Zweeds</value>
+  </data>
+  <data name="Settings_Language_Finnish" xml:space="preserve">
+    <value>Fins</value>
+  </data>
+  <data name="Settings_Language_Danish" xml:space="preserve">
+    <value>Deens</value>
+  </data>
+  <data name="Settings_Language_Norwegian" xml:space="preserve">
+    <value>Noors</value>
+  </data>
+  <data name="Settings_Language_Czech" xml:space="preserve">
+    <value>Tsjechisch</value>
+  </data>
+  <data name="Settings_Language_Hungarian" xml:space="preserve">
+    <value>Hongaars</value>
+  </data>
+  <data name="Settings_Language_Romanian" xml:space="preserve">
+    <value>Roemeens</value>
+  </data>
+  <data name="Settings_Language_Vietnamese" xml:space="preserve">
+    <value>Vietnamese</value>
+  </data>
+  <data name="Settings_Language_Ukrainian" xml:space="preserve">
+    <value>Oekraïens</value>
+  </data>
+  <data name="Settings_Language_Greek" xml:space="preserve">
+    <value>Grieks</value>
+  </data>
+  <data name="Settings_Language_Hebrew" xml:space="preserve">
+    <value>Hebreeuws</value>
+  </data>
+  <data name="Settings_Language_Afrikaans" xml:space="preserve">
+    <value>Afrikaanse</value>
+  </data>
+  <data name="Settings_Language_Catalan" xml:space="preserve">
+    <value>Catalaans</value>
+  </data>
+  <data name="Settings_Language_Serbian" xml:space="preserve">
+    <value>Servisch</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet2_1" xml:space="preserve">
+    <value>• Verminderen van</value>
+  </data>
+  <data name="Calibration_Instructions_Maximum" xml:space="preserve">
+    <value>Maximum</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet2_2" xml:space="preserve">
+    <value>waarde betekent dat een kleinere expressie 100% sneller bereikt.</value>
+  </data>
+  <data name="DropOverlay_Important_Header" xml:space="preserve">
+    <value>Belangrijk!</value>
+  </data>
+  <data name="DropOverlay_Message" xml:space="preserve">
+    <value>Nieuwere babbel trackers hebben een vertraging van 20 seconden nadat ze zijn aangesloten voordat ze kunnen worden gebruikt. Het maakt een USB-plugging-in geluid wanneer het klaar is!</value>
+  </data>
+  <data name="DropOverlay_DontShowAgain" xml:space="preserve">
+    <value>Deze waarschuwing niet meer weergeven</value>
+  </data>
+  <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
+    <value>Uitschakelen</value>
+  </data>
+</root>

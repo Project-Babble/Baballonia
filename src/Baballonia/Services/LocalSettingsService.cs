@@ -62,7 +62,9 @@ public class LocalSettingsService : ILocalSettingsService
 
         try
         {
-            var json = await File.ReadAllTextAsync(_localSettingsFile);
+            // I've observed this await File.ReadAllTextAsync can just hang forever here
+            // So, it's a File.ReadAllText for now
+            var json = File.ReadAllText(_localSettingsFile);
             _settings = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(json)
                         ?? new Dictionary<string, JsonElement>();
         }

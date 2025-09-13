@@ -94,7 +94,7 @@ public class ProcessingLoopService : IDisposable
         var eyeModel = await _localSettingsService.ReadSettingAsync<string>("EyeHome_EyeModel", defaultEyeModel);
         if (!File.Exists(Path.Combine(AppContext.BaseDirectory, eyeModel)))
         {
-            _logger.LogError("{} Does not exits", eyeModel);
+            _logger.LogError("{} Does not exists", eyeModel);
             eyeModel = defaultEyeModel;
         }
         if (eyeModel == defaultEyeModel)

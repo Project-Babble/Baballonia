@@ -1,0 +1,720 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Settings_Theme_Dark_Content" xml:space="preserve">
+    <value>Mörk</value>
+  </data>
+  <data name="Settings_Theme_Default_Content" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="Settings_Theme_Light_Content" xml:space="preserve">
+    <value>Ljus</value>
+  </data>
+  <data name="Home_Title_Header" xml:space="preserve">
+    <value>Hem</value>
+  </data>
+  <data name="Settings_Theme_Header" xml:space="preserve">
+    <value>App tema</value>
+  </data>
+  <data name="Settings_Theme_Description" xml:space="preserve">
+    <value>Välj vilket apptema som ska visas</value>
+  </data>
+  <data name="Settings_OSC_Description" xml:space="preserve">
+    <value>Var ska OSC-data skickas?</value>
+  </data>
+  <data name="Settings_OSC_Header" xml:space="preserve">
+    <value>OSC</value>
+  </data>
+  <data name="Home_Eye_Calibration" xml:space="preserve">
+    <value>Ögonkalibrering</value>
+  </data>
+  <data name="Home_Left_Camera_Address" xml:space="preserve">
+    <value>Vänster kamerans adress</value>
+  </data>
+  <data name="Home_Cameras_Start_Camera" xml:space="preserve">
+    <value>Starta kameran</value>
+  </data>
+  <data name="Home_Cameras_Stop_Camera" xml:space="preserve">
+    <value>Stoppa kamera</value>
+  </data>
+  <data name="Home_Cameras_Tracking_Mode" xml:space="preserve">
+    <value>Spårning</value>
+  </data>
+  <data name="Home_Cameras_Cropping_Mode" xml:space="preserve">
+    <value>Beskärning</value>
+  </data>
+  <data name="Home_Left_Camera_Select_Entire_Frame" xml:space="preserve">
+    <value>Välj vänster ram</value>
+  </data>
+  <data name="Home_Cameras_Vertical_Flip_Header" xml:space="preserve">
+    <value>Vertikal Vänd</value>
+  </data>
+  <data name="Home_Cameras_Vertical_Flip_Description" xml:space="preserve">
+    <value>Vänd bilden vertikalt</value>
+  </data>
+  <data name="Home_Cameras_Horizontal_Flip_Header" xml:space="preserve">
+    <value>Horisontell flip</value>
+  </data>
+  <data name="Home_Cameras_Horizontal_Flip_Description" xml:space="preserve">
+    <value>Vänd bilden horisontellt</value>
+  </data>
+  <data name="Home_Cameras_Rotation_Description" xml:space="preserve">
+    <value>Roterar bilden i en cirkel</value>
+  </data>
+  <data name="Home_Cameras_Brightness_Header" xml:space="preserve">
+    <value>Bild ljusstyrka</value>
+  </data>
+  <data name="Home_Cameras_Rotation_Header" xml:space="preserve">
+    <value>Bild rotation</value>
+  </data>
+  <data name="Home_Cameras_Brightness_Description" xml:space="preserve">
+    <value>Justera ljusstyrkan på bilden</value>
+  </data>
+  <data name="Home_Right_Camera_Address" xml:space="preserve">
+    <value>Höger kamerans adress</value>
+  </data>
+  <data name="Home_Right_Camera_Select_Entire_Frame" xml:space="preserve">
+    <value>Välj höger ram</value>
+  </data>
+  <data name="Home_Face_Camera_Address" xml:space="preserve">
+    <value>Ansiktskamerans adress</value>
+  </data>
+  <data name="Home_Face_Camera_Select_Entire_Frame" xml:space="preserve">
+    <value>Välj ansiktsram</value>
+  </data>
+  <data name="Home_Left_Camera_Header" xml:space="preserve">
+    <value>Vänster ögonkamera</value>
+  </data>
+  <data name="Home_Face_Camera_Header" xml:space="preserve">
+    <value>Ansiktskamera</value>
+  </data>
+  <data name="Home_Right_Camera_Header" xml:space="preserve">
+    <value>Höger ögonkamera</value>
+  </data>
+  <data name="Home_Left_Camera_Settings" xml:space="preserve">
+    <value>Vänster kamerainställningar</value>
+  </data>
+  <data name="Home_Face_Camera_Settings" xml:space="preserve">
+    <value>Inställningar för ansiktskamera</value>
+  </data>
+  <data name="Home_Right_Camera_Settings" xml:space="preserve">
+    <value>Höger kamerainställningar</value>
+  </data>
+  <data name="Common_Start_Typing" xml:space="preserve">
+    <value>Börja skriva...</value>
+  </data>
+  <data name="Calibration_Title_Header" xml:space="preserve">
+    <value>Kalibrering</value>
+  </data>
+  <data name="Calibration_Reset_Minimums" xml:space="preserve">
+    <value>Reset Minimums</value>
+  </data>
+  <data name="Calibration_Reset_Maximums" xml:space="preserve">
+    <value>Reset Maximums</value>
+  </data>
+  <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
+    <value>Ögonuttryck</value>
+  </data>
+  <data name="Calibration_Nose_Expressions_Header" xml:space="preserve">
+    <value>Näsuttryck</value>
+  </data>
+  <data name="Calibration_Tongue_Expressions_Header" xml:space="preserve">
+    <value>Tongue uttryck</value>
+  </data>
+  <data name="Calibration_Mouth_Expressions_Header" xml:space="preserve">
+    <value>Mun-uttryck</value>
+  </data>
+  <data name="Calibration_Jaw_Expressions_Header" xml:space="preserve">
+    <value>Käke uttryck</value>
+  </data>
+  <data name="Calibration_Cheek_Expressions_Header" xml:space="preserve">
+    <value>Kinka uttryck</value>
+  </data>
+  <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Header" xml:space="preserve">
+    <value>Stabilisera ögon</value>
+  </data>
+  <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Description" xml:space="preserve">
+    <value>Förhindrar ögon från att titta ut i motsatta riktningar, men kan overcorrect.</value>
+  </data>
+  <data name="Firmware_Title_Header" xml:space="preserve">
+    <value>Firmware</value>
+  </data>
+  <data name="Firmware_Select_Tracker_Header" xml:space="preserve">
+    <value>Välj spårare</value>
+  </data>
+  <data name="Firmware_Device_Instructions_1" xml:space="preserve">
+    <value>• Efter att du har slagit på/anslutit enheten kommer du att ha 20 sekunder på dig att trycka på "Uppdatera" och välja enheten i rullgardinsmenyn</value>
+  </data>
+  <data name="Firmware_Device_Instructions_2" xml:space="preserve">
+    <value>• Vissa konfigurationsåtgärder kommer att ta lite bit!</value>
+  </data>
+  <data name="Firmware_Device_Configuration_Header" xml:space="preserve">
+    <value>Enhetens konfiguration</value>
+  </data>
+  <data name="Firmware_Device_Configuration_Description" xml:space="preserve">
+    <value>Växla trådbundet/trådlöst läge</value>
+  </data>
+  <data name="Firmware_Device_Mode_Header" xml:space="preserve">
+    <value>Växla trådbundet/trådlöst läge</value>
+  </data>
+  <data name="Firmware_Device_Mode_Instruction_1" xml:space="preserve">
+    <value>• Du kommer att behöva starta om din tracker efter att ha ändrat läge</value>
+  </data>
+  <data name="Firmware_Device_Mode_Instruction_2" xml:space="preserve">
+    <value>• Du kan behöva starta om appen efter en blixt för trackers att visa</value>
+  </data>
+  <data name="Firmware_Device_Mode_Select_Placeholder" xml:space="preserve">
+    <value>Välj ett läge...</value>
+  </data>
+  <data name="Firmware_Wifi_Configuration_Header" xml:space="preserve">
+    <value>Wifi konfiguration</value>
+  </data>
+  <data name="Firmware_Wifi_Configuration_Description" xml:space="preserve">
+    <value>Anslut till Wi-Fi med mera</value>
+  </data>
+  <data name="Firmware_Wifi_Credentials_Header" xml:space="preserve">
+    <value>Ange dina Wi-Fi-uppgifter</value>
+  </data>
+  <data name="Firmware_Wifi_Instructions_1" xml:space="preserve">
+    <value>• Om du vill använda din tracker trådlöst behöver du ange sina Wifi-uppgifter</value>
+  </data>
+  <data name="Firmware_Wifi_Instructions_2" xml:space="preserve">
+    <value>• Du måste söka efter Wifi-nätverk innan du kan ställa in dina Wifi-uppgifter</value>
+  </data>
+  <data name="Firmware_Wifi_SSID_Label" xml:space="preserve">
+    <value>Wi-Fi-nätverksnamn (SSID)</value>
+  </data>
+  <data name="Firmware_Wifi_SSID_Placeholder" xml:space="preserve">
+    <value>Börja skriva för att se WiFi-nätverk...</value>
+  </data>
+  <data name="Firmware_Wifi_Password_Label" xml:space="preserve">
+    <value>WiFi Lösenord</value>
+  </data>
+  <data name="Firmware_Wifi_Password_Placeholder" xml:space="preserve">
+    <value>Ange Wi-Fi-lösenord...</value>
+  </data>
+  <data name="Firmware_Flashing_Header" xml:space="preserve">
+    <value>Flashing Options</value>
+  </data>
+  <data name="Firmware_Flashing_Description" xml:space="preserve">
+    <value>Blinka enhetens inbyggda programvara</value>
+  </data>
+  <data name="Firmware_Flashing_Warning" xml:space="preserve">
+    <value>VARNING!! DETTA KOMMER FAKTORA ÅTERSTÄLL DITT BESTÄLLNING. DU BEHÖVER ATT PERFORM EN FÖRSTA TID ÅTERSTÄLL EFTER FASHING DITT BESTÄLLNING.</value>
+  </data>
+  <data name="Firmware_Flashing_Button" xml:space="preserve">
+    <value>Flash Firmware</value>
+  </data>
+  <data name="Firmware_Flashing_Note" xml:space="preserve">
+    <value>Detta kommer att ta cirka ~10 sekunder. Lämna inte denna sida!</value>
+  </data>
+  <data name="Firmware_Flashing_Complete" xml:space="preserve">
+    <value>Klart! Du måste starta om din tracker</value>
+  </data>
+  <data name="Firmware_TrackerComboBox_Default" xml:space="preserve">
+    <value>Klicka för att se trackers...</value>
+  </data>
+  <data name="Firmware_RefreshDevices_Default" xml:space="preserve">
+    <value>Uppdatera enheter</value>
+  </data>
+  <data name="Firmware_RefreshDevices_Refreshing" xml:space="preserve">
+    <value>Uppdaterar</value>
+  </data>
+  <data name="Firmware_RefreshDevices_Found" xml:space="preserve">
+    <value>Hittade {0} enhet(er).</value>
+  </data>
+  <data name="Firmware_SelectTracker_Default" xml:space="preserve">
+    <value>Välj Tracker</value>
+  </data>
+  <data name="Firmware_SelectTracker_Connected" xml:space="preserve">
+    <value>Tracker ansluten!</value>
+  </data>
+  <data name="Firmware_SelectTracker_NoResponse" xml:space="preserve">
+    <value>Trackern svarade inte.</value>
+  </data>
+  <data name="Firmware_ModeSetButton_Default" xml:space="preserve">
+    <value>Ange läge</value>
+  </data>
+  <data name="Firmware_ModeSetButton_Setting" xml:space="preserve">
+    <value>Inställning läge</value>
+  </data>
+  <data name="Firmware_ModeSetButton_Success" xml:space="preserve">
+    <value>Sätt!</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Default" xml:space="preserve">
+    <value>Ställ in Wifi Creds</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Setting" xml:space="preserve">
+    <value>Inställning av WiFi-uppgifter</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Success" xml:space="preserve">
+    <value>Skickat!</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Error" xml:space="preserve">
+    <value>Något gick fel...</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Default" xml:space="preserve">
+    <value>Uppdatera wifi-nätverk</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Scanning" xml:space="preserve">
+    <value>Skanning. Detta kommer att ta högst 30 sekunder</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Error" xml:space="preserve">
+    <value>Skanna misslyckades. Klicka för att försöka igen.</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
+    <value>Hittade {0} nätverk. Klicka för att skanna igen.</value>
+  </data>
+  <data name="VRC_Title_Header" xml:space="preserve">
+    <value>VRChat + VRCFaceTracking inställningar</value>
+  </data>
+  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
+    <value>Använd Native VRC Eye Tracking</value>
+  </data>
+  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
+    <value>Ger eyetracking till avatarer som inte har VRCFaceTracking</value>
+  </data>
+  <data name="VRC_ModuleMode_Header" xml:space="preserve">
+    <value>Ställ in VRCFT-modulläge</value>
+  </data>
+  <data name="VRC_ModuleMode_Description" xml:space="preserve">
+    <value>Skicka endast öga, endast ansikte eller båda? (Ändra kräver VRCFT omstart)</value>
+  </data>
+  <data name="VRC_ModuleMode_Placeholder" xml:space="preserve">
+    <value>Välj ett läge...</value>
+  </data>
+  <data name="Output_Title_Header" xml:space="preserve">
+    <value>Utdata</value>
+  </data>
+  <data name="Output_CopyButton_Tooltip" xml:space="preserve">
+    <value>Kopiera loggens utdata till urklipp</value>
+  </data>
+  <data name="Output_SaveButton_Tooltip" xml:space="preserve">
+    <value>Spara loggens utdata</value>
+  </data>
+  <data name="Output_OpenLoggingDirectoryButton_Tooltip" xml:space="preserve">
+    <value>Öppna loggningsmappen</value>
+  </data>
+  <data name="Onboarding_Welcome_Message" xml:space="preserve">
+    <value>Den här guiden kommer att guida dig genom att sätta upp den nya Babble-appen.</value>
+  </data>
+  <data name="Onboarding_Wireless_Header" xml:space="preserve">
+    <value>Trådbunden eller trådlös?</value>
+  </data>
+  <data name="Onboarding_Wireless_Description1" xml:space="preserve">
+    <value>Med nyare Babbles måste du göra en första installation i fliken Firmware (Icon ovan).</value>
+  </data>
+  <data name="Onboarding_Wireless_Description2" xml:space="preserve">
+    <value>Det tar bara 2 minuter! Välj din tracker och läge (trådbundet eller trådlöst). Det är så enkelt.</value>
+  </data>
+  <data name="Onboarding_Wireless_Note" xml:space="preserve">
+    <value>Observera att nyare trackers har ett 20-sekunders fönster innan de går in i kameraläget.</value>
+  </data>
+  <data name="Onboarding_Assembly_Header" xml:space="preserve">
+    <value>Montera din Tracker</value>
+  </data>
+  <data name="Onboarding_Assembly_Description" xml:space="preserve">
+    <value>Om du behöver hjälp med att sätta ihop din spårare, här är en användbar Youtube tutorial!</value>
+  </data>
+  <data name="Settings_Title_Header" xml:space="preserve">
+    <value>Appens inställningar</value>
+  </data>
+  <data name="Settings_Language_Header" xml:space="preserve">
+    <value>Språk</value>
+  </data>
+  <data name="Settings_Language_Description" xml:space="preserve">
+    <value>Ange appens språk. Byt sida att tillämpa.</value>
+  </data>
+  <data name="Settings_Language_Default" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="Settings_Language_English" xml:space="preserve">
+    <value>Engelska</value>
+  </data>
+  <data name="Settings_Language_Spanish" xml:space="preserve">
+    <value>Español</value>
+  </data>
+  <data name="Settings_Language_Japanese" xml:space="preserve">
+    <value>日本語</value>
+  </data>
+  <data name="Settings_Language_Polish" xml:space="preserve">
+    <value>Polski</value>
+  </data>
+  <data name="Settings_Language_Chinese" xml:space="preserve">
+    <value>中文</value>
+  </data>
+  <data name="Settings_Filter_Header" xml:space="preserve">
+    <value>En-Euro filterinställningar</value>
+  </data>
+  <data name="Settings_Filter_Description" xml:space="preserve">
+    <value>Filtrera inställningar</value>
+  </data>
+  <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
+    <value>Aktiverad</value>
+  </data>
+  <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
+    <value>Slå på eller av filtrering.</value>
+  </data>
+  <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
+    <value>Minsta frekvens avstängd</value>
+  </data>
+  <data name="Settings_Filter_MinFreq_Description" xml:space="preserve">
+    <value>Styr hur mycket utjämning som appliceras på långsamma rörelser</value>
+  </data>
+  <data name="Settings_Filter_Template_Placeholder" xml:space="preserve">
+    <value>Välj från en mall</value>
+  </data>
+  <data name="Settings_Filter_Template_Low" xml:space="preserve">
+    <value>Låg ({0})</value>
+  </data>
+  <data name="Settings_Filter_Template_Medium" xml:space="preserve">
+    <value>Mellan ({0})</value>
+  </data>
+  <data name="Settings_Filter_Template_High" xml:space="preserve">
+    <value>Hög ({0})</value>
+  </data>
+  <data name="Settings_Filter_Speed_Label" xml:space="preserve">
+    <value>Hastighet koefficient</value>
+  </data>
+  <data name="Settings_Filter_Speed_Description" xml:space="preserve">
+    <value>Avgör hur filtret anpassar sig när du rör dig snabbare</value>
+  </data>
+  <data name="Settings_GPU_Header" xml:space="preserve">
+    <value>Använd GPU-acceleration</value>
+  </data>
+  <data name="Settings_GPU_Description" xml:space="preserve">
+    <value>Använd din GPU för att få saker att gå snabbare! Kräver omstart</value>
+  </data>
+  <data name="Settings_LogLevel_Header" xml:space="preserve">
+    <value>Loggnivå erbositet</value>
+  </data>
+  <data name="Settings_LogLevel_Description" xml:space="preserve">
+    <value>Minsta loggningsnivå. Kräver omstart</value>
+  </data>
+  <data name="Settings_Updates_Header" xml:space="preserve">
+    <value>Sök efter uppdateringar</value>
+  </data>
+  <data name="Settings_Updates_Description" xml:space="preserve">
+    <value>Ska appen söka efter uppdateringar vid start?</value>
+  </data>
+  <data name="Settings_FirstTime_Header" xml:space="preserve">
+    <value>Starta första gången installation</value>
+  </data>
+  <data name="Settings_FirstTime_Description" xml:space="preserve">
+    <value>Startar om den första installationen</value>
+  </data>
+  <data name="Settings_FirstTime_Button" xml:space="preserve">
+    <value>Starta</value>
+  </data>
+  <data name="Onboarding_Skip_Button" xml:space="preserve">
+    <value>Hoppa</value>
+  </data>
+  <data name="Onboarding_UI_Header" xml:space="preserve">
+    <value>Var finns allt?</value>
+  </data>
+  <data name="Onboarding_UI_Home_Description" xml:space="preserve">
+    <value>1. Hemsidan är där du kan ställa in dina kameror och utföra en kalibrering av eyetracking.</value>
+  </data>
+  <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
+    <value>2. Kalibrering kan användas för att justera dina ögon- och ansiktsuttryck individuellt.</value>
+  </data>
+  <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
+    <value>3. Firmwaresidan används för att konfigurera din enhet eller återställa den.</value>
+  </data>
+  <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
+    <value>4. VRChat-sidan används för att ändra specifika inställningar för VRChat/VRCFaceTracking.</value>
+  </data>
+  <data name="Onboarding_UI_Output_Description" xml:space="preserve">
+    <value>5. Utdatasidan visar appens status och annan användbar information.</value>
+  </data>
+  <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
+    <value>6. Inställningarna innehåller allmänna appinställningar, som tema, språk och mer.</value>
+  </data>
+  <data name="Onboarding_Complete_Header" xml:space="preserve">
+    <value>Konfigurationen slutförd!</value>
+  </data>
+  <data name="Onboarding_Complete_Description1" xml:space="preserve">
+    <value>Du är redo att börja använda den nya Babble-appen!</value>
+  </data>
+  <data name="Onboarding_Complete_Description2" xml:space="preserve">
+    <value>Du kan besöka denna sida igen i inställningarna.</value>
+  </data>
+  <data name="Settings_OSC_IP_Label" xml:space="preserve">
+    <value>IP-adress</value>
+  </data>
+  <data name="Settings_OSC_Prefix_Label" xml:space="preserve">
+    <value>OSC Prefix</value>
+  </data>
+  <data name="Settings_OSC_Recalibrate_Label" xml:space="preserve">
+    <value>Omkalibrera adress</value>
+  </data>
+  <data name="Settings_OSC_Recenter_Label" xml:space="preserve">
+    <value>Recenter adress</value>
+  </data>
+  <data name="Settings_OSC_SendPort_Label" xml:space="preserve">
+    <value>Skicka port</value>
+  </data>
+  <data name="Settings_OSC_ReceivePort_Label" xml:space="preserve">
+    <value>Ta emot port</value>
+  </data>
+  <data name="AdminWarning_Header" xml:space="preserve">
+    <value>Varning för administratörsläge</value>
+  </data>
+  <data name="AdminWarning_Message" xml:space="preserve">
+    <value>Kör inte Baballonia som administratör! Det finns inget behov, och det hindrar eyetracking kalibreringar från att arbeta.</value>
+  </data>
+  <data name="Aero_Overlay_NotFound" xml:space="preserve">
+    <value>Det överlappande programmet existerar inte!</value>
+  </data>
+  <data name="Aero_Overlay_AlreadyRunning" xml:space="preserve">
+    <value>Gaze overlay programmet är redan igång! Stäng den och försök igen.</value>
+  </data>
+  <data name="Aero_SteamVR_NotRunning" xml:space="preserve">
+    <value>SteamVR körs inte. Vänligen kör det och försök igen.</value>
+  </data>
+  <data name="Aero_CameraStream_Failed" xml:space="preserve">
+    <value>Det gick inte att starta kameraströmning!</value>
+  </data>
+  <data name="Aero_Calibration_Failed" xml:space="preserve">
+    <value>Det gick inte att starta kalibreringen!</value>
+  </data>
+  <data name="Aero_Calibration_Success" xml:space="preserve">
+    <value>Kalibrering av ögonspårning lyckades!</value>
+  </data>
+  <data name="Aero_Overlay_CleanupFailed" xml:space="preserve">
+    <value>Det gick inte att stoppa/rensa överlag!</value>
+  </data>
+  <data name="Calibration_Instructions_Line1" xml:space="preserve">
+    <value>Nedanstående reglagen används för att kalibrera</value>
+  </data>
+  <data name="Calibration_Instructions_Sensitivity" xml:space="preserve">
+    <value>känslighet</value>
+  </data>
+  <data name="Calibration_Instructions_Line1_2" xml:space="preserve">
+    <value>av dina ansiktsuttryck.</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet1_1" xml:space="preserve">
+    <value>• Höja</value>
+  </data>
+  <data name="Calibration_Instructions_Minimum" xml:space="preserve">
+    <value>Minsta</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet1_2" xml:space="preserve">
+    <value>värde kräver ett starkare uttryck innan det börjar visa.</value>
+  </data>
+  <data name="Settings_Language_Chinese_Simplified" xml:space="preserve">
+    <value>Kinesiska (förenklad)</value>
+  </data>
+  <data name="Settings_Language_Chinese_Traditional" xml:space="preserve">
+    <value>Kinesiska (traditionell)</value>
+  </data>
+  <data name="Settings_Language_German" xml:space="preserve">
+    <value>Tyska</value>
+  </data>
+  <data name="Settings_Language_French" xml:space="preserve">
+    <value>Franska</value>
+  </data>
+  <data name="Settings_Language_Italian" xml:space="preserve">
+    <value>Italienska</value>
+  </data>
+  <data name="Settings_Language_Korean" xml:space="preserve">
+    <value>Koreanska</value>
+  </data>
+  <data name="Settings_Language_Portuguese_Brazil" xml:space="preserve">
+    <value>Portugisiska (Brasilien)</value>
+  </data>
+  <data name="Settings_Language_Portuguese_Portugal" xml:space="preserve">
+    <value>Portugisiska (Portugal)</value>
+  </data>
+  <data name="Settings_Language_Russian" xml:space="preserve">
+    <value>Ryska</value>
+  </data>
+  <data name="Settings_Language_Arabic" xml:space="preserve">
+    <value>Arabiska</value>
+  </data>
+  <data name="Settings_Language_Turkish" xml:space="preserve">
+    <value>Turkiska</value>
+  </data>
+  <data name="Settings_Language_Dutch" xml:space="preserve">
+    <value>Holländska</value>
+  </data>
+  <data name="Settings_Language_Swedish" xml:space="preserve">
+    <value>Svenska</value>
+  </data>
+  <data name="Settings_Language_Finnish" xml:space="preserve">
+    <value>Finska</value>
+  </data>
+  <data name="Settings_Language_Danish" xml:space="preserve">
+    <value>Danska</value>
+  </data>
+  <data name="Settings_Language_Norwegian" xml:space="preserve">
+    <value>Norska</value>
+  </data>
+  <data name="Settings_Language_Czech" xml:space="preserve">
+    <value>Tjeckiska</value>
+  </data>
+  <data name="Settings_Language_Hungarian" xml:space="preserve">
+    <value>Ungerska</value>
+  </data>
+  <data name="Settings_Language_Romanian" xml:space="preserve">
+    <value>Rumänska</value>
+  </data>
+  <data name="Settings_Language_Vietnamese" xml:space="preserve">
+    <value>Vietnamese</value>
+  </data>
+  <data name="Settings_Language_Ukrainian" xml:space="preserve">
+    <value>Ukrainska</value>
+  </data>
+  <data name="Settings_Language_Greek" xml:space="preserve">
+    <value>Grekiska</value>
+  </data>
+  <data name="Settings_Language_Hebrew" xml:space="preserve">
+    <value>Hebreiska</value>
+  </data>
+  <data name="Settings_Language_Afrikaans" xml:space="preserve">
+    <value>Afrikaans</value>
+  </data>
+  <data name="Settings_Language_Catalan" xml:space="preserve">
+    <value>Katalanska</value>
+  </data>
+  <data name="Settings_Language_Serbian" xml:space="preserve">
+    <value>Serbiska</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet2_1" xml:space="preserve">
+    <value>• Sänker</value>
+  </data>
+  <data name="Calibration_Instructions_Maximum" xml:space="preserve">
+    <value>Maximal</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet2_2" xml:space="preserve">
+    <value>värde innebär att ett mindre uttryck når 100 % snabbare.</value>
+  </data>
+  <data name="DropOverlay_Important_Header" xml:space="preserve">
+    <value>Viktigt!</value>
+  </data>
+  <data name="DropOverlay_Message" xml:space="preserve">
+    <value>Nyare babble trackers har en 20 sekunders fördröjning efter att ha blivit inkopplad innan de kan användas. Det kommer att göra en USB plugging-in ljud när den är redo!</value>
+  </data>
+  <data name="DropOverlay_DontShowAgain" xml:space="preserve">
+    <value>Visa inte denna varning igen</value>
+  </data>
+  <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
+    <value>Avfärda</value>
+  </data>
+</root>
