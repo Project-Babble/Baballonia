@@ -310,7 +310,7 @@
     <value>WiFiパスワードを入力してください...</value>
   </data>
   <data name="Firmware_Flashing_Header" xml:space="preserve">
-    <value>Flashing Options</value>
+    <value>ファームウェアのアップグレード/再フラッシュ</value>
   </data>
   <data name="Firmware_Flashing_Description" xml:space="preserve">
     <value>デバイスのファームウェアをフラッシュする</value>
@@ -532,19 +532,19 @@
     <value>1. ホームページでは、カメラをセットアップし、アイトラッキングキャリブレーションを行うことができます。</value>
   </data>
   <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
-    <value>The {0} can be used to tweak your eye/face expressions individually.</value>
+    <value>2. キャリブレーションでは、目の動きや表情を個別に微調整できます。</value>
   </data>
   <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
-    <value>The {0} is used to set up your device, or reset it.</value>
+    <value>3. ファームウェアページでは、デバイスの設定やリセットができます。</value>
   </data>
   <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
-    <value>The {0} is used to alter VRChat/VRCFaceTracking specific settings.</value>
+    <value>4. VRChatページでは、VRChat/VRCFaceTracking固有の設定を変更できます。</value>
   </data>
   <data name="Onboarding_UI_Output_Description" xml:space="preserve">
-    <value>The {0} shows the status of the app, {1} and other useful information.</value>
+    <value>5. 出力ページでは、アプリの状態やその他の便利な情報を確認できます。</value>
   </data>
   <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
-    <value>The {0} is for general app settings, such as {1} and more.</value>
+    <value>6. 設定では、テーマや言語などの一般的なアプリ設定を変更できます。</value>
   </data>
   <data name="Onboarding_Complete_Header" xml:space="preserve">
     <value>セットアップ完了！</value>
