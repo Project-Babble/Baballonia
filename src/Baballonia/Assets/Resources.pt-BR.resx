@@ -310,7 +310,7 @@
     <value>Inserir senha do Wi-Fi...</value>
   </data>
   <data name="Firmware_Flashing_Header" xml:space="preserve">
-    <value>Flashing Options</value>
+    <value>Atualizar/Reflash Firmware</value>
   </data>
   <data name="Firmware_Flashing_Description" xml:space="preserve">
     <value>Firmware do seu dispositivo flash</value>
@@ -532,19 +532,19 @@
     <value>1. A Página inicial é onde você pode configurar suas câmeras e realizar uma calibração de rastreamento ocular</value>
   </data>
   <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
-    <value>The {0} can be used to tweak your eye/face expressions individually.</value>
+    <value>2. A calibração pode ser usada para ajustar individualmente as expressões dos olhos/rosto.</value>
   </data>
   <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
-    <value>The {0} is used to set up your device, or reset it.</value>
+    <value>3. A página de firmware é usada para configurar seu dispositivo ou redefini-lo.</value>
   </data>
   <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
-    <value>The {0} is used to alter VRChat/VRCFaceTracking specific settings.</value>
+    <value>4. A página do VRChat é usada para alterar configurações específicas do VRChat/VRCFaceTracking.</value>
   </data>
   <data name="Onboarding_UI_Output_Description" xml:space="preserve">
-    <value>The {0} shows the status of the app, {1} and other useful information.</value>
+    <value>5. A página de saída mostra o status do aplicativo e outras informações úteis.</value>
   </data>
   <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
-    <value>The {0} is for general app settings, such as {1} and more.</value>
+    <value>6. As configurações são para configurações gerais do aplicativo, como tema, idioma e muito mais.</value>
   </data>
   <data name="Onboarding_Complete_Header" xml:space="preserve">
     <value>Configuração concluída!</value>
