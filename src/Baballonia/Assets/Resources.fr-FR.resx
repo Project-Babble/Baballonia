@@ -310,7 +310,7 @@
     <value>Entrez le mot de passe WiFi...</value>
   </data>
   <data name="Firmware_Flashing_Header" xml:space="preserve">
-    <value>Flashing Options</value>
+    <value>Mise à jour/Réinstallation du Firmware</value>
   </data>
   <data name="Firmware_Flashing_Description" xml:space="preserve">
     <value>Flasher le firmware de votre appareil</value>
@@ -532,19 +532,19 @@
     <value>1. La page d'accueil est l'endroit où vous pouvez configurer vos caméras et effectuer un calibrage du suivi des yeux.</value>
   </data>
   <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
-    <value>The {0} can be used to tweak your eye/face expressions individually.</value>
+    <value>2. L'étalonnage peut être utilisé pour ajuster individuellement vos expressions oculaires/faciales.</value>
   </data>
   <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
-    <value>The {0} is used to set up your device, or reset it.</value>
+    <value>3. La page du micrologiciel est utilisée pour configurer votre appareil ou le réinitialiser.</value>
   </data>
   <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
-    <value>The {0} is used to alter VRChat/VRCFaceTracking specific settings.</value>
+    <value>4. La page VRChat est utilisée pour modifier les paramètres spécifiques à VRChat/VRCFaceTracking.</value>
   </data>
   <data name="Onboarding_UI_Output_Description" xml:space="preserve">
-    <value>The {0} shows the status of the app, {1} and other useful information.</value>
+    <value>5. La page de sortie affiche l'état de l'application et d'autres informations utiles.</value>
   </data>
   <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
-    <value>The {0} is for general app settings, such as {1} and more.</value>
+    <value>6. Les paramètres sont destinés aux paramètres généraux de l'application, tels que le thème, la langue et plus encore.</value>
   </data>
   <data name="Onboarding_Complete_Header" xml:space="preserve">
     <value>Configuration terminée !</value>
