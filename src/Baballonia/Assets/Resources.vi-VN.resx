@@ -529,28 +529,28 @@
     <value>Where is everything?</value>
   </data>
   <data name="Onboarding_UI_Home_Description" xml:space="preserve">
-    <value>1. The Home Page is where you can set up your cameras, and perform an eye tracking calibration.</value>
+    <value>1. Trang chủ là nơi bạn có thể thiết lập camera và thực hiện hiệu chuẩn theo dõi mắt.</value>
   </data>
   <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
-    <value>The {0} can be used to tweak your eye/face expressions individually.</value>
+    <value>2. Hiệu chuẩn có thể được sử dụng để điều chỉnh biểu cảm mắt/mặt của bạn một cách riêng lẻ.</value>
   </data>
   <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
-    <value>The {0} is used to set up your device, or reset it.</value>
+    <value>3. Trang Firmware được sử dụng để thiết lập thiết bị của bạn hoặc đặt lại nó.</value>
   </data>
   <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
-    <value>The {0} is used to alter VRChat/VRCFaceTracking specific settings.</value>
+    <value>4. Trang VRChat được sử dụng để thay đổi cài đặt cụ thể của VRChat/VRCFaceTracking.</value>
   </data>
   <data name="Onboarding_UI_Output_Description" xml:space="preserve">
-    <value>The {0} shows the status of the app, {1} and other useful information.</value>
+    <value>5. Trang Đầu ra hiển thị trạng thái ứng dụng và các thông tin hữu ích khác.</value>
   </data>
   <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
-    <value>The {0} is for general app settings, such as {1} and more.</value>
+    <value>6. Cài đặt dành cho các cài đặt chung của ứng dụng, chẳng hạn như chủ đề, ngôn ngữ và hơn thế nữa.</value>
   </data>
   <data name="Onboarding_Complete_Header" xml:space="preserve">
     <value>Setup Complete!</value>
   </data>
   <data name="Onboarding_Complete_Description1" xml:space="preserve">
-    <value>You're all set to start using the new Babble App!</value>
+    <value>Bạn đã hoàn thành việc thiết lập ứng dụng mới!</value>
   </data>
   <data name="Onboarding_Complete_Description2" xml:space="preserve">
     <value>You can revisit this page in the settings.</value>
