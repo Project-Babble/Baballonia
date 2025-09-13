@@ -526,31 +526,31 @@
     <value>Skip</value>
   </data>
   <data name="Onboarding_UI_Header" xml:space="preserve">
-    <value>Where is everything?</value>
+    <value>On està tot?</value>
   </data>
   <data name="Onboarding_UI_Home_Description" xml:space="preserve">
-    <value>1. The Home Page is where you can set up your cameras, and perform an eye tracking calibration.</value>
+    <value>1. La pàgina d'inici és on pots configurar les càmeres i realitzar una calibració d'eye tracking.</value>
   </data>
   <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
-    <value>The {0} can be used to tweak your eye/face expressions individually.</value>
+    <value>2. La Calibració es pot utilitzar per ajustar les expressions facials/ulls individualment.</value>
   </data>
   <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
-    <value>The {0} is used to set up your device, or reset it.</value>
+    <value>3. La pàgina de Firmware s'utilitza per configurar el teu dispositiu o reiniciar-lo.</value>
   </data>
   <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
-    <value>The {0} is used to alter VRChat/VRCFaceTracking specific settings.</value>
+    <value>4. La pàgina de VRChat s'utilitza per modificar configuracions específiques de VRChat/VRCFaceTracking.</value>
   </data>
   <data name="Onboarding_UI_Output_Description" xml:space="preserve">
-    <value>The {0} shows the status of the app, {1} and other useful information.</value>
+    <value>5. La pàgina de Sortida mostra l'estat de l'aplicació i altra informació útil.</value>
   </data>
   <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
-    <value>The {0} is for general app settings, such as {1} and more.</value>
+    <value>6. La Configuració és per a paràmetres generals de l'aplicació, com ara el tema, l'idioma i més.</value>
   </data>
   <data name="Onboarding_Complete_Header" xml:space="preserve">
-    <value>Setup Complete!</value>
+    <value>Configuració completa!</value>
   </data>
   <data name="Onboarding_Complete_Description1" xml:space="preserve">
-    <value>You're all set to start using the new Babble App!</value>
+    <value>Ja estàs llest per començar a utilitzar la nova aplicació Babble!</value>
   </data>
   <data name="Onboarding_Complete_Description2" xml:space="preserve">
     <value>You can revisit this page in the settings.</value>
