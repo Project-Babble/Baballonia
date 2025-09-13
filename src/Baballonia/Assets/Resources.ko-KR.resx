@@ -529,22 +529,22 @@
     <value>Where is everything?</value>
   </data>
   <data name="Onboarding_UI_Home_Description" xml:space="preserve">
-    <value>1. The Home Page is where you can set up your cameras, and perform an eye tracking calibration.</value>
+    <value>1. 홈 페이지에서는 카메라를 설정하고 아이 트래킹 보정을 수행할 수 있습니다.</value>
   </data>
   <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
-    <value>The {0} can be used to tweak your eye/face expressions individually.</value>
+    <value>2. 보정에서는 눈/얼굴 표정을 개별적으로 조정할 수 있습니다.</value>
   </data>
   <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
-    <value>The {0} is used to set up your device, or reset it.</value>
+    <value>3. 펌웨어 페이지에서는 장치를 설정하거나 초기화할 수 있습니다.</value>
   </data>
   <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
-    <value>The {0} is used to alter VRChat/VRCFaceTracking specific settings.</value>
+    <value>4. VRChat 페이지에서는 VRChat/VRCFaceTracking 전용 설정을 변경할 수 있습니다.</value>
   </data>
   <data name="Onboarding_UI_Output_Description" xml:space="preserve">
-    <value>The {0} shows the status of the app, {1} and other useful information.</value>
+    <value>5. 출력 페이지에서는 앱 상태 및 기타 유용한 정보를 확인할 수 있습니다.</value>
   </data>
   <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
-    <value>The {0} is for general app settings, such as {1} and more.</value>
+    <value>6. 설정에서는 테마, 언어 등 일반적인 앱 설정을 변경할 수 있습니다.</value>
   </data>
   <data name="Onboarding_Complete_Header" xml:space="preserve">
     <value>Setup Complete!</value>
