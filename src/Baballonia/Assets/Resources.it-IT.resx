@@ -318,6 +318,9 @@
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
     <value>ATTENZIONE!! QUESTO FATTORIO RESETTE IL TUO TRACKER. VAI ALLA PERFORMA DI UN PRIMO TEMPO RICERCA DOPO FLASHING IL TUO TRACKER.</value>
   </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>Firmware type to flash:</value>
+  </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>Firmware Flash</value>
   </data>
@@ -522,6 +525,9 @@
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>Avvia</value>
   </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>Previous</value>
+  </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
     <value>Salta</value>
   </data>
@@ -716,5 +722,8 @@
   </data>
   <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
     <value>Ignora</value>
+  </data>
+  <data name="Settings_OSC_VRCFT_Warning" xml:space="preserve">
+    <value>If you are using Baballonia with VRCFaceTracking, there is no need to change these ports</value>
   </data>
 </root>
