@@ -318,6 +318,9 @@
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
     <value>注意！このファクトリーはあなたのトレーカーをリセットします。あなたのトレーカーをフラッシング後に最初の時間を設定する必要があります。</value>
   </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>Firmware type to flash:</value>
+  </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>ファームウェアをフラッシュする</value>
   </data>
@@ -522,6 +525,9 @@
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>起動</value>
   </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>Previous</value>
+  </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
     <value>スキップ</value>
   </data>
@@ -716,5 +722,8 @@
   </data>
   <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
     <value>却下する</value>
+  </data>
+  <data name="Settings_OSC_VRCFT_Warning" xml:space="preserve">
+    <value>If you are using Baballonia with VRCFaceTracking, there is no need to change these ports</value>
   </data>
 </root>
