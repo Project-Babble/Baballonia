@@ -35,6 +35,12 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     private ObservableCollection<string> _availableWifiNetworks = new();
 
     [ObservableProperty]
+    private ObservableCollection<string> _availableFirmwareTypes = new();
+
+    [ObservableProperty]
+    private string _selectedFirmwareType = "babble_multimodal_firmware_1.0.0.bin";
+
+    [ObservableProperty]
     private string? _selectedSerialPort;
 
     [ObservableProperty]
@@ -80,6 +86,17 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     private string? _onRefreshDevicesButton = Resources.Firmware_RefreshDevices_Default;
 
     [ObservableProperty] private object? _deviceModeSelectedItem;
+
+    public FirmwareViewModel()
+    {
+        AvailableFirmwareTypes.Clear();
+        var binariesPath = Path.Combine(AppContext.BaseDirectory, "Firmware", "Binaries");
+        var binaries = Directory.GetFiles(binariesPath, "*.bin");
+        foreach (var bin in binaries)
+        {
+            AvailableFirmwareTypes.Add(Path.GetFileName(bin));
+        }
+    }
 
     private readonly ProgressBar _progressBar;
 
@@ -293,7 +310,7 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
         }
 
         IsFlashing = true;
-        await _firmwareService.UploadFirmwareAsync(SelectedSerialPort!, Path.Combine("Firmware", "babble_multimodal_firmware_1.0.0.bin"));
+        await _firmwareService.UploadFirmwareAsync(SelectedSerialPort!, Path.Combine("Firmware", "Binaries", SelectedFirmwareType));
         IsFlashing = false;
 
         IsFinished = true;

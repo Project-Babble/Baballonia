@@ -7,8 +7,8 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	<NoWarn>CS8618;CS8509;CS0067;CS8613;CS8622;MVVMTK0034</NoWarn>
 	<Company>Paradigm Reality Enhancement Labs</Company>
-	<AssemblyVersion>1.1.0.1</AssemblyVersion>
-	<FileVersion>1.1.0.1</FileVersion>
+	<AssemblyVersion>1.1.0.4</AssemblyVersion>
+	<FileVersion>1.1.0.4</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -22,7 +22,9 @@
         <None Update="LocalSettings.json">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Firmware\babble_multimodal_firmware_1.0.0.bin">
+        <None Update="Firmware\Binaries\babble_multimodal_firmware_1.0.0.bin">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>

@@ -46,17 +46,31 @@ public partial class AeroOverlayTrainerCombo
         string processName = Path.GetFileNameWithoutExtension(program);
 
         // Make sure program isn't already running
-        if (Process.GetProcesses().Any(p => p.ProcessName == processName))
+        var hitList = Process.GetProcesses().Where(p => p.ProcessName == processName).ToArray();
+        if (hitList.Length > 0)
         {
             Logger.LogError(Assets.Resources.Aero_Overlay_AlreadyRunning);
-            return (false, Assets.Resources.Aero_Overlay_AlreadyRunning);
+            foreach (var p in hitList)
+            {
+                p.Kill(true);
+            }
+
+            // return (false, Assets.Resources.Aero_Overlay_AlreadyRunning);
         }
 
         // Check if SteamVR is running. The overlay needs it to be running prior!
+        // TODO Add Monado here as well
         if (!Process.GetProcesses().Any(p => p.ProcessName.ToLower().Contains("vrserver")))
         {
             Logger.LogError(Assets.Resources.Aero_SteamVR_NotRunning);
             return (false, Assets.Resources.Aero_SteamVR_NotRunning);
+        }
+
+        var workingDir = AppContext.BaseDirectory;
+        if (OperatingSystem.IsWindows())
+        {
+            if (Directory.Exists("win-x64"))
+                workingDir = Path.Combine(AppContext.BaseDirectory, "win-x64");
         }
 
         var startInfo = new ProcessStartInfo
@@ -66,7 +80,7 @@ public partial class AeroOverlayTrainerCombo
             CreateNoWindow = true,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
-            WorkingDirectory = AppContext.BaseDirectory,
+            WorkingDirectory = workingDir,
         };
 
         if (arguments != null)
@@ -165,7 +179,6 @@ public partial class AeroOverlayTrainerCombo
     {
         try
         {
-            await StartProcess(Overlay, []);
             var response = await _httpClient.GetStringAsync($"{_baseUrl}/status");
             return JsonConvert.DeserializeObject<VrCalibrationStatus>(response)!;
         }

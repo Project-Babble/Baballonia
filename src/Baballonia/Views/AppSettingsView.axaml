@@ -95,81 +95,86 @@
             </StackPanel>
           </Grid>
         </Expander.Header>
-        <Grid
-            Margin="0,4"
-            ColumnDefinitions="Auto,*,Auto"
-            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto">
-          <Grid.Styles>
-            <Style Selector="TextBlock">
-              <Setter Property="HorizontalAlignment" Value="Left" />
-              <Setter Property="VerticalAlignment" Value="Bottom" />
-              <Setter Property="Margin" Value="0,8" />
-            </Style>
-            <Style Selector="TextBox">
-              <Setter Property="Margin" Value="0,8" />
-            </Style>
-          </Grid.Styles>
-
+        <StackPanel Spacing="12">
           <TextBlock
-              Grid.Row="1"
-              Grid.Column="0"
-              Text="{x:Static assets:Resources.Settings_OSC_ReceivePort_Label}" />
-          <TextBox
-              x:Name="OscTargetInPort"
-              Grid.Row="1"
-              Grid.Column="2"
-              Text="{Binding OscTarget.InPort, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue='9001'}" />
+            FontStyle="Italic"
+            TextWrapping="Wrap"
+            Text="{x:Static assets:Resources.Settings_OSC_VRCFT_Warning}" />
+          <Grid
+              Margin="0,4"
+              ColumnDefinitions="Auto,*,Auto"
+              RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+            <Grid.Styles>
+              <Style Selector="TextBlock">
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="Margin" Value="0,8" />
+              </Style>
+              <Style Selector="TextBox">
+                <Setter Property="Margin" Value="0,8" />
+              </Style>
+            </Grid.Styles>
 
-          <TextBlock
-              Grid.Row="2"
-              Grid.Column="0"
-              Text="{x:Static assets:Resources.Settings_OSC_IP_Label}" />
-          <TextBox
-              x:Name="OscTargetIpAddress"
-              Grid.Row="2"
-              Grid.Column="2"
-              Text="{Binding OscTarget.DestinationAddress, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue='127.0.0.1'}" />
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="0"
+                Text="{x:Static assets:Resources.Settings_OSC_ReceivePort_Label}" />
+            <TextBox
+                x:Name="OscTargetInPort"
+                Grid.Row="1"
+                Grid.Column="2"
+                Text="{Binding OscTarget.InPort, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue='9001'}" />
 
-          <TextBlock
-              Grid.Row="3"
-              Grid.Column="0"
-              Text="{x:Static assets:Resources.Settings_OSC_SendPort_Label}" />
-          <TextBox
-              x:Name="OscTargetOutPort"
-              Grid.Row="3"
-              Grid.Column="2"
-              Text="{Binding OscTarget.OutPort, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue='9000'}" />
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="0"
+                Text="{x:Static assets:Resources.Settings_OSC_IP_Label}" />
+            <TextBox
+                x:Name="OscTargetIpAddress"
+                Grid.Row="2"
+                Grid.Column="2"
+                Text="{Binding OscTarget.DestinationAddress, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue='127.0.0.1'}" />
 
-          <TextBlock
-              Grid.Row="4"
-              Grid.Column="0"
-              Text="{x:Static assets:Resources.Settings_OSC_Prefix_Label}" />
-          <TextBox
-              x:Name="OscPrefix"
-              Grid.Row="4"
-              Grid.Column="2"
-              Text="{Binding OscPrefix, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue=''}" />
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="0"
+                Text="{x:Static assets:Resources.Settings_OSC_SendPort_Label}" />
+            <TextBox
+                x:Name="OscTargetOutPort"
+                Grid.Row="3"
+                Grid.Column="2"
+                Text="{Binding OscTarget.OutPort, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue='9000'}" />
 
-          <TextBlock
-              Grid.Row="5"
-              Grid.Column="0"
-              Text="{x:Static assets:Resources.Settings_OSC_Recalibrate_Label}" />
-          <TextBox
-              x:Name="RecalibrateAddress"
-              Grid.Row="5"
-              Grid.Column="2"
-              Text="{Binding RecalibrateAddress, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue='/avatar/parameters/etvr_recalibrate'}" />
+            <TextBlock
+                Grid.Row="4"
+                Grid.Column="0"
+                Text="{x:Static assets:Resources.Settings_OSC_Prefix_Label}" />
+            <TextBox
+                x:Name="OscPrefix"
+                Grid.Row="4"
+                Grid.Column="2"
+                Text="{Binding OscPrefix, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue=''}" />
 
-          <TextBlock
-              Grid.Row="6"
-              Grid.Column="0"
-              Text="{x:Static assets:Resources.Settings_OSC_Recenter_Label}" />
-          <TextBox
-              x:Name="RecenterAddress"
-              Grid.Row="6"
-              Grid.Column="2"
-              Text="{Binding RecenterAddress, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue='/avatar/parameters/etvr_recenter'}" />
-        </Grid>
+            <TextBlock
+                Grid.Row="5"
+                Grid.Column="0"
+                Text="{x:Static assets:Resources.Settings_OSC_Recalibrate_Label}" />
+            <TextBox
+                x:Name="RecalibrateAddress"
+                Grid.Row="5"
+                Grid.Column="2"
+                Text="{Binding RecalibrateAddress, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue='/avatar/parameters/etvr_recalibrate'}" />
+
+            <TextBlock
+                Grid.Row="6"
+                Grid.Column="0"
+                Text="{x:Static assets:Resources.Settings_OSC_Recenter_Label}" />
+            <TextBox
+                x:Name="RecenterAddress"
+                Grid.Row="6"
+                Grid.Column="2"
+                Text="{Binding RecenterAddress, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue='/avatar/parameters/etvr_recenter'}" />
+          </Grid>
+        </StackPanel>
       </Expander>
 
       <Expander
