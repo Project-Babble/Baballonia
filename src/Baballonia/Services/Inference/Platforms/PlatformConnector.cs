@@ -32,12 +32,12 @@ public abstract class PlatformConnector(string source, ILogger logger)
     /// Add (or remove) from this collection to support platform specific connectors at runtime
     /// Or support weird hardware setups
     /// </summary>
-    protected Dictionary<Capture, Type> Captures;
+    public static readonly Dictionary<Capture, Type> Captures = new();
 
     /// <summary>
     /// Initializes a Platform Connector
     /// </summary>
-    public virtual bool Initialize(string source)
+    public virtual bool Initialize(string source, string preferredCapture = "")
     {
         if (string.IsNullOrEmpty(source)) return false;
 
@@ -54,13 +54,14 @@ public abstract class PlatformConnector(string source, ILogger logger)
                 throw new InvalidOperationException("Captures dictionary is null");
             }
 
-            foreach (var capture in Captures
-                         .Where(capture => capture.Key.CanConnect(source)))
+            var backend = Captures.FirstOrDefault(i => i.Value.Name == preferredCapture).Value ??
+                          Captures.FirstOrDefault(i => i.Key.CanConnect(source)).Value;
+
+            if (backend is not null)
             {
-                Logger.LogDebug("Attempting to create {CaptureTypeName} with logger support", capture.Value.Name);
-                Capture = (Capture)Activator.CreateInstance(capture.Value, source, logger)!;
-                Logger.LogInformation("Changed capture source to {CaptureTypeName} with url {Source}.", capture.Value.Name, source);
-                break;
+                Logger.LogDebug("Attempting to create {CaptureTypeName} with logger support", backend.Name);
+                Capture = (Capture)Activator.CreateInstance(backend, source, logger)!;
+                Logger.LogInformation("Changed capture source to {CaptureTypeName} with url {Source}.", backend.Name, source);
             }
 
             if (Capture is null)

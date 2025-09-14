@@ -505,7 +505,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         }
     }
 
-    private async Task<IVideoSource?> StartCameraAsync(string address)
+    private async Task<IVideoSource?> StartCameraAsync(string address, string preferredCapture = "")
     {
         var camera = address;
         if (string.IsNullOrEmpty(camera)) return null;
@@ -519,7 +519,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
         return await Task.Run<IVideoSource?>(() =>
         {
-            var cameraSource = new SingleCameraSourceFactory().Create(camera);
+            var cameraSource = SingleCameraSourceFactory.Create(camera);
             if (cameraSource == null)
                 return null;
 

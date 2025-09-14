@@ -140,6 +140,7 @@
                       Text="{Binding LeftCamera.DisplayAddress, Mode=TwoWay}"
                       Watermark="{x:Static assets:Resources.Common_Start_Typing}"
                       DropDownOpening="RefreshLeftEyeConnectedDevices"
+                      TextChanged="LeftCameraAddressEntry_OnTextChanged"
                       x:Name="LeftCameraAddressEntry">
                     <Interaction.Behaviors>
                       <controls:AutoCompleteZeroMinimumPrefixLengthDropdownBehaviour />
