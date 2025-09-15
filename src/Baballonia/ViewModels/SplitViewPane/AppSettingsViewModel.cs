@@ -125,6 +125,10 @@ public partial class AppSettingsViewModel : ViewModelBase
 
     async partial void OnUseGPUChanged(bool value)
     {
+        var prev = SettingsService.ReadSetting("AppSettings_UseGPU", value);
+        if (prev == value)
+            return;
+
         try
         {
             SettingsService.SaveSetting("AppSettings_UseGPU", value);
@@ -137,7 +141,6 @@ public partial class AppSettingsViewModel : ViewModelBase
         catch (Exception e)
         {
             _logger.LogError("", e);
-
         }
     }
 }
