@@ -72,6 +72,10 @@ public class OscSendService
         {
             _logger.LogWarning($"Failed to bind to sender endpoint: {endpoint}. {ex.Message}");
         }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Unexpected Exception while binding to sender endpoint: {endpoint}. {ex.Message}");
+        }
         finally
         {
             _cts = new CancellationTokenSource();
