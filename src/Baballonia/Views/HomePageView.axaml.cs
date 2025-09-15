@@ -198,31 +198,31 @@ public partial class HomePageView : UserControl
         _isLayoutUpdating = false;
     }
 
-    private async void RefreshLeftEyeConnectedDevices(object? sender, CancelEventArgs e)
+    private void RefreshLeftEyeConnectedDevices(object? sender, CancelEventArgs e)
     {
         if (DataContext is not HomePageViewModel vm) return;
 
-        var cameras = await App.DeviceEnumerator.UpdateCameras();
+        var cameras = App.DeviceEnumerator.UpdateCameras();
         var cameraNames = cameras.Keys.ToArray();
 
         vm.LeftCamera.UpdateCameraDropDown(cameraNames);
     }
 
-    private async void RefreshRightEyeDevices(object? sender, CancelEventArgs e)
+    private void RefreshRightEyeDevices(object? sender, CancelEventArgs e)
     {
         if (DataContext is not HomePageViewModel vm) return;
 
-        var cameras = await App.DeviceEnumerator.UpdateCameras();
+        var cameras = App.DeviceEnumerator.UpdateCameras();
         var cameraNames = cameras.Keys.ToArray();
 
         vm.RightCamera.UpdateCameraDropDown(cameraNames);
     }
 
-    private async void RefreshConnectedFaceDevices(object? sender, CancelEventArgs e)
+    private void RefreshConnectedFaceDevices(object? sender, CancelEventArgs e)
     {
         if (DataContext is not HomePageViewModel vm) return;
 
-        var cameras = await App.DeviceEnumerator.UpdateCameras();
+        var cameras = App.DeviceEnumerator.UpdateCameras();
         var cameraNames = cameras.Keys.ToArray();
 
         vm.FaceCamera.UpdateCameraDropDown(cameraNames);

@@ -65,7 +65,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             Name = name;
             Camera = camera;
 
-            Dispatcher.UIThread.Invoke(() => { Initialize(cameras); }, DispatcherPriority.Background);
+            Initialize(cameras);
 
             _processingPipeline.TransformedFrameEvent += ImageUpdateEventHandler;
         }
@@ -439,12 +439,12 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         };
         _msgCounterTimer.Start();
 
-        Dispatcher.UIThread.Invoke(() => { _ = Initialize(); }, DispatcherPriority.Background);
+        Initialize();
 
         _processingLoopService.PipelineExceptionEvent += PipelineExceptionEventHandler;
     }
 
-    private async Task Initialize()
+    private void Initialize()
     {
         bool hasRead = _localSettingsService.ReadSetting<bool>("SecondsWarningRead");
         if (!hasRead)
@@ -452,7 +452,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             _dropOverlayService.Show();
         }
 
-        var cameras = await App.DeviceEnumerator.UpdateCameras();
+        var cameras = App.DeviceEnumerator.UpdateCameras();
         var cameraNames = cameras.Keys.ToArray();
 
         LeftCamera = new CameraControllerModel(_localSettingsService, "LeftCamera",
@@ -464,15 +464,20 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
         IsInitialized = true;
 
+        _ = TryStartCamerasAsync();
+    }
+
+    private async Task TryStartCamerasAsync()
+    {
         await LeftCamera.IsInitialized.Task;
         if (!LeftCamera.IsCameraRunning)
             await StartCameraAsync(LeftCamera);
         await RightCamera.IsInitialized.Task;
         if (!RightCamera.IsCameraRunning)
             await StartCameraAsync(RightCamera);
+        await FaceCamera.IsInitialized.Task;
         if (!FaceCamera.IsCameraRunning)
-            await FaceCamera.IsInitialized.Task;
-        await StartCameraAsync(FaceCamera);
+            await StartCameraAsync(FaceCamera);
     }
 
     private void PipelineExceptionEventHandler(Exception ex)
@@ -505,7 +510,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         var camera = address;
         if (string.IsNullOrEmpty(camera)) return null;
 
-        App.DeviceEnumerator.Cameras ??= await App.DeviceEnumerator.UpdateCameras();
+        App.DeviceEnumerator.Cameras ??= App.DeviceEnumerator.UpdateCameras();
 
         if (App.DeviceEnumerator.Cameras.TryGetValue(camera, out var mappedAddress))
         {
@@ -582,28 +587,11 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     }
 
 
-    private SemaphoreSlim _cameraStartLock = new(1, 1);
-
-    [RelayCommand(AllowConcurrentExecutions = true)]
+    [RelayCommand]
     public async Task StartCamera(CameraControllerModel model)
     {
         SetButtons(model, false, false);
-
-        if (model.Camera == Camera.Face)
-        {
-            await StartCameraAsync(model);
-            return;
-        }
-
-        await _cameraStartLock.WaitAsync();
-        try
-        {
-            await StartCameraAsync(model);
-        }
-        finally
-        {
-            _cameraStartLock.Release();
-        }
+        await StartCameraAsync(model);
     }
 
     private bool IsSameAddressAsOtherEye(CameraControllerModel model)
@@ -650,46 +638,46 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     }
 
 
-    private async Task StartCameraAsync(CameraControllerModel model)
+    private bool IsSameEye(CameraControllerModel model)
     {
         var type = model.Camera;
+        if (type == Camera.Face || !IsSameAddressAsOtherEye(model)) return false;
 
-        var isSameEye = await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            if (type == Camera.Face || !IsSameAddressAsOtherEye(model)) return false;
+        var tryRes = TryHandleSameEyeCamera(model);
+        if (tryRes)
+            SetButtons(model, false, true);
+        return tryRes;
+    }
 
-            var tryRes = TryHandleSameEyeCamera(model);
-            if (tryRes)
-                SetButtons(model, false, true);
-            return tryRes;
-        });
-        if (isSameEye)
+    private async Task StartCameraAsync(CameraControllerModel model)
+    {
+        if (IsSameEye(model))
         {
             SaveLastOpened(model);
             return;
         }
 
+        var type = model.Camera;
+
         var cameraSource = await StartCameraAsync(model.DisplayAddress);
-        await Dispatcher.UIThread.InvokeAsync(() =>
+
+        if (cameraSource == null)
         {
-            if (cameraSource == null)
-            {
-                SetButtons(model, true, false);
-                return;
-            }
+            SetButtons(model, true, false);
+            return;
+        }
 
-            if (type == Camera.Face)
-            {
-                UpdateFacePipeline(cameraSource);
-            }
-            else
-            {
-                UpdateEyePipeline(cameraSource, type);
-            }
+        if (type == Camera.Face)
+        {
+            UpdateFacePipeline(cameraSource);
+        }
+        else
+        {
+            UpdateEyePipeline(cameraSource, type);
+        }
 
-            model.IsCameraRunning = true;
-            SetButtons(model, false, true);
-        });
+        model.IsCameraRunning = true;
+        SetButtons(model, false, true);
 
         SaveLastOpened(model);
     }
