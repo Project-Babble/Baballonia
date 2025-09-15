@@ -601,6 +601,15 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Firmware type to flash:.
+        /// </summary>
+        public static string Firmware_Type_To_Flash {
+            get {
+                return ResourceManager.GetString("Firmware_Type_To_Flash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connect to Wifi and more.
         /// </summary>
         public static string Firmware_Wifi_Configuration_Description {
@@ -1033,6 +1042,15 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Previous.
+        /// </summary>
+        public static string Onboarding_Previous_Button {
+            get {
+                return ResourceManager.GetString("Onboarding_Previous_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Skip.
         /// </summary>
         public static string Onboarding_Skip_Button {
@@ -1411,7 +1429,7 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to System Default.
+        ///   Looks up a localized string similar to Default.
         /// </summary>
         public static string Settings_Language_Default {
             get {
@@ -1519,7 +1537,7 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Japanese.
+        ///   Looks up a localized string similar to 日本語.
         /// </summary>
         public static string Settings_Language_Japanese {
             get {
@@ -1546,7 +1564,7 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Polish.
+        ///   Looks up a localized string similar to Polski.
         /// </summary>
         public static string Settings_Language_Polish {
             get {
@@ -1600,7 +1618,7 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Spanish.
+        ///   Looks up a localized string similar to Español.
         /// </summary>
         public static string Settings_Language_Spanish {
             get {
@@ -1731,6 +1749,15 @@ namespace Baballonia.Assets {
         public static string Settings_OSC_SendPort_Label {
             get {
                 return ResourceManager.GetString("Settings_OSC_SendPort_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you are using Baballonia with VRCFaceTracking, there is no need to change these ports.
+        /// </summary>
+        public static string Settings_OSC_VRCFT_Warning {
+            get {
+                return ResourceManager.GetString("Settings_OSC_VRCFT_Warning", resourceCulture);
             }
         }
         

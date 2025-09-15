@@ -1,13 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-using Baballonia.Services.Inference;
 using Microsoft.Extensions.Logging;
 using OpenCvSharp;
 using Capture = Baballonia.SDK.Capture;
@@ -16,7 +8,7 @@ namespace Baballonia.Android.Captures;
 
 /// <summary>
 /// Captures and decodes a known-size MJPEG stream, commonly used by IP Cameras
-/// Mobile-platform specific implementation, Desktop uses OpenCVCapture
+/// Used on mobile platforms or Linux where OpenCVCapture can't be used
 /// https://github.com/Larry57/SimpleMJPEGStreamViewer
 /// https://stackoverflow.com/questions/3801275/how-to-convert-image-to-byte-array
 /// </summary>
@@ -36,8 +28,7 @@ public sealed class IpCameraCapture(string url, ILogger logger) : Capture(url, l
 
     public override Task<bool> StartCapture()
     {
-        Task.Run(() => StartStreaming(Source, null, null, _cancellationTokenSource.Token, 1024,
-            256 * 256)); // Size of Babble frame
+        Task.Run(() => StartStreaming(Source, null, null, _cancellationTokenSource.Token)); // Size of Babble frame
         IsReady = true;
         return Task.FromResult(true);
     }
@@ -81,8 +72,6 @@ public sealed class IpCameraCapture(string url, ILogger logger) : Capture(url, l
             ParseStreamBuffer(frameBuffer, ref frameIdx, streamLength, streamBuffer, ref inPicture, ref previous, ref current);
         };
     }
-
-    // Parse the stream buffer
 
     private void ParseStreamBuffer(byte[] frameBuffer, ref int frameIdx, int streamLength, byte[] streamBuffer,
         ref bool inPicture, ref byte previous, ref byte current)

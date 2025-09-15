@@ -2,6 +2,26 @@ name: Build
 
 on:
   workflow_dispatch:
+    inputs:
+      publish-release:
+        description: 'Publish Release'
+        type: boolean
+        default: false
+      publish-pre-release:
+        description: 'Publish as Pre-Release'
+        type: boolean
+        default: false
+      version-number:
+        description: 'Version Number for Release'
+        type: string
+      release-name-info:
+        description: 'Additional info to put at the end of the release name'
+        type: string
+        required: false
+      release-notes:
+        description: 'Release notes, auto generated if not given'
+        type: string
+        required: false
 
 jobs:
   build-linux-x64:
@@ -61,3 +81,77 @@ jobs:
         with:
           name: "Baballonia Setup.exe"
           path: "src/Baballonia.Desktop/Baballonia Setup.exe"
+
+  publish-release:
+    #needs: [build-linux-x64, build-windows-x64]
+    #for now, releases only include windows
+    needs: build-windows-x64
+    if: ${{ github.event.inputs.publish-release == 'true' }}
+    defaults:
+      run:
+        shell: bash
+
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Validate version number exists
+        run: |
+          if [ -z "${{ github.event.inputs.version-number }}" ]; then
+            exit 1
+          fi
+
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: "Baballonia Setup.exe"
+          path: ./artifacts
+
+      #- name: Download Linux artifact
+      #  uses: actions/download-artifact@v4
+      #  with:
+      #    name: Baballonia.AppImage
+      #    path: ./artifacts
+
+      - name: Rename artifacts
+        env:
+          VERSION: ${{ github.event.inputs.version-number }}
+        run: |
+          cd artifacts
+          mv "Baballonia Setup.exe" "Baballonia.Setup.${VERSION}.exe"
+      #    mv "Baballonia.AppImage" "Baballonia.${VERSION}.AppImage"
+
+      - name: Set dynamic release name
+        id: release-name
+        run: |
+          if [[ -z "${{ github.event.inputs.release-name-info }}" ]]; then
+            echo "name=${{ github.event.inputs.version-number }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=${{ github.event.inputs.version-number }} - ${{ github.event.inputs.release-name-info }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set release body or generate notes
+        id: release-body
+        run: |
+          if [[ -z "${{ github.event.inputs.release-notes }}" ]]; then
+            echo "generate_notes=true" >> "$GITHUB_OUTPUT"
+            echo "body=" >> "$GITHUB_OUTPUT"
+          else
+            echo "generate_notes=false" >> "$GITHUB_OUTPUT"
+            echo "body<<EOF" >> "$GITHUB_OUTPUT"
+            echo "${{ github.event.inputs.release-notes }}" >> "$GITHUB_OUTPUT"
+            echo "EOF" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/Baballonia.Setup.${{ github.event.inputs.version-number }}.exe
+          tag_name: ${{ github.event.inputs.version-number }}
+          name: ${{ steps.release-name.outputs.name }}
+          prerelease: ${{ github.event.inputs.publish-pre-release }}
+          body: ${{ steps.release-body.outputs.body }}
+          generate_release_notes: ${{ steps.release-body.outputs.generate_notes }}
+
+          #files: |
+          #  artifacts/Baballonia.Setup.${{ github.event.inputs.versionNumber }}.exe
+          #  artifacts/Baballonia.${{ github.event.inputs.versionNumber }}.AppImage

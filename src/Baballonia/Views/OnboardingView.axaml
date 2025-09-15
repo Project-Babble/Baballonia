@@ -198,7 +198,7 @@
                                 Data="{StaticResource LeftArrowIcon}"
                                 Height="16"
                                 Width="16" />
-                            <TextBlock Text="Previous" VerticalAlignment="Center" />
+                            <TextBlock Text="{x:Static assets:Resources.Onboarding_Previous_Button}" VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
 
