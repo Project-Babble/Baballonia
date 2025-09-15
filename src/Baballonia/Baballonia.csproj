@@ -123,6 +123,7 @@
 		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
+	  <ProjectReference Include="..\Baballonia.FastCorruptionDetector\Baballonia.FastCorruptionDetector.csproj" />
 	  <ProjectReference Include="..\Baballonia.SDK\Baballonia.SDK.csproj" />
 	  <ProjectReference Include="..\HyperText.Avalonia\HyperText.Avalonia\HyperText.Avalonia.csproj" />
 	</ItemGroup>

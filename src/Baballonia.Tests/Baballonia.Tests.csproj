@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Baballonia.CaptureBin.IO\Baballonia.CaptureBin.IO.csproj" />
     <ProjectReference Include="..\Baballonia\Baballonia.csproj" />
       <ProjectReference Include="..\Baballonia.Desktop\Baballonia.Desktop.csproj" />
   </ItemGroup>
@@ -33,6 +34,9 @@
     <ItemGroup>
         <None Update="Firmware\Windows\espflash.exe">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="OverlayTests\user_cal.bin">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 

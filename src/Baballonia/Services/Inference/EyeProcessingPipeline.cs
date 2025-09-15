@@ -1,15 +1,11 @@
 ﻿using System;
-using Baballonia.Contracts;
-using Baballonia.Helpers;
 using Baballonia.Services.Inference.Enums;
-using OpenCvSharp;
-using System.Threading.Tasks;
 
 namespace Baballonia.Services.Inference;
 
 public class EyeProcessingPipeline : DefaultProcessingPipeline
 {
-    private readonly FastCorruptionDetector _fastCorruptionDetector = new();
+    private readonly FastCorruptionDetector.FastCorruptionDetector _fastCorruptionDetector = new();
     private readonly ImageCollector _imageCollector = new();
     public bool StabilizeEyes { get; set; } = false;
 
