@@ -20,20 +20,20 @@ public class CalibrationServiceTest
     {
         _localSettingsMock = new Mock<ILocalSettingsService>();
         _localSettingsMock
-            .Setup(x => x.ReadSettingAsync<ConcurrentDictionary<string, object>>("CalibrationParams", null, false))!
-            .ReturnsAsync((ConcurrentDictionary<string, object>?)null); // simulate empty storage
+            .Setup(x => x.ReadSetting<ConcurrentDictionary<string, object>>("CalibrationParams", null, false))!
+            .Returns((ConcurrentDictionary<string, object>?)null); // simulate empty storage
 
         _calibrationService = new CalibrationService(_localSettingsMock.Object);
     }
 
 
     [TestMethod]
-    public async Task SetExpression_SetsCorrectLowerAndUpperValues()
+    public void SetExpression_SetsCorrectLowerAndUpperValues()
     {
         var expression = "JawOpenLower";
         var expectedLower = 0.3f;
 
-        await _calibrationService.SetExpression(expression, expectedLower);
+        _calibrationService.SetExpression(expression, expectedLower);
         var result = _calibrationService.GetExpressionSettings("JawOpen");
 
         Assert.AreEqual(expectedLower, result.Lower);
@@ -41,10 +41,10 @@ public class CalibrationServiceTest
     }
 
     [TestMethod]
-    public async Task SetExpression_UpperValueOverridesCorrectly()
+    public void SetExpression_UpperValueOverridesCorrectly()
     {
-        await _calibrationService.SetExpression("JawOpenLower", 0.2f);
-        await _calibrationService.SetExpression("JawOpenUpper", 0.8f);
+        _calibrationService.SetExpression("JawOpenLower", 0.2f);
+        _calibrationService.SetExpression("JawOpenUpper", 0.8f);
 
         var result = _calibrationService.GetExpressionSettings("JawOpen");
 
@@ -53,12 +53,12 @@ public class CalibrationServiceTest
     }
 
     [TestMethod]
-    public async Task ResetValues_ResetsAllToDefaults()
+    public void ResetValues_ResetsAllToDefaults()
     {
-        await _calibrationService.SetExpression("JawOpenLower", 0.5f);
-        await _calibrationService.SetExpression("JawOpenUpper", 0.6f);
+        _calibrationService.SetExpression("JawOpenLower", 0.5f);
+        _calibrationService.SetExpression("JawOpenUpper", 0.6f);
 
-        await _calibrationService.ResetValues();
+        _calibrationService.ResetValues();
 
         var result = _calibrationService.GetExpressionSettings("JawOpen");
 

@@ -55,10 +55,10 @@ public partial class OnboardingViewModel : ObservableObject
         UpdateCurrentSlide();
     }
 
-    public async Task InitializeAsync()
+    public void Initialize()
     {
         // Load the user preference
-        var showOnStartup = await _localSettingsService.ReadSettingAsync<bool>("ShowOnboardingOnStartup");
+        var showOnStartup = _localSettingsService.ReadSetting<bool>("ShowOnboardingOnStartup");
     }
 
     private void UpdateCurrentSlide()
@@ -119,7 +119,7 @@ public partial class OnboardingViewModel : ObservableObject
     private async void FinishOnboarding()
     {
         // Save the user preference
-        await _localSettingsService.SaveSettingAsync("ShowOnboardingOnStartup", false);
+        _localSettingsService.SaveSetting("ShowOnboardingOnStartup", false);
 
         // Raise completed event to close the overlay
         OnboardingCompleted?.Invoke(this, EventArgs.Empty);

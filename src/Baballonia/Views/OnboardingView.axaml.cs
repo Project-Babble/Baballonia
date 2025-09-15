@@ -32,7 +32,7 @@ public partial class OnboardingView : UserControl
         _viewModel.OnboardingCompleted += (_, _) => OnboardingCompleted?.Invoke(this, EventArgs.Empty);
 
         // Initialize the view model asynchronously
-        Task.Run(async () => await _viewModel.InitializeAsync());
+        _viewModel.Initialize();
     }
 
     private void InitializeComponent()
@@ -42,11 +42,8 @@ public partial class OnboardingView : UserControl
 
     public static void ShowIfNeeded(Window parent)
     {
-        Task.Run(async () =>
-        {
-            var localSettingsService = Ioc.Default.GetService<ILocalSettingsService>()!;
-            _showOnStartup = await localSettingsService.ReadSettingAsync<bool>("ShowOnboardingOnStartup");
-        }).Wait();
+        var localSettingsService = Ioc.Default.GetService<ILocalSettingsService>()!;
+        _showOnStartup = localSettingsService.ReadSetting<bool>("ShowOnboardingOnStartup");
 
         if (_showOnStartup)
         {

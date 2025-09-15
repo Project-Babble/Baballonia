@@ -10,9 +10,9 @@ public interface IThemeSelectorService
         get;
     }
 
-    Task InitializeAsync();
+    void Initialize();
 
-    Task SetThemeAsync(ThemeVariant theme);
+    void SetTheme(ThemeVariant theme);
 
-    Task SetRequestedThemeAsync();
+    void SetRequestedTheme();
 }

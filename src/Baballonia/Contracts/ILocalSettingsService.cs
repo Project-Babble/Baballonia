@@ -23,11 +23,11 @@ public class SavedSettingAttribute : Attribute
 
 public interface ILocalSettingsService
 {
-    Task<T> ReadSettingAsync<T>(string key, T? defaultValue = default, bool forceLocal = false);
+    T ReadSetting<T>(string key, T? defaultValue = default, bool forceLocal = false);
 
-    Task SaveSettingAsync<T>(string key, T value, bool forceLocal = false);
+    void SaveSetting<T>(string key, T value, bool forceLocal = false);
 
-    Task Save(object target);
-    Task Load(object target);
+    void Save(object target);
+    void Load(object target);
     void ForceSave();
 }

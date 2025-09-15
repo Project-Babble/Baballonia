@@ -72,18 +72,15 @@ public class CalibrationService : ICalibrationService
 
     private readonly ILocalSettingsService _localSettingsService;
 
-    private readonly Task _isInitializedTask;
     public CalibrationService(ILocalSettingsService localSettingsService)
     {
         _localSettingsService = localSettingsService;
 
-        _isInitializedTask = LoadAsync();
+        Load();
     }
 
-    public async Task SetExpression(string expression, float value)
+    public void SetExpression(string expression, float value)
     {
-        await _isInitializedTask;
-
         if (string.IsNullOrEmpty(expression))
             return;
 
@@ -101,7 +98,7 @@ public class CalibrationService : ICalibrationService
 
         var param = new CalibrationParameter(lower, upper, min, max);
         _expressionSettings[parameterName] = param;
-        await SaveAsync();
+        SaveAsync();
     }
 
     public CalibrationParameter GetExpressionSettings(string parameterName)
@@ -111,10 +108,8 @@ public class CalibrationService : ICalibrationService
             new CalibrationParameter();
     }
 
-    public async Task<float> GetExpressionSetting(string expression)
+    public float GetExpressionSetting(string expression)
     {
-        await _isInitializedTask;
-
         if (!expression.EndsWith("Lower") && !expression.EndsWith("Upper")) return 0;
 
         var isUpper = expression.EndsWith("Upper");
@@ -128,15 +123,14 @@ public class CalibrationService : ICalibrationService
         return isUpper ? currentSettings.Upper : currentSettings.Lower;
     }
 
-    private async Task SaveAsync()
+    private void SaveAsync()
     {
-        await _isInitializedTask;
-        await _localSettingsService.SaveSettingAsync("CalibrationParams", _expressionSettings);
+        _localSettingsService.SaveSetting("CalibrationParams", _expressionSettings);
     }
 
-    private async Task LoadAsync()
+    private void Load()
     {
-        var parameters = await _localSettingsService.ReadSettingAsync<ConcurrentDictionary<string, CalibrationParameter>?>("CalibrationParams");
+        var parameters = _localSettingsService.ReadSetting<ConcurrentDictionary<string, CalibrationParameter>?>("CalibrationParams");
         _expressionSettings.Clear();
         if (parameters == null)
         {
@@ -167,35 +161,31 @@ public class CalibrationService : ICalibrationService
         }
     }
 
-    public async Task ResetValues()
+    public void ResetValues()
     {
-        await _isInitializedTask;
-
         foreach (var parameter in _expressionSettings.Values)
         {
             parameter.Lower = parameter.Min;
             parameter.Upper = parameter.Max;
         }
-        await SaveAsync();
+        SaveAsync();
     }
 
-    public async Task ResetMinimums()
+    public void ResetMinimums()
     {
-        await _isInitializedTask;
         foreach (var parameter in _expressionSettings.Values)
         {
             parameter.Lower = parameter.Min;
         }
-        await SaveAsync();
+        SaveAsync();
     }
 
-    public async Task ResetMaximums()
+    public void ResetMaximums()
     {
-        await _isInitializedTask;
         foreach (var parameter in _expressionSettings.Values)
         {
             parameter.Upper = parameter.Max;
         }
-        await SaveAsync();
+        SaveAsync();
     }
 }

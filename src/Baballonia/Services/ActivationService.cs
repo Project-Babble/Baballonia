@@ -9,11 +9,11 @@ public class ActivationService(
     ILanguageSelectorService languageSelectorService)
     : IActivationService
 {
-    public async Task ActivateAsync(object activationArgs)
+    public void Activate(object activationArgs)
     {
-        await languageSelectorService.InitializeAsync();
-        await languageSelectorService.SetRequestedLanguageAsync();
-        await themeSelectorService.InitializeAsync();
-        await themeSelectorService.SetRequestedThemeAsync();
+        languageSelectorService.Initialize();
+        languageSelectorService.SetRequestedLanguage();
+        themeSelectorService.Initialize();
+        themeSelectorService.SetRequestedTheme();
     }
 }

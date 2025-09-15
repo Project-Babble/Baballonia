@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Logging;
 using Baballonia.Contracts;
 using Baballonia.Services;
 using Baballonia.Services.Inference.Filters;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Baballonia.ViewModels.SplitViewPane;
 
@@ -68,6 +70,7 @@ public partial class AppSettingsViewModel : ViewModelBase
     [ObservableProperty] private bool _onboardingEnabled;
 
     private ProcessingLoopService _processingLoopService;
+    private ILogger<AppSettingsViewModel> _logger;
     public AppSettingsViewModel()
     {
         // General/Calibration Settings
@@ -75,6 +78,7 @@ public partial class AppSettingsViewModel : ViewModelBase
         GithubService = Ioc.Default.GetService<GithubService>()!;
         SettingsService = Ioc.Default.GetService<ILocalSettingsService>()!;
         _processingLoopService = Ioc.Default.GetService<ProcessingLoopService>()!;
+        _logger = Ioc.Default.GetService<ILogger<AppSettingsViewModel>>()!;
         SettingsService.Load(this);
 
         // Handle edge case where OSC port is used and the system freaks out
@@ -82,7 +86,7 @@ public partial class AppSettingsViewModel : ViewModelBase
         {
             const int Port = 8888;
             OscTarget.OutPort = Port;
-            Task.Run(async () => await SettingsService.SaveSettingAsync("OSCOutPort", Port));
+            SettingsService.SaveSetting("OSCOutPort", Port);
         }
 
         // Risky Settings
@@ -119,13 +123,21 @@ public partial class AppSettingsViewModel : ViewModelBase
         };
     }
 
-    partial void OnUseGPUChanged(bool value)
+    async partial void OnUseGPUChanged(bool value)
     {
-        Task.Run(async () =>
+        try
         {
-            await SettingsService.SaveSettingAsync("AppSettings_UseGPU", value);
-            await _processingLoopService.SetupFaceInference();
-            await _processingLoopService.SetupEyeInference();
-        });
+            SettingsService.SaveSetting("AppSettings_UseGPU", value);
+            var face = _processingLoopService.LoadFaceInferenceAsync();
+            var eyes = _processingLoopService.LoadEyeInferenceAsync();
+
+            _processingLoopService.FaceProcessingPipeline.InferenceService = await face;
+            _processingLoopService.EyesProcessingPipeline.InferenceService = await eyes;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("", e);
+
+        }
     }
 }

@@ -12,35 +12,33 @@ public class LanguageSelectorService(ILocalSettingsService localSettingsService)
 
     public string Language { get; set; } = DefaultLanguage;
 
-    public async Task InitializeAsync()
+    public void Initialize()
     {
-        Language = await LoadLanguageFromSettingsAsync();
-        await SetRequestedLanguageAsync();
-        await Task.CompletedTask;
+        Language = LoadLanguageFromSettings();
+        SetRequestedLanguage();
     }
 
-    public async Task SetLanguageAsync(string language)
+    public void SetLanguage(string language)
     {
         Language = language;
-        await SetRequestedLanguageAsync();
-        await SaveLanguageInSettingsAsync(Language);
+        SetRequestedLanguage();
+        SaveLanguageInSettings(Language);
     }
 
-    public Task SetRequestedLanguageAsync()
+    public void SetRequestedLanguage()
     {
         Assets.Resources.Culture = new CultureInfo(Language == DefaultLanguage ?
             CultureInfo.CurrentCulture.TwoLetterISOLanguageName :
             Language);
-        return Task.CompletedTask;
     }
 
-    private async Task<string> LoadLanguageFromSettingsAsync()
+    private string LoadLanguageFromSettings()
     {
-        return await localSettingsService.ReadSettingAsync<string>(SettingsKey);;
+        return localSettingsService.ReadSetting<string>(SettingsKey);;
     }
 
-    private async Task SaveLanguageInSettingsAsync(string langauge)
+    private void SaveLanguageInSettings(string langauge)
     {
-        await localSettingsService.SaveSettingAsync(SettingsKey, langauge);
+        localSettingsService.SaveSetting(SettingsKey, langauge);
     }
 }

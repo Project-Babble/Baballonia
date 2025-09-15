@@ -55,8 +55,8 @@ public partial class VrcViewModel : ViewModelBase
 
     private async Task LoadAsync()
     {
-        var selected = await LocalSettingsService.ReadSettingAsync<string>("VRC_SelectedModuleMode", "Face");
-        var useNative = await LocalSettingsService.ReadSettingAsync<bool>("VRC_UseNativeTracking", false);
+        var selected = LocalSettingsService.ReadSetting<string>("VRC_SelectedModuleMode", "Face");
+        var useNative = LocalSettingsService.ReadSetting<bool>("VRC_UseNativeTracking", false);
 
         await Dispatcher.UIThread.InvokeAsync(() =>
         {

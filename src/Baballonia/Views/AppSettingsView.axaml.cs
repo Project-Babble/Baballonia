@@ -38,13 +38,13 @@ public partial class AppSettingsView : UserControl
 
         if (_themeSelectorService.Theme is null)
         {
-            _themeSelectorService.SetThemeAsync(ThemeVariant.Default);
+            _themeSelectorService.SetTheme(ThemeVariant.Default);
             return;
         }
 
         if (string.IsNullOrEmpty(_languageSelectorService.Language))
         {
-            _languageSelectorService.SetLanguageAsync(LanguageSelectorService.DefaultLanguage);
+            _languageSelectorService.SetLanguage(LanguageSelectorService.DefaultLanguage);
             return;
         }
 
@@ -113,16 +113,13 @@ public partial class AppSettingsView : UserControl
             "Dark" => ThemeVariant.Dark,
             _ => variant
         };
-        Dispatcher.UIThread.InvokeAsync(async () => await _themeSelectorService.SetThemeAsync(variant));
+        _themeSelectorService.SetTheme(variant);
     }
 
     private void LangComboBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         var item = _langComboBox.SelectedItem as ComboBoxItem;
-        Dispatcher.UIThread.InvokeAsync(async () =>
-        {
-            await _languageSelectorService.SetLanguageAsync(item!.Tag!.ToString()!);
-        });
+        _languageSelectorService.SetLanguage(item!.Tag!.ToString()!);
     }
 
     // Workaround for https://github.com/AvaloniaUI/Avalonia/issues/4460
@@ -130,9 +127,12 @@ public partial class AppSettingsView : UserControl
     {
         var selectedIndex = _themeComboBox.SelectedIndex;
         _themeComboBox.Items.Clear();
-        _themeComboBox.Items.Add(new ComboBoxItem { Content=Assets.Resources.Settings_Theme_Default_Content, Name="DefaultTheme" });
-        _themeComboBox.Items.Add(new ComboBoxItem { Content=Assets.Resources.Settings_Theme_Light_Content, Name="Light" });
-        _themeComboBox.Items.Add(new ComboBoxItem { Content=Assets.Resources.Settings_Theme_Dark_Content, Name="Dark" });
+        _themeComboBox.Items.Add(new ComboBoxItem
+            { Content = Assets.Resources.Settings_Theme_Default_Content, Name = "DefaultTheme" });
+        _themeComboBox.Items.Add(new ComboBoxItem
+            { Content = Assets.Resources.Settings_Theme_Light_Content, Name = "Light" });
+        _themeComboBox.Items.Add(new ComboBoxItem
+            { Content = Assets.Resources.Settings_Theme_Dark_Content, Name = "Dark" });
         _themeComboBox.SelectedIndex = selectedIndex;
     }
 
@@ -172,4 +172,3 @@ public partial class AppSettingsView : UserControl
         };
     }
 }
-

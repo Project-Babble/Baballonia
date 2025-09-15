@@ -133,14 +133,14 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
             .Select((key, index) => new { key, index })
             .ToDictionary(x => x.key, x => x.index);
 
-        PropertyChanged += async (o, p) =>
+        PropertyChanged += (o, p) =>
         {
             var propertyInfo = GetType().GetProperty(p.PropertyName!);
             object value = propertyInfo?.GetValue(this)!;
             if (value is float floatValue)
             {
                 if (p.PropertyName == null) return;
-                await _calibrationService.SetExpression(p.PropertyName!, floatValue);
+                _calibrationService.SetExpression(p.PropertyName!, floatValue);
             }
         };
 
@@ -148,12 +148,12 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
 
         LoadInitialSettings();
         _settingsService.Load(this);
-        
-        PropertyChanged += async (o, p) =>
+
+        PropertyChanged += (o, p) =>
         {
             if (p.PropertyName == nameof(StabilizeEyes))
             {
-                await _settingsService.SaveSettingAsync("AppSettings_StabilizeEyes", StabilizeEyes);
+                _settingsService.SaveSetting("AppSettings_StabilizeEyes", StabilizeEyes);
                 _processingLoopService.EyesProcessingPipeline.StabilizeEyes = StabilizeEyes;
             }
         };
@@ -180,18 +180,15 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
     {
         if (sender is not SliderBindableSetting setting) return;
 
-        Dispatcher.UIThread.Post(async () =>
+        if (e.PropertyName is nameof(SliderBindableSetting.Lower))
         {
-            if (e.PropertyName is nameof(SliderBindableSetting.Lower))
-            {
-                await _calibrationService.SetExpression(setting.Name + "Lower", setting.Lower);
-            }
+            _calibrationService.SetExpression(setting.Name + "Lower", setting.Lower);
+        }
 
-            if (e.PropertyName is nameof(SliderBindableSetting.Upper))
-            {
-                await _calibrationService.SetExpression(setting.Name + "Upper", setting.Upper);
-            }
-        });
+        if (e.PropertyName is nameof(SliderBindableSetting.Upper))
+        {
+            _calibrationService.SetExpression(setting.Name + "Upper", setting.Upper);
+        }
     }
 
     private void ApplyCurrentEyeExpressionValues(float[] values, IEnumerable<SliderBindableSetting> settings)
@@ -231,21 +228,15 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
     [RelayCommand]
     public void ResetMinimums()
     {
-        Dispatcher.UIThread.Post(async () =>
-        {
-            await _calibrationService.ResetMinimums();
-            LoadInitialSettings();
-        });
+        _calibrationService.ResetMinimums();
+        LoadInitialSettings();
     }
 
     [RelayCommand]
     public void ResetMaximums()
     {
-        Dispatcher.UIThread.Post(async () =>
-        {
-            await _calibrationService.ResetMaximums();
-            LoadInitialSettings();
-        });
+        _calibrationService.ResetMaximums();
+        LoadInitialSettings();
     }
 
     private void LoadInitialSettings()

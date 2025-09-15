@@ -89,10 +89,9 @@ public partial class HomePageView : UserControl
                 }
             };
         }
-        Loaded += async (_, _) =>
+        Loaded += (_, _) =>
         {
             if (DataContext is not HomePageViewModel vm) return;
-            await vm.CamerasInitialized.Task;
 
             SetupCropEvents(vm.LeftCamera, LeftMouthWindow);
             SetupCropEvents(vm.RightCamera, RightMouthWindow);

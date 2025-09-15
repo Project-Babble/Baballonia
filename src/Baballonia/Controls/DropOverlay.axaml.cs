@@ -27,9 +27,9 @@ public partial class DropOverlay : UserControl
         set => SetValue(IsOverlayVisibleProperty, value);
     }
 
-    private async void Changed(object? sender, RoutedEventArgs e)
+    private void Changed(object? sender, RoutedEventArgs e)
     {
-        await _localSettingsService.SaveSettingAsync("SecondsWarningRead", WarningCheckbox.IsChecked);
+        _localSettingsService.SaveSetting("SecondsWarningRead", WarningCheckbox.IsChecked);
     }
 
     private void SecondWarningUnderstood(object? sender, RoutedEventArgs e)

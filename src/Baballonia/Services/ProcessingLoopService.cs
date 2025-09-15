@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -43,31 +44,38 @@ public class ProcessingLoopService : IDisposable
 
         FaceProcessingPipeline.ImageConverter = new MatToFloatTensorConverter();
         FaceProcessingPipeline.ImageTransformer = new ImageTransformer();
- 
+
         EyesProcessingPipeline.ImageConverter = new MatToFloatTensorConverter();
-        
+
         var dualTransformer = new DualImageTransformer();
         dualTransformer.LeftTransformer.TargetSize = new Size(128, 128);
         dualTransformer.RightTransformer.TargetSize = new Size(128, 128);
         EyesProcessingPipeline.ImageTransformer = dualTransformer;
 
-        _ = SetupFaceInference();
-        _ = SetupEyeInference();
-        _ = LoadFilters();
-        _ = LoadEyeStabilizationSetting();
+        var face = LoadFaceInference();
+        var eyes = LoadEyeInference();
+
+        FaceProcessingPipeline.InferenceService = face;
+        EyesProcessingPipeline.InferenceService = eyes;
+
+        var faceFilter = LoadFaceFilter();
+        var eyeFilter = LoadEyeFilter();
+        FaceProcessingPipeline.Filter = faceFilter;
+        EyesProcessingPipeline.Filter = eyeFilter;
+        LoadEyeStabilizationSetting();
 
         _drawTimer.Tick += TimerEvent;
         _drawTimer.Start();
     }
 
-    private async Task LoadFilters()
+    private IFilter? LoadFaceFilter()
     {
-        var enabled = await _localSettingsService.ReadSettingAsync<bool>("AppSettings_OneEuroEnabled");
-        var cutoff = await _localSettingsService.ReadSettingAsync<float>("AppSettings_OneEuroMinFreqCutoff");
-        var speedCutoff = await _localSettingsService.ReadSettingAsync<float>("AppSettings_OneEuroSpeedCutoff");
+        var enabled = _localSettingsService.ReadSetting<bool>("AppSettings_OneEuroEnabled");
+        var cutoff = _localSettingsService.ReadSetting<float>("AppSettings_OneEuroMinFreqCutoff");
+        var speedCutoff = _localSettingsService.ReadSetting<float>("AppSettings_OneEuroSpeedCutoff");
 
         if (!enabled)
-            return;
+            return null;
 
         float[] faceArray = new float[Utils.FaceRawExpressions];
         var faceFilter = new OneEuroFilter(
@@ -75,64 +83,79 @@ public class ProcessingLoopService : IDisposable
             minCutoff: cutoff,
             beta: speedCutoff
         );
+
+        return faceFilter;
+    }
+
+    private IFilter? LoadEyeFilter()
+    {
+        var enabled = _localSettingsService.ReadSetting<bool>("AppSettings_OneEuroEnabled");
+        var cutoff = _localSettingsService.ReadSetting<float>("AppSettings_OneEuroMinFreqCutoff");
+        var speedCutoff = _localSettingsService.ReadSetting<float>("AppSettings_OneEuroSpeedCutoff");
+
+        if (!enabled)
+            return null;
+
         float[] eyeArray = new float[Utils.EyeRawExpressions];
         var eyeFilter = new OneEuroFilter(
             eyeArray,
             minCutoff: cutoff,
             beta: speedCutoff
         );
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            FaceProcessingPipeline.Filter = faceFilter;
-            EyesProcessingPipeline.Filter = eyeFilter;
-        });
+        return eyeFilter;
     }
 
-    public async Task SetupEyeInference()
+
+    public Task<DefaultInferenceRunner> LoadEyeInferenceAsync()
+    {
+        return Task.Run(LoadEyeInference);
+    }
+
+    public DefaultInferenceRunner LoadEyeInference()
     {
         const string defaultEyeModel = "eyeModel.onnx";
-        var eyeModel = await _localSettingsService.ReadSettingAsync<string>("EyeHome_EyeModel", defaultEyeModel);
+        var eyeModel = _localSettingsService.ReadSetting<string>("EyeHome_EyeModel", defaultEyeModel);
         if (!File.Exists(Path.Combine(AppContext.BaseDirectory, eyeModel)))
         {
             _logger.LogError("{} Does not exists", eyeModel);
             eyeModel = defaultEyeModel;
         }
+
         if (eyeModel == defaultEyeModel)
         {
             _logger.LogDebug("Loaded default eye model with hash {EyeModelHash}", Utils.GenerateMD5(eyeModel));
         }
 
-        var useGpu = await _localSettingsService.ReadSettingAsync<bool>("AppSettings_UseGPU", false);
+        var useGpu = _localSettingsService.ReadSetting<bool>("AppSettings_UseGPU", false);
 
-        await Task.Run(() =>
-        {
-            var l = Ioc.Default.GetService<ILogger<DefaultInferenceRunner>>()!;
-            var eyeInference = new DefaultInferenceRunner(l);
-            eyeInference.Setup(eyeModel, useGpu);
-            Dispatcher.UIThread.Post(() => { EyesProcessingPipeline.InferenceService = eyeInference; });
-        });
+        var l = Ioc.Default.GetService<ILogger<DefaultInferenceRunner>>()!;
+        var eyeInference = new DefaultInferenceRunner(l);
+        eyeInference.Setup(eyeModel, useGpu);
+
+        return eyeInference;
     }
 
-    public async Task SetupFaceInference()
+    public Task<DefaultInferenceRunner> LoadFaceInferenceAsync()
     {
-        var useGpu = await _localSettingsService.ReadSettingAsync<bool>("AppSettings_UseGPU", false);
-
-        await Task.Run(() =>
-        {
-            var l = Ioc.Default.GetService<ILogger<DefaultInferenceRunner>>()!;
-            var faceInference = new DefaultInferenceRunner(l);
-
-            const string defaultFaceModel = "faceModel.onnx";
-            faceInference.Setup(defaultFaceModel, useGpu);
-            _logger.LogDebug("Loaded default face model with hash {FaceModelHash}", Utils.GenerateMD5(defaultFaceModel));
-
-            Dispatcher.UIThread.Post(() => { FaceProcessingPipeline.InferenceService = faceInference; });
-        });
+        return Task.Run(LoadFaceInference);
     }
 
-    private async Task LoadEyeStabilizationSetting()
+    public DefaultInferenceRunner LoadFaceInference()
     {
-        var stabilizeEyes = await _localSettingsService.ReadSettingAsync<bool>("AppSettings_StabilizeEyes", false);
+        var useGpu = _localSettingsService.ReadSetting<bool>("AppSettings_UseGPU", false);
+        var l = Ioc.Default.GetService<ILogger<DefaultInferenceRunner>>()!;
+        var faceInference = new DefaultInferenceRunner(l);
+
+        const string defaultFaceModel = "faceModel.onnx";
+        faceInference.Setup(defaultFaceModel, useGpu);
+        _logger.LogDebug("Loaded default face model with hash {FaceModelHash}", Utils.GenerateMD5(defaultFaceModel));
+
+        return faceInference;
+    }
+
+    private void LoadEyeStabilizationSetting()
+    {
+        var stabilizeEyes = _localSettingsService.ReadSetting<bool>("AppSettings_StabilizeEyes", false);
         EyesProcessingPipeline.StabilizeEyes = stabilizeEyes;
     }
 
