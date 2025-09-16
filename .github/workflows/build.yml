@@ -69,7 +69,7 @@ jobs:
       - name: Fetch internal zip
         run: |
           cd src/Baballonia.Desktop
-          powershell fetch_internal.ps1
+          powershell ./fetch_internal.ps1
 
       - name: Build project
         run: |
