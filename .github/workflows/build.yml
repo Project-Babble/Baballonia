@@ -8,7 +8,7 @@ on:
         type: boolean
         default: false
       publish-pre-release:
-        description: 'Publish as Pre-Release'
+        description: 'Mark as Pre-Release'
         type: boolean
         default: false
       version-number:
