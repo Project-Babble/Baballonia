@@ -16,6 +16,7 @@ using Baballonia.Services;
 using Baballonia.Services.Inference;
 using Baballonia.Services.Inference.Enums;
 using Baballonia.Services.Inference.Models;
+using Baballonia.Services.Inference.Platforms;
 using Baballonia.Services.Inference.VideoSources;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
@@ -52,7 +53,10 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         [ObservableProperty] private float _gamma = 1f;
         [ObservableProperty] private bool _isCropMode = false;
         [ObservableProperty] private bool _isCameraRunning = false;
+        [ObservableProperty] private int _selectedCaptureMethod = -1;
+        [ObservableProperty] private bool _captureMethodVisible = false;
         public ObservableCollection<string> Suggestions { get; set; } = [];
+        public ObservableCollection<string> CaptureMethods { get; set; } = [];
 
         private readonly ILocalSettingsService LocalSettingsService;
         private readonly DefaultProcessingPipeline _processingPipeline;
@@ -160,6 +164,22 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             StopButtonEnabled = false;
         }
 
+        public void OnTextChanged()
+        {
+            var text = DisplayAddress;
+
+            var matches = PlatformConnector.Captures.Where(i => i.Key.CanConnect(text)).ToArray();
+
+            var shouldShow = matches.Length >= 2;
+            CaptureMethodVisible = shouldShow;
+
+            CaptureMethods.Clear();
+            if (shouldShow)
+                foreach (var match in matches)
+                    CaptureMethods.Add(match.Value.Name);
+
+            SelectedCaptureMethod = -1;
+        }
         void ImageUpdateEventHandler(Mat image)
         {
             if (image == null)
@@ -519,7 +539,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
         return await Task.Run<IVideoSource?>(() =>
         {
-            var cameraSource = SingleCameraSourceFactory.Create(camera);
+            var cameraSource = SingleCameraSourceFactory.Create(camera, preferredCapture);
             if (cameraSource == null)
                 return null;
 
@@ -659,7 +679,11 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
         var type = model.Camera;
 
-        var cameraSource = await StartCameraAsync(model.DisplayAddress);
+        var selectedIndex = model.SelectedCaptureMethod >= 0 && model.SelectedCaptureMethod < model.CaptureMethods.Count
+            ? model.CaptureMethods[model.SelectedCaptureMethod]
+            : "";
+
+        var cameraSource = await StartCameraAsync(model.DisplayAddress, selectedIndex);
 
         if (cameraSource == null)
         {
