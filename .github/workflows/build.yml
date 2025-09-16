@@ -66,6 +66,11 @@ jobs:
           submodules: 'recursive'
           lfs: true
 
+      - name: Fetch internal zip
+        run: |
+          cd src/Baballonia.Desktop
+          powershell fetch_internal.ps1
+
       - name: Build project
         run: |
           cd src/Baballonia.Desktop
