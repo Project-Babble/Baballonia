@@ -39,7 +39,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baballonia.Tests", "src\Bab
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VRCFaceTracking", "src\VRCFaceTracking\VRCFaceTracking\VRCFaceTracking.csproj", "{D8C25797-49BC-4024-A812-F44AB0B77BD1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baballonia.IPCameraCapture", "src\Baballonia.IPCameraCapture\Baballonia.IPCameraCapture\Baballonia.IPCameraCapture.csproj", "{575BB586-5394-4F94-A178-DF4062EC44A1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baballonia.IPCameraCapture", "src\Baballonia.IPCameraCapture\Baballonia.IPCameraCapture.csproj", "{575BB586-5394-4F94-A178-DF4062EC44A1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baballonia.FastCorruptionDetector", "src\Baballonia.FastCorruptionDetector\Baballonia.FastCorruptionDetector.csproj", "{4B08BDE8-099A-405F-AB71-094E8FC24AB1}"
 EndProject
