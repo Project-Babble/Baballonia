@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -177,20 +178,17 @@ public class ParameterSenderService : BackgroundService
 
     private void ProcessFaceExpressionData(float[] expressions)
     {
-        if (expressions == null) return;
-        if (expressions.Length == 0) return;
+        Debug.Assert(expressions != null);
+        Debug.Assert(expressions.Length == Utils.FaceRawExpressions);
 
-        for (int i = 0; i < Math.Min(expressions.Length, FaceExpressionMap.Count); i++)
+        var calibrated = calibrationService.ApplyFaceCalibration(expressions);
+
+        for (int i = 0; i < Utils.FaceRawExpressions; i++)
         {
-            var weight = expressions[i];
+            var weight = calibrated[i];
             var faceElement = FaceExpressionMap.ElementAt(i);
-            var settings = calibrationService.GetExpressionSettings(faceElement.Key);
 
-            var msg = new OscMessage(prefix + faceElement.Value,
-                Math.Clamp(
-                    weight.Remap(settings.Lower, settings.Upper, settings.Min, settings.Max),
-                    settings.Min,
-                    settings.Max));
+            var msg = new OscMessage(prefix + faceElement.Value, weight);
             _sendQueue.Enqueue(msg);
         }
     }

@@ -10,6 +10,7 @@ using System.Linq;
 using Avalonia.Threading;
 using Baballonia.Helpers;
 using Baballonia.Services;
+using Baballonia.Services.Inference.Filters;
 using CommunityToolkit.Mvvm.Input;
 
 namespace Baballonia.ViewModels.SplitViewPane;
@@ -26,6 +27,9 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
     [ObservableProperty]
     [property: SavedSetting("AppSettings_StabilizeEyes", false)]
     private bool _stabilizeEyes;
+
+    [property: SavedSetting("AppSettings_UseAutocalib", true)]
+    [ObservableProperty] private bool _useAutocalib;
 
     private ILocalSettingsService _settingsService { get; }
     private readonly ICalibrationService _calibrationService;
@@ -159,17 +163,31 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
         };
     }
 
+    partial void OnUseAutocalibChanged(bool value)
+    {
+        var prev = _settingsService.ReadSetting("AppSettings_UseAutocalib", true);
+        if (prev == value)
+            return;
+
+        _settingsService.SaveSetting("AppSettings_UseAutocalib", UseAutocalib);
+        _calibrationService.FaceAutocalib = value ? new AutocalibOptimized(Utils.FaceRawExpressions) : null;
+    }
+
     private void ExpressionUpdateHandler(ProcessingLoopService.Expressions expressions)
     {
-        if(expressions.FaceExpression != null)
+        if (expressions.FaceExpression != null)
+        {
             Dispatcher.UIThread.Post(() =>
             {
-                ApplyCurrentFaceExpressionValues(expressions.FaceExpression, CheekSettings);
-                ApplyCurrentFaceExpressionValues(expressions.FaceExpression, MouthSettings);
-                ApplyCurrentFaceExpressionValues(expressions.FaceExpression, JawSettings);
-                ApplyCurrentFaceExpressionValues(expressions.FaceExpression, NoseSettings);
-                ApplyCurrentFaceExpressionValues(expressions.FaceExpression, TongueSettings);
+                var expr = _calibrationService.ApplyFaceCalibration(expressions.FaceExpression);
+                ApplyCurrentFaceExpressionValues(expr, CheekSettings);
+                ApplyCurrentFaceExpressionValues(expr, MouthSettings);
+                ApplyCurrentFaceExpressionValues(expr, JawSettings);
+                ApplyCurrentFaceExpressionValues(expr, NoseSettings);
+                ApplyCurrentFaceExpressionValues(expr, TongueSettings);
             });
+        }
+
         if(expressions.EyeExpression != null)
             Dispatcher.UIThread.Post(() =>
             {
@@ -261,8 +279,10 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
         }
     }
 
+
+
     public void Dispose()
     {
-        // _processingLoopService.ExpressionUpdateEvent -= ExpressionUpdateHandler;
+        _processingLoopService.ExpressionChangeEvent -= ExpressionUpdateHandler;
     }
 }

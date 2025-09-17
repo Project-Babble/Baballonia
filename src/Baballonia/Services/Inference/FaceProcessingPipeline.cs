@@ -2,23 +2,25 @@
 using Baballonia.Contracts;
 using Baballonia.Services.Inference.Enums;
 using OpenCvSharp;
+using SoundFlow.Components;
 
 namespace Baballonia.Services.Inference;
 
 public class FaceProcessingPipeline : DefaultProcessingPipeline
 {
+    public IFilter? AutocalibFilter;
 
-     public float[]? RunUpdate()
+    public float[]? RunUpdate()
     {
         var frame = VideoSource?.GetFrame(ColorType.Gray8);
-        if(frame == null)
+        if (frame == null)
             return null;
 
         InvokeNewFrameEvent(frame);
 
         var transformed = ImageTransformer?.Apply(frame);
 
-        if(transformed == null)
+        if (transformed == null)
             return null;
 
         InvokeTransformedFrameEvent(transformed);
@@ -31,14 +33,16 @@ public class FaceProcessingPipeline : DefaultProcessingPipeline
         transformed.Dispose();
 
         var inferenceResult = InferenceService?.Run();
-        if(inferenceResult == null)
+        if (inferenceResult == null)
             return null;
 
-        if(Filter != null)
+        if (Filter != null)
             inferenceResult = Filter.Filter(inferenceResult);
 
-        InvokeFilteredResultEvent(inferenceResult);
+        if (AutocalibFilter != null)
+            inferenceResult = AutocalibFilter.Filter(inferenceResult);
 
+        InvokeFilteredResultEvent(inferenceResult);
 
         return inferenceResult;
     }

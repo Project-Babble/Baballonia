@@ -322,6 +322,24 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enables autocalibrations of values over time.
+        /// </summary>
+        public static string Calibration_UseAutocalibration_Description {
+            get {
+                return ResourceManager.GetString("Calibration_UseAutocalibration_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable Face Autocalibration.
+        /// </summary>
+        public static string Calibration_UseAutocalibration_Title {
+            get {
+                return ResourceManager.GetString("Calibration_UseAutocalibration_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start typing....
         /// </summary>
         public static string Common_Start_Typing {

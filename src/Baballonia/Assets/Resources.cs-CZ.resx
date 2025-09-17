@@ -721,4 +721,10 @@
   <data name="Settings_OSC_VRCFT_Warning" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
+  <data name="Calibration_UseAutocalibration_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Calibration_UseAutocalibration_Description" xml:space="preserve">
+    <value />
+  </data>
 </root>

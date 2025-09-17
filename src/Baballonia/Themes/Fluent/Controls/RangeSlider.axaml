@@ -94,6 +94,12 @@
         <Setter Property="Background" Value="{DynamicResource SliderThumbBackgroundPressed}" />
       </Style>
     </Style>
+
+    <Style Selector="^.MiddleThumbStyle:disabled">
+      <Style Selector="^ /template/ Border">
+        <Setter Property="Background" Value="Red"/>
+      </Style>
+    </Style>
   </ControlTheme>
 
   <ControlTheme x:Key="{x:Type local:RangeSlider}" TargetType="local:RangeSlider">

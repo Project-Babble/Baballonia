@@ -64,6 +64,10 @@ public class ProcessingLoopService : IDisposable
         EyesProcessingPipeline.Filter = eyeFilter;
         LoadEyeStabilizationSetting();
 
+        var UseAutocalib = _localSettingsService.ReadSetting("AppSettings_UseAutocalib", true);
+        if(UseAutocalib)
+            FaceProcessingPipeline.AutocalibFilter = new AutocalibOptimized(Utils.FaceRawExpressions);
+
         _drawTimer.Tick += TimerEvent;
         _drawTimer.Start();
     }

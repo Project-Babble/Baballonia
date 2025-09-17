@@ -1,8 +1,11 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Baballonia.Contracts;
+using Baballonia.Helpers;
 using Baballonia.Services.Calibration;
+using Baballonia.Services.Inference.Filters;
 
 namespace Baballonia.Services;
 
@@ -15,12 +18,12 @@ public class CalibrationService : ICalibrationService
         { "LeftEyeY", "/LeftEyeY" },
         { "RightEyeX", "/RightEyeX" },
         { "RightEyeY", "/RightEyeY" },
+        { "LeftEyeLid", "/LeftEyeLid" },
+        { "RightEyeLid", "/RightEyeLid" },
     };
 
     private readonly Dictionary<string, string> _faceExpressionMap = new()
     {
-        { "LeftEyeLid", "/LeftEyeLid" },
-        { "RightEyeLid", "/RightEyeLid" },
         { "CheekPuffLeft", "/cheekPuffLeft" },
         { "CheekPuffRight", "/cheekPuffRight" },
         { "CheekSuckLeft", "/cheekSuckLeft" },
@@ -72,10 +75,12 @@ public class CalibrationService : ICalibrationService
 
     private readonly ILocalSettingsService _localSettingsService;
 
+    public AutocalibOptimized? FaceAutocalib { get; set; }
+
     public CalibrationService(ILocalSettingsService localSettingsService)
     {
-        _localSettingsService = localSettingsService;
 
+        _localSettingsService = localSettingsService;
         Load();
     }
 
@@ -98,7 +103,7 @@ public class CalibrationService : ICalibrationService
 
         var param = new CalibrationParameter(lower, upper, min, max);
         _expressionSettings[parameterName] = param;
-        SaveAsync();
+        Save();
     }
 
     public CalibrationParameter GetExpressionSettings(string parameterName)
@@ -106,6 +111,32 @@ public class CalibrationService : ICalibrationService
         return _expressionSettings.TryGetValue(parameterName, out var settings) ?
             settings :
             new CalibrationParameter();
+    }
+
+    public float ApplyCalibrationSetting(string expression, float value)
+    {
+        var settings = GetExpressionSettings(expression);
+        return value.Remap(settings.Lower, settings.Upper, settings.Min, settings.Max);
+    }
+
+    public float[] ApplyFaceCalibration(float[] expression)
+    {
+        Debug.Assert(expression.Length == Utils.FaceRawExpressions);
+
+        if (FaceAutocalib != null)
+        {
+            return FaceAutocalib.Filter(expression);
+        }
+
+        var res = new float[Utils.FaceRawExpressions];
+        var i = 0;
+        foreach (var faceExp in _faceExpressionMap)
+        {
+             res[i] = ApplyCalibrationSetting(faceExp.Value, expression[i]);
+             i++;
+        }
+
+        return res;
     }
 
     public float GetExpressionSetting(string expression)
@@ -123,7 +154,7 @@ public class CalibrationService : ICalibrationService
         return isUpper ? currentSettings.Upper : currentSettings.Lower;
     }
 
-    private void SaveAsync()
+    private void Save()
     {
         _localSettingsService.SaveSetting("CalibrationParams", _expressionSettings);
     }
@@ -168,7 +199,7 @@ public class CalibrationService : ICalibrationService
             parameter.Lower = parameter.Min;
             parameter.Upper = parameter.Max;
         }
-        SaveAsync();
+        Save();
     }
 
     public void ResetMinimums()
@@ -177,7 +208,7 @@ public class CalibrationService : ICalibrationService
         {
             parameter.Lower = parameter.Min;
         }
-        SaveAsync();
+        Save();
     }
 
     public void ResetMaximums()
@@ -186,6 +217,6 @@ public class CalibrationService : ICalibrationService
         {
             parameter.Upper = parameter.Max;
         }
-        SaveAsync();
+        Save();
     }
 }
