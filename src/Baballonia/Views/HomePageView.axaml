@@ -156,7 +156,7 @@
                         Grid.Row="0"
                         TextWrapping="Wrap"
                         >
-                        Multiple capture methods detected, please choose one
+                        Capture Method
                       </TextBlock>
 
                       <ComboBox
@@ -387,7 +387,7 @@
               <StackPanel>
                 <TextBlock FontSize="14" Text="{x:Static assets:Resources.Home_Right_Camera_Address}" />
 
-                <Grid RowDefinitions="Auto,Auto,Auto">
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto">
                   <AutoCompleteBox
                       FilterMode="None"
                       Grid.Row="0"
@@ -397,17 +397,42 @@
                       Text="{Binding RightCamera.DisplayAddress, Mode=TwoWay}"
                       Watermark="{x:Static assets:Resources.Common_Start_Typing}"
                       DropDownOpening="RefreshRightEyeDevices"
+                      TextChanged="RightCameraAddressEntry_OnTextChanged"
                       x:Name="RightCameraAddressEntry">
                     <Interaction.Behaviors>
                       <controls:AutoCompleteZeroMinimumPrefixLengthDropdownBehaviour />
                     </Interaction.Behaviors>
                   </AutoCompleteBox>
 
+                  <Grid
+                    Grid.Row="1"
+                    RowDefinitions="Auto,Auto"
+                    IsVisible="{Binding RightCamera.CaptureMethodVisible}">
+
+                    <TextBlock
+                      Grid.Row="0"
+                      TextWrapping="Wrap"
+                    >
+                      Capture Method
+                    </TextBlock>
+
+                    <ComboBox
+                      HorizontalAlignment="Stretch"
+                      Margin="0,6"
+                      PlaceholderText="Select capture method..."
+                      ItemsSource="{Binding RightCamera.CaptureMethods}"
+                      SelectedIndex="{Binding RightCamera.SelectedCaptureMethod}"
+                      Grid.Row="1"
+                    >
+                    </ComboBox>
+
+                  </Grid>
+
                   <TextBlock
                       FontSize="12"
                       FontStyle="Italic"
                       Foreground="Orange"
-                      Grid.Row="1"
+                      Grid.Row="2"
                       IsVisible="{Binding RightCamera.HintEnabled}"
                       Margin="0,0,0,4"
                       TextWrapping="Wrap"
@@ -415,7 +440,7 @@
 
                   <Grid
                       ColumnDefinitions="*,*"
-                      Grid.Row="2"
+                      Grid.Row="3"
                       Margin="0,4,0,8">
 
                     <Button
@@ -616,7 +641,7 @@
             <StackPanel>
               <TextBlock FontSize="14" Text="{x:Static assets:Resources.Home_Face_Camera_Address}" />
 
-              <Grid RowDefinitions="Auto,Auto,Auto">
+              <Grid RowDefinitions="Auto,Auto,Auto,Auto">
                 <AutoCompleteBox
                     FilterMode="None"
                     Grid.Row="0"
@@ -626,17 +651,42 @@
                     Text="{Binding FaceCamera.DisplayAddress, Mode=TwoWay}"
                     Watermark="{x:Static assets:Resources.Common_Start_Typing}"
                     DropDownOpening="RefreshConnectedFaceDevices"
+                    TextChanged="FaceCameraAddressEntry_OnTextChanged"
                     x:Name="FaceCameraAddressEntry">
                   <Interaction.Behaviors>
                     <controls:AutoCompleteZeroMinimumPrefixLengthDropdownBehaviour />
                   </Interaction.Behaviors>
                 </AutoCompleteBox>
 
+                <Grid
+                  Grid.Row="1"
+                  RowDefinitions="Auto,Auto"
+                  IsVisible="{Binding FaceCamera.CaptureMethodVisible}">
+
+                  <TextBlock
+                    Grid.Row="0"
+                    TextWrapping="Wrap"
+                  >
+                    Capture Method
+                  </TextBlock>
+
+                  <ComboBox
+                    HorizontalAlignment="Stretch"
+                    Margin="0,6"
+                    PlaceholderText="Select capture method..."
+                    ItemsSource="{Binding FaceCamera.CaptureMethods}"
+                    SelectedIndex="{Binding FaceCamera.SelectedCaptureMethod}"
+                    Grid.Row="1"
+                  >
+                  </ComboBox>
+
+                </Grid>
+
                 <TextBlock
                     FontSize="12"
                     FontStyle="Italic"
                     Foreground="Orange"
-                    Grid.Row="1"
+                    Grid.Row="2"
                     IsVisible="False"
                     Margin="0,0,0,4"
                     TextWrapping="Wrap"
@@ -644,7 +694,7 @@
 
                 <Grid
                     ColumnDefinitions="*,*"
-                    Grid.Row="2"
+                    Grid.Row="3"
                     Margin="0,4,0,8">
 
                   <Button

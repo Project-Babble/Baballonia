@@ -30,6 +30,7 @@ public class DesktopConnector : PlatformConnector, IPlatformConnector
         var results = LoadAssembliesFromPath(dlls);
         foreach (var pair in results) Captures.Add(pair.Key, pair.Value);
         Logger.LogDebug("Loaded {CaptureCount} capture types from assemblies", Captures.Count);
+        _addedCaptures = true;
     }
 
     private Dictionary<Capture, Type> LoadAssembliesFromPath(string[] paths)

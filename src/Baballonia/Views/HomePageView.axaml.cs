@@ -265,4 +265,16 @@ public partial class HomePageView : UserControl
         LoadEyeModelText.Text = Baballonia.Assets.Resources.Home_Eye_Load_Model;
         LoadEyeModelText.Foreground = new SolidColorBrush(vm.GetBaseHighColor());
     }
+
+    private void RightCameraAddressEntry_OnTextChanged(object? sender, TextChangedEventArgs e)
+    {
+        if (DataContext is not HomePageViewModel vm) return;
+        vm.RightCamera.OnTextChanged();
+    }
+
+    private void FaceCameraAddressEntry_OnTextChanged(object? sender, TextChangedEventArgs e)
+    {
+        if (DataContext is not HomePageViewModel vm) return;
+        vm.FaceCamera.OnTextChanged();
+    }
 }

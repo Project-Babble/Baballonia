@@ -18,7 +18,7 @@ public sealed class VftCapture(string source, ILogger logger) : Capture(source, 
     public override bool CanConnect(string connectionString)
     {
         var lowered = connectionString.ToLower();
-        return lowered.StartsWith("/dev/video");
+        return lowered.StartsWith("/dev/video") && OperatingSystem.IsLinux();
     }
 
     /// <summary>

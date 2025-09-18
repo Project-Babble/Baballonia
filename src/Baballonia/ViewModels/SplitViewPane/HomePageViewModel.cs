@@ -77,10 +77,13 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         private void Initialize(string[] cameras)
         {
             var displayAddress = LocalSettingsService.ReadSetting<string>("LastOpened" + Name);
+            var preferredCapture = LocalSettingsService.ReadSetting<string>("LastOpenedPreferredCapture" + Name);
             var camSettings = LocalSettingsService.ReadSetting<CameraSettings>(Name);
 
             UpdateCameraDropDown(cameras);
             DisplayAddress = displayAddress;
+            var selectedIndex = CaptureMethods.IndexOf(preferredCapture);
+            if (selectedIndex != -1) SelectedCaptureMethod = selectedIndex;
             FlipHorizontally = camSettings.UseHorizontalFlip;
             FlipVertically = camSettings.UseVerticalFlip;
             Rotation = camSettings.RotationRadians;
@@ -164,6 +167,10 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             StopButtonEnabled = false;
         }
 
+        public string SelectedPreferredCapture =>
+            CaptureMethods.Count <= 0 || (SelectedCaptureMethod < 0 || SelectedCaptureMethod >= CaptureMethods.Count)
+                ? "Default"
+                : CaptureMethods[SelectedCaptureMethod];
         public void OnTextChanged()
         {
             var text = DisplayAddress;
@@ -175,10 +182,13 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
             CaptureMethods.Clear();
             if (shouldShow)
+            {
+                CaptureMethods.Add("Default");
                 foreach (var match in matches)
                     CaptureMethods.Add(match.Value.Name);
+            }
 
-            SelectedCaptureMethod = -1;
+            SelectedCaptureMethod = shouldShow ? 0 : -1;
         }
         void ImageUpdateEventHandler(Mat image)
         {
@@ -649,6 +659,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     private void SaveLastOpened(CameraControllerModel model)
     {
         LocalSettingsService.SaveSetting("LastOpened" + model.Name, model.DisplayAddress);
+        LocalSettingsService.SaveSetting("LastOpenedPreferredCapture" + model.Name, model.SelectedPreferredCapture);
     }
 
     private void SetButtons(CameraControllerModel model, bool startEnabled, bool stopEnabled)
@@ -679,11 +690,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
         var type = model.Camera;
 
-        var selectedIndex = model.SelectedCaptureMethod >= 0 && model.SelectedCaptureMethod < model.CaptureMethods.Count
-            ? model.CaptureMethods[model.SelectedCaptureMethod]
-            : "";
-
-        var cameraSource = await StartCameraAsync(model.DisplayAddress, selectedIndex);
+        var cameraSource = await StartCameraAsync(model.DisplayAddress, model.SelectedPreferredCapture);
 
         if (cameraSource == null)
         {
