@@ -726,4 +726,7 @@
   <data name="Settings_OSC_VRCFT_Warning" xml:space="preserve">
     <value>If you are using Baballonia with VRCFaceTracking, there is no need to change these ports</value>
   </data>
+  <data name="Home_Eye_Load_Model" xml:space="preserve">
+    <value>Load Eye Model</value>
+  </data>
 </root>

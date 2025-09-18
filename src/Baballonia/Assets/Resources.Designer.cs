@@ -880,6 +880,15 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Load Eye Model.
+        /// </summary>
+        public static string Home_Eye_Load_Model {
+            get {
+                return ResourceManager.GetString("Home_Eye_Load_Model", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Face Camera Address.
         /// </summary>
         public static string Home_Face_Camera_Address {
