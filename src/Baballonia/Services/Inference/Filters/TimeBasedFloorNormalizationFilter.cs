@@ -23,14 +23,18 @@ public class TimeBasedFloorNormalizationFilter : IFilter
         var steps = Math.Max(1, inputFrequency * decayMinutes * 60);
         _floorStep = targetFloor / steps;
 
-        _minVal = new float[count];
-        Array.Fill(_minVal, float.NaN);
-        _maxVal = new float[count];
-        Array.Fill(_maxVal, float.NaN);
-        _floor = new float[count];
+        _minVal = InitAndFill<float>(count, float.NaN);
+        _maxVal = InitAndFill<float>(count, float.NaN);
+        _maxVal = InitAndFill<float>(count);
+        _rawNorm = InitAndFill<float>(count);
+        _newMin = InitAndFill<bool>(count);
+    }
 
-        _rawNorm = new float[count];
-        _newMin = new bool[count];
+    private T[] InitAndFill<T>(int count, T defaultValue = default!)
+    {
+        var result = new T[count];
+        Array.Fill(result, defaultValue);
+        return result;
     }
 
     public float[] Filter(float[] input)
