@@ -89,7 +89,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             CaptureMethods.Clear();
             if (shouldShow)
             {
-                CaptureMethods.Add("Default");
+                CaptureMethods.Add(Assets.Resources.Home_Backend_Default);
                 foreach (var match in matches)
                     CaptureMethods.Add(match.Value.Name);
             }

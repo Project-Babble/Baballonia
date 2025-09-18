@@ -154,8 +154,8 @@
                       <TextBlock
                         Grid.Row="0"
                         TextWrapping="Wrap"
+                        Text="{x:Static assets:Resources.Home_Preferred_Backend}"
                         >
-                        Capture Method
                       </TextBlock>
 
                       <ComboBox
@@ -410,8 +410,8 @@
                     <TextBlock
                       Grid.Row="0"
                       TextWrapping="Wrap"
+                      Text="{x:Static assets:Resources.Home_Preferred_Backend}"
                     >
-                      Capture Method
                     </TextBlock>
 
                     <ComboBox
@@ -663,8 +663,8 @@
                   <TextBlock
                     Grid.Row="0"
                     TextWrapping="Wrap"
+                    Text="{x:Static assets:Resources.Home_Preferred_Backend}"
                   >
-                    Capture Method
                   </TextBlock>
 
                   <ComboBox
