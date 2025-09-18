@@ -727,9 +727,15 @@
     <value>If you are using Baballonia with VRCFaceTracking, there is no need to change these ports</value>
   </data>
   <data name="Calibration_UseAutocalibration_Title" xml:space="preserve">
-    <value>Enable Face Autocalibration</value>
+      <value>Face Auto-Calibration</value>
   </data>
   <data name="Calibration_UseAutocalibration_Description" xml:space="preserve">
-    <value>Enables autocalibrations of values over time</value>
+      <value>Enables automatic face calibration</value>
+  </data>
+  <data name="Calibration_EyeCalibrationDisabled_Title" xml:space="preserve">
+      <value>Eye Calibration</value>
+  </data>
+  <data name="Calibration_EyeCalibrationDisabled_Description" xml:space="preserve">
+      <value>No autocalibration (Eyes are tuned during VR calibrations)</value>
   </data>
 </root>

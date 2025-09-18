@@ -178,6 +178,24 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No autocalibration (Eyes are tuned during VR calibrations).
+        /// </summary>
+        public static string Calibration_EyeCalibrationDisabled_Description {
+            get {
+                return ResourceManager.GetString("Calibration_EyeCalibrationDisabled_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Eye Calibration.
+        /// </summary>
+        public static string Calibration_EyeCalibrationDisabled_Title {
+            get {
+                return ResourceManager.GetString("Calibration_EyeCalibrationDisabled_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to • Raising the.
         /// </summary>
         public static string Calibration_Instructions_Bullet1_1 {
@@ -322,7 +340,7 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enables autocalibrations of values over time.
+        ///   Looks up a localized string similar to Enables automatic face calibration.
         /// </summary>
         public static string Calibration_UseAutocalibration_Description {
             get {
@@ -331,7 +349,7 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable Face Autocalibration.
+        ///   Looks up a localized string similar to Face Auto-Calibration.
         /// </summary>
         public static string Calibration_UseAutocalibration_Title {
             get {

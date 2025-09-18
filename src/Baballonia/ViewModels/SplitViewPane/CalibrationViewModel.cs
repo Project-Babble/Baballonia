@@ -28,7 +28,7 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
     [property: SavedSetting("AppSettings_StabilizeEyes", false)]
     private bool _stabilizeEyes;
 
-    [property: SavedSetting("AppSettings_UseAutocalib", true)]
+    [property: SavedSetting("AppSettings_UseAutocalib", false)]
     [ObservableProperty] private bool _useAutocalib;
 
     private ILocalSettingsService _settingsService { get; }
