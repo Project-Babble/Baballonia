@@ -20,34 +20,28 @@
         Classes="Header"
         Text="{x:Static assets:Resources.Calibration_Title_Header}" />
 
-      <StackPanel>
-        <controls:SettingsToggle
-          Title="{x:Static assets:Resources.Calibration_UseAutocalibration_Title}"
-          Description="{x:Static assets:Resources.Calibration_UseAutocalibration_Description}"
-          IconPath="TopSpeedRegular"
-          SettingToggled="{Binding UseAutocalib, Mode=TwoWay}" />
-      </StackPanel>
-
       <StackPanel >
-        <TextBlock TextWrapping="Wrap">
-          <Run Text="{x:Static assets:Resources.Calibration_Instructions_Line1}" />
-          <Run FontStyle="Italic" Text="{x:Static assets:Resources.Calibration_Instructions_Sensitivity}" />
-          <Run Text="{x:Static assets:Resources.Calibration_Instructions_Line1_2}" />
-          <LineBreak />
-          <Run Text="{x:Static assets:Resources.Calibration_Instructions_Bullet1_1}" />
-          <Run FontWeight="SemiBold" Text="{x:Static assets:Resources.Calibration_Instructions_Minimum}" />
-          <Run Text="{x:Static assets:Resources.Calibration_Instructions_Bullet1_2}" />
-          <LineBreak />
-          <Run Text="{x:Static assets:Resources.Calibration_Instructions_Bullet2_1}" />
-          <Run FontWeight="SemiBold" Text="{x:Static assets:Resources.Calibration_Instructions_Maximum}" />
-          <Run Text="{x:Static assets:Resources.Calibration_Instructions_Bullet2_2}" />
-        </TextBlock>
+        <StackPanel>
+          <TextBlock TextWrapping="Wrap">
+            <Run Text="{x:Static assets:Resources.Calibration_Instructions_Line1}" />
+            <Run FontStyle="Italic" Text="{x:Static assets:Resources.Calibration_Instructions_Sensitivity}" />
+            <Run Text="{x:Static assets:Resources.Calibration_Instructions_Line1_2}" />
+            <LineBreak />
+            <Run Text="{x:Static assets:Resources.Calibration_Instructions_Bullet1_1}" />
+            <Run FontWeight="SemiBold" Text="{x:Static assets:Resources.Calibration_Instructions_Minimum}" />
+            <Run Text="{x:Static assets:Resources.Calibration_Instructions_Bullet1_2}" />
+            <LineBreak />
+            <Run Text="{x:Static assets:Resources.Calibration_Instructions_Bullet2_1}" />
+            <Run FontWeight="SemiBold" Text="{x:Static assets:Resources.Calibration_Instructions_Maximum}" />
+            <Run Text="{x:Static assets:Resources.Calibration_Instructions_Bullet2_2}" />
+          </TextBlock>
+        <StackPanel/>
 
         <StackPanel
           IsEnabled="{Binding !UseAutocalib}"
           x:Name="ResetMobileStackPanel"
-          Orientation="Vertical"
-          Spacing="12">
+          Margin="0 12"
+          Orientation="Vertical">
           <StackPanel Orientation="Horizontal" Spacing="12">
             <Button Command="{Binding ResetMinimumsCommand}"
                     Content="{x:Static assets:Resources.Calibration_Reset_Minimums}" />
@@ -55,6 +49,14 @@
                     Content="{x:Static assets:Resources.Calibration_Reset_Maximums}" />
           </StackPanel>
         </StackPanel>
+
+        </StackPanel>
+
+        <controls:SettingsBlock
+          Title="{x:Static assets:Resources.Calibration_EyeCalibrationDisabled_Title}"
+          Description="{x:Static assets:Resources.Calibration_EyeCalibrationDisabled_Description}"
+          Margin="0 12 0 0"
+          IconPath="EyeShowRegular"/>
 
         <!--  Eye Expressions Expander  -->
         <Expander Margin="0,12,0,0" HorizontalAlignment="Stretch">
@@ -111,6 +113,13 @@
             </ItemsControl>
           </StackPanel>
         </Expander>
+
+        <controls:SettingsToggle
+          Title="{x:Static assets:Resources.Calibration_UseAutocalibration_Title}"
+          Description="{x:Static assets:Resources.Calibration_UseAutocalibration_Description}"
+          Margin="0 12 0 0"
+          IconPath="EmojiLaughRegular"
+          SettingToggled="{Binding UseAutocalib, Mode=TwoWay}" />
 
         <!--  Cheek Expressions Expander  -->
         <Expander Margin="0,12,0,0" HorizontalAlignment="Stretch">

@@ -8,8 +8,6 @@ namespace Baballonia.Services.Inference;
 
 public class FaceProcessingPipeline : DefaultProcessingPipeline
 {
-    public IFilter? AutocalibFilter;
-
     public float[]? RunUpdate()
     {
         var frame = VideoSource?.GetFrame(ColorType.Gray8);
@@ -38,9 +36,6 @@ public class FaceProcessingPipeline : DefaultProcessingPipeline
 
         if (Filter != null)
             inferenceResult = Filter.Filter(inferenceResult);
-
-        if (AutocalibFilter != null)
-            inferenceResult = AutocalibFilter.Filter(inferenceResult);
 
         InvokeFilteredResultEvent(inferenceResult);
 
