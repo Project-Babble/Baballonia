@@ -11,6 +11,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using Baballonia.Contracts;
+using Baballonia.Factories;
 using Baballonia.Helpers;
 using Baballonia.Services;
 using Baballonia.Services.Inference;
@@ -22,6 +23,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using OpenCvSharp;
 using Buffer = System.Buffer;
 using Rect = Avalonia.Rect;
@@ -72,6 +74,27 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             Initialize(cameras);
 
             _processingPipeline.TransformedFrameEvent += ImageUpdateEventHandler;
+        }
+
+
+        partial void OnDisplayAddressChanged(string value)
+        {
+            if (PlatformConnector.Captures.Count <= 0) PlatformConnectorFactory.Create(NullLogger.Instance, "temp");
+
+            var matches = PlatformConnector.Captures.Where(i => i.Key.CanConnect(value)).ToArray();
+
+            var shouldShow = matches.Length >= 2;
+            CaptureMethodVisible = shouldShow;
+
+            CaptureMethods.Clear();
+            if (shouldShow)
+            {
+                CaptureMethods.Add("Default");
+                foreach (var match in matches)
+                    CaptureMethods.Add(match.Value.Name);
+            }
+
+            SelectedCaptureMethod = shouldShow ? 0 : -1;
         }
 
         private void Initialize(string[] cameras)
@@ -171,25 +194,6 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             CaptureMethods.Count <= 0 || (SelectedCaptureMethod < 0 || SelectedCaptureMethod >= CaptureMethods.Count)
                 ? "Default"
                 : CaptureMethods[SelectedCaptureMethod];
-        public void OnTextChanged()
-        {
-            var text = DisplayAddress;
-
-            var matches = PlatformConnector.Captures.Where(i => i.Key.CanConnect(text)).ToArray();
-
-            var shouldShow = matches.Length >= 2;
-            CaptureMethodVisible = shouldShow;
-
-            CaptureMethods.Clear();
-            if (shouldShow)
-            {
-                CaptureMethods.Add("Default");
-                foreach (var match in matches)
-                    CaptureMethods.Add(match.Value.Name);
-            }
-
-            SelectedCaptureMethod = shouldShow ? 0 : -1;
-        }
         void ImageUpdateEventHandler(Mat image)
         {
             if (image == null)
@@ -695,6 +699,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         if (cameraSource == null)
         {
             SetButtons(model, true, false);
+            SaveLastOpened(model);
             return;
         }
 

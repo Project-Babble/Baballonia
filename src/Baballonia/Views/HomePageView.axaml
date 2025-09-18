@@ -140,7 +140,6 @@
                       Text="{Binding LeftCamera.DisplayAddress, Mode=TwoWay}"
                       Watermark="{x:Static assets:Resources.Common_Start_Typing}"
                       DropDownOpening="RefreshLeftEyeConnectedDevices"
-                      TextChanged="LeftCameraAddressEntry_OnTextChanged"
                       x:Name="LeftCameraAddressEntry">
                     <Interaction.Behaviors>
                       <controls:AutoCompleteZeroMinimumPrefixLengthDropdownBehaviour />
@@ -397,7 +396,6 @@
                       Text="{Binding RightCamera.DisplayAddress, Mode=TwoWay}"
                       Watermark="{x:Static assets:Resources.Common_Start_Typing}"
                       DropDownOpening="RefreshRightEyeDevices"
-                      TextChanged="RightCameraAddressEntry_OnTextChanged"
                       x:Name="RightCameraAddressEntry">
                     <Interaction.Behaviors>
                       <controls:AutoCompleteZeroMinimumPrefixLengthDropdownBehaviour />
@@ -651,7 +649,6 @@
                     Text="{Binding FaceCamera.DisplayAddress, Mode=TwoWay}"
                     Watermark="{x:Static assets:Resources.Common_Start_Typing}"
                     DropDownOpening="RefreshConnectedFaceDevices"
-                    TextChanged="FaceCameraAddressEntry_OnTextChanged"
                     x:Name="FaceCameraAddressEntry">
                   <Interaction.Behaviors>
                     <controls:AutoCompleteZeroMinimumPrefixLengthDropdownBehaviour />
