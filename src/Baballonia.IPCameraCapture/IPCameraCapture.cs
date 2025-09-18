@@ -22,7 +22,7 @@ public sealed class IpCameraCapture(string url, ILogger logger) : Capture(url, l
 
     public override bool CanConnect(string connectionString)
     {
-        return Uri.TryCreate(connectionString, UriKind.RelativeOrAbsolute, out _);
+        return Uri.TryCreate(connectionString, UriKind.RelativeOrAbsolute, out _) && connectionString.StartsWith("http://");
     }
 
     public override Task<bool> StartCapture()

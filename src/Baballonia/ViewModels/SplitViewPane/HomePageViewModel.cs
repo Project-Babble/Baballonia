@@ -63,6 +63,8 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         private readonly ILocalSettingsService LocalSettingsService;
         private readonly DefaultProcessingPipeline _processingPipeline;
 
+        private Stopwatch _deviceUpdateDebounce = new();
+
         public CameraControllerModel(ILocalSettingsService localSettingsService, string name,
             DefaultProcessingPipeline processingPipeline, string[] cameras, Camera camera)
         {
@@ -72,6 +74,8 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             Camera = camera;
 
             Initialize(cameras);
+
+            _deviceUpdateDebounce.Start();
 
             _processingPipeline.TransformedFrameEvent += ImageUpdateEventHandler;
         }
@@ -142,6 +146,16 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             }
 
             IsInitialized.SetResult();
+        }
+
+        public void UpdateCameraDropDown()
+        {
+            if (_deviceUpdateDebounce.Elapsed < TimeSpan.FromSeconds(5)) return;
+            _deviceUpdateDebounce.Restart();
+
+            var cameras = App.DeviceEnumerator.UpdateCameras();
+            var cameraNames = cameras.Keys.ToArray();
+            UpdateCameraDropDown(cameraNames);
         }
 
         public void UpdateCameraDropDown(string[] cameras)

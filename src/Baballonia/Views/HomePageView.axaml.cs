@@ -212,31 +212,19 @@ public partial class HomePageView : UserControl
     private void RefreshLeftEyeConnectedDevices(object? sender, CancelEventArgs e)
     {
         if (DataContext is not HomePageViewModel vm) return;
-
-        var cameras = App.DeviceEnumerator.UpdateCameras();
-        var cameraNames = cameras.Keys.ToArray();
-
-        vm.LeftCamera.UpdateCameraDropDown(cameraNames);
+        vm.LeftCamera.UpdateCameraDropDown();
     }
 
     private void RefreshRightEyeDevices(object? sender, CancelEventArgs e)
     {
         if (DataContext is not HomePageViewModel vm) return;
-
-        var cameras = App.DeviceEnumerator.UpdateCameras();
-        var cameraNames = cameras.Keys.ToArray();
-
-        vm.RightCamera.UpdateCameraDropDown(cameraNames);
+        vm.RightCamera.UpdateCameraDropDown();
     }
 
     private void RefreshConnectedFaceDevices(object? sender, CancelEventArgs e)
     {
         if (DataContext is not HomePageViewModel vm) return;
-
-        var cameras = App.DeviceEnumerator.UpdateCameras();
-        var cameraNames = cameras.Keys.ToArray();
-
-        vm.FaceCamera.UpdateCameraDropDown(cameraNames);
+        vm.FaceCamera.UpdateCameraDropDown();
     }
 
     private async void EyeModelLoad(object? sender, RoutedEventArgs e)
