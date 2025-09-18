@@ -1,7 +1,10 @@
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
 using Baballonia.Helpers;
 using Baballonia.ViewModels.SplitViewPane;
@@ -10,6 +13,12 @@ namespace Baballonia.Views;
 
 public partial class HomePageView : UserControl
 {
+
+    public static FilePickerFileType ONNXAll { get; } = new("ONNX Models")
+    {
+        Patterns = ["*.onnx"],
+    };
+
     private bool _isLayoutUpdating;
 
     public HomePageView()
@@ -226,5 +235,26 @@ public partial class HomePageView : UserControl
         var cameraNames = cameras.Keys.ToArray();
 
         vm.FaceCamera.UpdateCameraDropDown(cameraNames);
+    }
+
+    private async void EyeModelLoad(object? sender, RoutedEventArgs e)
+    {
+        var topLevelStorageProvider = TopLevel.GetTopLevel(this)!.StorageProvider;
+        var suggestedStartLocation =
+            await topLevelStorageProvider.TryGetFolderFromPathAsync(Utils.ModelsDirectory)!;
+        var file = await topLevelStorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        {
+            Title = "Open ONNX Model",
+            AllowMultiple = false,
+            SuggestedStartLocation = suggestedStartLocation, // Falls back to desktop if Models folder hasn't been created yet
+            FileTypeFilter = [ONNXAll]
+        })!;
+
+        if (file.Count == 0) return;
+        if (DataContext is not HomePageViewModel vm) return;
+
+        vm.LocalSettingsService.SaveSetting("EyeHome_EyeModel", file[0].Path.AbsolutePath);
+        var eye = await vm.ProcessingLoopService.LoadEyeInferenceAsync();
+        vm.ProcessingLoopService.EyesProcessingPipeline.InferenceService = eye;
     }
 }
