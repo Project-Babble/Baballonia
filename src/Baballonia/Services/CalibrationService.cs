@@ -161,6 +161,9 @@ public class CalibrationService : ICalibrationService
 
     private void Load()
     {
+        var useAutocalib = _localSettingsService.ReadSetting("AppSettings_UseAutocalib", false);
+        FaceAutocalib = useAutocalib ? new AutocalibOptimized(Utils.FaceRawExpressions) : null;
+
         var parameters = _localSettingsService.ReadSetting<ConcurrentDictionary<string, CalibrationParameter>?>("CalibrationParams");
         _expressionSettings.Clear();
         if (parameters == null)
@@ -190,6 +193,8 @@ public class CalibrationService : ICalibrationService
                 _expressionSettings[parameterName] = param ?? new CalibrationParameter(0f, 1f, 0f, 1f);
             }
         }
+
+
     }
 
     public void ResetValues()
