@@ -27,8 +27,7 @@ public sealed class IpCameraCapture(string url, ILogger logger) : Capture(url, l
 
     public override Task<bool> StartCapture()
     {
-        Task.Run(() => StartStreaming(Source, null, null, _cancellationTokenSource.Token, 1024,
-            256 * 256)); // Size of Babble frame
+        Task.Run(() => StartStreaming(Source, null, null, _cancellationTokenSource.Token)); // Size of Babble frame
         IsReady = true;
         return Task.FromResult(true);
     }
