@@ -96,10 +96,28 @@
           </Grid>
         </Expander.Header>
         <StackPanel Spacing="12">
-          <TextBlock
-            FontStyle="Italic"
-            TextWrapping="Wrap"
-            Text="{x:Static assets:Resources.Settings_OSC_VRCFT_Warning}" />
+          <Border
+            Background="Orange"
+            CornerRadius="8"
+            Padding="16,12">
+            <Grid ColumnDefinitions="Auto,12,*">
+              <PathIcon
+                Grid.Column="0"
+                Data="{StaticResource WarningRegular}"
+                Foreground="Black"
+                Height="20"
+                Width="20" />
+              <StackPanel Grid.Column="2" Spacing="4">
+                <TextBlock
+                  FontSize="14"
+                  FontWeight="DemiBold"
+                  Foreground="Black"
+                  Text="{x:Static assets:Resources.Settings_OSC_VRCFT_Warning}"
+                  TextWrapping="Wrap" />
+              </StackPanel>
+            </Grid>
+          </Border>
+
           <Grid
               Margin="0,4"
               ColumnDefinitions="Auto,*,Auto"

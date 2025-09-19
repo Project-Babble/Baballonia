@@ -78,6 +78,7 @@
                       FontSize="16"
                       FontWeight="SemiBold"
                       Foreground="Black"
+                      TextWrapping="Wrap"
                       Text="{x:Static assets:Resources.AdminWarning_Header}" />
                   <TextBlock
                       FontSize="14"
