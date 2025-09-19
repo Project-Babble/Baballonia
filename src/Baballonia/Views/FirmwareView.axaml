@@ -236,10 +236,20 @@
                     </Grid>
                   </Border>
 
-                  <Grid ColumnDefinitions="*,Auto">
+                  <Grid ColumnDefinitions="*,Auto,12,Auto">
                     <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Resources.Firmware_Type_To_Flash}" />
-                    <ComboBox Grid.Column="1" ItemsSource="{Binding AvailableFirmwareTypes}"
-                              SelectedItem="{Binding SelectedFirmwareType}">
+                    <Button
+                      Click="CustomFirmwareLoad"
+                      Grid.Column="1">
+                      <Button.Content>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                          <PathIcon Data="{StaticResource FolderOpenVerticalRegular}" />
+                          <TextBlock Text="{x:Static assets:Resources.Firmware_Custom_Firmware_Load}" VerticalAlignment="Center" />
+                        </StackPanel>
+                      </Button.Content>
+                    </Button>
+                    <ComboBox Width="200" Grid.Column="3" ItemsSource="{Binding AvailableFirmwareTypes}"
+                              SelectedIndex="{Binding SelectedFirmwareIndex}">
                     </ComboBox>
                   </Grid>
 

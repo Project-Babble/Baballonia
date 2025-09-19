@@ -729,4 +729,7 @@
   <data name="Home_Eye_Load_Model" xml:space="preserve">
     <value>Load Eye Model</value>
   </data>
+  <data name="Firmware_Custom_Firmware_Load" xml:space="preserve">
+    <value>Load Custom Firmware</value>
+  </data>
 </root>

@@ -367,6 +367,15 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Load Custom Firmware.
+        /// </summary>
+        public static string Firmware_Custom_Firmware_Load {
+            get {
+                return ResourceManager.GetString("Firmware_Custom_Firmware_Load", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Toggle wired/wireless mode.
         /// </summary>
         public static string Firmware_Device_Configuration_Description {
