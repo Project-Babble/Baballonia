@@ -5,13 +5,13 @@ namespace Baballonia.Contracts;
 
 public interface ICalibrationService
 {
-    Task SetExpression(string expression, float value);
+    void SetExpression(string expression, float value);
 
     CalibrationParameter GetExpressionSettings(string parameterName);
 
-    Task<float> GetExpressionSetting(string expression);
-    Task ResetValues();
-    Task ResetMinimums();
-    Task ResetMaximums();
+    float GetExpressionSetting(string expression);
+    void ResetValues();
+    void ResetMinimums();
+    void ResetMaximums();
 
 }

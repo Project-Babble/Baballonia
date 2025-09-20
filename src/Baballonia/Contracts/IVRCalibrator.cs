@@ -1,11 +1,8 @@
-using System.Threading.Tasks;
-using Baballonia.Models;
-using Baballonia.Services.Inference;
-using Baballonia.ViewModels.SplitViewPane;
+using System;
 
 namespace Baballonia.Contracts;
 
-public interface IVRCalibrator
+public interface IVRCalibrator : IDisposable
 {
 
 }

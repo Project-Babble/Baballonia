@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -6,54 +7,26 @@ using System.IO.Ports;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Controls;
 using Avalonia.Threading;
+using Baballonia.Assets;
 using Baballonia.Contracts;
+using Baballonia.Models;
 using Baballonia.Services;
 using Baballonia.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Logging;
 
 namespace Baballonia.ViewModels.SplitViewPane;
 
-public partial class FirmwareViewModel : ViewModelBase
+public partial class FirmwareViewModel : ViewModelBase, IDisposable
 {
-    #region Services and Dependencies
-
-    private readonly GithubService _githubService;
-    private readonly FirmwareService _firmwareService;
-    private readonly ILocalSettingsService _settingsService;
-
-    #endregion
-
-    #region Properties
-
-    [ObservableProperty]
-    private bool _isDeviceSelected;
-
-    [ObservableProperty]
-    private bool _isWirelessFirmware;
-
-    [ObservableProperty]
-    private bool _wirelessWarningVisible;
-
-    [ObservableProperty]
-    private bool _isFlashing;
-
-    [ObservableProperty]
-    private bool _isFinished;
-
-    [ObservableProperty]
-    private string _wifiSsid = string.Empty;
-
-    [ObservableProperty]
-    private string _wifiPassword = string.Empty;
-
-    [ObservableProperty]
-    private ObservableCollection<string> _availableFirmwareTypes = new();
-
-    [ObservableProperty]
-    private string? _selectedFirmwareType;
+    private readonly FirmwareService _firmwareService = Ioc.Default.GetRequiredService<FirmwareService>();
+    private readonly ILogger<FirmwareViewModel> _logger = Ioc.Default.GetRequiredService<ILogger<FirmwareViewModel>>();
+    private readonly Dictionary<string, FirmwareSession> _firmwareSessions = new();
+    private readonly Dictionary<string, CancellationTokenSource> _animationCancellationTokens = new();
 
     [ObservableProperty]
     private ObservableCollection<string> _availableSerialPorts = new();
@@ -62,294 +35,326 @@ public partial class FirmwareViewModel : ViewModelBase
     private ObservableCollection<string> _availableWifiNetworks = new();
 
     [ObservableProperty]
+    private ObservableCollection<string> _availableFirmwareTypes = new();
+
+    [ObservableProperty]
+    private string _selectedFirmwareType = "babble_multimodal_firmware_1.0.0.bin";
+
+    [ObservableProperty]
     private string? _selectedSerialPort;
 
-    public bool IsReadyToFlashFirmwareButWireless =>
-        !string.IsNullOrEmpty(SelectedSerialPort) &&
-        !string.IsNullOrEmpty(SelectedFirmwareType) &&
-        IsWirelessFirmware &&
-        !string.IsNullOrEmpty(WifiSsid) &&
-        !string.IsNullOrEmpty(WifiPassword);
+    [ObservableProperty]
+    private string? _trackerComboBox = Resources.Firmware_TrackerComboBox_Default;
 
-    public bool IsReadyToFlashFirmware =>
-        !string.IsNullOrEmpty(SelectedSerialPort) &&
-        !string.IsNullOrEmpty(SelectedFirmwareType) &&
-        (!IsWirelessFirmware ||
-         (!string.IsNullOrEmpty(WifiSsid) && !string.IsNullOrEmpty(WifiPassword)));
+    [ObservableProperty]
+    private string _wifiSsid;
 
-    #endregion
+    [ObservableProperty]
+    private string _wifiPassword;
 
-    #region Commands
+    // [ObservableProperty]
+    // private string _mdns = "openiris";
 
-    public IRelayCommand SendWifiCredsCommand { get; }
-    public IRelayCommand RefreshWifiListCommand { get; }
-    public IRelayCommand RefreshSerialPortsCommand { get; }
-    public IRelayCommand FlashFirmwareCommand { get; }
-    public IRelayCommand DismissWirelessWarningCommand { get; }
+    [ObservableProperty]
+    private bool _isDeviceSelectionPresent;
 
-    #endregion
+    [ObservableProperty]
+    private bool _isValidDeviceSelected;
+
+    [ObservableProperty]
+    private bool _isFlashing;
+
+    [ObservableProperty]
+    private bool _isFinished;
+
+    [ObservableProperty]
+    private string? _modeSetButton = Resources.Firmware_ModeSetButton_Default;
+
+    [ObservableProperty]
+    private string? _wifiSetButton = Resources.Firmware_WifiSetButton_Default;
+
+    [ObservableProperty]
+    private string? _wifiScanButton = Resources.Firmware_WifiScanButton_Default;
+
+    [ObservableProperty]
+    private string? _selectTracker = Resources.Firmware_SelectTracker_Default;
+
+    [ObservableProperty]
+    private bool _hasScanned;
+
+    [ObservableProperty]
+    private string? _onRefreshDevicesButton = Resources.Firmware_RefreshDevices_Default;
+
+    [ObservableProperty] private object? _deviceModeSelectedItem;
 
     public FirmwareViewModel()
     {
-        // Initialize services
-        _githubService = Ioc.Default.GetRequiredService<GithubService>();
-        _firmwareService = Ioc.Default.GetRequiredService<FirmwareService>();
-        _settingsService = Ioc.Default.GetService<ILocalSettingsService>()!;
-        _settingsService.Load(this);
-
-        // Initialize commands
-        RefreshWifiListCommand = new RelayCommand(RefreshWifiNetworks);
-        SendWifiCredsCommand = new RelayCommand(SendDeviceWifiCredentials);
-        RefreshSerialPortsCommand = new RelayCommand(RefreshSerialPorts);
-        FlashFirmwareCommand = new RelayCommand(FlashDeviceFirmware, () => IsReadyToFlashFirmware && !IsFlashing);
-        DismissWirelessWarningCommand = new RelayCommand(OnDismissWirelessWarning);
-
-        // Initialize events
-        _firmwareService.OnFirmwareUpdateStart += HandleFirmwareUpdateStart;
-        _firmwareService.OnFirmwareUpdateError += msg => Debug.WriteLine(msg);
-        _firmwareService.OnFirmwareUpdateComplete += HandleFirmwareUpdateComplete;
-
-        // Initial state setup
-        RefreshSerialPorts();
-        RefreshWifiNetworks();
-        LoadAvailableFirmwareTypesAsync();
-
-        // Setup property changed handlers
-        SetupPropertyChangeHandlers();
-    }
-
-    private void SetupPropertyChangeHandlers()
-    {
-        PropertyChanged += (_, args) =>
+        AvailableFirmwareTypes.Clear();
+        var binariesPath = Path.Combine(AppContext.BaseDirectory, "Firmware", "Binaries");
+        var binaries = Directory.GetFiles(binariesPath, "*.bin");
+        foreach (var bin in binaries)
         {
-            switch (args.PropertyName)
-            {
-                case nameof(SelectedSerialPort):
-                    IsDeviceSelected = !string.IsNullOrEmpty(SelectedSerialPort);
-                    OnPropertyChanged(nameof(IsReadyToFlashFirmware));
-                    OnPropertyChanged(nameof(IsReadyToFlashFirmwareButWireless));
-                    break;
-
-                case nameof(SelectedFirmwareType):
-                    if (!string.IsNullOrEmpty(SelectedFirmwareType))
-                    {
-                        IsWirelessFirmware = !SelectedFirmwareType.Contains("Babble_USB");
-                        if (IsWirelessFirmware)
-                        {
-                            RefreshWifiNetworks();
-                        }
-                        OnPropertyChanged(nameof(IsReadyToFlashFirmware));
-                        OnPropertyChanged(nameof(IsReadyToFlashFirmwareButWireless));
-                    }
-                    break;
-
-                case nameof(WifiSsid):
-                case nameof(WifiPassword):
-                    if (IsWirelessFirmware)
-                    {
-                        OnPropertyChanged(nameof(IsReadyToFlashFirmware));
-                        OnPropertyChanged(nameof(IsReadyToFlashFirmwareButWireless));
-                    }
-                    break;
-            }
-
-            // Re-evaluate command's CanExecute status
-            FlashFirmwareCommand.NotifyCanExecuteChanged();
-        };
-    }
-
-    #region UI Event Handlers
-
-    private void OnDismissWirelessWarning()
-    {
-        WirelessWarningVisible = false;
-    }
-
-    private void HandleFirmwareUpdateStart()
-    {
-        Dispatcher.UIThread.Post(() =>
-        {
-            IsFlashing = true;
-            IsFinished = false;
-            FlashFirmwareCommand.NotifyCanExecuteChanged();
-        });
-    }
-
-    private void HandleFirmwareUpdateComplete()
-    {
-        Dispatcher.UIThread.Post(() =>
-        {
-            IsFlashing = false;
-
-            if (IsWirelessFirmware)
-            {
-                WirelessWarningVisible = true;
-            }
-            else
-            {
-                IsFinished = true;
-            }
-
-            FlashFirmwareCommand.NotifyCanExecuteChanged();
-        });
-    }
-
-    #endregion
-
-    #region Operations
-
-    public void RefreshWifiNetworks()
-    {
-        AvailableWifiNetworks.Clear();
-
-        foreach (var port in _firmwareService.GetWirelessCredentials(SelectedSerialPort!))
-        {
-            AvailableWifiNetworks.Add(port);
+            AvailableFirmwareTypes.Add(Path.GetFileName(bin));
         }
     }
 
-    public void RefreshSerialPorts()
-    {
-        AvailableSerialPorts.Clear();
+    private readonly ProgressBar _progressBar;
 
-        foreach (var port in SerialPort.GetPortNames())
-        {
-            AvailableSerialPorts.Add(port);
-        }
-    }
-
-    private async void LoadAvailableFirmwareTypesAsync()
+    private async Task AnimateEllipsesAsync(string baseText, string propertyName, CancellationToken cancellationToken = default)
     {
+        var ellipsesStates = new[] { ".", "..", "..." };
+        var currentIndex = 0;
+
         try
         {
-            var githubRelease = await _githubService.GetReleases("EyeTrackVR", "OpenIris");
-
-            await Dispatcher.UIThread.InvokeAsync(() =>
+            while (!cancellationToken.IsCancellationRequested)
             {
-                AvailableFirmwareTypes.Clear();
-                foreach (var asset in githubRelease.assets)
+                var animatedText = $"{baseText}{ellipsesStates[currentIndex]}";
+
+                await Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    if (asset.name.ToLower().Contains("babble"))
+                    switch (propertyName)
                     {
-                        AvailableFirmwareTypes.Add(asset.name);
+                        case nameof(OnRefreshDevicesButton):
+                            OnRefreshDevicesButton = animatedText;
+                            break;
+                        case nameof(WifiScanButton):
+                            WifiScanButton = animatedText;
+                            break;
+                        case nameof(ModeSetButton):
+                            ModeSetButton = animatedText;
+                            break;
+                        case nameof(WifiSetButton):
+                            WifiSetButton = animatedText;
+                            break;
                     }
-                }
-            });
+                });
+
+                currentIndex = (currentIndex + 1) % ellipsesStates.Length;
+                await Task.Delay(500, cancellationToken); // Update every 500ms
+            }
         }
-        catch (Exception ex)
+        catch (OperationCanceledException)
         {
-            // Log or handle the exception
-            System.Diagnostics.Debug.WriteLine($"Error loading firmware types: {ex.Message}");
+            // Animation was cancelled, which is expected
         }
     }
 
-    private void SendDeviceWifiCredentials()
+    private void StartButtonAnimation(string baseText, string propertyName)
     {
-        Dispatcher.UIThread.Post(() => IsFlashing = true);
-        _firmwareService.SetWirelessCredentials(SelectedSerialPort!, WifiSsid, WifiPassword);
-        Dispatcher.UIThread.Post(() => IsFlashing = false);
-        Dispatcher.UIThread.Post(() => IsFinished = true);
+        StopButtonAnimation(propertyName);
+
+        var cts = new CancellationTokenSource();
+        _animationCancellationTokens[propertyName] = cts;
+
+        _ = Task.Run(async () => await AnimateEllipsesAsync(baseText, propertyName, cts.Token));
     }
 
-    private async void FlashDeviceFirmware()
+    private void StopButtonAnimation(string propertyName)
     {
-        if (string.IsNullOrEmpty(SelectedFirmwareType) || string.IsNullOrEmpty(SelectedSerialPort))
+        if (_animationCancellationTokens.TryGetValue(propertyName, out var cts))
         {
-            return;
+            cts.Cancel();
+            cts.Dispose();
+            _animationCancellationTokens.Remove(propertyName);
         }
+    }
 
-        string? tempDir = null;
-        CancellationTokenSource cts = new CancellationTokenSource();
+    partial void OnSelectedSerialPortChanged(string? oldValue, string? newValue)
+    {
+        IsDeviceSelectionPresent = !string.IsNullOrEmpty(newValue);
+        if (IsDeviceSelectionPresent)
+        {
+            SelectedSerialPort = newValue;
+        }
+        else
+        {
+            IsValidDeviceSelected = false;
+        }
+    }
 
-        try
+    [RelayCommand]
+    private async Task SelectSerialPort()
+    {
+        if (IsDeviceSelectionPresent)
         {
             await Task.Run(async () =>
             {
-                var releases = await _githubService.GetReleases("EyeTrackVR", "OpenIris");
-                var asset = releases.assets.FirstOrDefault(a => a.name == SelectedFirmwareType);
+                // If we haven't already refreshed, create the new firmware session for the
+                // Manually typed in tracker
+                if (!_firmwareSessions.ContainsKey(SelectedSerialPort!))
+                    _firmwareSessions.Add(SelectedSerialPort!, _firmwareService.StartSession(CommandSenderType.Serial, SelectedSerialPort!));
 
-                if (asset == null)
+                var res = await TrySendCommandAsync(new FirmwareRequests.SetPausedRequest(true), TimeSpan.FromSeconds(5));
+                IsValidDeviceSelected = !string.IsNullOrWhiteSpace(res);
+                if (IsValidDeviceSelected)
                 {
-                    throw new Exception($"Selected firmware {SelectedFirmwareType} not found");
+                    SelectTracker = Resources.Firmware_SelectTracker_Connected;
+                    await Task.Delay(3000);
+                    SelectTracker = Resources.Firmware_SelectTracker_Default;
                 }
-
-                tempDir = Directory.CreateTempSubdirectory().FullName;
-                var pathToBinary = await _githubService.DownloadAndExtractOpenIrisRelease(
-                    tempDir,
-                    asset.browser_download_url,
-                    asset.name);
-
-                _firmwareService.UploadFirmware(SelectedSerialPort!, pathToBinary.firmwarePath);
-
-                if (IsWirelessFirmware)
+                else
                 {
-                    // Wait for user to acknowledge reconnection
-                    var wirelessReconnectionEvent = new TaskCompletionSource<bool>();
-
-                    // Set up a one-time event handler to catch when warning is dismissed
-                    void WirelessWarningHandler(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-                    {
-                        if (e.PropertyName == nameof(WirelessWarningVisible) && !WirelessWarningVisible)
-                        {
-                            wirelessReconnectionEvent.SetResult(true);
-                            PropertyChanged -= WirelessWarningHandler;
-                        }
-                    }
-
-                    PropertyChanged += WirelessWarningHandler;
-
-                    // Wait for user to dismiss the warning or for timeout
-                    var timeoutTask = Task.Delay(Timeout.InfiniteTimeSpan, cts.Token);
-                    var completedTask = await Task.WhenAny(wirelessReconnectionEvent.Task, timeoutTask);
-
-                    // Only send credentials if not timed out and not canceled
-                    if (completedTask == wirelessReconnectionEvent.Task && !cts.Token.IsCancellationRequested)
-                    {
-                        SendDeviceWifiCredentials();
-                    }
+                    SelectTracker = Resources.Firmware_SelectTracker_NoResponse;
+                    await Task.Delay(3000);
+                    SelectTracker = Resources.Firmware_SelectTracker_Default;
                 }
-            }, cts.Token);
-        }
-        catch (TaskCanceledException)
-        {
-            // Operation was canceled, no need for additional handling
-        }
-        catch (Exception ex)
-        {
-            // Log or display error to user
-            Debug.WriteLine($"Error during firmware update: {ex.Message}");
-            IsFlashing = false;
-            IsFinished = false;
-        }
-        finally
-        {
-            cts.Dispose();
-
-            // Clean up temp directory
-            if (tempDir != null && Directory.Exists(tempDir))
-            {
-                try
-                {
-                    Directory.Delete(tempDir, true);
-                }
-                catch
-                {
-                    // Ignore cleanup errors
-                }
-            }
+            });
         }
     }
 
-    #endregion
-
-    #region Cleanup
-
-    // Called when the ViewModel is no longer needed
-    public void Cleanup()
+    [RelayCommand]
+    private async Task RefreshSerialPorts()
     {
-        _firmwareService.OnFirmwareUpdateStart -= HandleFirmwareUpdateStart;
-        _firmwareService.OnFirmwareUpdateComplete -= HandleFirmwareUpdateComplete;
+        AvailableSerialPorts.Clear();
+        _firmwareSessions.Clear();
+
+        await Task.Run(async () =>
+        {
+            StartButtonAnimation(Resources.Firmware_RefreshDevices_Refreshing, nameof(OnRefreshDevicesButton));
+
+            var response = await _firmwareService.ProbeComPortsAsync(TimeSpan.FromSeconds(10));
+            TrackerComboBox = string.Format(Resources.Firmware_RefreshDevices_Found, response.Length);
+            foreach (var port in response)
+            {
+                // Only add devices that need a first time set up - IE ones with a heartbeat
+                await Dispatcher.UIThread.InvokeAsync(() => AvailableSerialPorts.Add(port));
+                _firmwareSessions.Add(port, _firmwareService.StartSession(CommandSenderType.Serial, port));
+            }
+
+            StopButtonAnimation(nameof(OnRefreshDevicesButton));
+            await Dispatcher.UIThread.InvokeAsync(() => OnRefreshDevicesButton = Resources.Firmware_RefreshDevices_Default);
+        });
     }
 
-    #endregion
+    [RelayCommand]
+    private async Task RefreshWifiNetworks()
+    {
+        AvailableWifiNetworks.Clear();
+
+        StartButtonAnimation(Resources.Firmware_WifiScanButton_Scanning, nameof(WifiScanButton));
+
+        // By this point we should have a valid serial port, no need to do any error wrapping here
+        var response = await _firmwareSessions[SelectedSerialPort!].SendCommandAsync(new FirmwareRequests.ScanWifiRequest(), TimeSpan.FromSeconds(30));
+        if (response == null)
+        {
+            StopButtonAnimation(nameof(WifiScanButton));
+            WifiScanButton = Resources.Firmware_WifiScanButton_Error;
+            return;
+        }
+
+        var networks = response!.Networks;
+        foreach (var port in networks.
+                     OrderByDescending(network => network.Rssi).
+                     Select(network => network.Ssid).
+                     Where(ssid => !string.IsNullOrEmpty(ssid)))
+        {
+            AvailableWifiNetworks.Add(port);
+        }
+
+        StopButtonAnimation(nameof(WifiScanButton));
+        WifiScanButton = string.Format(Resources.Firmware_WifiScanButton_Success, networks.Count);
+        HasScanned = true;
+    }
+
+    [RelayCommand]
+    private async Task SetDeviceMode()
+    {
+        if (_deviceModeSelectedItem is not ComboBoxItem comboBoxItem)
+            return;
+
+        var m = StringToMode(comboBoxItem.Tag!.ToString()!);
+
+        StartButtonAnimation(Resources.Firmware_ModeSetButton_Setting, nameof(ModeSetButton));
+
+        await TrySendCommandAsync(new FirmwareRequests.SetModeRequest(m), TimeSpan.FromSeconds(30));
+
+        StopButtonAnimation(nameof(ModeSetButton));
+        ModeSetButton = Resources.Firmware_ModeSetButton_Success;
+        await Task.Delay(2000);
+        ModeSetButton = Resources.Firmware_ModeSetButton_Default;
+    }
+
+    [RelayCommand]
+    private async Task SendDeviceWifiCredentials()
+    {
+        StartButtonAnimation(Resources.Firmware_WifiSetButton_Setting, nameof(WifiSetButton));
+
+        var res = await TrySendCommandAsync(new FirmwareRequests.SetWifiRequest(WifiSsid, WifiPassword), TimeSpan.FromSeconds(30));
+
+        StopButtonAnimation(nameof(WifiSetButton));
+        WifiSetButton = string.IsNullOrEmpty(res) ? Resources.Firmware_WifiSetButton_Error : Resources.Firmware_WifiSetButton_Success;
+        await Task.Delay(2000);
+        WifiSetButton = Resources.Firmware_WifiSetButton_Default;
+
+        //if (!string.IsNullOrEmpty(Mdns))
+        //{
+        //    _firmwareSessions[SelectedSerialPort!].SendCommand(new FirmwareRequests.SetMdns(Mdns), TimeSpan.FromSeconds(30));
+        //}
+    }
+
+    [RelayCommand]
+    private async Task FlashFirmware()
+    {
+        if (_firmwareSessions.TryGetValue(SelectedSerialPort!, out FirmwareSession? value))
+        {
+            // True, this is a multimodal device that needs to be released prior to flashing
+            await TrySendCommandAsync(new FirmwareRequests.SetPausedRequest(false), TimeSpan.FromSeconds(5));
+            value.Dispose();
+        }
+        else if (!_firmwareService.FindAvailableSerialPorts().Contains(SelectedSerialPort))
+        {
+            // If we don't have a multimodal device, this is most likely a legacy device we're upgrading. No need to release!
+            // However, we need to make sure the user's input is an actual valid serial port
+            return;
+        }
+
+        IsFlashing = true;
+        await _firmwareService.UploadFirmwareAsync(SelectedSerialPort!, Path.Combine("Firmware", "Binaries", SelectedFirmwareType));
+        IsFlashing = false;
+
+        IsFinished = true;
+        _firmwareSessions[SelectedSerialPort!] = _firmwareService.StartSession(CommandSenderType.Serial, SelectedSerialPort!);
+        await Task.Delay(5000);
+        IsFinished = false;
+    }
+
+    private static FirmwareRequests.Mode StringToMode(string mode)
+    {
+        return mode switch
+        {
+            "auto" => FirmwareRequests.Mode.Auto,
+            "wifi" => FirmwareRequests.Mode.Wifi,
+            "uvc" => FirmwareRequests.Mode.UVC,
+            _ => FirmwareRequests.Mode.Auto
+        };
+    }
+
+    private async Task<string?> TrySendCommandAsync(IFirmwareRequest request, TimeSpan timeSpan)
+    {
+        try
+        {
+            return await _firmwareSessions[SelectedSerialPort!].SendCommandAsync(request, timeSpan);
+
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("Error while sending command {Exception}", e);
+            return await Task.FromResult(string.Empty);
+        }
+    }
+
+    public void Dispose()
+    {
+        // Stop all button animations
+        foreach (var propertyName in _animationCancellationTokens.Keys.ToList())
+        {
+            StopButtonAnimation(propertyName);
+        }
+
+        foreach (var sessions in _firmwareSessions.Values)
+        {
+            sessions.SendCommand(new FirmwareRequests.SetPausedRequest(false), TimeSpan.FromSeconds(5));
+        }
+    }
 }

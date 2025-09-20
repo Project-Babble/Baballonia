@@ -18,6 +18,8 @@ public class FirmwareSession
     private ICommandSender _commandSender;
     private ILogger _logger;
 
+    JsonExtractor jsonExtractor = new JsonExtractor();
+
     private SemaphoreSlim _lock = new(1, 1);
 
     JsonSerializerOptions _options = new()
@@ -52,14 +54,13 @@ public class FirmwareSession
         _commandSender.WriteLine(payload);
     }
 
-    private JsonDocument? ReadResponse(string responseJsonRootKey)
+    private JsonDocument? ReadResponse(string responseJsonRootKey, TimeSpan timeout)
     {
-        JsonExtractor jsonExtractor = new JsonExtractor();
         while (true)
         {
             Thread.Sleep(10); // give it some breathing time
 
-            JsonDocument json = jsonExtractor.ReadUntilValidJson(() => _commandSender.ReadLine());
+            JsonDocument json = jsonExtractor.ReadUntilValidJson(() => _commandSender.ReadLine(timeout), timeout);
             _logger.LogDebug("Received json: {}", json.RootElement.GetRawText());
             if (JsonHasPrefix(json, responseJsonRootKey))
                 return json;
@@ -88,7 +89,7 @@ public class FirmwareSession
                 if (DateTime.Now - startTime > timeout)
                     throw new TimeoutException("Timeout reached");
 
-                var res = ReadResponse("heartbeat");
+                var res = ReadResponse("heartbeat", timeout);
                 return res?.Deserialize<FirmwareResponses.Heartbeat>();
             }
         }
@@ -103,7 +104,7 @@ public class FirmwareSession
         }
     }
 
-    public string? SendCommand(IFirmwareRequest request)
+    public string? SendCommand(IFirmwareRequest request, TimeSpan timeout)
     {
         _lock.Wait();
         try
@@ -111,7 +112,7 @@ public class FirmwareSession
             var genericReqList = new { commands = new[] { request } };
             var serialized = JsonSerializer.Serialize(genericReqList, _options);
             SendCommand(serialized);
-            var jsonDoc = ReadResponse("results");
+            var jsonDoc = ReadResponse("results", timeout);
             var response = jsonDoc?.Deserialize<FirmwareResponses.GenericResponse>();
             if (response == null)
                 return null;
@@ -131,7 +132,7 @@ public class FirmwareSession
         }
     }
 
-    public T? SendCommand<T>(IFirmwareRequest<T> request)
+    public T? SendCommand<T>(IFirmwareRequest<T> request, TimeSpan timeout)
     {
         _lock.Wait();
         try
@@ -144,15 +145,15 @@ public class FirmwareSession
             // special case because a list of networks comes in a separate json
             if (typeof(T) == typeof(FirmwareResponses.WifiNetworkResponse))
             {
-                var networks = ReadResponse("networks");
+                var networks = ReadResponse("networks", timeout);
                 if (networks == null)
                     return default;
 
-                ReadResponse("results"); // to discard the actual response
+                ReadResponse("results", timeout); // to discard the actual response
                 return networks.Deserialize<T>();
             }
 
-            var jsonDoc = ReadResponse("results");
+            var jsonDoc = ReadResponse("results", timeout);
             var response = jsonDoc?.Deserialize<FirmwareResponses.GenericResponse>();
             if (response == null)
                 return default;
@@ -171,10 +172,17 @@ public class FirmwareSession
         }
     }
 
-    public async Task<T?> SendCommandAsync<T>(IFirmwareRequest<T> request)
+    public async Task<T?> SendCommandAsync<T>(IFirmwareRequest<T> request, TimeSpan timeSpan)
     {
         return await Task.Run(() =>
-            SendCommand(request)
+            SendCommand(request, timeSpan)
+        );
+    }
+
+    public async Task<string?> SendCommandAsync(IFirmwareRequest request, TimeSpan timeSpan)
+    {
+        return await Task.Run(() =>
+            SendCommand(request, timeSpan)
         );
     }
 
@@ -182,6 +190,7 @@ public class FirmwareSession
     {
         return await Task.Run(() => WaitForHeartbeat());
     }
+
     public async Task<FirmwareResponses.Heartbeat?> WaitForHeartbeatAsync(TimeSpan timeout)
     {
         return await Task.Run(() => WaitForHeartbeat(timeout));

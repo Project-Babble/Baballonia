@@ -30,6 +30,7 @@ public class OscSendService
         _cts = new CancellationTokenSource();
 
         _oscTarget = oscTarget;
+        UpdateTarget(new IPEndPoint(IPAddress.Parse(_oscTarget.DestinationAddress), _oscTarget.OutPort));
 
         _oscTarget.PropertyChanged += (_, args) =>
         {
@@ -70,6 +71,10 @@ public class OscSendService
         catch (SocketException ex)
         {
             _logger.LogWarning($"Failed to bind to sender endpoint: {endpoint}. {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Unexpected Exception while binding to sender endpoint: {endpoint}. {ex.Message}");
         }
         finally
         {

@@ -4,6 +4,7 @@
     mc:Ignorable="d"
     x:Class="Baballonia.Views.OnboardingView"
     x:DataType="viewModels:OnboardingViewModel"
+    xmlns:assets="clr-namespace:Baballonia.Assets"
     xmlns="https://github.com/avaloniaui"
     xmlns:controls="clr-namespace:HyperText.Avalonia.Controls;assembly=HyperText.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -24,7 +25,6 @@
             BorderThickness="1"
             CornerRadius="8"
             HorizontalAlignment="Center"
-            MaxHeight="500"
             MaxWidth="500"
             Padding="24"
             VerticalAlignment="Center">
@@ -44,7 +44,7 @@
 
                     <Button
                         Command="{Binding FinishCommand}"
-                        Content="Skip"
+                        Content="{x:Static assets:Resources.Onboarding_Skip_Button}"
                         Grid.Column="1"
                         HorizontalAlignment="Right"
                         Padding="12,6"
@@ -66,7 +66,7 @@
                         <TextBlock
                             FontSize="16"
                             HorizontalAlignment="Center"
-                            Text="This wizard will guide you through setting up the new Babble App."
+                            Text="{x:Static assets:Resources.Onboarding_Welcome_Message}"
                             TextWrapping="Wrap" />
                     </StackPanel>
 
@@ -79,56 +79,28 @@
                                 Data="{StaticResource DeveloperBoardRegular}"
                                 Height="64"
                                 Width="64" />
-                            <PathIcon
-                                Data="{StaticResource WirelessRegular}"
-                                Height="64"
-                                Width="64" />
                         </StackPanel>
 
                         <TextBlock
                             FontSize="20"
                             FontWeight="Bold"
-                            Text="Wired or wireless?" />
+                            Text="{x:Static assets:Resources.Onboarding_Wireless_Header}" />
 
                         <TextBlock
                             FontSize="16"
-                            Text="If you want to use your tracker wirelessly, you'll need to flash your device. You can download the firmware flashing app below."
+                            Text="{x:Static assets:Resources.Onboarding_Wireless_Description1}"
                             TextWrapping="Wrap" />
-
-                        <Grid ColumnDefinitions="Auto,12,*" RowDefinitions="Auto,Auto">
-                            <TextBlock
-                                FontSize="16"
-                                Grid.Column="0"
-                                Grid.Row="0"
-                                Text="Download link:"
-                                VerticalAlignment="Center" />
-                            <controls:Hyperlink
-                                Alias="EyeTrackVR Firmware Flashing Tool"
-                                Command="{Binding OpenEtvrModuleUrl}"
-                                FontSize="16"
-                                Grid.Column="2"
-                                Grid.Row="0"
-                                Url="{Binding EtvrFirmwareFlashingTool}" />
-
-                            <TextBlock
-                                FontSize="16"
-                                Grid.Column="0"
-                                Grid.Row="1"
-                                Text="How to use it:"
-                                VerticalAlignment="Center" />
-                            <controls:Hyperlink
-                                Alias="Babble Docs Page"
-                                Command="{Binding OpenBabbleModuleUrl}"
-                                FontSize="16"
-                                Grid.Column="2"
-                                Grid.Row="1"
-                                Url="{Binding BabbleFirmwareDocs}" />
-                        </Grid>
 
                         <TextBlock
-                            FontSize="16"
-                            Text="If you want to use your tracker wired, continue!"
-                            TextWrapping="Wrap" />
+                          FontSize="16"
+                          Text="{x:Static assets:Resources.Onboarding_Wireless_Description2}"
+                          TextWrapping="Wrap" />
+
+                        <TextBlock
+                          FontSize="16"
+                          FontStyle="Italic"
+                          Text="{x:Static assets:Resources.Onboarding_Wireless_Note}"
+                          TextWrapping="Wrap" />
                     </StackPanel>
 
                     <!--  Assembly Slide  -->
@@ -140,10 +112,10 @@
                         <TextBlock
                             FontSize="20"
                             FontWeight="Bold"
-                            Text="Assemble Your Tracker" />
+                            Text="{x:Static assets:Resources.Onboarding_Assembly_Header}" />
                         <TextBlock
                             FontSize="16"
-                            Text="If you need help putting your tracker together, here's a useful Youtube tutorial!"
+                            Text="{x:Static assets:Resources.Onboarding_Assembly_Description}"
                             TextWrapping="Wrap" />
                         <controls:Hyperlink
                             Alias="Babble Youtube Page"
@@ -161,42 +133,29 @@
                         <TextBlock
                             FontSize="20"
                             FontWeight="Bold"
-                            Text="Where is everything?" />
+                            Text="{x:Static assets:Resources.Onboarding_UI_Header}" />
                         <TextBlock
                             FontSize="16"
                             HorizontalAlignment="Center"
                             MaxWidth="450"
                             TextWrapping="Wrap">
 
-                            <Run Text="1. The" />
-                            <Run FontWeight="Bold" Text="Home Page" />
-                            <Run Text="is where you can set up your cameras, and" />
-                            <Run FontStyle="Italic" Text="calibrate your eye tracking." />
+                            <Run Text="{x:Static assets:Resources.Onboarding_UI_Home_Description}" />
                             <LineBreak />
 
-                            <Run Text="2. The" />
-                            <Run FontWeight="Bold" Text="Eye Calibration Page" />
-                            <Run Text="can be used to tweak your eye tracking beyond a standard calibration." />
+                            <Run Text="{x:Static assets:Resources.Onboarding_UI_Calibration_Description}" />
                             <LineBreak />
 
-                            <Run Text="3. The" />
-                            <Run FontWeight="Bold" Text="Face Calibration Page" />
-                            <Run Text="similar to the Eye Calibration Page, lets you tweak your face tracking." />
+                            <Run Text="{x:Static assets:Resources.Onboarding_UI_Firmware_Description}" />
                             <LineBreak />
 
-                            <Run Text="4. The" />
-                            <Run FontWeight="Bold" Text="Output Page" />
-                            <Run Text="shows the status of the app," />
-                            <Run FontStyle="Italic" Text="errors" />
-                            <Run Text="and other useful information." />
+                            <Run Text="{x:Static assets:Resources.Onboarding_UI_VRChat_Description}" />
                             <LineBreak />
 
-                            <Run Text="5. The" />
-                            <Run FontWeight="Bold" Text="Settings Page" />
-                            <Run Text="is for general app settings, such as" />
-                            <Run FontStyle="Italic" Text="theme, language," />
-                            <Run Text="and more." />
+                            <Run Text="{x:Static assets:Resources.Onboarding_UI_Output_Description}" />
+                            <LineBreak />
 
+                            <Run Text="{x:Static assets:Resources.Onboarding_UI_Settings_Description}" />
                         </TextBlock>
                     </StackPanel>
 
@@ -210,12 +169,14 @@
                             FontSize="24"
                             FontWeight="Bold"
                             HorizontalAlignment="Center"
-                            Text="Setup Complete!" />
+                            Text="{x:Static assets:Resources.Onboarding_Complete_Header}" />
                         <TextBlock
                             FontSize="16"
-                            Text="You're all set to start using the new Babble App!"
+                            Text="{x:Static assets:Resources.Onboarding_Complete_Description1}"
                             TextWrapping="Wrap" />
-                        <TextBlock FontSize="16" Text="You can revisit this page in the settings." />
+                        <TextBlock
+                            FontSize="16"
+                            Text="{x:Static assets:Resources.Onboarding_Complete_Description2}" />
                     </StackPanel>
                 </Carousel>
 
@@ -237,7 +198,7 @@
                                 Data="{StaticResource LeftArrowIcon}"
                                 Height="16"
                                 Width="16" />
-                            <TextBlock Text="Previous" VerticalAlignment="Center" />
+                            <TextBlock Text="{x:Static assets:Resources.Onboarding_Previous_Button}" VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
 

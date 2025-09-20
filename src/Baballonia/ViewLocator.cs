@@ -26,6 +26,7 @@ public class ViewLocator : IDataTemplate
         if (!Utils.IsSupportedDesktopOS) return;
 
         RegisterViewFactory<FirmwareViewModel, FirmwareView>();
+        RegisterViewFactory<VrcViewModel, VrcView>();
         RegisterViewFactory<OnboardingViewModel, OnboardingView>();
     }
 

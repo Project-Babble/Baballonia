@@ -1,30 +1,39 @@
 ;--------------------------------
-; Includes
+;Includes
 
   !include "MUI2.nsh"
   !include "logiclib.nsh"
+  !include "FileFunc.nsh"
 
 ;--------------------------------
-; Custom defines
+;Custom defines
   !define NAME "Baballonia"
   !define APPFILE "Baballonia.Desktop.exe"
-  !define VERSION "1.0.1.1"
+  !define PUBLISHER "dfgHiatus - Paradigm Reality Enhancement Laboratories"
+  !define VERSION "1.1.0.5"
   !define SLUG "${NAME} v${VERSION}"
 
 ;--------------------------------
-; General
+;General
 
   Name "${NAME}"
   OutFile "${NAME} Setup.exe"
-  ; Default install directory in user's AppData folder
+  ;Default install directory in user's AppData folder
   InstallDir "$LOCALAPPDATA\${NAME}"
   InstallDirRegKey HKCU "Software\${NAME}" ""
   RequestExecutionLevel user
 
-;--------------------------------
-; UI
+  SetCompressor /SOLID lzma ; "/FINAL" can be added to prevent anything from changing this later down the line.
+  SetCompressorDictSize 32
+  FileBufSize 64
+  ManifestDPIAware true
+  ;ManifestLongPathAware true ; disabled until the rest of the app is confirmed to have this setup right
+  XPStyle on ; does this even do anything meaningful anymore?
 
-  !define MUI_ICON "assets\IconOpaque_32x32.ico"
+;--------------------------------
+;UI
+
+  !define MUI_ICON "assets\IconOpaque.ico"
   !define MUI_HEADERIMAGE
   !define MUI_WELCOMEFINISHPAGE_BITMAP "assets\MUI_WELCOMEFINISHPAGE_BITMAP.bmp"
   !define MUI_HEADERIMAGE_BITMAP "assets\MUI_HEADERIMAGE_BITMAP.bmp"
@@ -32,9 +41,9 @@
   !define MUI_WELCOMEPAGE_TITLE "${SLUG} Setup"
 
 ;--------------------------------
-; Pages
+;Pages
 
-  ; Installer pages
+  ;Installer pages
   !insertmacro MUI_PAGE_WELCOME
   !insertmacro MUI_PAGE_LICENSE "assets\license.txt"
   !insertmacro MUI_PAGE_COMPONENTS
@@ -42,48 +51,74 @@
   !insertmacro MUI_PAGE_INSTFILES
   !insertmacro MUI_PAGE_FINISH
 
-  ; Uninstaller pages
+  ;Uninstaller pages
   !insertmacro MUI_UNPAGE_CONFIRM
   !insertmacro MUI_UNPAGE_INSTFILES
 
-  ; Set UI language
+  ;Set UI language
   !insertmacro MUI_LANGUAGE "English"
 
 ;--------------------------------
-; Section - Install App
+;Section - Install App
 
   Section "-hidden app"
     SectionIn RO
     SetOutPath "$INSTDIR"
 
-    ; Copy all files except runtimes and Calibration folders
-    File /r /x "runtimes" /x "Calibration" "bin\Release\net8.0\*"
+    ;Copy all files except Calibration, Firmware and publish folders
+    File /r /x "Calibration" /x "Firmware" /x "publish" "bin\Release\net8.0\win-x64\*"
 
-    ; Create runtimes directory and copy only Windows runtimes
-    CreateDirectory "$INSTDIR\runtimes"
-    SetOutPath "$INSTDIR\runtimes"
-    File /r "bin\Release\net8.0\runtimes\win*"
+    ;Create Firmware directory
+    CreateDirectory "$INSTDIR\Firmware"
 
-    ; Create Calibration directory and copy only Windows calibration files
+    ;Copy Windows-only Firmware tooling
+    CreateDirectory "$INSTDIR\Firmware\Windows"
+    SetOutPath "$INSTDIR\Firmware\Windows"
+    File /r "bin\Release\net8.0\win-x64\Firmware\Windows"
+
+    ;Create Windows-only Calibration tooling
     CreateDirectory "$INSTDIR\Calibration"
     SetOutPath "$INSTDIR\Calibration"
-    File /r "bin\Release\net8.0\Calibration\Windows"
+    File /r "bin\Release\net8.0\win-x64\Calibration\Windows"
 
-    ; Reset output path and write registry values
+    ;Copy firmware over
+    CreateDirectory "$INSTDIR\Firmware\Binaries"
+    SetOutPath "$INSTDIR\Firmware\Binaries"
+    File /r "bin\Release\net8.0\win-x64\Firmware\Binaries"
+
+    ;Reset output path and write registry values
     SetOutPath "$INSTDIR"
-    WriteRegStr HKCU "Software\${NAME}" "" $INSTDIR
+
+    ;Get size to show in Control Panel
+    ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
+    IntFmt $0 "0x%08X" $0
+
     WriteUninstaller "$INSTDIR\Uninstall.exe"
+    WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayName" "${NAME}"
+    WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayIcon" "$INSTDIR\${APPFILE}"
+    WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "UninstallString" "$INSTDIR\Uninstall.exe"
+    WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayVersion" "${VERSION}"
+    WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "Publisher" "${PUBLISHER}"
+    WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "InstallLocation" "$INSTDIR"
+    WriteRegDWORD HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "EstimatedSize" "$0"
+
+    CreateShortCut "$SMPROGRAMS\${Name}.lnk" "$INSTDIR\${APPFILE}"
+    CreateShortCut "$SMPROGRAMS\Uninstall ${Name}.lnk" "$INSTDIR\Uninstall.exe"
+
+    ;Launch app when finished
+    ExecShell "" "$INSTDIR\${APPFILE}"
+
   SectionEnd
 
 ;--------------------------------
-; Section - Shortcut
+;Section - Shortcut
 
   Section "Desktop Shortcut" DeskShort
     CreateShortCut "$DESKTOP\${NAME}.lnk" "$INSTDIR\${APPFILE}"
   SectionEnd
 
 ;--------------------------------
-; Descriptions
+;Descriptions
 
   ;Language strings
   LangString DESC_DeskShort ${LANG_ENGLISH} "Create Shortcut on Dekstop."
@@ -94,7 +129,7 @@
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;--------------------------------
-; Remove empty parent directories
+;Remove empty parent directories
 
   Function un.RMDirUP
     !define RMDirUP '!insertmacro RMDirUPCall'
@@ -104,7 +139,7 @@
           Call un.RMDirUP
     !macroend
 
-    ; $0 - current folder
+    ;$0 - current folder
     ClearErrors
 
     Exch $0
@@ -120,20 +155,30 @@
   FunctionEnd
 
 ;--------------------------------
-; Section - Uninstaller
+;Section - Uninstaller
 
 Section "Uninstall"
+
+  ;Prompt to delete local data
+  MessageBox MB_YESNO|MB_ICONQUESTION \
+    "Do you also want to delete local user data/settings (stored under %APPDATA%\ProjectBabble)?" \
+    IDNO skip_userdata
+
+  RMDir /r "$APPDATA\ProjectBabble"
+
+  skip_userdata:
 
   ;Delete Shortcut
   Delete "$DESKTOP\${NAME}.lnk"
 
   ;Delete Uninstall
+  Delete "$SMPROGRAMS\${Name}.lnk"
+  Delete "$SMPROGRAMS\Uninstall ${Name}.lnk"
+  DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}"
   Delete "$INSTDIR\Uninstall.exe"
 
   ;Delete Folder
   RMDir /r "$INSTDIR"
   ${RMDirUP} "$INSTDIR"
-
-  DeleteRegKey /ifempty HKCU "Software\${NAME}"
 
 SectionEnd

@@ -12,29 +12,27 @@ public class ThemeSelectorService(ILocalSettingsService localSettingsService) : 
 
     public ThemeVariant Theme { get; set; } = ThemeVariant.Default;
 
-    public async Task InitializeAsync()
+    public void Initialize()
     {
-        Theme = await LoadThemeFromSettingsAsync();
-        await SetRequestedThemeAsync();
-        await Task.CompletedTask;
+        Theme = LoadThemeFromSettingsAsync();
+        SetRequestedTheme();
     }
 
-    public async Task SetThemeAsync(ThemeVariant theme)
+    public void SetTheme(ThemeVariant theme)
     {
         Theme = theme;
-        await SetRequestedThemeAsync();
-        await SaveThemeInSettingsAsync(Theme);
+        SetRequestedTheme();
+        SaveThemeInSettingsAsync(Theme);
     }
 
-    public Task SetRequestedThemeAsync()
+    public void SetRequestedTheme()
     {
         Dispatcher.UIThread.Invoke(() => Application.Current!.RequestedThemeVariant = Theme);
-        return Task.CompletedTask;
     }
 
-    private async Task<ThemeVariant> LoadThemeFromSettingsAsync()
+    private ThemeVariant LoadThemeFromSettingsAsync()
     {
-        var themeName = await localSettingsService.ReadSettingAsync<string>(SettingsKey, "Default");
+        var themeName = localSettingsService.ReadSetting<string>(SettingsKey, "Default");
         return themeName switch
         {
             "Default" => ThemeVariant.Default,
@@ -44,8 +42,8 @@ public class ThemeSelectorService(ILocalSettingsService localSettingsService) : 
         };
     }
 
-    private async Task SaveThemeInSettingsAsync(ThemeVariant theme)
+    private void SaveThemeInSettingsAsync(ThemeVariant theme)
     {
-        await localSettingsService.SaveSettingAsync(SettingsKey, theme.ToString());
+        localSettingsService.SaveSetting(SettingsKey, theme.ToString());
     }
 }

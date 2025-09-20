@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
@@ -19,61 +20,63 @@ public class LocalSettingsService : ILocalSettingsService
     private readonly string _localApplicationData = Utils.PersistentDataDirectory;
     private readonly string _localSettingsFile;
 
-    private Dictionary<string, JsonElement> _settings;
-    private DebounceFunction debouncedSave;
+    private ConcurrentDictionary<string, JsonElement> _settings;
+    private readonly DebounceFunction _debouncedSave;
 
-    private readonly Task _isInitializedTask;
+    private readonly JsonSerializerOptions _jsonSerializerOptions = new()
+    {
+        WriteIndented = true
+    };
+
     private readonly ILogger<LocalSettingsService> _logger;
 
     public LocalSettingsService(IOptions<LocalSettingsOptions> options, ILogger<LocalSettingsService> logger)
     {
         var opt = options.Value;
 
+        _logger = logger;
         var applicationDataFolder =
             Path.Combine(_localApplicationData, opt.ApplicationDataFolder ?? DefaultApplicationDataFolder);
         _localSettingsFile = opt.LocalSettingsFile ?? Path.Combine(applicationDataFolder, DefaultLocalSettingsFile);
 
-        debouncedSave = new DebounceFunction(async () =>
+        _debouncedSave = new DebounceFunction(async void () =>
         {
-            var json = JsonSerializer.Serialize(_settings, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
+            var json = JsonSerializer.Serialize(_settings, _jsonSerializerOptions);
             // Despite what the docs say, the below does not in fact create a new file if it does not exist
             // However, we can safely assume this file will always exist (created by App.axaml.cs)
             await File.WriteAllTextAsync(_localSettingsFile, json);
             logger.LogInformation("Saving settings");
         }, 2000);
 
-        _settings = new Dictionary<string, JsonElement>();
+        _settings = new ConcurrentDictionary<string, JsonElement>();
 
-        _isInitializedTask = InitializeAsync();
+        Initialize();
     }
 
-    private async Task InitializeAsync()
+    private void Initialize()
     {
         if (!File.Exists(_localSettingsFile))
         {
-            _settings = new Dictionary<string, JsonElement>();
+            _settings = new ConcurrentDictionary<string, JsonElement>();
             return;
         }
 
         try
         {
-            var json = await File.ReadAllTextAsync(_localSettingsFile);
-            _settings = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(json)
-                        ?? new Dictionary<string, JsonElement>();
+            // I've observed this await File.ReadAllTextAsync can just hang forever here
+            // So, it's a File.ReadAllText for now
+            var json = File.ReadAllText(_localSettingsFile);
+            _settings = JsonSerializer.Deserialize<ConcurrentDictionary<string, JsonElement>>(json)
+                        ?? new ConcurrentDictionary<string, JsonElement>();
         }
         catch (Exception)
         {
-            _settings = new Dictionary<string, JsonElement>();
+            _settings = new ConcurrentDictionary<string, JsonElement>();
         }
     }
 
-    public async Task<T?> ReadSettingAsync<T>(string key, T? defaultValue = default, bool forceLocal = false)
+    public T? ReadSetting<T>(string key, T? defaultValue = default, bool forceLocal = false)
     {
-        await _isInitializedTask;
-
         try
         {
             if (_settings.TryGetValue(key, out var obj))
@@ -91,14 +94,13 @@ public class LocalSettingsService : ILocalSettingsService
 
     public void ForceSave()
     {
-        debouncedSave.Force();
+        _debouncedSave.Force();
     }
 
-    public async Task SaveSettingAsync<T>(string key, T value, bool forceLocal = false)
+    public void SaveSetting<T>(string key, T value, bool forceLocal = false)
     {
         if (key == null)
             return;
-        await _isInitializedTask;
 
         try
         {
@@ -110,10 +112,10 @@ public class LocalSettingsService : ILocalSettingsService
             return;
         }
 
-        debouncedSave.Call();
+        _debouncedSave.Call();
     }
 
-    public async Task Load(object instance)
+    public void Load(object instance)
     {
         var type = instance.GetType();
         var properties = type.GetProperties();
@@ -133,7 +135,8 @@ public class LocalSettingsService : ILocalSettingsService
 
             try
             {
-                var setting = await ReadSettingAsync<JsonElement>(settingName, default, savedSettingAttribute.ForceLocal());
+                var setting =
+                    ReadSetting<JsonElement>(settingName, default, savedSettingAttribute.ForceLocal());
                 if (setting.ValueKind != JsonValueKind.Undefined && setting.ValueKind != JsonValueKind.Null)
                 {
                     var value = setting.Deserialize(property.PropertyType);
@@ -155,7 +158,7 @@ public class LocalSettingsService : ILocalSettingsService
         }
     }
 
-    public async Task Save(object instance)
+    public void Save(object instance)
     {
         var type = instance.GetType();
         var properties = type.GetProperties();
@@ -172,7 +175,7 @@ public class LocalSettingsService : ILocalSettingsService
             var savedSettingAttribute = (SavedSettingAttribute)attributes[0];
             var settingName = savedSettingAttribute.GetName();
 
-            await SaveSettingAsync(settingName, property.GetValue(instance), savedSettingAttribute.ForceLocal());
+            SaveSetting(settingName, property.GetValue(instance), savedSettingAttribute.ForceLocal());
         }
     }
 }

@@ -41,9 +41,9 @@
         <PackageReference Include="SkiaSharp.NativeAssets.macOS" Version="3.119.0" Condition="$([MSBuild]::IsOSPlatform('OSX'))" />
 
         <!-- Linux-specific -->
-        <PackageReference Include="Sdcb.OpenCvSharp4.mini.runtime.linux-x64" Version="4.11.0.35" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
-	    <PackageReference Include="Microsoft.ML.OnnxRuntime.Gpu" Version="1.22.0" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
-      <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.119.0" Condition="$([MSBuild]::IsOSPlatform('Linux'))"/>
+        <PackageReference Include="Project-Babble.OpenCvSharp4.mini.runtime.ubuntu.22.04-x64" Version="4.11.0.1" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
+	    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.22.0" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
+        <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.119.0" Condition="$([MSBuild]::IsOSPlatform('Linux'))"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Baballonia.OpenCVCapture\Baballonia.OpenCVCapture.csproj"/>
@@ -159,6 +159,8 @@
 	  <ItemGroup>
 		<ModuleDlls Include="$(OutputPath)Baballonia.SerialCameraCapture.dll" />
 		<ModuleDlls Include="$(OutputPath)Baballonia.OpenCVCapture.dll" />
+        <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.SerialCameraCapture.pdb')" Include="$(OutputPath)Baballonia.SerialCameraCapture.pdb" />
+        <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.OpenCVCapture.pdb')" Include="$(OutputPath)Baballonia.OpenCVCapture.pdb" />
 	  </ItemGroup>
 	  <MakeDir Directories="$(OutputPath)Modules" />
 	  <Copy SourceFiles="@(ModuleDlls)" DestinationFolder="$(OutputPath)Modules\" />
@@ -190,3 +192,4 @@
   </Target>
 
 </Project>
+

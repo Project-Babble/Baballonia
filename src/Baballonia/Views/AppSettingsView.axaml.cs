@@ -33,13 +33,13 @@ public partial class AppSettingsView : UserControl
 
         if (_themeSelectorService.Theme is null)
         {
-            _themeSelectorService.SetThemeAsync(ThemeVariant.Default);
+            _themeSelectorService.SetTheme(ThemeVariant.Default);
             return;
         }
 
         if (string.IsNullOrEmpty(_languageSelectorService.Language))
         {
-            _languageSelectorService.SetLanguageAsync(LanguageSelectorService.DefaultLanguage);
+            _languageSelectorService.SetLanguage(LanguageSelectorService.DefaultLanguage);
             return;
         }
 
@@ -55,11 +55,36 @@ public partial class AppSettingsView : UserControl
         index = _languageSelectorService.Language switch
         {
             "DefaultLanguage" => 0,
-            "en" => 1,
-            "es" => 2,
-            "ja" => 3,
-            "pl" => 4,
-            "zh" => 5,
+            "en-US" => 1,
+            "es-ES" => 2,
+            "ja-JP" => 3,
+            "pl-PL" => 4,
+            "zh-CN" => 5,
+            "zh-TW" => 6,
+            "de-DE" => 7,
+            "fr-FR" => 8,
+            "it-IT" => 9,
+            "ko-KR" => 10,
+            "pt-BR" => 11,
+            "pt-PT" => 12,
+            "ru-RU" => 13,
+            "ar-SA" => 14,
+            "tr-TR" => 15,
+            "nl-NL" => 16,
+            "sv-SE" => 17,
+            "fi-FI" => 18,
+            "da-DK" => 19,
+            "no-NO" => 20,
+            "cs-CZ" => 21,
+            "hu-HU" => 22,
+            "ro-RO" => 23,
+            "vi-VN" => 24,
+            "uk-UA" => 25,
+            "el-GR" => 26,
+            "he-IL" => 27,
+            "af-ZA" => 28,
+            "ca-ES" => 29,
+            "sr-SP" => 30,
             _ => 0
         };
         _langComboBox.SelectedIndex = index;
@@ -83,25 +108,25 @@ public partial class AppSettingsView : UserControl
             "Dark" => ThemeVariant.Dark,
             _ => variant
         };
-        Dispatcher.UIThread.InvokeAsync(async () => await _themeSelectorService.SetThemeAsync(variant));
+        _themeSelectorService.SetTheme(variant);
     }
 
     private void LangComboBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         var item = _langComboBox.SelectedItem as ComboBoxItem;
-        Dispatcher.UIThread.InvokeAsync(async () =>
-        {
-            await _languageSelectorService.SetLanguageAsync(item!.Name!);
-        });
+        _languageSelectorService.SetLanguage(item!.Tag!.ToString()!);
     }
 
     private void UpdateThemes()
     {
         var selectedIndex = _themeComboBox.SelectedIndex;
         _themeComboBox.Items.Clear();
-        _themeComboBox.Items.Add(new ComboBoxItem { Content=Assets.Resources.Settings_Theme_Default_Content, Name="DefaultTheme" });
-        _themeComboBox.Items.Add(new ComboBoxItem { Content=Assets.Resources.Settings_Theme_Light_Content, Name="Light" });
-        _themeComboBox.Items.Add(new ComboBoxItem { Content=Assets.Resources.Settings_Theme_Dark_Content, Name="Dark" });
+        _themeComboBox.Items.Add(new ComboBoxItem
+            { Content = Assets.Resources.Settings_Theme_Default_Content, Name = "DefaultTheme" });
+        _themeComboBox.Items.Add(new ComboBoxItem
+            { Content = Assets.Resources.Settings_Theme_Light_Content, Name = "Light" });
+        _themeComboBox.Items.Add(new ComboBoxItem
+            { Content = Assets.Resources.Settings_Theme_Dark_Content, Name = "Dark" });
         _themeComboBox.SelectedIndex = selectedIndex;
     }
 
@@ -115,3 +140,4 @@ public partial class AppSettingsView : UserControl
         }
     }
 }
+

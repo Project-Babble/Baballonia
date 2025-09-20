@@ -8,5 +8,5 @@ public interface IDeviceEnumerator
 {
     protected ILogger Logger { get; set; }
     public Dictionary<string, string> Cameras { get; set; }
-    public Task<Dictionary<string, string>> UpdateCameras();
+    public Dictionary<string, string> UpdateCameras();
 }

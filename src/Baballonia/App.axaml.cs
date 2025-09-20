@@ -96,6 +96,7 @@ public class App : Application
                 services.AddTransient<FirmwareService>();
                 services.AddSingleton<IMainService, MainStandalone>();
                 services.AddSingleton<ICalibrationService, CalibrationService>();
+                services.AddSingleton<DropOverlayService>();
 
                 services.AddSingleton<MainViewModel>();
                 services.AddSingleton<MainWindow>();
@@ -113,6 +114,8 @@ public class App : Application
                 {
                     services.AddSingleton<ICommandSenderFactory, CommandSenderFactory>();
                     services.AddSingleton<ICommandSender, SerialCommandSender>();
+                    services.AddTransient<VrcViewModel>();
+                    services.AddTransient<VrcView>();
                     services.AddTransient<FirmwareViewModel>();
                     services.AddTransient<FirmwareView>();
                     services.AddTransient<OnboardingViewModel>();
@@ -141,6 +144,12 @@ public class App : Application
                 var defaultSettings = Path.Combine(AppContext.BaseDirectory, LocalSettingsService.DefaultLocalSettingsFile);
                 Directory.CreateDirectory(Path.GetDirectoryName(settingsLocation)!);
                 File.Copy(defaultSettings, settingsLocation);
+                if (!OperatingSystem.IsWindows()) {
+                    // Make file read-write if not on Windows as the source file might be in read-only.
+                    File.SetUnixFileMode(
+                        settingsLocation,
+                        UnixFileMode.UserRead | UnixFileMode.UserWrite | File.GetUnixFileMode(settingsLocation));
+                }
             }
         }
         else // extract default models for mobile
@@ -233,6 +242,8 @@ public class App : Application
             }
         }
 
+        // Initialize settings
+        var localSettings = Ioc.Default.GetService<ILocalSettingsService>();
 
         Assembly assembly = Assembly.GetExecutingAssembly();
         Version version = assembly.GetName().Version!;
@@ -242,7 +253,7 @@ public class App : Application
         Task.Run(async () => await _host.StartAsync());
 
         var activation = Ioc.Default.GetRequiredService<IActivationService>();
-        Task.Run(async () => await activation.ActivateAsync(null!));
+        Task.Run(() => activation.Activate(null!));
 
         var vm = Ioc.Default.GetRequiredService<MainViewModel>();
         switch (ApplicationLifetime)
@@ -260,8 +271,6 @@ public class App : Application
                 break;
         }
 
-        _host.Services.GetRequiredService<IThemeSelectorService>().SetRequestedThemeAsync();
-
         base.OnFrameworkInitializationCompleted();
     }
 
@@ -269,8 +278,8 @@ public class App : Application
     {
         if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime) return;
 
-        var vrcft = Ioc.Default.GetRequiredService<IMainService>();
-        Task.Run(vrcft.Teardown);
+        var mainService = Ioc.Default.GetRequiredService<IMainService>();
+        Task.Run(mainService.Teardown);
 
         var loop = Ioc.Default.GetRequiredService<ProcessingLoopService>();
         loop.FaceProcessingPipeline.VideoSource?.Dispose();

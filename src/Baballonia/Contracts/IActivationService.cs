@@ -4,5 +4,5 @@ namespace Baballonia.Contracts;
 
 public interface IActivationService
 {
-    Task ActivateAsync(object activationArgs);
+    void Activate(object activationArgs);
 }

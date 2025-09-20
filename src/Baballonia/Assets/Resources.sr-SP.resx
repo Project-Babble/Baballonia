@@ -1,0 +1,720 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Settings_Theme_Dark_Content" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="Settings_Theme_Default_Content" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Settings_Theme_Light_Content" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="Home_Title_Header" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Settings_Theme_Header" xml:space="preserve">
+    <value>App theme</value>
+  </data>
+  <data name="Settings_Theme_Description" xml:space="preserve">
+    <value>Select which app theme to display</value>
+  </data>
+  <data name="Settings_OSC_Description" xml:space="preserve">
+    <value>Where should OSC data be sent?</value>
+  </data>
+  <data name="Settings_OSC_Header" xml:space="preserve">
+    <value>OSC</value>
+  </data>
+  <data name="Home_Eye_Calibration" xml:space="preserve">
+    <value>Eye Calibration</value>
+  </data>
+  <data name="Home_Left_Camera_Address" xml:space="preserve">
+    <value>Left Camera Address</value>
+  </data>
+  <data name="Home_Cameras_Start_Camera" xml:space="preserve">
+    <value>Start Camera</value>
+  </data>
+  <data name="Home_Cameras_Stop_Camera" xml:space="preserve">
+    <value>Stop Camera</value>
+  </data>
+  <data name="Home_Cameras_Tracking_Mode" xml:space="preserve">
+    <value>Tracking</value>
+  </data>
+  <data name="Home_Cameras_Cropping_Mode" xml:space="preserve">
+    <value>Cropping</value>
+  </data>
+  <data name="Home_Left_Camera_Select_Entire_Frame" xml:space="preserve">
+    <value>Select Left Frame</value>
+  </data>
+  <data name="Home_Cameras_Vertical_Flip_Header" xml:space="preserve">
+    <value>Vertical Flip</value>
+  </data>
+  <data name="Home_Cameras_Vertical_Flip_Description" xml:space="preserve">
+    <value>Flip the image vertically</value>
+  </data>
+  <data name="Home_Cameras_Horizontal_Flip_Header" xml:space="preserve">
+    <value>Horizontal flip</value>
+  </data>
+  <data name="Home_Cameras_Horizontal_Flip_Description" xml:space="preserve">
+    <value>Flip the image horizontally</value>
+  </data>
+  <data name="Home_Cameras_Rotation_Description" xml:space="preserve">
+    <value>Rotates the image in a circle</value>
+  </data>
+  <data name="Home_Cameras_Brightness_Header" xml:space="preserve">
+    <value>Image Brightness</value>
+  </data>
+  <data name="Home_Cameras_Rotation_Header" xml:space="preserve">
+    <value>Image Rotation</value>
+  </data>
+  <data name="Home_Cameras_Brightness_Description" xml:space="preserve">
+    <value>Adjust the brightness of the image</value>
+  </data>
+  <data name="Home_Right_Camera_Address" xml:space="preserve">
+    <value>Right Camera Address</value>
+  </data>
+  <data name="Home_Right_Camera_Select_Entire_Frame" xml:space="preserve">
+    <value>Select Right Frame</value>
+  </data>
+  <data name="Home_Face_Camera_Address" xml:space="preserve">
+    <value>Face Camera Address</value>
+  </data>
+  <data name="Home_Face_Camera_Select_Entire_Frame" xml:space="preserve">
+    <value>Select Face Frame</value>
+  </data>
+  <data name="Home_Left_Camera_Header" xml:space="preserve">
+    <value>Left Eye Camera</value>
+  </data>
+  <data name="Home_Face_Camera_Header" xml:space="preserve">
+    <value>Face Camera</value>
+  </data>
+  <data name="Home_Right_Camera_Header" xml:space="preserve">
+    <value>Right Eye Camera</value>
+  </data>
+  <data name="Home_Left_Camera_Settings" xml:space="preserve">
+    <value>Left Camera Settings</value>
+  </data>
+  <data name="Home_Face_Camera_Settings" xml:space="preserve">
+    <value>Face Camera Settings</value>
+  </data>
+  <data name="Home_Right_Camera_Settings" xml:space="preserve">
+    <value>Right Camera Settings</value>
+  </data>
+  <data name="Common_Start_Typing" xml:space="preserve">
+    <value>Start typing...</value>
+  </data>
+  <data name="Calibration_Title_Header" xml:space="preserve">
+    <value>Calibration</value>
+  </data>
+  <data name="Calibration_Reset_Minimums" xml:space="preserve">
+    <value>Reset Minimums</value>
+  </data>
+  <data name="Calibration_Reset_Maximums" xml:space="preserve">
+    <value>Reset Maximums</value>
+  </data>
+  <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
+    <value>Eye Expressions</value>
+  </data>
+  <data name="Calibration_Nose_Expressions_Header" xml:space="preserve">
+    <value>Nose Expressions</value>
+  </data>
+  <data name="Calibration_Tongue_Expressions_Header" xml:space="preserve">
+    <value>Tongue Expressions</value>
+  </data>
+  <data name="Calibration_Mouth_Expressions_Header" xml:space="preserve">
+    <value>Mouth Expressions</value>
+  </data>
+  <data name="Calibration_Jaw_Expressions_Header" xml:space="preserve">
+    <value>Jaw Expressions</value>
+  </data>
+  <data name="Calibration_Cheek_Expressions_Header" xml:space="preserve">
+    <value>Cheek Expressions</value>
+  </data>
+  <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Header" xml:space="preserve">
+    <value>Stabilize Eyes</value>
+  </data>
+  <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Description" xml:space="preserve">
+    <value>Prevents eyes from looking out in opposite directions, but may overcorrect.</value>
+  </data>
+  <data name="Firmware_Title_Header" xml:space="preserve">
+    <value>Firmware</value>
+  </data>
+  <data name="Firmware_Select_Tracker_Header" xml:space="preserve">
+    <value>Select your tracker</value>
+  </data>
+  <data name="Firmware_Device_Instructions_1" xml:space="preserve">
+    <value>• After powering on/connecting your device you will have 20 seconds to press "Refresh" and select your device from the dropdown</value>
+  </data>
+  <data name="Firmware_Device_Instructions_2" xml:space="preserve">
+    <value>• Certain configuration operations will take a little bit!</value>
+  </data>
+  <data name="Firmware_Device_Configuration_Header" xml:space="preserve">
+    <value>Device Configuration</value>
+  </data>
+  <data name="Firmware_Device_Configuration_Description" xml:space="preserve">
+    <value>Toggle wired/wireless mode</value>
+  </data>
+  <data name="Firmware_Device_Mode_Header" xml:space="preserve">
+    <value>Toggle wired/wireless mode</value>
+  </data>
+  <data name="Firmware_Device_Mode_Instruction_1" xml:space="preserve">
+    <value>• You WILL need to restart your tracker after changing the mode</value>
+  </data>
+  <data name="Firmware_Device_Mode_Instruction_2" xml:space="preserve">
+    <value>• You MAY need to restart the app after a flash for trackers to show</value>
+  </data>
+  <data name="Firmware_Device_Mode_Select_Placeholder" xml:space="preserve">
+    <value>Select a mode...</value>
+  </data>
+  <data name="Firmware_Wifi_Configuration_Header" xml:space="preserve">
+    <value>Wifi Configuration</value>
+  </data>
+  <data name="Firmware_Wifi_Configuration_Description" xml:space="preserve">
+    <value>Connect to Wifi and more</value>
+  </data>
+  <data name="Firmware_Wifi_Credentials_Header" xml:space="preserve">
+    <value>Set your Wi-Fi credentials</value>
+  </data>
+  <data name="Firmware_Wifi_Instructions_1" xml:space="preserve">
+    <value>• If you want to use your tracker wirelessly, you NEED to set its Wifi credentials</value>
+  </data>
+  <data name="Firmware_Wifi_Instructions_2" xml:space="preserve">
+    <value>• You MUST scan for Wifi networks BEFORE you can set your Wifi credentials</value>
+  </data>
+  <data name="Firmware_Wifi_SSID_Label" xml:space="preserve">
+    <value>WiFi Network Name (SSID)</value>
+  </data>
+  <data name="Firmware_Wifi_SSID_Placeholder" xml:space="preserve">
+    <value>Start typing to see WiFi networks...</value>
+  </data>
+  <data name="Firmware_Wifi_Password_Label" xml:space="preserve">
+    <value>WiFi Password</value>
+  </data>
+  <data name="Firmware_Wifi_Password_Placeholder" xml:space="preserve">
+    <value>Enter WiFi password...</value>
+  </data>
+  <data name="Firmware_Flashing_Header" xml:space="preserve">
+    <value>Flashing Options</value>
+  </data>
+  <data name="Firmware_Flashing_Description" xml:space="preserve">
+    <value>Flash your device's firmware</value>
+  </data>
+  <data name="Firmware_Flashing_Warning" xml:space="preserve">
+    <value>CAUTION!! THIS WILL FACTORY RESET YOUR TRACKER. YOU WILL NEED TO PERFORM A FIRST TIME SET UP AFTER FLASHING YOUR TRACKER.</value>
+  </data>
+  <data name="Firmware_Flashing_Button" xml:space="preserve">
+    <value>Flash Firmware</value>
+  </data>
+  <data name="Firmware_Flashing_Note" xml:space="preserve">
+    <value>This will take around ~10 seconds. Don't leave this page!</value>
+  </data>
+  <data name="Firmware_Flashing_Complete" xml:space="preserve">
+    <value>Done! You will need to restart your tracker</value>
+  </data>
+  <data name="Firmware_TrackerComboBox_Default" xml:space="preserve">
+    <value>Click to see trackers...</value>
+  </data>
+  <data name="Firmware_RefreshDevices_Default" xml:space="preserve">
+    <value>Refresh Devices</value>
+  </data>
+  <data name="Firmware_RefreshDevices_Refreshing" xml:space="preserve">
+    <value>Refreshing</value>
+  </data>
+  <data name="Firmware_RefreshDevices_Found" xml:space="preserve">
+    <value>Found {0} device(s).</value>
+  </data>
+  <data name="Firmware_SelectTracker_Default" xml:space="preserve">
+    <value>Select Tracker</value>
+  </data>
+  <data name="Firmware_SelectTracker_Connected" xml:space="preserve">
+    <value>Tracker connected!</value>
+  </data>
+  <data name="Firmware_SelectTracker_NoResponse" xml:space="preserve">
+    <value>The tracker did not respond.</value>
+  </data>
+  <data name="Firmware_ModeSetButton_Default" xml:space="preserve">
+    <value>Set Mode</value>
+  </data>
+  <data name="Firmware_ModeSetButton_Setting" xml:space="preserve">
+    <value>Setting mode</value>
+  </data>
+  <data name="Firmware_ModeSetButton_Success" xml:space="preserve">
+    <value>Set!</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Default" xml:space="preserve">
+    <value>Set Wifi Creds</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Setting" xml:space="preserve">
+    <value>Setting WiFi credentials</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Success" xml:space="preserve">
+    <value>Sent!</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Error" xml:space="preserve">
+    <value>Something went wrong...</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Default" xml:space="preserve">
+    <value>Refresh Wifi Networks</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Scanning" xml:space="preserve">
+    <value>Scanning. This will take at most 30 seconds</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Error" xml:space="preserve">
+    <value>Scan failed. Click to try again.</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
+    <value>Found {0} networks. Click to scan again.</value>
+  </data>
+  <data name="VRC_Title_Header" xml:space="preserve">
+    <value>VRChat + VRCFaceTracking Settings</value>
+  </data>
+  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
+    <value>Use Native VRC Eye Tracking</value>
+  </data>
+  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
+    <value>Brings eye tracking to avatars that do not have VRCFaceTracking</value>
+  </data>
+  <data name="VRC_ModuleMode_Header" xml:space="preserve">
+    <value>Set VRCFT module mode</value>
+  </data>
+  <data name="VRC_ModuleMode_Description" xml:space="preserve">
+    <value>Send only eye, only face or both? (Change requires VRCFT restart)</value>
+  </data>
+  <data name="VRC_ModuleMode_Placeholder" xml:space="preserve">
+    <value>Select a mode...</value>
+  </data>
+  <data name="Output_Title_Header" xml:space="preserve">
+    <value>Output</value>
+  </data>
+  <data name="Output_CopyButton_Tooltip" xml:space="preserve">
+    <value>Copy the log's output to your clipboard</value>
+  </data>
+  <data name="Output_SaveButton_Tooltip" xml:space="preserve">
+    <value>Save the log's output</value>
+  </data>
+  <data name="Output_OpenLoggingDirectoryButton_Tooltip" xml:space="preserve">
+    <value>Open the logging directory</value>
+  </data>
+  <data name="Onboarding_Welcome_Message" xml:space="preserve">
+    <value>This wizard will guide you through setting up the new Babble App.</value>
+  </data>
+  <data name="Onboarding_Wireless_Header" xml:space="preserve">
+    <value>Wired or Wireless?</value>
+  </data>
+  <data name="Onboarding_Wireless_Description1" xml:space="preserve">
+    <value>With newer Babbles, you'll need to perform a first time setup in the Firmware tab (Icon above).</value>
+  </data>
+  <data name="Onboarding_Wireless_Description2" xml:space="preserve">
+    <value>It only takes 2 minutes! Select your tracker and mode (wired or wireless). It's that simple.</value>
+  </data>
+  <data name="Onboarding_Wireless_Note" xml:space="preserve">
+    <value>Please note newer trackers have a 20-second window before they enter camera mode.</value>
+  </data>
+  <data name="Onboarding_Assembly_Header" xml:space="preserve">
+    <value>Assemble Your Tracker</value>
+  </data>
+  <data name="Onboarding_Assembly_Description" xml:space="preserve">
+    <value>If you need help putting your tracker together, here's a useful Youtube tutorial!</value>
+  </data>
+  <data name="Settings_Title_Header" xml:space="preserve">
+    <value>App Settings</value>
+  </data>
+  <data name="Settings_Language_Header" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Settings_Language_Description" xml:space="preserve">
+    <value>Set the app's language. Switch pages to apply.</value>
+  </data>
+  <data name="Settings_Language_Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Settings_Language_English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Settings_Language_Spanish" xml:space="preserve">
+    <value>Español</value>
+  </data>
+  <data name="Settings_Language_Japanese" xml:space="preserve">
+    <value>日本語</value>
+  </data>
+  <data name="Settings_Language_Polish" xml:space="preserve">
+    <value>Polski</value>
+  </data>
+  <data name="Settings_Language_Chinese" xml:space="preserve">
+    <value>中文</value>
+  </data>
+  <data name="Settings_Filter_Header" xml:space="preserve">
+    <value>One-Euro filter settings</value>
+  </data>
+  <data name="Settings_Filter_Description" xml:space="preserve">
+    <value>Filter Settings</value>
+  </data>
+  <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
+    <value>Turn filtering on or off.</value>
+  </data>
+  <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
+    <value>Minimum frequency cutoff</value>
+  </data>
+  <data name="Settings_Filter_MinFreq_Description" xml:space="preserve">
+    <value>Controls how much smoothing is applied to slow movements</value>
+  </data>
+  <data name="Settings_Filter_Template_Placeholder" xml:space="preserve">
+    <value>Select from a template</value>
+  </data>
+  <data name="Settings_Filter_Template_Low" xml:space="preserve">
+    <value>Low ({0})</value>
+  </data>
+  <data name="Settings_Filter_Template_Medium" xml:space="preserve">
+    <value>Medium ({0})</value>
+  </data>
+  <data name="Settings_Filter_Template_High" xml:space="preserve">
+    <value>High ({0})</value>
+  </data>
+  <data name="Settings_Filter_Speed_Label" xml:space="preserve">
+    <value>Speed coefficient</value>
+  </data>
+  <data name="Settings_Filter_Speed_Description" xml:space="preserve">
+    <value>Determines how the filter adapts when you move faster</value>
+  </data>
+  <data name="Settings_GPU_Header" xml:space="preserve">
+    <value>Use GPU acceleration</value>
+  </data>
+  <data name="Settings_GPU_Description" xml:space="preserve">
+    <value>Use your GPU to make things run faster! Requires restart</value>
+  </data>
+  <data name="Settings_LogLevel_Header" xml:space="preserve">
+    <value>Log Level Verbosity</value>
+  </data>
+  <data name="Settings_LogLevel_Description" xml:space="preserve">
+    <value>Minimum logging level. Requires restart</value>
+  </data>
+  <data name="Settings_Updates_Header" xml:space="preserve">
+    <value>Check For Updates</value>
+  </data>
+  <data name="Settings_Updates_Description" xml:space="preserve">
+    <value>Should the app check for updates on start?</value>
+  </data>
+  <data name="Settings_FirstTime_Header" xml:space="preserve">
+    <value>Launch first time setup</value>
+  </data>
+  <data name="Settings_FirstTime_Description" xml:space="preserve">
+    <value>Relaunches the first time setup</value>
+  </data>
+  <data name="Settings_FirstTime_Button" xml:space="preserve">
+    <value>Launch</value>
+  </data>
+  <data name="Onboarding_Skip_Button" xml:space="preserve">
+    <value>Skip</value>
+  </data>
+  <data name="Onboarding_UI_Header" xml:space="preserve">
+    <value>Where is everything?</value>
+  </data>
+  <data name="Onboarding_UI_Home_Description" xml:space="preserve">
+    <value>1. The Home Page is where you can set up your cameras, and perform an eye tracking calibration.</value>
+  </data>
+  <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
+    <value>The {0} can be used to tweak your eye/face expressions individually.</value>
+  </data>
+  <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
+    <value>The {0} is used to set up your device, or reset it.</value>
+  </data>
+  <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
+    <value>The {0} is used to alter VRChat/VRCFaceTracking specific settings.</value>
+  </data>
+  <data name="Onboarding_UI_Output_Description" xml:space="preserve">
+    <value>The {0} shows the status of the app, {1} and other useful information.</value>
+  </data>
+  <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
+    <value>The {0} is for general app settings, such as {1} and more.</value>
+  </data>
+  <data name="Onboarding_Complete_Header" xml:space="preserve">
+    <value>Setup Complete!</value>
+  </data>
+  <data name="Onboarding_Complete_Description1" xml:space="preserve">
+    <value>You're all set to start using the new Babble App!</value>
+  </data>
+  <data name="Onboarding_Complete_Description2" xml:space="preserve">
+    <value>You can revisit this page in the settings.</value>
+  </data>
+  <data name="Settings_OSC_IP_Label" xml:space="preserve">
+    <value>IP Address</value>
+  </data>
+  <data name="Settings_OSC_Prefix_Label" xml:space="preserve">
+    <value>OSC Prefix</value>
+  </data>
+  <data name="Settings_OSC_Recalibrate_Label" xml:space="preserve">
+    <value>Recalibrate Address</value>
+  </data>
+  <data name="Settings_OSC_Recenter_Label" xml:space="preserve">
+    <value>Recenter Address</value>
+  </data>
+  <data name="Settings_OSC_SendPort_Label" xml:space="preserve">
+    <value>Send Port</value>
+  </data>
+  <data name="Settings_OSC_ReceivePort_Label" xml:space="preserve">
+    <value>Receive Port</value>
+  </data>
+  <data name="AdminWarning_Header" xml:space="preserve">
+    <value>Administrator Mode Warning</value>
+  </data>
+  <data name="AdminWarning_Message" xml:space="preserve">
+    <value>Do not run Baballonia as admin! There is no need, and it prevents eye tracking calibrations from working.</value>
+  </data>
+  <data name="Aero_Overlay_NotFound" xml:space="preserve">
+    <value>The gaze overlay program does not exist!</value>
+  </data>
+  <data name="Aero_Overlay_AlreadyRunning" xml:space="preserve">
+    <value>The gaze overlay program is already running! Please close it and try again.</value>
+  </data>
+  <data name="Aero_SteamVR_NotRunning" xml:space="preserve">
+    <value>SteamVR is not running. Please run it and try again.</value>
+  </data>
+  <data name="Aero_CameraStream_Failed" xml:space="preserve">
+    <value>Failed to start camera streaming!</value>
+  </data>
+  <data name="Aero_Calibration_Failed" xml:space="preserve">
+    <value>Failed to start calibration!</value>
+  </data>
+  <data name="Aero_Calibration_Success" xml:space="preserve">
+    <value>Eye tracking calibration successful!</value>
+  </data>
+  <data name="Aero_Overlay_CleanupFailed" xml:space="preserve">
+    <value>Failed to stop/cleanup overlay!</value>
+  </data>
+  <data name="Calibration_Instructions_Line1" xml:space="preserve">
+    <value>The below sliders are used to calibrate the</value>
+  </data>
+  <data name="Calibration_Instructions_Sensitivity" xml:space="preserve">
+    <value>sensitivity</value>
+  </data>
+  <data name="Calibration_Instructions_Line1_2" xml:space="preserve">
+    <value>of your face expressions.</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet1_1" xml:space="preserve">
+    <value>• Raising the</value>
+  </data>
+  <data name="Calibration_Instructions_Minimum" xml:space="preserve">
+    <value>Minimum</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet1_2" xml:space="preserve">
+    <value>value requires a stronger expression before it starts to show.</value>
+  </data>
+  <data name="Settings_Language_Chinese_Simplified" xml:space="preserve">
+    <value>Chinese (Simplified)</value>
+  </data>
+  <data name="Settings_Language_Chinese_Traditional" xml:space="preserve">
+    <value>Chinese (Traditional)</value>
+  </data>
+  <data name="Settings_Language_German" xml:space="preserve">
+    <value>German</value>
+  </data>
+  <data name="Settings_Language_French" xml:space="preserve">
+    <value>French</value>
+  </data>
+  <data name="Settings_Language_Italian" xml:space="preserve">
+    <value>Italian</value>
+  </data>
+  <data name="Settings_Language_Korean" xml:space="preserve">
+    <value>Korean</value>
+  </data>
+  <data name="Settings_Language_Portuguese_Brazil" xml:space="preserve">
+    <value>Portuguese (Brazil)</value>
+  </data>
+  <data name="Settings_Language_Portuguese_Portugal" xml:space="preserve">
+    <value>Portuguese (Portugal)</value>
+  </data>
+  <data name="Settings_Language_Russian" xml:space="preserve">
+    <value>Russian</value>
+  </data>
+  <data name="Settings_Language_Arabic" xml:space="preserve">
+    <value>Arabic</value>
+  </data>
+  <data name="Settings_Language_Turkish" xml:space="preserve">
+    <value>Turkish</value>
+  </data>
+  <data name="Settings_Language_Dutch" xml:space="preserve">
+    <value>Dutch</value>
+  </data>
+  <data name="Settings_Language_Swedish" xml:space="preserve">
+    <value>Swedish</value>
+  </data>
+  <data name="Settings_Language_Finnish" xml:space="preserve">
+    <value>Finnish</value>
+  </data>
+  <data name="Settings_Language_Danish" xml:space="preserve">
+    <value>Danish</value>
+  </data>
+  <data name="Settings_Language_Norwegian" xml:space="preserve">
+    <value>Norwegian</value>
+  </data>
+  <data name="Settings_Language_Czech" xml:space="preserve">
+    <value>Czech</value>
+  </data>
+  <data name="Settings_Language_Hungarian" xml:space="preserve">
+    <value>Hungarian</value>
+  </data>
+  <data name="Settings_Language_Romanian" xml:space="preserve">
+    <value>Romanian</value>
+  </data>
+  <data name="Settings_Language_Vietnamese" xml:space="preserve">
+    <value>Vietnamese</value>
+  </data>
+  <data name="Settings_Language_Ukrainian" xml:space="preserve">
+    <value>Ukrainian</value>
+  </data>
+  <data name="Settings_Language_Greek" xml:space="preserve">
+    <value>Greek</value>
+  </data>
+  <data name="Settings_Language_Hebrew" xml:space="preserve">
+    <value>Hebrew</value>
+  </data>
+  <data name="Settings_Language_Afrikaans" xml:space="preserve">
+    <value>Afrikaans</value>
+  </data>
+  <data name="Settings_Language_Catalan" xml:space="preserve">
+    <value>Catalan</value>
+  </data>
+  <data name="Settings_Language_Serbian" xml:space="preserve">
+    <value>Serbian</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet2_1" xml:space="preserve">
+    <value>• Lowering the</value>
+  </data>
+  <data name="Calibration_Instructions_Maximum" xml:space="preserve">
+    <value>Maximum</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet2_2" xml:space="preserve">
+    <value>value means a smaller expression will reach 100% faster.</value>
+  </data>
+  <data name="DropOverlay_Important_Header" xml:space="preserve">
+    <value>Important!</value>
+  </data>
+  <data name="DropOverlay_Message" xml:space="preserve">
+    <value>Newer babble trackers have a 20 second delay after being plugged in before they can be used. It will make a USB plugging-in sound when it is ready!</value>
+  </data>
+  <data name="DropOverlay_DontShowAgain" xml:space="preserve">
+    <value>Don't show this warning again</value>
+  </data>
+  <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
+    <value>Dismiss</value>
+  </data>
+</root>

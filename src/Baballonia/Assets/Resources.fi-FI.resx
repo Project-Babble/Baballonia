@@ -1,0 +1,724 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Settings_Theme_Dark_Content" xml:space="preserve">
+    <value>Tumma</value>
+  </data>
+  <data name="Settings_Theme_Default_Content" xml:space="preserve">
+    <value>Oletus</value>
+  </data>
+  <data name="Settings_Theme_Light_Content" xml:space="preserve">
+    <value>Vaalea</value>
+  </data>
+  <data name="Home_Title_Header" xml:space="preserve">
+    <value>Koti</value>
+  </data>
+  <data name="Settings_Theme_Header" xml:space="preserve">
+    <value>Sovelluksen teema</value>
+  </data>
+  <data name="Settings_Theme_Description" xml:space="preserve">
+    <value>Valitse minkä sovelluksen teema näytetään</value>
+  </data>
+  <data name="Settings_OSC_Description" xml:space="preserve">
+    <value>Mihin OSC-tiedot pitäisi lähettää?</value>
+  </data>
+  <data name="Settings_OSC_Header" xml:space="preserve">
+    <value>OSC</value>
+  </data>
+  <data name="Home_Eye_Calibration" xml:space="preserve">
+    <value>Silmien Kalibrointi</value>
+  </data>
+  <data name="Home_Left_Camera_Address" xml:space="preserve">
+    <value>Vasen Kameran Osoite</value>
+  </data>
+  <data name="Home_Cameras_Start_Camera" xml:space="preserve">
+    <value>Aloita Kamera</value>
+  </data>
+  <data name="Home_Cameras_Stop_Camera" xml:space="preserve">
+    <value>Pysäytä Kamera</value>
+  </data>
+  <data name="Home_Cameras_Tracking_Mode" xml:space="preserve">
+    <value>Seuranta</value>
+  </data>
+  <data name="Home_Cameras_Cropping_Mode" xml:space="preserve">
+    <value>Rajaa</value>
+  </data>
+  <data name="Home_Left_Camera_Select_Entire_Frame" xml:space="preserve">
+    <value>Valitse Vasen Kehys</value>
+  </data>
+  <data name="Home_Cameras_Vertical_Flip_Header" xml:space="preserve">
+    <value>Pystysuuntainen Käännä</value>
+  </data>
+  <data name="Home_Cameras_Vertical_Flip_Description" xml:space="preserve">
+    <value>Käännä kuva pystysuunnassa</value>
+  </data>
+  <data name="Home_Cameras_Horizontal_Flip_Header" xml:space="preserve">
+    <value>Vaakasuora kääntö</value>
+  </data>
+  <data name="Home_Cameras_Horizontal_Flip_Description" xml:space="preserve">
+    <value>Käännä kuva vaakasuunnassa</value>
+  </data>
+  <data name="Home_Cameras_Rotation_Description" xml:space="preserve">
+    <value>Kiertää kuvaa ympyrän sisään</value>
+  </data>
+  <data name="Home_Cameras_Brightness_Header" xml:space="preserve">
+    <value>Kuvan Kirkkaus</value>
+  </data>
+  <data name="Home_Cameras_Rotation_Header" xml:space="preserve">
+    <value>Kuvan Kierto</value>
+  </data>
+  <data name="Home_Cameras_Brightness_Description" xml:space="preserve">
+    <value>Säädä kuvan kirkkautta</value>
+  </data>
+  <data name="Home_Right_Camera_Address" xml:space="preserve">
+    <value>Oikea Kamera Osoite</value>
+  </data>
+  <data name="Home_Right_Camera_Select_Entire_Frame" xml:space="preserve">
+    <value>Valitse Oikea Kehys</value>
+  </data>
+  <data name="Home_Face_Camera_Address" xml:space="preserve">
+    <value>Kasvokameran Osoite</value>
+  </data>
+  <data name="Home_Face_Camera_Select_Entire_Frame" xml:space="preserve">
+    <value>Valitse Kasvojen Kehys</value>
+  </data>
+  <data name="Home_Left_Camera_Header" xml:space="preserve">
+    <value>Vasen Silmäkamera</value>
+  </data>
+  <data name="Home_Face_Camera_Header" xml:space="preserve">
+    <value>Kasvojen Kamera</value>
+  </data>
+  <data name="Home_Right_Camera_Header" xml:space="preserve">
+    <value>Oikean Silmän Kamera</value>
+  </data>
+  <data name="Home_Left_Camera_Settings" xml:space="preserve">
+    <value>Vasen Kameran Asetukset</value>
+  </data>
+  <data name="Home_Face_Camera_Settings" xml:space="preserve">
+    <value>Kasvokameran Asetukset</value>
+  </data>
+  <data name="Home_Right_Camera_Settings" xml:space="preserve">
+    <value>Oikean Kameran Asetukset</value>
+  </data>
+  <data name="Common_Start_Typing" xml:space="preserve">
+    <value>Aloita kirjoittaminen...</value>
+  </data>
+  <data name="Calibration_Title_Header" xml:space="preserve">
+    <value>Kalibrointi</value>
+  </data>
+  <data name="Calibration_Reset_Minimums" xml:space="preserve">
+    <value>Reset Minimums</value>
+  </data>
+  <data name="Calibration_Reset_Maximums" xml:space="preserve">
+    <value>Reset Maximums</value>
+  </data>
+  <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
+    <value>Silmien Lausekkeet</value>
+  </data>
+  <data name="Calibration_Nose_Expressions_Header" xml:space="preserve">
+    <value>Nenäilmaukset</value>
+  </data>
+  <data name="Calibration_Tongue_Expressions_Header" xml:space="preserve">
+    <value>Kielen Lausekkeet</value>
+  </data>
+  <data name="Calibration_Mouth_Expressions_Header" xml:space="preserve">
+    <value>Suun Lausekkeet</value>
+  </data>
+  <data name="Calibration_Jaw_Expressions_Header" xml:space="preserve">
+    <value>Leuan Lausekkeet</value>
+  </data>
+  <data name="Calibration_Cheek_Expressions_Header" xml:space="preserve">
+    <value>Cheek Lausekkeet</value>
+  </data>
+  <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Header" xml:space="preserve">
+    <value>Stabiloi Silmät</value>
+  </data>
+  <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Description" xml:space="preserve">
+    <value>Estää silmät katsomasta vastakkaisiin suuntiin, mutta saattaa korjata.</value>
+  </data>
+  <data name="Firmware_Title_Header" xml:space="preserve">
+    <value>Laiteohjelmisto</value>
+  </data>
+  <data name="Firmware_Select_Tracker_Header" xml:space="preserve">
+    <value>Valitse seurantapalvelin</value>
+  </data>
+  <data name="Firmware_Device_Instructions_1" xml:space="preserve">
+    <value>• Laitteen käynnistämisen ja yhdistämisen jälkeen sinulla on 20 sekuntia aikaa painaa "Virkistää" ja valitse laite pudotusvalikosta</value>
+  </data>
+  <data name="Firmware_Device_Instructions_2" xml:space="preserve">
+    <value>• Tietyt konfiguraatiotoiminnot vievät hieman!</value>
+  </data>
+  <data name="Firmware_Device_Configuration_Header" xml:space="preserve">
+    <value>Laitteen Asetukset</value>
+  </data>
+  <data name="Firmware_Device_Configuration_Description" xml:space="preserve">
+    <value>Vaihda langallinen/langaton tila</value>
+  </data>
+  <data name="Firmware_Device_Mode_Header" xml:space="preserve">
+    <value>Vaihda langallinen/langaton tila</value>
+  </data>
+  <data name="Firmware_Device_Mode_Instruction_1" xml:space="preserve">
+    <value>• Sinun täytyy käynnistää seurantapalvelin uudelleen tilan vaihtamisen jälkeen</value>
+  </data>
+  <data name="Firmware_Device_Mode_Instruction_2" xml:space="preserve">
+    <value>• Sinun on käynnistettävä sovellus uudelleen salaman jälkeen, jotta seuraajat voivat näyttää</value>
+  </data>
+  <data name="Firmware_Device_Mode_Select_Placeholder" xml:space="preserve">
+    <value>Valitse tila...</value>
+  </data>
+  <data name="Firmware_Wifi_Configuration_Header" xml:space="preserve">
+    <value>Wi-Fi-asetusten Asetukset</value>
+  </data>
+  <data name="Firmware_Wifi_Configuration_Description" xml:space="preserve">
+    <value>Yhdistä Wifiin ja lisää</value>
+  </data>
+  <data name="Firmware_Wifi_Credentials_Header" xml:space="preserve">
+    <value>Aseta Wi-Fi-tunnuksesi</value>
+  </data>
+  <data name="Firmware_Wifi_Instructions_1" xml:space="preserve">
+    <value>• Jos haluat käyttää seurantapalvelinta langattomasti, voit NEED asettaa sen Wifi-tunnukset</value>
+  </data>
+  <data name="Firmware_Wifi_Instructions_2" xml:space="preserve">
+    <value>• Voit skannata Wifi-verkkoja ENNEN KUIN TAI Wifi-tunnuksiasi</value>
+  </data>
+  <data name="Firmware_Wifi_SSID_Label" xml:space="preserve">
+    <value>WiFi-Verkon Nimi (Ssid)</value>
+  </data>
+  <data name="Firmware_Wifi_SSID_Placeholder" xml:space="preserve">
+    <value>Aloita kirjoittaminen nähdäksesi WiFi-verkot...</value>
+  </data>
+  <data name="Firmware_Wifi_Password_Label" xml:space="preserve">
+    <value>WiFi-Salasana</value>
+  </data>
+  <data name="Firmware_Wifi_Password_Placeholder" xml:space="preserve">
+    <value>Anna WiFi-salasana...</value>
+  </data>
+  <data name="Firmware_Flashing_Header" xml:space="preserve">
+    <value>Flashing Options</value>
+  </data>
+  <data name="Firmware_Flashing_Description" xml:space="preserve">
+    <value>Flash laitteesi firmware</value>
+  </data>
+  <data name="Firmware_Flashing_Warning" xml:space="preserve">
+    <value>VAROITUS!! TÄMÄ KÄYTTÖ PALAUTA RAKENTAJasi. SINÄ SUORITTAA ENSIMMÄISEN AJAN JÄLKEEN LÄHETTÄVÄN RAKENNUKSEN.</value>
+  </data>
+  <data name="Firmware_Flashing_Button" xml:space="preserve">
+    <value>Flash Firmware</value>
+  </data>
+  <data name="Firmware_Flashing_Note" xml:space="preserve">
+    <value>Tämä kestää noin ~ 10 sekuntia. Älä jätä tätä sivua!</value>
+  </data>
+  <data name="Firmware_Flashing_Complete" xml:space="preserve">
+    <value>Valmis! Sinun täytyy käynnistää seurantapalvelin uudelleen</value>
+  </data>
+  <data name="Firmware_TrackerComboBox_Default" xml:space="preserve">
+    <value>Klikkaa nähdäksesi seurantapalvelimet...</value>
+  </data>
+  <data name="Firmware_RefreshDevices_Default" xml:space="preserve">
+    <value>Päivitä Laitteet</value>
+  </data>
+  <data name="Firmware_RefreshDevices_Refreshing" xml:space="preserve">
+    <value>Päivitetään</value>
+  </data>
+  <data name="Firmware_RefreshDevices_Found" xml:space="preserve">
+    <value>Löytyi {0} laite.</value>
+  </data>
+  <data name="Firmware_SelectTracker_Default" xml:space="preserve">
+    <value>Valitse Seurantakoodi</value>
+  </data>
+  <data name="Firmware_SelectTracker_Connected" xml:space="preserve">
+    <value>Seurantapalvelin yhdistetty!</value>
+  </data>
+  <data name="Firmware_SelectTracker_NoResponse" xml:space="preserve">
+    <value>Seurantapalvelin ei vastannut.</value>
+  </data>
+  <data name="Firmware_ModeSetButton_Default" xml:space="preserve">
+    <value>Aseta Tila</value>
+  </data>
+  <data name="Firmware_ModeSetButton_Setting" xml:space="preserve">
+    <value>Asetusten tila</value>
+  </data>
+  <data name="Firmware_ModeSetButton_Success" xml:space="preserve">
+    <value>Aseta!</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Default" xml:space="preserve">
+    <value>Aseta Wi-Fi-liittimet</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Setting" xml:space="preserve">
+    <value>WiFi-tunnusten määrittäminen</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Success" xml:space="preserve">
+    <value>Lähetetty!</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Error" xml:space="preserve">
+    <value>Jokin meni pieleen...</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Default" xml:space="preserve">
+    <value>Päivitä Wi-Fi-verkot</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Scanning" xml:space="preserve">
+    <value>Skannaus. Tämä kestää enintään 30 sekuntia</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Error" xml:space="preserve">
+    <value>Skannaus epäonnistui. Yritä uudelleen napsauttamalla</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
+    <value>Löytyi {0} verkot. Klikkaa skannataksesi uudelleen.</value>
+  </data>
+  <data name="VRC_Title_Header" xml:space="preserve">
+    <value>VRChat + VRCFaceTracking Asetukset</value>
+  </data>
+  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
+    <value>Käytä Native Vrc Silmien Seurantaa</value>
+  </data>
+  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
+    <value>Tuo silmien seuranta hahmoille, joilla ei ole VRCFaceTrackingiä</value>
+  </data>
+  <data name="VRC_ModuleMode_Header" xml:space="preserve">
+    <value>Aseta VRCFT-moduuli</value>
+  </data>
+  <data name="VRC_ModuleMode_Description" xml:space="preserve">
+    <value>Lähetä vain silmät, vain kasvot tai molemmat? (Tarina vaatii VRCFT uudelleenkäynnistyksen)</value>
+  </data>
+  <data name="VRC_ModuleMode_Placeholder" xml:space="preserve">
+    <value>Valitse tila...</value>
+  </data>
+  <data name="Output_Title_Header" xml:space="preserve">
+    <value>Ulostulo</value>
+  </data>
+  <data name="Output_CopyButton_Tooltip" xml:space="preserve">
+    <value>Kopioi lokin tuloste leikepöydälle</value>
+  </data>
+  <data name="Output_SaveButton_Tooltip" xml:space="preserve">
+    <value>Tallenna lokin tuloste</value>
+  </data>
+  <data name="Output_OpenLoggingDirectoryButton_Tooltip" xml:space="preserve">
+    <value>Avaa lokihakemisto</value>
+  </data>
+  <data name="Onboarding_Welcome_Message" xml:space="preserve">
+    <value>Tämä avustaja opastaa sinua perustamalla uuden Babble Appin.</value>
+  </data>
+  <data name="Onboarding_Wireless_Header" xml:space="preserve">
+    <value>Langallinen vai langaton?</value>
+  </data>
+  <data name="Onboarding_Wireless_Description1" xml:space="preserve">
+    <value>Uudempien Babblesien kanssa sinun täytyy tehdä ensimmäisen kerran asetukset Firmware-välilehdessä (yllä).</value>
+  </data>
+  <data name="Onboarding_Wireless_Description2" xml:space="preserve">
+    <value>Se kestää vain 2 minuuttia! Valitse seurantapalvelin ja tila (langallinen tai langaton). Se on niin yksinkertainen.</value>
+  </data>
+  <data name="Onboarding_Wireless_Note" xml:space="preserve">
+    <value>Huomaa, että uudemmilla seurantalaitteilla on 20 sekunnin ikkuna ennen kuin ne siirtyvät kameratilaan.</value>
+  </data>
+  <data name="Onboarding_Assembly_Header" xml:space="preserve">
+    <value>Kokoa Seurantapalvelin</value>
+  </data>
+  <data name="Onboarding_Assembly_Description" xml:space="preserve">
+    <value>Jos tarvitset apua seurantapalvelimen kokoamisessa, tässä on hyödyllinen Youtube-opetusohjelma!</value>
+  </data>
+  <data name="Settings_Title_Header" xml:space="preserve">
+    <value>Sovelluksen Asetukset</value>
+  </data>
+  <data name="Settings_Language_Header" xml:space="preserve">
+    <value>Kieli</value>
+  </data>
+  <data name="Settings_Language_Description" xml:space="preserve">
+    <value>Aseta sovelluksen kieli. Vaihda sivuja sovellettavaksi.</value>
+  </data>
+  <data name="Settings_Language_Default" xml:space="preserve">
+    <value>Oletus</value>
+  </data>
+  <data name="Settings_Language_English" xml:space="preserve">
+    <value>Englanti</value>
+  </data>
+  <data name="Settings_Language_Spanish" xml:space="preserve">
+    <value>Español</value>
+  </data>
+  <data name="Settings_Language_Japanese" xml:space="preserve">
+    <value>日本語</value>
+  </data>
+  <data name="Settings_Language_Polish" xml:space="preserve">
+    <value>Polski</value>
+  </data>
+  <data name="Settings_Language_Chinese" xml:space="preserve">
+    <value>中文</value>
+  </data>
+  <data name="Settings_Filter_Header" xml:space="preserve">
+    <value>Yhden Euro suodattimen asetukset</value>
+  </data>
+  <data name="Settings_Filter_Description" xml:space="preserve">
+    <value>Suodattimen Asetukset</value>
+  </data>
+  <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
+    <value>Käytössä</value>
+  </data>
+  <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
+    <value>Ota suodatus käyttöön tai pois päältä.</value>
+  </data>
+  <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
+    <value>Vähimmäistaajuus katto</value>
+  </data>
+  <data name="Settings_Filter_MinFreq_Description" xml:space="preserve">
+    <value>Määrittää kuinka paljon tasoitusta levitetään hitaisiin liikkeisiin</value>
+  </data>
+  <data name="Settings_Filter_Template_Placeholder" xml:space="preserve">
+    <value>Valitse mallista</value>
+  </data>
+  <data name="Settings_Filter_Template_Low" xml:space="preserve">
+    <value>Matala ({0})</value>
+  </data>
+  <data name="Settings_Filter_Template_Medium" xml:space="preserve">
+    <value>Keskikokoinen ({0})</value>
+  </data>
+  <data name="Settings_Filter_Template_High" xml:space="preserve">
+    <value>Korkea ({0})</value>
+  </data>
+  <data name="Settings_Filter_Speed_Label" xml:space="preserve">
+    <value>Nopeuden kerroin</value>
+  </data>
+  <data name="Settings_Filter_Speed_Description" xml:space="preserve">
+    <value>Määrittää miten suodatin mukautuu kun liikut nopeammin</value>
+  </data>
+  <data name="Settings_GPU_Header" xml:space="preserve">
+    <value>Käytä GPU-kiihtyvyyttä</value>
+  </data>
+  <data name="Settings_GPU_Description" xml:space="preserve">
+    <value>Käytä GPU:ta saadaksesi asiat toimimaan nopeammin! Vaatii uudelleenkäynnistyksen</value>
+  </data>
+  <data name="Settings_LogLevel_Header" xml:space="preserve">
+    <value>Lokin Taso</value>
+  </data>
+  <data name="Settings_LogLevel_Description" xml:space="preserve">
+    <value>Minimi lokitaso. Vaatii uudelleenkäynnistyksen</value>
+  </data>
+  <data name="Settings_Updates_Header" xml:space="preserve">
+    <value>Tarkista Päivitykset</value>
+  </data>
+  <data name="Settings_Updates_Description" xml:space="preserve">
+    <value>Pitäisikö sovelluksen tarkistaa päivitykset käynnistyksessä?</value>
+  </data>
+  <data name="Settings_FirstTime_Header" xml:space="preserve">
+    <value>Käynnistä ensimmäisen kerran</value>
+  </data>
+  <data name="Settings_FirstTime_Description" xml:space="preserve">
+    <value>Käynnistä uudelleen ensimmäisen kerran asetukset</value>
+  </data>
+  <data name="Settings_FirstTime_Button" xml:space="preserve">
+    <value>Käynnistä</value>
+  </data>
+  <data name="Onboarding_Skip_Button" xml:space="preserve">
+    <value>Ohita</value>
+  </data>
+  <data name="Onboarding_UI_Header" xml:space="preserve">
+    <value>Missä kaikki on?</value>
+  </data>
+  <data name="Onboarding_UI_Home_Description" xml:space="preserve">
+    <value>1. Kotisivu on paikka, jossa voit määrittää kamerat, ja suorittaa silmien seuranta kalibrointi.</value>
+  </data>
+  <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
+    <value>2. Kalibrointia voidaan käyttää silmien/kasvojen ilmeiden hienosäätöön yksitellen.</value>
+  </data>
+  <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
+    <value>3. Laiteohjelmistosivua käytetään laitteen asetusten määrittämiseen tai sen nollaamiseen.</value>
+  </data>
+  <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
+    <value>4. VRChat-sivua käytetään VRChat/VRCFaceTracking -kohtaisten asetusten muuttamiseen.</value>
+  </data>
+  <data name="Onboarding_UI_Output_Description" xml:space="preserve">
+    <value>5. Tulos-sivu näyttää sovelluksen tilan ja muuta hyödyllistä tietoa.</value>
+  </data>
+  <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
+    <value>6. Asetukset on tarkoitettu yleisiin sovellusasetuksiin, kuten teemaan, kieleen ja muuhun.</value>
+  </data>
+  <data name="Onboarding_Complete_Header" xml:space="preserve">
+    <value>Asennus Valmis!</value>
+  </data>
+  <data name="Onboarding_Complete_Description1" xml:space="preserve">
+    <value>Kaikki on asetettu aloittamaan uuden Babble Appin käyttö!</value>
+  </data>
+  <data name="Onboarding_Complete_Description2" xml:space="preserve">
+    <value>Voit tarkastella tätä sivua uudelleen asetuksista.</value>
+  </data>
+  <data name="Settings_OSC_IP_Label" xml:space="preserve">
+    <value>Ip Osoite</value>
+  </data>
+  <data name="Settings_OSC_Prefix_Label" xml:space="preserve">
+    <value>OSC Prefix</value>
+  </data>
+  <data name="Settings_OSC_Recalibrate_Label" xml:space="preserve">
+    <value>Palauta Osoite</value>
+  </data>
+  <data name="Settings_OSC_Recenter_Label" xml:space="preserve">
+    <value>Kirjoita Osoite Uudelleen</value>
+  </data>
+  <data name="Settings_OSC_SendPort_Label" xml:space="preserve">
+    <value>Lähetä Portti</value>
+  </data>
+  <data name="Settings_OSC_ReceivePort_Label" xml:space="preserve">
+    <value>Vastaanota Portti</value>
+  </data>
+  <data name="AdminWarning_Header" xml:space="preserve">
+    <value>Järjestelmänvalvojan Tilan Varoitus</value>
+  </data>
+  <data name="AdminWarning_Message" xml:space="preserve">
+    <value>Älä käytä Baballonia ylläpitäjänä! Ei ole tarvetta, ja se estää silmien seurannan kalibrointia.</value>
+  </data>
+  <data name="Aero_Overlay_NotFound" xml:space="preserve">
+    <value>Katseen peitto-ohjelmaa ei ole olemassa!</value>
+  </data>
+  <data name="Aero_Overlay_AlreadyRunning" xml:space="preserve">
+    <value>Katseen peittoohjelma on jo käynnissä! Sulje se ja yritä uudelleen.</value>
+  </data>
+  <data name="Aero_SteamVR_NotRunning" xml:space="preserve">
+    <value>SteamVR ei ole käynnissä. Ole hyvä ja yritä uudelleen.</value>
+  </data>
+  <data name="Aero_CameraStream_Failed" xml:space="preserve">
+    <value>Kameran suoratoistoa ei voitu käynnistää!</value>
+  </data>
+  <data name="Aero_Calibration_Failed" xml:space="preserve">
+    <value>Kalibroinnin käynnistäminen epäonnistui!</value>
+  </data>
+  <data name="Aero_Calibration_Success" xml:space="preserve">
+    <value>Silmien kalibrointi onnistui!</value>
+  </data>
+  <data name="Aero_Overlay_CleanupFailed" xml:space="preserve">
+    <value>Ei voitu pysäyttää/siivota overlay!</value>
+  </data>
+  <data name="Calibration_Instructions_Line1" xml:space="preserve">
+    <value>Alla olevia liukusäätimiä käytetään kalibroimaan</value>
+  </data>
+  <data name="Calibration_Instructions_Sensitivity" xml:space="preserve">
+    <value>herkkyys</value>
+  </data>
+  <data name="Calibration_Instructions_Line1_2" xml:space="preserve">
+    <value>kasvojen ilmettä.</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet1_1" xml:space="preserve">
+    <value>• Nostaminen</value>
+  </data>
+  <data name="Calibration_Instructions_Minimum" xml:space="preserve">
+    <value>Minimi</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet1_2" xml:space="preserve">
+    <value>arvo vaatii vahvemman ilmaisun ennen kuin se alkaa näkyä.</value>
+  </data>
+  <data name="Settings_Language_Chinese_Simplified" xml:space="preserve">
+    <value>Kiina (yksinkertaistettu)</value>
+  </data>
+  <data name="Settings_Language_Chinese_Traditional" xml:space="preserve">
+    <value>Kiina (perinteinen)</value>
+  </data>
+  <data name="Settings_Language_German" xml:space="preserve">
+    <value>Saksa</value>
+  </data>
+  <data name="Settings_Language_French" xml:space="preserve">
+    <value>Ranska</value>
+  </data>
+  <data name="Settings_Language_Italian" xml:space="preserve">
+    <value>Italia</value>
+  </data>
+  <data name="Settings_Language_Korean" xml:space="preserve">
+    <value>Korealainen</value>
+  </data>
+  <data name="Settings_Language_Portuguese_Brazil" xml:space="preserve">
+    <value>Portugali (Brasilia)</value>
+  </data>
+  <data name="Settings_Language_Portuguese_Portugal" xml:space="preserve">
+    <value>Portugali (Portugali)</value>
+  </data>
+  <data name="Settings_Language_Russian" xml:space="preserve">
+    <value>Venäjä</value>
+  </data>
+  <data name="Settings_Language_Arabic" xml:space="preserve">
+    <value>Arabia</value>
+  </data>
+  <data name="Settings_Language_Turkish" xml:space="preserve">
+    <value>Turkki</value>
+  </data>
+  <data name="Settings_Language_Dutch" xml:space="preserve">
+    <value>Hollanti</value>
+  </data>
+  <data name="Settings_Language_Swedish" xml:space="preserve">
+    <value>Ruotsi</value>
+  </data>
+  <data name="Settings_Language_Finnish" xml:space="preserve">
+    <value>Suomi</value>
+  </data>
+  <data name="Settings_Language_Danish" xml:space="preserve">
+    <value>Tanska</value>
+  </data>
+  <data name="Settings_Language_Norwegian" xml:space="preserve">
+    <value>Norja</value>
+  </data>
+  <data name="Settings_Language_Czech" xml:space="preserve">
+    <value>Tšekki</value>
+  </data>
+  <data name="Settings_Language_Hungarian" xml:space="preserve">
+    <value>Unkari</value>
+  </data>
+  <data name="Settings_Language_Romanian" xml:space="preserve">
+    <value>Romania</value>
+  </data>
+  <data name="Settings_Language_Vietnamese" xml:space="preserve">
+    <value>Vietnamese</value>
+  </data>
+  <data name="Settings_Language_Ukrainian" xml:space="preserve">
+    <value>Ukraina</value>
+  </data>
+  <data name="Settings_Language_Greek" xml:space="preserve">
+    <value>Kreikka</value>
+  </data>
+  <data name="Settings_Language_Hebrew" xml:space="preserve">
+    <value>Heprea</value>
+  </data>
+  <data name="Settings_Language_Afrikaans" xml:space="preserve">
+    <value>Afrikaans</value>
+  </data>
+  <data name="Settings_Language_Catalan" xml:space="preserve">
+    <value>Katalaani</value>
+  </data>
+  <data name="Settings_Language_Serbian" xml:space="preserve">
+    <value>Serbia</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet2_1" xml:space="preserve">
+    <value>• Laskeminen</value>
+  </data>
+  <data name="Calibration_Instructions_Maximum" xml:space="preserve">
+    <value>Maksimi</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet2_2" xml:space="preserve">
+    <value>arvo tarkoittaa, että pienempi lauseke saavuttaa 100% nopeammin.</value>
+  </data>
+  <data name="DropOverlay_Important_Header" xml:space="preserve">
+    <value>Tärkeää!</value>
+  </data>
+  <data name="DropOverlay_Message" xml:space="preserve">
+    <value>Uudemmat babble trackers on 20 sekunnin viive sen jälkeen, kun se on kytketty ennen kuin niitä voidaan käyttää. Se tekee USB-liitännäisen äänen, kun se on valmis!</value>
+  </data>
+  <data name="DropOverlay_DontShowAgain" xml:space="preserve">
+    <value>Älä näytä tätä varoitusta uudelleen</value>
+  </data>
+  <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
+    <value>Hylkää</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Settings_OSC_VRCFT_Warning" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+</root>

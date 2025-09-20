@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="OpenCvSharp4" Version="4.11.0.20250507" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Baballonia.FastCorruptionDetector\Baballonia.FastCorruptionDetector.csproj" />
+    </ItemGroup>
+
+</Project>

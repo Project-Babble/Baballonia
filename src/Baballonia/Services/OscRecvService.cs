@@ -60,7 +60,7 @@ public class OscRecvService : BackgroundService
     public override async Task StartAsync(CancellationToken cancellationToken)
     {
         _logger.LogDebug("Starting OSC Receive Service...");
-        await _settingsService.Load(_oscTarget);
+        _settingsService.Load(_oscTarget);
         _logger.LogDebug("OSC target loaded - Address: {Address}, InPort: {InPort}", _oscTarget.DestinationAddress, _oscTarget.InPort);
         await base.StartAsync(cancellationToken);
         _logger.LogDebug("OSC Receive Service started successfully");

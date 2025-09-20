@@ -19,19 +19,22 @@
     pkgsFor = system: import nixpkgs {
       inherit system;
     };
+    internal = builtins.fetchurl {
+      url = "http://217.154.52.44:7771/builds/trainer/1.0.0.0.zip";
+      sha256 = "sha256:0cfc1r1nwcrkihmi9xn4higybyawy465qa6kpls2bjh9wbl5ys82";
+    };
   in {
     packages = forAllSystems (system: let
       pkgs = pkgsFor system;
       dotnet = pkgs.dotnetCorePackages.dotnet_8;
-    in {
-      default = pkgs.buildDotnetModule rec {
+      base = pkgs.buildDotnetModule {
         version = "0.0.0";
         pname = "baballonia";
 
         buildInputs = with pkgs; [
           cmake opencv udev
+          libjpeg libGL fontconfig
           xorg.libX11 xorg.libSM xorg.libICE
-          libjpeg onnxruntime libGL fontconfig
           (pkgs.callPackage ./nix/opencvsharp.nix {})
         ];
 
@@ -41,9 +44,15 @@
         dotnetRuntime = dotnet.runtime;
         projectFile = "src/Baballonia.Desktop/Baballonia.Desktop.csproj";
 
+        makeWrapperArgs = [
+          "--chdir"
+          "${placeholder "out"}/lib/baballonia"
+        ];
+
         postUnpack = ''
           cp -r ${vrcft} $sourceRoot/src/VRCFaceTracking
           cp -r ${hypertext} $sourceRoot/src/HyperText.Avalonia
+          cp ${internal} $sourceRoot/src/Baballonia.Desktop/_internal.zip
 
           # For some reason submodule perms get messed up
           find $sourceRoot/src -type d -exec chmod 755 {} \;
@@ -61,6 +70,13 @@
           description = "Repo for the new Babble App, free and open source eye and face tracking for social VR";
         };
       };
+    in {
+      default = base.overrideAttrs (old: {
+        buildInputs = old.buildInputs ++ [ pkgs.onnxruntime ];
+      });
+      baballonia-cuda = base.overrideAttrs (old: {
+        buildInputs = old.buildInputs ++ [ pkgs.pkgsCuda.onnxruntime ];
+      });
     });
 
     devShells = forAllSystems (system: let
@@ -86,3 +102,4 @@
     });
   };
 }
+

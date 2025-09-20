@@ -1,0 +1,4 @@
+files:
+  - source: /src/Baballonia/Assets/Resources.resx
+    translation: /src/Baballonia/Assets/Resources.%locale%.resx
+

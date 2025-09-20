@@ -44,23 +44,23 @@ namespace Baballonia.Tests.FirmwareTests
             var session = new FirmwareSession(new SerialCommandSender(PORT), _logger);
 
             session.WaitForHeartbeat();
-            session.SendCommand(new FirmwareRequests.SetPausedRequest(true));
-            var networks = session.SendCommand(new FirmwareRequests.ScanWifiRequest());
+            session.SendCommand(new FirmwareRequests.SetPausedRequest(true), TimeSpan.FromSeconds(30));
+            var networks = session.SendCommand(new FirmwareRequests.ScanWifiRequest(), TimeSpan.FromSeconds(30));
             Assert.IsNotNull(networks);
 
             var find = networks.Networks.Find(network => network.Ssid == WIFI_SSID);
             Assert.IsNotNull(find);
 
-            session.SendCommand(new FirmwareRequests.SetWifiRequest(WIFI_SSID, WIFI_PWD));
+            session.SendCommand(new FirmwareRequests.SetWifiRequest(WIFI_SSID, WIFI_PWD), TimeSpan.FromSeconds(30));
 
-            var connectionres = session.SendCommand(new FirmwareRequests.ConnectWifiRequest());
+            var connectionres = session.SendCommand(new FirmwareRequests.ConnectWifiRequest(), TimeSpan.FromSeconds(30));
             Assert.IsNotNull(connectionres);
 
-            var wifistatus = session.SendCommand(new FirmwareRequests.GetWifiStatusRequest());
+            var wifistatus = session.SendCommand(new FirmwareRequests.GetWifiStatusRequest(), TimeSpan.FromSeconds(30));
             Assert.IsNotNull(wifistatus);
             Assert.AreEqual("connected", wifistatus.Status);
 
-            session.SendCommand(new FirmwareRequests.SetPausedRequest(false));
+            session.SendCommand(new FirmwareRequests.SetPausedRequest(false), TimeSpan.FromSeconds(30));
 
             session.Dispose();
         }
@@ -71,23 +71,23 @@ namespace Baballonia.Tests.FirmwareTests
             var session = new FirmwareSession(new SerialCommandSender(PORT), _logger);
 
             session.WaitForHeartbeat();
-            session.SendCommand(new FirmwareRequests.SetPausedRequest(true));
-            var networks = session.SendCommand(new FirmwareRequests.ScanWifiRequest());
+            session.SendCommand(new FirmwareRequests.SetPausedRequest(true), TimeSpan.FromSeconds(30));
+            var networks = session.SendCommand(new FirmwareRequests.ScanWifiRequest(), TimeSpan.FromSeconds(30));
             Assert.IsNotNull(networks);
 
             var find = networks.Networks.Find(network => network.Ssid == WIFI_SSID);
             Assert.IsNotNull(find);
 
-            session.SendCommand(new FirmwareRequests.SetWifiRequest("", WIFI_PWD));
+            session.SendCommand(new FirmwareRequests.SetWifiRequest("", WIFI_PWD), TimeSpan.FromSeconds(30));
 
-            var connectionres = session.SendCommand(new FirmwareRequests.ConnectWifiRequest());
+            var connectionres = session.SendCommand(new FirmwareRequests.ConnectWifiRequest(), TimeSpan.FromSeconds(30));
             Assert.IsNotNull(connectionres);
 
-            var wifistatus = session.SendCommand(new FirmwareRequests.GetWifiStatusRequest());
+            var wifistatus = session.SendCommand(new FirmwareRequests.GetWifiStatusRequest(), TimeSpan.FromSeconds(30));
             Assert.IsNotNull(wifistatus);
             Assert.AreEqual("error", wifistatus.Status);
 
-            session.SendCommand(new FirmwareRequests.SetPausedRequest(false));
+            session.SendCommand(new FirmwareRequests.SetPausedRequest(false), TimeSpan.FromSeconds(30));
 
             session.Dispose();
         }

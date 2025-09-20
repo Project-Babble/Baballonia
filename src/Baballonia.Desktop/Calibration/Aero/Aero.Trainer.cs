@@ -1,12 +1,13 @@
-﻿using System;
+using System;
 using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
-using Baballonia.Contracts;
 using Baballonia.Desktop.Calibration.Aero.Overlay;
 using Baballonia.Models;
 using Baballonia.Services;
-using Baballonia.Services.Inference;
+using Baballonia.ViewModels.SplitViewPane;
 using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using OpenCvSharp;
 
@@ -14,42 +15,20 @@ namespace Baballonia.Desktop.Calibration.Aero;
 
 public partial class AeroOverlayTrainerCombo
 {
-    private MjpegStreamingService leftStreamService = new();
-    private MjpegStreamingService rightStreamService = new();
-    private async Task<bool> StartCamerasAsync(VrCalibration calibration)
-    {
-        var response = await _httpClient.GetStringAsync(new Uri($"{_baseUrl}/start_cameras?left={calibration.LeftEyeMjpegSource}&right={calibration.RightEyeMjpegSource}"));
-        var result = JsonConvert.DeserializeObject<ApiResponse>(response);
-        return result!.Result == "ok";
-    }
+    private readonly MjpegStreamingService _leftStreamService = new();
+    private readonly MjpegStreamingService _rightStreamService = new();
 
-    private async Task<bool> StartCalibrationAsync(VrCalibration calibration)
+    public async Task<(bool, string)> EyeTrackingCalibrationRequested(string calibrationRoutine)
     {
-        var url = $"{_baseUrl}/start_calibration?onnx_filename={VrCalibration.ModelName}&routine_id={calibration.CalibrationInstructions}";
-        var response = await _httpClient.GetStringAsync(url);
-        var result = JsonConvert.DeserializeObject<ApiResponse>(response);
-        return result!.Result == "ok";
-    }
+        // Need to pull here, the service provider isn't present until this method is called
+        Logger ??= Ioc.Default.GetService<ILogger<HomePageViewModel>>()!;
 
-    private void HandleEyeImageEvent(Mat image)
-    {
-        int channels = image.Channels();
-        if (channels != 2)
-            return;
-
-        var images = image.Split();
-        leftStreamService.UpdateMjpegFrame(images[0]);
-        rightStreamService.UpdateMjpegFrame(images[1]);
-
-    }
-    public async Task EyeTrackingCalibrationRequested(string calibrationRoutine)
-    {
         var processingLoop = Ioc.Default.GetService<ProcessingLoopService>()!;
 
         processingLoop.EyesProcessingPipeline.TransformedFrameEvent += HandleEyeImageEvent;
 
-        const int leftPort = 8080;
-        const int rightPort = 8081;
+        const int leftPort = 23952;
+        const int rightPort = 23953;
         var modelPath = Directory.GetCurrentDirectory();
         var calibration = new VrCalibration
         {
@@ -61,20 +40,37 @@ public partial class AeroOverlayTrainerCombo
         };
 
         // Now for the IPC. Spool up our MJPEG streams
-        leftStreamService.StartStreaming(leftPort);
-        rightStreamService.StartStreaming(rightPort);
+        _leftStreamService.StartStreaming(leftPort);
+        _rightStreamService.StartStreaming(rightPort);
 
-        // Tell the calibrator/overlay to accept our streams, then start calibration
-        await StartOverlay();
-        await StartCamerasAsync(calibration);
-        await StartCalibrationAsync(calibration);
+        // Tell the calibrator/overlay start...
+        var status = await StartOverlay();
+        var success = status.success;
+        if (!success)
+        {
+            return await StopStreamingAndReturn(processingLoop, status.message);
+        }
+
+        // Then connect the camera streams...
+        success = await StartCamerasAsync(calibration);
+        if (!success)
+        {
+            return await StopStreamingAndReturn(processingLoop, Assets.Resources.Aero_CameraStream_Failed);
+        }
+
+        // If we have a good start on the overlay/streams, then start calibration
+        success = await StartCalibrationAsync(calibration);
+        if (!success)
+        {
+            return await StopStreamingAndReturn(processingLoop, Assets.Resources.Aero_Calibration_Failed);
+        }
 
         // Wait for the process to exit
         var loop = true;
         while (loop)
         {
-            var status = await GetStatusAsync();
-            if (status.IsTrained)
+            var res = await GetStatusAsync();
+            if (res.IsTrained)
             {
                 loop = false;
             }
@@ -83,14 +79,88 @@ public partial class AeroOverlayTrainerCombo
         }
 
         // Stop the MJPEG streams, we don't need them anymore
-        StopOverlay();
+        success = StopOverlay();
 
-        processingLoop.EyesProcessingPipeline.TransformedFrameEvent -= HandleEyeImageEvent;
+        var outputMessage = success ?
+            Assets.Resources.Aero_Calibration_Success :
+            Assets.Resources.Aero_Overlay_CleanupFailed;
 
-        leftStreamService.StopStreaming();
-        rightStreamService.StopStreaming();
+        // Stop streaming, cleanup. No need to report an error state
+        await StopStreamingAndReturn(processingLoop, string.Empty);
 
         // Cleanup any leftover capture.bin files
         DeleteCaptureFiles(modelPath);
+        return await Task.FromResult((success, outputMessage));
+    }
+
+    private async Task<(bool, string)> StopStreamingAndReturn(ProcessingLoopService processingLoop, string message)
+    {
+        processingLoop.EyesProcessingPipeline.TransformedFrameEvent -= HandleEyeImageEvent;
+        _leftStreamService.StopStreaming();
+        _rightStreamService.StopStreaming();
+        return await Task.FromResult((false, message));
+    }
+
+    private async Task<(bool success, string message)> StartOverlay(string[]? arguments = null, bool waitForExit = false)
+    {
+        return await StartProcess(Overlay, arguments, waitForExit);
+    }
+
+    private bool StopOverlay()
+    {
+        return StopProcess(Overlay);
+    }
+
+    private async Task<bool> StartCamerasAsync(VrCalibration calibration)
+    {
+        try
+        {
+            var response = await _httpClient.GetStringAsync(new Uri(
+                $"{_baseUrl}/start_cameras?left={calibration.LeftEyeMjpegSource}&right={calibration.RightEyeMjpegSource}"));
+            var result = JsonConvert.DeserializeObject<ApiResponse>(response);
+            return result!.Result == "ok";
+        }
+        catch (HttpRequestException e)
+        {
+            Logger.LogError(e.Message);
+            return false;
+        }
+        catch (Exception e)
+        {
+            Logger.LogError(e.Message);
+            throw;
+        }
+    }
+
+    private async Task<bool> StartCalibrationAsync(VrCalibration calibration)
+    {
+        try
+        {
+            var url = $"{_baseUrl}/start_calibration?onnx_filename={VrCalibration.ModelName}&routine_id={calibration.CalibrationInstructions}";
+            var response = await _httpClient.GetStringAsync(url);
+            var result = JsonConvert.DeserializeObject<ApiResponse>(response);
+            return result!.Result == "ok";
+        }
+        catch (HttpRequestException e)
+        {
+            Logger.LogError(e.Message);
+            return false;
+        }
+        catch (Exception e)
+        {
+            Logger.LogError(e.Message);
+            throw;
+        }
+    }
+
+    private void HandleEyeImageEvent(Mat image)
+    {
+        int channels = image.Channels();
+        if (channels != 2)
+            return;
+
+        var images = image.Split();
+        _leftStreamService.UpdateMjpegFrame(images[0]);
+        _rightStreamService.UpdateMjpegFrame(images[1]);
     }
 }

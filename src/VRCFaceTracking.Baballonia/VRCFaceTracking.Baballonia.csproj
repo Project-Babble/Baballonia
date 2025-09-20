@@ -12,7 +12,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="BabbleLogo.png" />
+    <EmbeddedResource Include="BabbleEyeLogo.png" />
+    <None Remove="BabbleFaceLogo.png" />
+    <EmbeddedResource Include="BabbleFaceLogo.png" />
+    <None Update="module.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -34,7 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="BaballoniaConfig.json">
+    <None Update="BabbleConfig.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -43,6 +48,35 @@
     <ProjectReference Include="..\VRCFaceTracking\VRCFaceTracking.Core\VRCFaceTracking.Core.csproj" />
     <ProjectReference Include="..\VRCFaceTracking\VRCFaceTracking.SDK\VRCFaceTracking.SDK.csproj" />
   </ItemGroup>
+
+    <!-- Make module .zip -->
+  <Target Name="ZipFiles" AfterTargets="AfterBuild">
+    <PropertyGroup>
+      <TempZipFolder>$(OutputPath)temp_zip</TempZipFolder>
+    </PropertyGroup>
+    
+    <ItemGroup>
+      <FilesToZip Include="$(OutputPath)VRCFaceTracking.Baballonia.dll" />
+      <FilesToZip Include="$(OutputPath)BabbleConfig.json" />
+      <FilesToZip Include="$(OutputPath)module.json" />
+    </ItemGroup>
+    
+    <!-- Delete existing zip file if it exists -->
+    <Delete Files="$(OutputPath)VRCFaceTracking.Baballonia.zip" ContinueOnError="true" />
+    
+    <!-- Create temp directory -->
+    <MakeDir Directories="$(TempZipFolder)" />
+    
+    <!-- Copy files to temp directory -->
+    <Copy SourceFiles="@(FilesToZip)" DestinationFolder="$(TempZipFolder)" />
+    
+    <!-- Create zip from temp directory -->
+    <ZipDirectory SourceDirectory="$(TempZipFolder)" 
+                  DestinationFile="$(OutputPath)VRCFaceTracking.Baballonia.zip" />
+    
+    <!-- Clean up temp directory -->
+    <RemoveDir Directories="$(TempZipFolder)" />
+  </Target>
   
 
 </Project>

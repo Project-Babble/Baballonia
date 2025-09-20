@@ -1,0 +1,724 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Settings_Theme_Dark_Content" xml:space="preserve">
+    <value>داكن</value>
+  </data>
+  <data name="Settings_Theme_Default_Content" xml:space="preserve">
+    <value>الافتراضي</value>
+  </data>
+  <data name="Settings_Theme_Light_Content" xml:space="preserve">
+    <value>فاتح</value>
+  </data>
+  <data name="Home_Title_Header" xml:space="preserve">
+    <value>المنزل</value>
+  </data>
+  <data name="Settings_Theme_Header" xml:space="preserve">
+    <value>سمة التطبيق</value>
+  </data>
+  <data name="Settings_Theme_Description" xml:space="preserve">
+    <value>حدد سمة التطبيق التي سيتم عرضها</value>
+  </data>
+  <data name="Settings_OSC_Description" xml:space="preserve">
+    <value>أين ينبغي إرسال بيانات OSC ؟</value>
+  </data>
+  <data name="Settings_OSC_Header" xml:space="preserve">
+    <value>OSC</value>
+  </data>
+  <data name="Home_Eye_Calibration" xml:space="preserve">
+    <value>معايرة العين</value>
+  </data>
+  <data name="Home_Left_Camera_Address" xml:space="preserve">
+    <value>عنوان الكاميرا اليسرى</value>
+  </data>
+  <data name="Home_Cameras_Start_Camera" xml:space="preserve">
+    <value>بدء تشغيل الكاميرا</value>
+  </data>
+  <data name="Home_Cameras_Stop_Camera" xml:space="preserve">
+    <value>إيقاف الكاميرا</value>
+  </data>
+  <data name="Home_Cameras_Tracking_Mode" xml:space="preserve">
+    <value>التتبع</value>
+  </data>
+  <data name="Home_Cameras_Cropping_Mode" xml:space="preserve">
+    <value>التقطيع</value>
+  </data>
+  <data name="Home_Left_Camera_Select_Entire_Frame" xml:space="preserve">
+    <value>حدد الإطار الأيسر</value>
+  </data>
+  <data name="Home_Cameras_Vertical_Flip_Header" xml:space="preserve">
+    <value>انعكاس عمودي</value>
+  </data>
+  <data name="Home_Cameras_Vertical_Flip_Description" xml:space="preserve">
+    <value>قلب الصورة عمودياً</value>
+  </data>
+  <data name="Home_Cameras_Horizontal_Flip_Header" xml:space="preserve">
+    <value>قلب أفقي</value>
+  </data>
+  <data name="Home_Cameras_Horizontal_Flip_Description" xml:space="preserve">
+    <value>قلب الصورة أفقياً</value>
+  </data>
+  <data name="Home_Cameras_Rotation_Description" xml:space="preserve">
+    <value>تدوير الصورة في دائرة</value>
+  </data>
+  <data name="Home_Cameras_Brightness_Header" xml:space="preserve">
+    <value>سطوع الصورة</value>
+  </data>
+  <data name="Home_Cameras_Rotation_Header" xml:space="preserve">
+    <value>تدوير الصورة</value>
+  </data>
+  <data name="Home_Cameras_Brightness_Description" xml:space="preserve">
+    <value>ضبط سطوع الصورة</value>
+  </data>
+  <data name="Home_Right_Camera_Address" xml:space="preserve">
+    <value>عنوان الكاميرا اليمنى</value>
+  </data>
+  <data name="Home_Right_Camera_Select_Entire_Frame" xml:space="preserve">
+    <value>حدد الإطار الصحيح</value>
+  </data>
+  <data name="Home_Face_Camera_Address" xml:space="preserve">
+    <value>عنوان الكاميرا الوجه</value>
+  </data>
+  <data name="Home_Face_Camera_Select_Entire_Frame" xml:space="preserve">
+    <value>حدد إطار الوجه</value>
+  </data>
+  <data name="Home_Left_Camera_Header" xml:space="preserve">
+    <value>كاميرا العين اليسرى</value>
+  </data>
+  <data name="Home_Face_Camera_Header" xml:space="preserve">
+    <value>كاميرا الوجه</value>
+  </data>
+  <data name="Home_Right_Camera_Header" xml:space="preserve">
+    <value>كاميرا العين الأيمن</value>
+  </data>
+  <data name="Home_Left_Camera_Settings" xml:space="preserve">
+    <value>إعدادات الكاميرا اليسرى</value>
+  </data>
+  <data name="Home_Face_Camera_Settings" xml:space="preserve">
+    <value>إعدادات الكاميرا الوجه</value>
+  </data>
+  <data name="Home_Right_Camera_Settings" xml:space="preserve">
+    <value>إعدادات الكاميرا اليمنى</value>
+  </data>
+  <data name="Common_Start_Typing" xml:space="preserve">
+    <value>ابدأ الكتابة...</value>
+  </data>
+  <data name="Calibration_Title_Header" xml:space="preserve">
+    <value>معايرة</value>
+  </data>
+  <data name="Calibration_Reset_Minimums" xml:space="preserve">
+    <value>Reset Minimums</value>
+  </data>
+  <data name="Calibration_Reset_Maximums" xml:space="preserve">
+    <value>Reset Maximums</value>
+  </data>
+  <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
+    <value>تعبيرات العين</value>
+  </data>
+  <data name="Calibration_Nose_Expressions_Header" xml:space="preserve">
+    <value>تعبيرات الأنف</value>
+  </data>
+  <data name="Calibration_Tongue_Expressions_Header" xml:space="preserve">
+    <value>تعبيرات التونغي</value>
+  </data>
+  <data name="Calibration_Mouth_Expressions_Header" xml:space="preserve">
+    <value>تعبيرات الفم</value>
+  </data>
+  <data name="Calibration_Jaw_Expressions_Header" xml:space="preserve">
+    <value>تعبيرات الجو</value>
+  </data>
+  <data name="Calibration_Cheek_Expressions_Header" xml:space="preserve">
+    <value>عبارات الشك</value>
+  </data>
+  <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Header" xml:space="preserve">
+    <value>تثبيت العيون</value>
+  </data>
+  <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Description" xml:space="preserve">
+    <value>يمنع العيون من النظر إلى الخارج في اتجاهات معاكسة، ولكن قد يكون صحيحا.</value>
+  </data>
+  <data name="Firmware_Title_Header" xml:space="preserve">
+    <value>البرامج الثابتة</value>
+  </data>
+  <data name="Firmware_Select_Tracker_Header" xml:space="preserve">
+    <value>حدد المتتبع الخاص بك</value>
+  </data>
+  <data name="Firmware_Device_Instructions_1" xml:space="preserve">
+    <value>• بعد تشغيل أو توصيل جهازك سيكون لديك 20 ثانية للضغط على "تحديث" وتحديد جهازك من القائمة المنسدلة</value>
+  </data>
+  <data name="Firmware_Device_Instructions_2" xml:space="preserve">
+    <value>• بعض عمليات التكوين سوف تستغرق بعض الشيء!</value>
+  </data>
+  <data name="Firmware_Device_Configuration_Header" xml:space="preserve">
+    <value>تكوين الجهاز</value>
+  </data>
+  <data name="Firmware_Device_Configuration_Description" xml:space="preserve">
+    <value>تبديل الوضع السلكي/اللاسلكي</value>
+  </data>
+  <data name="Firmware_Device_Mode_Header" xml:space="preserve">
+    <value>تبديل الوضع السلكي/اللاسلكي</value>
+  </data>
+  <data name="Firmware_Device_Mode_Instruction_1" xml:space="preserve">
+    <value>• تحتاج إلى إعادة تشغيل التتبع الخاص بك بعد تغيير الوضع</value>
+  </data>
+  <data name="Firmware_Device_Mode_Instruction_2" xml:space="preserve">
+    <value>• تحتاج إلى إعادة تشغيل التطبيق بعد فلاش للمتعقبين لإظهاره</value>
+  </data>
+  <data name="Firmware_Device_Mode_Select_Placeholder" xml:space="preserve">
+    <value>اختر وضعًا...</value>
+  </data>
+  <data name="Firmware_Wifi_Configuration_Header" xml:space="preserve">
+    <value>تكوين الواي فاي</value>
+  </data>
+  <data name="Firmware_Wifi_Configuration_Description" xml:space="preserve">
+    <value>الاتصال بشبكة Wi-Fi والمزيد</value>
+  </data>
+  <data name="Firmware_Wifi_Credentials_Header" xml:space="preserve">
+    <value>تعيين بيانات اعتماد Wi-Fi الخاصة بك</value>
+  </data>
+  <data name="Firmware_Wifi_Instructions_1" xml:space="preserve">
+    <value>• إذا كنت ترغب في استخدام تتبع الخاص بك لاسلكيا، فأنت جديد لتعيين بيانات اعتماد Wi-Fi الخاصة به</value>
+  </data>
+  <data name="Firmware_Wifi_Instructions_2" xml:space="preserve">
+    <value>• تقوم بمسح شبكات Wi-Fi بيضاء يمكنك تعيين بيانات اعتماد Wi-Fi الخاصة بك</value>
+  </data>
+  <data name="Firmware_Wifi_SSID_Label" xml:space="preserve">
+    <value>اسم شبكة WiFi (SSID)</value>
+  </data>
+  <data name="Firmware_Wifi_SSID_Placeholder" xml:space="preserve">
+    <value>بدء الكتابة لمشاهدة شبكات WiFi ...</value>
+  </data>
+  <data name="Firmware_Wifi_Password_Label" xml:space="preserve">
+    <value>كلمة مرور WiFi</value>
+  </data>
+  <data name="Firmware_Wifi_Password_Placeholder" xml:space="preserve">
+    <value>أدخل كلمة مرور WiFi ...</value>
+  </data>
+  <data name="Firmware_Flashing_Header" xml:space="preserve">
+    <value>Flashing Options</value>
+  </data>
+  <data name="Firmware_Flashing_Description" xml:space="preserve">
+    <value>تشغيل البرنامج الثابت لجهازك</value>
+  </data>
+  <data name="Firmware_Flashing_Warning" xml:space="preserve">
+    <value>تنبيه!! هذه هي المرة الأولى التي تقوم فيها بحركتك. أنت لا تريد أن تنشرك مرة أخرى لتنبيهك إلى مجموعة من الأشياء التي يمكنك الحصول عليها في وقت لاحق.</value>
+  </data>
+  <data name="Firmware_Flashing_Button" xml:space="preserve">
+    <value>البرامج الثابتة الفلاش</value>
+  </data>
+  <data name="Firmware_Flashing_Note" xml:space="preserve">
+    <value>هذا سوف يستغرق حوالي ~10 ثوان. لا تترك هذه الصفحة!</value>
+  </data>
+  <data name="Firmware_Flashing_Complete" xml:space="preserve">
+    <value>تم! ستحتاج إلى إعادة تشغيل المتتبع الخاص بك</value>
+  </data>
+  <data name="Firmware_TrackerComboBox_Default" xml:space="preserve">
+    <value>انقر لرؤية المتتبعين...</value>
+  </data>
+  <data name="Firmware_RefreshDevices_Default" xml:space="preserve">
+    <value>تحديث الأجهزة</value>
+  </data>
+  <data name="Firmware_RefreshDevices_Refreshing" xml:space="preserve">
+    <value>التحديث</value>
+  </data>
+  <data name="Firmware_RefreshDevices_Found" xml:space="preserve">
+    <value>تم العثور على جهاز {0}.</value>
+  </data>
+  <data name="Firmware_SelectTracker_Default" xml:space="preserve">
+    <value>حدد متعقب</value>
+  </data>
+  <data name="Firmware_SelectTracker_Connected" xml:space="preserve">
+    <value>متتبع متصل!</value>
+  </data>
+  <data name="Firmware_SelectTracker_NoResponse" xml:space="preserve">
+    <value>ولم يستجب المتتبع.</value>
+  </data>
+  <data name="Firmware_ModeSetButton_Default" xml:space="preserve">
+    <value>تعيين الوضع</value>
+  </data>
+  <data name="Firmware_ModeSetButton_Setting" xml:space="preserve">
+    <value>وضع الإعداد</value>
+  </data>
+  <data name="Firmware_ModeSetButton_Success" xml:space="preserve">
+    <value>المجموعة!</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Default" xml:space="preserve">
+    <value>تعيين إنشاء Wi-Fi</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Setting" xml:space="preserve">
+    <value>إعداد بيانات اعتماد WiFi</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Success" xml:space="preserve">
+    <value>تم إرساله!</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Error" xml:space="preserve">
+    <value>حدث خطأ ما...</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Default" xml:space="preserve">
+    <value>تحديث شبكات الواي فاي</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Scanning" xml:space="preserve">
+    <value>الفحص. سيستغرق هذا 30 ثانية على الأكثر</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Error" xml:space="preserve">
+    <value>فشل المسح. انقر لإعادة المحاولة.</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
+    <value>تم العثور على شبكات {0} . انقر للمسح مرة أخرى.</value>
+  </data>
+  <data name="VRC_Title_Header" xml:space="preserve">
+    <value>إعدادات VRChat + VRCFaceTTrking</value>
+  </data>
+  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
+    <value>استخدام الـ VRC الأصلية لتتبع العين</value>
+  </data>
+  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
+    <value>يجلب تتبع العين إلى الصور الرمزية التي لا تملك VRCFaceTTrking</value>
+  </data>
+  <data name="VRC_ModuleMode_Header" xml:space="preserve">
+    <value>تعيين وضع وحدة VRCFT</value>
+  </data>
+  <data name="VRC_ModuleMode_Description" xml:space="preserve">
+    <value>إرسال العين فقط، الوجه فقط أو كليهما؟ (التغيير يتطلب إعادة تشغيل VRCFT)</value>
+  </data>
+  <data name="VRC_ModuleMode_Placeholder" xml:space="preserve">
+    <value>اختر وضعًا...</value>
+  </data>
+  <data name="Output_Title_Header" xml:space="preserve">
+    <value>الناتج</value>
+  </data>
+  <data name="Output_CopyButton_Tooltip" xml:space="preserve">
+    <value>نسخ إخراج السجل إلى الحافظة الخاصة بك</value>
+  </data>
+  <data name="Output_SaveButton_Tooltip" xml:space="preserve">
+    <value>حفظ إخراج السجل</value>
+  </data>
+  <data name="Output_OpenLoggingDirectoryButton_Tooltip" xml:space="preserve">
+    <value>فتح دليل التسجيل</value>
+  </data>
+  <data name="Onboarding_Welcome_Message" xml:space="preserve">
+    <value>هذا المعالج سيوجهك من خلال إعداد تطبيق بابل الجديد.</value>
+  </data>
+  <data name="Onboarding_Wireless_Header" xml:space="preserve">
+    <value>محلول أم لاسلكي؟</value>
+  </data>
+  <data name="Onboarding_Wireless_Description1" xml:space="preserve">
+    <value>مع البابلات الأحدث، ستحتاج إلى إجراء أول عملية إعداد في علامة التبويب البرنامج الثابت (أيقونة أعلاه).</value>
+  </data>
+  <data name="Onboarding_Wireless_Description2" xml:space="preserve">
+    <value>يستغرق الأمر دقيقتين فقط! حدد التتبع الخاص بك والوضع (سلكي أو لاسلكي). إنه بهذه البساطة.</value>
+  </data>
+  <data name="Onboarding_Wireless_Note" xml:space="preserve">
+    <value>يرجى ملاحظة أن للمتعقبين الأحدث نافذة 20 ثانية قبل أن يدخلوا وضع الكاميرا.</value>
+  </data>
+  <data name="Onboarding_Assembly_Header" xml:space="preserve">
+    <value>تجميع التتبع الخاص بك</value>
+  </data>
+  <data name="Onboarding_Assembly_Description" xml:space="preserve">
+    <value>إذا كنت بحاجة إلى مساعدة في وضع المتتبع الخاص بك معا، إليك برنامج تعليمي مفيد على اليوتيوب!</value>
+  </data>
+  <data name="Settings_Title_Header" xml:space="preserve">
+    <value>إعدادات التطبيق</value>
+  </data>
+  <data name="Settings_Language_Header" xml:space="preserve">
+    <value>اللغة</value>
+  </data>
+  <data name="Settings_Language_Description" xml:space="preserve">
+    <value>تعيين لغة التطبيق. قم بتبديل الصفحات إلى التطبيق.</value>
+  </data>
+  <data name="Settings_Language_Default" xml:space="preserve">
+    <value>الافتراضي</value>
+  </data>
+  <data name="Settings_Language_English" xml:space="preserve">
+    <value>الإنكليزية</value>
+  </data>
+  <data name="Settings_Language_Spanish" xml:space="preserve">
+    <value>Español</value>
+  </data>
+  <data name="Settings_Language_Japanese" xml:space="preserve">
+    <value>日本語</value>
+  </data>
+  <data name="Settings_Language_Polish" xml:space="preserve">
+    <value>Polski</value>
+  </data>
+  <data name="Settings_Language_Chinese" xml:space="preserve">
+    <value>中文</value>
+  </data>
+  <data name="Settings_Filter_Header" xml:space="preserve">
+    <value>إعدادات تصفية اليورو الواحد</value>
+  </data>
+  <data name="Settings_Filter_Description" xml:space="preserve">
+    <value>إعدادات الفلتر</value>
+  </data>
+  <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
+    <value>تمكين</value>
+  </data>
+  <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
+    <value>تشغيل الفلتر أو إيقاف تشغيله.</value>
+  </data>
+  <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
+    <value>الحد الأدنى من قطع التردد</value>
+  </data>
+  <data name="Settings_Filter_MinFreq_Description" xml:space="preserve">
+    <value>التحكم في مدى سلاسة الحركة البطيئة</value>
+  </data>
+  <data name="Settings_Filter_Template_Placeholder" xml:space="preserve">
+    <value>حدد من قالب</value>
+  </data>
+  <data name="Settings_Filter_Template_Low" xml:space="preserve">
+    <value>منخفض ({0})</value>
+  </data>
+  <data name="Settings_Filter_Template_Medium" xml:space="preserve">
+    <value>متوسط ({0})</value>
+  </data>
+  <data name="Settings_Filter_Template_High" xml:space="preserve">
+    <value>عالي ({0})</value>
+  </data>
+  <data name="Settings_Filter_Speed_Label" xml:space="preserve">
+    <value>معامل السرعة</value>
+  </data>
+  <data name="Settings_Filter_Speed_Description" xml:space="preserve">
+    <value>يحدد كيف يتكيف عامل التصفية عندما تتحرك بسرعة</value>
+  </data>
+  <data name="Settings_GPU_Header" xml:space="preserve">
+    <value>استخدام تسارع GPU</value>
+  </data>
+  <data name="Settings_GPU_Description" xml:space="preserve">
+    <value>استخدم GPU الخاص بك لجعل الأمور تعمل بشكل أسرع! يتطلب إعادة التشغيل</value>
+  </data>
+  <data name="Settings_LogLevel_Header" xml:space="preserve">
+    <value>فيربوس مستوى السجل</value>
+  </data>
+  <data name="Settings_LogLevel_Description" xml:space="preserve">
+    <value>الحد الأدنى لمستوى تسجيل الدخول. يتطلب إعادة التشغيل</value>
+  </data>
+  <data name="Settings_Updates_Header" xml:space="preserve">
+    <value>التحقق من وجود تحديثات</value>
+  </data>
+  <data name="Settings_Updates_Description" xml:space="preserve">
+    <value>هل ينبغي للتطبيق التحقق من وجود تحديثات عند البدء؟</value>
+  </data>
+  <data name="Settings_FirstTime_Header" xml:space="preserve">
+    <value>تشغيل أول مرة للإعداد</value>
+  </data>
+  <data name="Settings_FirstTime_Description" xml:space="preserve">
+    <value>يستعيد أول مرة يتم فيها الإعداد</value>
+  </data>
+  <data name="Settings_FirstTime_Button" xml:space="preserve">
+    <value>تشغيل</value>
+  </data>
+  <data name="Onboarding_Skip_Button" xml:space="preserve">
+    <value>تخطي</value>
+  </data>
+  <data name="Onboarding_UI_Header" xml:space="preserve">
+    <value>أين كل شيء؟</value>
+  </data>
+  <data name="Onboarding_UI_Home_Description" xml:space="preserve">
+    <value>1. الصفحة الرئيسية هي المكان الذي يمكنك فيه إعداد الكاميرات، وإجراء معايرة تتبع العين.</value>
+  </data>
+  <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
+    <value>2. يمكن استخدام المعايرة لضبط تعابير العين/الوجه بشكل فردي.</value>
+  </data>
+  <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
+    <value>3. تُستخدم صفحة البرنامج الثابت لإعداد جهازك أو إعادة ضبطه.</value>
+  </data>
+  <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
+    <value>4. تُستخدم صفحة VRChat لتعديل إعدادات VRChat/VRCFaceTracking المحددة.</value>
+  </data>
+  <data name="Onboarding_UI_Output_Description" xml:space="preserve">
+    <value>5. تعرض صفحة الإخراج حالة التطبيق ومعلومات أخرى مفيدة.</value>
+  </data>
+  <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
+    <value>6. الإعدادات مخصصة لإعدادات التطبيق العامة، مثل السمة واللغة والمزيد.</value>
+  </data>
+  <data name="Onboarding_Complete_Header" xml:space="preserve">
+    <value>اكتمل الإعداد!</value>
+  </data>
+  <data name="Onboarding_Complete_Description1" xml:space="preserve">
+    <value>أنت مجهز للبدء في استخدام تطبيق بابل الجديد!</value>
+  </data>
+  <data name="Onboarding_Complete_Description2" xml:space="preserve">
+    <value>يمكنك مراجعة هذه الصفحة في الإعدادات.</value>
+  </data>
+  <data name="Settings_OSC_IP_Label" xml:space="preserve">
+    <value>عنوان IP</value>
+  </data>
+  <data name="Settings_OSC_Prefix_Label" xml:space="preserve">
+    <value>OSC Prefix</value>
+  </data>
+  <data name="Settings_OSC_Recalibrate_Label" xml:space="preserve">
+    <value>إعادة معايرة العنوان</value>
+  </data>
+  <data name="Settings_OSC_Recenter_Label" xml:space="preserve">
+    <value>عنوان المُسَجّل</value>
+  </data>
+  <data name="Settings_OSC_SendPort_Label" xml:space="preserve">
+    <value>إرسال المنفذ</value>
+  </data>
+  <data name="Settings_OSC_ReceivePort_Label" xml:space="preserve">
+    <value>تلقي المنفذ</value>
+  </data>
+  <data name="AdminWarning_Header" xml:space="preserve">
+    <value>تحذير وضع المسؤول</value>
+  </data>
+  <data name="AdminWarning_Message" xml:space="preserve">
+    <value>لا تقم بتشغيل بابالونيا كمشرف! لا حاجة إلى ذلك، وهو يمنع معايرة تتبع العين من العمل.</value>
+  </data>
+  <data name="Aero_Overlay_NotFound" xml:space="preserve">
+    <value>برنامج الطبقات غير موجود!</value>
+  </data>
+  <data name="Aero_Overlay_AlreadyRunning" xml:space="preserve">
+    <value>تم تشغيل برنامج التحديث مسبقاً! الرجاء إغلاقه والمحاولة مرة أخرى.</value>
+  </data>
+  <data name="Aero_SteamVR_NotRunning" xml:space="preserve">
+    <value>SteamVR غير مشغل. الرجاء تشغيله والمحاولة مرة أخرى.</value>
+  </data>
+  <data name="Aero_CameraStream_Failed" xml:space="preserve">
+    <value>فشل في بدء تشغيل الكاميرا!</value>
+  </data>
+  <data name="Aero_Calibration_Failed" xml:space="preserve">
+    <value>فشل في بدء المعايرة!</value>
+  </data>
+  <data name="Aero_Calibration_Success" xml:space="preserve">
+    <value>تمت معايرة تتبع العين بنجاح!</value>
+  </data>
+  <data name="Aero_Overlay_CleanupFailed" xml:space="preserve">
+    <value>فشل في التوقف/تنظيف فوق الجهاز!</value>
+  </data>
+  <data name="Calibration_Instructions_Line1" xml:space="preserve">
+    <value>الشرائح أدناه تستخدم لمعايرة</value>
+  </data>
+  <data name="Calibration_Instructions_Sensitivity" xml:space="preserve">
+    <value>حساسية</value>
+  </data>
+  <data name="Calibration_Instructions_Line1_2" xml:space="preserve">
+    <value>من تعبيرات وجهك.</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet1_1" xml:space="preserve">
+    <value>• رفع مستوى</value>
+  </data>
+  <data name="Calibration_Instructions_Minimum" xml:space="preserve">
+    <value>الحد الأدنى</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet1_2" xml:space="preserve">
+    <value>تتطلب القيمة تعبيراً أقوى قبل أن تبدأ في الإظهار.</value>
+  </data>
+  <data name="Settings_Language_Chinese_Simplified" xml:space="preserve">
+    <value>الصينية (المبسطة)</value>
+  </data>
+  <data name="Settings_Language_Chinese_Traditional" xml:space="preserve">
+    <value>الصينية (التقليدية)</value>
+  </data>
+  <data name="Settings_Language_German" xml:space="preserve">
+    <value>الألمانية</value>
+  </data>
+  <data name="Settings_Language_French" xml:space="preserve">
+    <value>الفرنسية</value>
+  </data>
+  <data name="Settings_Language_Italian" xml:space="preserve">
+    <value>الإيطالية</value>
+  </data>
+  <data name="Settings_Language_Korean" xml:space="preserve">
+    <value>الكورية</value>
+  </data>
+  <data name="Settings_Language_Portuguese_Brazil" xml:space="preserve">
+    <value>البرتغالية (البرازيل)</value>
+  </data>
+  <data name="Settings_Language_Portuguese_Portugal" xml:space="preserve">
+    <value>البرتغالية (البرتغال)</value>
+  </data>
+  <data name="Settings_Language_Russian" xml:space="preserve">
+    <value>الروسية</value>
+  </data>
+  <data name="Settings_Language_Arabic" xml:space="preserve">
+    <value>العربية</value>
+  </data>
+  <data name="Settings_Language_Turkish" xml:space="preserve">
+    <value>تركية</value>
+  </data>
+  <data name="Settings_Language_Dutch" xml:space="preserve">
+    <value>الهولندية</value>
+  </data>
+  <data name="Settings_Language_Swedish" xml:space="preserve">
+    <value>السويدية</value>
+  </data>
+  <data name="Settings_Language_Finnish" xml:space="preserve">
+    <value>الفنلندية</value>
+  </data>
+  <data name="Settings_Language_Danish" xml:space="preserve">
+    <value>الدانماركية</value>
+  </data>
+  <data name="Settings_Language_Norwegian" xml:space="preserve">
+    <value>النرويجية</value>
+  </data>
+  <data name="Settings_Language_Czech" xml:space="preserve">
+    <value>التشيكية</value>
+  </data>
+  <data name="Settings_Language_Hungarian" xml:space="preserve">
+    <value>الهنغارية</value>
+  </data>
+  <data name="Settings_Language_Romanian" xml:space="preserve">
+    <value>الرومانية</value>
+  </data>
+  <data name="Settings_Language_Vietnamese" xml:space="preserve">
+    <value>Vietnamese</value>
+  </data>
+  <data name="Settings_Language_Ukrainian" xml:space="preserve">
+    <value>أوكراني</value>
+  </data>
+  <data name="Settings_Language_Greek" xml:space="preserve">
+    <value>اليونانية</value>
+  </data>
+  <data name="Settings_Language_Hebrew" xml:space="preserve">
+    <value>العبرية</value>
+  </data>
+  <data name="Settings_Language_Afrikaans" xml:space="preserve">
+    <value>الأفريكانيون</value>
+  </data>
+  <data name="Settings_Language_Catalan" xml:space="preserve">
+    <value>الكاتالونية</value>
+  </data>
+  <data name="Settings_Language_Serbian" xml:space="preserve">
+    <value>الصربية</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet2_1" xml:space="preserve">
+    <value>• تخفيض مستوى</value>
+  </data>
+  <data name="Calibration_Instructions_Maximum" xml:space="preserve">
+    <value>الحد الأقصى</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet2_2" xml:space="preserve">
+    <value>القيمة تعني أن التعبير الأصغر سوف يصل إلى 100% أسرع.</value>
+  </data>
+  <data name="DropOverlay_Important_Header" xml:space="preserve">
+    <value>مهم!</value>
+  </data>
+  <data name="DropOverlay_Message" xml:space="preserve">
+    <value>ويحصل المتتبعون الأحدث على 20 ثانية من التأخير بعد توصيلهم قبل استخدامهم. سوف تصنع صوت توصيل USB عندما يكون جاهزاً!</value>
+  </data>
+  <data name="DropOverlay_DontShowAgain" xml:space="preserve">
+    <value>لا تظهر هذا التحذير مرة أخرى</value>
+  </data>
+  <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
+    <value>تجاهل</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Settings_OSC_VRCFT_Warning" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+</root>

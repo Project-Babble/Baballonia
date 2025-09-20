@@ -64,31 +64,34 @@ public sealed class SerialCameraCapture(string source, ILogger logger) : Capture
     private async void DataLoop()
     {
         Logger.LogDebug("Serial camera data loop started");
-        byte[] buffer = new byte[2048];
+        var buffer = new byte[2048];
         try
         {
             while (_serialPort.IsOpen)
             {
-                Stream stream = _serialPort.BaseStream;
-                for (int bufferPosition = 0; bufferPosition < sizeof(ulong);)
-                    bufferPosition += await stream.ReadAsync(buffer, bufferPosition, sizeof(ulong) - bufferPosition);
-                ulong header = BinaryPrimitives.ReadUInt64LittleEndian(buffer);
+                var stream = _serialPort.BaseStream;
+                for (var bufferPosition = 0; bufferPosition < sizeof(ulong);) bufferPosition += await stream.ReadAsync(buffer, bufferPosition, sizeof(ulong) - bufferPosition);
+                var header = BinaryPrimitives.ReadUInt64LittleEndian(buffer);
+
                 for (; (header & EtvrHeaderMask) != EtvrHeader; header = header >> 8 | (ulong)buffer[0] << 56)
                     while (await stream.ReadAsync(buffer, 0, 1) == 0) /**/;
 
-                ushort jpegSize = (ushort)(header >> BitOperations.TrailingZeroCount(~EtvrHeaderMask));
+                var jpegSize = (ushort)(header >> BitOperations.TrailingZeroCount(~EtvrHeaderMask));
                 if (buffer.Length < jpegSize)
                     Array.Resize(ref buffer, jpegSize);
 
                 BinaryPrimitives.WriteUInt16LittleEndian(buffer, 0xd8ff);
-                for (int bufferPosition = 2; bufferPosition < jpegSize;)
+                for (var bufferPosition = 2; bufferPosition < jpegSize;)
                     bufferPosition += await stream.ReadAsync(buffer, bufferPosition, jpegSize - bufferPosition);
-                var newFrame = Mat.FromImageData(buffer);
-                // Only update the frame count if the image data has actually changed
-                if (newFrame.Width > 0 && newFrame.Height > 0)
-                    SetRawMat(newFrame);
-                else
-                    newFrame.Dispose();
+
+                var last = BinaryPrimitives.ReadUInt16LittleEndian(buffer[(jpegSize - 2)..jpegSize]);
+                if (last == 0xd9ff) //if the last two bytes arent the end of stream pattern, the image is corrupt
+                {
+                    var newFrame = Mat.FromImageData(buffer);
+                    // Only update the frame count if the image data has actually changed
+                    if (newFrame.Width > 0 && newFrame.Height > 0) SetRawMat(newFrame);
+                    else newFrame.Dispose();
+                }
             }
         }
         catch (ObjectDisposedException)

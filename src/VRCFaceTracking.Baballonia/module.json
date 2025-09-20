@@ -1,0 +1,16 @@
+{
+  "InstallationState": 0,
+  "ModuleId": "360b014b-b57b-450f-8f12-9904618ff370",
+  "LastUpdated": "2025-09-05T01:08:01Z",
+  "Version": "3.0.0",
+  "Downloads": 17263,
+  "Ratings": 116,
+  "Rating": 4.0603447,
+  "AuthorName": "dfgHiatus",
+  "ModuleName": "VRCFT-Babble",
+  "ModuleDescription": "Project Babble eye and face tracking for VRCFaceTracking v5.",
+  "UsageInstructions": "For complete instructions, please refer to the project page.",
+  "DownloadUrl": "https://github.com/Project-Babble/Baballonia/releases/download/v1.0.1.2rc2/VRCFaceTracking.Baballonia.zip",
+  "ModulePageUrl": "https://github.com/Project-Babble/Baballonia",
+  "DllFileName": "VRCFaceTracking.Baballonia.dll"
+}

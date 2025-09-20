@@ -10,7 +10,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:Baballonia.Models"
     xmlns:viewModels="clr-namespace:Baballonia.ViewModels"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Baballonia.Controls">
     <Design.DataContext>
         <viewModels:MainViewModel />
     </Design.DataContext>
@@ -81,13 +82,16 @@
         </SplitView.Pane>
 
         <SplitView.Content>
-            <Border
-                Background="{DynamicResource SystemChromeMediumColor}"
-                CornerRadius="16 0 0 0"
-                Padding="5"
-                x:Name="ViewContainer">
+          <Grid>
+          <Border
+            Background="{DynamicResource SystemChromeMediumColor}"
+            CornerRadius="16 0 0 0"
+            Padding="5"
+            x:Name="ViewContainer">
                 <TransitioningContentControl Content="{Binding CurrentPage}" />
             </Border>
+           <controls:DropOverlay IsOverlayVisible="{Binding IsDropOverlayVisible}"/>
+           </Grid>
         </SplitView.Content>
     </SplitView>
 </UserControl>

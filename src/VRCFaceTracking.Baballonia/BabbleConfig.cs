@@ -18,7 +18,7 @@ public static class BabbleConfig
         if (Config != null) return Config;
 
 		string directoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
-		string path = Path.Combine(directoryName, "BaballoniaConfig.json");
+		string path = Path.Combine(directoryName, "BabbleConfig.json");
 		string value = File.ReadAllText(path);
 
         Config = JsonConvert.DeserializeObject<Config>(value)!;

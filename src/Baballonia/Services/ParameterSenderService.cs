@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -20,7 +21,8 @@ public class ParameterSenderService : BackgroundService
     private readonly ILogger<ParameterSenderService> logger;
 
     private string prefix = "";
-    private readonly Queue<OscMessage> _sendQueue = new();
+    private bool sendNativeVrcEyeTracking;
+    private readonly ConcurrentQueue<OscMessage> _sendQueue = new();
 
     // Expression parameter names
     public readonly Dictionary<string, string> EyeExpressionMap = new()
@@ -107,13 +109,14 @@ public class ParameterSenderService : BackgroundService
         {
             try
             {
-                prefix = await localSettingsService.ReadSettingAsync<string>("AppSettings_OSCPrefix");
+                prefix = localSettingsService.ReadSetting<string>("AppSettings_OSCPrefix");
+                sendNativeVrcEyeTracking = localSettingsService.ReadSetting<bool>("VRC_UseNativeTracking");
                 await SendAndClearQueue(cancellationToken);
                 await Task.Delay(10, cancellationToken);
             }
             catch (Exception)
             {
-                // ignore!
+                // ignore
             }
         }
     }
@@ -121,12 +124,12 @@ public class ParameterSenderService : BackgroundService
     private void ExpressionUpdateHandler(ProcessingLoopService.Expressions expressions)
     {
         if (expressions.EyeExpression != null)
-            ProcessEyeExpressionData(expressions.EyeExpression, prefix);
+            ProcessEyeExpressionData(expressions.EyeExpression);
         if (expressions.FaceExpression != null)
-            ProcessFaceExpressionData(expressions.FaceExpression, prefix);
+            ProcessFaceExpressionData(expressions.FaceExpression);
     }
 
-    private void ProcessEyeExpressionData(float[] expressions, string prefix = "")
+    private void ProcessEyeExpressionData(float[] expressions)
     {
         if (expressions is null) return;
         if (expressions.Length == 0) return;
@@ -141,9 +144,38 @@ public class ParameterSenderService : BackgroundService
                 weight.Remap(settings.Lower, settings.Upper, settings.Min, settings.Max));
             _sendQueue.Enqueue(msg);
         }
+
+        if (!sendNativeVrcEyeTracking) return;
+
+        ProcessNativeVrcEyeTracking(expressions);
     }
 
-    private void ProcessFaceExpressionData(float[] expressions, string prefix = "")
+    private void ProcessNativeVrcEyeTracking(float[] expressions)
+    {
+        var leftEyeX = expressions[0];
+        var leftEyeY = expressions[1];
+        var leftEyeLid = expressions[2];
+        var rightEyeX = expressions[3];
+        var rightEyeY = expressions[4];
+        var rightEyeLid = expressions[5];
+
+        var leftEyeLidSettings = calibrationService.GetExpressionSettings("LeftEyeLid");
+        var rightEyeLidSettings = calibrationService.GetExpressionSettings("RightEyeLid");
+        var weightedLeftEyeLid = leftEyeLid.Remap(leftEyeLidSettings.Lower, leftEyeLidSettings.Upper, leftEyeLidSettings.Min, leftEyeLidSettings.Max);
+        var weightedRightEyeLid = rightEyeLid.Remap(rightEyeLidSettings.Lower, rightEyeLidSettings.Upper, rightEyeLidSettings.Min, rightEyeLidSettings.Max);
+        var averageLid = (weightedLeftEyeLid + weightedRightEyeLid) / 2f;
+        _sendQueue.Enqueue(new OscMessage("/tracking/eye/EyesClosedAmount", 1f - Math.Clamp(averageLid, 0f, 1f)));
+
+        // Convert normalized eye positions to angles
+        const float maxEyeAngle = 45f;
+        leftEyeX *= maxEyeAngle;
+        leftEyeY *= -maxEyeAngle; // Negative because Y is inverted (up is negative pitch)
+        rightEyeX *= maxEyeAngle;
+        rightEyeY *= -maxEyeAngle; // Negative because Y is inverted (up is negative pitch)
+        _sendQueue.Enqueue(new OscMessage("/tracking/eye/LeftRightPitchYaw", leftEyeY, rightEyeX, rightEyeY, leftEyeX));
+    }
+
+    private void ProcessFaceExpressionData(float[] expressions)
     {
         if (expressions == null) return;
         if (expressions.Length == 0) return;

@@ -1,0 +1,724 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Settings_Theme_Dark_Content" xml:space="preserve">
+    <value>Σκοτεινό</value>
+  </data>
+  <data name="Settings_Theme_Default_Content" xml:space="preserve">
+    <value>Προεπιλογή</value>
+  </data>
+  <data name="Settings_Theme_Light_Content" xml:space="preserve">
+    <value>Φωτεινό</value>
+  </data>
+  <data name="Home_Title_Header" xml:space="preserve">
+    <value>Αρχική</value>
+  </data>
+  <data name="Settings_Theme_Header" xml:space="preserve">
+    <value>Θέμα εφαρμογής</value>
+  </data>
+  <data name="Settings_Theme_Description" xml:space="preserve">
+    <value>Επιλέξτε το θέμα εφαρμογής που θα εμφανιστεί</value>
+  </data>
+  <data name="Settings_OSC_Description" xml:space="preserve">
+    <value>Πού πρέπει να αποστέλλονται τα στοιχεία OSC?</value>
+  </data>
+  <data name="Settings_OSC_Header" xml:space="preserve">
+    <value>OSC</value>
+  </data>
+  <data name="Home_Eye_Calibration" xml:space="preserve">
+    <value>Βαθμονόμηση Ματιών</value>
+  </data>
+  <data name="Home_Left_Camera_Address" xml:space="preserve">
+    <value>Διεύθυνση Αριστερής Κάμερας</value>
+  </data>
+  <data name="Home_Cameras_Start_Camera" xml:space="preserve">
+    <value>Έναρξη Κάμερας</value>
+  </data>
+  <data name="Home_Cameras_Stop_Camera" xml:space="preserve">
+    <value>Σταμάτημα Κάμερας</value>
+  </data>
+  <data name="Home_Cameras_Tracking_Mode" xml:space="preserve">
+    <value>Παρακολούθηση</value>
+  </data>
+  <data name="Home_Cameras_Cropping_Mode" xml:space="preserve">
+    <value>Περικοπή</value>
+  </data>
+  <data name="Home_Left_Camera_Select_Entire_Frame" xml:space="preserve">
+    <value>Επιλογή Αριστερού Πλαισίου</value>
+  </data>
+  <data name="Home_Cameras_Vertical_Flip_Header" xml:space="preserve">
+    <value>Κατακόρυφη Αναστροφή</value>
+  </data>
+  <data name="Home_Cameras_Vertical_Flip_Description" xml:space="preserve">
+    <value>Αναστροφή της εικόνας κατακόρυφα</value>
+  </data>
+  <data name="Home_Cameras_Horizontal_Flip_Header" xml:space="preserve">
+    <value>Οριζόντια αναστροφή</value>
+  </data>
+  <data name="Home_Cameras_Horizontal_Flip_Description" xml:space="preserve">
+    <value>Αναστροφή της εικόνας οριζόντια</value>
+  </data>
+  <data name="Home_Cameras_Rotation_Description" xml:space="preserve">
+    <value>Περιστρέφει την εικόνα σε έναν κύκλο</value>
+  </data>
+  <data name="Home_Cameras_Brightness_Header" xml:space="preserve">
+    <value>Φωτεινότητα Εικόνας</value>
+  </data>
+  <data name="Home_Cameras_Rotation_Header" xml:space="preserve">
+    <value>Περιστροφή Εικόνας</value>
+  </data>
+  <data name="Home_Cameras_Brightness_Description" xml:space="preserve">
+    <value>Ρύθμιση της φωτεινότητας της εικόνας</value>
+  </data>
+  <data name="Home_Right_Camera_Address" xml:space="preserve">
+    <value>Διεύθυνση Δεξιάς Κάμερας</value>
+  </data>
+  <data name="Home_Right_Camera_Select_Entire_Frame" xml:space="preserve">
+    <value>Επιλογή Δεξιού Πλαισίου</value>
+  </data>
+  <data name="Home_Face_Camera_Address" xml:space="preserve">
+    <value>Διεύθυνση Κάμερας Προσώπου</value>
+  </data>
+  <data name="Home_Face_Camera_Select_Entire_Frame" xml:space="preserve">
+    <value>Επιλέξτε Πλαίσιο Προσώπου</value>
+  </data>
+  <data name="Home_Left_Camera_Header" xml:space="preserve">
+    <value>Αριστερή Κάμερα Ματιών</value>
+  </data>
+  <data name="Home_Face_Camera_Header" xml:space="preserve">
+    <value>Κάμερα Προσώπου</value>
+  </data>
+  <data name="Home_Right_Camera_Header" xml:space="preserve">
+    <value>Δεξιά Οφθαλμική Κάμερα</value>
+  </data>
+  <data name="Home_Left_Camera_Settings" xml:space="preserve">
+    <value>Ρυθμίσεις Αριστερής Κάμερας</value>
+  </data>
+  <data name="Home_Face_Camera_Settings" xml:space="preserve">
+    <value>Ρυθμίσεις Κάμερας Προσώπου</value>
+  </data>
+  <data name="Home_Right_Camera_Settings" xml:space="preserve">
+    <value>Ρυθμίσεις Δεξιάς Κάμερας</value>
+  </data>
+  <data name="Common_Start_Typing" xml:space="preserve">
+    <value>Αρχίστε να πληκτρολογείτε...</value>
+  </data>
+  <data name="Calibration_Title_Header" xml:space="preserve">
+    <value>Βαθμονόμηση</value>
+  </data>
+  <data name="Calibration_Reset_Minimums" xml:space="preserve">
+    <value>Reset Minimums</value>
+  </data>
+  <data name="Calibration_Reset_Maximums" xml:space="preserve">
+    <value>Reset Maximums</value>
+  </data>
+  <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
+    <value>Οφθαλμικές Εκφράσεις</value>
+  </data>
+  <data name="Calibration_Nose_Expressions_Header" xml:space="preserve">
+    <value>Εκφράσεις Μύτης</value>
+  </data>
+  <data name="Calibration_Tongue_Expressions_Header" xml:space="preserve">
+    <value>Εκφράσεις Γλώσσας</value>
+  </data>
+  <data name="Calibration_Mouth_Expressions_Header" xml:space="preserve">
+    <value>Στόμα Εκφράσεις</value>
+  </data>
+  <data name="Calibration_Jaw_Expressions_Header" xml:space="preserve">
+    <value>Jaw Εκφράσεις</value>
+  </data>
+  <data name="Calibration_Cheek_Expressions_Header" xml:space="preserve">
+    <value>Εκφράσεις Μάραθου</value>
+  </data>
+  <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Header" xml:space="preserve">
+    <value>Σταθεροποίηση Ματιών</value>
+  </data>
+  <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Description" xml:space="preserve">
+    <value>Αποτρέπει τα μάτια από το να κοιτάζουν έξω προς αντίθετες κατευθύνσεις, αλλά μπορεί να υπερ-διορθώσει.</value>
+  </data>
+  <data name="Firmware_Title_Header" xml:space="preserve">
+    <value>Υλικολογισμικό</value>
+  </data>
+  <data name="Firmware_Select_Tracker_Header" xml:space="preserve">
+    <value>Επιλέξτε τον ανιχνευτή σας</value>
+  </data>
+  <data name="Firmware_Device_Instructions_1" xml:space="preserve">
+    <value>• Μετά την ενεργοποίηση/σύνδεση της συσκευής σας, θα έχετε 20 δευτερόλεπτα για να πατήσετε "Ανανέωση" και να επιλέξετε τη συσκευή σας από το αναπτυσσόμενο μενού</value>
+  </data>
+  <data name="Firmware_Device_Instructions_2" xml:space="preserve">
+    <value>• Ορισμένες λειτουργίες ρύθμισης παραμέτρων θα πάρουν λίγο!</value>
+  </data>
+  <data name="Firmware_Device_Configuration_Header" xml:space="preserve">
+    <value>Ρύθμιση Παραμέτρων Συσκευής</value>
+  </data>
+  <data name="Firmware_Device_Configuration_Description" xml:space="preserve">
+    <value>Εναλλαγή λειτουργίας ενσύρματη/ασύρματου</value>
+  </data>
+  <data name="Firmware_Device_Mode_Header" xml:space="preserve">
+    <value>Εναλλαγή λειτουργίας ενσύρματη/ασύρματου</value>
+  </data>
+  <data name="Firmware_Device_Mode_Instruction_1" xml:space="preserve">
+    <value>• Θα πρέπει να επανεκκινήσετε τον ανιχνευτή σας μετά την αλλαγή της λειτουργίας</value>
+  </data>
+  <data name="Firmware_Device_Mode_Instruction_2" xml:space="preserve">
+    <value>• Θα πρέπει να επανεκκινήσετε την εφαρμογή μετά από ένα φλας για να εμφανίσετε ιχνηλάτες</value>
+  </data>
+  <data name="Firmware_Device_Mode_Select_Placeholder" xml:space="preserve">
+    <value>Επιλέξτε μια λειτουργία...</value>
+  </data>
+  <data name="Firmware_Wifi_Configuration_Header" xml:space="preserve">
+    <value>Ρύθμιση Wi-Fi</value>
+  </data>
+  <data name="Firmware_Wifi_Configuration_Description" xml:space="preserve">
+    <value>Συνδεθείτε στο Wifi και άλλα</value>
+  </data>
+  <data name="Firmware_Wifi_Credentials_Header" xml:space="preserve">
+    <value>Ορίστε τα διαπιστευτήρια Wi-Fi</value>
+  </data>
+  <data name="Firmware_Wifi_Instructions_1" xml:space="preserve">
+    <value>• Αν θέλετε να χρησιμοποιήσετε ασύρματα τον ιχνηλάτη σας, NEED για να ρυθμίσετε τα διαπιστευτήρια Wi-Fi</value>
+  </data>
+  <data name="Firmware_Wifi_Instructions_2" xml:space="preserve">
+    <value>• ΠΡΕΠΕΙ να κάνετε σάρωση για δίκτυα Wifi ΠΡΙΝ μπορείτε να ορίσετε τα διαπιστευτήρια Wifi σας</value>
+  </data>
+  <data name="Firmware_Wifi_SSID_Label" xml:space="preserve">
+    <value>Όνομα Δικτύου WiFi (SsiD)</value>
+  </data>
+  <data name="Firmware_Wifi_SSID_Placeholder" xml:space="preserve">
+    <value>Αρχίστε να πληκτρολογείτε για να δείτε δίκτυα WiFi...</value>
+  </data>
+  <data name="Firmware_Wifi_Password_Label" xml:space="preserve">
+    <value>Κωδικός Πρόσβασης Wi-Fi</value>
+  </data>
+  <data name="Firmware_Wifi_Password_Placeholder" xml:space="preserve">
+    <value>Εισάγετε κωδικό WiF...</value>
+  </data>
+  <data name="Firmware_Flashing_Header" xml:space="preserve">
+    <value>Flashing Options</value>
+  </data>
+  <data name="Firmware_Flashing_Description" xml:space="preserve">
+    <value>Flash firmware της συσκευής σας</value>
+  </data>
+  <data name="Firmware_Flashing_Warning" xml:space="preserve">
+    <value>ΠΡΟΣΟΧΗ!! ΑΥΤΗ ΘΑ ΠΑΡΑΓΟΝΤΑΙ ΝΑ ΑΝΑΦΕΡΕΤΕ ΤΟ TRACKER ΣΑΣ. Θα ΑΞΙΖΕΤΕ ΝΑ ΕΠΙΤΡΕΠΕΤΑΙ ΝΑ ΕΠΙΤΡΕΠΕΤΑΙ ΕΜΠΙΣΤΕΙ ΠΡΟΣ ΤΟΝ ΠΡΩΤΟ ΧΡΟΝΟΥ ΜΕΤΑ ΤΟΝ ΤΡΟΠΟΣ ΣΑΣ.</value>
+  </data>
+  <data name="Firmware_Flashing_Button" xml:space="preserve">
+    <value>Υλικολογισμικό Flash</value>
+  </data>
+  <data name="Firmware_Flashing_Note" xml:space="preserve">
+    <value>Αυτό θα διαρκέσει περίπου ~10 δευτερόλεπτα. Μην φύγετε από αυτή τη σελίδα!</value>
+  </data>
+  <data name="Firmware_Flashing_Complete" xml:space="preserve">
+    <value>Έτοιμο! Θα πρέπει να επανεκκινήσετε τον ιχνηλάτη σας</value>
+  </data>
+  <data name="Firmware_TrackerComboBox_Default" xml:space="preserve">
+    <value>Κάντε κλικ για να δείτε ιχνηλάτες...</value>
+  </data>
+  <data name="Firmware_RefreshDevices_Default" xml:space="preserve">
+    <value>Ανανέωση Συσκευών</value>
+  </data>
+  <data name="Firmware_RefreshDevices_Refreshing" xml:space="preserve">
+    <value>Ανανέωση</value>
+  </data>
+  <data name="Firmware_RefreshDevices_Found" xml:space="preserve">
+    <value>Βρέθηκαν συσκευές {0}.</value>
+  </data>
+  <data name="Firmware_SelectTracker_Default" xml:space="preserve">
+    <value>Επιλογή Ιχνηλάτη</value>
+  </data>
+  <data name="Firmware_SelectTracker_Connected" xml:space="preserve">
+    <value>Το Tracker συνδέθηκε!</value>
+  </data>
+  <data name="Firmware_SelectTracker_NoResponse" xml:space="preserve">
+    <value>Ο ανιχνευτής δεν ανταποκρίθηκε.</value>
+  </data>
+  <data name="Firmware_ModeSetButton_Default" xml:space="preserve">
+    <value>Ορισμός Λειτουργίας</value>
+  </data>
+  <data name="Firmware_ModeSetButton_Setting" xml:space="preserve">
+    <value>Λειτουργία ρύθμισης</value>
+  </data>
+  <data name="Firmware_ModeSetButton_Success" xml:space="preserve">
+    <value>Όρισε!</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Default" xml:space="preserve">
+    <value>Ορισμός Υποδείξεων Wi-Fi</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Setting" xml:space="preserve">
+    <value>Ρύθμιση διαπιστευτηρίων WiFi</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Success" xml:space="preserve">
+    <value>Στάλθηκε!</value>
+  </data>
+  <data name="Firmware_WifiSetButton_Error" xml:space="preserve">
+    <value>Κάτι πήγε στραβά...</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Default" xml:space="preserve">
+    <value>Ανανέωση Δικτύων Wifi</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Scanning" xml:space="preserve">
+    <value>Σάρωση. Αυτό θα διαρκέσει το πολύ 30 δευτερόλεπτα</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Error" xml:space="preserve">
+    <value>Η σάρωση απέτυχε. Κάντε κλικ για να προσπαθήσετε ξανά.</value>
+  </data>
+  <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
+    <value>Βρέθηκαν δίκτυα {0} . Κάντε κλικ για σάρωση ξανά.</value>
+  </data>
+  <data name="VRC_Title_Header" xml:space="preserve">
+    <value>Ρυθμίσεις VRChat + VRCFaceTracking</value>
+  </data>
+  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
+    <value>Χρήση Εγγενούς Παρακολούθησης Ματιών Vrc</value>
+  </data>
+  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
+    <value>Φέρνει την παρακολούθηση των ματιών σε avatars που δεν έχουν VRCFaceTracking</value>
+  </data>
+  <data name="VRC_ModuleMode_Header" xml:space="preserve">
+    <value>Ορισμός λειτουργίας μονάδας VRCFT</value>
+  </data>
+  <data name="VRC_ModuleMode_Description" xml:space="preserve">
+    <value>Στείλτε μόνο μάτι, μόνο πρόσωπο ή και τα δύο? (η αλλαγή απαιτεί επανεκκίνηση VRCFT)</value>
+  </data>
+  <data name="VRC_ModuleMode_Placeholder" xml:space="preserve">
+    <value>Επιλέξτε μια λειτουργία...</value>
+  </data>
+  <data name="Output_Title_Header" xml:space="preserve">
+    <value>Έξοδος</value>
+  </data>
+  <data name="Output_CopyButton_Tooltip" xml:space="preserve">
+    <value>Αντιγράψτε την έξοδο της καταγραφής στο πρόχειρο σας</value>
+  </data>
+  <data name="Output_SaveButton_Tooltip" xml:space="preserve">
+    <value>Αποθήκευση της εξόδου του αρχείου καταγραφής</value>
+  </data>
+  <data name="Output_OpenLoggingDirectoryButton_Tooltip" xml:space="preserve">
+    <value>Άνοιγμα του φακέλου καταγραφής</value>
+  </data>
+  <data name="Onboarding_Welcome_Message" xml:space="preserve">
+    <value>Αυτός ο οδηγός θα σας καθοδηγήσει στη δημιουργία του νέου Babble App.</value>
+  </data>
+  <data name="Onboarding_Wireless_Header" xml:space="preserve">
+    <value>Ενσύρματο ή ασύρματο?</value>
+  </data>
+  <data name="Onboarding_Wireless_Description1" xml:space="preserve">
+    <value>Με νεότερα Babbles, θα πρέπει να εκτελέσετε μια πρώτη ρύθμιση στην καρτέλα Firmware (εικονίδιο παραπάνω).</value>
+  </data>
+  <data name="Onboarding_Wireless_Description2" xml:space="preserve">
+    <value>Χρειάζονται μόνο 2 λεπτά! Επιλέξτε τον ιχνηλάτη και τη λειτουργία σας (ενσύρματο ή ασύρματο).</value>
+  </data>
+  <data name="Onboarding_Wireless_Note" xml:space="preserve">
+    <value>Παρακαλείστε να σημειώσετε ότι οι νεότεροι ιχνηλάτες έχουν ένα παράθυρο 20 δευτερολέπτων πριν εισέλθουν στη λειτουργία κάμερας.</value>
+  </data>
+  <data name="Onboarding_Assembly_Header" xml:space="preserve">
+    <value>Συγκεντρώστε Τον Ιχνηλάτη Σας</value>
+  </data>
+  <data name="Onboarding_Assembly_Description" xml:space="preserve">
+    <value>Αν χρειάζεστε βοήθεια βάζοντας τον ιχνηλάτη σας μαζί, εδώ είναι ένα χρήσιμο φροντιστήριο Youtube!</value>
+  </data>
+  <data name="Settings_Title_Header" xml:space="preserve">
+    <value>Ρυθμίσεις Εφαρμογής</value>
+  </data>
+  <data name="Settings_Language_Header" xml:space="preserve">
+    <value>Γλώσσα</value>
+  </data>
+  <data name="Settings_Language_Description" xml:space="preserve">
+    <value>Ορίστε τη γλώσσα της εφαρμογής. Αλλάξτε σελίδες για να εφαρμόσετε.</value>
+  </data>
+  <data name="Settings_Language_Default" xml:space="preserve">
+    <value>Προεπιλογή</value>
+  </data>
+  <data name="Settings_Language_English" xml:space="preserve">
+    <value>Αγγλικά</value>
+  </data>
+  <data name="Settings_Language_Spanish" xml:space="preserve">
+    <value>Español</value>
+  </data>
+  <data name="Settings_Language_Japanese" xml:space="preserve">
+    <value>日本語</value>
+  </data>
+  <data name="Settings_Language_Polish" xml:space="preserve">
+    <value>Polski</value>
+  </data>
+  <data name="Settings_Language_Chinese" xml:space="preserve">
+    <value>中文</value>
+  </data>
+  <data name="Settings_Filter_Header" xml:space="preserve">
+    <value>Ρυθμίσεις φίλτρου ενός Ευρώ</value>
+  </data>
+  <data name="Settings_Filter_Description" xml:space="preserve">
+    <value>Ρυθμίσεις Φίλτρου</value>
+  </data>
+  <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
+    <value>Ενεργοποιημένο</value>
+  </data>
+  <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
+    <value>Ενεργοποίηση ή απενεργοποίηση φιλτραρίσματος.</value>
+  </data>
+  <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
+    <value>Περικοπή ελάχιστης συχνότητας</value>
+  </data>
+  <data name="Settings_Filter_MinFreq_Description" xml:space="preserve">
+    <value>Ελέγχει πόσο εξομάλυνση εφαρμόζεται σε αργές κινήσεις</value>
+  </data>
+  <data name="Settings_Filter_Template_Placeholder" xml:space="preserve">
+    <value>Επιλέξτε από ένα πρότυπο</value>
+  </data>
+  <data name="Settings_Filter_Template_Low" xml:space="preserve">
+    <value>Χαμηλή ({0})</value>
+  </data>
+  <data name="Settings_Filter_Template_Medium" xml:space="preserve">
+    <value>Μεσαία ({0})</value>
+  </data>
+  <data name="Settings_Filter_Template_High" xml:space="preserve">
+    <value>Υψηλή ({0})</value>
+  </data>
+  <data name="Settings_Filter_Speed_Label" xml:space="preserve">
+    <value>Συντελεστής ταχύτητας</value>
+  </data>
+  <data name="Settings_Filter_Speed_Description" xml:space="preserve">
+    <value>Καθορίζει τον τρόπο προσαρμογής του φίλτρου όταν μετακινείτε γρηγορότερα</value>
+  </data>
+  <data name="Settings_GPU_Header" xml:space="preserve">
+    <value>Χρήση επιτάχυνσης GPU</value>
+  </data>
+  <data name="Settings_GPU_Description" xml:space="preserve">
+    <value>Χρησιμοποιήστε την GPU σας για να κάνετε τα πράγματα να τρέξουν πιο γρήγορα! Απαιτεί επανεκκίνηση</value>
+  </data>
+  <data name="Settings_LogLevel_Header" xml:space="preserve">
+    <value>Ένδειξη Επιπέδου Καταγραφής</value>
+  </data>
+  <data name="Settings_LogLevel_Description" xml:space="preserve">
+    <value>Ελάχιστο επίπεδο καταγραφής. Απαιτείται επανεκκίνηση</value>
+  </data>
+  <data name="Settings_Updates_Header" xml:space="preserve">
+    <value>Έλεγχος Ενημερώσεων</value>
+  </data>
+  <data name="Settings_Updates_Description" xml:space="preserve">
+    <value>Θα πρέπει ο έλεγχος της εφαρμογής για ενημερώσεις κατά την έναρξη?</value>
+  </data>
+  <data name="Settings_FirstTime_Header" xml:space="preserve">
+    <value>Εκκίνηση εγκατάστασης πρώτης φοράς</value>
+  </data>
+  <data name="Settings_FirstTime_Description" xml:space="preserve">
+    <value>Επαναπροσδιορίζει την πρώτη ρύθμιση</value>
+  </data>
+  <data name="Settings_FirstTime_Button" xml:space="preserve">
+    <value>Εκκίνηση</value>
+  </data>
+  <data name="Onboarding_Skip_Button" xml:space="preserve">
+    <value>Παράλειψη</value>
+  </data>
+  <data name="Onboarding_UI_Header" xml:space="preserve">
+    <value>Πού είναι τα πάντα;</value>
+  </data>
+  <data name="Onboarding_UI_Home_Description" xml:space="preserve">
+    <value>1. Η Αρχική Σελίδα είναι όπου μπορείτε να ρυθμίσετε τις κάμερες σας και να εκτελέσετε μια βαθμονόμηση παρακολούθησης ματιών.</value>
+  </data>
+  <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
+    <value>2. Η Βαθμονόμηση μπορεί να χρησιμοποιηθεί για να προσαρμόσετε τις εκφράσεις ματιών/προσώπου σας ατομικά.</value>
+  </data>
+  <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
+    <value>3. Η Σελίδα Firmware χρησιμοποιείται για τη ρύθμιση της συσκευής σας ή για την επαναφορά της.</value>
+  </data>
+  <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
+    <value>4. Η Σελίδα VRChat χρησιμοποιείται για την αλλαγή συγκεκριμένων ρυθμίσεων VRChat/VRCFaceTracking.</value>
+  </data>
+  <data name="Onboarding_UI_Output_Description" xml:space="preserve">
+    <value>5. Η Σελίδα Εξόδου δείχνει την κατάσταση της εφαρμογής και άλλες χρήσιμες πληροφορίες.</value>
+  </data>
+  <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
+    <value>6. Οι Ρυθμίσεις είναι για γενικές ρυθμίσεις εφαρμογής, όπως το θέμα, η γλώσσα και άλλα.</value>
+  </data>
+  <data name="Onboarding_Complete_Header" xml:space="preserve">
+    <value>Η Ρύθμιση Ολοκληρώθηκε!</value>
+  </data>
+  <data name="Onboarding_Complete_Description1" xml:space="preserve">
+    <value>Είστε έτοιμοι να αρχίσετε να χρησιμοποιείτε το νέο Babble App!</value>
+  </data>
+  <data name="Onboarding_Complete_Description2" xml:space="preserve">
+    <value>Μπορείτε να επισκεφθείτε ξανά αυτή τη σελίδα στις ρυθμίσεις.</value>
+  </data>
+  <data name="Settings_OSC_IP_Label" xml:space="preserve">
+    <value>Διεύθυνση IP</value>
+  </data>
+  <data name="Settings_OSC_Prefix_Label" xml:space="preserve">
+    <value>OSC Prefix</value>
+  </data>
+  <data name="Settings_OSC_Recalibrate_Label" xml:space="preserve">
+    <value>Διεύθυνση Αναβαθμονόμησης</value>
+  </data>
+  <data name="Settings_OSC_Recenter_Label" xml:space="preserve">
+    <value>Διεύθυνση Recenter</value>
+  </data>
+  <data name="Settings_OSC_SendPort_Label" xml:space="preserve">
+    <value>Αποστολή Θύρας</value>
+  </data>
+  <data name="Settings_OSC_ReceivePort_Label" xml:space="preserve">
+    <value>Λάβετε Θύρα</value>
+  </data>
+  <data name="AdminWarning_Header" xml:space="preserve">
+    <value>Προειδοποίηση Λειτουργίας Διαχειριστή</value>
+  </data>
+  <data name="AdminWarning_Message" xml:space="preserve">
+    <value>Μην τρέχετε Baballonia ως admin! Δεν υπάρχει καμία ανάγκη και αποτρέπει βαθμονόμηση των ματιών παρακολούθησης από την εργασία.</value>
+  </data>
+  <data name="Aero_Overlay_NotFound" xml:space="preserve">
+    <value>Το πρόγραμμα επικάλυψης βλέμματος δεν υπάρχει!</value>
+  </data>
+  <data name="Aero_Overlay_AlreadyRunning" xml:space="preserve">
+    <value>Το πρόγραμμα gaze overlay εκτελείται ήδη! Κλείστε το και προσπαθήστε ξανά.</value>
+  </data>
+  <data name="Aero_SteamVR_NotRunning" xml:space="preserve">
+    <value>Το SteamVR δεν εκτελείται. Παρακαλώ εκτελέστε το και προσπαθήστε ξανά.</value>
+  </data>
+  <data name="Aero_CameraStream_Failed" xml:space="preserve">
+    <value>Αποτυχία εκκίνησης της ροής κάμερας!</value>
+  </data>
+  <data name="Aero_Calibration_Failed" xml:space="preserve">
+    <value>Αποτυχία έναρξης βαθμονόμησης!</value>
+  </data>
+  <data name="Aero_Calibration_Success" xml:space="preserve">
+    <value>Επιτυχής βαθμονόμηση παρακολούθησης ματιών!</value>
+  </data>
+  <data name="Aero_Overlay_CleanupFailed" xml:space="preserve">
+    <value>Αποτυχία διακοπής/εκκαθάρισης επικάλυψης!</value>
+  </data>
+  <data name="Calibration_Instructions_Line1" xml:space="preserve">
+    <value>Οι κατωτέρω ρυθμιστές χρησιμοποιούνται για τη βαθμονόμηση του</value>
+  </data>
+  <data name="Calibration_Instructions_Sensitivity" xml:space="preserve">
+    <value>ευαισθησία</value>
+  </data>
+  <data name="Calibration_Instructions_Line1_2" xml:space="preserve">
+    <value>των εκφράσεων προσώπου σας.</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet1_1" xml:space="preserve">
+    <value>• Αύξηση του</value>
+  </data>
+  <data name="Calibration_Instructions_Minimum" xml:space="preserve">
+    <value>Ελάχιστο</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet1_2" xml:space="preserve">
+    <value>τιμή απαιτεί μια ισχυρότερη έκφραση πριν αρχίσει να εμφανίζεται.</value>
+  </data>
+  <data name="Settings_Language_Chinese_Simplified" xml:space="preserve">
+    <value>Κινέζικα (Απλοποιημένα)</value>
+  </data>
+  <data name="Settings_Language_Chinese_Traditional" xml:space="preserve">
+    <value>Κινέζικα (Παραδοσιακά)</value>
+  </data>
+  <data name="Settings_Language_German" xml:space="preserve">
+    <value>Γερμανικά</value>
+  </data>
+  <data name="Settings_Language_French" xml:space="preserve">
+    <value>Γαλλικά</value>
+  </data>
+  <data name="Settings_Language_Italian" xml:space="preserve">
+    <value>Ιταλικά</value>
+  </data>
+  <data name="Settings_Language_Korean" xml:space="preserve">
+    <value>Κορεάτικα</value>
+  </data>
+  <data name="Settings_Language_Portuguese_Brazil" xml:space="preserve">
+    <value>Πορτογαλικά (Βραζιλίας)</value>
+  </data>
+  <data name="Settings_Language_Portuguese_Portugal" xml:space="preserve">
+    <value>Πορτογαλικά (Πορτογαλία)</value>
+  </data>
+  <data name="Settings_Language_Russian" xml:space="preserve">
+    <value>Ρωσικά</value>
+  </data>
+  <data name="Settings_Language_Arabic" xml:space="preserve">
+    <value>Αραβικά</value>
+  </data>
+  <data name="Settings_Language_Turkish" xml:space="preserve">
+    <value>Τουρκικά</value>
+  </data>
+  <data name="Settings_Language_Dutch" xml:space="preserve">
+    <value>Ολλανδικά</value>
+  </data>
+  <data name="Settings_Language_Swedish" xml:space="preserve">
+    <value>Σουηδικά</value>
+  </data>
+  <data name="Settings_Language_Finnish" xml:space="preserve">
+    <value>Φινλανδικά</value>
+  </data>
+  <data name="Settings_Language_Danish" xml:space="preserve">
+    <value>Δανέζικα</value>
+  </data>
+  <data name="Settings_Language_Norwegian" xml:space="preserve">
+    <value>Νορβηγικά</value>
+  </data>
+  <data name="Settings_Language_Czech" xml:space="preserve">
+    <value>Τσέχικα</value>
+  </data>
+  <data name="Settings_Language_Hungarian" xml:space="preserve">
+    <value>Ουγγρικά</value>
+  </data>
+  <data name="Settings_Language_Romanian" xml:space="preserve">
+    <value>Ρουμανικά</value>
+  </data>
+  <data name="Settings_Language_Vietnamese" xml:space="preserve">
+    <value>Vietnamese</value>
+  </data>
+  <data name="Settings_Language_Ukrainian" xml:space="preserve">
+    <value>Ουκρανικά</value>
+  </data>
+  <data name="Settings_Language_Greek" xml:space="preserve">
+    <value>Ελληνικά</value>
+  </data>
+  <data name="Settings_Language_Hebrew" xml:space="preserve">
+    <value>Εβραϊκά</value>
+  </data>
+  <data name="Settings_Language_Afrikaans" xml:space="preserve">
+    <value>Αφρικάανς</value>
+  </data>
+  <data name="Settings_Language_Catalan" xml:space="preserve">
+    <value>Καταλανικά</value>
+  </data>
+  <data name="Settings_Language_Serbian" xml:space="preserve">
+    <value>Σερβικά</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet2_1" xml:space="preserve">
+    <value>• Μείωση της</value>
+  </data>
+  <data name="Calibration_Instructions_Maximum" xml:space="preserve">
+    <value>Μέγιστο</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet2_2" xml:space="preserve">
+    <value>τιμή σημαίνει ότι μια μικρότερη έκφραση θα φτάσει 100% πιο γρήγορα.</value>
+  </data>
+  <data name="DropOverlay_Important_Header" xml:space="preserve">
+    <value>Σημαντικό!</value>
+  </data>
+  <data name="DropOverlay_Message" xml:space="preserve">
+    <value>Νεότερα babble trackers έχουν μια 20 δεύτερη καθυστέρηση μετά την σύνδεση για να μπορούν να χρησιμοποιηθούν. Θα κάνει έναν ήχο σύνδεσης USB όταν είναι έτοιμο!</value>
+  </data>
+  <data name="DropOverlay_DontShowAgain" xml:space="preserve">
+    <value>Να μην εμφανιστεί ξανά αυτή η προειδοποίηση</value>
+  </data>
+  <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
+    <value>Απόρριψη</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Settings_OSC_VRCFT_Warning" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+</root>

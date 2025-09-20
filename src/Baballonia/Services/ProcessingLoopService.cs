@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -43,7 +44,9 @@ public class ProcessingLoopService : IDisposable
 
         FaceProcessingPipeline.ImageConverter = new MatToFloatTensorConverter();
         FaceProcessingPipeline.ImageTransformer = new ImageTransformer();
+
         EyesProcessingPipeline.ImageConverter = new MatToFloatTensorConverter();
+
         var dualTransformer = new DualImageTransformer();
         dualTransformer.LeftTransformer.TargetSize = new Size(128, 128);
         dualTransformer.RightTransformer.TargetSize = new Size(128, 128);
@@ -59,43 +62,49 @@ public class ProcessingLoopService : IDisposable
     public async Task SetupEyeInference()
     {
         const string defaultEyeModel = "eyeModel.onnx";
-        var eyeModel = await _localSettingsService.ReadSettingAsync<string>("EyeHome_EyeModel", defaultEyeModel);
+        var eyeModel = _localSettingsService.ReadSetting<string>("EyeHome_EyeModel", defaultEyeModel);
         if (!File.Exists(Path.Combine(AppContext.BaseDirectory, eyeModel)))
         {
-            _logger.LogError("{} Does not exits", eyeModel);
+            _logger.LogError("{} Does not exists", eyeModel);
             eyeModel = defaultEyeModel;
         }
+
         if (eyeModel == defaultEyeModel)
         {
             _logger.LogDebug("Loaded default eye model with hash {EyeModelHash}", Utils.GenerateMD5(eyeModel));
         }
 
-        var useGpu = await _localSettingsService.ReadSettingAsync<bool>("AppSettings_UseGPU", false);
+        var useGpu = _localSettingsService.ReadSetting<bool>("AppSettings_UseGPU", false);
 
-        await Task.Run(() =>
-        {
-            var l = Ioc.Default.GetService<ILogger<DefaultInferenceRunner>>()!;
-            var eyeInference = new DefaultInferenceRunner(l);
-            eyeInference.Setup(eyeModel, useGpu);
-            Dispatcher.UIThread.Post(() => { EyesProcessingPipeline.InferenceService = eyeInference; });
-        });
+        var l = Ioc.Default.GetService<ILogger<DefaultInferenceRunner>>()!;
+        var eyeInference = new DefaultInferenceRunner(l);
+        eyeInference.Setup(eyeModel, useGpu);
+
+        return eyeInference;
     }
 
-    public async Task SetupFaceInference()
+    public Task<DefaultInferenceRunner> LoadFaceInferenceAsync()
     {
-        var useGpu = await _localSettingsService.ReadSettingAsync<bool>("AppSettings_UseGPU", false);
+        return Task.Run(LoadFaceInference);
+    }
 
-        await Task.Run(() =>
-        {
-            var l = Ioc.Default.GetService<ILogger<DefaultInferenceRunner>>()!;
-            var faceInference = new DefaultInferenceRunner(l);
+    public DefaultInferenceRunner LoadFaceInference()
+    {
+        var useGpu = _localSettingsService.ReadSetting<bool>("AppSettings_UseGPU", false);
+        var l = Ioc.Default.GetService<ILogger<DefaultInferenceRunner>>()!;
+        var faceInference = new DefaultInferenceRunner(l);
 
-            const string defaultFaceModel = "faceModel.onnx";
-            faceInference.Setup(defaultFaceModel, useGpu);
-            _logger.LogDebug("Loaded default face model with hash {FaceModelHash}", Utils.GenerateMD5(defaultFaceModel));
+        const string defaultFaceModel = "faceModel.onnx";
+        faceInference.Setup(defaultFaceModel, useGpu);
+        _logger.LogDebug("Loaded default face model with hash {FaceModelHash}", Utils.GenerateMD5(defaultFaceModel));
 
-            Dispatcher.UIThread.Post(() => { FaceProcessingPipeline.InferenceService = faceInference; });
-        });
+        return faceInference;
+    }
+
+    private void LoadEyeStabilizationSetting()
+    {
+        var stabilizeEyes = _localSettingsService.ReadSetting<bool>("AppSettings_StabilizeEyes", false);
+        EyesProcessingPipeline.StabilizeEyes = stabilizeEyes;
     }
 
     private void TimerEvent(object? s, EventArgs e)

@@ -9,9 +9,9 @@ public interface ILanguageSelectorService
         get;
     }
 
-    Task InitializeAsync();
+    void Initialize();
 
-    Task SetLanguageAsync(string language);
+    void SetLanguage(string language);
 
-    Task SetRequestedLanguageAsync();
+    void SetRequestedLanguage();
 }

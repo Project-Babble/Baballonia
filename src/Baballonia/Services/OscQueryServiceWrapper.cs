@@ -22,9 +22,9 @@ public class OscQueryServiceWrapper(ILogger<OscQueryServiceWrapper> logger, ILoc
     private CancellationTokenSource _cancellationTokenSource;
     private const int VrcPort = 9000;
 
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var ipString = await localSettingsService.ReadSettingAsync<string>("OSCAddress");
+        var ipString = localSettingsService.ReadSetting<string>("OSCAddress");
         var hostIp = IPAddress.Parse(ipString);
 
         _cancellationTokenSource = new CancellationTokenSource();
@@ -50,6 +50,8 @@ public class OscQueryServiceWrapper(ILogger<OscQueryServiceWrapper> logger, ILoc
         _serviceWrapper.OnOscQueryServiceAdded += AddProfileToList;
 
         StartAutoRefreshServices(5000);
+
+        return Task.CompletedTask;
     }
 
     private void AddProfileToList(OSCQueryServiceProfile profile)
@@ -70,13 +72,13 @@ public class OscQueryServiceWrapper(ILogger<OscQueryServiceWrapper> logger, ILoc
         {
             while (true)
             {
-                var useOscQuery = await localSettingsService.ReadSettingAsync<bool>("UseOSCQuery");
+                var useOscQuery = localSettingsService.ReadSetting<bool>("UseOSCQuery");
                 if (useOscQuery)
                 {
                     try
                     {
                         _serviceWrapper.RefreshServices();
-                        await PollVrChatParameters();
+                        PollVrChatParameters();
                     }
                     catch (Exception)
                     {
@@ -89,7 +91,7 @@ public class OscQueryServiceWrapper(ILogger<OscQueryServiceWrapper> logger, ILoc
         });
     }
 
-    private async Task PollVrChatParameters()
+    private void PollVrChatParameters()
     {
         if (_profiles.Count == 0) return;
 
@@ -97,17 +99,17 @@ public class OscQueryServiceWrapper(ILogger<OscQueryServiceWrapper> logger, ILoc
         {
             var vrcProfile = _profiles.First(profile => VrChatClientRegex.IsMatch(profile.name));
 
-            var hostIp = await localSettingsService.ReadSettingAsync<string>("OSCAddress");
+            var hostIp = localSettingsService.ReadSetting<string>("OSCAddress");
             var vrcIp = vrcProfile.address.ToString();
             if (hostIp != vrcIp)
             {
-                await localSettingsService.SaveSettingAsync("OSCAddress", vrcIp);
+                localSettingsService.SaveSetting("OSCAddress", vrcIp);
             }
 
-            var hostPort = await localSettingsService.ReadSettingAsync<int>("OSCOutPort");
+            var hostPort = localSettingsService.ReadSetting<int>("OSCOutPort");
             if (hostPort != VrcPort)
             {
-                await localSettingsService.SaveSettingAsync("OSCOutPort", VrcPort);
+                localSettingsService.SaveSetting("OSCOutPort", VrcPort);
             }
         }
         catch (InvalidOperationException)
