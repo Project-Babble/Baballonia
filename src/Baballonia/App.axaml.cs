@@ -13,6 +13,7 @@ using Baballonia.Contracts;
 using Baballonia.Factories;
 using Baballonia.Models;
 using Baballonia.Services;
+using Baballonia.Services.Inference;
 using Baballonia.Services.Inference.Platforms;
 using Baballonia.ViewModels;
 using Baballonia.ViewModels.SplitViewPane;
@@ -82,6 +83,15 @@ public class App : Application
                 services.AddSingleton<IActivationService, ActivationService>();
                 services.AddSingleton<IDispatcherService, DispatcherService>();
                 services.AddSingleton<ProcessingLoopService>();
+
+                services.AddSingleton<InferenceFactory>();
+                services.AddSingleton<FaceProcessingPipeline>();
+                services.AddSingleton<FacePipelineManager>();
+                services.AddSingleton<IFacePipelineEventBus, FacePipelineEventBus>();
+                services.AddSingleton<EyeProcessingPipeline>();
+                services.AddSingleton<EyePipelineManager>();
+                services.AddSingleton<IEyePipelineEventBus, EyePipelineEventBus>();
+                services.AddSingleton<SingleCameraSourceFactory>();
 
                 // Core Services
                 services.AddTransient<IIdentityService, IdentityService>();
@@ -279,16 +289,12 @@ public class App : Application
         if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime) return;
 
         var mainService = Ioc.Default.GetRequiredService<IMainService>();
-        Task.Run(mainService.Teardown);
-
-        var loop = Ioc.Default.GetRequiredService<ProcessingLoopService>();
-        loop.FaceProcessingPipeline.VideoSource?.Dispose();
-        loop.EyesProcessingPipeline.VideoSource?.Dispose();
 
         var settings = Ioc.Default.GetRequiredService<ILocalSettingsService>();
         settings.ForceSave();
-
         Overlay.Dispose();
+
+        Task.Run(mainService.Teardown);
     }
 
     private void OnTrayShutdownClicked(object? sender, EventArgs e)

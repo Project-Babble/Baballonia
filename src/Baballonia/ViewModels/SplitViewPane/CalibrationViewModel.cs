@@ -31,11 +31,13 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
     private readonly ICalibrationService _calibrationService;
     private readonly ParameterSenderService _parameterSenderService;
     private readonly ProcessingLoopService _processingLoopService;
+    private readonly EyePipelineManager _eyePipelineManager;
 
     private readonly Dictionary<string, int> _eyeKeyIndexMap;
     private readonly Dictionary<string, int> _faceKeyIndexMap;
-    public CalibrationViewModel()
+    public CalibrationViewModel(EyePipelineManager eyePipelineManager)
     {
+        _eyePipelineManager = eyePipelineManager;
         _settingsService = Ioc.Default.GetService<ILocalSettingsService>()!;
         _calibrationService = Ioc.Default.GetService<ICalibrationService>()!;
         _parameterSenderService = Ioc.Default.GetService<ParameterSenderService>()!;
@@ -154,7 +156,7 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
             if (p.PropertyName == nameof(StabilizeEyes))
             {
                 _settingsService.SaveSetting("AppSettings_StabilizeEyes", StabilizeEyes);
-                _processingLoopService.EyesProcessingPipeline.StabilizeEyes = StabilizeEyes;
+                _eyePipelineManager.LoadEyeStabilization();
             }
         };
     }

@@ -41,11 +41,18 @@ public class LocalSettingsService : ILocalSettingsService
 
         _debouncedSave = new DebounceFunction(async void () =>
         {
-            var json = JsonSerializer.Serialize(_settings, _jsonSerializerOptions);
-            // Despite what the docs say, the below does not in fact create a new file if it does not exist
-            // However, we can safely assume this file will always exist (created by App.axaml.cs)
-            await File.WriteAllTextAsync(_localSettingsFile, json);
-            logger.LogInformation("Saving settings");
+            try
+            {
+                var json = JsonSerializer.Serialize(_settings, _jsonSerializerOptions);
+                // Despite what the docs say, the below does not in fact create a new file if it does not exist
+                // However, we can safely assume this file will always exist (created by App.axaml.cs)
+                await File.WriteAllTextAsync(_localSettingsFile, json);
+                logger.LogInformation("Saving settings");
+            }
+            catch (Exception e)
+            {
+                logger.LogError("Could not save settings file: {}", e);
+            }
         }, 2000);
 
         _settings = new ConcurrentDictionary<string, JsonElement>();

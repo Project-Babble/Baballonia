@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Logging;
 using Baballonia.Contracts;
 using Baballonia.Services;
+using Baballonia.Services.Inference;
 using Baballonia.Services.Inference.Filters;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
@@ -69,10 +70,14 @@ public partial class AppSettingsViewModel : ViewModelBase
 
     [ObservableProperty] private bool _onboardingEnabled;
 
-    private ProcessingLoopService _processingLoopService;
     private ILogger<AppSettingsViewModel> _logger;
-    public AppSettingsViewModel()
+    private readonly ProcessingLoopService _processingLoopService;
+    private readonly FacePipelineManager _facePipelineManager;
+    private readonly EyePipelineManager _eyePipelineManager;
+    public AppSettingsViewModel(FacePipelineManager facePipelineManager, EyePipelineManager eyePipelineManager)
     {
+        _facePipelineManager = facePipelineManager;
+        _eyePipelineManager = eyePipelineManager;
         // General/Calibration Settings
         OscTarget = Ioc.Default.GetService<IOscTarget>()!;
         GithubService = Ioc.Default.GetService<GithubService>()!;
@@ -96,30 +101,9 @@ public partial class AppSettingsViewModel : ViewModelBase
 
         PropertyChanged += (_, _) =>
         {
-            if (!_oneEuroMinEnabled)
-            {
-                _processingLoopService.FaceProcessingPipeline.Filter = null;
-                _processingLoopService.EyesProcessingPipeline.Filter = null;
-            }
-            else
-            {
-                float[] faceArray = new float[Utils.FaceRawExpressions];
-                var faceFilter = new OneEuroFilter(
-                    faceArray,
-                    minCutoff: _oneEuroMinFreqCutoff,
-                    beta: _oneEuroSpeedCutoff
-                );
-                float[] eyeArray = new float[Utils.EyeRawExpressions];
-                var eyeFilter = new OneEuroFilter(
-                    eyeArray,
-                    minCutoff: _oneEuroMinFreqCutoff,
-                    beta: _oneEuroSpeedCutoff
-                );
-                _processingLoopService.FaceProcessingPipeline.Filter = faceFilter;
-                _processingLoopService.EyesProcessingPipeline.Filter = eyeFilter;
-            }
-
             SettingsService.Save(this);
+            _facePipelineManager.LoadFilter();
+            _eyePipelineManager.LoadFilter();
         };
     }
 
@@ -132,11 +116,11 @@ public partial class AppSettingsViewModel : ViewModelBase
         try
         {
             SettingsService.SaveSetting("AppSettings_UseGPU", value);
-            var face = _processingLoopService.LoadFaceInferenceAsync();
-            var eyes = _processingLoopService.LoadEyeInferenceAsync();
+            var loadFace = _eyePipelineManager.LoadInferenceAsync();
+            var loadEye = _facePipelineManager.LoadInferenceAsync();
 
-            _processingLoopService.FaceProcessingPipeline.InferenceService = await face;
-            _processingLoopService.EyesProcessingPipeline.InferenceService = await eyes;
+            await loadEye;
+            await loadFace;
         }
         catch (Exception e)
         {

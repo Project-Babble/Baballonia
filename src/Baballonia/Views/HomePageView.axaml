@@ -635,7 +635,8 @@
                       Padding="12,8" />
 
                   <Button
-                      Command="{Binding FaceCamera.StopCameraCommand}"
+                      Command="{Binding StopCameraCommand}"
+                      CommandParameter="{Binding FaceCamera}"
                       Content="{x:Static assets:Resources.Home_Cameras_Stop_Camera}"
                       FontSize="13"
                       Grid.Column="1"

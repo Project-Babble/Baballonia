@@ -1,12 +1,20 @@
 ﻿using System;
+using Baballonia.Services.events;
 using Baballonia.Services.Inference.Enums;
 
 namespace Baballonia.Services.Inference;
 
-public class EyeProcessingPipeline : DefaultProcessingPipeline
+public class EyeProcessingPipeline : DefaultProcessingPipeline, IDisposable
 {
+    private readonly IEyePipelineEventBus _eyePipelineEventBus;
     private readonly FastCorruptionDetector.FastCorruptionDetector _fastCorruptionDetector = new();
     private readonly ImageCollector _imageCollector = new();
+
+    public EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus)
+    {
+        _eyePipelineEventBus = eyePipelineEventBus;
+    }
+
     public bool StabilizeEyes { get; set; } = false;
 
     public float[]? RunUpdate()
@@ -18,13 +26,13 @@ public class EyeProcessingPipeline : DefaultProcessingPipeline
         if (_fastCorruptionDetector.IsCorrupted(frame).isCorrupted)
             return null;
 
-        InvokeNewFrameEvent(frame);
+        _eyePipelineEventBus.Publish(new EyePipelineEvents.NewFrameEvent(frame));
 
         var transformed = ImageTransformer?.Apply(frame);
         if(transformed == null)
             return null;
 
-        InvokeTransformedFrameEvent(transformed);
+        _eyePipelineEventBus.Publish(new EyePipelineEvents.NewTransformedFrameEvent(transformed));
 
         var collected = _imageCollector.Apply(transformed);
         transformed.Dispose();
@@ -45,7 +53,7 @@ public class EyeProcessingPipeline : DefaultProcessingPipeline
 
         ProcessExpressions(ref inferenceResult);
 
-        InvokeFilteredResultEvent(inferenceResult);
+        _eyePipelineEventBus.Publish(new EyePipelineEvents.NewFilteredResultEvent(inferenceResult));
 
         frame.Dispose();
         transformed.Dispose();
@@ -89,7 +97,7 @@ public class EyeProcessingPipeline : DefaultProcessingPipeline
         float[] convertedExpressions = new float[Utils.EyeRawExpressions];
 
         // swap eyes at this point
-        convertedExpressions[0] = rightEyeYawCorrected; // left pitch 
+        convertedExpressions[0] = rightEyeYawCorrected; // left pitch
         convertedExpressions[1] = eyeY;                   // left yaw
         convertedExpressions[2] = rightLid;               // left lid
         convertedExpressions[3] = leftEyeYawCorrected;  // right pitch
@@ -99,5 +107,22 @@ public class EyeProcessingPipeline : DefaultProcessingPipeline
         arKitExpressions = convertedExpressions;
 
         return true;
+    }
+
+
+    public void Dispose()
+    {
+        TryDisposeObject(VideoSource);
+        TryDisposeObject(ImageTransformer);
+        TryDisposeObject(ImageConverter);
+        TryDisposeObject(InferenceService);
+        TryDisposeObject(Filter);
+        TryDisposeObject(_fastCorruptionDetector);
+        TryDisposeObject(_imageCollector);
+    }
+
+    private void TryDisposeObject(object? obj)
+    {
+        (obj as IDisposable)?.Dispose();
     }
 }

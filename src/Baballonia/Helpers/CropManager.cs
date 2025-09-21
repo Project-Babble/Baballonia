@@ -16,9 +16,9 @@ public class CropManager()
     private bool _isCropping;
     private double _startX;
     private double _startY;
-    private CameraSettings.RegionOfInterest _cropZone;
+    private RegionOfInterest _cropZone;
 
-    public CameraSettings.RegionOfInterest CropZone => _cropZone;
+    public RegionOfInterest CropZone => _cropZone;
     public bool IsCropping => _isCropping;
     public CameraSize MaxSize { get; set; } = new();
 
@@ -61,7 +61,7 @@ public class CropManager()
             h = clampedY - _startY;
         }
 
-        _cropZone = new CameraSettings.RegionOfInterest(
+        _cropZone = new RegionOfInterest(
             (int)x,
             (int)y,
             (int)w,
@@ -74,7 +74,7 @@ public class CropManager()
         _isCropping = false;
     }
 
-    public void SetCropZone(CameraSettings.RegionOfInterest rectangle)
+    public void SetCropZone(RegionOfInterest rectangle)
     {
         _cropZone = rectangle;
     }
@@ -121,6 +121,6 @@ public class CropManager()
             height = MaxSize.Height;
         }
 
-        _cropZone = new CameraSettings.RegionOfInterest(x, y, width, height);
+        _cropZone = new RegionOfInterest(x, y, width, height);
     }
 }
