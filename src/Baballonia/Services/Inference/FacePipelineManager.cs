@@ -37,7 +37,7 @@ public class FacePipelineManager
         _pipeline.ImageConverter = new MatToFloatTensorConverter();
         _pipeline.ImageTransformer = new ImageTransformer();
 
-        LoadInference();
+        _ = LoadInferenceAsync();
         LoadFilter();
     }
 

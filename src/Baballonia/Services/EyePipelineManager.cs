@@ -47,7 +47,7 @@ public class EyePipelineManager
         dualTransformer.RightTransformer.TargetSize = new Size(128, 128);
         _pipeline.ImageTransformer = dualTransformer;
 
-        LoadInference();
+        _ = LoadInferenceAsync();
         LoadFilter();
         LoadEyeStabilization();
     }
