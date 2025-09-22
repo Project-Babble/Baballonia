@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Baballonia.Contracts;
 using Baballonia.Factories;
 using Baballonia.Services.Inference.VideoSources;
 using CommunityToolkit.Mvvm.DependencyInjection;
@@ -12,11 +13,13 @@ public class SingleCameraSourceFactory
 {
     private readonly ILogger<SingleCameraSourceFactory> _logger;
     private readonly ILoggerFactory _loggerFactory;
+    private readonly IDeviceEnumerator _deviceEnumerator;
 
-    public SingleCameraSourceFactory(ILogger<SingleCameraSourceFactory> logger, ILoggerFactory loggerFactory)
+    public SingleCameraSourceFactory(ILogger<SingleCameraSourceFactory> logger, ILoggerFactory loggerFactory, IDeviceEnumerator deviceEnumerator)
     {
         _logger = logger;
         _loggerFactory = loggerFactory;
+        _deviceEnumerator = deviceEnumerator;
     }
 
     public SingleCameraSource? Create(string address)
@@ -34,9 +37,9 @@ public class SingleCameraSourceFactory
         var camera = address;
         if (string.IsNullOrEmpty(camera)) return null;
 
-        App.DeviceEnumerator.Cameras ??= App.DeviceEnumerator.UpdateCameras();
+        _deviceEnumerator.Cameras ??= _deviceEnumerator.UpdateCameras();
 
-        if (App.DeviceEnumerator.Cameras.TryGetValue(camera, out var mappedAddress))
+        if (_deviceEnumerator.Cameras.TryGetValue(camera, out var mappedAddress))
         {
             camera = mappedAddress;
         }

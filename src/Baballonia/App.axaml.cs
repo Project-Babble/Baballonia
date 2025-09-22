@@ -29,15 +29,28 @@ namespace Baballonia;
 
 public class App : Application
 {
-    public static IVROverlay Overlay;
-    public static IVRCalibrator Calibrator;
-    public static IDeviceEnumerator DeviceEnumerator;
     public static Type PlatformConnectorType;
 
     private IHost? _host;
+    private static Action<IServiceCollection> ConfigurePlatformServices { get; set; }
+
+    public static void RegisterPlatformServices<TOverlay, TDeviceEnumerator>()
+        where TOverlay : class, IVROverlay
+        where TDeviceEnumerator : class, IDeviceEnumerator
+    {
+        ConfigurePlatformServices = services =>
+        {
+            services.AddSingleton<IVROverlay, TOverlay>();
+            services.AddSingleton<IDeviceEnumerator, TDeviceEnumerator>();
+        };
+    }
+
 
     public override void Initialize()
     {
+        if (ConfigurePlatformServices == null)
+            throw new ApplicationException("No platform services were provided provided");
+
         AvaloniaXamlLoader.Load(this);
 
         // https://github.com/benaclejames/VRCFaceTracking/blob/51405d57cbbd46c92ff176d5211d043ed875ad42/VRCFaceTracking/App.xaml.cs#L61C9-L71C10
@@ -132,6 +145,8 @@ public class App : Application
                     services.AddTransient<OnboardingView>();
                 }
 
+                ConfigurePlatformServices.Invoke(services);
+
                 services.AddHostedService(provider => provider.GetService<OscRecvService>()!);
                 services.AddHostedService(provider => provider.GetService<ParameterSenderService>()!);
 
@@ -182,76 +197,6 @@ public class App : Application
         _host = hostBuilder.Build();
         Ioc.Default.ConfigureServices(_host.Services);
 
-        // Hacky
-        if (Utils.IsSupportedDesktopOS)
-        {
-            if (DeviceEnumerator != null && DeviceEnumerator.GetType().Name == "DesktopDeviceEnumerator")
-            {
-                var appLogger = Ioc.Default.GetService<ILogger<App>>();
-
-                try
-                {
-                    // Use reflection to create DesktopDeviceEnumerator with logger since we can't reference Baballonia.Desktop here
-                    var deviceEnumeratorType = DeviceEnumerator.GetType();
-
-                    if (deviceEnumeratorType == null)
-                    {
-                        appLogger?.LogWarning("DeviceEnumerator type is null, cannot reinitialize with logger");
-                        return;
-                    }
-
-                    appLogger?.LogInformation("Attempting to (re)initialize DeviceEnumerator of type: {TypeName}", deviceEnumeratorType.FullName);
-
-                    // Create generic logger type safely
-                    Type loggerType;
-                    try
-                    {
-                        loggerType = typeof(ILogger<>).MakeGenericType(deviceEnumeratorType);
-                    }
-                    catch (Exception ex)
-                    {
-                        appLogger?.LogError(ex, "Failed to create generic logger type for DeviceEnumerator: {TypeName}", deviceEnumeratorType.FullName);
-                        return;
-                    }
-
-                    // Attempt to get the logger service
-                    var deviceLogger = Ioc.Default.GetService(loggerType);
-                    appLogger?.LogInformation("Logger service resolution result. Logger found: {LoggerFound}", deviceLogger != null);
-
-                    if (deviceLogger != null)
-                    {
-                        // Attempt to create new instance with logger using reflection
-                        try
-                        {
-                            var newDeviceEnumerator = Activator.CreateInstance(deviceEnumeratorType, deviceLogger);
-
-                            if (newDeviceEnumerator is IDeviceEnumerator deviceEnum)
-                            {
-                                DeviceEnumerator = deviceEnum;
-                                appLogger?.LogInformation("DeviceEnumerator successfully reinitialized with logger");
-                            }
-                            else
-                            {
-                                appLogger?.LogError("Created instance does not implement IDeviceEnumerator interface. Type: {TypeName}", newDeviceEnumerator?.GetType().FullName ?? "null");
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            appLogger?.LogError(ex, "Failed to create DeviceEnumerator instance via reflection. This could be due to missing constructor, constructor exceptions, or security restrictions. Type: {TypeName}", deviceEnumeratorType.FullName);
-                        }
-                    }
-                    else
-                    {
-                        appLogger?.LogWarning("Could not resolve logger service for DeviceEnumerator type: {TypeName}. DeviceEnumerator will continue without enhanced logging.", deviceEnumeratorType.FullName);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    appLogger?.LogError(ex, "Unexpected error during DeviceEnumerator logger initialization. DeviceEnumerator will continue with existing instance.");
-                }
-            }
-        }
-
         // Initialize settings
         var localSettings = Ioc.Default.GetService<ILocalSettingsService>();
 
@@ -292,7 +237,6 @@ public class App : Application
 
         var settings = Ioc.Default.GetRequiredService<ILocalSettingsService>();
         settings.ForceSave();
-        Overlay.Dispose();
 
         Task.Run(mainService.Teardown);
     }

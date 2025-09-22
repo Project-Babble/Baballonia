@@ -307,9 +307,6 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     // Necessary evil to store some globals that don't really have place to go :( _sob_
     private static bool _hasPerformedFirstTimeSetup = false;
 
-    public IOscTarget OscTarget { get; }
-    private OscRecvService OscRecvService { get; }
-    private OscSendService OscSendService { get; }
 
     private int _messagesRecvd;
     [ObservableProperty] private string _messagesInPerSecCount;
@@ -327,74 +324,66 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     [ObservableProperty] private CameraControllerModel _rightCamera;
     [ObservableProperty] private CameraControllerModel _faceCamera;
 
-    public readonly ILocalSettingsService LocalSettingsService;
 
-    private readonly DispatcherTimer _msgCounterTimer;
     private readonly DropOverlayService _dropOverlayService;
 
     private readonly FacePipelineManager _facePipelineManager;
     private readonly IFacePipelineEventBus _facePipelineEventBus;
     private readonly EyePipelineManager _eyePipelineManager;
     private readonly IEyePipelineEventBus _eyePipelineEventBus;
+    private readonly IVROverlay _vrOverlay;
+    private readonly IDeviceEnumerator _deviceEnumerator;
+    private readonly ILocalSettingsService _localSettings;
+    private readonly ILogger<HomePageViewModel> _logger;
 
     public string RequestedVRCalibration = CalibrationRoutine.Map["QuickCalibration"];
 
-    private ILogger<HomePageViewModel> _logger;
 
-    public HomePageViewModel(FacePipelineManager facePipelineManager, EyePipelineManager eyePipelineManager,
-        IFacePipelineEventBus facePipelineEventBus, IEyePipelineEventBus eyePipelineEventBus)
+    public HomePageViewModel(FacePipelineManager facePipelineManager,
+        EyePipelineManager eyePipelineManager,
+        IFacePipelineEventBus facePipelineEventBus,
+        IEyePipelineEventBus eyePipelineEventBus,
+        IVROverlay vrOverlay,
+        IDeviceEnumerator deviceEnumerator,
+        OscSendService oscSendService,
+        ILocalSettingsService localSettings,
+        ILogger<HomePageViewModel> logger, DropOverlayService dropOverlayService)
     {
         _facePipelineManager = facePipelineManager;
         _eyePipelineManager = eyePipelineManager;
         _facePipelineEventBus = facePipelineEventBus;
         _eyePipelineEventBus = eyePipelineEventBus;
-        OscTarget = Ioc.Default.GetService<IOscTarget>()!;
-        OscRecvService = Ioc.Default.GetService<OscRecvService>()!;
-        OscSendService = Ioc.Default.GetService<OscSendService>()!;
-        LocalSettingsService = Ioc.Default.GetService<ILocalSettingsService>()!;
-        LocalSettingsService = Ioc.Default.GetRequiredService<ILocalSettingsService>()!;
-        _logger = Ioc.Default.GetService<ILogger<HomePageViewModel>>()!;
-        _dropOverlayService = Ioc.Default.GetService<DropOverlayService>()!;
+        _vrOverlay = vrOverlay;
+        _deviceEnumerator = deviceEnumerator;
+        _localSettings = localSettings;
+        _logger = logger;
+        _dropOverlayService = dropOverlayService;
 
-        LocalSettingsService.Load(this);
+        _localSettings.Load(this);
 
         MessagesInPerSecCount = "0";
         MessagesOutPerSecCount = "0";
-        OscSendService.OnMessagesDispatched += MessageDispatched;
 
-        _msgCounterTimer = new DispatcherTimer
-        {
-            Interval = TimeSpan.FromSeconds(1)
-        };
-        _msgCounterTimer.Tick += (_, _) =>
-        {
-            MessagesInPerSecCount = _messagesRecvd.ToString();
-            _messagesRecvd = 0;
-
-            MessagesOutPerSecCount = _messagesSent.ToString();
-            _messagesSent = 0;
-        };
-        _msgCounterTimer.Start();
 
         Initialize();
     }
 
     private void Initialize()
     {
-        bool hasRead = LocalSettingsService.ReadSetting<bool>("SecondsWarningRead");
+        bool hasRead = _localSettings.ReadSetting<bool>("SecondsWarningRead");
         if (!hasRead)
         {
             _dropOverlayService.Show();
         }
 
-        var cameras = App.DeviceEnumerator.UpdateCameras();
+        var cameras = _deviceEnumerator.UpdateCameras();
         var cameraNames = cameras.Keys.ToArray();
 
-        LeftCamera = new CameraControllerModel(LocalSettingsService, "LeftCamera",
+        LeftCamera = new CameraControllerModel(_localSettings, "LeftCamera",
             cameraNames, Camera.Left);
-        RightCamera = new CameraControllerModel(LocalSettingsService, "RightCamera",
+        RightCamera = new CameraControllerModel(_localSettings, "RightCamera",
             cameraNames, Camera.Right);
-        FaceCamera = new CameraControllerModel(LocalSettingsService, "FaceCamera",
+        FaceCamera = new CameraControllerModel(_localSettings, "FaceCamera",
             cameraNames, Camera.Face);
 
         FaceCamera.PropertyChanged += CameraControllerModel_PropertyChanged;
@@ -594,7 +583,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     [RelayCommand]
     private async Task RequestVRCalibration()
     {
-        var res = await App.Overlay.EyeTrackingCalibrationRequested(RequestedVRCalibration);
+        var res = await _vrOverlay.EyeTrackingCalibrationRequested(RequestedVRCalibration);
         if (res.success)
         {
             if (!Directory.Exists(Utils.ModelsDirectory))
@@ -604,7 +593,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
             var destPath = Path.Combine(Utils.ModelsDirectory, $"tuned_temporal_eye_tracking_{DateTime.Now}.onnx");
             File.Move("tuned_temporal_eye_tracking.onnx", destPath);
-            LocalSettingsService.SaveSetting("EyeHome_EyeModel", destPath);
+            _localSettings.SaveSetting("EyeHome_EyeModel", destPath);
             await _eyePipelineManager.LoadInferenceAsync();
             SelectedCalibrationTextBlock.Foreground = new SolidColorBrush(Colors.Green);
         }
@@ -636,8 +625,6 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
         return color;
     }
-
-    private void MessageDispatched(int msgCount) => _messagesSent += msgCount;
 
     public void Dispose()
     {
@@ -690,8 +677,5 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
         _facePipelineEventBus.Unsubscribe<FacePipelineEvents.ExceptionEvent>(FacePipelineExceptionHandler);
         _eyePipelineEventBus.Unsubscribe<EyePipelineEvents.ExceptionEvent>(EyePipelineExceptionHandler);
-
-        OscSendService.OnMessagesDispatched -= MessageDispatched;
-        _msgCounterTimer.Stop();
     }
 }

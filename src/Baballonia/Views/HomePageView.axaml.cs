@@ -7,6 +7,7 @@ using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
 using Baballonia.Assets;
+using Baballonia.Contracts;
 using Baballonia.Helpers;
 using Baballonia.ViewModels.SplitViewPane;
 
@@ -22,8 +23,13 @@ public partial class HomePageView : UserControl
 
     private bool _isLayoutUpdating;
 
-    public HomePageView()
+    private readonly IDeviceEnumerator _deviceEnumerator;
+    private readonly ILocalSettingsService _localSettings;
+
+    public HomePageView(IDeviceEnumerator deviceEnumerator, ILocalSettingsService localSettings)
     {
+        _deviceEnumerator = deviceEnumerator;
+        _localSettings = localSettings;
         InitializeComponent();
 
         if (Utils.IsSupportedDesktopOS)
@@ -178,7 +184,7 @@ public partial class HomePageView : UserControl
     {
         if (DataContext is not HomePageViewModel vm) return;
 
-        var cameras = App.DeviceEnumerator.UpdateCameras();
+        var cameras = _deviceEnumerator.UpdateCameras();
         var cameraNames = cameras.Keys.ToArray();
 
         vm.LeftCamera.UpdateCameraDropDown(cameraNames);
@@ -188,7 +194,7 @@ public partial class HomePageView : UserControl
     {
         if (DataContext is not HomePageViewModel vm) return;
 
-        var cameras = App.DeviceEnumerator.UpdateCameras();
+        var cameras = _deviceEnumerator.UpdateCameras();
         var cameraNames = cameras.Keys.ToArray();
 
         vm.RightCamera.UpdateCameraDropDown(cameraNames);
@@ -198,7 +204,7 @@ public partial class HomePageView : UserControl
     {
         if (DataContext is not HomePageViewModel vm) return;
 
-        var cameras = App.DeviceEnumerator.UpdateCameras();
+        var cameras = _deviceEnumerator.UpdateCameras();
         var cameraNames = cameras.Keys.ToArray();
 
         vm.FaceCamera.UpdateCameraDropDown(cameraNames);
@@ -220,7 +226,7 @@ public partial class HomePageView : UserControl
         if (file.Count == 0) return;
         if (DataContext is not HomePageViewModel vm) return;
 
-        vm.LocalSettingsService.SaveSetting("EyeHome_EyeModel", file[0].Path.AbsolutePath);
+        _localSettings.SaveSetting("EyeHome_EyeModel", file[0].Path.AbsolutePath);
 
         await vm.ReloadEyeInference();
 
