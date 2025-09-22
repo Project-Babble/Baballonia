@@ -96,10 +96,28 @@
           </Grid>
         </Expander.Header>
         <StackPanel Spacing="12">
-          <TextBlock
-            FontStyle="Italic"
-            TextWrapping="Wrap"
-            Text="{x:Static assets:Resources.Settings_OSC_VRCFT_Warning}" />
+          <Border
+            Background="Orange"
+            CornerRadius="8"
+            Padding="16,12">
+            <Grid ColumnDefinitions="Auto,12,*">
+              <PathIcon
+                Grid.Column="0"
+                Data="{StaticResource WarningRegular}"
+                Foreground="Black"
+                Height="20"
+                Width="20" />
+              <StackPanel Grid.Column="2" Spacing="4">
+                <TextBlock
+                  FontSize="14"
+                  FontWeight="DemiBold"
+                  Foreground="Black"
+                  Text="{x:Static assets:Resources.Settings_OSC_VRCFT_Warning}"
+                  TextWrapping="Wrap" />
+              </StackPanel>
+            </Grid>
+          </Border>
+
           <Grid
               Margin="0,4"
               ColumnDefinitions="Auto,*,Auto"
@@ -238,10 +256,37 @@
                 Margin="0,8"
                 PlaceholderText="{x:Static assets:Resources.Settings_Filter_Template_Placeholder}"
                 SelectionChanged="SelectedMinFreqCutoffComboBox_OnSelectionChanged">
-              <ComboBoxItem Tag="0.5"><TextBlock Text="{x:Static assets:Resources.Settings_Filter_Template_Low}" DataContext="0.5" /></ComboBoxItem>
-              <ComboBoxItem Tag="1.0"><TextBlock Text="{x:Static assets:Resources.Settings_Filter_Template_Medium}" DataContext="1.0" /></ComboBoxItem>
-              <ComboBoxItem Tag="2.0"><TextBlock Text="{x:Static assets:Resources.Settings_Filter_Template_High}" DataContext="2.0" /></ComboBoxItem>
+              <ComboBoxItem Tag="0.5">
+                <TextBlock>
+                  <TextBlock.Text>
+                    <MultiBinding StringFormat="{x:Static assets:Resources.Settings_Filter_Template_Low}">
+                      <Binding Source="0.5" />
+                    </MultiBinding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </ComboBoxItem>
+
+              <ComboBoxItem Tag="1.0">
+                <TextBlock>
+                  <TextBlock.Text>
+                    <MultiBinding StringFormat="{x:Static assets:Resources.Settings_Filter_Template_Medium}">
+                      <Binding Source="1.0" />
+                    </MultiBinding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </ComboBoxItem>
+
+              <ComboBoxItem Tag="2.0">
+                <TextBlock>
+                  <TextBlock.Text>
+                    <MultiBinding StringFormat="{x:Static assets:Resources.Settings_Filter_Template_High}">
+                      <Binding Source="2.0" />
+                    </MultiBinding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </ComboBoxItem>
             </ComboBox>
+
             <NumericUpDown
                 x:Name="SelectedMinFreqCutoffUpDown"
                 Margin="0,8"

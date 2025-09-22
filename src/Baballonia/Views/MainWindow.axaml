@@ -8,7 +8,7 @@
     xmlns:views="clr-namespace:Baballonia.Views"
     Width="1100"
     Height="825"
-    MinWidth="675"
+    MinWidth="700"
     MinHeight="250"
     d:DesignHeight="825"
     d:DesignWidth="1100"

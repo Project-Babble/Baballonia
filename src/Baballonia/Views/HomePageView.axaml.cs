@@ -1,8 +1,13 @@
+using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
+using Baballonia.Assets;
 using Baballonia.Helpers;
 using Baballonia.ViewModels.SplitViewPane;
 
@@ -10,6 +15,12 @@ namespace Baballonia.Views;
 
 public partial class HomePageView : UserControl
 {
+
+    public static FilePickerFileType ONNXAll { get; } = new("ONNX Models")
+    {
+        Patterns = ["*.onnx"],
+    };
+
     private bool _isLayoutUpdating;
 
     public HomePageView()
@@ -201,30 +212,45 @@ public partial class HomePageView : UserControl
     private void RefreshLeftEyeConnectedDevices(object? sender, CancelEventArgs e)
     {
         if (DataContext is not HomePageViewModel vm) return;
-
-        var cameras = App.DeviceEnumerator.UpdateCameras();
-        var cameraNames = cameras.Keys.ToArray();
-
-        vm.LeftCamera.UpdateCameraDropDown(cameraNames);
+        vm.LeftCamera.UpdateCameraDropDown();
     }
 
     private void RefreshRightEyeDevices(object? sender, CancelEventArgs e)
     {
         if (DataContext is not HomePageViewModel vm) return;
-
-        var cameras = App.DeviceEnumerator.UpdateCameras();
-        var cameraNames = cameras.Keys.ToArray();
-
-        vm.RightCamera.UpdateCameraDropDown(cameraNames);
+        vm.RightCamera.UpdateCameraDropDown();
     }
 
     private void RefreshConnectedFaceDevices(object? sender, CancelEventArgs e)
     {
         if (DataContext is not HomePageViewModel vm) return;
+        vm.FaceCamera.UpdateCameraDropDown();
+    }
 
-        var cameras = App.DeviceEnumerator.UpdateCameras();
-        var cameraNames = cameras.Keys.ToArray();
+    private async void EyeModelLoad(object? sender, RoutedEventArgs e)
+    {
+        var topLevelStorageProvider = TopLevel.GetTopLevel(this)!.StorageProvider;
+        var suggestedStartLocation =
+            await topLevelStorageProvider.TryGetFolderFromPathAsync(Utils.ModelsDirectory)!;
+        var file = await topLevelStorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        {
+            Title = "Select ONNX Model",
+            AllowMultiple = false,
+            SuggestedStartLocation = suggestedStartLocation, // Falls back to desktop if Models folder hasn't been created yet
+            FileTypeFilter = [ONNXAll]
+        })!;
 
-        vm.FaceCamera.UpdateCameraDropDown(cameraNames);
+        if (file.Count == 0) return;
+        if (DataContext is not HomePageViewModel vm) return;
+
+        vm.LocalSettingsService.SaveSetting("EyeHome_EyeModel", file[0].Path.AbsolutePath);
+        var eye = await vm.ProcessingLoopService.LoadEyeInferenceAsync();
+        vm.ProcessingLoopService.EyesProcessingPipeline.InferenceService = eye;
+
+        LoadEyeModelText.Text = file[0].Name;
+        LoadEyeModelText.Foreground = new SolidColorBrush(Colors.Green);
+        await Task.Delay(3000);
+        LoadEyeModelText.Text = Baballonia.Assets.Resources.Home_Eye_Load_Model;
+        LoadEyeModelText.Foreground = new SolidColorBrush(vm.GetBaseHighColor());
     }
 }

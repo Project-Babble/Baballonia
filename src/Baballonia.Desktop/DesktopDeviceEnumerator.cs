@@ -64,7 +64,7 @@ public sealed class DesktopDeviceEnumerator(ILogger<DesktopDeviceEnumerator> log
             cameraDict.Add($"Error: {ex.Message}", "error");
         }
 
-        Logger.LogInformation("Camera enumeration completed. Found {CameraCount} devices", cameraDict.Count);
+        Logger.LogDebug("Camera enumeration completed. Found {CameraCount} devices", cameraDict.Count);
         foreach (var camera in cameraDict)
         {
             Logger.LogDebug("Detected camera: '{FriendlyName}' -> '{DeviceId}'", camera.Key, camera.Value);
@@ -112,7 +112,7 @@ public sealed class DesktopDeviceEnumerator(ILogger<DesktopDeviceEnumerator> log
         for (var index = 0; index < videoInputDevices.Length; index++)
         {
             var dev = videoInputDevices[index];
-            logger.LogInformation("Found device: {}, ClassId: {}, Path: {}", dev.Name, dev.ClassID, dev.DevicePath);
+            logger.LogDebug("Found device: {}, ClassId: {}, Path: {}", dev.Name, dev.ClassID, dev.DevicePath);
             EnsureUniqueKey(cameraDict, dev.Name, index.ToString());
         }
         #endif

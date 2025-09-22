@@ -5,15 +5,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Baballonia.Services.Inference;
 
-public class SingleCameraSourceFactory
+public static class SingleCameraSourceFactory
 {
-    public SingleCameraSource? Create(string address)
+    public static SingleCameraSource? Create(string address, string preferredCapture = "")
     {
         var logger = Ioc.Default.GetService<ILogger<SingleCameraSource>>()!;
-        var platform = new PlatformConnectorFactory().Create(logger, address);
-        if(platform != null)
-            return new SingleCameraSource(logger, platform, address);
-
-        return null;
+        var platform = PlatformConnectorFactory.Create(logger, address);
+        return platform != null ? new SingleCameraSource(logger, platform, address, preferredCapture) : null;
     }
 }

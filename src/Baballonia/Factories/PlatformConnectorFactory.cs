@@ -4,10 +4,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Baballonia.Factories;
 
-public class PlatformConnectorFactory
+public static class PlatformConnectorFactory
 {
-    public PlatformConnector Create(ILogger logger, string cameraAddress)
-    {
-        return (PlatformConnector)Activator.CreateInstance(App.PlatformConnectorType, cameraAddress, logger)!;
-    }
+    public static PlatformConnector Create(ILogger logger, string cameraAddress) =>
+        (PlatformConnector)Activator.CreateInstance(App.PlatformConnectorType, cameraAddress, logger)!;
 }

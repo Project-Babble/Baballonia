@@ -38,7 +38,14 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     private ObservableCollection<string> _availableFirmwareTypes = new();
 
     [ObservableProperty]
-    private string _selectedFirmwareType = "babble_multimodal_firmware_1.0.0.bin";
+    private int _selectedFirmwareIndex;
+
+    private readonly string _bundledFirmwarePath = Path.Combine(
+        AppContext.BaseDirectory,
+        "Firmware",
+        "Binaries");
+
+    public string CustomFirmwarePath;
 
     [ObservableProperty]
     private string? _selectedSerialPort;
@@ -90,8 +97,7 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     public FirmwareViewModel()
     {
         AvailableFirmwareTypes.Clear();
-        var binariesPath = Path.Combine(AppContext.BaseDirectory, "Firmware", "Binaries");
-        var binaries = Directory.GetFiles(binariesPath, "*.bin");
+        var binaries = Directory.GetFiles(_bundledFirmwarePath, "*.bin");
         foreach (var bin in binaries)
         {
             AvailableFirmwareTypes.Add(Path.GetFileName(bin));
@@ -309,8 +315,24 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
             return;
         }
 
-        IsFlashing = true;
-        await _firmwareService.UploadFirmwareAsync(SelectedSerialPort!, Path.Combine("Firmware", "Binaries", SelectedFirmwareType));
+        // Check if the user has selected custom firmware for upload
+        var candidateFirmwarePath = Path.Combine(_bundledFirmwarePath, AvailableFirmwareTypes[SelectedFirmwareIndex]);
+        if (File.Exists(candidateFirmwarePath))
+        {
+            // Combobox selection
+            IsFlashing = true;
+            await _firmwareService.UploadFirmwareAsync(SelectedSerialPort!, candidateFirmwarePath);
+        }
+        else if (!string.IsNullOrEmpty(CustomFirmwarePath))
+        {
+            // Else, pass in the absolute path
+            IsFlashing = true;
+            await _firmwareService.UploadFirmwareAsync(SelectedSerialPort!, CustomFirmwarePath);
+        }
+        else
+        {
+            return;
+        }
         IsFlashing = false;
 
         IsFinished = true;

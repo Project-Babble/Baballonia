@@ -367,6 +367,15 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Load Custom Firmware.
+        /// </summary>
+        public static string Firmware_Custom_Firmware_Load {
+            get {
+                return ResourceManager.GetString("Firmware_Custom_Firmware_Load", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Toggle wired/wireless mode.
         /// </summary>
         public static string Firmware_Device_Configuration_Description {
@@ -763,6 +772,15 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Default.
+        /// </summary>
+        public static string Home_Backend_Default {
+            get {
+                return ResourceManager.GetString("Home_Backend_Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Adjust the brightness of the image.
         /// </summary>
         public static string Home_Cameras_Brightness_Description {
@@ -880,6 +898,15 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Load Eye Model.
+        /// </summary>
+        public static string Home_Eye_Load_Model {
+            get {
+                return ResourceManager.GetString("Home_Eye_Load_Model", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Face Camera Address.
         /// </summary>
         public static string Home_Face_Camera_Address {
@@ -948,6 +975,15 @@ namespace Baballonia.Assets {
         public static string Home_Left_Camera_Settings {
             get {
                 return ResourceManager.GetString("Home_Left_Camera_Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preferred Backend.
+        /// </summary>
+        public static string Home_Preferred_Backend {
+            get {
+                return ResourceManager.GetString("Home_Preferred_Backend", resourceCulture);
             }
         }
         

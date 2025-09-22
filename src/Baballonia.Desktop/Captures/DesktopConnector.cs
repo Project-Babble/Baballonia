@@ -19,25 +19,18 @@ namespace Baballonia.Desktop.Captures;
 /// </summary>
 public class DesktopConnector : PlatformConnector, IPlatformConnector
 {
-    private static Dictionary<Capture, Type> CaptureCache;
-
+    private static bool _addedCaptures = false;
     public DesktopConnector(string source, ILogger logger) : base(source, logger)
     {
         // If we've already scanned for DLL's, just return the original result. Reflection is slow!
-        if (CaptureCache != null)
-        {
-            Captures = CaptureCache;
-            return;
-        }
-
-        Captures = new Dictionary<Capture, Type>();
-
+        if (_addedCaptures) return;
         // Load all modules
         var dlls = Directory.GetFiles(Path.Combine(AppContext.BaseDirectory, "Modules"), "*.dll");
         Logger.LogDebug("Found {DllCount} DLL files in application directory: {DllFiles}", dlls.Length, string.Join(", ", dlls.Select(Path.GetFileName)));
-        Captures = LoadAssembliesFromPath(dlls);
-        CaptureCache = Captures;
+        var results = LoadAssembliesFromPath(dlls);
+        foreach (var pair in results) Captures.Add(pair.Key, pair.Value);
         Logger.LogDebug("Loaded {CaptureCount} capture types from assemblies", Captures.Count);
+        _addedCaptures = true;
     }
 
     private Dictionary<Capture, Type> LoadAssembliesFromPath(string[] paths)

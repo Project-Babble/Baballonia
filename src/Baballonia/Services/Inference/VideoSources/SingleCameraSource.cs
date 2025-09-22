@@ -9,23 +9,26 @@ public class SingleCameraSource : IVideoSource
 {
     private ILogger _logger;
     public Size CameraSize;
+    public string PreferredCapture;
     private string _cameraAddress;
     private PlatformConnector _platformConnector;
 
     public SingleCameraSource(
         ILogger logger,
         PlatformConnector platformConnector,
-        string cameraAddress)
+        string cameraAddress,
+        string preferredCapture = "")
     {
         _logger = logger;
         _platformConnector = platformConnector;
         _cameraAddress = cameraAddress;
         CameraSize = new Size(0, 0);
+        PreferredCapture = preferredCapture;
     }
 
     public bool Start()
     {
-        return _platformConnector.Initialize(_cameraAddress);
+        return _platformConnector.Initialize(_cameraAddress, PreferredCapture);
     }
 
     public bool Stop()

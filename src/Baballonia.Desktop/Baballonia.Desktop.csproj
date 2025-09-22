@@ -49,6 +49,8 @@
         <ProjectReference Include="..\Baballonia.OpenCVCapture\Baballonia.OpenCVCapture.csproj"/>
         <ProjectReference Include="..\Baballonia.SDK\Baballonia.SDK.csproj" />
         <ProjectReference Include="..\Baballonia.SerialCameraCapture\Baballonia.SerialCameraCapture.csproj"/>
+        <ProjectReference Include="..\Baballonia.IPCameraCapture\Baballonia.IPCameraCapture.csproj"/>
+        <ProjectReference Include="..\Baballonia.VFTCapture\Baballonia.VFTCapture.csproj"/>
         <ProjectReference Include="..\Baballonia\Baballonia.csproj" />
     </ItemGroup>
 
@@ -156,12 +158,16 @@
 
 
 	<Target Name="CopyModulesToFolder" AfterTargets="AfterBuild">
-	  <ItemGroup>
-		<ModuleDlls Include="$(OutputPath)Baballonia.SerialCameraCapture.dll" />
-		<ModuleDlls Include="$(OutputPath)Baballonia.OpenCVCapture.dll" />
-        <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.SerialCameraCapture.pdb')" Include="$(OutputPath)Baballonia.SerialCameraCapture.pdb" />
-        <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.OpenCVCapture.pdb')" Include="$(OutputPath)Baballonia.OpenCVCapture.pdb" />
-	  </ItemGroup>
+	    <ItemGroup>
+	    	<ModuleDlls Include="$(OutputPath)Baballonia.SerialCameraCapture.dll" />
+	    	<ModuleDlls Include="$(OutputPath)Baballonia.OpenCVCapture.dll" />
+            <ModuleDlls Include="$(OutputPath)Baballonia.IPCameraCapture.dll" />
+            <ModuleDlls Include="$(OutputPath)Baballonia.VFTCapture.dll" />
+            <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.SerialCameraCapture.pdb')" Include="$(OutputPath)Baballonia.SerialCameraCapture.pdb" />
+            <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.OpenCVCapture.pdb')" Include="$(OutputPath)Baballonia.OpenCVCapture.pdb" />
+            <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.IPCameraCapture.pdb')" Include="$(OutputPath)Baballonia.IPCameraCapture.pdb" />
+            <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.VFTCapture.pdb')" Include="$(OutputPath)Baballonia.VFTCapture.pdb" />
+	    </ItemGroup>
 	  <MakeDir Directories="$(OutputPath)Modules" />
 	  <Copy SourceFiles="@(ModuleDlls)" DestinationFolder="$(OutputPath)Modules\" />
 	  <!-- Remove the DLLs from the root output directory -->
