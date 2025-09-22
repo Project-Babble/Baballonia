@@ -20,7 +20,7 @@ namespace Baballonia.Controls
 
         private readonly Path _chevron = new()
         {
-            Data = Avalonia.Media.Geometry.Parse("M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"),
+            Data = Avalonia.Media.Geometry.Parse("M8.36612 16.1161C7.87796 16.6043 7.87796 17.3957 8.36612 17.8839L23.1161 32.6339C23.6043 33.122 24.3957 33.122 24.8839 32.6339L39.6339 17.8839C40.122 17.3957 40.122 16.6043 39.6339 16.1161C39.1457 15.628 38.3543 15.628 37.8661 16.1161L24 29.9822L10.1339 16.1161C9.64573 15.628 8.85427 15.628 8.36612 16.1161Z"),
             Fill = Avalonia.Media.Brushes.Gray,
             StrokeThickness = 0.5,
             Width = 12,
