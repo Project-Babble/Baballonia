@@ -12,6 +12,7 @@ using Capture = Baballonia.SDK.Capture;
 
 namespace Baballonia.Services.Inference.Platforms;
 
+
 /// <summary>
 /// Manages what Captures are allowed to run on what platforms, as well as their Urls, etc.
 /// </summary>

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Baballonia.Contracts;
 using Baballonia.Factories;
+using Baballonia.Services.Inference.Platforms;
 using Baballonia.Services.Inference.VideoSources;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -14,31 +16,48 @@ public class SingleCameraSourceFactory
     private readonly ILogger<SingleCameraSourceFactory> _logger;
     private readonly ILoggerFactory _loggerFactory;
     private readonly IDeviceEnumerator _deviceEnumerator;
+    private readonly IPlatformConnector _platformConnector;
 
-    public SingleCameraSourceFactory(ILogger<SingleCameraSourceFactory> logger, ILoggerFactory loggerFactory, IDeviceEnumerator deviceEnumerator)
+    public SingleCameraSourceFactory(ILogger<SingleCameraSourceFactory> logger, ILoggerFactory loggerFactory, IDeviceEnumerator deviceEnumerator, IPlatformConnector platformConnector)
     {
         _logger = logger;
         _loggerFactory = loggerFactory;
         _deviceEnumerator = deviceEnumerator;
+        _platformConnector = platformConnector;
     }
 
-    public SingleCameraSource? Create(string address)
+    public SingleCameraSource? Create(string address, string providerName)
     {
-        var platform =
-            new PlatformConnectorFactory().Create(_loggerFactory.CreateLogger<PlatformConnectorFactory>(), address);
-        if (platform != null)
-            return new SingleCameraSource(_loggerFactory.CreateLogger<SingleCameraSource>(), platform, address);
+        var provider = _platformConnector.GetCaptureFactories().FirstOrDefault(factory => factory.GetProviderName() == providerName);
+        if (provider == null)
+            throw new ArgumentNullException($"Provider {providerName} not found");
 
-        return null;
+        var capture = provider.Create(address);
+
+        return new SingleCameraSource(_loggerFactory.CreateLogger<SingleCameraSource>(), capture, address);
     }
 
     public Task<SingleCameraSource?> CreateStart(string address)
     {
         var camera = address;
-        if (string.IsNullOrEmpty(camera)) return null;
+        _deviceEnumerator.Cameras ??= _deviceEnumerator.UpdateCameras();
+        if (_deviceEnumerator.Cameras.TryGetValue(camera, out var mappedAddress))
+        {
+            camera = mappedAddress;
+        }
+
+        var provider = _platformConnector.GetCaptureFactories().FirstOrDefault(factory => factory.CanConnect(camera));
+        if (provider == null)
+            throw new ArgumentNullException($"No provider for {address} not found");
+
+        return CreateStart(address, provider.GetProviderName());
+    }
+
+    public Task<SingleCameraSource?> CreateStart(string address, string providerName)
+    {
+        var camera = address;
 
         _deviceEnumerator.Cameras ??= _deviceEnumerator.UpdateCameras();
-
         if (_deviceEnumerator.Cameras.TryGetValue(camera, out var mappedAddress))
         {
             camera = mappedAddress;
@@ -46,7 +65,7 @@ public class SingleCameraSourceFactory
 
         return Task.Run<SingleCameraSource?>(() =>
         {
-            var cameraSource = Create(camera);
+            var cameraSource = Create(camera, providerName);
             if (cameraSource == null)
                 return null;
 

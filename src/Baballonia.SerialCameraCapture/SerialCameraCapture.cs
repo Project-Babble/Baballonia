@@ -12,7 +12,7 @@ namespace Baballonia.SerialCameraCapture;
 /// Serial Camera capture class intended for use on Desktop platforms
 /// Babble-board specific implementation, assumes a fixed camera size of 240x240
 /// </summary>
-public sealed class SerialCameraCapture(string source, ILogger logger) : Capture(source, logger), IDisposable
+public sealed class SerialCameraCapture(string source, ILogger<SerialCameraCapture> logger) : Capture(source, logger)
 {
     private const int BaudRate = 3000000;
     private const ulong EtvrHeader = 0xd8ff0000a1ffa0ff, EtvrHeaderMask = 0xffff0000ffffffff;
@@ -137,7 +137,7 @@ public sealed class SerialCameraCapture(string source, ILogger logger) : Capture
         _isDisposed = true;
     }
 
-    public void Dispose()
+    public override void Dispose()
     {
         Dispose(true);
         GC.SuppressFinalize(this); // xlinka 11/8/24: Suppress finalization as resources are now disposed

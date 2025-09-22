@@ -34,11 +34,10 @@ sealed class Program
 
         VelopackApp.Build().Run();
 
-        App.PlatformConnectorType = typeof(DesktopConnector);
-
         App.RegisterPlatformServices<
             AeroOverlayTrainerCombo,
-            DesktopDeviceEnumerator
+            DesktopDeviceEnumerator,
+            DesktopConnector
         >();
 
         try

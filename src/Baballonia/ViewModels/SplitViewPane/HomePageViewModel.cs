@@ -36,6 +36,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         public readonly CropManager CropManager = new();
         public CamViewMode CamViewMode = CamViewMode.Tracking;
         public readonly Camera Camera;
+        [ObservableProperty] private bool _shouldAutostart = false;
 
         public CameraSettings CameraSettings;
 
@@ -76,6 +77,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         {
             var displayAddress = _localSettingsService.ReadSetting<string>("LastOpened" + Name);
             var camSettings = _localSettingsService.ReadSetting<CameraSettings>(Name);
+            ShouldAutostart = _localSettingsService.ReadSetting("ShouldAutostart" + Name, false);
 
             UpdateCameraDropDown(cameras);
             DisplayAddress = displayAddress;
@@ -90,6 +92,13 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
             CameraSettings = camSettings;
             OnCropUpdated();
+        }
+
+        partial void OnShouldAutostartChanged(bool value)
+        {
+            var prev = _localSettingsService.ReadSetting("ShouldAutostart" + Name, false);
+            if (prev != value)
+                _localSettingsService.SaveSetting("ShouldAutostart" + Name, value);
         }
 
         public void UpdateCameraDropDown(string[] cameras)
@@ -345,7 +354,6 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         IEyePipelineEventBus eyePipelineEventBus,
         IVROverlay vrOverlay,
         IDeviceEnumerator deviceEnumerator,
-        OscSendService oscSendService,
         ILocalSettingsService localSettings,
         ILogger<HomePageViewModel> logger, DropOverlayService dropOverlayService)
     {
@@ -363,7 +371,6 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
         MessagesInPerSecCount = "0";
         MessagesOutPerSecCount = "0";
-
 
         Initialize();
     }
@@ -447,21 +454,21 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
     private async Task TryStartCamerasAsync()
     {
-        if (!FaceCamera.IsCameraRunning)
+        if (!FaceCamera.IsCameraRunning && FaceCamera.ShouldAutostart)
         {
             var success = await _facePipelineManager.TryStartIfNotRunning(FaceCamera.DisplayAddress);
             if (success)
                 SetCameraRunning(FaceCamera);
         }
 
-        if (!LeftCamera.IsCameraRunning)
+        if (!LeftCamera.IsCameraRunning && LeftCamera.ShouldAutostart)
         {
             var success = await _eyePipelineManager.TryStartLeftIfNotRunning(LeftCamera.DisplayAddress);
             if (success)
                 SetCameraRunning(LeftCamera);
         }
 
-        if (!RightCamera.IsCameraRunning)
+        if (!RightCamera.IsCameraRunning && RightCamera.ShouldAutostart)
         {
             var success = await _eyePipelineManager.TryStartRightIfNotRunning(RightCamera.DisplayAddress);
             if (success)
@@ -498,6 +505,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         {
             case Camera.Face:
                 _facePipelineManager.StopCamera();
+                FaceCamera.ShouldAutostart = false;
                 SetButtons(FaceCamera, true, false);
                 break;
             case Camera.Left:
@@ -508,11 +516,14 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
                     RightCamera.IsCameraRunning = false;
                     SetButtons(LeftCamera, true, false);
                     SetButtons(RightCamera, true, false);
+                    LeftCamera.ShouldAutostart = false;
+                    RightCamera.ShouldAutostart = false;
                 }
                 else
                 {
                     _eyePipelineManager.StopLeftCamera();
                     SetButtons(LeftCamera, true, false);
+                    LeftCamera.ShouldAutostart = false;
                 }
 
                 break;
@@ -524,11 +535,14 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
                     RightCamera.IsCameraRunning = false;
                     SetButtons(LeftCamera, true, false);
                     SetButtons(RightCamera, true, false);
+                    LeftCamera.ShouldAutostart = false;
+                    RightCamera.ShouldAutostart = false;
                 }
                 else
                 {
                     _eyePipelineManager.StopRightCamera();
                     SetButtons(RightCamera, true, false);
+                    RightCamera.ShouldAutostart = false;
                 }
 
                 break;
@@ -541,28 +555,39 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     [RelayCommand]
     public async Task StartCamera(CameraControllerModel model)
     {
-        SetButtons(model, false, false);
+        try
+        {
+            SetButtons(model, false, false);
 
-        bool success = false;
-        switch (model.Camera)
-        {
-            case Camera.Face:
-                success = await _facePipelineManager.StartVideoSource(model.DisplayAddress);
-                break;
-            case Camera.Left:
-                success = await _eyePipelineManager.StartLeftVideoSource(model.DisplayAddress);
-                break;
-            case Camera.Right:
-                success = await _eyePipelineManager.StartRightVideoSource(model.DisplayAddress);
-                break;
-        }
+            bool success = false;
+            switch (model.Camera)
+            {
+                case Camera.Face:
+                    success = await _facePipelineManager.StartVideoSource(model.DisplayAddress);
+                    FaceCamera.ShouldAutostart = true;
+                    break;
+                case Camera.Left:
+                    success = await _eyePipelineManager.StartLeftVideoSource(model.DisplayAddress);
+                    LeftCamera.ShouldAutostart = true;
+                    break;
+                case Camera.Right:
+                    success = await _eyePipelineManager.StartRightVideoSource(model.DisplayAddress);
+                    RightCamera.ShouldAutostart = true;
+                    break;
+            }
 
-        if (success)
-        {
-            SetCameraRunning(model);
+            if (success)
+            {
+                SetCameraRunning(model);
+            }
+            else
+            {
+                SetButtons(model, true, false);
+            }
         }
-        else
+        catch (Exception ex)
         {
+            _logger.LogError("{}", ex);
             SetButtons(model, true, false);
         }
     }

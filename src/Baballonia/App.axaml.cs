@@ -24,24 +24,25 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using OpenCvSharp.XPhoto;
 
 namespace Baballonia;
 
 public class App : Application
 {
-    public static Type PlatformConnectorType;
-
     private IHost? _host;
     private static Action<IServiceCollection> ConfigurePlatformServices { get; set; }
 
-    public static void RegisterPlatformServices<TOverlay, TDeviceEnumerator>()
+    public static void RegisterPlatformServices<TOverlay, TDeviceEnumerator, TPlatformConnector>()
         where TOverlay : class, IVROverlay
         where TDeviceEnumerator : class, IDeviceEnumerator
+        where TPlatformConnector : class, IPlatformConnector
     {
         ConfigurePlatformServices = services =>
         {
             services.AddSingleton<IVROverlay, TOverlay>();
             services.AddSingleton<IDeviceEnumerator, TDeviceEnumerator>();
+            services.AddSingleton<IPlatformConnector, TPlatformConnector>();
         };
     }
 
@@ -219,6 +220,7 @@ public class App : Application
                 {
                     desktop.MainWindow.ShowOnboardingIfNeeded();
                 };
+                desktop.Exit += OnShutdown;
                 desktop.ShutdownRequested += OnShutdown;
                 break;
             case ISingleViewApplicationLifetime singleViewPlatform:

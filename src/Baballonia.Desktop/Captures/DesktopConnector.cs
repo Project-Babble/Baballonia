@@ -7,7 +7,9 @@ using System.Runtime.Loader;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Baballonia.Contracts;
+using Baballonia.SDK;
 using Baballonia.Services.Inference.Platforms;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Capture = Baballonia.SDK.Capture;
 
@@ -17,32 +19,28 @@ namespace Baballonia.Desktop.Captures;
 /// Base class for camera capture and frame processing
 /// Use OpenCV's IP capture class here!
 /// </summary>
-public class DesktopConnector : PlatformConnector, IPlatformConnector
+public class DesktopConnector : IPlatformConnector
 {
-    private static Dictionary<Capture, Type> CaptureCache;
+    private List<ICaptureFactory> _captureFactories;
+    private readonly IServiceProvider _serviceProvider;
+    private readonly ILogger<DesktopConnector> _logger;
 
-    public DesktopConnector(string source, ILogger logger) : base(source, logger)
+    public DesktopConnector(ILogger<DesktopConnector> logger, IServiceProvider serviceProvider)
     {
-        // If we've already scanned for DLL's, just return the original result. Reflection is slow!
-        if (CaptureCache != null)
-        {
-            Captures = CaptureCache;
-            return;
-        }
-
-        Captures = new Dictionary<Capture, Type>();
+        _logger = logger;
+        _serviceProvider = serviceProvider;
 
         // Load all modules
         var dlls = Directory.GetFiles(Path.Combine(AppContext.BaseDirectory, "Modules"), "*.dll");
-        Logger.LogDebug("Found {DllCount} DLL files in application directory: {DllFiles}", dlls.Length, string.Join(", ", dlls.Select(Path.GetFileName)));
-        Captures = LoadAssembliesFromPath(dlls);
-        CaptureCache = Captures;
-        Logger.LogDebug("Loaded {CaptureCount} capture types from assemblies", Captures.Count);
+        _logger.LogDebug("Found {DllCount} DLL files in application directory: {DllFiles}", dlls.Length,
+            string.Join(", ", dlls.Select(Path.GetFileName)));
+        _captureFactories = LoadAssembliesFromPath(dlls);
+        _logger.LogDebug("Loaded {CaptureCount} capture types from assemblies", _captureFactories.Count);
     }
 
-    private Dictionary<Capture, Type> LoadAssembliesFromPath(string[] paths)
+    private List<ICaptureFactory> LoadAssembliesFromPath(string[] paths)
     {
-        var returnList = new Dictionary<Capture, Type>();
+        var returnList = new List<ICaptureFactory>();
 
         foreach (var dll in paths)
         {
@@ -51,30 +49,31 @@ public class DesktopConnector : PlatformConnector, IPlatformConnector
                 var alc = new AssemblyLoadContext(dll, true);
                 var loaded = alc.LoadFromAssemblyPath(dll);
 
-                Logger.LogDebug("Scanning assembly '{AssemblyName}' for capture types", loaded.FullName);
+                _logger.LogDebug("Scanning assembly '{AssemblyName}' for capture types", loaded.FullName);
                 foreach (var type in loaded.GetExportedTypes())
                 {
-                    Logger.LogDebug("Checking type '{TypeName}' for Capture compatibility", type.FullName);
-                    if (!typeof(Capture).IsAssignableFrom(type) || type.IsAbstract) continue;
+                    _logger.LogDebug("Checking type '{TypeName}' for Capture compatibility", type.FullName);
+                    if (type.IsAbstract || type.IsInterface) continue;
+                    if (!typeof(ICaptureFactory).IsAssignableFrom(type)) continue;
 
-                    // Check if the type has a constructor that takes a string parameter (for source) and a logger
-                    // Adding this second parameter makes reflection take longer...
-                    var constructor = type.GetConstructor([typeof(string), typeof(ILogger)] );
-                    if (constructor == null) continue;
+                    var factory = (ICaptureFactory)ActivatorUtilities.CreateInstance(_serviceProvider, type);
 
-                    // Create a temporary instance to access the Connections property
-                    var tempInstance = (Capture)Activator.CreateInstance(type, "temp", null!)!;
-                    returnList.Add(tempInstance, type);
-                    Logger.LogDebug("Successfully loaded capture type '{CaptureTypeName}'", type.Name);
+                    returnList.Add(factory);
+                    _logger.LogDebug("Successfully loaded capture type '{CaptureTypeName}'", type.Name);
                 }
             }
             catch (Exception e)
             {
-                Logger.LogWarning("Assembly '{DllPath}' not able to be loaded. Skipping. Error: {ErrorMessage}", dll, e.Message);
+                _logger.LogWarning("Assembly '{DllPath}' not able to be loaded. Skipping. Error: {ErrorMessage}", dll,
+                    e.Message);
             }
         }
 
         return returnList;
     }
 
+    public ICaptureFactory[] GetCaptureFactories()
+    {
+        return _captureFactories.ToArray();
+    }
 }
