@@ -22,8 +22,8 @@ public class EyePipelineManager
     private readonly InferenceFactory _inferenceFactory;
     private readonly SingleCameraSourceFactory _singleCameraSourceFactory;
 
-    private string? _currentLeftAdress;
-    private string? _currentRightAdress;
+    private string? _currentLeftAddress;
+    private string? _currentRightAddress;
 
     public EyePipelineManager(ILogger<EyePipelineManager> logger, EyeProcessingPipeline pipeline,
         ILocalSettingsService localSettings, InferenceFactory inferenceFactory,
@@ -129,16 +129,16 @@ public class EyePipelineManager
             var source = new DualCameraSource();
             source.LeftCam = cam;
             _pipeline.VideoSource = source;
-            _currentLeftAdress = cameraAddress;
+            _currentLeftAddress = cameraAddress;
             return true;
         }
 
         if (_pipeline.VideoSource is DualCameraSource dualCameraSource)
-            if (cameraAddress == _currentRightAdress && _currentRightAdress != null)
+            if (cameraAddress == _currentRightAddress && _currentRightAddress != null)
             {
                 var tmp = dualCameraSource.RightCam;
                 _pipeline.VideoSource = tmp;
-                _currentLeftAdress = cameraAddress;
+                _currentLeftAddress = cameraAddress;
                 return true;
             }
             else
@@ -153,13 +153,13 @@ public class EyePipelineManager
                 if (cam == null)
                     return false;
                 dualCameraSource.LeftCam = cam;
-                _currentLeftAdress = cameraAddress;
+                _currentLeftAddress = cameraAddress;
                 return true;
             }
 
         if (_pipeline.VideoSource is SingleCameraSource singleCameraSource)
         {
-            if (_currentLeftAdress == cameraAddress && _currentLeftAdress != null)
+            if (_currentLeftAddress == cameraAddress && _currentLeftAddress != null)
                 return true;
 
             var cam = await _singleCameraSourceFactory.CreateStart(cameraAddress);
@@ -172,7 +172,7 @@ public class EyePipelineManager
             source.LeftCam = cam;
             source.RightCam = tmp;
 
-            _currentLeftAdress = cameraAddress;
+            _currentLeftAddress = cameraAddress;
             return true;
         }
 
@@ -190,16 +190,16 @@ public class EyePipelineManager
             var source = new DualCameraSource();
             source.RightCam = cam;
             _pipeline.VideoSource = source;
-            _currentRightAdress = cameraAddress;
+            _currentRightAddress = cameraAddress;
             return true;
         }
 
         if (_pipeline.VideoSource is DualCameraSource dualCameraSource)
-            if (cameraAddress == _currentLeftAdress && _currentLeftAdress != null)
+            if (cameraAddress == _currentLeftAddress && _currentLeftAddress != null)
             {
                 var tmp = dualCameraSource.LeftCam;
                 _pipeline.VideoSource = tmp;
-                _currentRightAdress = cameraAddress;
+                _currentRightAddress = cameraAddress;
                 return true;
             }
             else
@@ -214,13 +214,13 @@ public class EyePipelineManager
                 if (cam == null)
                     return false;
                 dualCameraSource.RightCam = cam;
-                _currentRightAdress = cameraAddress;
+                _currentRightAddress = cameraAddress;
                 return true;
             }
 
         if (_pipeline.VideoSource is SingleCameraSource singleCameraSource)
         {
-            if (_currentRightAdress == cameraAddress && _currentRightAdress != null)
+            if (_currentRightAddress == cameraAddress && _currentRightAddress != null)
                 return true;
 
             var cam = await _singleCameraSourceFactory.CreateStart(cameraAddress);
@@ -233,7 +233,7 @@ public class EyePipelineManager
             source.RightCam = cam;
             source.LeftCam = tmp;
 
-            _currentRightAdress = cameraAddress;
+            _currentRightAddress = cameraAddress;
             return true;
         }
 
@@ -264,7 +264,7 @@ public class EyePipelineManager
     }
     public void StopLeftCamera()
     {
-        _currentLeftAdress = null;
+        _currentLeftAddress = null;
         if (_pipeline.VideoSource is DualCameraSource dualCameraSource)
         {
             dualCameraSource.LeftCam?.Dispose();
@@ -275,13 +275,13 @@ public class EyePipelineManager
         {
             singleCameraSource.Dispose();
             _pipeline.VideoSource = null;
-            _currentRightAdress = null;
+            _currentRightAddress = null;
         }
     }
 
     public void StopRightCamera()
     {
-        _currentRightAdress = null;
+        _currentRightAddress = null;
         if (_pipeline.VideoSource is DualCameraSource dualCameraSource)
         {
             dualCameraSource.RightCam?.Dispose();
@@ -292,21 +292,21 @@ public class EyePipelineManager
         {
             singleCameraSource.Dispose();
             _pipeline.VideoSource = null;
-            _currentLeftAdress = null;
+            _currentLeftAddress = null;
         }
     }
 
     public void StopAllCameras()
     {
-        _currentRightAdress = null;
-        _currentLeftAdress = null;
+        _currentRightAddress = null;
+        _currentLeftAddress = null;
         _pipeline.VideoSource?.Dispose();
         _pipeline.VideoSource = null;
     }
 
     public bool IsUsingSameCamera()
     {
-        return _currentLeftAdress == _currentRightAdress && _currentLeftAdress != null;
+        return _currentLeftAddress == _currentRightAddress && _currentLeftAddress != null;
     }
 
     public void SetFilter(IFilter? filter)
