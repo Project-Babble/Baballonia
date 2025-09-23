@@ -118,11 +118,11 @@ public class EyePipelineManager
         }
     }
 
-    public async Task<bool> StartLeftVideoSource(string cameraAddress)
+    public async Task<bool> StartLeftVideoSource(string cameraAddress, string preferredBackend)
     {
         if (_pipeline.VideoSource == null)
         {
-            var cam = await _singleCameraSourceFactory.CreateStart(cameraAddress);
+            var cam = await _singleCameraSourceFactory.CreateStart(cameraAddress, preferredBackend);
             if (cam == null)
                 return false;
 
@@ -149,7 +149,7 @@ public class EyePipelineManager
                     dualCameraSource.LeftCam = null;
                 }
 
-                var cam = await _singleCameraSourceFactory.CreateStart(cameraAddress);
+                var cam = await _singleCameraSourceFactory.CreateStart(cameraAddress, preferredBackend);
                 if (cam == null)
                     return false;
                 dualCameraSource.LeftCam = cam;
@@ -162,7 +162,7 @@ public class EyePipelineManager
             if (_currentLeftAddress == cameraAddress && _currentLeftAddress != null)
                 return true;
 
-            var cam = await _singleCameraSourceFactory.CreateStart(cameraAddress);
+            var cam = await _singleCameraSourceFactory.CreateStart(cameraAddress, preferredBackend);
             if (cam == null)
                 return false;
 
@@ -179,11 +179,11 @@ public class EyePipelineManager
         return true;
     }
 
-    public async Task<bool> StartRightVideoSource(string cameraAddress)
+    public async Task<bool> StartRightVideoSource(string cameraAddress, string preferredBackend)
     {
         if (_pipeline.VideoSource == null)
         {
-            var cam = await _singleCameraSourceFactory.CreateStart(cameraAddress);
+            var cam = await _singleCameraSourceFactory.CreateStart(cameraAddress, preferredBackend);
             if (cam == null)
                 return false;
 
@@ -210,7 +210,7 @@ public class EyePipelineManager
                     dualCameraSource.RightCam = null;
                 }
 
-                var cam = await _singleCameraSourceFactory.CreateStart(cameraAddress);
+                var cam = await _singleCameraSourceFactory.CreateStart(cameraAddress, preferredBackend);
                 if (cam == null)
                     return false;
                 dualCameraSource.RightCam = cam;
@@ -223,7 +223,7 @@ public class EyePipelineManager
             if (_currentRightAddress == cameraAddress && _currentRightAddress != null)
                 return true;
 
-            var cam = await _singleCameraSourceFactory.CreateStart(cameraAddress);
+            var cam = await _singleCameraSourceFactory.CreateStart(cameraAddress, preferredBackend);
             if (cam == null)
                 return false;
 
@@ -240,7 +240,7 @@ public class EyePipelineManager
         return true;
     }
 
-    public async Task<bool> TryStartLeftIfNotRunning(string cameraAddress)
+    public async Task<bool> TryStartLeftIfNotRunning(string cameraAddress, string preferredBackend)
     {
         switch (_pipeline.VideoSource)
         {
@@ -248,10 +248,10 @@ public class EyePipelineManager
             case DualCameraSource { LeftCam: not null }:
                 return true;
             default:
-                return await StartLeftVideoSource(cameraAddress);
+                return await StartLeftVideoSource(cameraAddress, preferredBackend);
         }
     }
-    public async Task<bool> TryStartRightIfNotRunning(string cameraAddress)
+    public async Task<bool> TryStartRightIfNotRunning(string cameraAddress, string preferredBackend)
     {
         switch (_pipeline.VideoSource)
         {
@@ -259,7 +259,7 @@ public class EyePipelineManager
             case DualCameraSource { RightCam: not null }:
                 return true;
             default:
-                return await StartRightVideoSource(cameraAddress);
+                return await StartRightVideoSource(cameraAddress, preferredBackend);
         }
     }
     public void StopLeftCamera()

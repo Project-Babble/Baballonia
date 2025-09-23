@@ -1,7 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,9 +9,7 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using Avalonia.Threading;
 using Baballonia.Contracts;
-using Baballonia.Factories;
 using Baballonia.Helpers;
 using Baballonia.Services;
 using Baballonia.Services.events;
@@ -20,9 +17,7 @@ using Baballonia.Services.Inference;
 using Baballonia.Services.Inference.Enums;
 using Baballonia.Services.Inference.Models;
 using Baballonia.Services.Inference.Platforms;
-using Baballonia.Services.Inference.VideoSources;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using OpenCvSharp;
@@ -60,18 +55,25 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         [ObservableProperty] private float _gamma = 1f;
         [ObservableProperty] private bool _isCropMode = false;
         [ObservableProperty] private bool _isCameraRunning = false;
-        [ObservableProperty] private int _selectedCaptureMethod = -1;
+        [ObservableProperty] private string _selectedCaptureMethod = "";
         [ObservableProperty] private bool _captureMethodVisible = false;
         public ObservableCollection<string> Suggestions { get; set; } = [];
         public ObservableCollection<string> CaptureMethods { get; set; } = [];
 
         private readonly ILocalSettingsService _localSettingsService;
+        private readonly IPlatformConnector _platformConnector;
+        private readonly IDeviceEnumerator _deviceEnumerator;
 
 
-        public CameraControllerModel(ILocalSettingsService localSettingsService, string name, string[] cameras,
+        public CameraControllerModel(ILocalSettingsService localSettingsService, IPlatformConnector platformConnector,
+            IDeviceEnumerator deviceEnumerator,
+            string name, string[] cameras,
             Camera camera)
         {
             _localSettingsService = localSettingsService;
+            _platformConnector = platformConnector;
+            _deviceEnumerator = deviceEnumerator;
+
             Name = name;
             Camera = camera;
 
@@ -81,33 +83,12 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             Initialize(cameras);
         }
 
-
-        partial void OnDisplayAddressChanged(string value)
-        {
-            if (PlatformConnector.Captures.Count <= 0) PlatformConnectorFactory.Create(NullLogger.Instance, "temp");
-
-            var matches = PlatformConnector.Captures.Where(i => i.Key.CanConnect(value)).ToArray();
-
-            var shouldShow = matches.Length >= 2;
-            CaptureMethodVisible = shouldShow;
-
-            CaptureMethods.Clear();
-            if (shouldShow)
-            {
-                CaptureMethods.Add(Assets.Resources.Home_Backend_Default);
-                foreach (var match in matches)
-                    CaptureMethods.Add(match.Value.Name);
-            }
-
-            SelectedCaptureMethod = shouldShow ? 0 : -1;
-        }
-
         private void Initialize(string[] cameras)
         {
             var displayAddress = _localSettingsService.ReadSetting<string>("LastOpened" + Name);
             var camSettings = _localSettingsService.ReadSetting<CameraSettings>(Name);
             ShouldAutostart = _localSettingsService.ReadSetting("ShouldAutostart" + Name, false);
-            var preferredCapture = LocalSettingsService.ReadSetting<string>("LastOpenedPreferredCapture" + Name);
+            var preferredCapture = _localSettingsService.ReadSetting<string>("LastOpenedPreferredCapture" + Name);
 
             UpdateCameraDropDown(cameras);
             DisplayAddress = displayAddress;
@@ -115,6 +96,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             FlipVertically = camSettings.UseVerticalFlip;
             Rotation = camSettings.RotationRadians;
             Gamma = camSettings.Gamma;
+            SelectedCaptureMethod = preferredCapture;
 
 
             CropManager.SetCropZone(camSettings.Roi);
@@ -124,11 +106,48 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             OnCropUpdated();
         }
 
+        partial void OnDisplayAddressChanged(string value)
+        {
+            var availableCaptureFactories = _platformConnector.GetCaptureFactories()
+                .Where(factory => factory.CanConnect(value)).ToArray();
+
+            var shouldShow = availableCaptureFactories.Length >= 2;
+            CaptureMethodVisible = shouldShow;
+
+            CaptureMethods.Clear();
+            if (shouldShow)
+            {
+                CaptureMethods.Add(Assets.Resources.Home_Backend_Default);
+                foreach (var match in availableCaptureFactories)
+                    CaptureMethods.Add(match.GetProviderName());
+
+                SelectedCaptureMethod = availableCaptureFactories.First().GetProviderName();
+            }
+            else
+            {
+                SelectedCaptureMethod = "";
+            }
+
+        }
+
+        partial void OnSelectedCaptureMethodChanged(string value)
+        {
+            var prev = _localSettingsService.ReadSetting<string>("LastOpenedPreferredCapture" + Name);
+            if (prev != value)
+                _localSettingsService.SaveSetting("LastOpenedPreferredCapture" + Name, value);
+        }
+
         partial void OnShouldAutostartChanged(bool value)
         {
             var prev = _localSettingsService.ReadSetting("ShouldAutostart" + Name, false);
             if (prev != value)
                 _localSettingsService.SaveSetting("ShouldAutostart" + Name, value);
+        }
+
+        public void UpdateCameraDropDown()
+        {
+            var friendlyNames = _deviceEnumerator.UpdateCameras().Keys.ToArray();
+            UpdateCameraDropDown(friendlyNames);
         }
 
         public void UpdateCameraDropDown(string[] cameras)
@@ -148,7 +167,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         public void OnCropUpdated()
         {
             OverlayRectangle = CropManager.CropZone.GetRect();
-            SaveTransformer();
+            Save();
         }
 
         public void FaceNewImageUpdateEventHandler(FacePipelineEvents.NewFrameEvent e)
@@ -289,20 +308,20 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
         partial void OnFlipHorizontallyChanged(bool value)
         {
-            SaveTransformer();
+            Save();
         }
 
         partial void OnFlipVerticallyChanged(bool value)
         {
-            SaveTransformer();
+            Save();
         }
 
         partial void OnRotationChanged(float value)
         {
-            SaveTransformer();
+            Save();
         }
 
-        void SaveTransformer()
+        void Save()
         {
             CameraSettings = new CameraSettings(
                 Camera,
@@ -321,7 +340,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         {
             // If the slider is close enough to 1, then we treat it as 1
             Gamma = Math.Abs(value - 1) > 0.1f ? value : 1f;
-            SaveTransformer();
+            Save();
         }
 
         partial void OnIsCropModeChanged(bool value)
@@ -374,6 +393,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     private readonly IDeviceEnumerator _deviceEnumerator;
     private readonly ILocalSettingsService _localSettings;
     private readonly ILogger<HomePageViewModel> _logger;
+    private readonly IPlatformConnector _platformConnector;
 
     public string RequestedVRCalibration = CalibrationRoutine.Map["QuickCalibration"];
 
@@ -385,7 +405,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         IVROverlay vrOverlay,
         IDeviceEnumerator deviceEnumerator,
         ILocalSettingsService localSettings,
-        ILogger<HomePageViewModel> logger, DropOverlayService dropOverlayService)
+        ILogger<HomePageViewModel> logger, DropOverlayService dropOverlayService, IPlatformConnector platformConnector)
     {
         _facePipelineManager = facePipelineManager;
         _eyePipelineManager = eyePipelineManager;
@@ -396,6 +416,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         _localSettings = localSettings;
         _logger = logger;
         _dropOverlayService = dropOverlayService;
+        _platformConnector = platformConnector;
 
         _localSettings.Load(this);
 
@@ -416,11 +437,11 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         var cameras = _deviceEnumerator.UpdateCameras();
         var cameraNames = cameras.Keys.ToArray();
 
-        LeftCamera = new CameraControllerModel(_localSettings, "LeftCamera",
+        LeftCamera = new CameraControllerModel(_localSettings, _platformConnector, _deviceEnumerator, "LeftCamera",
             cameraNames, Camera.Left);
-        RightCamera = new CameraControllerModel(_localSettings, "RightCamera",
+        RightCamera = new CameraControllerModel(_localSettings, _platformConnector, _deviceEnumerator, "RightCamera",
             cameraNames, Camera.Right);
-        FaceCamera = new CameraControllerModel(_localSettings, "FaceCamera",
+        FaceCamera = new CameraControllerModel(_localSettings, _platformConnector, _deviceEnumerator, "FaceCamera",
             cameraNames, Camera.Face);
 
         FaceCamera.PropertyChanged += CameraControllerModel_PropertyChanged;
@@ -485,25 +506,13 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     private async Task TryStartCamerasAsync()
     {
         if (!FaceCamera.IsCameraRunning && FaceCamera.ShouldAutostart)
-        {
-            var success = await _facePipelineManager.TryStartIfNotRunning(FaceCamera.DisplayAddress);
-            if (success)
-                SetCameraRunning(FaceCamera);
-        }
+            await StartCamera(FaceCamera);
 
         if (!LeftCamera.IsCameraRunning && LeftCamera.ShouldAutostart)
-        {
-            var success = await _eyePipelineManager.TryStartLeftIfNotRunning(LeftCamera.DisplayAddress);
-            if (success)
-                SetCameraRunning(LeftCamera);
-        }
+            await StartCamera(LeftCamera);
 
         if (!RightCamera.IsCameraRunning && RightCamera.ShouldAutostart)
-        {
-            var success = await _eyePipelineManager.TryStartRightIfNotRunning(RightCamera.DisplayAddress);
-            if (success)
-                SetCameraRunning(RightCamera);
-        }
+            await StartCamera(RightCamera);
     }
 
     private void EyePipelineExceptionHandler(EyePipelineEvents.ExceptionEvent e)
@@ -588,20 +597,25 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         try
         {
             SetButtons(model, false, false);
+            var address = model.DisplayAddress;
+            var backend = model.SelectedCaptureMethod;
+            if (!model.CaptureMethodVisible)
+                backend = "";
+
 
             bool success = false;
             switch (model.Camera)
             {
                 case Camera.Face:
-                    success = await _facePipelineManager.StartVideoSource(model.DisplayAddress);
+                    success = await _facePipelineManager.TryStartIfNotRunning(address, backend);
                     FaceCamera.ShouldAutostart = true;
                     break;
                 case Camera.Left:
-                    success = await _eyePipelineManager.StartLeftVideoSource(model.DisplayAddress);
+                    success = await _eyePipelineManager.TryStartLeftIfNotRunning(address, backend);
                     LeftCamera.ShouldAutostart = true;
                     break;
                 case Camera.Right:
-                    success = await _eyePipelineManager.StartRightVideoSource(model.DisplayAddress);
+                    success = await _eyePipelineManager.TryStartRightIfNotRunning(address, backend);
                     RightCamera.ShouldAutostart = true;
                     break;
             }
@@ -646,7 +660,8 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
                 Directory.CreateDirectory(Utils.ModelsDirectory);
             }
 
-            var destPath = Path.Combine(Utils.ModelsDirectory, $"tuned_temporal_eye_tracking_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.onnx");
+            var destPath = Path.Combine(Utils.ModelsDirectory,
+                $"tuned_temporal_eye_tracking_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.onnx");
             File.Move("tuned_temporal_eye_tracking.onnx", destPath);
             _localSettings.SaveSetting("EyeHome_EyeModel", destPath);
             await _eyePipelineManager.LoadInferenceAsync();

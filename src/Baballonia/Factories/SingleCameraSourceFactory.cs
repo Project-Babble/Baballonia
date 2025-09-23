@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Baballonia.Contracts;
 using Baballonia.Factories;
+using Baballonia.SDK;
 using Baballonia.Services.Inference.Platforms;
 using Baballonia.Services.Inference.VideoSources;
 using CommunityToolkit.Mvvm.DependencyInjection;
@@ -28,9 +29,21 @@ public class SingleCameraSourceFactory
 
     public SingleCameraSource? Create(string address, string providerName)
     {
-        var provider = _platformConnector.GetCaptureFactories().FirstOrDefault(factory => factory.GetProviderName() == providerName);
-        if (provider == null)
-            throw new ArgumentNullException($"Provider {providerName} not found");
+        ICaptureFactory? provider;
+        if (!string.IsNullOrEmpty(providerName))
+        {
+            provider = _platformConnector.GetCaptureFactories()
+                .FirstOrDefault(factory => factory.GetProviderName() == providerName && factory.CanConnect(address));
+            if(provider == null)
+                throw new ArgumentNullException($"No provider \"{provider}\" is not compatible with \"{address}\"");
+
+        }
+        else
+        {
+            provider = _platformConnector.GetCaptureFactories().First(factory => factory.CanConnect(address));
+            if(provider == null)
+                throw new ArgumentNullException($"No suitable provider for {address} found");
+        }
 
         var capture = provider.Create(address);
 
@@ -84,7 +97,7 @@ public class SingleCameraSourceFactory
                     return cameraSource;
             }
 
-            _logger.LogError("No data was received from {}, closing...", address);
+            _logger.LogError("No data was received from {}, with {}, closing... Maybe the camera is opened somewhere else?", address, providerName);
             cameraSource.Dispose();
             return null;
         });

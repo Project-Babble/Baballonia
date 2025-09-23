@@ -96,7 +96,7 @@ public class FacePipelineManager
         }
     }
 
-    public async Task<bool> StartVideoSource(string cameraAdress)
+    public async Task<bool> StartVideoSource(string cameraAddress, string preferredBackend)
     {
         if (_pipeline.VideoSource != null)
         {
@@ -104,7 +104,7 @@ public class FacePipelineManager
             _pipeline.VideoSource = null;
         }
 
-        var cam = await _singleCameraSourceFactory.CreateStart(cameraAdress);
+        var cam = await _singleCameraSourceFactory.CreateStart(cameraAddress, preferredBackend);
         if (cam == null)
             return false;
 
@@ -112,12 +112,12 @@ public class FacePipelineManager
         return true;
     }
 
-    public async Task<bool> TryStartIfNotRunning(string cameraAddress)
+    public async Task<bool> TryStartIfNotRunning(string cameraAddress, string preferredBackend)
     {
         if (_pipeline.VideoSource != null)
             return true;
 
-        return await StartVideoSource(cameraAddress);
+        return await StartVideoSource(cameraAddress, preferredBackend);
     }
 
     public void SetFilter(IFilter? filter)

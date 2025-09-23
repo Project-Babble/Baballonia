@@ -1,4 +1,5 @@
-﻿using Baballonia.SDK;
+﻿using Baballonia.IPCameraCapture;
+using Baballonia.SDK;
 using Microsoft.Extensions.Logging;
 
 namespace Baballonia.Android.Captures;
@@ -19,7 +20,7 @@ public class IpCameraCaptureFactory : ICaptureFactory
 
     public bool CanConnect(string address)
     {
-        return Uri.TryCreate(address, UriKind.RelativeOrAbsolute, out _);
+        return Uri.TryCreate(address, UriKind.RelativeOrAbsolute, out _) && address.StartsWith("http://");
     }
 
     public string GetProviderName()
