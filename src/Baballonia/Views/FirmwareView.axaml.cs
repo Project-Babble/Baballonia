@@ -26,7 +26,7 @@ public partial class FirmwareView : UserControl
         var topLevelStorageProvider = TopLevel.GetTopLevel(this)!.StorageProvider;
         var file = await topLevelStorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title = "Open ONNX Model",
+            Title = "Select Firmware .bin",
             AllowMultiple = false,
             FileTypeFilter = [BinAll]
         })!;

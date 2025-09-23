@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -183,31 +184,19 @@ public partial class HomePageView : UserControl
     private void RefreshLeftEyeConnectedDevices(object? sender, CancelEventArgs e)
     {
         if (DataContext is not HomePageViewModel vm) return;
-
-        var cameras = _deviceEnumerator.UpdateCameras();
-        var cameraNames = cameras.Keys.ToArray();
-
-        vm.LeftCamera.UpdateCameraDropDown(cameraNames);
+        vm.LeftCamera.UpdateCameraDropDown();
     }
 
     private void RefreshRightEyeDevices(object? sender, CancelEventArgs e)
     {
         if (DataContext is not HomePageViewModel vm) return;
-
-        var cameras = _deviceEnumerator.UpdateCameras();
-        var cameraNames = cameras.Keys.ToArray();
-
-        vm.RightCamera.UpdateCameraDropDown(cameraNames);
+        vm.RightCamera.UpdateCameraDropDown();
     }
 
     private void RefreshConnectedFaceDevices(object? sender, CancelEventArgs e)
     {
         if (DataContext is not HomePageViewModel vm) return;
-
-        var cameras = _deviceEnumerator.UpdateCameras();
-        var cameraNames = cameras.Keys.ToArray();
-
-        vm.FaceCamera.UpdateCameraDropDown(cameraNames);
+        vm.FaceCamera.UpdateCameraDropDown();
     }
 
     private async void EyeModelLoad(object? sender, RoutedEventArgs e)
@@ -217,7 +206,7 @@ public partial class HomePageView : UserControl
             await topLevelStorageProvider.TryGetFolderFromPathAsync(Utils.ModelsDirectory)!;
         var file = await topLevelStorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title = "Open ONNX Model",
+            Title = "Select ONNX Model",
             AllowMultiple = false,
             SuggestedStartLocation = suggestedStartLocation, // Falls back to desktop if Models folder hasn't been created yet
             FileTypeFilter = [ONNXAll]

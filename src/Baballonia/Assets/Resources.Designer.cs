@@ -772,6 +772,15 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Default.
+        /// </summary>
+        public static string Home_Backend_Default {
+            get {
+                return ResourceManager.GetString("Home_Backend_Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Adjust the brightness of the image.
         /// </summary>
         public static string Home_Cameras_Brightness_Description {
@@ -966,6 +975,15 @@ namespace Baballonia.Assets {
         public static string Home_Left_Camera_Settings {
             get {
                 return ResourceManager.GetString("Home_Left_Camera_Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preferred Backend.
+        /// </summary>
+        public static string Home_Preferred_Backend {
+            get {
+                return ResourceManager.GetString("Home_Preferred_Backend", resourceCulture);
             }
         }
         

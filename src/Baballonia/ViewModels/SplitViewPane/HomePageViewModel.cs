@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,12 +12,15 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using Baballonia.Contracts;
+using Baballonia.Factories;
 using Baballonia.Helpers;
 using Baballonia.Services;
 using Baballonia.Services.events;
 using Baballonia.Services.Inference;
 using Baballonia.Services.Inference.Enums;
 using Baballonia.Services.Inference.Models;
+using Baballonia.Services.Inference.Platforms;
+using Baballonia.Services.Inference.VideoSources;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
@@ -56,9 +60,13 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         [ObservableProperty] private float _gamma = 1f;
         [ObservableProperty] private bool _isCropMode = false;
         [ObservableProperty] private bool _isCameraRunning = false;
+        [ObservableProperty] private int _selectedCaptureMethod = -1;
+        [ObservableProperty] private bool _captureMethodVisible = false;
         public ObservableCollection<string> Suggestions { get; set; } = [];
+        public ObservableCollection<string> CaptureMethods { get; set; } = [];
 
         private readonly ILocalSettingsService _localSettingsService;
+
 
         public CameraControllerModel(ILocalSettingsService localSettingsService, string name, string[] cameras,
             Camera camera)
@@ -73,11 +81,33 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             Initialize(cameras);
         }
 
+
+        partial void OnDisplayAddressChanged(string value)
+        {
+            if (PlatformConnector.Captures.Count <= 0) PlatformConnectorFactory.Create(NullLogger.Instance, "temp");
+
+            var matches = PlatformConnector.Captures.Where(i => i.Key.CanConnect(value)).ToArray();
+
+            var shouldShow = matches.Length >= 2;
+            CaptureMethodVisible = shouldShow;
+
+            CaptureMethods.Clear();
+            if (shouldShow)
+            {
+                CaptureMethods.Add(Assets.Resources.Home_Backend_Default);
+                foreach (var match in matches)
+                    CaptureMethods.Add(match.Value.Name);
+            }
+
+            SelectedCaptureMethod = shouldShow ? 0 : -1;
+        }
+
         private void Initialize(string[] cameras)
         {
             var displayAddress = _localSettingsService.ReadSetting<string>("LastOpened" + Name);
             var camSettings = _localSettingsService.ReadSetting<CameraSettings>(Name);
             ShouldAutostart = _localSettingsService.ReadSetting("ShouldAutostart" + Name, false);
+            var preferredCapture = LocalSettingsService.ReadSetting<string>("LastOpenedPreferredCapture" + Name);
 
             UpdateCameraDropDown(cameras);
             DisplayAddress = displayAddress;
@@ -616,7 +646,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
                 Directory.CreateDirectory(Utils.ModelsDirectory);
             }
 
-            var destPath = Path.Combine(Utils.ModelsDirectory, $"tuned_temporal_eye_tracking_{DateTime.Now}.onnx");
+            var destPath = Path.Combine(Utils.ModelsDirectory, $"tuned_temporal_eye_tracking_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.onnx");
             File.Move("tuned_temporal_eye_tracking.onnx", destPath);
             _localSettings.SaveSetting("EyeHome_EyeModel", destPath);
             await _eyePipelineManager.LoadInferenceAsync();

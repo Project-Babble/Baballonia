@@ -10,7 +10,7 @@
   !define NAME "Baballonia"
   !define APPFILE "Baballonia.Desktop.exe"
   !define PUBLISHER "dfgHiatus - Paradigm Reality Enhancement Laboratories"
-  !define VERSION "1.1.0.6"
+  !define VERSION "1.1.0.7"
   !define SLUG "${NAME} v${VERSION}"
 
 ;--------------------------------
