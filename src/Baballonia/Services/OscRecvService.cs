@@ -61,7 +61,8 @@ public class OscRecvService : BackgroundService
     {
         _logger.LogDebug("Starting OSC Receive Service...");
         _settingsService.Load(_oscTarget);
-        _logger.LogDebug("OSC target loaded - Address: {Address}, InPort: {InPort}", _oscTarget.DestinationAddress, _oscTarget.InPort);
+        _logger.LogDebug("OSC target loaded - Address: {Address}, InPort: {InPort}", _oscTarget.DestinationAddress,
+            _oscTarget.InPort);
         await base.StartAsync(cancellationToken);
         _logger.LogDebug("OSC Receive Service started successfully");
     }
@@ -101,14 +102,14 @@ public class OscRecvService : BackgroundService
 
         while (!_stoppingToken.IsCancellationRequested)
         {
-            if (_linkedToken.IsCancellationRequested || _recvSocket is not { IsBound: true })
-            {
-                await Task.Delay(100, stoppingToken);
-                continue;
-            }
-
             try
             {
+                if (_linkedToken.IsCancellationRequested || _recvSocket is not { IsBound: true })
+                {
+                    await Task.Delay(100, stoppingToken);
+                    continue;
+                }
+
                 var bytesReceived = await _recvSocket.ReceiveAsync(_recvBuffer, _linkedToken.Token);
                 OscPacket packet = OscPacket.Read(_recvBuffer, 0, bytesReceived);
 

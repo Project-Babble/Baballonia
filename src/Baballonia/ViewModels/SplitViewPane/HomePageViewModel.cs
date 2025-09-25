@@ -623,6 +623,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             if (success)
             {
                 SetCameraRunning(model);
+                _localSettings.SaveSetting("LastOpened" + model.Name, model.DisplayAddress);
             }
             else
             {

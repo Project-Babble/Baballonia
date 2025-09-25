@@ -31,6 +31,7 @@ namespace Baballonia;
 public class App : Application
 {
     private IHost? _host;
+    private bool IsTeardDown = false;
     private static Action<IServiceCollection> ConfigurePlatformServices { get; set; }
 
     public static void RegisterPlatformServices<TOverlay, TDeviceEnumerator, TPlatformConnector>()
@@ -61,7 +62,8 @@ public class App : Application
         if (File.Exists(resetFile))
         {
             // Delete everything including files and folders in Utils.PersistentDataDirectory
-            foreach (var file in Directory.EnumerateFiles(Utils.PersistentDataDirectory, "*", SearchOption.AllDirectories))
+            foreach (var file in Directory.EnumerateFiles(Utils.PersistentDataDirectory, "*",
+                         SearchOption.AllDirectories))
             {
                 File.Delete(file);
             }
@@ -73,90 +75,89 @@ public class App : Application
         var locator = new ViewLocator();
         DataTemplates.Add(locator);
 
-        var hostBuilder = Host.CreateDefaultBuilder().
-            ConfigureServices((_, services) =>
+        var hostBuilder = Host.CreateDefaultBuilder().ConfigureServices((_, services) =>
+        {
+            services.AddLogging(logging =>
             {
-                services.AddLogging(logging =>
-                {
-                    logging.ClearProviders();
-                    logging.SetMinimumLevel(LogFileLogger.GetMinimumLogLevel());
-                    logging.AddDebug();
-                    logging.AddConsole();
-                    logging.AddProvider(new OutputLogProvider(Dispatcher.UIThread));
-                    logging.AddProvider(new LogFileProvider());
-                });
-
-                // Default Activation Handler
-                services.AddTransient<ActivationHandler, DefaultActivationHandler>();
-                services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
-
-                services.AddSingleton<ILocalSettingsService, LocalSettingsService>();
-                services.AddSingleton<IThemeSelectorService, ThemeSelectorService>();
-                services.AddSingleton<ILanguageSelectorService, LanguageSelectorService>();
-
-                services.AddSingleton<IActivationService, ActivationService>();
-                services.AddSingleton<IDispatcherService, DispatcherService>();
-                services.AddSingleton<ProcessingLoopService>();
-
-                services.AddSingleton<InferenceFactory>();
-                services.AddSingleton<FaceProcessingPipeline>();
-                services.AddSingleton<FacePipelineManager>();
-                services.AddSingleton<IFacePipelineEventBus, FacePipelineEventBus>();
-                services.AddSingleton<EyeProcessingPipeline>();
-                services.AddSingleton<EyePipelineManager>();
-                services.AddSingleton<IEyePipelineEventBus, EyePipelineEventBus>();
-                services.AddSingleton<SingleCameraSourceFactory>();
-
-                // Core Services
-                services.AddTransient<IIdentityService, IdentityService>();
-                services.AddTransient<IFileService, FileService>();
-                services.AddSingleton<IOscTarget, OscTarget>();
-                services.AddSingleton<OscRecvService>();
-                services.AddSingleton<OscSendService>();
-                services.AddTransient<OscQueryServiceWrapper>();
-                services.AddSingleton<ParameterSenderService>();
-                services.AddTransient<GithubService>();
-                services.AddTransient<ICommandSenderFactory, CommandSenderFactory>();
-                services.AddTransient<FirmwareService>();
-                services.AddSingleton<IMainService, MainStandalone>();
-                services.AddSingleton<ICalibrationService, CalibrationService>();
-                services.AddSingleton<DropOverlayService>();
-
-                services.AddSingleton<MainViewModel>();
-                services.AddSingleton<MainWindow>();
-
-                services.AddTransient<HomePageViewModel>();
-                services.AddTransient<HomePageView>();
-                services.AddTransient<CalibrationViewModel>();
-                services.AddTransient<CalibrationView>();
-                services.AddTransient<OutputPageViewModel>();
-                services.AddTransient<OutputPageView>();
-                services.AddTransient<AppSettingsViewModel>();
-                services.AddTransient<AppSettingsView>();
-
-                if (Utils.IsSupportedDesktopOS)
-                {
-                    services.AddSingleton<ICommandSenderFactory, CommandSenderFactory>();
-                    services.AddSingleton<ICommandSender, SerialCommandSender>();
-                    services.AddTransient<VrcViewModel>();
-                    services.AddTransient<VrcView>();
-                    services.AddTransient<FirmwareViewModel>();
-                    services.AddTransient<FirmwareView>();
-                    services.AddTransient<OnboardingViewModel>();
-                    services.AddTransient<OnboardingView>();
-                }
-
-                ConfigurePlatformServices.Invoke(services);
-
-                services.AddHostedService(provider => provider.GetService<OscRecvService>()!);
-                services.AddHostedService(provider => provider.GetService<ParameterSenderService>()!);
-
-                // Configuration
-                IConfiguration config = new ConfigurationBuilder()
-                    .AddJsonFile(LocalSettingsService.DefaultLocalSettingsFile, optional: true)
-                    .Build();
-                services.Configure<LocalSettingsOptions>(config);
+                logging.ClearProviders();
+                logging.SetMinimumLevel(LogFileLogger.GetMinimumLogLevel());
+                logging.AddDebug();
+                logging.AddConsole();
+                logging.AddProvider(new OutputLogProvider(Dispatcher.UIThread));
+                logging.AddProvider(new LogFileProvider());
             });
+
+            // Default Activation Handler
+            services.AddTransient<ActivationHandler, DefaultActivationHandler>();
+            services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
+
+            services.AddSingleton<ILocalSettingsService, LocalSettingsService>();
+            services.AddSingleton<IThemeSelectorService, ThemeSelectorService>();
+            services.AddSingleton<ILanguageSelectorService, LanguageSelectorService>();
+
+            services.AddSingleton<IActivationService, ActivationService>();
+            services.AddSingleton<IDispatcherService, DispatcherService>();
+            services.AddSingleton<ProcessingLoopService>();
+
+            services.AddSingleton<InferenceFactory>();
+            services.AddSingleton<FaceProcessingPipeline>();
+            services.AddSingleton<FacePipelineManager>();
+            services.AddSingleton<IFacePipelineEventBus, FacePipelineEventBus>();
+            services.AddSingleton<EyeProcessingPipeline>();
+            services.AddSingleton<EyePipelineManager>();
+            services.AddSingleton<IEyePipelineEventBus, EyePipelineEventBus>();
+            services.AddSingleton<SingleCameraSourceFactory>();
+
+            // Core Services
+            services.AddTransient<IIdentityService, IdentityService>();
+            services.AddTransient<IFileService, FileService>();
+            services.AddSingleton<IOscTarget, OscTarget>();
+            services.AddSingleton<OscRecvService>();
+            services.AddSingleton<OscSendService>();
+            services.AddTransient<OscQueryServiceWrapper>();
+            services.AddSingleton<ParameterSenderService>();
+            services.AddTransient<GithubService>();
+            services.AddTransient<ICommandSenderFactory, CommandSenderFactory>();
+            services.AddTransient<FirmwareService>();
+            services.AddSingleton<IMainService, MainStandalone>();
+            services.AddSingleton<ICalibrationService, CalibrationService>();
+            services.AddSingleton<DropOverlayService>();
+
+            services.AddSingleton<MainViewModel>();
+            services.AddSingleton<MainWindow>();
+
+            services.AddTransient<HomePageViewModel>();
+            services.AddTransient<HomePageView>();
+            services.AddTransient<CalibrationViewModel>();
+            services.AddTransient<CalibrationView>();
+            services.AddTransient<OutputPageViewModel>();
+            services.AddTransient<OutputPageView>();
+            services.AddTransient<AppSettingsViewModel>();
+            services.AddTransient<AppSettingsView>();
+
+            if (Utils.IsSupportedDesktopOS)
+            {
+                services.AddSingleton<ICommandSenderFactory, CommandSenderFactory>();
+                services.AddSingleton<ICommandSender, SerialCommandSender>();
+                services.AddTransient<VrcViewModel>();
+                services.AddTransient<VrcView>();
+                services.AddTransient<FirmwareViewModel>();
+                services.AddTransient<FirmwareView>();
+                services.AddTransient<OnboardingViewModel>();
+                services.AddTransient<OnboardingView>();
+            }
+
+            ConfigurePlatformServices.Invoke(services);
+
+            services.AddHostedService(provider => provider.GetService<OscRecvService>()!);
+            services.AddHostedService(provider => provider.GetService<ParameterSenderService>()!);
+
+            // Configuration
+            IConfiguration config = new ConfigurationBuilder()
+                .AddJsonFile(LocalSettingsService.DefaultLocalSettingsFile, optional: true)
+                .Build();
+            services.Configure<LocalSettingsOptions>(config);
+        });
 
         if (Utils.IsSupportedDesktopOS)
         {
@@ -167,10 +168,12 @@ public class App : Application
             if (!File.Exists(settingsLocation))
             {
                 // Create the settings file if it doesn't exist and copy the default settings file
-                var defaultSettings = Path.Combine(AppContext.BaseDirectory, LocalSettingsService.DefaultLocalSettingsFile);
+                var defaultSettings =
+                    Path.Combine(AppContext.BaseDirectory, LocalSettingsService.DefaultLocalSettingsFile);
                 Directory.CreateDirectory(Path.GetDirectoryName(settingsLocation)!);
                 File.Copy(defaultSettings, settingsLocation);
-                if (!OperatingSystem.IsWindows()) {
+                if (!OperatingSystem.IsWindows())
+                {
                     // Make file read-write if not on Windows as the source file might be in read-only.
                     File.SetUnixFileMode(
                         settingsLocation,
@@ -186,10 +189,7 @@ public class App : Application
                 string modelPath = Path.Combine(AppContext.BaseDirectory, model);
                 Utils.ExtractEmbeddedResource(
                     Assembly.GetExecutingAssembly(),
-                    Assembly.
-                        GetExecutingAssembly().
-                        GetManifestResourceNames().
-                        First(x => x.Contains(model)),
+                    Assembly.GetExecutingAssembly().GetManifestResourceNames().First(x => x.Contains(model)),
                     modelPath,
                     overwrite: false);
             }
@@ -216,11 +216,12 @@ public class App : Application
         {
             case IClassicDesktopStyleApplicationLifetime desktop:
                 desktop.MainWindow = new MainWindow(vm);
-                desktop.MainWindow.Loaded += (_, _) =>
+                desktop.MainWindow.Loaded += (_, _) => { desktop.MainWindow.ShowOnboardingIfNeeded(); };
+                desktop.Exit += (s, e) =>
                 {
-                    desktop.MainWindow.ShowOnboardingIfNeeded();
+                    OnShutdown(s,e);
+                    _host.Dispose();
                 };
-                desktop.Exit += OnShutdown;
                 desktop.ShutdownRequested += OnShutdown;
                 break;
             case ISingleViewApplicationLifetime singleViewPlatform:
@@ -234,13 +235,14 @@ public class App : Application
     private void OnShutdown(object? sender, EventArgs e)
     {
         if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime) return;
+        if (IsTeardDown) return;
 
-        var mainService = Ioc.Default.GetRequiredService<IMainService>();
+        var mainService = Ioc.Default.GetService<IMainService>();
+        var settings = Ioc.Default.GetService<ILocalSettingsService>();
+        settings?.ForceSave();
 
-        var settings = Ioc.Default.GetRequiredService<ILocalSettingsService>();
-        settings.ForceSave();
-
-        Task.Run(mainService.Teardown);
+        mainService?.Teardown();
+        IsTeardDown = true;
     }
 
     private void OnTrayShutdownClicked(object? sender, EventArgs e)
@@ -251,4 +253,3 @@ public class App : Application
         }
     }
 }
-
