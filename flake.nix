@@ -60,7 +60,16 @@
         '';
 
         postFixup = ''
+          mkdir -p $out/lib/baballonia/Modules
           mv $out/bin/Baballonia.Desktop $out/bin/baballonia
+          mv $out/lib/baballonia/Baballonia.VFTCapture.dll $out/lib/baballonia/Modules/
+          mv $out/lib/baballonia/Baballonia.VFTCapture.pdb $out/lib/baballonia/Modules/
+          mv $out/lib/baballonia/Baballonia.OpenCVCapture.dll $out/lib/baballonia/Modules/
+          mv $out/lib/baballonia/Baballonia.OpenCVCapture.pdb $out/lib/baballonia/Modules/
+          mv $out/lib/baballonia/Baballonia.IPCameraCapture.dll $out/lib/baballonia/Modules/
+          mv $out/lib/baballonia/Baballonia.IPCameraCapture.pdb $out/lib/baballonia/Modules/
+          mv $out/lib/baballonia/Baballonia.SerialCameraCapture.dll $out/lib/baballonia/Modules/
+          mv $out/lib/baballonia/Baballonia.SerialCameraCapture.pdb $out/lib/baballonia/Modules/
         '';
 
         meta = with pkgs.lib; {
