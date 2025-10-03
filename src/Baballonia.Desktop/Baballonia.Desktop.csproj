@@ -22,6 +22,7 @@
 
     <ItemGroup>
         <PackageReference Include="Avalonia.Desktop" Version="11.3.4" />
+        <PackageReference Include="Project-Babble.Baballonia.OverlaySDK" Version="1.0.0-alpha" />
         <PackageReference Include="Velopack" Version="0.0.1298" />
 
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
@@ -46,6 +47,7 @@
         <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.119.0" Condition="$([MSBuild]::IsOSPlatform('Linux'))"/>
     </ItemGroup>
     <ItemGroup>
+        <ProjectReference Include="..\Baballonia.CaptureBin.IO\Baballonia.CaptureBin.IO.csproj" />
         <ProjectReference Include="..\Baballonia.OpenCVCapture\Baballonia.OpenCVCapture.csproj"/>
         <ProjectReference Include="..\Baballonia.SDK\Baballonia.SDK.csproj" />
         <ProjectReference Include="..\Baballonia.SerialCameraCapture\Baballonia.SerialCameraCapture.csproj"/>

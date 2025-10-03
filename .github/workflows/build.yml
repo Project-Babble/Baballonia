@@ -42,8 +42,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           RUN_ID=$(gh run list -R Project-Babble/BabbleCalibration --workflow=export.yml --status=success --limit=1 --json databaseId | jq -r '.[0].databaseId')
-          gh run download -R Project-Babble/BabbleCalibration $RUN_ID --name Linux --dir src/Baballonia.Desktop/Calibration/Linux
-          ls -R src/Baballonia.Desktop/Calibration/Linux
+          gh run download -R Project-Babble/BabbleCalibration $RUN_ID --name Linux --dir src/Baballonia.Desktop/Calibration/Linux/Overlay
+          ls -R src/Baballonia.Desktop/Calibration/Linux/Overlay
 
       - name: Install dependencies
         run: |
@@ -73,6 +73,14 @@ jobs:
         with:
           submodules: 'recursive'
           lfs: true
+
+      - name: Download Calibration Overlay artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          RUN_ID=$(gh run list -R Project-Babble/BabbleCalibration --workflow=export.yml --status=success --limit=1 --json databaseId | jq -r '.[0].databaseId')
+          gh run download -R Project-Babble/BabbleCalibration $RUN_ID --name Windows --dir src/Baballonia.Desktop/Calibration/Windows/Overlay
+          ls -R src/Baballonia.Desktop/Calibration/Windows/Overlay
 
       - name: Fetch internal zip
         run: |
