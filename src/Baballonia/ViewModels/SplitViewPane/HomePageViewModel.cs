@@ -108,10 +108,11 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
         partial void OnDisplayAddressChanged(string value)
         {
+            var advancedEnabled = _localSettingsService.ReadSetting<bool>("AppSettings_AdvancedOptions");
             var availableCaptureFactories = _platformConnector.GetCaptureFactories()
                 .Where(factory => factory.CanConnect(value)).ToArray();
 
-            var shouldShow = availableCaptureFactories.Length >= 2;
+            var shouldShow = advancedEnabled && availableCaptureFactories.Length >= 2;
             CaptureMethodVisible = shouldShow;
 
             CaptureMethods.Clear();

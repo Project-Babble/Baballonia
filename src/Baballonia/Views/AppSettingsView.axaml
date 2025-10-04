@@ -369,6 +369,12 @@
                IconPath="PowerRegular"
                SettingToggled="{Binding SteamvrAutoStart, Mode=TwoWay}" />
 
+      <controls:SettingsToggle
+        Title="Advanced settings"
+        Description="Enable advanced settings"
+        IconPath="SettingsRegular"
+        SettingToggled="{Binding AdvancedOptions, Mode=TwoWay}" />
+
       <Border
           Padding="15,5,15,5"
           Background="{DynamicResource SystemChromeMediumLowColor}"

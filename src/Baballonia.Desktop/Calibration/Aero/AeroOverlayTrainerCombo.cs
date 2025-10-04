@@ -168,20 +168,19 @@ public class AeroOverlayTrainerCombo : IVROverlay
 
         messageDispatcher.RegisterHandler(handlerInstance);
 
-        messageDispatcher.Dispatch(new RunFixedLenghtRoutinePacket("gazetutorial"));
-        _currentState = OverlayState.GazeTutorial;
+        #region Routines
 
-        await Task.Delay(TimeSpan.FromSeconds(28));
+        await FixedLengthWithDelayedState(28, OverlayState.GazeTutorial, "gazetutorial", 0);
 
-        messageDispatcher.Dispatch(new RunVariableLenghtRoutinePacket("gaze", TimeSpan.FromSeconds(15)));
+        await VariableLengthWithDelayedState(15, OverlayState.Gaze, "gaze");
 
-        await Task.Delay(TimeSpan.FromSeconds(1));
+        await VariableLengthWithDelayedState(10, OverlayState.BlinkTutorial, "blinktutorial", 0);
 
-        _currentState = OverlayState.Gaze;
-
-        await Task.Delay(TimeSpan.FromSeconds(14));
+        await VariableLengthWithDelayedState(10, OverlayState.Blink, "blink");
 
         messageDispatcher.Dispatch(new RunFixedLenghtRoutinePacket("close"));
+
+        #endregion
 
         if (waitForExit) await process.WaitForExitAsync();
 
@@ -192,6 +191,28 @@ public class AeroOverlayTrainerCombo : IVROverlay
         _currentFrames.Clear();
 
         return (true, string.Empty);
+
+        async Task DelayedState(float duration, OverlayState state, float buffer = 0.1f)
+        {
+            if (buffer > 0) await Task.Delay(TimeSpan.FromSeconds(buffer));
+
+            _currentState = state;
+
+            await Task.Delay(TimeSpan.FromSeconds(duration - buffer));
+        }
+
+        async Task VariableLengthWithDelayedState(float duration, OverlayState state, string routine,
+            float buffer = 0.1f)
+        {
+            messageDispatcher.Dispatch(new RunVariableLenghtRoutinePacket(routine, TimeSpan.FromSeconds(duration)));
+            await DelayedState(duration, state, buffer);
+        }
+        async Task FixedLengthWithDelayedState(float duration, OverlayState state, string routine,
+            float buffer = 0.1f)
+        {
+            messageDispatcher.Dispatch(new RunFixedLenghtRoutinePacket(routine));
+            await DelayedState(duration, state, buffer);
+        }
     }
 
     private async Task<(bool, string)> StopStreamingAndReturn(string message)

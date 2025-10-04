@@ -66,6 +66,10 @@ public partial class AppSettingsViewModel : ViewModelBase
     private string _logLevel;
 
     [ObservableProperty]
+    [property: SavedSetting("AppSettings_AdvancedOptions", false)]
+    private bool _advancedOptions;
+
+    [ObservableProperty]
     [property: SavedSetting("AppSettings_StabilizeEyes", true)]
     private bool _stabilizeEyes;
 
@@ -112,7 +116,7 @@ public partial class AppSettingsViewModel : ViewModelBase
             SettingsService.Save(this);
             _facePipelineManager.LoadFilter();
             _eyePipelineManager.LoadFilter();
-            
+
             if (p.PropertyName == nameof(StabilizeEyes))
             {
                 _eyePipelineManager.LoadEyeStabilization();
