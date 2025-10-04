@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Baballonia.Assets;
 using Baballonia.CaptureBin.IO;
 using Baballonia.Contracts;
+using Baballonia.Helpers;
 using Baballonia.Services;
 using Baballonia.Services.events;
 using Baballonia.ViewModels.SplitViewPane;
@@ -61,7 +62,7 @@ public class AeroOverlayTrainerCombo : IVROverlay
         //_rightStreamService.StartStreaming(rightPort);
 
         // Tell the calibrator/overlay start...
-        var status = await StartOverlay();
+        var status = await StartOverlay(calibrationRoutine);
         var success = status.success;
         if (!success) return await StopStreamingAndReturn(status.message);
 
@@ -85,7 +86,7 @@ public class AeroOverlayTrainerCombo : IVROverlay
         foreach (var file in filesToDelete) File.Delete(file);
     }
 
-    private async Task<(bool success, string message)> StartProcess(string program,
+    private async Task<(bool success, string message)> StartProcess(string calibrationRoutine, string program,
         string[]? arguments = null,
         bool waitForExit = false)
     {
@@ -95,6 +96,9 @@ public class AeroOverlayTrainerCombo : IVROverlay
             Logger.LogError(Resources.Aero_Overlay_NotFound);
             return (false, Resources.Aero_Overlay_NotFound);
         }
+
+        if (!int.TryParse(calibrationRoutine, out var r)) return (false, "Something went horribly wrong");
+        var rout = (CalibrationRoutine.Routines)r;
 
         var processName = Path.GetFileNameWithoutExtension(program);
 
@@ -170,17 +174,25 @@ public class AeroOverlayTrainerCombo : IVROverlay
 
         #region Routines
 
-        await FixedLengthWithDelayedState(28, OverlayState.GazeTutorial, "gazetutorial", 0);
+        if (rout is CalibrationRoutine.Routines.GazeOnly or CalibrationRoutine.Routines.BasicCalibration or CalibrationRoutine.Routines.BasicCalibrationNoTutorial)
+        {
+            if (rout is CalibrationRoutine.Routines.BasicCalibration)
+                await FixedLengthWithDelayedState(28, OverlayState.GazeTutorial, "gazetutorial", 0);
+            else
+                await FixedLengthWithDelayedState(10, OverlayState.GazeTutorial, "gazetutorialshort", 0);
 
-        await VariableLengthWithDelayedState(120, OverlayState.Gaze, "gaze");
+            await VariableLengthWithDelayedState(120, OverlayState.Gaze, "gaze");
 
-        WriteBinAndClear("gaze.bin");
+            WriteBinAndClear("gaze.bin");
+        }
+        if (rout is CalibrationRoutine.Routines.BlinkOnly or CalibrationRoutine.Routines.BasicCalibration or CalibrationRoutine.Routines.BasicCalibrationNoTutorial)
+        {
+            await VariableLengthWithDelayedState(10, OverlayState.BlinkTutorial, "blinktutorial", 0);
 
-        await VariableLengthWithDelayedState(10, OverlayState.BlinkTutorial, "blinktutorial", 0);
+            await VariableLengthWithDelayedState(20, OverlayState.Blink, "blink");
 
-        await VariableLengthWithDelayedState(20, OverlayState.Blink, "blink");
-
-        WriteBinAndClear("blink.bin");
+            WriteBinAndClear("blink.bin");
+        }
 
         messageDispatcher.Dispatch(new RunFixedLenghtRoutinePacket("close"));
 
@@ -230,11 +242,9 @@ public class AeroOverlayTrainerCombo : IVROverlay
         return await Task.FromResult((false, message));
     }
 
-    private async Task<(bool success, string message)> StartOverlay(string[]? arguments = null,
-        bool waitForExit = false)
-    {
-        return await StartProcess(Overlay, arguments, waitForExit);
-    }
+    private async Task<(bool success, string message)> StartOverlay(string calibrationRoutine, string[]? arguments = null,
+        bool waitForExit = false) =>
+        await StartProcess(calibrationRoutine, Overlay, arguments, waitForExit);
 
     private void HandleEyeImageEvent(EyePipelineEvents.NewTransformedFrameEvent e)
     {

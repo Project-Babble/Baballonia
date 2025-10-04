@@ -56,17 +56,29 @@
             </StackPanel>
           </SplitButton.Content>
           <SplitButton.Flyout>
+
             <MenuFlyout> <!-- Names come from CalibrationRoutine.cs -->
-              <MenuItem Click="OnCalibrationMenuItemClick" x:Name="QuickCalibration" Header="{x:Static assets:Resources.Home_Eye_Calibration}">
+              <MenuItem Click="OnCalibrationMenuItemClick" x:Name="BasicCalibration" Header="{x:Static assets:Resources.Home_Eye_Calibration}">
                 <MenuItem.Icon>
                   <PathIcon Data="{StaticResource HeadsetVrRegular}" />
                 </MenuItem.Icon>
               </MenuItem>
-              <!--<MenuItem Click="OnCalibrationMenuItemClick" x:Name="QuickCalibrationNoTutorial" Header="Eye Calibration (No Tutorial)">
+              <MenuItem Click="OnCalibrationMenuItemClick" x:Name="BasicCalibrationNoTutorial" Header="Eye Calibration (No Tutorial)">
                 <MenuItem.Icon>
                   <PathIcon Data="{StaticResource HeadsetVrRegular}" />
                 </MenuItem.Icon>
-              </MenuItem>-->
+              </MenuItem>
+              <MenuItem Click="OnCalibrationMenuItemClick" x:Name="GazeOnly" Header="Gaze Calibration">
+                <MenuItem.Icon>
+                  <PathIcon Data="{StaticResource HeadsetVrRegular}" />
+                </MenuItem.Icon>
+              </MenuItem>
+              <MenuItem Click="OnCalibrationMenuItemClick" x:Name="BlinkOnly" Header="Blink Calibration">
+                <MenuItem.Icon>
+                  <PathIcon Data="{StaticResource HeadsetVrRegular}" />
+                </MenuItem.Icon>
+              </MenuItem>
+
             </MenuFlyout>
           </SplitButton.Flyout>
         </SplitButton>
