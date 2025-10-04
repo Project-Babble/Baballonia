@@ -172,11 +172,15 @@ public class AeroOverlayTrainerCombo : IVROverlay
 
         await FixedLengthWithDelayedState(28, OverlayState.GazeTutorial, "gazetutorial", 0);
 
-        await VariableLengthWithDelayedState(15, OverlayState.Gaze, "gaze");
+        await VariableLengthWithDelayedState(120, OverlayState.Gaze, "gaze");
+
+        WriteBinAndClear("gaze.bin");
 
         await VariableLengthWithDelayedState(10, OverlayState.BlinkTutorial, "blinktutorial", 0);
 
-        await VariableLengthWithDelayedState(10, OverlayState.Blink, "blink");
+        await VariableLengthWithDelayedState(20, OverlayState.Blink, "blink");
+
+        WriteBinAndClear("blink.bin");
 
         messageDispatcher.Dispatch(new RunFixedLenghtRoutinePacket("close"));
 
@@ -184,34 +188,39 @@ public class AeroOverlayTrainerCombo : IVROverlay
 
         if (waitForExit) await process.WaitForExitAsync();
 
-        CaptureBin.IO.CaptureBin.WriteAll("user_cal.bin", _currentFrames);
-
         _currentState = OverlayState.GazeTutorial;
         _currentPacket = new HmdPositionalDataPacket();
         _currentFrames.Clear();
 
+        CaptureBin.IO.CaptureBin.Concatenate("user_cal.bin", "gaze.bin", "blink.bin");
+
         return (true, string.Empty);
 
-        async Task DelayedState(float duration, OverlayState state, float buffer = 0.1f)
+        void WriteBinAndClear(string name)
+        {
+            CaptureBin.IO.CaptureBin.WriteAll(name, _currentFrames);
+            _currentFrames.Clear();
+        }
+        async Task DelayedState(float durationSeconds, OverlayState state, float buffer = 0.1f)
         {
             if (buffer > 0) await Task.Delay(TimeSpan.FromSeconds(buffer));
 
             _currentState = state;
 
-            await Task.Delay(TimeSpan.FromSeconds(duration - buffer));
+            await Task.Delay(TimeSpan.FromSeconds(durationSeconds - buffer));
         }
 
-        async Task VariableLengthWithDelayedState(float duration, OverlayState state, string routine,
+        async Task VariableLengthWithDelayedState(float durationSeconds, OverlayState state, string routine,
             float buffer = 0.1f)
         {
-            messageDispatcher.Dispatch(new RunVariableLenghtRoutinePacket(routine, TimeSpan.FromSeconds(duration)));
-            await DelayedState(duration, state, buffer);
+            messageDispatcher.Dispatch(new RunVariableLenghtRoutinePacket(routine, TimeSpan.FromSeconds(durationSeconds)));
+            await DelayedState(durationSeconds, state, buffer);
         }
-        async Task FixedLengthWithDelayedState(float duration, OverlayState state, string routine,
+        async Task FixedLengthWithDelayedState(float durationSeconds, OverlayState state, string routine,
             float buffer = 0.1f)
         {
             messageDispatcher.Dispatch(new RunFixedLenghtRoutinePacket(routine));
-            await DelayedState(duration, state, buffer);
+            await DelayedState(durationSeconds, state, buffer);
         }
     }
 
