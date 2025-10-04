@@ -408,8 +408,7 @@ FodyWeavers.xsd
 # this chonky bastard
 src/Baballonia.Desktop/_internal.zip
 
-
 /src/Baballonia.Desktop/python
 
-#src/Baballonia.Desktop/Calibration/Windows/Overlay/
-#src/Baballonia.Desktop/Calibration/Linux/Overlay/
+src/Baballonia.Desktop/Calibration/Windows/Overlay/*
+src/Baballonia.Desktop/Calibration/Linux/Overlay/*

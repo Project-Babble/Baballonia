@@ -72,7 +72,6 @@ public class AeroOverlayTrainerCombo : IVROverlay
         //DeleteCaptureFiles(modelPath);
         return await Task.FromResult((success, "TEMP"));
     }
-
     private static void DeleteCaptureFiles(string directoryPath)
     {
         // Validate directory exists
@@ -118,22 +117,27 @@ public class AeroOverlayTrainerCombo : IVROverlay
 
         if (!steamvr && !monado)
         {
+            /*
             Logger.LogError(Resources.Aero_SteamVR_NotRunning);
             return (false, Resources.Aero_SteamVR_NotRunning);
-        }
-
-        //TODO: enable OpenXR overlay mode on supported runtimes (monado) whenever OpenXR overlays are supported
-        if (isWindows)
-        {
-            if (steamvr)
-                launchArgs = "--use-openvr";
-            else if (monado) launchArgs = "--xr-mode on"; //uhhhhh?????
+            */
+            launchArgs = "--use-debug";
         }
         else
         {
-            launchArgs = "--xr-mode on";
+            //TODO: enable OpenXR overlay mode on supported runtimes (monado) whenever OpenXR overlays are supported
+            if (isWindows)
+            {
+                if (steamvr)
+                    launchArgs = "--use-openvr";
+                else if (monado) launchArgs = "--xr-mode on"; //uhhhhh?????
+            }
+            else
+            {
+                launchArgs = "--xr-mode on";
+            }
+            //linux always runs openxr standalone because overlays aren't supported and steamvr overlay segfaults
         }
-        //linux always runs openxr standalone because overlays aren't supported and steamvr overlay segfaults
 
         var startInfo = new ProcessStartInfo
         {
@@ -167,19 +171,21 @@ public class AeroOverlayTrainerCombo : IVROverlay
         messageDispatcher.Dispatch(new RunFixedLenghtRoutinePacket("gazetutorial"));
         _currentState = OverlayState.GazeTutorial;
 
-        Thread.Sleep(1000 * 28);
+        await Task.Delay(TimeSpan.FromSeconds(28));
 
         messageDispatcher.Dispatch(new RunVariableLenghtRoutinePacket("gaze", TimeSpan.FromSeconds(15)));
 
-        Thread.Sleep(1000);
+        await Task.Delay(TimeSpan.FromSeconds(1));
 
         _currentState = OverlayState.Gaze;
 
-        Thread.Sleep(1000 * 14);
+        await Task.Delay(TimeSpan.FromSeconds(14));
 
         messageDispatcher.Dispatch(new RunFixedLenghtRoutinePacket("close"));
 
         if (waitForExit) await process.WaitForExitAsync();
+
+        CaptureBin.IO.CaptureBin.WriteAll("user_cal.bin", _currentFrames);
 
         _currentState = OverlayState.GazeTutorial;
         _currentPacket = new HmdPositionalDataPacket();
@@ -203,7 +209,6 @@ public class AeroOverlayTrainerCombo : IVROverlay
     private void HandleEyeImageEvent(EyePipelineEvents.NewTransformedFrameEvent e)
     {
         if (_currentState is (OverlayState.GazeTutorial or OverlayState.BlinkTutorial)) return;
-
         var image = e.image;
         var channels = image.Channels();
         if (channels != 2)
@@ -211,10 +216,14 @@ public class AeroOverlayTrainerCombo : IVROverlay
 
         var images = image.Split();
 
+        HandleEyeImages(images[0], images[1]);
+    }
+    private void HandleEyeImages(Mat left, Mat right)
+    {
         const int jpegQuality = 50;
 
-        Cv2.ImEncode(".jpg", images[0], out var bufLeft, [(int)ImwriteFlags.JpegQuality, jpegQuality]);
-        Cv2.ImEncode(".jpg", images[1], out var bufRight, [(int)ImwriteFlags.JpegQuality, jpegQuality]);
+        Cv2.ImEncode(".jpg", left, out var bufLeft, [(int)ImwriteFlags.JpegQuality, jpegQuality]);
+        Cv2.ImEncode(".jpg", right, out var bufRight, [(int)ImwriteFlags.JpegQuality, jpegQuality]);
 
         switch (_currentState)
         {
