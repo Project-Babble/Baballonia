@@ -49,7 +49,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          RUN_ID=$(gh run list -R Project-Babble/BabbleTrainer --workflow=export.yml --status=success --limit=1 --json databaseId | jq -r '.[0].databaseId')
+          RUN_ID=$(gh run list -R Project-Babble/BabbleTrainer --workflow=build.yml --status=success --limit=1 --json databaseId | jq -r '.[0].databaseId')
           gh run download -R Project-Babble/BabbleTrainer $RUN_ID --name Linux --dir src/Baballonia.Desktop/Calibration/Linux/Trainer
           ls -R src/Baballonia.Desktop/Calibration/Linux/Trainer
 
@@ -94,7 +94,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          RUN_ID=$(gh run list -R Project-Babble/BabbleTrainer --workflow=export.yml --status=success --limit=1 --json databaseId | jq -r '.[0].databaseId')
+          RUN_ID=$(gh run list -R Project-Babble/BabbleTrainer --workflow=build.yml --status=success --limit=1 --json databaseId | jq -r '.[0].databaseId')
           gh run download -R Project-Babble/BabbleTrainer $RUN_ID --name Windows --dir src/Baballonia.Desktop/Calibration/Windows/Trainer
           ls -R src/Baballonia.Desktop/Calibration/Windows/Trainer
 
