@@ -22,7 +22,6 @@
 
     <ItemGroup>
         <PackageReference Include="Avalonia.Desktop" Version="11.3.4" />
-        <PackageReference Include="Project-Babble.Baballonia.OverlaySDK" Version="1.0.0-alpha" />
         <PackageReference Include="Velopack" Version="0.0.1298" />
 
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->

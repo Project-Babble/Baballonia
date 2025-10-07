@@ -52,6 +52,7 @@
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="OpenCvSharp4" Version="4.11.0.20250507" />
         <PackageReference Include="OscCore" Version="1.0.5" />
+        <PackageReference Include="Project-Babble.Baballonia.OverlaySDK" Version="1.0.1-alpha" />
         <PackageReference Include="SkiaSharp" Version="3.119.0" />
         <PackageReference Include="SoundFlow" Version="1.2.1" />
         <PackageReference Include="System.IO.Ports" Version="9.0.8" />
