@@ -96,38 +96,15 @@
       <None Update="baseline_R.pth">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Calibration\Linux\gaze_overlay">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <None Update="Calibration\Linux\**">
+          <Link>%(RecursiveDir)\%(Filename)%(Extension)</Link>
+          <TargetPath>%(RecursiveDir)\%(Filename)%(Extension)</TargetPath>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Calibration\Linux\trainer">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Calibration\Windows\app.rc">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Calibration\Windows\app.res">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Calibration\Windows\calibration_runner.exe">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Calibration\Windows\capture_417272897.bin">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Calibration\Windows\gaze_overlay.exe">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Calibration\Windows\onnxruntime.dll">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Calibration\Windows\onnxruntime_providers_shared.dll">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Calibration\Windows\openvr_api.dll">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Calibration\Windows\turbojpeg.dll">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <None Update="Calibration\Windows\**">
+          <Link>%(RecursiveDir)\%(Filename)%(Extension)</Link>
+          <TargetPath>%(RecursiveDir)\%(Filename)%(Extension)</TargetPath>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="onnx_artifacts\training\checkpoint\paramfrozen_tensors.pbseq">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -148,15 +125,6 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="onnx_artifacts\temporal_eye_tracking_model.onnx">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="trainermin.exe">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="video.bin">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="main.py">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>
