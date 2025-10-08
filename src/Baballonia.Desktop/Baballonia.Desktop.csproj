@@ -95,12 +95,12 @@
       <None Update="baseline_R.pth">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Calibration\Linux\**">
+      <None Update="Calibration\Linux\**" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
           <Link>%(RecursiveDir)\%(Filename)%(Extension)</Link>
           <TargetPath>%(RecursiveDir)\%(Filename)%(Extension)</TargetPath>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Calibration\Windows\**">
+      <None Update="Calibration\Windows\**" Condition="$([MSBuild]::IsOSPlatform('Windows'))">
           <Link>%(RecursiveDir)\%(Filename)%(Extension)</Link>
           <TargetPath>%(RecursiveDir)\%(Filename)%(Extension)</TargetPath>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
