@@ -13,8 +13,15 @@
 
     <ItemGroup>
         <AvaloniaResource Include="Assets\**" />
-        <None Update="Firmware\Windows\espflash.exe">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <None Update="Firmware\Windows\espflash.exe" Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+            <Link>%(RecursiveDir)\%(Filename)%(Extension)</Link>
+            <TargetPath>%(RecursiveDir)\%(Filename)%(Extension)</TargetPath>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Firmware\Linux\espflash" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+            <Link>%(RecursiveDir)\%(Filename)%(Extension)</Link>
+            <TargetPath>%(RecursiveDir)\%(Filename)%(Extension)</TargetPath>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="font.ttf">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
