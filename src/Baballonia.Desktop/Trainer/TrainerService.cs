@@ -10,7 +10,7 @@ using OverlaySDK.Packets;
 
 namespace Baballonia.Desktop.Trainer;
 
-public class TrainerService : ITrainerService
+public partial class TrainerService : ITrainerService
 {
     private readonly object _lock = new();
 
@@ -23,41 +23,43 @@ public class TrainerService : ITrainerService
         _logger = logger;
     }
 
+    [GeneratedRegex(@"Batch\s+(\d+)/(\d+),\s+Loss:\s+([0-9.]+)")]
+    private static partial Regex ParseBatchRegex();
     TrainerProgressReportPacket? ParseBatch(string line)
     {
-        var pattern = @"Batch\s+(\d+)/(\d+),\s+Loss:\s+([0-9.]+)";
-        var match = Regex.Match(line, pattern);
+        var match = ParseBatchRegex().Match(line);
         if (!match.Success)
             return null;
         _logger.LogDebug(line);
 
-        int currentBatch = int.Parse(match.Groups[1].Value);
-        int totalBatches = int.Parse(match.Groups[2].Value);
-        double loss = double.Parse(match.Groups[3].Value);
+        var currentBatch = int.Parse(match.Groups[1].Value);
+        var totalBatches = int.Parse(match.Groups[2].Value);
+        var loss = double.Parse(match.Groups[3].Value);
 
         return new TrainerProgressReportPacket("Batch", currentBatch, totalBatches, loss);
     }
-
+    [GeneratedRegex(@"Epoch\s+(\d+)/(\d+)\s+completed\s+in\s+([\d.]+)s\.\s+Average\s+loss:\s+([\d.eE+-]+)")]
+    private static partial Regex ParseEpochRegex();
     TrainerProgressReportPacket? ParseEpoch(string line)
     {
-        var pattern = @"Epoch\s+(\d+)/(\d+)\s+completed\s+in\s+([\d.]+)s\.\s+Average\s+loss:\s+([\d.eE+-]+)";
-        var match = Regex.Match(line, pattern);
+        var match = ParseEpochRegex().Match(line);
         if (!match.Success)
             return null;
 
         _logger.LogDebug(line);
 
-        int currentEpoch = int.Parse(match.Groups[1].Value);
-        int totalEpochs = int.Parse(match.Groups[2].Value);
-        double loss = double.Parse(match.Groups[3].Value);
+        var currentEpoch = int.Parse(match.Groups[1].Value);
+        var totalEpochs = int.Parse(match.Groups[2].Value);
+        var loss = double.Parse(match.Groups[3].Value);
 
         return new TrainerProgressReportPacket("Epoch", currentEpoch, totalEpochs, loss);
     }
 
+    [GeneratedRegex(@"\s*Training\s+completed\s+successfully!\s*")]
+    private static partial Regex ParseTrainingCompleteRegex();
     bool ParseTrainingComplete(string line)
     {
-        var pattern = @"\s*Training\s+completed\s+successfully!\s*";
-        var match = Regex.Match(line, pattern);
+        var match = ParseTrainingCompleteRegex().Match(line);
 
         _logger.LogDebug(line);
 
@@ -89,7 +91,9 @@ public class TrainerService : ITrainerService
         if (!File.Exists(usercalbinPath))
             throw new FileNotFoundException(usercalbinPath + " not found");
 
-        string trainerPath = "BabbleTrainer.exe";
+        var isWindows = OperatingSystem.IsWindows();
+        var basePath = Path.Combine(AppContext.BaseDirectory, "Calibration", isWindows ? "Windows" : "Linux", "Trainer");
+        var trainerPath = Path.Combine(basePath, isWindows ? "BabbleTrainer.exe" : "BabbleTrainer");
         if (!File.Exists(trainerPath))
             throw new FileNotFoundException(trainerPath + " not found");
 
@@ -102,7 +106,7 @@ public class TrainerService : ITrainerService
             if (trainerProcess != null)
                 throw new Exception("Training process already running");
 
-            string launchArgs = usercalbinPath + " " + outputfilePath;
+            var launchArgs = $"{usercalbinPath} {outputfilePath}";
             var startInfo = new ProcessStartInfo
             {
                 FileName = trainerPath,

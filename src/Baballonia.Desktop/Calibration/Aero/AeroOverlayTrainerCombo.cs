@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Baballonia.Assets;
 using Baballonia.CaptureBin.IO;
 using Baballonia.Contracts;
+using Baballonia.Desktop.Trainer;
 using Baballonia.Helpers;
 using Baballonia.Services;
 using Baballonia.Services.events;
@@ -194,17 +195,30 @@ public class AeroOverlayTrainerCombo : IVROverlay
             WriteBinAndClear("blink.bin");
         }
 
-        messageDispatcher.Dispatch(new RunFixedLenghtRoutinePacket("close"));
-
-        #endregion
-
-        if (waitForExit) await process.WaitForExitAsync();
-
         _currentState = OverlayState.GazeTutorial;
         _currentPacket = new HmdPositionalDataPacket();
         _currentFrames.Clear();
 
         CaptureBin.IO.CaptureBin.Concatenate("user_cal.bin", "gaze.bin", "blink.bin");
+
+        var factory = LoggerFactory.Create(builder => builder.AddConsole().AddDebug());
+        var log = factory.CreateLogger<TrainerService>();
+        var service = new TrainerService(log);
+
+        messageDispatcher.Dispatch(new RunFixedLenghtRoutinePacket("trainer"));
+
+        service.RunTraining("user_cal.bin", "model.onnx");
+        service.OnProgress += packet =>
+        {
+            messageDispatcher.Dispatch(packet);
+        };
+        await service.WaitAsync();
+
+        #endregion
+
+        messageDispatcher.Dispatch(new RunFixedLenghtRoutinePacket("close"));
+
+        if (waitForExit) await process.WaitForExitAsync();
 
         return (true, string.Empty);
 
