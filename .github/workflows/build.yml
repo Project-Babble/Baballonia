@@ -37,21 +37,24 @@ jobs:
         with:
           submodules: 'recursive'
 
-      - name: Download Calibration Overlay artifacts
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          RUN_ID=$(gh run list -R Project-Babble/BabbleCalibration --workflow=export.yml --status=success --limit=1 --json databaseId | jq -r '.[0].databaseId')
-          gh run download -R Project-Babble/BabbleCalibration $RUN_ID --name Linux --dir src/Baballonia.Desktop/Calibration/Linux/Overlay
-          ls -R src/Baballonia.Desktop/Calibration/Linux/Overlay
+      - name: Download dependencies
+        run: ./download_dependencies.sh
 
-      - name: Download Calibration Trainer artifacts
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          RUN_ID=$(gh run list -R Project-Babble/BabbleTrainer --workflow=build.yml --status=success --limit=1 --json databaseId | jq -r '.[0].databaseId')
-          gh run download -R Project-Babble/BabbleTrainer $RUN_ID --name Linux --dir src/Baballonia.Desktop/Calibration/Linux/Trainer
-          ls -R src/Baballonia.Desktop/Calibration/Linux/Trainer
+      #- name: Download Calibration Overlay artifacts
+      #  env:
+      #    GH_TOKEN: ${{ github.token }}
+      #  run: |
+      #    RUN_ID=$(gh run list -R Project-Babble/BabbleCalibration --workflow=export.yml --status=success --limit=1 --json databaseId | jq -r '.[0].databaseId')
+      #    gh run download -R Project-Babble/BabbleCalibration $RUN_ID --name Linux --dir src/Baballonia.Desktop/Calibration/Linux/Overlay
+      #    ls -R src/Baballonia.Desktop/Calibration/Linux/Overlay
+
+      #- name: Download Calibration Trainer artifacts
+      #  env:
+      #    GH_TOKEN: ${{ github.token }}
+      #  run: |
+      #    RUN_ID=$(gh run list -R Project-Babble/BabbleTrainer --workflow=build.yml --status=success --limit=1 --json databaseId | jq -r '.[0].databaseId')
+      #    gh run download -R Project-Babble/BabbleTrainer $RUN_ID --name Linux --dir src/Baballonia.Desktop/Calibration/Linux/Trainer
+      #    ls -R src/Baballonia.Desktop/Calibration/Linux/Trainer
 
       - name: Install dependencies
         run: |
@@ -82,26 +85,30 @@ jobs:
           submodules: 'recursive'
           lfs: true
 
-      - name: Download Calibration Overlay artifacts
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          RUN_ID=$(gh run list -R Project-Babble/BabbleCalibration --workflow=export.yml --status=success --limit=1 --json databaseId | jq -r '.[0].databaseId')
-          gh run download -R Project-Babble/BabbleCalibration $RUN_ID --name Windows --dir src/Baballonia.Desktop/Calibration/Windows/Overlay
-          ls -R src/Baballonia.Desktop/Calibration/Windows/Overlay
+      - name: Download dependencies
+        shell: pwsh
+        run: ./download_dependencies.ps1
 
-      - name: Download Calibration Trainer artifacts
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          RUN_ID=$(gh run list -R Project-Babble/BabbleTrainer --workflow=build.yml --status=success --limit=1 --json databaseId | jq -r '.[0].databaseId')
-          gh run download -R Project-Babble/BabbleTrainer $RUN_ID --name Windows --dir src/Baballonia.Desktop/Calibration/Windows/Trainer
-          ls -R src/Baballonia.Desktop/Calibration/Windows/Trainer
+      #- name: Download Calibration Overlay artifacts
+      #  env:
+      #    GH_TOKEN: ${{ github.token }}
+      #  run: |
+      #    RUN_ID=$(gh run list -R Project-Babble/BabbleCalibration --workflow=export.yml --status=success --limit=1 --json databaseId | jq -r '.[0].databaseId')
+      #    gh run download -R Project-Babble/BabbleCalibration $RUN_ID --name Windows --dir src/Baballonia.Desktop/Calibration/Windows/Overlay
+      #    ls -R src/Baballonia.Desktop/Calibration/Windows/Overlay
 
-      - name: Fetch internal zip
-        run: |
-          cd src/Baballonia.Desktop
-          powershell ./fetch_internal.ps1
+      #- name: Download Calibration Trainer artifacts
+      #  env:
+      #    GH_TOKEN: ${{ github.token }}
+      #  run: |
+      #    RUN_ID=$(gh run list -R Project-Babble/BabbleTrainer --workflow=build.yml --status=success --limit=1 --json databaseId | jq -r '.[0].databaseId')
+      #    gh run download -R Project-Babble/BabbleTrainer $RUN_ID --name Windows --dir src/Baballonia.Desktop/Calibration/Windows/Trainer
+      #    ls -R src/Baballonia.Desktop/Calibration/Windows/Trainer
+
+      #- name: Fetch internal zip
+      #  run: |
+      #    cd src/Baballonia.Desktop
+      #    powershell ./fetch_internal.ps1
 
       - name: Build project
         run: |

@@ -414,3 +414,5 @@ src/Baballonia.Desktop/Calibration/Windows/Overlay/*
 src/Baballonia.Desktop/Calibration/Linux/Overlay/*
 src/Baballonia.Desktop/Calibration/Windows/Trainer/*
 src/Baballonia.Desktop/Calibration/Linux/Trainer/*
+src/Baballonia/Firmware/Windows/espflash.exe
+src/Baballonia/Firmware/Linux/espflash
