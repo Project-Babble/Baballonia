@@ -128,7 +128,6 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             {
                 SelectedCaptureMethod = "";
             }
-
         }
 
         partial void OnSelectedCaptureMethodChanged(string value)
@@ -654,8 +653,19 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     [RelayCommand]
     private async Task RequestVRCalibration()
     {
-        var res = await _vrOverlay.EyeTrackingCalibrationRequested(RequestedVRCalibration);
-        if (res.success)
+        var res = await Task.Run(async () =>
+            {
+                try
+                {
+                    return await _vrOverlay.EyeTrackingCalibrationRequested(RequestedVRCalibration);
+                }
+                catch (Exception ex)
+                {
+                    return (false, ex.Message);
+                }
+            }
+        );
+        if (res.Item1)
         {
             if (!Directory.Exists(Utils.ModelsDirectory))
             {
@@ -680,11 +690,11 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         else
         {
             SelectedCalibrationTextBlock.Foreground = new SolidColorBrush(Colors.Red);
-            _logger.LogError(res.status);
+            _logger.LogError(res.Item2);
         }
 
         var previousText = SelectedCalibrationTextBlock.Text;
-        SelectedCalibrationTextBlock.Text = res.status;
+        SelectedCalibrationTextBlock.Text = res.Item2;
         await Task.Delay(5000);
         SelectedCalibrationTextBlock.Text = previousText;
         SelectedCalibrationTextBlock.Foreground = new SolidColorBrush(GetBaseHighColor());

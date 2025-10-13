@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Baballonia.Desktop.Calibration.Aero;
 
-public class AeroOverlayLogger(ILogger logger) : OverlaySDK.ILogger
+public class OverlayLogger(ILogger logger) : OverlaySDK.ILogger
 {
     public void Debug(string message) => logger.LogDebug(message);
     public void Info(string message) => logger.LogInformation(message);
