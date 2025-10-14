@@ -26,9 +26,8 @@ public class AeroOverlayTrainerCombo : IVROverlay
 {
     private enum OverlayState
     {
-        GazeTutorial,
+        Tutorial,
         Gaze,
-        BlinkTutorial,
         Blink,
     }
 
@@ -46,7 +45,7 @@ public class AeroOverlayTrainerCombo : IVROverlay
     private static string OverlayPath { get; } = null!;
 
     private static HmdPositionalDataPacket _currentPacket = new();
-    private static OverlayState _currentState = OverlayState.GazeTutorial;
+    private static OverlayState _currentState = OverlayState.Tutorial;
     private static List<Frame> _currentFrames = new();
 
 
@@ -178,24 +177,32 @@ public class AeroOverlayTrainerCombo : IVROverlay
         if (rout is CalibrationRoutine.Routines.GazeOnly or CalibrationRoutine.Routines.BasicCalibration or CalibrationRoutine.Routines.BasicCalibrationNoTutorial)
         {
             if (rout is CalibrationRoutine.Routines.BasicCalibration)
-                await FixedLengthWithDelayedState(28, OverlayState.GazeTutorial, "gazetutorial", 0);
+                await FixedLengthWithDelayedState(28, OverlayState.Tutorial, "gazetutorial", 0);
             else
-                await FixedLengthWithDelayedState(10, OverlayState.GazeTutorial, "gazetutorialshort", 0);
+                await FixedLengthWithDelayedState(10, OverlayState.Tutorial, "gazetutorialshort", 0);
+
+            SendFixed("startsound");
 
             await VariableLengthWithDelayedState(120, OverlayState.Gaze, "gaze");
+
+            SendFixed("endsound");
 
             WriteBinAndClear("gaze.bin");
         }
         if (rout is CalibrationRoutine.Routines.BlinkOnly or CalibrationRoutine.Routines.BasicCalibration or CalibrationRoutine.Routines.BasicCalibrationNoTutorial)
         {
-            await VariableLengthWithDelayedState(10, OverlayState.BlinkTutorial, "blinktutorial", 0);
+            await VariableLengthWithDelayedState(10, OverlayState.Tutorial, "blinktutorial", 0);
+
+            SendFixed("startsound");
 
             await VariableLengthWithDelayedState(20, OverlayState.Blink, "blink");
+
+            SendFixed("endsound");
 
             WriteBinAndClear("blink.bin");
         }
 
-        _currentState = OverlayState.GazeTutorial;
+        _currentState = OverlayState.Tutorial;
         _currentPacket = new HmdPositionalDataPacket();
         _currentFrames.Clear();
 
@@ -205,18 +212,15 @@ public class AeroOverlayTrainerCombo : IVROverlay
         var log = factory.CreateLogger<TrainerService>();
         var service = new TrainerService(log);
 
-        messageDispatcher.Dispatch(new RunFixedLenghtRoutinePacket("trainer"));
+        SendFixed("trainer");
 
         service.RunTraining("user_cal.bin", "model.onnx");
-        service.OnProgress += packet =>
-        {
-            messageDispatcher.Dispatch(packet);
-        };
+        service.OnProgress += packet => { messageDispatcher.Dispatch(packet); };
         await service.WaitAsync();
 
         #endregion
 
-        messageDispatcher.Dispatch(new RunFixedLenghtRoutinePacket("close"));
+        SendFixed("close");
 
         if (waitForExit) await process.WaitForExitAsync();
 
@@ -239,15 +243,19 @@ public class AeroOverlayTrainerCombo : IVROverlay
         async Task VariableLengthWithDelayedState(float durationSeconds, OverlayState state, string routine,
             float buffer = 0.1f)
         {
-            messageDispatcher.Dispatch(new RunVariableLenghtRoutinePacket(routine, TimeSpan.FromSeconds(durationSeconds)));
+            SendVariable(routine, durationSeconds);
             await DelayedState(durationSeconds, state, buffer);
         }
         async Task FixedLengthWithDelayedState(float durationSeconds, OverlayState state, string routine,
             float buffer = 0.1f)
         {
-            messageDispatcher.Dispatch(new RunFixedLenghtRoutinePacket(routine));
+            SendFixed(routine);
             await DelayedState(durationSeconds, state, buffer);
         }
+        void SendFixed(string name) =>
+            messageDispatcher.Dispatch(new RunFixedLenghtRoutinePacket(name));
+        void SendVariable(string name, float seconds) =>
+            messageDispatcher.Dispatch(new RunVariableLenghtRoutinePacket(name, TimeSpan.FromSeconds(seconds)));
     }
 
     private async Task<(bool, string)> StopStreamingAndReturn(string message)
@@ -262,7 +270,7 @@ public class AeroOverlayTrainerCombo : IVROverlay
 
     private void HandleEyeImageEvent(EyePipelineEvents.NewTransformedFrameEvent e)
     {
-        if (_currentState is (OverlayState.GazeTutorial or OverlayState.BlinkTutorial)) return;
+        if (_currentState is OverlayState.Tutorial) return;
         var image = e.image;
         var channels = image.Channels();
         if (channels != 2)
