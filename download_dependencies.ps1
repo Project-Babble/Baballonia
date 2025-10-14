@@ -9,3 +9,5 @@ Remove-Item "src/Baballonia.Desktop/Calibration/Windows/Overlay/Windows.zip"
 Expand-Archive -Path "src/Baballonia/Firmware/Windows/espflash-x86_64-pc-windows-msvc.zip" -DestinationPath "src/Baballonia/Firmware/Windows"
 
 Remove-Item "src/Baballonia/Firmware/Windows/espflash-x86_64-pc-windows-msvc.zip"
+
+Move-Item "src/Baballonia/Firmware/Windows/cargo-espflash.exe" "src/Baballonia/Firmware/Windows/espflash.exe"
