@@ -28,6 +28,7 @@ public class OverlayTrainerService : PacketHandlerAdapter, IVROverlay
         Blink,
     }
 
+    private LocalSettingsService _localSettingsService;
     private ILogger<OverlayTrainerService> _logger;
     private IEyePipelineEventBus _eyePipelineEventBus;
     private ITrainerService _trainerService;
@@ -39,16 +40,18 @@ public class OverlayTrainerService : PacketHandlerAdapter, IVROverlay
     private List<Frame> _currentFrames = new();
     private HmdPositionalDataPacket? _latesdPosData;
     private Stopwatch _posDataStopwatch = Stopwatch.StartNew();
+    private EyePipelineManager _eyePipelineManager;
 
 
     public OverlayTrainerService(ILogger<OverlayTrainerService> logger, IEyePipelineEventBus eyePipelineEventBus,
-        ITrainerService trainerService, IOverlayProgram overlayProgram)
+        ITrainerService trainerService, IOverlayProgram overlayProgram, LocalSettingsService localSettingsService, EyePipelineManager eyePipelineManager)
     {
         _logger = logger;
         _eyePipelineEventBus = eyePipelineEventBus;
         _trainerService = trainerService;
         _program = overlayProgram;
-
+        _localSettingsService = localSettingsService;
+        _eyePipelineManager = eyePipelineManager;
     }
 
     public void Dispose()
@@ -88,7 +91,6 @@ public class OverlayTrainerService : PacketHandlerAdapter, IVROverlay
         _messageDispatcher = new OverlayMessageDispatcher(logger, client);
         _messageDispatcher.RegisterHandler(this);
 
-
         if (rout is CalibrationRoutine.Routines.GazeOnly or CalibrationRoutine.Routines.BasicCalibration
             or CalibrationRoutine.Routines.BasicCalibrationNoTutorial)
         {
@@ -118,10 +120,19 @@ public class OverlayTrainerService : PacketHandlerAdapter, IVROverlay
 
         _messageDispatcher.Dispatch(new RunFixedLenghtRoutinePacket("trainer"));
 
-        _trainerService.RunTraining(Path.Combine(Utils.ModelsDirectory, "user_cal.bin"), Path.Combine(Utils.ModelsDirectory, "tuned_temporal_eye_tracking.onnx"));
-
         _trainerService.OnProgress += packet => { _messageDispatcher.Dispatch(packet); };
+
+        if (!Directory.Exists(Utils.ModelsDirectory))
+        {
+            Directory.CreateDirectory(Utils.ModelsDirectory);
+        }
+        var destPath = Path.Combine(Utils.ModelsDirectory,
+            $"tuned_temporal_eye_tracking_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.onnx");
+        _trainerService.RunTraining(Path.Combine(Utils.ModelsDirectory, "user_cal.bin"), destPath);
+
         await _trainerService.WaitAsync();
+        _localSettingsService.SaveSetting("EyeHome_EyeModel", destPath);
+        await _eyePipelineManager.LoadInferenceAsync();
 
         _messageDispatcher.Dispatch(new RunFixedLenghtRoutinePacket("close"));
 
@@ -245,4 +256,5 @@ public class OverlayTrainerService : PacketHandlerAdapter, IVROverlay
         _posDataStopwatch.Restart();
         Interlocked.Exchange(ref _latesdPosData, positionalData);
     }
+
 }
