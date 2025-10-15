@@ -23,10 +23,8 @@ public class OverlayTrainerService : PacketHandlerAdapter, IVROverlay
 {
     private enum OverlayState
     {
-        None,
-        GazeTutorial,
+        Tutorial,
         Gaze,
-        BlinkTutorial,
         Blink,
     }
 
@@ -34,7 +32,7 @@ public class OverlayTrainerService : PacketHandlerAdapter, IVROverlay
     private IEyePipelineEventBus _eyePipelineEventBus;
     private ITrainerService _trainerService;
     private IOverlayProgram _program;
-    private OverlayState _currentState = OverlayState.None;
+    private OverlayState _currentState = OverlayState.Tutorial;
     private OverlayMessageDispatcher _messageDispatcher;
 
     private object _frame_lock = new();
@@ -95,9 +93,9 @@ public class OverlayTrainerService : PacketHandlerAdapter, IVROverlay
             or CalibrationRoutine.Routines.BasicCalibrationNoTutorial)
         {
             if (rout is CalibrationRoutine.Routines.BasicCalibration)
-                await FixedLengthWithDelayedState(28, OverlayState.GazeTutorial, "gazetutorial", 0);
+                await FixedLengthWithDelayedState(28, OverlayState.Tutorial, "gazetutorial", 0);
             else
-                await FixedLengthWithDelayedState(10, OverlayState.GazeTutorial, "gazetutorialshort", 0);
+                await FixedLengthWithDelayedState(10, OverlayState.Tutorial, "gazetutorialshort", 0);
 
             await VariableLengthWithDelayedState(120, OverlayState.Gaze, "gaze");
 
@@ -107,7 +105,7 @@ public class OverlayTrainerService : PacketHandlerAdapter, IVROverlay
         if (rout is CalibrationRoutine.Routines.BlinkOnly or CalibrationRoutine.Routines.BasicCalibration
             or CalibrationRoutine.Routines.BasicCalibrationNoTutorial)
         {
-            await VariableLengthWithDelayedState(10, OverlayState.BlinkTutorial, "blinktutorial", 0);
+            await VariableLengthWithDelayedState(10, OverlayState.Tutorial, "blinktutorial", 0);
 
             await VariableLengthWithDelayedState(20, OverlayState.Blink, "blink");
 
@@ -175,13 +173,7 @@ public class OverlayTrainerService : PacketHandlerAdapter, IVROverlay
 
     private void HandleEyeImageEvent(EyePipelineEvents.NewTransformedFrameEvent e)
     {
-        switch (_currentState)
-        {
-            case OverlayState.None:
-            case OverlayState.BlinkTutorial:
-            case OverlayState.GazeTutorial:
-                return;
-        }
+        if (_currentState is OverlayState.Tutorial) return;
 
         var image = e.image;
         var channels = image.Channels();
