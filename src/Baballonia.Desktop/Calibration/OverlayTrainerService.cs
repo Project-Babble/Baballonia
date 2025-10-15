@@ -91,6 +91,8 @@ public class OverlayTrainerService : PacketHandlerAdapter, IVROverlay
         _messageDispatcher = new OverlayMessageDispatcher(logger, client);
         _messageDispatcher.RegisterHandler(this);
 
+        await Task.Delay(TimeSpan.FromSeconds(5));
+
         if (rout is CalibrationRoutine.Routines.GazeOnly or CalibrationRoutine.Routines.BasicCalibration
             or CalibrationRoutine.Routines.BasicCalibrationNoTutorial)
         {
