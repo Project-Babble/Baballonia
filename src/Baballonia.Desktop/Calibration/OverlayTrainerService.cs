@@ -28,7 +28,7 @@ public class OverlayTrainerService : PacketHandlerAdapter, IVROverlay
         Blink,
     }
 
-    private LocalSettingsService _localSettingsService;
+    private ILocalSettingsService _localSettingsService;
     private ILogger<OverlayTrainerService> _logger;
     private IEyePipelineEventBus _eyePipelineEventBus;
     private ITrainerService _trainerService;
@@ -44,7 +44,7 @@ public class OverlayTrainerService : PacketHandlerAdapter, IVROverlay
 
 
     public OverlayTrainerService(ILogger<OverlayTrainerService> logger, IEyePipelineEventBus eyePipelineEventBus,
-        ITrainerService trainerService, IOverlayProgram overlayProgram, LocalSettingsService localSettingsService, EyePipelineManager eyePipelineManager)
+        ITrainerService trainerService, IOverlayProgram overlayProgram, ILocalSettingsService localSettingsService, EyePipelineManager eyePipelineManager)
     {
         _logger = logger;
         _eyePipelineEventBus = eyePipelineEventBus;
@@ -93,6 +93,8 @@ public class OverlayTrainerService : PacketHandlerAdapter, IVROverlay
 
         await Task.Delay(TimeSpan.FromSeconds(5));
 
+        if (!Directory.Exists(Utils.ModelDataDirectory)) Directory.CreateDirectory(Utils.ModelDataDirectory);
+
         if (rout is CalibrationRoutine.Routines.GazeOnly or CalibrationRoutine.Routines.BasicCalibration
             or CalibrationRoutine.Routines.BasicCalibrationNoTutorial)
         {
@@ -124,13 +126,10 @@ public class OverlayTrainerService : PacketHandlerAdapter, IVROverlay
 
         _trainerService.OnProgress += packet => { _messageDispatcher.Dispatch(packet); };
 
-        if (!Directory.Exists(Utils.ModelsDirectory))
-        {
-            Directory.CreateDirectory(Utils.ModelsDirectory);
-        }
+        if (!Directory.Exists(Utils.ModelsDirectory)) Directory.CreateDirectory(Utils.ModelsDirectory);
         var destPath = Path.Combine(Utils.ModelsDirectory,
             $"tuned_temporal_eye_tracking_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.onnx");
-        _trainerService.RunTraining(Path.Combine(Utils.ModelsDirectory, "user_cal.bin"), destPath);
+        _trainerService.RunTraining(Path.Combine(Utils.ModelDataDirectory, "user_cal.bin"), destPath);
 
         await _trainerService.WaitAsync();
         _localSettingsService.SaveSetting("EyeHome_EyeModel", destPath);
@@ -145,8 +144,8 @@ public class OverlayTrainerService : PacketHandlerAdapter, IVROverlay
 
     void MergeBins(string result, params string[] inputs)
     {
-        var resultPath = Path.Combine(Utils.ModelsDirectory, result);
-        var inputPaths = inputs.Select(i => Path.Combine(Utils.ModelsDirectory, i)).ToArray();
+        var resultPath = Path.Combine(Utils.ModelDataDirectory, result);
+        var inputPaths = inputs.Select(i => Path.Combine(Utils.ModelDataDirectory, i)).ToArray();
         CaptureBin.IO.CaptureBin.Concatenate(resultPath, inputPaths);
     }
     void WriteBinAndClear(string name)
@@ -158,7 +157,7 @@ public class OverlayTrainerService : PacketHandlerAdapter, IVROverlay
             _currentFrames.Clear();
         }
 
-        CaptureBin.IO.CaptureBin.WriteAll(Path.Combine(Utils.ModelsDirectory, name), framesCopy);
+        CaptureBin.IO.CaptureBin.WriteAll(Path.Combine(Utils.ModelDataDirectory, name), framesCopy);
     }
 
     async Task FixedLengthWithDelayedState(float durationSeconds, OverlayState state, string routine,

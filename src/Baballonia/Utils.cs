@@ -62,6 +62,10 @@ public static class Utils
         ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ProjectBabble", "Models")
         : AppContext.BaseDirectory;
 
+    public static readonly string ModelDataDirectory = IsSupportedDesktopOS
+        ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ProjectBabble", "ModelData")
+        : AppContext.BaseDirectory;
+
     public static readonly string VrcftLibsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
         "VRCFaceTracking",
         "CustomLibs");
