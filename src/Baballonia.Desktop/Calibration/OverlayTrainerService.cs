@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Baballonia.CaptureBin.IO;
@@ -113,13 +114,14 @@ public class OverlayTrainerService : PacketHandlerAdapter, IVROverlay
             WriteBinAndClear("blink.bin");
         }
 
-        CaptureBin.IO.CaptureBin.Concatenate("user_cal.bin", "gaze.bin", "blink.bin");
+        MergeBins("user_cal.bin", "gaze.bin", "blink.bin");
 
         _eyePipelineEventBus.Unsubscribe<EyePipelineEvents.NewTransformedFrameEvent>(HandleEyeImageEvent);
 
         _messageDispatcher.Dispatch(new RunFixedLenghtRoutinePacket("trainer"));
 
-        _trainerService.RunTraining("user_cal.bin", "model.onnx");
+        _trainerService.RunTraining(Path.Combine(Utils.ModelsDirectory, "user_cal.bin"), Path.Combine(Utils.ModelsDirectory, "tuned_temporal_eye_tracking.onnx"));
+
         _trainerService.OnProgress += packet => { _messageDispatcher.Dispatch(packet); };
         await _trainerService.WaitAsync();
 
@@ -130,6 +132,12 @@ public class OverlayTrainerService : PacketHandlerAdapter, IVROverlay
         return (true, string.Empty);
     }
 
+    void MergeBins(string result, params string[] inputs)
+    {
+        var resultPath = Path.Combine(Utils.ModelsDirectory, result);
+        var inputPaths = inputs.Select(i => Path.Combine(Utils.ModelsDirectory, i)).ToArray();
+        CaptureBin.IO.CaptureBin.Concatenate(resultPath, inputPaths);
+    }
     void WriteBinAndClear(string name)
     {
         List<Frame> framesCopy;
@@ -139,7 +147,7 @@ public class OverlayTrainerService : PacketHandlerAdapter, IVROverlay
             _currentFrames.Clear();
         }
 
-        CaptureBin.IO.CaptureBin.WriteAll(name, framesCopy);
+        CaptureBin.IO.CaptureBin.WriteAll(Path.Combine(Utils.ModelsDirectory, name), framesCopy);
     }
 
     async Task FixedLengthWithDelayedState(float durationSeconds, OverlayState state, string routine,
