@@ -206,7 +206,7 @@ public class AeroOverlayTrainerCombo : IVROverlay
         _currentPacket = new HmdPositionalDataPacket();
         _currentFrames.Clear();
 
-        CaptureBin.IO.CaptureBin.Concatenate("user_cal.bin", "gaze.bin", "blink.bin");
+        MergeBins("user_cal.bin", "gaze.bin", "blink.bin");
 
         var factory = LoggerFactory.Create(builder => builder.AddConsole().AddDebug());
         var log = factory.CreateLogger<TrainerService>();
@@ -214,7 +214,7 @@ public class AeroOverlayTrainerCombo : IVROverlay
 
         SendFixed("trainer");
 
-        service.RunTraining("user_cal.bin", "model.onnx");
+        service.RunTraining(Path.Combine(Utils.ModelsDirectory, "user_cal.bin"), Path.Combine(Utils.ModelsDirectory, "tuned_temportal_eye_tracking.onnx"));
         service.OnProgress += packet => { messageDispatcher.Dispatch(packet); };
         await service.WaitAsync();
 
@@ -228,8 +228,14 @@ public class AeroOverlayTrainerCombo : IVROverlay
 
         void WriteBinAndClear(string name)
         {
-            CaptureBin.IO.CaptureBin.WriteAll(name, _currentFrames);
+            CaptureBin.IO.CaptureBin.WriteAll(Path.Combine(Utils.ModelsDirectory, name), _currentFrames);
             _currentFrames.Clear();
+        }
+        void MergeBins(string result, params string[] inputs)
+        {
+            var resultPath = Path.Combine(Utils.ModelsDirectory, result);
+            var inputPaths = inputs.Select(i => Path.Combine(Utils.ModelsDirectory, i)).ToArray();
+            CaptureBin.IO.CaptureBin.Concatenate(resultPath, inputPaths);
         }
         async Task DelayedState(float durationSeconds, OverlayState state, float buffer = 0.1f)
         {
