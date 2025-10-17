@@ -113,6 +113,7 @@ public partial class TrainerService : ITrainerService
                 Arguments = launchArgs,
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
+                WorkingDirectory = basePath,
             };
 
             trainerProcess = new Process

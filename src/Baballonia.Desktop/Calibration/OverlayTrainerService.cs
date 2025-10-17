@@ -208,6 +208,13 @@ public class OverlayTrainerService : PacketHandlerAdapter, IVROverlay
         Cv2.ImEncode(".jpg", left, out var bufLeft, [(int)ImwriteFlags.JpegQuality, jpegQuality]);
         Cv2.ImEncode(".jpg", right, out var bufRight, [(int)ImwriteFlags.JpegQuality, jpegQuality]);
 
+
+        var header = GenerateHeader(_latesdPosData) with
+        {
+            JpegDataLeftLength = (uint)bufLeft.Length,
+            JpegDataRightLength = (uint)bufRight.Length
+        };
+
         uint routineState = _currentState switch
         {
             OverlayState.Gaze => CaptureFlags.FLAG_IN_MOVEMENT | CaptureFlags.FLAG_GOOD_DATA,
@@ -215,15 +222,26 @@ public class OverlayTrainerService : PacketHandlerAdapter, IVROverlay
             _ => 0
         };
 
+        if (_currentState is OverlayState.Gaze)
+        {
+            header.RoutineLeftLid = 1f;
+            header.RoutineRightLid = 1f;
+
+            if (MathF.Abs(header.LeftEyePitch) > 60f || MathF.Abs(header.LeftEyeYaw) > 60f ||
+                MathF.Abs(header.RightEyePitch) > 60f || MathF.Abs(header.RightEyeYaw) > 60f)
+            {
+                // We don't have a "bad data" flag, so we just invert the good
+                routineState &= ~CaptureFlags.FLAG_GOOD_DATA;
+            }
+        }
+
+        header.RoutineState = routineState;
+
         var frame = new Frame
         {
-            Header = GenerateHeader(_latesdPosData) with
-            {
-                RoutineState = routineState,
-                JpegDataLeftLength = (uint)bufLeft.Length,
-                JpegDataRightLength = (uint)bufRight.Length
-            },
-            LeftJpeg = bufLeft, RightJpeg = bufRight
+            Header = header,
+            LeftJpeg = bufLeft,
+            RightJpeg = bufRight
         };
 
         lock (_frame_lock)
