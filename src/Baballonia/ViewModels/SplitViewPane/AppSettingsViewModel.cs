@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Logging;
 using Baballonia.Contracts;
 using Baballonia.Services;
+using Baballonia.Services.Inference;
 using Baballonia.Services.Inference.Filters;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
@@ -18,7 +19,7 @@ public partial class AppSettingsViewModel : ViewModelBase
     public ILocalSettingsService SettingsService { get; }
     public GithubService GithubService { get; private set;}
     public ParameterSenderService ParameterSenderService { get; private set;}
-    private OpenVRService OpenVRService { get; }
+    private OpenVRService OpenVrService { get; } = Ioc.Default.GetService<OpenVRService>();
 
     [ObservableProperty]
     [property: SavedSetting("AppSettings_RecalibrateAddress", "/avatar/parameters/etvr_recalibrate")]
@@ -73,70 +74,52 @@ public partial class AppSettingsViewModel : ViewModelBase
     ];
 
     [ObservableProperty] private bool _onboardingEnabled;
-    public bool IsOpenVREnabled => OpenVRService.IsAutoStartReady;
-    private ProcessingLoopService _processingLoopService;
+
     private ILogger<AppSettingsViewModel> _logger;
-    public AppSettingsViewModel()
+    private readonly FacePipelineManager _facePipelineManager;
+    private readonly EyePipelineManager _eyePipelineManager;
+    public AppSettingsViewModel(FacePipelineManager facePipelineManager, EyePipelineManager eyePipelineManager)
     {
+        _facePipelineManager = facePipelineManager;
+        _eyePipelineManager = eyePipelineManager;
+
         // General/Calibration Settings
         OscTarget = Ioc.Default.GetService<IOscTarget>()!;
         GithubService = Ioc.Default.GetService<GithubService>()!;
         SettingsService = Ioc.Default.GetService<ILocalSettingsService>()!;
-        _processingLoopService = Ioc.Default.GetService<ProcessingLoopService>()!;
-        OpenVRService = Ioc.Default.GetService<OpenVRService>()!;
-        OpenVRService.CheckIfReadyIfIsnt();
         _logger = Ioc.Default.GetService<ILogger<AppSettingsViewModel>>()!;
         SettingsService.Load(this);
 
-            // Handle edge case where OSC port is used and the system freaks out
-            if (OscTarget.OutPort == 0)
-            {
-                const int Port = 8888;
-                OscTarget.OutPort = Port;
-                SettingsService.SaveSetting("OSCOutPort", Port);
-            }
-
-            // Risky Settings
-            ParameterSenderService = Ioc.Default.GetService<ParameterSenderService>()!;
-
-            OnboardingEnabled = Utils.IsSupportedDesktopOS;
-
-            PropertyChanged += (_, _) =>
-            {
-                if (!_oneEuroMinEnabled)
-                {
-                    _processingLoopService.FaceProcessingPipeline.Filter = null;
-                    _processingLoopService.EyesProcessingPipeline.Filter = null;
-                }
-                else
-                {
-                    float[] faceArray = new float[Utils.FaceRawExpressions];
-                    var faceFilter = new OneEuroFilter(
-                        faceArray,
-                        minCutoff: _oneEuroMinFreqCutoff,
-                        beta: _oneEuroSpeedCutoff
-                    );
-                    float[] eyeArray = new float[Utils.EyeRawExpressions];
-                    var eyeFilter = new OneEuroFilter(
-                        eyeArray,
-                        minCutoff: _oneEuroMinFreqCutoff,
-                        beta: _oneEuroSpeedCutoff
-                    );
-                    _processingLoopService.FaceProcessingPipeline.Filter = faceFilter;
-                    _processingLoopService.EyesProcessingPipeline.Filter = eyeFilter;
-                }
-
-                SettingsService.Save(this);
-            };
+        // Handle edge case where OSC port is used and the system freaks out
+        if (OscTarget.OutPort == 0)
+        {
+            const int port = 8888;
+            OscTarget.OutPort = port;
+            SettingsService.SaveSetting("OSCOutPort", port);
         }
-  partial void OnSteamvrAutoStartChanged(bool value)
+
+        // Risky Settings
+        ParameterSenderService = Ioc.Default.GetService<ParameterSenderService>()!;
+
+        OnboardingEnabled = Utils.IsSupportedDesktopOS;
+
+        PropertyChanged += (_, _) =>
+        {
+            SettingsService.Save(this);
+            _facePipelineManager.LoadFilter();
+            _eyePipelineManager.LoadFilter();
+        };
+    }
+
+    partial void OnSteamvrAutoStartChanged(bool value)
     {
         var readValue = SettingsService.ReadSetting("AppSettings_SteamvrAutoStart", value);
-        if (readValue == value)
+        if (readValue == value || OpenVrService == null)
             return;
+
         try
         {
-           OpenVRService.SteamvrAutoStart = value;
+           OpenVrService.SteamvrAutoStart = value;
            SettingsService.SaveSetting("AppSettings_SteamvrAutoStart", value);
         }
         catch (Exception e)
@@ -154,11 +137,11 @@ public partial class AppSettingsViewModel : ViewModelBase
         try
         {
             SettingsService.SaveSetting("AppSettings_UseGPU", value);
-            var face = _processingLoopService.LoadFaceInferenceAsync();
-            var eyes = _processingLoopService.LoadEyeInferenceAsync();
+            var loadFace = _eyePipelineManager.LoadInferenceAsync();
+            var loadEye = _facePipelineManager.LoadInferenceAsync();
 
-            _processingLoopService.FaceProcessingPipeline.InferenceService = await face;
-            _processingLoopService.EyesProcessingPipeline.InferenceService = await eyes;
+            await loadEye;
+            await loadFace;
         }
         catch (Exception e)
         {

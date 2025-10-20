@@ -7,7 +7,7 @@ namespace Baballonia.SDK;
 /// <summary>
 /// Defines custom camera stream behavior
 /// </summary>
-public abstract class Capture(string source, ILogger logger)
+public abstract class Capture(string source, ILogger logger) : IDisposable
 {
     protected ILogger Logger = logger;
     private Mat? _rawMat;
@@ -75,4 +75,6 @@ public abstract class Capture(string source, ILogger logger)
     /// </summary>
     /// <returns></returns>
     public abstract Task<bool> StopCapture();
+
+    public virtual void Dispose(){}
 }

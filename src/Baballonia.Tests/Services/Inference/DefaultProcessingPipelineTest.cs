@@ -23,7 +23,7 @@ public class EyeProcessingPipelineTest
             builder.AddConsole(); // Or AddDebug()
             builder.SetMinimumLevel(LogLevel.Debug);
         });
-        var eyeInference = new DefaultInferenceRunner(loggerFactory.CreateLogger<DefaultInferenceRunner>());
+        var eyeInference = new DefaultInferenceRunner(loggerFactory);
         eyeInference.Setup("eyeModel.onnx", false);
 
         var cameraSource = new Moq.Mock<IVideoSource>();

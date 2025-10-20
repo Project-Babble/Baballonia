@@ -1,5 +1,6 @@
 ﻿using System;
 using Baballonia.Contracts;
+using Baballonia.Services.events;
 using Baballonia.Services.Inference.Enums;
 using OpenCvSharp;
 
@@ -8,21 +9,28 @@ namespace Baballonia.Services.Inference;
 public class FaceProcessingPipeline : DefaultProcessingPipeline
 {
 
-     public float[]? RunUpdate()
+    private readonly IFacePipelineEventBus _facePipelineEventBus;
+
+    public FaceProcessingPipeline(IFacePipelineEventBus facePipelineEventBus)
+    {
+        _facePipelineEventBus = facePipelineEventBus;
+    }
+
+
+    public float[]? RunUpdate()
     {
         var frame = VideoSource?.GetFrame(ColorType.Gray8);
         if(frame == null)
             return null;
 
-        InvokeNewFrameEvent(frame);
+        _facePipelineEventBus.Publish(new FacePipelineEvents.NewFrameEvent(frame));
 
         var transformed = ImageTransformer?.Apply(frame);
 
         if(transformed == null)
             return null;
 
-        InvokeTransformedFrameEvent(transformed);
-
+        _facePipelineEventBus.Publish(new FacePipelineEvents.NewTransformedFrameEvent(transformed));
 
         if (InferenceService == null)
             return null;
@@ -37,9 +45,23 @@ public class FaceProcessingPipeline : DefaultProcessingPipeline
         if(Filter != null)
             inferenceResult = Filter.Filter(inferenceResult);
 
-        InvokeFilteredResultEvent(inferenceResult);
+        _facePipelineEventBus.Publish(new FacePipelineEvents.NewFilteredResultEvent(inferenceResult));
 
 
         return inferenceResult;
+    }
+
+    public void Dispose()
+    {
+        TryDisposeObject(VideoSource);
+        TryDisposeObject(ImageTransformer);
+        TryDisposeObject(ImageConverter);
+        TryDisposeObject(InferenceService);
+        TryDisposeObject(Filter);
+    }
+
+    private void TryDisposeObject(object? obj)
+    {
+        (obj as IDisposable)?.Dispose();
     }
 }

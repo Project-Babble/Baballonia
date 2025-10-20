@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Baballonia.Desktop.Calibration.Aero.Overlay;
 using Baballonia.Models;
 using Baballonia.Services;
+using Baballonia.Services.events;
 using Baballonia.ViewModels.SplitViewPane;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -17,15 +18,15 @@ public partial class AeroOverlayTrainerCombo
 {
     private readonly MjpegStreamingService _leftStreamService = new();
     private readonly MjpegStreamingService _rightStreamService = new();
+    private IEyePipelineEventBus _eyePipelineEventBus;
 
     public async Task<(bool, string)> EyeTrackingCalibrationRequested(string calibrationRoutine)
     {
         // Need to pull here, the service provider isn't present until this method is called
         Logger ??= Ioc.Default.GetService<ILogger<HomePageViewModel>>()!;
 
-        var processingLoop = Ioc.Default.GetService<ProcessingLoopService>()!;
-
-        processingLoop.EyesProcessingPipeline.TransformedFrameEvent += HandleEyeImageEvent;
+        _eyePipelineEventBus = Ioc.Default.GetService<IEyePipelineEventBus>()!;
+        _eyePipelineEventBus.Subscribe<EyePipelineEvents.NewTransformedFrameEvent>(HandleEyeImageEvent);
 
         const int leftPort = 23952;
         const int rightPort = 23953;
@@ -48,21 +49,21 @@ public partial class AeroOverlayTrainerCombo
         var success = status.success;
         if (!success)
         {
-            return await StopStreamingAndReturn(processingLoop, status.message);
+            return await StopStreamingAndReturn(status.message);
         }
 
         // Then connect the camera streams...
         success = await StartCamerasAsync(calibration);
         if (!success)
         {
-            return await StopStreamingAndReturn(processingLoop, Assets.Resources.Aero_CameraStream_Failed);
+            return await StopStreamingAndReturn(Assets.Resources.Aero_CameraStream_Failed);
         }
 
         // If we have a good start on the overlay/streams, then start calibration
         success = await StartCalibrationAsync(calibration);
         if (!success)
         {
-            return await StopStreamingAndReturn(processingLoop, Assets.Resources.Aero_Calibration_Failed);
+            return await StopStreamingAndReturn(Assets.Resources.Aero_Calibration_Failed);
         }
 
         // Wait for the process to exit
@@ -86,16 +87,16 @@ public partial class AeroOverlayTrainerCombo
             Assets.Resources.Aero_Overlay_CleanupFailed;
 
         // Stop streaming, cleanup. No need to report an error state
-        await StopStreamingAndReturn(processingLoop, string.Empty);
+        await StopStreamingAndReturn(string.Empty);
 
         // Cleanup any leftover capture.bin files
         DeleteCaptureFiles(modelPath);
         return await Task.FromResult((success, outputMessage));
     }
 
-    private async Task<(bool, string)> StopStreamingAndReturn(ProcessingLoopService processingLoop, string message)
+    private async Task<(bool, string)> StopStreamingAndReturn(string message)
     {
-        processingLoop.EyesProcessingPipeline.TransformedFrameEvent -= HandleEyeImageEvent;
+        _eyePipelineEventBus.Unsubscribe<EyePipelineEvents.NewTransformedFrameEvent>(HandleEyeImageEvent);
         _leftStreamService.StopStreaming();
         _rightStreamService.StopStreaming();
         return await Task.FromResult((false, message));
@@ -153,8 +154,9 @@ public partial class AeroOverlayTrainerCombo
         }
     }
 
-    private void HandleEyeImageEvent(Mat image)
+    private void HandleEyeImageEvent(EyePipelineEvents.NewTransformedFrameEvent e)
     {
+        var image = e.image;
         int channels = image.Channels();
         if (channels != 2)
             return;

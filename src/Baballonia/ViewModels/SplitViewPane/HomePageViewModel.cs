@@ -1,6 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,21 +9,17 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using Avalonia.Threading;
 using Baballonia.Contracts;
-using Baballonia.Factories;
 using Baballonia.Helpers;
 using Baballonia.Services;
+using Baballonia.Services.events;
 using Baballonia.Services.Inference;
 using Baballonia.Services.Inference.Enums;
 using Baballonia.Services.Inference.Models;
 using Baballonia.Services.Inference.Platforms;
-using Baballonia.Services.Inference.VideoSources;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using OpenCvSharp;
 using Buffer = System.Buffer;
 using Rect = Avalonia.Rect;
@@ -33,129 +29,125 @@ namespace Baballonia.ViewModels.SplitViewPane;
 public partial class HomePageViewModel : ViewModelBase, IDisposable
 {
     // This feels unorthodox but... i kinda like it?
-    public partial class CameraControllerModel : ObservableObject, IDisposable
+    public partial class CameraControllerModel : ObservableObject
     {
-        public readonly TaskCompletionSource IsInitialized = new();
-
         public string Name;
         public readonly CropManager CropManager = new();
         public CamViewMode CamViewMode = CamViewMode.Tracking;
         public readonly Camera Camera;
+        [ObservableProperty] private bool _shouldAutostart = false;
+
+        public CameraSettings CameraSettings;
 
         [ObservableProperty] private WriteableBitmap? _bitmap;
-
         [ObservableProperty] private bool _startButtonEnabled = true;
         [ObservableProperty] private bool _stopButtonEnabled = false;
         [ObservableProperty] private bool _hintEnabled = false;
-        [ObservableProperty] private string _displayAddress;
         [ObservableProperty] private Rect _overlayRectangle;
+
+        // this particular property is used as event indicator lmao
+        [ObservableProperty] private bool _importantSettingsProperty;
+
+        [ObservableProperty] private string _displayAddress;
         [ObservableProperty] private bool _flipHorizontally = false;
         [ObservableProperty] private bool _flipVertically = false;
         [ObservableProperty] private float _rotation = 0f;
         [ObservableProperty] private float _gamma = 1f;
         [ObservableProperty] private bool _isCropMode = false;
         [ObservableProperty] private bool _isCameraRunning = false;
-        [ObservableProperty] private int _selectedCaptureMethod = -1;
+        [ObservableProperty] private string _selectedCaptureMethod = "";
         [ObservableProperty] private bool _captureMethodVisible = false;
         public ObservableCollection<string> Suggestions { get; set; } = [];
         public ObservableCollection<string> CaptureMethods { get; set; } = [];
 
-        private readonly ILocalSettingsService LocalSettingsService;
-        private readonly DefaultProcessingPipeline _processingPipeline;
+        private readonly ILocalSettingsService _localSettingsService;
+        private readonly IPlatformConnector _platformConnector;
+        private readonly IDeviceEnumerator _deviceEnumerator;
 
-        private Stopwatch _deviceUpdateDebounce = new();
 
-        public CameraControllerModel(ILocalSettingsService localSettingsService, string name,
-            DefaultProcessingPipeline processingPipeline, string[] cameras, Camera camera)
+        public CameraControllerModel(ILocalSettingsService localSettingsService, IPlatformConnector platformConnector,
+            IDeviceEnumerator deviceEnumerator,
+            string name, string[] cameras,
+            Camera camera)
         {
-            LocalSettingsService = localSettingsService;
-            _processingPipeline = processingPipeline;
+            _localSettingsService = localSettingsService;
+            _platformConnector = platformConnector;
+            _deviceEnumerator = deviceEnumerator;
+
             Name = name;
             Camera = camera;
 
+            var roi = new RegionOfInterest();
+            CameraSettings = new CameraSettings(camera, roi);
+
             Initialize(cameras);
-
-            _deviceUpdateDebounce.Start();
-
-            _processingPipeline.TransformedFrameEvent += ImageUpdateEventHandler;
         }
 
+        private void Initialize(string[] cameras)
+        {
+            var displayAddress = _localSettingsService.ReadSetting<string>("LastOpened" + Name);
+            var camSettings = _localSettingsService.ReadSetting<CameraSettings>(Name);
+            ShouldAutostart = _localSettingsService.ReadSetting("ShouldAutostart" + Name, false);
+            var preferredCapture = _localSettingsService.ReadSetting<string>("LastOpenedPreferredCapture" + Name);
+
+            UpdateCameraDropDown(cameras);
+            DisplayAddress = displayAddress;
+            FlipHorizontally = camSettings.UseHorizontalFlip;
+            FlipVertically = camSettings.UseVerticalFlip;
+            Rotation = camSettings.RotationRadians;
+            Gamma = camSettings.Gamma;
+            SelectedCaptureMethod = preferredCapture;
+
+
+            CropManager.SetCropZone(camSettings.Roi);
+            OverlayRectangle = CropManager.CropZone.GetRect();
+
+            CameraSettings = camSettings;
+            OnCropUpdated();
+        }
 
         partial void OnDisplayAddressChanged(string value)
         {
-            if (PlatformConnector.Captures.Count <= 0) PlatformConnectorFactory.Create(NullLogger.Instance, "temp");
+            var availableCaptureFactories = _platformConnector.GetCaptureFactories()
+                .Where(factory => factory.CanConnect(value)).ToArray();
 
-            var matches = PlatformConnector.Captures.Where(i => i.Key.CanConnect(value)).ToArray();
-
-            var shouldShow = matches.Length >= 2;
+            var shouldShow = availableCaptureFactories.Length >= 2;
             CaptureMethodVisible = shouldShow;
 
             CaptureMethods.Clear();
             if (shouldShow)
             {
                 CaptureMethods.Add(Assets.Resources.Home_Backend_Default);
-                foreach (var match in matches)
-                    CaptureMethods.Add(match.Value.Name);
+                foreach (var match in availableCaptureFactories)
+                    CaptureMethods.Add(match.GetProviderName());
+
+                SelectedCaptureMethod = availableCaptureFactories.First().GetProviderName();
+            }
+            else
+            {
+                SelectedCaptureMethod = "";
             }
 
-            SelectedCaptureMethod = shouldShow ? 0 : -1;
         }
 
-        private void Initialize(string[] cameras)
+        partial void OnSelectedCaptureMethodChanged(string value)
         {
-            var displayAddress = LocalSettingsService.ReadSetting<string>("LastOpened" + Name);
-            var preferredCapture = LocalSettingsService.ReadSetting<string>("LastOpenedPreferredCapture" + Name);
-            var camSettings = LocalSettingsService.ReadSetting<CameraSettings>(Name);
+            var prev = _localSettingsService.ReadSetting<string>("LastOpenedPreferredCapture" + Name);
+            if (prev != value)
+                _localSettingsService.SaveSetting("LastOpenedPreferredCapture" + Name, value);
+        }
 
-            UpdateCameraDropDown(cameras);
-            DisplayAddress = displayAddress;
-            var selectedIndex = CaptureMethods.IndexOf(preferredCapture);
-            if (selectedIndex != -1) SelectedCaptureMethod = selectedIndex;
-            FlipHorizontally = camSettings.UseHorizontalFlip;
-            FlipVertically = camSettings.UseVerticalFlip;
-            Rotation = camSettings.RotationRadians;
-            Gamma = camSettings.Gamma;
-
-            CropManager.SetCropZone(camSettings.Roi);
-            OverlayRectangle = CropManager.CropZone.GetRect();
-            OnCropUpdated();
-
-            switch (_processingPipeline.VideoSource)
-            {
-                case null:
-                    break;
-                case SingleCameraSource singleCamera:
-                    IsCameraRunning = true;
-                    StartButtonEnabled = false;
-                    StopButtonEnabled = true;
-                    break;
-                case DualCameraSource dualCamera:
-                    switch (Camera)
-                    {
-                        case Camera.Left when dualCamera.LeftCam == null:
-                        case Camera.Right when dualCamera.RightCam == null:
-                            break;
-                        default:
-                            IsCameraRunning = true;
-                            StartButtonEnabled = false;
-                            StopButtonEnabled = true;
-                            break;
-                    }
-
-                    break;
-            }
-
-            IsInitialized.SetResult();
+        partial void OnShouldAutostartChanged(bool value)
+        {
+            var prev = _localSettingsService.ReadSetting("ShouldAutostart" + Name, false);
+            if (prev != value)
+                _localSettingsService.SaveSetting("ShouldAutostart" + Name, value);
         }
 
         public void UpdateCameraDropDown()
         {
-            if (_deviceUpdateDebounce.Elapsed < TimeSpan.FromSeconds(5)) return;
-            _deviceUpdateDebounce.Restart();
-
-            var cameras = App.DeviceEnumerator.UpdateCameras();
-            var cameraNames = cameras.Keys.ToArray();
-            UpdateCameraDropDown(cameraNames);
+            var friendlyNames = _deviceEnumerator.UpdateCameras().Keys.ToArray();
+            UpdateCameraDropDown(friendlyNames);
         }
 
         public void UpdateCameraDropDown(string[] cameras)
@@ -175,44 +167,28 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         public void OnCropUpdated()
         {
             OverlayRectangle = CropManager.CropZone.GetRect();
-            var t = _processingPipeline.ImageTransformer;
-            if (t is ImageTransformer transformer)
-            {
-                transformer.Transformation.Roi = CropManager.CropZone;
-            }
-            else if (t is DualImageTransformer dualTransformer)
-            {
-                if (Camera == Camera.Left)
-                    dualTransformer.LeftTransformer.Transformation.Roi = CropManager.CropZone;
-                if (Camera == Camera.Right)
-                    dualTransformer.RightTransformer.Transformation.Roi = CropManager.CropZone;
-            }
-
-            SaveTransformer();
+            Save();
         }
 
-        [RelayCommand]
-        public void StopCamera()
+        public void FaceNewImageUpdateEventHandler(FacePipelineEvents.NewFrameEvent e)
         {
-            _processingPipeline.VideoSource?.Dispose();
-            _processingPipeline.VideoSource = null;
-
-            Bitmap = null;
-
-            IsCameraRunning = false;
-            StartButtonEnabled = true;
-            StopButtonEnabled = false;
+            if (IsCropMode)
+                FaceImageUpdateHandler(e.image);
         }
 
-        public string SelectedPreferredCapture =>
-            CaptureMethods.Count <= 0 || (SelectedCaptureMethod < 0 || SelectedCaptureMethod >= CaptureMethods.Count)
-                ? "Default"
-                : CaptureMethods[SelectedCaptureMethod];
-        void ImageUpdateEventHandler(Mat image)
+        public void FaceNewTransformedUpdateEventHandler(FacePipelineEvents.NewTransformedFrameEvent e)
+        {
+            if (!IsCropMode)
+                FaceImageUpdateHandler(e.image);
+        }
+
+        private void FaceImageUpdateHandler(Mat image)
         {
             if (image == null)
             {
                 IsCameraRunning = false;
+                StartButtonEnabled = true;
+                StopButtonEnabled = false;
                 Bitmap = null;
                 return;
             }
@@ -220,11 +196,41 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             if (!IsCameraRunning)
                 return;
 
+            StartButtonEnabled = false;
+            StopButtonEnabled = true;
+
             if (Camera == Camera.Face)
             {
                 UpdateBitmap(image);
+            }
+        }
+
+        public void EyeNewImageUpdateEventHandler(EyePipelineEvents.NewFrameEvent e)
+        {
+            if (IsCropMode)
+                EyeImageUpdateHandler(e.image);
+        }
+
+        public void EyeNewTransformedUpdateEventHandler(EyePipelineEvents.NewTransformedFrameEvent e)
+        {
+            if (!IsCropMode)
+                EyeImageUpdateHandler(e.image);
+        }
+
+        private void EyeImageUpdateHandler(Mat image)
+        {
+            if (image == null)
+            {
+                IsCameraRunning = false;
+                StartButtonEnabled = true;
+                StopButtonEnabled = false;
+                Bitmap = null;
                 return;
             }
+
+            if (!IsCameraRunning)
+                return;
+
 
             int channels = image.Channels();
             if (channels == 1)
@@ -237,6 +243,8 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
                     {
                         var leftHalf = new OpenCvSharp.Rect(0, 0, width / 2, height);
                         var leftRoi = new Mat(image, leftHalf);
+
+
                         UpdateBitmap(leftRoi);
                         break;
                     }
@@ -300,107 +308,49 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
         partial void OnFlipHorizontallyChanged(bool value)
         {
-            var t = _processingPipeline.ImageTransformer;
-            if (t is ImageTransformer transformer)
-            {
-                transformer.Transformation.UseHorizontalFlip = value;
-            }
-            else if (t is DualImageTransformer dualTransformer)
-            {
-                if (Camera == Camera.Left)
-                    dualTransformer.LeftTransformer.Transformation.UseHorizontalFlip = value;
-                if (Camera == Camera.Right)
-                    dualTransformer.RightTransformer.Transformation.UseHorizontalFlip = value;
-            }
-
-            SaveTransformer();
+            Save();
         }
 
         partial void OnFlipVerticallyChanged(bool value)
         {
-            var t = _processingPipeline.ImageTransformer;
-            if (t is ImageTransformer transformer)
-            {
-                transformer.Transformation.UseVerticalFlip = value;
-            }
-            else if (t is DualImageTransformer dualTransformer)
-            {
-                if (Camera == Camera.Left)
-                    dualTransformer.LeftTransformer.Transformation.UseVerticalFlip = value;
-                if (Camera == Camera.Right)
-                    dualTransformer.RightTransformer.Transformation.UseVerticalFlip = value;
-            }
-
-            SaveTransformer();
+            Save();
         }
 
         partial void OnRotationChanged(float value)
         {
-            var t = _processingPipeline.ImageTransformer;
-            if (t is ImageTransformer transformer)
-            {
-                transformer.Transformation.RotationRadians = value;
-            }
-            else if (t is DualImageTransformer dualTransformer)
-            {
-                if (Camera == Camera.Left)
-                    dualTransformer.LeftTransformer.Transformation.RotationRadians = value;
-                if (Camera == Camera.Right)
-                    dualTransformer.RightTransformer.Transformation.RotationRadians = value;
-            }
-
-            SaveTransformer();
+            Save();
         }
 
-        void SaveTransformer()
+        void Save()
         {
-            var t = _processingPipeline.ImageTransformer;
-            if (t is ImageTransformer transformer)
-            {
-                LocalSettingsService.SaveSetting(Name, transformer.Transformation);
-            }
-            else if (t is DualImageTransformer dualTransformer)
-            {
-                if (Camera == Camera.Left)
-                    LocalSettingsService.SaveSetting(Name, dualTransformer.LeftTransformer.Transformation);
-                if (Camera == Camera.Right)
-                    LocalSettingsService.SaveSetting(Name, dualTransformer.RightTransformer.Transformation);
-            }
+            CameraSettings = new CameraSettings(
+                Camera,
+                CropManager.CropZone,
+                Rotation,
+                Gamma,
+                false,
+                FlipHorizontally,
+                FlipVertically
+            );
+            _localSettingsService.SaveSetting(Name, CameraSettings);
+            ImportantSettingsProperty = !ImportantSettingsProperty;
         }
 
         partial void OnGammaChanged(float value)
         {
             // If the slider is close enough to 1, then we treat it as 1
-            value = Math.Abs(value - 1) > 0.1f ? value : 1f;
-
-            var t = _processingPipeline.ImageTransformer;
-            if (t is ImageTransformer transformer)
-            {
-                transformer.Transformation.Gamma = value;
-            }
-            else if (t is DualImageTransformer dualTransformer)
-            {
-                if (Camera == Camera.Left)
-                    dualTransformer.LeftTransformer.Transformation.Gamma = value;
-                if (Camera == Camera.Right)
-                    dualTransformer.RightTransformer.Transformation.Gamma = value;
-            }
-
-            SaveTransformer();
+            Gamma = Math.Abs(value - 1) > 0.1f ? value : 1f;
+            Save();
         }
 
         partial void OnIsCropModeChanged(bool value)
         {
             if (value)
             {
-                _processingPipeline.TransformedFrameEvent -= ImageUpdateEventHandler;
-                _processingPipeline.NewFrameEvent += ImageUpdateEventHandler;
                 CamViewMode = CamViewMode.Cropping;
             }
             else
             {
-                _processingPipeline.NewFrameEvent -= ImageUpdateEventHandler;
-                _processingPipeline.TransformedFrameEvent += ImageUpdateEventHandler;
                 CamViewMode = CamViewMode.Tracking;
             }
         }
@@ -410,23 +360,11 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             CropManager.SelectEntireFrame(Camera);
             OnCropUpdated();
         }
-
-        private bool _disposed = false;
-
-        public void Dispose()
-        {
-            if (_disposed) return;
-
-            _processingPipeline.TransformedFrameEvent -= ImageUpdateEventHandler;
-            _processingPipeline.NewFrameEvent -= ImageUpdateEventHandler;
-        }
     }
 
+    // Necessary evil to store some globals that don't really have place to go :( _sob_
     private static bool _hasPerformedFirstTimeSetup = false;
 
-    public IOscTarget OscTarget { get; }
-    private OscRecvService OscRecvService { get; }
-    private OscSendService OscSendService { get; }
 
     private int _messagesRecvd;
     [ObservableProperty] private string _messagesInPerSecCount;
@@ -444,240 +382,259 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     [ObservableProperty] private CameraControllerModel _rightCamera;
     [ObservableProperty] private CameraControllerModel _faceCamera;
 
-    public readonly TaskCompletionSource CamerasInitialized = new();
 
-    public readonly ILocalSettingsService LocalSettingsService;
-    public readonly ProcessingLoopService ProcessingLoopService;
-
-    private readonly DispatcherTimer _msgCounterTimer;
     private readonly DropOverlayService _dropOverlayService;
+
+    private readonly FacePipelineManager _facePipelineManager;
+    private readonly IFacePipelineEventBus _facePipelineEventBus;
+    private readonly EyePipelineManager _eyePipelineManager;
+    private readonly IEyePipelineEventBus _eyePipelineEventBus;
+    private readonly IVROverlay _vrOverlay;
+    private readonly IDeviceEnumerator _deviceEnumerator;
+    private readonly ILocalSettingsService _localSettings;
+    private readonly ILogger<HomePageViewModel> _logger;
+    private readonly IPlatformConnector _platformConnector;
 
     public string RequestedVRCalibration = CalibrationRoutine.Map["QuickCalibration"];
 
-    private ILogger<HomePageViewModel> _logger;
 
-    public HomePageViewModel()
+    public HomePageViewModel(FacePipelineManager facePipelineManager,
+        EyePipelineManager eyePipelineManager,
+        IFacePipelineEventBus facePipelineEventBus,
+        IEyePipelineEventBus eyePipelineEventBus,
+        IVROverlay vrOverlay,
+        IDeviceEnumerator deviceEnumerator,
+        ILocalSettingsService localSettings,
+        ILogger<HomePageViewModel> logger, DropOverlayService dropOverlayService, IPlatformConnector platformConnector)
     {
-        OscTarget = Ioc.Default.GetService<IOscTarget>()!;
-        OscRecvService = Ioc.Default.GetService<OscRecvService>()!;
-        OscSendService = Ioc.Default.GetService<OscSendService>()!;
-        LocalSettingsService = Ioc.Default.GetService<ILocalSettingsService>()!;
-        LocalSettingsService = Ioc.Default.GetRequiredService<ILocalSettingsService>()!;
-        ProcessingLoopService = Ioc.Default.GetService<ProcessingLoopService>()!;
-        _logger = Ioc.Default.GetService<ILogger<HomePageViewModel>>()!;
-        _dropOverlayService = Ioc.Default.GetService<DropOverlayService>()!;
+        _facePipelineManager = facePipelineManager;
+        _eyePipelineManager = eyePipelineManager;
+        _facePipelineEventBus = facePipelineEventBus;
+        _eyePipelineEventBus = eyePipelineEventBus;
+        _vrOverlay = vrOverlay;
+        _deviceEnumerator = deviceEnumerator;
+        _localSettings = localSettings;
+        _logger = logger;
+        _dropOverlayService = dropOverlayService;
+        _platformConnector = platformConnector;
 
-        LocalSettingsService.Load(this);
+        _localSettings.Load(this);
 
         MessagesInPerSecCount = "0";
         MessagesOutPerSecCount = "0";
-        OscSendService.OnMessagesDispatched += MessageDispatched;
-
-        _msgCounterTimer = new DispatcherTimer
-        {
-            Interval = TimeSpan.FromSeconds(1)
-        };
-        _msgCounterTimer.Tick += (_, _) =>
-        {
-            MessagesInPerSecCount = _messagesRecvd.ToString();
-            _messagesRecvd = 0;
-
-            MessagesOutPerSecCount = _messagesSent.ToString();
-            _messagesSent = 0;
-        };
-        _msgCounterTimer.Start();
 
         Initialize();
-
-        ProcessingLoopService.PipelineExceptionEvent += PipelineExceptionEventHandler;
     }
 
     private void Initialize()
     {
-        bool hasRead = LocalSettingsService.ReadSetting<bool>("SecondsWarningRead");
+        bool hasRead = _localSettings.ReadSetting<bool>("SecondsWarningRead");
         if (!hasRead)
         {
             _dropOverlayService.Show();
         }
 
-        var cameras = App.DeviceEnumerator.UpdateCameras();
+        var cameras = _deviceEnumerator.UpdateCameras();
         var cameraNames = cameras.Keys.ToArray();
 
-        LeftCamera = new CameraControllerModel(LocalSettingsService, "LeftCamera",
-            ProcessingLoopService.EyesProcessingPipeline, cameraNames, Camera.Left);
-        RightCamera = new CameraControllerModel(LocalSettingsService, "RightCamera",
-            ProcessingLoopService.EyesProcessingPipeline, cameraNames, Camera.Right);
-        FaceCamera = new CameraControllerModel(LocalSettingsService, "FaceCamera",
-            ProcessingLoopService.FaceProcessingPipeline, cameraNames, Camera.Face);
+        LeftCamera = new CameraControllerModel(_localSettings, _platformConnector, _deviceEnumerator, "LeftCamera",
+            cameraNames, Camera.Left);
+        RightCamera = new CameraControllerModel(_localSettings, _platformConnector, _deviceEnumerator, "RightCamera",
+            cameraNames, Camera.Right);
+        FaceCamera = new CameraControllerModel(_localSettings, _platformConnector, _deviceEnumerator, "FaceCamera",
+            cameraNames, Camera.Face);
+
+        FaceCamera.PropertyChanged += CameraControllerModel_PropertyChanged;
+        LeftCamera.PropertyChanged += CameraControllerModel_PropertyChanged;
+        RightCamera.PropertyChanged += CameraControllerModel_PropertyChanged;
+
+        OnCameraModelUpdate(FaceCamera);
+        OnCameraModelUpdate(LeftCamera);
+        OnCameraModelUpdate(RightCamera);
+
+        _facePipelineEventBus.Subscribe<FacePipelineEvents.NewFrameEvent>(FaceCamera.FaceNewImageUpdateEventHandler);
+        _facePipelineEventBus.Subscribe<FacePipelineEvents.NewTransformedFrameEvent>(FaceCamera
+            .FaceNewTransformedUpdateEventHandler);
+
+        _eyePipelineEventBus.Subscribe<EyePipelineEvents.NewFrameEvent>(LeftCamera.EyeNewImageUpdateEventHandler);
+        _eyePipelineEventBus.Subscribe<EyePipelineEvents.NewTransformedFrameEvent>(LeftCamera
+            .EyeNewTransformedUpdateEventHandler);
+
+        _eyePipelineEventBus.Subscribe<EyePipelineEvents.NewFrameEvent>(RightCamera.EyeNewImageUpdateEventHandler);
+        _eyePipelineEventBus.Subscribe<EyePipelineEvents.NewTransformedFrameEvent>(RightCamera
+            .EyeNewTransformedUpdateEventHandler);
+
+        _facePipelineEventBus.Subscribe<FacePipelineEvents.ExceptionEvent>(FacePipelineExceptionHandler);
+        _eyePipelineEventBus.Subscribe<EyePipelineEvents.ExceptionEvent>(EyePipelineExceptionHandler);
 
         IsInitialized = true;
 
         _ = TryStartCamerasAsync();
     }
 
+    private void CameraControllerModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != "ImportantSettingsProperty") return;
+
+        if (sender is CameraControllerModel model)
+            OnCameraModelUpdate(model);
+    }
+
+    private void OnCameraModelUpdate(CameraControllerModel model)
+    {
+        var copy = model.CameraSettings with { Roi = model.CameraSettings.Roi with { } };
+        switch (model.Camera)
+        {
+            case Camera.Face:
+                _facePipelineManager.SetTransformation(copy);
+                break;
+            case Camera.Left:
+                _eyePipelineManager.SetLeftTransformation(copy);
+                break;
+            case Camera.Right:
+                _eyePipelineManager.SetRightTransformation(copy);
+                break;
+        }
+    }
+
+    private void SetCameraRunning(CameraControllerModel model)
+    {
+        model.IsCameraRunning = true;
+        SetButtons(model, false, true);
+    }
+
     private async Task TryStartCamerasAsync()
     {
-        await LeftCamera.IsInitialized.Task;
-        if (!LeftCamera.IsCameraRunning)
-            await StartCameraAsync(LeftCamera);
-        await RightCamera.IsInitialized.Task;
-        if (!RightCamera.IsCameraRunning)
-            await StartCameraAsync(RightCamera);
-        await FaceCamera.IsInitialized.Task;
-        if (!FaceCamera.IsCameraRunning)
-            await StartCameraAsync(FaceCamera);
+        if (!FaceCamera.IsCameraRunning && FaceCamera.ShouldAutostart)
+            await StartCamera(FaceCamera);
+
+        if (!LeftCamera.IsCameraRunning && LeftCamera.ShouldAutostart)
+            await StartCamera(LeftCamera);
+
+        if (!RightCamera.IsCameraRunning && RightCamera.ShouldAutostart)
+            await StartCamera(RightCamera);
     }
 
-    private void PipelineExceptionEventHandler(Exception ex)
+    private void EyePipelineExceptionHandler(EyePipelineEvents.ExceptionEvent e)
     {
-        if (ProcessingLoopService.FaceProcessingPipeline.VideoSource == null)
-        {
-            FaceCamera.StartButtonEnabled = true;
-            FaceCamera.StopButtonEnabled = false;
+        LeftCamera.StartButtonEnabled = true;
+        LeftCamera.StopButtonEnabled = false;
+        LeftCamera.Bitmap = null;
+        LeftCamera.IsCameraRunning = false;
 
-            FaceCamera.Bitmap = null;
-            FaceCamera.IsCameraRunning = false;
-        }
-
-        if (ProcessingLoopService.EyesProcessingPipeline.VideoSource == null)
-        {
-            LeftCamera.StartButtonEnabled = true;
-            LeftCamera.StopButtonEnabled = false;
-            LeftCamera.Bitmap = null;
-            LeftCamera.IsCameraRunning = false;
-
-            RightCamera.StartButtonEnabled = true;
-            RightCamera.StopButtonEnabled = false;
-            RightCamera.Bitmap = null;
-            RightCamera.IsCameraRunning = false;
-        }
+        RightCamera.StartButtonEnabled = true;
+        RightCamera.StopButtonEnabled = false;
+        RightCamera.Bitmap = null;
+        RightCamera.IsCameraRunning = false;
     }
 
-    private async Task<IVideoSource?> StartCameraAsync(string address, string preferredCapture = "")
+    private void FacePipelineExceptionHandler(FacePipelineEvents.ExceptionEvent e)
     {
-        var camera = address;
-        if (string.IsNullOrEmpty(camera)) return null;
+        FaceCamera.StartButtonEnabled = true;
+        FaceCamera.StopButtonEnabled = false;
 
-        App.DeviceEnumerator.Cameras ??= App.DeviceEnumerator.UpdateCameras();
-
-        if (App.DeviceEnumerator.Cameras.TryGetValue(camera, out var mappedAddress))
-        {
-            camera = mappedAddress;
-        }
-
-        return await Task.Run<IVideoSource?>(() =>
-        {
-            var cameraSource = SingleCameraSourceFactory.Create(camera, preferredCapture);
-            if (cameraSource == null)
-                return null;
-
-            if (!cameraSource.Start())
-            {
-                _logger.LogError("Could not initialize {}", address);
-                return null;
-            }
-
-            Stopwatch sw = Stopwatch.StartNew();
-            var timeout = TimeSpan.FromSeconds(13);
-            while (sw.Elapsed < timeout)
-            {
-                var testFrame = cameraSource.GetFrame();
-                if (testFrame != null)
-                    return cameraSource;
-            }
-
-            _logger.LogError("No data was received from {}, closing...", address);
-            cameraSource.Dispose();
-            return null;
-        });
+        FaceCamera.Bitmap = null;
+        FaceCamera.IsCameraRunning = false;
     }
 
     [RelayCommand]
     public void StopCamera(CameraControllerModel model)
     {
-        var pipeline = ProcessingLoopService.EyesProcessingPipeline;
-        switch (pipeline.VideoSource)
+        switch (model.Camera)
         {
-            case SingleCameraSource singleCameraSource:
-                singleCameraSource.Dispose();
-                pipeline.VideoSource = null;
-
-                LeftCamera.IsCameraRunning = false;
-                LeftCamera.StartButtonEnabled = true;
-                LeftCamera.StopButtonEnabled = false;
-
-                RightCamera.IsCameraRunning = false;
-                RightCamera.StartButtonEnabled = true;
-                RightCamera.StopButtonEnabled = false;
+            case Camera.Face:
+                _facePipelineManager.StopCamera();
+                FaceCamera.ShouldAutostart = false;
+                SetButtons(FaceCamera, true, false);
                 break;
-            case DualCameraSource dualCameraSource:
-                if (model.Camera == Camera.Right)
+            case Camera.Left:
+                if (_eyePipelineManager.IsUsingSameCamera())
                 {
-                    dualCameraSource.RightCam?.Dispose();
-                    dualCameraSource.RightCam = null;
-
-                    RightCamera.IsCameraRunning = false;
-                    RightCamera.StartButtonEnabled = true;
-                    RightCamera.StopButtonEnabled = false;
-                }
-                else if (model.Camera == Camera.Left)
-                {
-                    dualCameraSource.LeftCam?.Dispose();
-                    dualCameraSource.LeftCam = null;
-
+                    _eyePipelineManager.StopAllCameras();
                     LeftCamera.IsCameraRunning = false;
-                    LeftCamera.StartButtonEnabled = true;
-                    LeftCamera.StopButtonEnabled = false;
+                    RightCamera.IsCameraRunning = false;
+                    SetButtons(LeftCamera, true, false);
+                    SetButtons(RightCamera, true, false);
+                    LeftCamera.ShouldAutostart = false;
+                    RightCamera.ShouldAutostart = false;
+                }
+                else
+                {
+                    _eyePipelineManager.StopLeftCamera();
+                    SetButtons(LeftCamera, true, false);
+                    LeftCamera.ShouldAutostart = false;
+                }
+
+                break;
+            case Camera.Right:
+                if (_eyePipelineManager.IsUsingSameCamera())
+                {
+                    _eyePipelineManager.StopAllCameras();
+                    LeftCamera.IsCameraRunning = false;
+                    RightCamera.IsCameraRunning = false;
+                    SetButtons(LeftCamera, true, false);
+                    SetButtons(RightCamera, true, false);
+                    LeftCamera.ShouldAutostart = false;
+                    RightCamera.ShouldAutostart = false;
+                }
+                else
+                {
+                    _eyePipelineManager.StopRightCamera();
+                    SetButtons(RightCamera, true, false);
+                    RightCamera.ShouldAutostart = false;
                 }
 
                 break;
         }
+
+        model.IsCameraRunning = false;
     }
 
 
     [RelayCommand]
     public async Task StartCamera(CameraControllerModel model)
     {
-        SetButtons(model, false, false);
-        await StartCameraAsync(model);
-    }
-
-    private bool IsSameAddressAsOtherEye(CameraControllerModel model)
-    {
-        var type = model.Camera;
-        if (type == Camera.Left)
-            return !string.IsNullOrEmpty(model.DisplayAddress) &&
-                   string.Equals(model.DisplayAddress, RightCamera.DisplayAddress);
-        if (type == Camera.Right)
-            return !string.IsNullOrEmpty(model.DisplayAddress) &&
-                   string.Equals(model.DisplayAddress, LeftCamera.DisplayAddress);
-        return false;
-    }
-
-    private bool TryHandleSameEyeCamera(CameraControllerModel model)
-    {
-        var type = model.Camera;
-
-        if (ProcessingLoopService.EyesProcessingPipeline.VideoSource is DualCameraSource dualSource)
+        try
         {
-            if (type == Camera.Left && dualSource.RightCam != null)
-                ProcessingLoopService.EyesProcessingPipeline.VideoSource = dualSource.RightCam;
-            else if (dualSource.LeftCam != null)
-                ProcessingLoopService.EyesProcessingPipeline.VideoSource = dualSource.LeftCam;
+            SetButtons(model, false, false);
+            var address = model.DisplayAddress;
+            var backend = model.SelectedCaptureMethod;
+            if (!model.CaptureMethodVisible)
+                backend = "";
+
+
+            bool success = false;
+            switch (model.Camera)
+            {
+                case Camera.Face:
+                    success = await _facePipelineManager.TryStartIfNotRunning(address, backend);
+                    FaceCamera.ShouldAutostart = true;
+                    break;
+                case Camera.Left:
+                    success = await _eyePipelineManager.TryStartLeftIfNotRunning(address, backend);
+                    LeftCamera.ShouldAutostart = true;
+                    break;
+                case Camera.Right:
+                    success = await _eyePipelineManager.TryStartRightIfNotRunning(address, backend);
+                    RightCamera.ShouldAutostart = true;
+                    break;
+            }
+
+            if (success)
+            {
+                SetCameraRunning(model);
+                _localSettings.SaveSetting("LastOpened" + model.Name, model.DisplayAddress);
+            }
             else
-                return false;
-
-            model.IsCameraRunning = true;
-            return true;
+            {
+                SetButtons(model, true, false);
+            }
         }
-
-        return false;
-    }
-
-    private void SaveLastOpened(CameraControllerModel model)
-    {
-        LocalSettingsService.SaveSetting("LastOpened" + model.Name, model.DisplayAddress);
-        LocalSettingsService.SaveSetting("LastOpenedPreferredCapture" + model.Name, model.SelectedPreferredCapture);
+        catch (Exception ex)
+        {
+            _logger.LogError("{}", ex);
+            SetButtons(model, true, false);
+        }
     }
 
     private void SetButtons(CameraControllerModel model, bool startEnabled, bool stopEnabled)
@@ -686,103 +643,6 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         model.StopButtonEnabled = stopEnabled;
     }
 
-
-    private bool IsSameEye(CameraControllerModel model)
-    {
-        var type = model.Camera;
-        if (type == Camera.Face || !IsSameAddressAsOtherEye(model)) return false;
-
-        var tryRes = TryHandleSameEyeCamera(model);
-        if (tryRes)
-            SetButtons(model, false, true);
-        return tryRes;
-    }
-
-    private async Task StartCameraAsync(CameraControllerModel model)
-    {
-        if (IsSameEye(model))
-        {
-            SaveLastOpened(model);
-            return;
-        }
-
-        var type = model.Camera;
-
-        var cameraSource = await StartCameraAsync(model.DisplayAddress, model.SelectedPreferredCapture);
-
-        if (cameraSource == null)
-        {
-            SetButtons(model, true, false);
-            SaveLastOpened(model);
-            return;
-        }
-
-        if (type == Camera.Face)
-        {
-            UpdateFacePipeline(cameraSource);
-        }
-        else
-        {
-            UpdateEyePipeline(cameraSource, type);
-        }
-
-        model.IsCameraRunning = true;
-        SetButtons(model, false, true);
-
-        SaveLastOpened(model);
-    }
-
-    private void UpdateFacePipeline(IVideoSource cameraSource)
-    {
-        var pipeline = ProcessingLoopService.FaceProcessingPipeline;
-
-        if (pipeline.VideoSource != null)
-        {
-            pipeline.VideoSource.Dispose();
-            pipeline.VideoSource = null;
-        }
-
-        pipeline.VideoSource = cameraSource;
-    }
-
-    private void UpdateEyePipeline(IVideoSource cameraSource, Camera type)
-    {
-        var pipeline = ProcessingLoopService.EyesProcessingPipeline;
-
-        if (pipeline.VideoSource == null)
-        {
-            var dualSource = new DualCameraSource();
-            if (type == Camera.Left)
-                dualSource.LeftCam = cameraSource;
-            else
-                dualSource.RightCam = cameraSource;
-
-            pipeline.VideoSource = dualSource;
-        }
-        else if (pipeline.VideoSource is DualCameraSource dualSource)
-        {
-            if (type == Camera.Left)
-                dualSource.LeftCam = cameraSource;
-            else
-                dualSource.RightCam = cameraSource;
-        }
-        else if (pipeline.VideoSource is SingleCameraSource singleSource)
-        {
-            var dual = new DualCameraSource();
-            if (type == Camera.Left)
-            {
-                dual.LeftCam = cameraSource;
-                dual.RightCam = singleSource;
-            }
-            else
-            {
-                dual.RightCam = cameraSource;
-                dual.LeftCam = singleSource;
-            }
-
-            pipeline.VideoSource = dual;
-        }
-    }
 
     [RelayCommand]
     private void SelectWholeFrame(CameraControllerModel model)
@@ -793,7 +653,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     [RelayCommand]
     private async Task RequestVRCalibration()
     {
-        var res = await App.Overlay.EyeTrackingCalibrationRequested(RequestedVRCalibration);
+        var res = await _vrOverlay.EyeTrackingCalibrationRequested(RequestedVRCalibration);
         if (res.success)
         {
             if (!Directory.Exists(Utils.ModelsDirectory))
@@ -801,11 +661,11 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
                 Directory.CreateDirectory(Utils.ModelsDirectory);
             }
 
-            var destPath = Path.Combine(Utils.ModelsDirectory, $"tuned_temporal_eye_tracking_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.onnx");
+            var destPath = Path.Combine(Utils.ModelsDirectory,
+                $"tuned_temporal_eye_tracking_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.onnx");
             File.Move("tuned_temporal_eye_tracking.onnx", destPath);
-            LocalSettingsService.SaveSetting("EyeHome_EyeModel", destPath);
-            var eye = await ProcessingLoopService.LoadEyeInferenceAsync();
-            ProcessingLoopService.EyesProcessingPipeline.InferenceService = eye;
+            _localSettings.SaveSetting("EyeHome_EyeModel", destPath);
+            await _eyePipelineManager.LoadInferenceAsync();
             SelectedCalibrationTextBlock.Foreground = new SolidColorBrush(Colors.Green);
         }
         else
@@ -837,11 +697,32 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         return color;
     }
 
-    private void MessageDispatched(int msgCount) => _messagesSent += msgCount;
-
     public void Dispose()
     {
         CleanupResources();
+    }
+
+    public void OnCropUpdated(CameraControllerModel model)
+    {
+        var copy = model.CameraSettings with { Roi = model.CameraSettings.Roi with { } };
+        switch (model.Camera)
+        {
+            case Camera.Face:
+                _facePipelineManager.SetTransformation(copy);
+                break;
+            case Camera.Left:
+                _eyePipelineManager.SetLeftTransformation(copy);
+                break;
+            case Camera.Right:
+                _eyePipelineManager.SetRightTransformation(copy);
+                break;
+        }
+    }
+
+    [RelayCommand]
+    public async Task ReloadEyeInference()
+    {
+        await _eyePipelineManager.LoadInferenceAsync();
     }
 
     private bool _disposed = false;
@@ -853,12 +734,19 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         LeftCamera.CamViewMode = CamViewMode.Tracking;
         RightCamera.CamViewMode = CamViewMode.Tracking;
 
-        _faceCamera.Dispose();
-        _leftCamera.Dispose();
-        _rightCamera.Dispose();
+        _facePipelineEventBus.Unsubscribe<FacePipelineEvents.NewFrameEvent>(FaceCamera.FaceNewImageUpdateEventHandler);
+        _facePipelineEventBus.Unsubscribe<FacePipelineEvents.NewTransformedFrameEvent>(FaceCamera
+            .FaceNewTransformedUpdateEventHandler);
 
-        ProcessingLoopService.PipelineExceptionEvent -= PipelineExceptionEventHandler;
-        OscSendService.OnMessagesDispatched -= MessageDispatched;
-        _msgCounterTimer.Stop();
+        _eyePipelineEventBus.Unsubscribe<EyePipelineEvents.NewFrameEvent>(LeftCamera.EyeNewImageUpdateEventHandler);
+        _eyePipelineEventBus.Unsubscribe<EyePipelineEvents.NewTransformedFrameEvent>(LeftCamera
+            .EyeNewTransformedUpdateEventHandler);
+
+        _eyePipelineEventBus.Unsubscribe<EyePipelineEvents.NewFrameEvent>(RightCamera.EyeNewImageUpdateEventHandler);
+        _eyePipelineEventBus.Unsubscribe<EyePipelineEvents.NewTransformedFrameEvent>(RightCamera
+            .EyeNewTransformedUpdateEventHandler);
+
+        _facePipelineEventBus.Unsubscribe<FacePipelineEvents.ExceptionEvent>(FacePipelineExceptionHandler);
+        _eyePipelineEventBus.Unsubscribe<EyePipelineEvents.ExceptionEvent>(EyePipelineExceptionHandler);
     }
 }

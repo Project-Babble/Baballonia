@@ -163,7 +163,7 @@
                       Margin="0,6"
                       PlaceholderText="Select capture method..."
                       ItemsSource="{Binding LeftCamera.CaptureMethods}"
-                      SelectedIndex="{Binding LeftCamera.SelectedCaptureMethod}"
+                      SelectedItem="{Binding LeftCamera.SelectedCaptureMethod}"
                       Grid.Row="1"
                       >
                       </ComboBox>
@@ -419,7 +419,7 @@
                       Margin="0,6"
                       PlaceholderText="Select capture method..."
                       ItemsSource="{Binding RightCamera.CaptureMethods}"
-                      SelectedIndex="{Binding RightCamera.SelectedCaptureMethod}"
+                      SelectedItem="{Binding RightCamera.SelectedCaptureMethod}"
                       Grid.Row="1"
                     >
                     </ComboBox>
@@ -672,7 +672,7 @@
                     Margin="0,6"
                     PlaceholderText="Select capture method..."
                     ItemsSource="{Binding FaceCamera.CaptureMethods}"
-                    SelectedIndex="{Binding FaceCamera.SelectedCaptureMethod}"
+                    SelectedItem="{Binding FaceCamera.SelectedCaptureMethod}"
                     Grid.Row="1"
                   >
                   </ComboBox>
@@ -707,7 +707,8 @@
                       Padding="12,8" />
 
                   <Button
-                      Command="{Binding FaceCamera.StopCameraCommand}"
+                      Command="{Binding StopCameraCommand}"
+                      CommandParameter="{Binding FaceCamera}"
                       Content="{x:Static assets:Resources.Home_Cameras_Stop_Camera}"
                       FontSize="13"
                       Grid.Column="1"

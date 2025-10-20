@@ -11,7 +11,7 @@ namespace Baballonia.IPCameraCapture;
 /// https://github.com/Larry57/SimpleMJPEGStreamViewer
 /// https://stackoverflow.com/questions/3801275/how-to-convert-image-to-byte-array
 /// </summary>
-public sealed class IpCameraCapture(string url, ILogger logger) : Capture(url, logger)
+public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger) : Capture(url, logger)
 {
     private readonly CancellationTokenSource _cancellationTokenSource = new();
 

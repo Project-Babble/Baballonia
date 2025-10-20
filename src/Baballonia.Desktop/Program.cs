@@ -3,6 +3,8 @@ using Baballonia.Desktop.Calibration.Aero;
 using Baballonia.Desktop.Captures;
 using System;
 using System.Threading;
+using Baballonia.Contracts;
+using Microsoft.Extensions.DependencyInjection;
 using Velopack;
 
 namespace Baballonia.Desktop;
@@ -32,10 +34,11 @@ sealed class Program
 
         VelopackApp.Build().Run();
 
-        App.Overlay = new AeroOverlayTrainerCombo();
-        App.Calibrator = new AeroOverlayTrainerCombo();
-        App.PlatformConnectorType = typeof(DesktopConnector);
-        App.DeviceEnumerator = new DesktopDeviceEnumerator(null!);
+        App.RegisterPlatformServices<
+            AeroOverlayTrainerCombo,
+            DesktopDeviceEnumerator,
+            DesktopConnector
+        >();
 
         try
         {

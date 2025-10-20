@@ -10,32 +10,39 @@ using OpenCvSharp;
 
 namespace Baballonia.Services;
 
-public class DefaultInferenceRunner(ILogger<DefaultInferenceRunner> logger) : IInferenceRunner
+public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRunner
 {
+    private ILogger _logger;
     private string _inputName;
     private InferenceSession _session;
     public DenseTensor<float> InputTensor;
     public Size InputSize { get; private set; }
 
+
     /// <summary>
     /// Loads/reloads the ONNX model and setups the environment
     /// </summary>
-    public void Setup(string modelName, bool useGpu = true)
+    public void Setup(string modelPath, bool useGpu = true)
     {
+        if (!File.Exists(modelPath))
+            throw new FileNotFoundException($"{modelPath} does not exist");
+
+        _logger = loggerFactory.CreateLogger(this.GetType().Name + "." + Path.GetFileName(modelPath));
+
         SessionOptions sessionOptions = SetupSessionOptions();
         if (useGpu)
-            ConfigurePlatformSpecificGpu(sessionOptions, modelName);
+            ConfigurePlatformSpecificGpu(sessionOptions, modelPath);
         else
             sessionOptions.AppendExecutionProvider_CPU();
 
-        _session = new InferenceSession(Path.Combine(AppContext.BaseDirectory, modelName), sessionOptions);
+        _session = new InferenceSession(modelPath, sessionOptions);
         _inputName = _session.InputMetadata.Keys.First();
         var dimensions = _session.InputMetadata.Values.First().Dimensions;
         InputSize = new Size(dimensions[2], dimensions[3]);
 
         InputTensor = new DenseTensor<float>([1, dimensions[1], dimensions[2], dimensions[3]]);
 
-        logger.LogInformation("{} initialization finished", modelName);
+        _logger.LogInformation("{} initialization finished", modelPath);
     }
 
     /// <summary>
@@ -53,7 +60,7 @@ public class DefaultInferenceRunner(ILogger<DefaultInferenceRunner> logger) : II
             !OperatingSystem.IsAndroidVersionAtLeast(15)) // At most 15
         {
             sessionOptions.AppendExecutionProvider_Nnapi();
-            logger.LogInformation("Initialized ExecutionProvider: nnAPI for {ModelName}", modelName);
+            _logger.LogInformation("Initialized ExecutionProvider: nnAPI for {ModelName}", modelName);
             return;
         }
 
@@ -64,7 +71,7 @@ public class DefaultInferenceRunner(ILogger<DefaultInferenceRunner> logger) : II
             OperatingSystem.IsTvOS())
         {
             sessionOptions.AppendExecutionProvider_CoreML();
-            logger.LogInformation("Initialized ExecutionProvider: CoreML for {ModelName}", modelName);
+            _logger.LogInformation("Initialized ExecutionProvider: CoreML for {ModelName}", modelName);
             return;
         }
 
@@ -75,13 +82,13 @@ public class DefaultInferenceRunner(ILogger<DefaultInferenceRunner> logger) : II
             try
             {
                 sessionOptions.AppendExecutionProvider_DML();
-                logger.LogInformation("Initialized ExecutionProvider: DirectML for {ModelName}", modelName);
+                _logger.LogInformation("Initialized ExecutionProvider: DirectML for {ModelName}", modelName);
                 return;
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Failed to configure Gpu.");
-                logger.LogWarning("Failed to create DML Execution Provider on Windows. Falling back to CUDA...");
+                _logger.LogError(ex, "Failed to configure Gpu.");
+                _logger.LogWarning("Failed to create DML Execution Provider on Windows. Falling back to CUDA...");
             }
         }
 
@@ -91,13 +98,13 @@ public class DefaultInferenceRunner(ILogger<DefaultInferenceRunner> logger) : II
         try
         {
             sessionOptions.AppendExecutionProvider_CUDA();
-            logger.LogInformation("Initialized ExecutionProvider: CUDA for {ModelName}", modelName);
+            _logger.LogInformation("Initialized ExecutionProvider: CUDA for {ModelName}", modelName);
             return;
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Failed to configure Gpu.");
-            logger.LogWarning("Failed to create CUDA Execution Provider.");
+            _logger.LogError(ex, "Failed to configure Gpu.");
+            _logger.LogWarning("Failed to create CUDA Execution Provider.");
         }
 
         // And, if CUDA fails (or we have an AMD card)
@@ -105,16 +112,16 @@ public class DefaultInferenceRunner(ILogger<DefaultInferenceRunner> logger) : II
         try
         {
             sessionOptions.AppendExecutionProvider_ROCm();
-            logger.LogInformation("Initialized ExecutionProvider: ROCm for {ModelName}", modelName);
+            _logger.LogInformation("Initialized ExecutionProvider: ROCm for {ModelName}", modelName);
             return;
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Failed to configure ROCm.");
-            logger.LogWarning("Failed to create ROCm Execution Provider.");
+            _logger.LogError(ex, "Failed to configure ROCm.");
+            _logger.LogWarning("Failed to create ROCm Execution Provider.");
         }
 
-        logger.LogWarning("No GPU acceleration will be applied.");
+        _logger.LogWarning("No GPU acceleration will be applied.");
         sessionOptions.AppendExecutionProvider_CPU();
     }
 

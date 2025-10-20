@@ -7,7 +7,7 @@ namespace Baballonia.OpenCVCapture;
 /// <summary>
 /// Wrapper class for OpenCV
 /// </summary>
-public sealed class OpenCvCapture(string source, ILogger logger) : Capture(source, logger)
+public sealed class OpenCvCapture(string source, ILogger<OpenCvCapture> logger) : Capture(source, logger)
 {
     private VideoCapture? _videoCapture;
     private static readonly VideoCaptureAPIs PreferredBackend;
@@ -64,8 +64,9 @@ public sealed class OpenCvCapture(string source, ILogger logger) : Capture(sourc
                 else
                     _videoCapture = await Task.Run(() => new VideoCapture(Source), cts.Token);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                logger.LogError("Error: {}", e);
                 IsReady = false;
                 return false;
             }

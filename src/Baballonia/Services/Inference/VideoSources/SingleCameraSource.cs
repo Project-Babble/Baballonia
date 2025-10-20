@@ -1,5 +1,5 @@
-﻿using Baballonia.Services.Inference.Enums;
-using Baballonia.Services.Inference.Platforms;
+﻿using Baballonia.SDK;
+using Baballonia.Services.Inference.Enums;
 using Microsoft.Extensions.Logging;
 using OpenCvSharp;
 
@@ -9,31 +9,29 @@ public class SingleCameraSource : IVideoSource
 {
     private ILogger _logger;
     public Size CameraSize;
-    public string PreferredCapture;
     private string _cameraAddress;
-    private PlatformConnector _platformConnector;
+    private readonly Capture _capture;
 
     public SingleCameraSource(
         ILogger logger,
-        PlatformConnector platformConnector,
-        string cameraAddress,
-        string preferredCapture = "")
+        Capture capture,
+        string cameraAddress)
     {
         _logger = logger;
-        _platformConnector = platformConnector;
+        _capture = capture;
         _cameraAddress = cameraAddress;
         CameraSize = new Size(0, 0);
-        PreferredCapture = preferredCapture;
     }
 
     public bool Start()
     {
-        return _platformConnector.Initialize(_cameraAddress, PreferredCapture);
+        _capture.StartCapture();
+        return true;
     }
 
     public bool Stop()
     {
-        _platformConnector.Terminate();
+        _capture.StopCapture();
         return true;
     }
 
@@ -44,13 +42,10 @@ public class SingleCameraSource : IVideoSource
     /// <returns>captured image</returns>
     public Mat? GetFrame(ColorType? color = null)
     {
-        if (_platformConnector?.Capture == null)
-            return null;
-
-        if (!_platformConnector.Capture.IsReady) return null;
+        if (!_capture.IsReady) return null;
 
 
-        var rawMat = _platformConnector.Capture.AcquireRawMat();
+        var rawMat = _capture.AcquireRawMat();
         if (rawMat == null)
             return null;
 

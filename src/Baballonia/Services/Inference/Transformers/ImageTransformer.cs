@@ -1,4 +1,5 @@
 ﻿using System;
+using Baballonia.Services.Inference.Enums;
 using Baballonia.Services.Inference.Models;
 using OpenCvSharp;
 
@@ -6,8 +7,14 @@ namespace Baballonia.Services.Inference;
 
 public class ImageTransformer : IImageTransformer
 {
-    public CameraSettings Transformation = new();
+    public CameraSettings Transformation;
     public Size TargetSize = new Size(224,224);
+
+    public ImageTransformer()
+    {
+        var roi = new RegionOfInterest();
+        Transformation = new CameraSettings(Camera.Face, roi);
+    }
 
     public Mat? Apply(Mat image)
     {

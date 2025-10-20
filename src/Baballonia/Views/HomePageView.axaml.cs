@@ -8,6 +8,7 @@ using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
 using Baballonia.Assets;
+using Baballonia.Contracts;
 using Baballonia.Helpers;
 using Baballonia.ViewModels.SplitViewPane;
 
@@ -23,8 +24,13 @@ public partial class HomePageView : UserControl
 
     private bool _isLayoutUpdating;
 
-    public HomePageView()
+    private readonly IDeviceEnumerator _deviceEnumerator;
+    private readonly ILocalSettingsService _localSettings;
+
+    public HomePageView(IDeviceEnumerator deviceEnumerator, ILocalSettingsService localSettings)
     {
+        _deviceEnumerator = deviceEnumerator;
+        _localSettings = localSettings;
         InitializeComponent();
 
         if (Utils.IsSupportedDesktopOS)
@@ -115,6 +121,8 @@ public partial class HomePageView : UserControl
 
     private void SetupCropEvents(HomePageViewModel.CameraControllerModel model, Image image)
     {
+        if (DataContext is not HomePageViewModel vm) return;
+
         // in theory should be cleaned up by the GC so no need to manually unsubscribe
         image.PointerPressed += (sender, e) =>
         {
@@ -137,45 +145,9 @@ public partial class HomePageView : UserControl
 
             model.CropManager.EndCrop();
             model.OnCropUpdated();
+            vm.OnCropUpdated(model);
         };
     }
-
-    // Add these back if we need hint text again
-    /*private void EyeAddressEntry_OnTextChanged(object? sender, SelectionChangedEventArgs e)
-    {
-        if (e is null) return; // Skip DeviceEnumerator calls
-        if (DataContext is not HomePageViewModel vm || vm.FaceCamera == null) return;
-
-        if (vm.LeftCamera.DisplayAddress.Length == 0)
-        {
-            LeftAddressHint.Text = "You must enter cameras for both eyes before using eye tracking!";
-            vm.LeftCamera.HintEnabled = true;
-        }
-
-        if (vm.RightCamera.DisplayAddress.Length == 0)
-        {
-            RightAddressHint.Text = "You must enter cameras for both eyes before using eye tracking!";
-            vm.RightCamera.HintEnabled = true;
-        }
-
-        if (vm.LeftCamera.DisplayAddress.Length > 0 && vm.RightCamera.DisplayAddress.Length > 0)
-        {
-            vm.LeftCamera.HintEnabled = false;
-            vm.RightCamera.HintEnabled = false;
-        }
-    }*/
-
-    // Add these back if we need hint text again
-    /*private void FaceAddressEntry_OnTextChanged(object? sender, SelectionChangedEventArgs e)
-    {
-        if (this.DataContext is not HomePageViewModel vm) return;
-
-        if (vm.FaceCamera == null) return;
-        if (!string.IsNullOrEmpty(vm.FaceCamera.DisplayAddress))
-        {
-            vm.FaceCamera.HintEnabled = vm.FaceCamera.DisplayAddress.Length > 0;
-        }
-    }*/
 
     private void OnCalibrationMenuItemClick(object? sender, RoutedEventArgs e)
     {
@@ -243,9 +215,9 @@ public partial class HomePageView : UserControl
         if (file.Count == 0) return;
         if (DataContext is not HomePageViewModel vm) return;
 
-        vm.LocalSettingsService.SaveSetting("EyeHome_EyeModel", file[0].Path.AbsolutePath);
-        var eye = await vm.ProcessingLoopService.LoadEyeInferenceAsync();
-        vm.ProcessingLoopService.EyesProcessingPipeline.InferenceService = eye;
+        _localSettings.SaveSetting("EyeHome_EyeModel", file[0].Path.AbsolutePath);
+
+        await vm.ReloadEyeInference();
 
         LoadEyeModelText.Text = file[0].Name;
         LoadEyeModelText.Foreground = new SolidColorBrush(Colors.Green);

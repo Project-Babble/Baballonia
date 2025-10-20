@@ -1,20 +1,15 @@
-﻿using Avalonia.Logging;
-using Baballonia.Contracts;
+﻿using Baballonia.Contracts;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.DependencyInjection;
 
 namespace Baballonia.Services;
 
 public class ActivationService(
     IThemeSelectorService themeSelectorService,
     ILanguageSelectorService languageSelectorService,
-    ILogger<ActivationService> logger,
-    OpenVRService _openVRService)
+    ILogger<ActivationService> logger)
     : IActivationService
 {
-    public ILogger<ActivationService> Logger { get; } = logger;
-    public OpenVRService OpenVRService { get; } = _openVRService;
-
     public void Activate(object activationArgs)
     {
         languageSelectorService.Initialize();
@@ -22,9 +17,13 @@ public class ActivationService(
         themeSelectorService.Initialize();
         themeSelectorService.SetRequestedTheme();
 
-        //checking to see if AutoStart has checks pass during service activation
+        // Guard against mobile
+        if (!Utils.IsSupportedDesktopOS) return;
+
+        // Checking to see if AutoStart has checks pass during service activation
+        var openVrService = Ioc.Default.GetService<OpenVRService>();
         logger.LogInformation("Configuring OpenVR...");
-        if (!_openVRService.AutoStart())
+        if (!openVrService!.AutoStart())
         {
             logger.LogWarning("Failed to configure OpenVR during ActivationService startup. Skipping.");
         }

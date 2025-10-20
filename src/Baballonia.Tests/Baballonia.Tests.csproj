@@ -21,6 +21,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Baballonia.CaptureBin.IO\Baballonia.CaptureBin.IO.csproj" />
+    <ProjectReference Include="..\Baballonia.IPCameraCapture\Baballonia.IPCameraCapture.csproj" />
+    <ProjectReference Include="..\Baballonia.OpenCVCapture\Baballonia.OpenCVCapture.csproj" />
     <ProjectReference Include="..\Baballonia\Baballonia.csproj" />
       <ProjectReference Include="..\Baballonia.Desktop\Baballonia.Desktop.csproj" />
   </ItemGroup>

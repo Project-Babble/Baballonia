@@ -26,7 +26,7 @@ public class DefaultInferenceRunnerTest
 
         try
         {
-            _defaultInference = new DefaultInferenceRunner(loggerFactory.CreateLogger<DefaultInferenceRunner>());
+            _defaultInference = new DefaultInferenceRunner(loggerFactory);
             _defaultInference.Setup("faceModel.onnx", false);
         }
         catch (Exception ex)
