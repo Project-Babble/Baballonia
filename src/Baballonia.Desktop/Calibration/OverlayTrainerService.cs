@@ -203,11 +203,8 @@ public class OverlayTrainerService : PacketHandlerAdapter, IVROverlay
         if (_currentState == OverlayState.Gaze && _posDataStopwatch.ElapsedMilliseconds > 100)
             return;
 
-        const int jpegQuality = 50;
-
-        Cv2.ImEncode(".jpg", left, out var bufLeft, [(int)ImwriteFlags.JpegQuality, jpegQuality]);
-        Cv2.ImEncode(".jpg", right, out var bufRight, [(int)ImwriteFlags.JpegQuality, jpegQuality]);
-
+        Cv2.ImEncode(".jpg", left, out var bufLeft );
+        Cv2.ImEncode(".jpg", right, out var bufRight);
 
         var header = GenerateHeader(_latesdPosData) with
         {
@@ -237,11 +234,12 @@ public class OverlayTrainerService : PacketHandlerAdapter, IVROverlay
 
         header.RoutineState = routineState;
 
+        // Flip the eyes here - this is stupid
         var frame = new Frame
         {
             Header = header,
-            LeftJpeg = bufLeft,
-            RightJpeg = bufRight
+            LeftJpeg = bufRight,
+            RightJpeg = bufLeft
         };
 
         lock (_frame_lock)
