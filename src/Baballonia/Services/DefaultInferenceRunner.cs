@@ -159,8 +159,13 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
 
         using var results = _session.Run(inputs);
 
-        var arKitExpressions = results[0].AsEnumerable<float>().ToArray();
-        return arKitExpressions;
+        List<float> arKitExpressions = [];
+        foreach (var result in results)
+        {
+            arKitExpressions.AddRange(result.AsEnumerable<float>().ToArray());
+        }
+
+        return arKitExpressions.ToArray();
     }
 
     public DenseTensor<float> GetInputTensor()

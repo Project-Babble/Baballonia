@@ -85,7 +85,7 @@ public class EyeProcessingPipeline : DefaultProcessingPipeline, IDisposable
         if (StabilizeEyes)
         {
             var rawConvergence = (rightEyeYawCorrected - leftEyeYawCorrected) / 2.0f;
-            var convergence = Math.Max(rawConvergence, 0.0f); //We clamp the value here to avoid accidental divergence, as the model sometimes decides that's a thing
+            var convergence = Math.Max(rawConvergence, 0.0f); // We clamp the value here to avoid accidental divergence, as the model sometimes decides that's a thing
 
             var averagedYaw = (rightEyeYawCorrected + leftEyeYawCorrected) / 2.0f;
 
@@ -103,6 +103,12 @@ public class EyeProcessingPipeline : DefaultProcessingPipeline, IDisposable
         convertedExpressions[3] = leftEyeYawCorrected;  // right pitch
         convertedExpressions[4] = eyeY;                   // right yaw
         convertedExpressions[5] = leftLid;                // right lid
+
+        // Rest are untouched
+        convertedExpressions[6] = arKitExpressions[6];
+        convertedExpressions[7] = arKitExpressions[7];
+        convertedExpressions[8] = arKitExpressions[8];
+        convertedExpressions[9] = arKitExpressions[9];
 
         arKitExpressions = convertedExpressions;
 

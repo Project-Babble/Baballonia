@@ -46,7 +46,11 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
         EyeSettings =
         [
             new("LeftEyeLid"),
-            new("RightEyeLid")
+            new("RightEyeLid"),
+            new ("LeftEyeWiden"),
+            new ("LeftEyeLower"),
+            new ("RightEyeWiden"),
+            new ("RightEyeLower"),
         ];
 
         JawSettings =
@@ -125,10 +129,14 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
         {
             { "LeftEyeX", 0 },
             { "LeftEyeY", 1 },
-            { "RightEyeX", 3 },
-            { "RightEyeY", 4 },
             { "LeftEyeLid", 2 },
-            { "RightEyeLid", 5 }
+            { "LeftEyeWiden", 3 },
+            { "LeftEyeLower", 4 },
+            { "RightEyeX", 5 },
+            { "RightEyeY", 6 },
+            { "RightEyeLid", 7 },
+            { "RightEyeWiden", 8 },
+            { "RightEyeLower", 9 },
         };
 
         _faceKeyIndexMap = _parameterSenderService.FaceExpressionMap.Keys

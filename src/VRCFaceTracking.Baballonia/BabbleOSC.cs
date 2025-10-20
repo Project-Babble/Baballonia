@@ -7,7 +7,7 @@ namespace VRCFaceTracking.Baballonia;
 
 public class BabbleOsc
 {
-    public static readonly float[] EyeExpressions = new float[11];
+    public static readonly float[] EyeExpressions = new float[10];
 
     private Socket? _receiver;
 
@@ -81,17 +81,29 @@ public class BabbleOsc
                             case "/LeftEyeY":
                                 EyeExpressions[(int)ExpressionMapping.EyeLeftY] = value;
                                 break;
+                            case "/LeftEyeLid":
+                                EyeExpressions[(int)ExpressionMapping.EyeLeftLid] = value;
+                                break;
+                            case "/LeftEyeWiden":
+                                EyeExpressions[(int)ExpressionMapping.EyeLeftWiden] = value;
+                                break;
+                            case "/LeftEyeLower":
+                                EyeExpressions[(int)ExpressionMapping.EyeLeftLower] = value;
+                                break;
                             case "/RightEyeX":
                                 EyeExpressions[(int)ExpressionMapping.EyeRightX] = value;
                                 break;
                             case "/RightEyeY":
                                 EyeExpressions[(int)ExpressionMapping.EyeRightY] = value;
                                 break;
-                            case "/LeftEyeLid":
-                                EyeExpressions[(int)ExpressionMapping.EyeLeftLid] = value;
-                                break;
                             case "/RightEyeLid":
                                 EyeExpressions[(int)ExpressionMapping.EyeRightLid] = value;
+                                break;
+                            case "/RightEyeWiden":
+                                EyeExpressions[(int)ExpressionMapping.EyeRightWiden] = value;
+                                break;
+                            case "/RightEyeLower":
+                                EyeExpressions[(int)ExpressionMapping.EyeRightLower] = value;
                                 break;
                             case "/mouthFunnel":
                             case "/mouthPucker":
