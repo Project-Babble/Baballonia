@@ -4,6 +4,7 @@
       "app_key": "projectbabble.Baballonia",
       "launch_type": "binary",
       "binary_path_windows": "Baballonia.Desktop.exe",
+      "binary_path_linux": "Baballonia.Desktop",
       "is_dashboard_overlay": true,
 
       "strings": {
