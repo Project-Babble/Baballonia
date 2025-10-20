@@ -7,8 +7,8 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	<NoWarn>CS8618;CS8509;CS0067;CS8613;CS8622;MVVMTK0034</NoWarn>
 	<Company>Paradigm Reality Enhancement Labs</Company>
-	<AssemblyVersion>1.1.0.7</AssemblyVersion>
-	<FileVersion>1.1.0.7</FileVersion>
+	<AssemblyVersion>1.1.0.8</AssemblyVersion>
+	<FileVersion>1.1.0.8</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>

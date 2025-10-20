@@ -7,10 +7,11 @@
 
 ;--------------------------------
 ;Custom defines
+
   !define NAME "Baballonia"
   !define APPFILE "Baballonia.Desktop.exe"
   !define PUBLISHER "dfgHiatus - Paradigm Reality Enhancement Laboratories"
-  !define VERSION "1.1.0.7"
+  !define VERSION "1.1.0.8"
   !define SLUG "${NAME} v${VERSION}"
 
 ;--------------------------------
@@ -22,6 +23,15 @@
   InstallDir "$LOCALAPPDATA\${NAME}"
   InstallDirRegKey HKCU "Software\${NAME}" ""
   RequestExecutionLevel user
+
+;--------------------------------
+;Compression
+  SetCompressor /SOLID lzma ; "/FINAL" can be added to prevent anything from changing this later down the line.
+  SetCompressorDictSize 32
+  FileBufSize 64
+  ManifestDPIAware true
+  ;ManifestLongPathAware true ; disabled until the rest of the app is confirmed to have this setup right
+  XPStyle on ; does this even do anything meaningful anymore?
 
 ;--------------------------------
 ;UI
