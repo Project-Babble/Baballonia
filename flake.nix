@@ -27,16 +27,17 @@
     packages = forAllSystems (system: let
       pkgs = pkgsFor system;
       dotnet = pkgs.dotnetCorePackages.dotnet_8;
+      baseBuildInputs = with pkgs; [
+        cmake opencv udev
+        libjpeg libGL fontconfig
+        xorg.libX11 xorg.libSM xorg.libICE
+        (pkgs.callPackage ./nix/opencvsharp.nix {})
+      ];
       base = pkgs.buildDotnetModule {
         version = "0.0.0";
         pname = "baballonia";
 
-        buildInputs = with pkgs; [
-          cmake opencv udev
-          libjpeg libGL fontconfig
-          xorg.libX11 xorg.libSM xorg.libICE
-          (pkgs.callPackage ./nix/opencvsharp.nix {})
-        ];
+        buildInputs = baseBuildInputs;
 
         src = ./.;
         dotnetSdk = dotnet.sdk;
@@ -47,6 +48,10 @@
         makeWrapperArgs = [
           "--chdir"
           "${placeholder "out"}/lib/baballonia"
+          "--prefix"
+          "LD_LIBRARY_PATH"
+          ":"
+          "${pkgs.lib.makeLibraryPath baseBuildInputs}"
         ];
 
         postUnpack = ''
