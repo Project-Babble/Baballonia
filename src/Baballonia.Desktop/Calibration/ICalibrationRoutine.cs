@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -9,6 +10,7 @@ using Baballonia.Contracts;
 using Baballonia.Desktop.Trainer;
 using Baballonia.Services;
 using Baballonia.Services.events;
+using Google.Protobuf.WellKnownTypes;
 using OverlaySDK;
 using OverlaySDK.Packets;
 
@@ -76,7 +78,7 @@ public abstract class BaseCaptureStep : PacketHandlerAdapter, ICalibrationStep
         _binCollector.UpdatePositionalData(positionalData);
     }
 
-    public void OnNewEyeFrame(EyePipelineEvents.NewTransformedFrameEvent frame)
+    public virtual void OnNewEyeFrame(EyePipelineEvents.NewTransformedFrameEvent frame)
     {
         if (!_shouldCollect)
             return;
@@ -111,20 +113,32 @@ public abstract class BaseCaptureStep : PacketHandlerAdapter, ICalibrationStep
     }
 }
 
-public class GazeTutorialStep : BaseTutorialStep
+public class GazeCaptureStep : BaseEyeCaptureStep
 {
-    public GazeTutorialStep() : base("GazeTutorialRoutine")
+    private Stopwatch _posDataTimer = new();
+    private readonly TimeSpan _posDataTimeout = TimeSpan.FromSeconds(0.2);
+    public GazeCaptureStep(EyePipelineEventBus bus) : base(bus, "gaze", CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_IN_MOVEMENT)
     {
     }
 
-    public override async Task ExecuteAsync(OverlayMessageDispatcher dispatcher, CancellationToken ct)
+    public override void OnHmdPositionalData(HmdPositionalDataPacket positionalData)
     {
-        dispatcher.RegisterHandler(this);
+        if (!_shouldCollect)
+            return;
 
-        dispatcher.Dispatch(new RunFixedLenghtRoutinePacket("gazetutorial"));
-        await WaitForRoutineFinishAsync(ct);
+        _binCollector.UpdatePositionalData(positionalData);
+        _posDataTimer.Restart();
+    }
 
-        dispatcher.UnRegisterHandler(this);
+    public override void OnNewEyeFrame(EyePipelineEvents.NewTransformedFrameEvent frame)
+    {
+        if (!_shouldCollect)
+            return;
+        if (_posDataTimer.Elapsed <= _posDataTimeout)
+        {
+            var images = frame.image.Split();
+            _binCollector.AddFrame(images[0], images[1]);
+        }
     }
 }
 
@@ -218,13 +232,11 @@ public class MergeBinsStep : ICalibrationStep
     {
         _binNames = binNames;
     }
-
     public Task ExecuteAsync(OverlayMessageDispatcher dispatcher, CancellationToken ct)
     {
         MergeBins("user_cal.bin", _binNames);
         return Task.CompletedTask;
     }
-
     void MergeBins(string result, params string[] inputs)
     {
         var resultPath = Path.Combine(Utils.ModelDataDirectory, result);
@@ -237,23 +249,25 @@ public class EyeCalibration
 {
     private readonly EyeCaptureStepFactory _eyeCaptureStepFactory;
     private readonly ITrainerService _trainer;
+    private readonly EyePipelineEventBus _eyePipelineEventBus;
 
-    public EyeCalibration(EyeCaptureStepFactory eyeCaptureStepFactory, ITrainerService trainer)
+    public EyeCalibration(EyeCaptureStepFactory eyeCaptureStepFactory, ITrainerService trainer, EyePipelineEventBus eyePipelineEventBus)
     {
         _eyeCaptureStepFactory = eyeCaptureStepFactory;
         _trainer = trainer;
+        _eyePipelineEventBus = eyePipelineEventBus;
     }
 
     public IEnumerable<ICalibrationStep> BasicAllCalibration()
     {
         List<ICalibrationStep> steps = [];
         steps.Add(new BaseTutorialStep("gazetutorial"));
-        steps.Add(_eyeCaptureStepFactory.Create("gaze", CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_IN_MOVEMENT));
+        steps.Add(new GazeCaptureStep(_eyePipelineEventBus));
         steps.Add(new BaseTutorialStep("blinktutorial"));
         steps.Add(_eyeCaptureStepFactory.Create("blink", CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_RESTING));
-        steps.Add(new BaseTutorialStep("dilationtutorial"));
-        steps.Add(_eyeCaptureStepFactory.Create("dilation",
-            CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_DILATION_BLACK));
+        // steps.Add(new BaseTutorialStep("dilationtutorial"));
+        // steps.Add(_eyeCaptureStepFactory.Create("dilation",
+        //     CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_DILATION_BLACK));
         // steps.Add(new BaseTutorialStep("widentutorial"));
         // steps.Add(_eyeCaptureStepFactory.Create("widen",
         //     CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_WHATEVER_NOT_IMPLEMENTED));
