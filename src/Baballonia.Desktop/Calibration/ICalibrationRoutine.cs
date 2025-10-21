@@ -163,6 +163,7 @@ public class BaseEyeCaptureStep : BaseCaptureStep
         if (ct.IsCancellationRequested)
             return;
 
+        _eyePipelineEvent.Unsubscribe<EyePipelineEvents.NewTransformedFrameEvent>(OnNewEyeFrame);
         dispatcher.UnRegisterHandler(this);
         _binCollector.WriteBin(Name + ".bin");
     }
