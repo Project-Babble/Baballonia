@@ -117,7 +117,7 @@ public class GazeCaptureStep : BaseEyeCaptureStep
 {
     private Stopwatch _posDataTimer = new();
     private readonly TimeSpan _posDataTimeout = TimeSpan.FromSeconds(0.2);
-    public GazeCaptureStep(EyePipelineEventBus bus) : base(bus, "gaze", CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_IN_MOVEMENT)
+    public GazeCaptureStep(IEyePipelineEventBus bus) : base(bus, "gaze", CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_IN_MOVEMENT)
     {
     }
 
@@ -250,9 +250,9 @@ public class EyeCalibration
 {
     private readonly EyeCaptureStepFactory _eyeCaptureStepFactory;
     private readonly ITrainerService _trainer;
-    private readonly EyePipelineEventBus _eyePipelineEventBus;
+    private readonly IEyePipelineEventBus _eyePipelineEventBus;
 
-    public EyeCalibration(EyeCaptureStepFactory eyeCaptureStepFactory, ITrainerService trainer, EyePipelineEventBus eyePipelineEventBus)
+    public EyeCalibration(EyeCaptureStepFactory eyeCaptureStepFactory, ITrainerService trainer, IEyePipelineEventBus eyePipelineEventBus)
     {
         _eyeCaptureStepFactory = eyeCaptureStepFactory;
         _trainer = trainer;

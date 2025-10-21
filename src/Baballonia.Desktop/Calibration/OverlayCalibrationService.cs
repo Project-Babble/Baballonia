@@ -91,7 +91,4 @@ public class OverlayTrainerService : IVROverlay, IDisposable
 
         return (true, string.Empty);
     }
-
-
-
 }
