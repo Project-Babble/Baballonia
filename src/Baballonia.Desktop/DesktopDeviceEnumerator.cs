@@ -221,6 +221,7 @@ public sealed class DesktopDeviceEnumerator(ILogger<DesktopDeviceEnumerator> log
         catch (Exception e)
         {
             cameraDict.Add($"Error listing UVC devices: {e.Message}", "error");
+            Logger.LogError(e, "Error listing UVC devices", e.Message);
         }
     }
 
