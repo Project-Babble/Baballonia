@@ -39,13 +39,15 @@ sealed class Program
         App.RegisterRequiredPlatformServices<
             OverlayTrainerService,
             DesktopDeviceEnumerator,
-            DesktopConnector,
-            TrainerService
+            DesktopConnector
         >();
 
         App.RegisterPlatformSpecifficServices(collection =>
         {
             collection.AddSingleton<IOverlayProgram, OverlayProgram>();
+            collection.AddSingleton<ITrainerService, TrainerService>();
+            collection.AddSingleton<EyeCaptureStepFactory>();
+            collection.AddSingleton<EyeCalibration>();
         });
 
         try

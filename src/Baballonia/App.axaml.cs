@@ -36,18 +36,16 @@ public class App : Application
     private static Action<IServiceCollection> ConfigurePlatformServices { get; set; }
     private static Action<IServiceCollection>? _platformSpecifficServices;
 
-    public static void RegisterRequiredPlatformServices<TOverlay, TDeviceEnumerator, TPlatformConnector, TTrainerService>()
+    public static void RegisterRequiredPlatformServices<TOverlay, TDeviceEnumerator, TPlatformConnector>()
         where TOverlay : class, IVROverlay
         where TDeviceEnumerator : class, IDeviceEnumerator
         where TPlatformConnector : class, IPlatformConnector
-        where TTrainerService : class, ITrainerService
     {
         ConfigurePlatformServices = services =>
         {
             services.AddSingleton<IVROverlay, TOverlay>();
             services.AddSingleton<IDeviceEnumerator, TDeviceEnumerator>();
             services.AddSingleton<IPlatformConnector, TPlatformConnector>();
-            services.AddSingleton<ITrainerService, TTrainerService>();
         };
     }
 
