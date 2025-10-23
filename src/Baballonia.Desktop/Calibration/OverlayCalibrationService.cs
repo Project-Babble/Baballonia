@@ -23,22 +23,18 @@ public class OverlayTrainerService : IVROverlay, IDisposable
 {
     private ILocalSettingsService _localSettingsService;
     private ILogger<OverlayTrainerService> _logger;
-    private IEyePipelineEventBus _eyePipelineEventBus;
-    private ITrainerService _trainerService;
     private IOverlayProgram _program;
-    private OverlayMessageDispatcher _messageDispatcher;
 
     private EyePipelineManager _eyePipelineManager;
     private readonly EyeCalibration _eyeCalibration;
     private readonly CancellationTokenSource _tokenSource = new();
 
 
-    public OverlayTrainerService(ILogger<OverlayTrainerService> logger, IEyePipelineEventBus eyePipelineEventBus,
-        ITrainerService trainerService, IOverlayProgram overlayProgram, ILocalSettingsService localSettingsService, EyePipelineManager eyePipelineManager, EyeCalibration eyeCalibration)
+    public OverlayTrainerService(ILogger<OverlayTrainerService> logger, IOverlayProgram overlayProgram,
+        ILocalSettingsService localSettingsService, EyePipelineManager eyePipelineManager,
+        EyeCalibration eyeCalibration)
     {
         _logger = logger;
-        _eyePipelineEventBus = eyePipelineEventBus;
-        _trainerService = trainerService;
         _program = overlayProgram;
         _localSettingsService = localSettingsService;
         _eyePipelineManager = eyePipelineManager;
@@ -70,7 +66,7 @@ public class OverlayTrainerService : IVROverlay, IDisposable
         var tcp = new EventDrivenTcpClient(sock);
         var client = new EventDrivenJsonClient(tcp);
 
-        _messageDispatcher = new OverlayMessageDispatcher(logger, client);
+        var messageDispatcher = new OverlayMessageDispatcher(logger, client);
 
         if (!Directory.Exists(Utils.ModelDataDirectory)) Directory.CreateDirectory(Utils.ModelDataDirectory);
         if (!Directory.Exists(Utils.ModelsDirectory)) Directory.CreateDirectory(Utils.ModelsDirectory);
@@ -78,7 +74,7 @@ public class OverlayTrainerService : IVROverlay, IDisposable
         var steps = _eyeCalibration.BasicAllCalibration();
         foreach (var calibrationStep in steps)
         {
-            await calibrationStep.ExecuteAsync(_messageDispatcher, _tokenSource.Token);
+            await calibrationStep.ExecuteAsync(messageDispatcher, _tokenSource.Token);
         }
 
         var destPath = Path.Combine(Utils.ModelsDirectory,
