@@ -56,7 +56,6 @@ public partial class VrcViewModel : ViewModelBase
         LocalSettingsService = Ioc.Default.GetRequiredService<ILocalSettingsService>();
 
         _vrcftDetected = TryGetModuleConfig(out var config);
-        Console.WriteLine($"is vrcft detected {_vrcftDetected}");
         if (_vrcftDetected && config is not null)
         {
             _selectedModuleMode = config.IsEyeSupported switch
