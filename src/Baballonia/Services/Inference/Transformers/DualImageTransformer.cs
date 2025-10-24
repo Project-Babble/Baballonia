@@ -41,4 +41,9 @@ public class DualImageTransformer : IImageTransformer
         return combined;
     }
 
+    public void SetSize(Size size)
+    {
+        LeftTransformer.SetSize(size);
+        RightTransformer.SetSize(size);
+    }
 }

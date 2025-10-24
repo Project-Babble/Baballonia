@@ -44,4 +44,6 @@ public class ImageCollector : IImageTransformer
 
         return octoMatrix;
     }
+
+    public void SetSize(Size size) { }
 }

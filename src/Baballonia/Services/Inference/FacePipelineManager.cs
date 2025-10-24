@@ -55,7 +55,9 @@ public class FacePipelineManager
     public DefaultInferenceRunner CreateInference()
     {
         const string defaultFaceModel = "faceModel.onnx";
-        return _inferenceFactory.Create(Path.Combine(AppContext.BaseDirectory, defaultFaceModel));
+        var result = _inferenceFactory.Create(Path.Combine(AppContext.BaseDirectory, defaultFaceModel));
+        _pipeline.ImageTransformer?.SetSize(result.InputSize);
+        return result;
     }
 
     public void LoadFilter()

@@ -64,12 +64,20 @@ public class EyePipelineManager
         var eyeModelName = _localSettings.ReadSetting<string>("EyeHome_EyeModel", defaultEyeModelName);
         var eyeModelPath = Path.Combine(AppContext.BaseDirectory, eyeModelName);
 
-        if (File.Exists(eyeModelPath)) return _inferenceFactory.Create(eyeModelPath);
+        if (File.Exists(eyeModelPath))
+        {
+            var earlyResult = _inferenceFactory.Create(eyeModelPath);
+            _pipeline.ImageTransformer?.SetSize(earlyResult.InputSize);
+            return earlyResult;
+        }
         _logger.LogError("{} Does not exists, Loading default...", eyeModelPath);
         eyeModelName = defaultEyeModelName;
         eyeModelPath = Path.Combine(AppContext.BaseDirectory, eyeModelName);
 
-        return _inferenceFactory.Create(eyeModelPath);
+        var result = _inferenceFactory.Create(eyeModelPath);
+        _pipeline.ImageTransformer?.SetSize(result.InputSize);
+
+        return result;
     }
 
 

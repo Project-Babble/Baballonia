@@ -110,4 +110,5 @@ public class ImageTransformer : IImageTransformer
         return resultMat;
     }
 
+    public void SetSize(Size size) => TargetSize = size;
 }
