@@ -18,10 +18,6 @@ Baballonia currently does not have an installer for macOS or Linux. You will nee
 
 Baballonia *can* be run through Wine, as documented on the [Linux VR Adventures Wiki](https://lvra.gitlab.io/docs/other/bigscreen-beyond-driver/#bigscreen-beyond-2e-eyetracking-via-baballonia-under-linux).
 
-#### NixOS (Flakes)
-
-Simply run Baballonia with ``nix run github:Project-Babble/Baballonia``
-
 ## Platform Compatibility
 
 ### VRChat
