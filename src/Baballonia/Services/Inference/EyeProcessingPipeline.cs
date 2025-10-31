@@ -109,6 +109,8 @@ public class EyeProcessingPipeline : DefaultProcessingPipeline, IDisposable
         convertedExpressions[7] = arKitExpressions[7];
         convertedExpressions[8] = arKitExpressions[8];
         convertedExpressions[9] = arKitExpressions[9];
+        convertedExpressions[10] = arKitExpressions[10];
+        convertedExpressions[11] = arKitExpressions[11];
 
         arKitExpressions = convertedExpressions;
 

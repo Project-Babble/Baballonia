@@ -32,11 +32,13 @@ public class ParameterSenderService : BackgroundService
         { "LeftEyeLid", "/LeftEyeLid" },
         { "LeftEyeWiden", "/LeftEyeWiden" },
         { "LeftEyeLower", "/LeftEyeLower" },
+        { "LeftEyeBrow", "/LeftEyeBrow" },
         { "RightEyeX", "/RightEyeX" },
         { "RightEyeY", "/RightEyeY" },
         { "RightEyeLid", "/RightEyeLid" },
         { "RightEyeWiden", "/RightEyeWiden" },
         { "RightEyeLower", "/RightEyeLower" },
+        { "RightEyeBrow", "/RightEyeBrow" },
     };
 
     public readonly Dictionary<string, string> FaceExpressionMap = new()

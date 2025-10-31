@@ -7,7 +7,7 @@ namespace VRCFaceTracking.Baballonia;
 
 public class BabbleOsc
 {
-    public static readonly float[] EyeExpressions = new float[10];
+    public static readonly float[] EyeExpressions = new float[12];
 
     private Socket? _receiver;
 
@@ -90,6 +90,9 @@ public class BabbleOsc
                             case "/LeftEyeLower":
                                 EyeExpressions[(int)ExpressionMapping.EyeLeftLower] = value;
                                 break;
+                            case "/LeftEyeBrow":
+                                EyeExpressions[(int)ExpressionMapping.EyeLeftSquint] = value;
+                                break;
                             case "/RightEyeX":
                                 EyeExpressions[(int)ExpressionMapping.EyeRightX] = value;
                                 break;
@@ -104,6 +107,9 @@ public class BabbleOsc
                                 break;
                             case "/RightEyeLower":
                                 EyeExpressions[(int)ExpressionMapping.EyeRightLower] = value;
+                                break;
+                            case "/RightEyeBrow":
+                                EyeExpressions[(int)ExpressionMapping.EyeRightSquint] = value;
                                 break;
                             case "/mouthFunnel":
                             case "/mouthPucker":

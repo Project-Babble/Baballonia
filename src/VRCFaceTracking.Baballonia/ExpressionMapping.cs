@@ -7,9 +7,11 @@ public enum ExpressionMapping
     EyeLeftLid,
     EyeLeftWiden,
     EyeLeftLower,
+    EyeLeftSquint,
     EyeRightX,
     EyeRightY,
     EyeRightLid,
     EyeRightWiden,
-    EyeRightLower
+    EyeRightLower,
+    EyeRightSquint
 }
