@@ -15,7 +15,7 @@ namespace Baballonia.ViewModels.SplitViewPane;
 
 public partial class VrcViewModel : ViewModelBase
 {
-    public ILocalSettingsService LocalSettingsService { get; }
+    private ILocalSettingsService LocalSettingsService { get; }
 
     [ObservableProperty]
     [SavedSetting("VRC_UseNativeTracking", false)]
@@ -24,11 +24,12 @@ public partial class VrcViewModel : ViewModelBase
     [ObservableProperty]
     private string? _selectedModuleMode = "Face";
 
-    [ObservableProperty] private bool _vrcftDetected = false;
+    [ObservableProperty] private bool _vrcftDetected;
 
     public ObservableCollection<string> ModuleModeOptions { get; set; } = ["Both", "Face", "Eyes", "Disabled"];
 
     private string _baballoniaModulePath;
+
     private bool TryGetModuleConfig(out ModuleConfig? config)
     {
         if (!Directory.Exists(Utils.VrcftLibsDirectory))
@@ -51,6 +52,7 @@ public partial class VrcViewModel : ViewModelBase
         config = null;
         return false;
     }
+
     public VrcViewModel()
     {
         LocalSettingsService = Ioc.Default.GetRequiredService<ILocalSettingsService>();
@@ -71,20 +73,20 @@ public partial class VrcViewModel : ViewModelBase
 
     private async Task LoadAsync()
     {
-        //var selected = LocalSettingsService.ReadSetting<string>("VRC_SelectedModuleMode", "Face");
-        var useNative = LocalSettingsService.ReadSetting<bool>("VRC_UseNativeTracking", false);
+        var useNative = LocalSettingsService.ReadSetting("VRC_UseNativeTracking", false);
 
         await Dispatcher.UIThread.InvokeAsync(() =>
         {
-            //SelectedModuleMode = selected;
             UseNativeVrcEyeTracking = useNative;
         }, DispatcherPriority.Background);
     }
+
     private async Task WriteModuleConfig(ModuleConfig config)
     {
         if (!string.IsNullOrWhiteSpace(_baballoniaModulePath))
             await File.WriteAllTextAsync(_baballoniaModulePath, JsonSerializer.Serialize(config));
     }
+
     async partial void OnSelectedModuleModeChanged(string? value)
     {
         try
@@ -101,7 +103,7 @@ public partial class VrcViewModel : ViewModelBase
             };
             await WriteModuleConfig(newConfig);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             // ignore lol
         }
