@@ -160,7 +160,7 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Prevents eyes from looking out in opposite directions, but may overcorrect..
+        ///   Looks up a localized string similar to Prevents eyes from looking out in opposite directions, and improves pupil stability..
         /// </summary>
         public static string Calibration_Eye_Expressions_Stabilize_Eyes_Description {
             get {

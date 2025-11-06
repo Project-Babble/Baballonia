@@ -405,3 +405,4 @@ FodyWeavers.xsd
 # macOS files
 .DS_Store
 src/Baballonia.Desktop/_internal.zip
+/src/Baballonia.Desktop/python
