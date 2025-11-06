@@ -12,11 +12,12 @@ namespace Baballonia.Services;
 
 public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRunner
 {
+    public Size InputSize { get; private set; }
+    public int OutputSize { get; private set; }
+    public DenseTensor<float> InputTensor;
     private ILogger _logger;
     private string _inputName;
     private InferenceSession _session;
-    public DenseTensor<float> InputTensor;
-    public Size InputSize { get; private set; }
 
 
     /// <summary>
@@ -165,6 +166,7 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
             arKitExpressions.AddRange(result.AsEnumerable<float>().ToArray());
         }
 
+        OutputSize = arKitExpressions.Count;
         return arKitExpressions.ToArray();
     }
 
