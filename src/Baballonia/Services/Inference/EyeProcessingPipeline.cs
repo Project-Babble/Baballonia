@@ -73,9 +73,9 @@ public class EyeProcessingPipeline : DefaultProcessingPipeline, IDisposable
         var leftYaw = arKitExpressions[1] * mulV - mulV / 2;
         var leftLid = 1 - arKitExpressions[2];
 
-        var rightPitch = arKitExpressions[3] * mulY - mulY / 2;
-        var rightYaw = arKitExpressions[4] * mulV - mulV / 2;
-        var rightLid = 1 - arKitExpressions[5];
+        var rightPitch = arKitExpressions[6] * mulY - mulY / 2;
+        var rightYaw = arKitExpressions[7] * mulV - mulV / 2;
+        var rightLid = 1 - arKitExpressions[8];
 
         var eyeY = (leftPitch * leftLid + rightPitch * rightLid) / (leftLid + rightLid);
 
@@ -96,18 +96,15 @@ public class EyeProcessingPipeline : DefaultProcessingPipeline, IDisposable
         // [left pitch, left yaw, left lid...
         float[] convertedExpressions = new float[Utils.EyeRawExpressions];
 
-        // swap eyes at this point
         convertedExpressions[0] = rightEyeYawCorrected; // left pitch
         convertedExpressions[1] = eyeY;                   // left yaw
         convertedExpressions[2] = rightLid;               // left lid
-        convertedExpressions[3] = leftEyeYawCorrected;  // right pitch
-        convertedExpressions[4] = eyeY;                   // right yaw
-        convertedExpressions[5] = leftLid;                // right lid
-
-        // Rest are untouched
-        convertedExpressions[6] = arKitExpressions[6];
-        convertedExpressions[7] = arKitExpressions[7];
-        convertedExpressions[8] = arKitExpressions[8];
+        convertedExpressions[3] = arKitExpressions[3];
+        convertedExpressions[4] = arKitExpressions[4];
+        convertedExpressions[5] = arKitExpressions[5];
+        convertedExpressions[6] = leftEyeYawCorrected;  // right pitch
+        convertedExpressions[7] = eyeY;                   // right yaw
+        convertedExpressions[8] = leftLid;                // right lid
         convertedExpressions[9] = arKitExpressions[9];
         convertedExpressions[10] = arKitExpressions[10];
         convertedExpressions[11] = arKitExpressions[11];
