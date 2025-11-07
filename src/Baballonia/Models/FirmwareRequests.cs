@@ -1,10 +1,40 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 // ReSharper disable InconsistentNaming
 
 namespace Baballonia.Models
 {
+    public class FirmwareResponse<T>
+    {
+        public bool IsSuccess { get; }
+        public T? Value { get; }
+        public string? Error { get; }
+
+        private FirmwareResponse(T value)
+        {
+            IsSuccess = true;
+            Value = value;
+        }
+
+        private FirmwareResponse(string error)
+        {
+            IsSuccess = false;
+            Error = error;
+        }
+
+        public static FirmwareResponse<T> Success(T value) => new(value);
+
+        public static FirmwareResponse<T> Failure(string error) => new(error);
+
+        public T GetValueOrThrow()
+        {
+            if (!IsSuccess)
+                throw new InvalidOperationException($"Cannot access value. Error: {Error}");
+            return Value!;
+        }
+    }
     public interface IFirmwareRequest
     {
         string command { get; }
@@ -50,17 +80,48 @@ namespace Baballonia.Models
 
             [JsonPropertyName("ip_address")] public string? IpAddress { get; set; }
         }
+        public record WhoAmIResponse(string who_am_i, string version);
+        public record GetSerialResponse(string mac, string serial);
+
+        public record GetDeviceModeResponse(string mode, int value);
 
         public record GenericResponse(List<string> results);
 
         public record GenericResult(string result);
+
+        public record GenericDataResult(string status, JsonDocument? data);
+        public record GenericCommandResultV2(string command, GenericDataResult result);
+        public record GenericResponseV2(List<GenericCommandResultV2> results);
+
     }
 
     public class FirmwareRequests
     {
+        public record RestartDeviceRequest() : IFirmwareRequest
+        {
+            public string command => "restart_device";
+            public object? data => null;
+        }
+        public record GetSerialRequest() : IFirmwareRequest<FirmwareResponses.GetSerialResponse>
+        {
+            public string command => "get_serial";
+            public object? data => null;
+        }
+
+        public record GetWhoAmIRequest() : IFirmwareRequest<FirmwareResponses.WhoAmIResponse>
+        {
+            public string command => "get_who_am_i";
+            public object? data => null;
+        }
         public record ScanWifiRequest() : IFirmwareRequest<FirmwareResponses.WifiNetworkResponse>
         {
             public string command => "scan_networks";
+            public object? data => null;
+        }
+
+        public record GetDeviceModeRequestV2 : IFirmwareRequest<FirmwareResponses.GetDeviceModeResponse>
+        {
+            public string command => "get_device_mode";
             public object? data => null;
         }
 
@@ -76,6 +137,10 @@ namespace Baballonia.Models
             public object? data => new { hostname = mdns };
         }
 
+        /// <summary>
+        /// DO NOT USE WITH V2
+        /// </summary>
+        /// <param name="state"></param>
         public record SetPausedRequest(bool state) : IFirmwareRequest
         {
             public string command => "pause";
@@ -94,6 +159,11 @@ namespace Baballonia.Models
             public object? data => null;
         }
 
+        /**
+         * quoting a txt I got
+         * "NOTE: DO NOT USE START STREAMING COMMAND IT IS DEPRECATED"
+         * for new firmware only ofc
+         */
         public record StartStreamingRequest : IFirmwareRequest
         {
             public string command => "start_streaming";

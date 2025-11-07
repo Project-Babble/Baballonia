@@ -90,7 +90,7 @@ namespace Baballonia.Tests.FirmwareTests
             session.WaitForHeartbeat();
 
             var results = session.SendCommand(new FirmwareRequests.GetWifiStatusRequest(), TimeSpan.FromSeconds(10));
-            Assert.AreEqual("192.168.0.246", results.IpAddress);
+            Assert.AreEqual("192.168.0.246", results.Value!.IpAddress);
         }
 
 
@@ -133,7 +133,7 @@ namespace Baballonia.Tests.FirmwareTests
             var commandResult = session.SendCommand(new FirmwareRequests.SetPausedRequest(true), TimeSpan.FromSeconds(10));
             Assert.AreEqual("""
                             {"command_name":"pause", "status":"SUCCESS"}
-                            """, commandResult);
+                            """, commandResult.Value!.ToString());
         }
 
 

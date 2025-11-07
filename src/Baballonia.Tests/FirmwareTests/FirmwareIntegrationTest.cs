@@ -46,9 +46,9 @@ namespace Baballonia.Tests.FirmwareTests
             session.WaitForHeartbeat();
             session.SendCommand(new FirmwareRequests.SetPausedRequest(true), TimeSpan.FromSeconds(30));
             var networks = session.SendCommand(new FirmwareRequests.ScanWifiRequest(), TimeSpan.FromSeconds(30));
-            Assert.IsNotNull(networks);
+            Assert.IsTrue(networks.IsSuccess);
 
-            var find = networks.Networks.Find(network => network.Ssid == WIFI_SSID);
+            var find = networks.Value!.Networks.Find(network => network.Ssid == WIFI_SSID);
             Assert.IsNotNull(find);
 
             session.SendCommand(new FirmwareRequests.SetWifiRequest(WIFI_SSID, WIFI_PWD), TimeSpan.FromSeconds(30));
@@ -57,8 +57,8 @@ namespace Baballonia.Tests.FirmwareTests
             Assert.IsNotNull(connectionres);
 
             var wifistatus = session.SendCommand(new FirmwareRequests.GetWifiStatusRequest(), TimeSpan.FromSeconds(30));
-            Assert.IsNotNull(wifistatus);
-            Assert.AreEqual("connected", wifistatus.Status);
+            Assert.IsTrue(wifistatus.IsSuccess);
+            Assert.AreEqual("connected", wifistatus.Value!.Status);
 
             session.SendCommand(new FirmwareRequests.SetPausedRequest(false), TimeSpan.FromSeconds(30));
 
@@ -73,9 +73,9 @@ namespace Baballonia.Tests.FirmwareTests
             session.WaitForHeartbeat();
             session.SendCommand(new FirmwareRequests.SetPausedRequest(true), TimeSpan.FromSeconds(30));
             var networks = session.SendCommand(new FirmwareRequests.ScanWifiRequest(), TimeSpan.FromSeconds(30));
-            Assert.IsNotNull(networks);
+            Assert.IsTrue(networks.IsSuccess);
 
-            var find = networks.Networks.Find(network => network.Ssid == WIFI_SSID);
+            var find = networks.Value!.Networks.Find(network => network.Ssid == WIFI_SSID);
             Assert.IsNotNull(find);
 
             session.SendCommand(new FirmwareRequests.SetWifiRequest("", WIFI_PWD), TimeSpan.FromSeconds(30));
@@ -84,8 +84,8 @@ namespace Baballonia.Tests.FirmwareTests
             Assert.IsNotNull(connectionres);
 
             var wifistatus = session.SendCommand(new FirmwareRequests.GetWifiStatusRequest(), TimeSpan.FromSeconds(30));
-            Assert.IsNotNull(wifistatus);
-            Assert.AreEqual("error", wifistatus.Status);
+            Assert.IsTrue(wifistatus.IsSuccess);
+            Assert.AreEqual("error", wifistatus.Value!.Status);
 
             session.SendCommand(new FirmwareRequests.SetPausedRequest(false), TimeSpan.FromSeconds(30));
 

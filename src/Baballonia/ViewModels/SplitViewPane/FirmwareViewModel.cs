@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
@@ -192,7 +193,7 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
                     _firmwareSessions.Add(SelectedSerialPort!, _firmwareService.StartSession(CommandSenderType.Serial, SelectedSerialPort!));
 
                 var res = await TrySendCommandAsync(new FirmwareRequests.SetPausedRequest(true), TimeSpan.FromSeconds(5));
-                IsValidDeviceSelected = !string.IsNullOrWhiteSpace(res);
+                IsValidDeviceSelected = res.IsSuccess;
                 if (IsValidDeviceSelected)
                 {
                     SelectTracker = Resources.Firmware_SelectTracker_Connected;
@@ -242,14 +243,14 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
 
         // By this point we should have a valid serial port, no need to do any error wrapping here
         var response = await _firmwareSessions[SelectedSerialPort!].SendCommandAsync(new FirmwareRequests.ScanWifiRequest(), TimeSpan.FromSeconds(30));
-        if (response == null)
+        if (!response.IsSuccess)
         {
             StopButtonAnimation(nameof(WifiScanButton));
             WifiScanButton = Resources.Firmware_WifiScanButton_Error;
             return;
         }
 
-        var networks = response!.Networks;
+        var networks = response.Value!.Networks;
         foreach (var port in networks.
                      OrderByDescending(network => network.Rssi).
                      Select(network => network.Ssid).
@@ -289,7 +290,7 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
         var res = await TrySendCommandAsync(new FirmwareRequests.SetWifiRequest(WifiSsid, WifiPassword), TimeSpan.FromSeconds(30));
 
         StopButtonAnimation(nameof(WifiSetButton));
-        WifiSetButton = string.IsNullOrEmpty(res) ? Resources.Firmware_WifiSetButton_Error : Resources.Firmware_WifiSetButton_Success;
+        WifiSetButton = !res.IsSuccess ? Resources.Firmware_WifiSetButton_Error : Resources.Firmware_WifiSetButton_Success;
         await Task.Delay(2000);
         WifiSetButton = Resources.Firmware_WifiSetButton_Default;
 
@@ -352,17 +353,16 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
         };
     }
 
-    private async Task<string?> TrySendCommandAsync(IFirmwareRequest request, TimeSpan timeSpan)
+    private async Task<FirmwareResponse<JsonDocument>> TrySendCommandAsync(IFirmwareRequest request, TimeSpan timeSpan)
     {
         try
         {
             return await _firmwareSessions[SelectedSerialPort!].SendCommandAsync(request, timeSpan);
-
         }
         catch (Exception e)
         {
             _logger.LogError("Error while sending command {Exception}", e);
-            return await Task.FromResult(string.Empty);
+            return await Task.FromResult(FirmwareResponse<JsonDocument>.Failure($"Error while sending command: {e}"));
         }
     }
 

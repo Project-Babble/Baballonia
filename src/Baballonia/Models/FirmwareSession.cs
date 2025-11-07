@@ -13,7 +13,7 @@ namespace Baballonia.Models;
 /// <summary>
 /// Thread safe, async supported Session object for sending and receiving commands in json format
 /// </summary>
-public class FirmwareSession
+public class FirmwareSession : IDisposable
 {
     private ICommandSender _commandSender;
     private ILogger _logger;
@@ -104,7 +104,7 @@ public class FirmwareSession
         }
     }
 
-    public string? SendCommand(IFirmwareRequest request, TimeSpan timeout)
+    public FirmwareResponse<JsonDocument> SendCommand(IFirmwareRequest request, TimeSpan timeout)
     {
         _lock.Wait();
         try
@@ -115,16 +115,15 @@ public class FirmwareSession
             var jsonDoc = ReadResponse("results", timeout);
             var response = jsonDoc?.Deserialize<FirmwareResponses.GenericResponse>();
             if (response == null)
-                return null;
+                return FirmwareResponse<JsonDocument>.Failure("Wtf?");
 
             var result =  JsonSerializer.Deserialize<FirmwareResponses.GenericResult>(response.results.First());
 
-            return result?.result;
+            return FirmwareResponse<JsonDocument>.Success(JsonSerializer.Deserialize<JsonDocument>(result!.result)!);
         }
         catch (TimeoutException ex)
         {
-            _logger.LogError("Timeout reached");
-            return null;
+            return FirmwareResponse<JsonDocument>.Failure("Timeout reached");
         }
         finally
         {
@@ -132,7 +131,7 @@ public class FirmwareSession
         }
     }
 
-    public T? SendCommand<T>(IFirmwareRequest<T> request, TimeSpan timeout)
+    public FirmwareResponse<T> SendCommand<T>(IFirmwareRequest<T> request, TimeSpan timeout)
     {
         _lock.Wait();
         try
@@ -147,10 +146,10 @@ public class FirmwareSession
             {
                 var networks = ReadResponse("networks", timeout);
                 if (networks == null)
-                    return default;
+                    return FirmwareResponse<T>.Failure("No networks found");
 
                 ReadResponse("results", timeout); // to discard the actual response
-                return networks.Deserialize<T>();
+                return FirmwareResponse<T>.Success(networks.Deserialize<T>()!);
             }
 
             var jsonDoc = ReadResponse("results", timeout);
@@ -159,12 +158,14 @@ public class FirmwareSession
                 return default;
 
             var result =  JsonSerializer.Deserialize<FirmwareResponses.GenericResult>(response.results.First());
-            return result == null ? default : JsonSerializer.Deserialize<T>(result.result);
+            if (result == null)
+                return FirmwareResponse<T>.Failure(response.ToString());
+
+            return FirmwareResponse<T>.Success(JsonSerializer.Deserialize<T>(result.result)!);
         }
         catch (TimeoutException ex)
         {
-            _logger.LogError("Timeout reached");
-            return default;
+            return FirmwareResponse<T>.Failure("Timeout reached");
         }
         finally
         {
@@ -172,14 +173,14 @@ public class FirmwareSession
         }
     }
 
-    public async Task<T?> SendCommandAsync<T>(IFirmwareRequest<T> request, TimeSpan timeSpan)
+    public async Task<FirmwareResponse<T>> SendCommandAsync<T>(IFirmwareRequest<T> request, TimeSpan timeSpan)
     {
         return await Task.Run(() =>
             SendCommand(request, timeSpan)
         );
     }
 
-    public async Task<string?> SendCommandAsync(IFirmwareRequest request, TimeSpan timeSpan)
+    public async Task<FirmwareResponse<JsonDocument>> SendCommandAsync(IFirmwareRequest request, TimeSpan timeSpan)
     {
         return await Task.Run(() =>
             SendCommand(request, timeSpan)
