@@ -113,13 +113,14 @@ public abstract class BaseCaptureStep : PacketHandlerAdapter, ICalibrationStep
     }
 }
 
-public class GazeCaptureStep : BaseEyeCaptureStep
+public class GazeCaptureStep(IEyePipelineEventBus bus) : BaseEyeCaptureStep(bus, "gaze",
+    CaptureFlags.FLAG_GOOD_DATA |
+    CaptureFlags.FLAG_IN_MOVEMENT |
+    CaptureFlags.FLAG_VERSION_BIT1 |
+    CaptureFlags.FLAG_ROUTINE_BIT1)
 {
     private Stopwatch _posDataTimer = new();
     private readonly TimeSpan _posDataTimeout = TimeSpan.FromSeconds(0.2);
-    public GazeCaptureStep(IEyePipelineEventBus bus) : base(bus, "gaze", CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_IN_MOVEMENT)
-    {
-    }
 
     public override void OnHmdPositionalData(HmdPositionalDataPacket positionalData)
     {
@@ -142,20 +143,14 @@ public class GazeCaptureStep : BaseEyeCaptureStep
     }
 }
 
-public class BaseEyeCaptureStep : BaseCaptureStep
+public class BaseEyeCaptureStep(IEyePipelineEventBus eyePipelineEvent, string name, uint flags)
+    : BaseCaptureStep(name, flags)
 {
-    private readonly IEyePipelineEventBus _eyePipelineEvent;
-
-    public BaseEyeCaptureStep(IEyePipelineEventBus eyePipelineEvent, string name, uint flags) : base(name, flags)
-    {
-        _eyePipelineEvent = eyePipelineEvent;
-    }
-
     public override async Task ExecuteAsync(OverlayMessageDispatcher dispatcher, CancellationToken ct)
     {
         dispatcher.RegisterHandler(this);
 
-        _eyePipelineEvent.Subscribe<EyePipelineEvents.NewTransformedFrameEvent>(OnNewEyeFrame);
+        eyePipelineEvent.Subscribe<EyePipelineEvents.NewTransformedFrameEvent>(OnNewEyeFrame);
 
         dispatcher.Dispatch(new RunVariableLenghtRoutinePacket(Name, TimeSpan.FromSeconds(120)));
         StartCollecting();
@@ -163,7 +158,7 @@ public class BaseEyeCaptureStep : BaseCaptureStep
         if (ct.IsCancellationRequested)
             return;
 
-        _eyePipelineEvent.Unsubscribe<EyePipelineEvents.NewTransformedFrameEvent>(OnNewEyeFrame);
+        eyePipelineEvent.Unsubscribe<EyePipelineEvents.NewTransformedFrameEvent>(OnNewEyeFrame);
         dispatcher.UnRegisterHandler(this);
         _binCollector.WriteBin(Name + ".bin");
     }
@@ -265,23 +260,28 @@ public class EyeCalibration
         steps.Add(new BaseTutorialStep("gazetutorial"));
         steps.Add(new GazeCaptureStep(_eyePipelineEventBus));
         steps.Add(new BaseTutorialStep("blinktutorial"));
-        steps.Add(_eyeCaptureStepFactory.Create("blink", CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_RESTING));
+        steps.Add(_eyeCaptureStepFactory.Create("blink",
+            CaptureFlags.FLAG_GOOD_DATA |
+            CaptureFlags.FLAG_RESTING |
+            CaptureFlags.FLAG_VERSION_BIT1 |
+            CaptureFlags.FLAG_ROUTINE_BIT1
+            ));
         // steps.Add(new BaseTutorialStep("dilationtutorial"));
         // steps.Add(_eyeCaptureStepFactory.Create("dilation",
         //     CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_DILATION_BLACK));
-        // steps.Add(new BaseTutorialStep("widentutorial"));
-        // steps.Add(_eyeCaptureStepFactory.Create("widen",
-        //     CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_WHATEVER_NOT_IMPLEMENTED));
-        // steps.Add(new BaseTutorialStep("squinttutorial"));
-        // steps.Add(_eyeCaptureStepFactory.Create("squint",
-        //     CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_WHATEVER_NOT_IMPLEMENTED));
-        // steps.Add(new BaseTutorialStep("browtutorial"));
-        // steps.Add(_eyeCaptureStepFactory.Create("brow",
-        //     CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_WHATEVER_NOT_IMPLEMENTED));
+        steps.Add(new BaseTutorialStep("widentutorial"));
+        steps.Add(_eyeCaptureStepFactory.Create("widen",
+             CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1));
+        steps.Add(new BaseTutorialStep("squinttutorial"));
+        steps.Add(_eyeCaptureStepFactory.Create("squint",
+             CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1));
+        steps.Add(new BaseTutorialStep("browtutorial"));
+        steps.Add(_eyeCaptureStepFactory.Create("brow",
+             CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1));
         // steps.Add(new BaseTutorialStep("covergencetutorial"));
         // steps.Add(_eyeCaptureStepFactory.Create("covergence",
         //     CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_WHATEVER_NOT_IMPLEMENTED));
-        steps.Add(new MergeBinsStep("gaze.bin", "blink.bin", "dilation.bin"));
+        steps.Add(new MergeBinsStep("gaze.bin", "blink.bin", "dilation.bin", "widen.bin", "squint.bin", "brow.bin"));
         steps.Add(new TrainerCalibrationStep(_trainer));
         steps.Add(new CommandDispatchStep("close"));
 
