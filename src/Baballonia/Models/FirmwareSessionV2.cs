@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Baballonia.Models;
 
-public class FirmwareSessionV2 : IDisposable
+public class FirmwareSessionV2 : IFirmwareSession, IDisposable
 {
     private ICommandSender _commandSender;
     private ILogger _logger;

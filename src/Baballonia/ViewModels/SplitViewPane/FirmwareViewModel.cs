@@ -26,7 +26,7 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
 {
     private readonly FirmwareService _firmwareService = Ioc.Default.GetRequiredService<FirmwareService>();
     private readonly ILogger<FirmwareViewModel> _logger = Ioc.Default.GetRequiredService<ILogger<FirmwareViewModel>>();
-    private readonly Dictionary<string, FirmwareSession> _firmwareSessions = new();
+    private readonly Dictionary<string, FirmwareSessionV1> _firmwareSessions = new();
     private readonly Dictionary<string, CancellationTokenSource> _animationCancellationTokens = new();
 
     [ObservableProperty]
@@ -303,7 +303,7 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     [RelayCommand]
     private async Task FlashFirmware()
     {
-        if (_firmwareSessions.TryGetValue(SelectedSerialPort!, out FirmwareSession? value))
+        if (_firmwareSessions.TryGetValue(SelectedSerialPort!, out FirmwareSessionV1? value))
         {
             // True, this is a multimodal device that needs to be released prior to flashing
             await TrySendCommandAsync(new FirmwareRequests.SetPausedRequest(false), TimeSpan.FromSeconds(5));
