@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
+using System.Threading.Tasks;
 using Baballonia.Contracts;
 using Microsoft.Extensions.Logging;
 
@@ -41,6 +42,23 @@ public class FirmwareSessionFactory
 
         return sessions;
     }
+    public async Task<IEnumerable<IFirmwareSession>> TryOpenAllSessionsAsync()
+    {
+        var availablePorts = FindAvailableSerialPorts();
+
+        var sessionTasks = availablePorts
+            .Select(async port =>
+            {
+                var s = await Task.Run(() => TryOpenSession(port));
+                return s;
+            })
+            .ToList();
+
+        var results = await Task.WhenAll(sessionTasks);
+
+        // Filter out nulls
+        return results.Where(s => s != null);
+    }
 
     public IFirmwareSession? TryOpenSession(string port)
     {
@@ -71,6 +89,7 @@ public class FirmwareSessionFactory
             return null;
         }
 
+        sessionV2.Version = new Version(response.Value!.version);
         _logger.LogInformation($"Opened V2 session for {port}");
         return sessionV2;
     }
@@ -88,6 +107,9 @@ public class FirmwareSessionFactory
             sender.Dispose();
             return null;
         }
+
+        // legacy
+        sessionV1.Version = new Version(0,0,0);
 
         _logger.LogInformation($"Opened V1 session for {port}");
         return sessionV1;
