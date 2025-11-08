@@ -42,7 +42,9 @@ public class FirmwareSessionFactory
 
         return sessions;
     }
-    public async Task<IEnumerable<IFirmwareSession>> TryOpenAllSessionsAsync()
+
+    public record PortToSessionMapping(string port, IFirmwareSession session);
+    public async Task<List<PortToSessionMapping>> TryOpenAllSessionsAsync()
     {
         var availablePorts = FindAvailableSerialPorts();
 
@@ -50,14 +52,15 @@ public class FirmwareSessionFactory
             .Select(async port =>
             {
                 var s = await Task.Run(() => TryOpenSession(port));
-                return s;
+                return s == null ? null : new PortToSessionMapping(port, s);
             })
             .ToList();
 
         var results = await Task.WhenAll(sessionTasks);
+        var filtered = results.Where(s => s != null).ToList();
 
         // Filter out nulls
-        return results.Where(s => s != null);
+        return filtered!;
     }
 
     public IFirmwareSession? TryOpenSession(string port)
@@ -73,6 +76,11 @@ public class FirmwareSessionFactory
         _logger.LogInformation($"{port} most likely is not a babble board");
 
         return null;
+    }
+
+    public Task<IFirmwareSession?> TryOpenSessionAsync(string port)
+    {
+        return Task.Run(() => TryOpenSession(port));
     }
 
     private FirmwareSessionV2? TryOpenV2Session(string port)

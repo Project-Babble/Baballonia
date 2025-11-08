@@ -17,7 +17,8 @@ public class FirmwareSessionV1 : IVersionedFirmwareSession, IDisposable
 {
     private ICommandSender _commandSender;
     private ILogger _logger;
-    public Version Version { get; set; }
+    // this is legacy by default so it will always stay as 0.0.0
+    public Version Version { get; set; } = new Version(0, 0, 0);
 
     JsonExtractor jsonExtractor = new JsonExtractor();
 

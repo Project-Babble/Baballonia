@@ -5,7 +5,7 @@ using Baballonia.Models;
 
 namespace Baballonia.Contracts;
 
-public interface IFirmwareSession
+public interface IFirmwareSession : IDisposable
 {
     Version Version { get; }
     FirmwareResponse<JsonDocument> SendCommand(IFirmwareRequest request, TimeSpan timeout);
