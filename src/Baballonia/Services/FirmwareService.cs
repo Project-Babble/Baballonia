@@ -42,9 +42,9 @@ public class FirmwareService(ILogger<FirmwareService> logger, ICommandSenderFact
         }
     }
 
-    public FirmwareSession StartSession(CommandSenderType type, string port)
+    public FirmwareSessionV1 StartSession(CommandSenderType type, string port)
     {
-        return new FirmwareSession(commandSenderFactory.Create(type, port), logger);
+        return new FirmwareSessionV1(commandSenderFactory.Create(type, port), logger);
     }
 
     /// <summary>

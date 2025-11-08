@@ -34,14 +34,14 @@ namespace Baballonia.Tests.FirmwareTests
         [TestMethod]
         public void TestBoard()
         {
-            var session = new FirmwareSession(new SerialCommandSender(PORT), _logger);
+            var session = new FirmwareSessionV1(new SerialCommandSender(PORT), _logger);
             Assert.IsNotNull(session.WaitForHeartbeat());
         }
 
         [TestMethod]
         public void FindAndConnectWifiSuccess()
         {
-            var session = new FirmwareSession(new SerialCommandSender(PORT), _logger);
+            var session = new FirmwareSessionV1(new SerialCommandSender(PORT), _logger);
 
             session.WaitForHeartbeat();
             session.SendCommand(new FirmwareRequests.SetPausedRequest(true), TimeSpan.FromSeconds(30));
@@ -68,7 +68,7 @@ namespace Baballonia.Tests.FirmwareTests
         [TestMethod]
         public void FindAndConnectWifiFail()
         {
-            var session = new FirmwareSession(new SerialCommandSender(PORT), _logger);
+            var session = new FirmwareSessionV1(new SerialCommandSender(PORT), _logger);
 
             session.WaitForHeartbeat();
             session.SendCommand(new FirmwareRequests.SetPausedRequest(true), TimeSpan.FromSeconds(30));

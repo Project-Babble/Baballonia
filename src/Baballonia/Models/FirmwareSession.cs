@@ -13,7 +13,7 @@ namespace Baballonia.Models;
 /// <summary>
 /// Thread safe, async supported Session object for sending and receiving commands in json format
 /// </summary>
-public class FirmwareSession : IDisposable
+public class FirmwareSessionV1 : IFirmwareSession, IDisposable
 {
     private ICommandSender _commandSender;
     private ILogger _logger;
@@ -28,7 +28,7 @@ public class FirmwareSession : IDisposable
         WriteIndented = false
     };
 
-    public FirmwareSession(ICommandSender commandSender, ILogger logger)
+    public FirmwareSessionV1(ICommandSender commandSender, ILogger logger)
     {
         _commandSender = commandSender;
         _logger = logger;

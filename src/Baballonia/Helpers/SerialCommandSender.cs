@@ -93,7 +93,6 @@ namespace Baballonia.Helpers
                 _serialPort.Write(payloadBytes, i, length);
                 Thread.Sleep(50); // Small pause between chunks
             }
-
         }
     }
 }
