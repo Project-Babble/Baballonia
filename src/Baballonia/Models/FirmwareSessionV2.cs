@@ -10,10 +10,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Baballonia.Models;
 
-public class FirmwareSessionV2 : IFirmwareSession, IDisposable
+public class FirmwareSessionV2 : IVersionedFirmwareSession, IDisposable
 {
     private ICommandSender _commandSender;
     private ILogger _logger;
+    public Version Version { get; set; }
 
     JsonExtractor jsonExtractor = new JsonExtractor();
 
@@ -49,8 +50,11 @@ public class FirmwareSessionV2 : IFirmwareSession, IDisposable
         _commandSender.WriteLine(payload);
     }
 
+
     public FirmwareResponse<JsonDocument> SendCommand(IFirmwareRequest request, TimeSpan timeout)
     {
+        RequestVersionGuard.ValidateRequestForVersion(request, Version);
+
         _lock.Wait();
         try
         {
@@ -74,6 +78,10 @@ public class FirmwareSessionV2 : IFirmwareSession, IDisposable
         {
             return FirmwareResponse<JsonDocument>.Failure($"Timeout reached");
         }
+        catch (Exception any)
+        {
+            return FirmwareResponse<JsonDocument>.Failure(any.Message);
+        }
         finally
         {
             _lock.Release();
@@ -82,6 +90,8 @@ public class FirmwareSessionV2 : IFirmwareSession, IDisposable
 
     public FirmwareResponse<T> SendCommand<T>(IFirmwareRequest<T> request, TimeSpan timeout)
     {
+        RequestVersionGuard.ValidateRequestForVersion(request, Version);
+
         _lock.Wait();
         try
         {
@@ -109,6 +119,10 @@ public class FirmwareSessionV2 : IFirmwareSession, IDisposable
         {
             return FirmwareResponse<T>.Failure($"Timeout reached");
         }
+        catch (Exception any)
+        {
+            return FirmwareResponse<T>.Failure(any.Message);
+        }
         finally
         {
             _lock.Release();
@@ -117,6 +131,8 @@ public class FirmwareSessionV2 : IFirmwareSession, IDisposable
 
     public async Task<FirmwareResponse<T>> SendCommandAsync<T>(IFirmwareRequest<T> request, TimeSpan timeSpan)
     {
+        RequestVersionGuard.ValidateRequestForVersion(request, Version);
+
         return await Task.Run(() =>
             SendCommand(request, timeSpan)
         );
@@ -125,6 +141,8 @@ public class FirmwareSessionV2 : IFirmwareSession, IDisposable
     public async Task<FirmwareResponse<JsonDocument>> SendCommandAsync(IFirmwareRequest request,
         TimeSpan timeSpan)
     {
+        RequestVersionGuard.ValidateRequestForVersion(request, Version);
+
         return await Task.Run(() =>
             SendCommand(request, timeSpan)
         );

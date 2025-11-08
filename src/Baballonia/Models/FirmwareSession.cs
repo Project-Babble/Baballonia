@@ -13,10 +13,11 @@ namespace Baballonia.Models;
 /// <summary>
 /// Thread safe, async supported Session object for sending and receiving commands in json format
 /// </summary>
-public class FirmwareSessionV1 : IFirmwareSession, IDisposable
+public class FirmwareSessionV1 : IVersionedFirmwareSession, IDisposable
 {
     private ICommandSender _commandSender;
     private ILogger _logger;
+    public Version Version { get; set; }
 
     JsonExtractor jsonExtractor = new JsonExtractor();
 
@@ -106,6 +107,8 @@ public class FirmwareSessionV1 : IFirmwareSession, IDisposable
 
     public FirmwareResponse<JsonDocument> SendCommand(IFirmwareRequest request, TimeSpan timeout)
     {
+        RequestVersionGuard.ValidateRequestForVersion(request, Version);
+
         _lock.Wait();
         try
         {
@@ -133,6 +136,8 @@ public class FirmwareSessionV1 : IFirmwareSession, IDisposable
 
     public FirmwareResponse<T> SendCommand<T>(IFirmwareRequest<T> request, TimeSpan timeout)
     {
+        RequestVersionGuard.ValidateRequestForVersion(request, Version);
+
         _lock.Wait();
         try
         {
@@ -175,6 +180,8 @@ public class FirmwareSessionV1 : IFirmwareSession, IDisposable
 
     public async Task<FirmwareResponse<T>> SendCommandAsync<T>(IFirmwareRequest<T> request, TimeSpan timeSpan)
     {
+        RequestVersionGuard.ValidateRequestForVersion(request, Version);
+
         return await Task.Run(() =>
             SendCommand(request, timeSpan)
         );
@@ -182,6 +189,8 @@ public class FirmwareSessionV1 : IFirmwareSession, IDisposable
 
     public async Task<FirmwareResponse<JsonDocument>> SendCommandAsync(IFirmwareRequest request, TimeSpan timeSpan)
     {
+        RequestVersionGuard.ValidateRequestForVersion(request, Version);
+
         return await Task.Run(() =>
             SendCommand(request, timeSpan)
         );
