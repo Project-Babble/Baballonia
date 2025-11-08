@@ -46,7 +46,7 @@ public class OscQueryServiceWrapper(ILogger<OscQueryServiceWrapper> logger, ILoc
         logger.LogInformation(
             $"[VRCFTReceiver] Started OSCQueryService {_serviceWrapper.ServerName} at TCP {tcpPort}, UDP {udpPort}, HTTP http://{_serviceWrapper.HostIP}:{tcpPort}");
 
-        _serviceWrapper.AddEndpoint<string>("/avatar/change", Attributes.AccessValues.ReadWrite, ["default"]);
+        _serviceWrapper.AddEndpoint<string>("/avatar/change", VRC.OSCQuery.Attributes.AccessValues.ReadWrite, ["default"]);
         _serviceWrapper.OnOscQueryServiceAdded += AddProfileToList;
 
         StartAutoRefreshServices(5000);

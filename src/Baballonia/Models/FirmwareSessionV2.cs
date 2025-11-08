@@ -14,7 +14,10 @@ public class FirmwareSessionV2 : IVersionedFirmwareSession, IDisposable
 {
     private ICommandSender _commandSender;
     private ILogger _logger;
-    public Version Version { get; set; }
+
+    // default to minimal required version for which this Session is expected to work
+    // will be overridden by factory if needed
+    public Version Version { get; set; } = new Version(0, 0, 1);
 
     JsonExtractor jsonExtractor = new JsonExtractor();
 
