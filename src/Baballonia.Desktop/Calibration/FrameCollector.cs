@@ -47,11 +47,11 @@ public class PositionalBinCollector
         };
     }
 
-    public void AddFrame(Mat left, Mat right)
+    public Frame AddFrame(Mat left, Mat right)
     {
         var posData = Interlocked.CompareExchange(ref _latestPosData, null, null);
         if (posData == null)
-            return;
+            return null;
 
         const int jpegQuality = 50;
         Cv2.ImEncode(".jpg", left, out var leftBuf, [(int)ImwriteFlags.JpegQuality, jpegQuality]);
@@ -74,6 +74,8 @@ public class PositionalBinCollector
         {
             _frames.Add(frame);
         }
+
+        return frame;
     }
 
     public void WriteBin(string path)
@@ -102,7 +104,7 @@ public class BinCollector
     }
 
 
-    CaptureFrameHeader GenerateHeader()
+    private CaptureFrameHeader GenerateHeader()
     {
         var time = (ulong)DateTimeOffset.Now.ToUnixTimeMilliseconds();
         return new CaptureFrameHeader
@@ -123,7 +125,7 @@ public class BinCollector
         };
     }
 
-    public void AddFrame(Mat left, Mat right)
+    public Frame AddFrame(Mat left, Mat right)
     {
         const int jpegQuality = 50;
         Cv2.ImEncode(".jpg", left, out var leftBuf, [(int)ImwriteFlags.JpegQuality, jpegQuality]);
@@ -146,6 +148,8 @@ public class BinCollector
         {
             _frames.Add(frame);
         }
+
+        return frame;
     }
 
     public void WriteBin(string path)
