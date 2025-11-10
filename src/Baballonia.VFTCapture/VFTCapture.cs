@@ -1,4 +1,4 @@
-
+using System.Net;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using OpenCvSharp;
@@ -17,8 +17,15 @@ public sealed class VftCapture(string source, ILogger logger) : Capture(source, 
 
     public override bool CanConnect(string connectionString)
     {
-        var lowered = connectionString.ToLower();
-        return lowered.StartsWith("/dev/video") && OperatingSystem.IsLinux();
+        if (OperatingSystem.IsLinux())
+        {
+            var lowered = connectionString.ToLower();
+            return lowered.StartsWith("/dev/video");
+        } else if (OperatingSystem.IsWindows())
+        {
+            return true;
+        }
+        return false;
     }
 
     /// <summary>
@@ -39,9 +46,18 @@ public sealed class VftCapture(string source, ILogger logger) : Capture(source, 
                 // Initialize VideoCapture with URL, timeout for robustness
                 // Set capture mode to YUYV
                 // Prevent automatic conversion to RGB
+#if LINUX
                 _videoCapture = await Task.Run(() => new VideoCapture(Source, VideoCaptureAPIs.V4L2), cts.Token);
                 _videoCapture.Set(VideoCaptureProperties.Mode, 3);
                 _videoCapture.Set(VideoCaptureProperties.ConvertRgb, 0);
+#else
+                if (int.TryParse(Source, out var index))
+                {
+                    _videoCapture = await Task.Run(() => VideoCapture.FromCamera(index, VideoCaptureAPIs.DSHOW), cts.Token);
+                    _videoCapture.Set(VideoCaptureProperties.Mode, 3);
+                    _videoCapture.Set(VideoCaptureProperties.ConvertRgb, 0);
+                }
+#endif
 
                 _loop = true;
                 _ = Task.Run(VideoCapture_UpdateLoop);
@@ -98,9 +114,13 @@ public sealed class VftCapture(string source, ILogger logger) : Capture(source, 
     private void SetTrackerState(bool setActive)
     {
         // Prev: var fd = ViveFacialTracker.open(Url, ViveFacialTracker.FileOpenFlags.O_RDWR);
+#if LINUX
         var vftFileStream = File.Open(Source, FileMode.Open, FileAccess.ReadWrite);
         var fd = vftFileStream.SafeFileHandle.DangerousGetHandle();
         if (fd != IntPtr.Zero)
+#elif WINDOWS
+        int fd = 0;
+#endif
         {
             try
             {
@@ -113,8 +133,10 @@ public sealed class VftCapture(string source, ILogger logger) : Capture(source, 
             }
             finally
             {
+#if LINUX
                 // Prev: ViveFacialTracker.close((int)fd);
                 vftFileStream.Close();
+#endif
             }
         }
     }

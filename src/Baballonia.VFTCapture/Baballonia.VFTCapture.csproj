@@ -7,8 +7,22 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
+	<PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
+	  <DefineConstants>WINDOWS</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(OS)' == 'Unix' ">
+	  <DefineConstants>LINUX</DefineConstants>
+	</PropertyGroup>
+
     <ItemGroup>
       <ProjectReference Include="..\Baballonia.SDK\Baballonia.SDK.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="blluc.dll">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

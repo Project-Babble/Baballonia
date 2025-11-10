@@ -2,6 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace Baballonia.VFTCapture;
 
+#if LINUX
 public partial class ViveFacialTracker
 {
     public enum FileOpenFlags
@@ -308,3 +309,4 @@ public partial class ViveFacialTracker
         return true;
     }
 }
+#endif

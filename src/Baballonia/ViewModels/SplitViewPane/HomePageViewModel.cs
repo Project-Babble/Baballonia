@@ -601,7 +601,10 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             var backend = model.SelectedCaptureMethod;
             if (!model.CaptureMethodVisible)
                 backend = "";
-
+            if (OperatingSystem.IsWindows() && address == "HTC Multimedia Camera" && string.IsNullOrEmpty(backend))
+            {
+                backend = "VFTCapture";
+            }
 
             bool success = false;
             switch (model.Camera)
