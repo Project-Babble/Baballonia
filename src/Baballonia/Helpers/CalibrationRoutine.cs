@@ -14,7 +14,7 @@ public static class CalibrationRoutine
         GazeOnly,
         BlinkOnly,
     }
-    public static readonly Dictionary<string, string> Map = Enum.GetValues<Routines>().ToDictionary(i => i.ToString(), i => ((int)i).ToString());
+    public static readonly Dictionary<string, Routines> Map = Enum.GetValues<Routines>().ToDictionary(i => i.ToString(), i => i);
     /*
     public static readonly Dictionary<string, string> Map = new()
     {

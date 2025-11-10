@@ -9,14 +9,14 @@ using OverlaySDK.Packets;
 
 namespace Baballonia.Desktop.Calibration;
 
-public class BinCollector
+public class PositionalBinCollector
 {
     private readonly object _lock = new();
     private readonly List<Frame> _frames = new();
     private HmdPositionalDataPacket? _latestPosData;
     private uint _headerFlags;
 
-    public BinCollector(uint headerFlags)
+    public PositionalBinCollector(uint headerFlags)
     {
         _headerFlags = headerFlags;
     }
@@ -58,6 +58,78 @@ public class BinCollector
         Cv2.ImEncode(".jpg", right, out var rightBuf, [(int)ImwriteFlags.JpegQuality, jpegQuality]);
 
         var header = GenerateHeader(posData);
+
+        var frame = new Frame
+        {
+            Header = header with
+            {
+                JpegDataLeftLength = (uint)leftBuf.Length,
+                JpegDataRightLength = (uint)rightBuf.Length
+            },
+            LeftJpeg = leftBuf,
+            RightJpeg = rightBuf
+        };
+
+        lock (_lock)
+        {
+            _frames.Add(frame);
+        }
+    }
+
+    public void WriteBin(string path)
+    {
+        List<Frame> copy;
+        lock (_lock)
+        {
+            copy = new List<Frame>(_frames);
+            _frames.Clear();
+        }
+
+        CaptureBin.IO.CaptureBin.WriteAll(Path.Combine(Utils.ModelDataDirectory, path), copy);
+    }
+}
+public class BinCollector
+{
+    private readonly object _lock = new();
+    private readonly List<Frame> _frames = new();
+    private uint _headerFlags;
+    // empty data, because bin
+    HmdPositionalDataPacket positionalData = new HmdPositionalDataPacket();
+
+    public BinCollector(uint headerFlags)
+    {
+        _headerFlags = headerFlags;
+    }
+
+
+    CaptureFrameHeader GenerateHeader()
+    {
+        var time = (ulong)DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        return new CaptureFrameHeader
+        {
+            RoutineState = _headerFlags,
+            LeftEyePitch = positionalData.LeftEyePitch,
+            LeftEyeYaw = positionalData.LeftEyeYaw,
+            RightEyePitch = positionalData.RightEyePitch,
+            RightEyeYaw = positionalData.RightEyeYaw,
+            RoutinePitch = positionalData.RoutinePitch,
+            RoutineYaw = positionalData.RoutineYaw,
+            RoutineDistance = positionalData.RoutineDistance,
+            RoutineConvergence = positionalData.RoutineConvergence,
+            FovAdjustDistance = positionalData.FovAdjustDistance,
+            Timestamp = time,
+            TimestampLeft = time,
+            TimestampRight = time,
+        };
+    }
+
+    public void AddFrame(Mat left, Mat right)
+    {
+        const int jpegQuality = 50;
+        Cv2.ImEncode(".jpg", left, out var leftBuf, [(int)ImwriteFlags.JpegQuality, jpegQuality]);
+        Cv2.ImEncode(".jpg", right, out var rightBuf, [(int)ImwriteFlags.JpegQuality, jpegQuality]);
+
+        var header = GenerateHeader();
 
         var frame = new Frame
         {

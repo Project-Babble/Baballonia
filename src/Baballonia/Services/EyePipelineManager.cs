@@ -141,6 +141,9 @@ public class EyePipelineManager
 
     public async Task<bool> StartLeftVideoSource(string cameraAddress, string preferredBackend)
     {
+        if (string.IsNullOrEmpty(cameraAddress) || string.IsNullOrEmpty(preferredBackend))
+            return false;
+
         if (_pipeline.VideoSource == null)
         {
             var cam = await _singleCameraSourceFactory.CreateStart(cameraAddress, preferredBackend);
@@ -202,6 +205,9 @@ public class EyePipelineManager
 
     public async Task<bool> StartRightVideoSource(string cameraAddress, string preferredBackend)
     {
+        if (string.IsNullOrEmpty(cameraAddress) || string.IsNullOrEmpty(preferredBackend))
+            return false;
+
         if (_pipeline.VideoSource == null)
         {
             var cam = await _singleCameraSourceFactory.CreateStart(cameraAddress, preferredBackend);

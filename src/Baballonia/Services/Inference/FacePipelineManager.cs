@@ -98,6 +98,9 @@ public class FacePipelineManager
 
     public async Task<bool> StartVideoSource(string cameraAddress, string preferredBackend)
     {
+        if (string.IsNullOrEmpty(cameraAddress) || string.IsNullOrEmpty(preferredBackend))
+            return false;
+
         if (_pipeline.VideoSource != null)
         {
             _pipeline.VideoSource.Dispose();

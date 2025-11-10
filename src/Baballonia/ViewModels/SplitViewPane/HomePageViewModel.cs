@@ -395,7 +395,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     private readonly ILogger<HomePageViewModel> _logger;
     private readonly IPlatformConnector _platformConnector;
 
-    public string RequestedVRCalibration = CalibrationRoutine.Map["BasicCalibration"];
+    public CalibrationRoutine.Routines RequestedVRCalibration = CalibrationRoutine.Map["BasicCalibration"];
 
 
     public HomePageViewModel(FacePipelineManager facePipelineManager,

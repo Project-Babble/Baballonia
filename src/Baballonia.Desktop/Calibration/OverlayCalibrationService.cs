@@ -46,10 +46,9 @@ public class OverlayTrainerService : IVROverlay, IDisposable
         _program.Dispose();
     }
 
-    public async Task<(bool success, string status)> EyeTrackingCalibrationRequested(string calibrationRoutine)
+    public async Task<(bool success, string status)> EyeTrackingCalibrationRequested(
+        CalibrationRoutine.Routines routine)
     {
-        if (!int.TryParse(calibrationRoutine, out var r)) return (false, "Something went horribly wrong");
-
         if (!_program.CanStart())
         {
             return (false, "Cannot start Overlay");
@@ -71,14 +70,22 @@ public class OverlayTrainerService : IVROverlay, IDisposable
         if (!Directory.Exists(Utils.ModelDataDirectory)) Directory.CreateDirectory(Utils.ModelDataDirectory);
         if (!Directory.Exists(Utils.ModelsDirectory)) Directory.CreateDirectory(Utils.ModelsDirectory);
 
-        var steps = _eyeCalibration.BasicAllCalibration();
+        var steps = routine switch
+        {
+            CalibrationRoutine.Routines.BasicCalibration => _eyeCalibration.BasicAllCalibration(),
+            CalibrationRoutine.Routines.BasicCalibrationNoTutorial => _eyeCalibration.BasicAllCalibrationQuick(),
+            _ => _eyeCalibration.BasicAllCalibration()
+        };
         foreach (var calibrationStep in steps)
         {
             await calibrationStep.ExecuteAsync(messageDispatcher, _tokenSource.Token);
         }
 
+        var srcPath = Path.Combine(Utils.ModelDataDirectory, "tuned_temporal_eye_tracking_latest.onnx");
         var destPath = Path.Combine(Utils.ModelsDirectory,
-            $"tuned_temporal_eye_tracking_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.onnx");
+            $"tuned_temporal_eye_tracking_{DateTime.Now:yyyyMMdd_HHmmss}.onnx");
+
+        File.Move(srcPath, destPath);
 
         _localSettingsService.SaveSetting("EyeHome_EyeModel", destPath);
         await _eyePipelineManager.LoadInferenceAsync();

@@ -97,7 +97,9 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     public FirmwareViewModel()
     {
         AvailableFirmwareTypes.Clear();
-        var binaries = Directory.GetFiles(_bundledFirmwarePath, "*.bin");
+        var binaries = Directory.
+            GetFiles(_bundledFirmwarePath, "*.bin").
+            OrderByDescending(x => x.Length);
         foreach (var bin in binaries)
         {
             AvailableFirmwareTypes.Add(Path.GetFileName(bin));
