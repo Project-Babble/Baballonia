@@ -108,7 +108,14 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
         partial void OnDisplayAddressChanged(string value)
         {
-            var advancedEnabled = _localSettingsService.ReadSetting<bool>("AppSettings_AdvancedOptions");
+            // "it looks like shit" be damned, i've seen *way* too many instances of people needing to force
+            // a capture backend and this stupid visual preference garbage is getting in the way of it.
+            // we're going to get more support tickets from people who can't find this when they're on linux or
+            // using vive face trackers.
+            // if you think it looks bad, suck it, make it look better yourself, it has to be here,
+            // the NEED take precedent over visual preferences.
+            //var advancedEnabled = _localSettingsService.ReadSetting<bool>("AppSettings_AdvancedOptions");
+            var advancedEnabled = true;
             var availableCaptureFactories = _platformConnector.GetCaptureFactories()
                 .Where(factory => factory.CanConnect(value)).ToArray();
 
@@ -116,6 +123,9 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             CaptureMethodVisible = shouldShow;
 
             CaptureMethods.Clear();
+            // IF YOU'RE TRYING TO ENABLE A SPECIFIC BACKEND FOR A CAPTURE, DO NOT TOUCH THIS!
+            // THIS IS NOT WHERE YOU FORCE A BACKEND
+            // OVERRIDE THE CANCAPTURE() METHOD INSIDE THE CAPTURE'S CAPTURE FACTORY
             if (shouldShow)
             {
                 CaptureMethods.Add(Assets.Resources.Home_Backend_Default);
