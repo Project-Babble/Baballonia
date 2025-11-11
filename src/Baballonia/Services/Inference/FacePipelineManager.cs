@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Baballonia.Contracts;
 using Baballonia.Services.Inference.Filters;
 using Baballonia.Services.Inference.Models;
+using Baballonia.Services.Inference.VideoSources;
 using Microsoft.Extensions.Logging;
 
 namespace Baballonia.Services.Inference;
@@ -98,7 +99,7 @@ public class FacePipelineManager
 
     public async Task<bool> StartVideoSource(string cameraAddress, string preferredBackend)
     {
-        if (string.IsNullOrEmpty(cameraAddress) || string.IsNullOrEmpty(preferredBackend))
+        if (string.IsNullOrEmpty(cameraAddress))
             return false;
 
         if (_pipeline.VideoSource != null)
@@ -107,7 +108,12 @@ public class FacePipelineManager
             _pipeline.VideoSource = null;
         }
 
-        var cam = await _singleCameraSourceFactory.CreateStart(cameraAddress, preferredBackend);
+        SingleCameraSource cam;
+        if (string.IsNullOrEmpty(preferredBackend))
+            cam = await _singleCameraSourceFactory.CreateStart(cameraAddress);
+        else
+            cam = await _singleCameraSourceFactory.CreateStart(cameraAddress, preferredBackend);
+
         if (cam == null)
             return false;
 

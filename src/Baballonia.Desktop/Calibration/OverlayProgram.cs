@@ -78,6 +78,8 @@ public class OverlayProgram : IOverlayProgram, IDisposable
         var startInfo = new ProcessStartInfo
         {
             FileName = _executablePath,
+            WindowStyle = ProcessWindowStyle.Hidden,
+            CreateNoWindow = true,
             Arguments = launchArgs
         };
 
