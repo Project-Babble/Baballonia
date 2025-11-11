@@ -33,7 +33,7 @@ public static class CaptureFlags
 
     public const uint FLAG_CONVERGENCE = 1u << 24;
     public const uint FLAG_IN_MOVEMENT = 1u << 25;
-    public const uint FLAG_RESTING = 1u << 26;
+    public const uint FLAG_RESTING = 1u << 26; // Unused right now, was used to denote tutorial sections
     public const uint FLAG_DILATION_BLACK = 1u << 27;   // Black screen for full dilation
     public const uint FLAG_DILATION_WHITE = 1u << 28;   // White screen for full constriction
     public const uint FLAG_DILATION_GRADIENT = 1u << 29; // Gradient fade from white to black

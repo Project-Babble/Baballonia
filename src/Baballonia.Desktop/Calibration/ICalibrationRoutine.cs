@@ -407,7 +407,7 @@ public class EyeCalibration
             new BaseTutorialStep("blinktutorial", TimeSpan.FromSeconds(10)),
             _eyeCaptureStepFactory.Create("blink",
                 CaptureFlags.FLAG_GOOD_DATA |
-                CaptureFlags.FLAG_RESTING |
+                CaptureFlags.FLAG_IN_MOVEMENT |
                 CaptureFlags.FLAG_VERSION_BIT1 |
                 CaptureFlags.FLAG_ROUTINE_BIT1,
                 TimeSpan.FromSeconds(20), lid: 0
@@ -454,7 +454,7 @@ public class EyeCalibration
             new BaseTutorialStep("blinktutorial", TimeSpan.FromSeconds(4)),
             _eyeCaptureStepFactory.Create("blink",
                 CaptureFlags.FLAG_GOOD_DATA |
-                CaptureFlags.FLAG_RESTING |
+                CaptureFlags.FLAG_IN_MOVEMENT |
                 CaptureFlags.FLAG_VERSION_BIT1 |
                 CaptureFlags.FLAG_ROUTINE_BIT1,
                 TimeSpan.FromSeconds(20)
