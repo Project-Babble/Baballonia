@@ -216,11 +216,14 @@ public class GazeCaptureStep : BasePositionalAwareEyeCaptureStep
         {
             var images = frame.image.Split();
             var f = _positionalBinCollector.AddFrame(images[0], images[1]);
-            f.Header = f.Header with
+            if (f is not null)
             {
-                RoutineLeftLid = 1,
-                RoutineRightLid = 1,
-            };
+                f.Header = f.Header with
+                {
+                    RoutineLeftLid = 1,
+                    RoutineRightLid = 1,
+                };
+            }
         }
     }
 }

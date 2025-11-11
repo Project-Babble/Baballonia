@@ -47,7 +47,7 @@ public class PositionalBinCollector
         };
     }
 
-    public Frame AddFrame(Mat left, Mat right)
+    public Frame? AddFrame(Mat left, Mat right)
     {
         var posData = Interlocked.CompareExchange(ref _latestPosData, null, null);
         if (posData == null)
