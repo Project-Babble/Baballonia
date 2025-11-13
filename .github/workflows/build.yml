@@ -24,12 +24,17 @@ on:
         required: false
 
 jobs:
-  build-linux-x64:
+  build-linux:
     defaults:
       run:
         shell: bash
+    strategy:
+      matrix:
+        include:
+          - { result: Baballonia.x64.AppImage, runs-on: ubuntu-22.04, publish: publish_linux.py, artifact-path: src/Baballonia.Desktop/installers/linux-x64/ }
+          - { result: Baballonia.arm64.AppImage, runs-on: ubuntu-22.04-arm, publish: publish_linux_arm64.py, artifact-path: src/Baballonia.Desktop/installers/linux-arm64/ }
 
-    runs-on: ubuntu-22.04
+    runs-on: ${{ matrix.runs-on }}
 
     steps:
       - name: Checkout latest
@@ -40,22 +45,6 @@ jobs:
       - name: Download dependencies
         run: ./download_dependencies.sh
 
-      #- name: Download Calibration Overlay artifacts
-      #  env:
-      #    GH_TOKEN: ${{ github.token }}
-      #  run: |
-      #    RUN_ID=$(gh run list -R Project-Babble/BabbleCalibration --workflow=export.yml --status=success --limit=1 --json databaseId | jq -r '.[0].databaseId')
-      #    gh run download -R Project-Babble/BabbleCalibration $RUN_ID --name Linux --dir src/Baballonia.Desktop/Calibration/Linux/Overlay
-      #    ls -R src/Baballonia.Desktop/Calibration/Linux/Overlay
-
-      #- name: Download Calibration Trainer artifacts
-      #  env:
-      #    GH_TOKEN: ${{ github.token }}
-      #  run: |
-      #    RUN_ID=$(gh run list -R Project-Babble/BabbleTrainer --workflow=build.yml --status=success --limit=1 --json databaseId | jq -r '.[0].databaseId')
-      #    gh run download -R Project-Babble/BabbleTrainer $RUN_ID --name Linux --dir src/Baballonia.Desktop/Calibration/Linux/Trainer
-      #    ls -R src/Baballonia.Desktop/Calibration/Linux/Trainer
-
       - name: Install dependencies
         run: |
           dotnet tool install -g vpk
@@ -63,13 +52,18 @@ jobs:
       - name: Run publish script
         run: |
           cd src/Baballonia.Desktop/Publish
-          python publish_linux.py
+          python ${{ matrix.publish }}
+
+      - name: Rename artifact
+        run: |
+          cd ${{ matrix.artifact-path }}
+          mv Baballonia.AppImage ${{ matrix.result }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Baballonia.AppImage
-          path: src/Baballonia.Desktop/installers/linux-x64/Baballonia.AppImage
+          name: ${{ matrix.result }}
+          path: ${{ matrix.artifact-path + matrix.result }}
 
   build-windows-x64:
     defaults:
@@ -127,7 +121,7 @@ jobs:
           path: "src/Baballonia.Desktop/Baballonia Setup.exe"
 
   publish-release:
-    #needs: [build-linux-x64, build-windows-x64]
+    #needs: [build-linux, build-windows-x64]
     #for now, releases only include windows
     needs: build-windows-x64
     if: ${{ github.event.inputs.publish-release == 'true' }}
