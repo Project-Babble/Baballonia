@@ -80,27 +80,6 @@ jobs:
         shell: pwsh
         run: ./download_dependencies.ps1
 
-      #- name: Download Calibration Overlay artifacts
-      #  env:
-      #    GH_TOKEN: ${{ github.token }}
-      #  run: |
-      #    RUN_ID=$(gh run list -R Project-Babble/BabbleCalibration --workflow=export.yml --status=success --limit=1 --json databaseId | jq -r '.[0].databaseId')
-      #    gh run download -R Project-Babble/BabbleCalibration $RUN_ID --name Windows --dir src/Baballonia.Desktop/Calibration/Windows/Overlay
-      #    ls -R src/Baballonia.Desktop/Calibration/Windows/Overlay
-
-      #- name: Download Calibration Trainer artifacts
-      #  env:
-      #    GH_TOKEN: ${{ github.token }}
-      #  run: |
-      #    RUN_ID=$(gh run list -R Project-Babble/BabbleTrainer --workflow=build.yml --status=success --limit=1 --json databaseId | jq -r '.[0].databaseId')
-      #    gh run download -R Project-Babble/BabbleTrainer $RUN_ID --name Windows --dir src/Baballonia.Desktop/Calibration/Windows/Trainer
-      #    ls -R src/Baballonia.Desktop/Calibration/Windows/Trainer
-
-      #- name: Fetch internal zip
-      #  run: |
-      #    cd src/Baballonia.Desktop
-      #    powershell ./fetch_internal.ps1
-
       - name: Build project
         run: |
           cd src/Baballonia.Desktop
@@ -118,9 +97,7 @@ jobs:
           path: "src/Baballonia.Desktop/Baballonia Setup.exe"
 
   publish-release:
-    #needs: [build-linux, build-windows-x64]
-    #for now, releases only include windows
-    needs: build-windows-x64
+    needs: [build-linux, build-windows-x64]
     if: ${{ github.event.inputs.publish-release == 'true' }}
     defaults:
       run:
@@ -143,11 +120,17 @@ jobs:
           name: "Baballonia Setup.exe"
           path: ./artifacts
 
-      #- name: Download Linux artifact
-      #  uses: actions/download-artifact@v4
-      #  with:
-      #    name: Baballonia.AppImage
-      #    path: ./artifacts
+      - name: Download Linux artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: Baballonia.x64.tar.gz
+          path: ./artifacts
+
+      - name: Download Linux ARM artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: Baballonia.arm64.tar.gz
+          path: ./artifacts
 
       - name: Rename artifacts
         env:
@@ -155,7 +138,8 @@ jobs:
         run: |
           cd artifacts
           mv "Baballonia Setup.exe" "Baballonia.Setup.${VERSION}.exe"
-      #    mv "Baballonia.AppImage" "Baballonia.${VERSION}.AppImage"
+          mv "Baballonia.x64.tar.gz" "Baballonia.x64.${VERSION}.tar.gz"
+          mv "Baballonia.arm64.tar.gz" "Baballonia.arm64.${VERSION}.tar.gz"
 
       - name: Set dynamic release name
         id: release-name
@@ -182,13 +166,12 @@ jobs:
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
-          files: artifacts/Baballonia.Setup.${{ github.event.inputs.version-number }}.exe
+          files: |
+            artifacts/Baballonia.Setup.${{ github.event.inputs.version-number }}.exe
+            artifacts/Baballonia.x64.${VERSION}.tar.gz
+            artifacts/Baballonia.arm64.${VERSION}.tar.gz
           tag_name: ${{ github.event.inputs.version-number }}
           name: ${{ steps.release-name.outputs.name }}
           prerelease: ${{ github.event.inputs.publish-pre-release }}
           body: ${{ steps.release-body.outputs.body }}
           generate_release_notes: ${{ steps.release-body.outputs.generate_notes }}
-
-          #files: |
-          #  artifacts/Baballonia.Setup.${{ github.event.inputs.versionNumber }}.exe
-          #  artifacts/Baballonia.${{ github.event.inputs.versionNumber }}.AppImage
