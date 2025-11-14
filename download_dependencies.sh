@@ -5,7 +5,10 @@ trainerDownloadPath="https://github.com/Project-Babble/BabbleTrainer/releases/la
 espflashDownloadPath="https://github.com/esp-rs/espflash/releases/latest/download/espflash-x86_64-unknown-linux-gnu.zip"
 
 isArm=$(uname -m)
-if [[ $isArm == *"arm"* || $isArm == *"aarch64"* ]]; then
+
+echo $isArm
+
+if [[ $isArm == *"arm"* || $isArm == "aarch64" ]]; then
   calibrationDownloadPath="https://github.com/Project-Babble/BabbleCalibration/releases/latest/download/Linux-ARM.zip"
   trainerDownloadPath="https://github.com/Project-Babble/BabbleTrainer/releases/latest/download/BabbleTrainer-arm"
   espflashDownloadPath="https://github.com/esp-rs/espflash/releases/latest/download/espflash-aarch64-unknown-linux-gnu.zip"
