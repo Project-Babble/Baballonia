@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Baballonia.Assets;
 using Microsoft.Extensions.Logging;
@@ -17,10 +18,12 @@ public class OverlayProgram : IOverlayProgram, IDisposable
     public OverlayProgram(ILogger<OverlayProgram> logger)
     {
         var isWindows = OperatingSystem.IsWindows();
+        var isArm = RuntimeInformation.OSArchitecture is Architecture.Arm or Architecture.Arm64 or Architecture.Armv6;
+        var architectureIdentifier = isArm ? "arm64" : "x86_64";
         var OverlayPath = Path.Combine(AppContext.BaseDirectory, "Calibration", isWindows ? "Windows" : "Linux",
             "Overlay");
         var Overlay = Path.Combine(OverlayPath,
-            isWindows ? "BabbleCalibration.x86_64.exe" : "BabbleCalibration.x86_64");
+            isWindows ? $"BabbleCalibration.{architectureIdentifier}.exe" : $"BabbleCalibration.{architectureIdentifier}");
         _executablePath = Overlay;
         _logger = logger;
     }
