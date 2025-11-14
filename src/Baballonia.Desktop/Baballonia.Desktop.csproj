@@ -130,9 +130,13 @@
     </ItemGroup>
 
     <!-- SkiaSharp is currently broken on ARM for some reason -->
-    <Target Name="PatchSkiaSharp" Condition="$([MSBuild]::IsOSPlatform('Linux')) And $(RuntimeIdentifier.Contains('arm'))" AfterTargets="AfterBuild">
+    <Target Name="PatchSkiaSharp" Condition="$([MSBuild]::IsOSPlatform('Linux')) And $(RuntimeIdentifier.Contains('arm')) And Exists('$(OutputPath)runtimes\linux-arm64\native\libSkiaSharp.so')" AfterTargets="AfterBuild;AfterPublish">
         <Exec Command="patchelf --add-needed libuuid.so.1 $(OutputPath)runtimes\linux-arm64\native\libSkiaSharp.so"/>
         <Exec Command="patchelf --add-needed libfreetype.so.6 $(OutputPath)runtimes\linux-arm64\native\libSkiaSharp.so"/>
+    </Target>
+    <Target Name="PatchSkiaSharp" Condition="$([MSBuild]::IsOSPlatform('Linux')) And $(RuntimeIdentifier.Contains('arm')) And Exists('$(OutputPath)libSkiaSharp.so')" AfterTargets="AfterBuild;AfterPublish">
+        <Exec Command="patchelf --add-needed libuuid.so.1 $(OutputPath)libSkiaSharp.so"/>
+        <Exec Command="patchelf --add-needed libfreetype.so.6 $(OutputPath)libSkiaSharp.so"/>
     </Target>
 
 
