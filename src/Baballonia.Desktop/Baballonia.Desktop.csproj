@@ -140,7 +140,7 @@
     </Target>
 
 
-	<Target Name="CopyModulesToFolder" AfterTargets="AfterBuild;AfterPublish">
+	<Target Name="CopyModulesToFolder" AfterTargets="AfterBuild">
 	    <ItemGroup>
 	    	<ModuleDlls Include="$(OutputPath)Baballonia.SerialCameraCapture.dll" />
 	    	<ModuleDlls Include="$(OutputPath)Baballonia.OpenCVCapture.dll" />
@@ -153,6 +153,16 @@
 	    </ItemGroup>
 	  <Move SourceFiles="@(ModuleDlls)" DestinationFolder="$(OutputPath)Modules\" />
 	</Target>
+    <!-- TODO: this sucks -->
+    <Target Name="CopyModulesToFolder" AfterTargets="Publish">
+        <ItemGroup>
+            <ModuleDlls Include="$(OutputPath)\publish\Baballonia.SerialCameraCapture.dll" />
+            <ModuleDlls Include="$(OutputPath)\publish\Baballonia.OpenCVCapture.dll" />
+            <ModuleDlls Include="$(OutputPath)\publish\Baballonia.IPCameraCapture.dll" />
+            <ModuleDlls Include="$(OutputPath)\publish\Baballonia.VFTCapture.dll" />
+        </ItemGroup>
+        <Move SourceFiles="@(ModuleDlls)" DestinationFolder="$(OutputPath)\publish\Modules\" />
+    </Target>
 
 </Project>
 
