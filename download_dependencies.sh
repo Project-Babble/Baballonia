@@ -10,7 +10,7 @@ echo $isArm
 
 if [[ $isArm == *"arm"* || $isArm == "aarch64" ]]; then
   calibrationDownloadPath="https://github.com/Project-Babble/BabbleCalibration/releases/latest/download/Linux-ARM.zip"
-  trainerDownloadPath="https://github.com/Project-Babble/BabbleTrainer/releases/latest/download/BabbleTrainer-arm"
+  trainerDownloadPath="https://github.com/Project-Babble/BabbleTrainer/releases/latest/download/BabbleTrainer-arm64"
   espflashDownloadPath="https://github.com/esp-rs/espflash/releases/latest/download/espflash-aarch64-unknown-linux-gnu.zip"
 fi
 
