@@ -45,9 +45,9 @@ jobs:
       - name: Download dependencies
         run: ./download_dependencies.sh
 
-      - name: Install dependencies
-        run: |
-          dotnet tool install -g vpk
+      #- name: Install dependencies
+      #  run: |
+      #    dotnet tool install -g vpk
 
       - name: Run publish
         run: |
@@ -168,8 +168,8 @@ jobs:
         with:
           files: |
             artifacts/Baballonia.Setup.${{ github.event.inputs.version-number }}.exe
-            artifacts/Baballonia.x64.${VERSION}.tar.gz
-            artifacts/Baballonia.arm64.${VERSION}.tar.gz
+            artifacts/Baballonia.x64.${{ github.event.inputs.version-number }}.tar.gz
+            artifacts/Baballonia.arm64.${{ github.event.inputs.version-number }}.tar.gz
           tag_name: ${{ github.event.inputs.version-number }}
           name: ${{ steps.release-name.outputs.name }}
           prerelease: ${{ github.event.inputs.publish-pre-release }}
