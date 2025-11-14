@@ -92,11 +92,9 @@ public partial class TrainerService : ITrainerService
         if (!File.Exists(usercalbinPath))
             throw new FileNotFoundException(usercalbinPath + " not found");
 
-        var isArm = RuntimeInformation.OSArchitecture is Architecture.Arm or Architecture.Arm64 or Architecture.Armv6;
-        var architectureIdentifier = isArm ? "arm64" : "x64";
         var isWindows = OperatingSystem.IsWindows();
         var basePath = Path.Combine(AppContext.BaseDirectory, "Calibration", isWindows ? "Windows" : "Linux", "Trainer");
-        var trainerPath = Path.Combine(basePath, isWindows ? $"BabbleTrainer-{architectureIdentifier}.exe" : $"BabbleTrainer-{architectureIdentifier}");
+        var trainerPath = Path.Combine(basePath, isWindows ? $"BabbleTrainer.exe" : $"BabbleTrainer");
         if (!File.Exists(trainerPath))
             throw new FileNotFoundException(trainerPath + " not found");
 
