@@ -31,8 +31,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - { result: Baballonia.x64.AppImage, runs-on: ubuntu-22.04, publish: publish_linux.py, artifact-path: src/Baballonia.Desktop/installers/linux-x64/ }
-          - { result: Baballonia.arm64.AppImage, runs-on: ubuntu-22.04-arm, publish: publish_linux_arm64.py, artifact-path: src/Baballonia.Desktop/installers/linux-arm64/ }
+          - { result: Baballonia.x64.AppImage, runs-on: ubuntu-22.04, publish: publish_linux.py, artifact-path: src/Baballonia.Desktop/installers/linux-x64, upload-path: src/Baballonia.Desktop/installers/linux-x64/Baballonia.x64.AppImage }
+          - { result: Baballonia.arm64.AppImage, runs-on: ubuntu-22.04-arm, publish: publish_linux_arm64.py, artifact-path: src/Baballonia.Desktop/installers/linux-arm64, upload-path: src/Baballonia.Desktop/installers/linux-x64/Baballonia.arm64.AppImage  }
 
     runs-on: ${{ matrix.runs-on }}
 
@@ -63,7 +63,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.result }}
-          path: ${{ matrix.artifact-path + matrix.result }}
+          path: ${{ matrix.upload-path }}
 
   build-windows-x64:
     defaults:
