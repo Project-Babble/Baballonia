@@ -129,6 +129,30 @@
       </None>
     </ItemGroup>
 
+    <Target Name="CopyModulesToFolder" AfterTargets="AfterBuild;Build">
+        <ItemGroup>
+            <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.SerialCameraCapture.dll')" Include="$(OutputPath)Baballonia.SerialCameraCapture.dll" />
+            <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.OpenCVCapture.dll')" Include="$(OutputPath)Baballonia.OpenCVCapture.dll" />
+            <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.IPCameraCapture.dll')" Include="$(OutputPath)Baballonia.IPCameraCapture.dll" />
+            <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.VFTCapture.dll')" Include="$(OutputPath)Baballonia.VFTCapture.dll" />
+            <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.SerialCameraCapture.pdb')" Include="$(OutputPath)Baballonia.SerialCameraCapture.pdb" />
+            <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.OpenCVCapture.pdb')" Include="$(OutputPath)Baballonia.OpenCVCapture.pdb" />
+            <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.IPCameraCapture.pdb')" Include="$(OutputPath)Baballonia.IPCameraCapture.pdb" />
+            <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.VFTCapture.pdb')" Include="$(OutputPath)Baballonia.VFTCapture.pdb" />
+        </ItemGroup>
+        <Move SourceFiles="@(ModuleDlls)" DestinationFolder="$(OutputPath)Modules\" />
+    </Target>
+    <!-- TODO: this sucks -->
+    <Target Name="CopyModulesToFolderPublish" AfterTargets="Publish">
+        <ItemGroup>
+            <ModuleDlls Include="$(OutputPath)\publish\Baballonia.SerialCameraCapture.dll" />
+            <ModuleDlls Include="$(OutputPath)\publish\Baballonia.OpenCVCapture.dll" />
+            <ModuleDlls Include="$(OutputPath)\publish\Baballonia.IPCameraCapture.dll" />
+            <ModuleDlls Include="$(OutputPath)\publish\Baballonia.VFTCapture.dll" />
+        </ItemGroup>
+        <Move SourceFiles="@(ModuleDlls)" DestinationFolder="$(OutputPath)\publish\Modules\" />
+    </Target>
+
     <!-- SkiaSharp is currently broken on ARM for some reason -->
     <Target Name="PatchSkiaSharp" Condition="$([MSBuild]::IsOSPlatform('Linux')) And $(RuntimeIdentifier.Contains('arm')) And Exists('$(OutputPath)runtimes\linux-arm64\native\libSkiaSharp.so')" AfterTargets="AfterBuild;AfterPublish">
         <Exec Command="patchelf --add-needed libuuid.so.1 '$(OutputPath)runtimes\linux-arm64\native\libSkiaSharp.so'"/>
@@ -137,31 +161,6 @@
     <Target Name="PatchSkiaSharp" Condition="$([MSBuild]::IsOSPlatform('Linux')) And $(RuntimeIdentifier.Contains('arm')) And Exists('$(OutputPath)libSkiaSharp.so')" AfterTargets="AfterBuild;AfterPublish">
         <Exec Command="patchelf --add-needed libuuid.so.1 '$(OutputPath)libSkiaSharp.so'"/>
         <Exec Command="patchelf --add-needed libfreetype.so.6 '$(OutputPath)libSkiaSharp.so'"/>
-    </Target>
-
-
-	<Target Name="CopyModulesToFolder" AfterTargets="AfterBuild">
-	    <ItemGroup>
-	    	<ModuleDlls Include="$(OutputPath)Baballonia.SerialCameraCapture.dll" />
-	    	<ModuleDlls Include="$(OutputPath)Baballonia.OpenCVCapture.dll" />
-            <ModuleDlls Include="$(OutputPath)Baballonia.IPCameraCapture.dll" />
-            <ModuleDlls Include="$(OutputPath)Baballonia.VFTCapture.dll" />
-            <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.SerialCameraCapture.pdb')" Include="$(OutputPath)Baballonia.SerialCameraCapture.pdb" />
-            <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.OpenCVCapture.pdb')" Include="$(OutputPath)Baballonia.OpenCVCapture.pdb" />
-            <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.IPCameraCapture.pdb')" Include="$(OutputPath)Baballonia.IPCameraCapture.pdb" />
-            <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.VFTCapture.pdb')" Include="$(OutputPath)Baballonia.VFTCapture.pdb" />
-	    </ItemGroup>
-	  <Move SourceFiles="@(ModuleDlls)" DestinationFolder="$(OutputPath)Modules\" />
-	</Target>
-    <!-- TODO: this sucks -->
-    <Target Name="CopyModulesToFolder" AfterTargets="Publish">
-        <ItemGroup>
-            <ModuleDlls Include="$(OutputPath)\publish\Baballonia.SerialCameraCapture.dll" />
-            <ModuleDlls Include="$(OutputPath)\publish\Baballonia.OpenCVCapture.dll" />
-            <ModuleDlls Include="$(OutputPath)\publish\Baballonia.IPCameraCapture.dll" />
-            <ModuleDlls Include="$(OutputPath)\publish\Baballonia.VFTCapture.dll" />
-        </ItemGroup>
-        <Move SourceFiles="@(ModuleDlls)" DestinationFolder="$(OutputPath)\publish\Modules\" />
     </Target>
 
 </Project>

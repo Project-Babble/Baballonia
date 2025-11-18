@@ -56,6 +56,8 @@ public class OverlayTrainerService : IVROverlay, IDisposable
 
         _program.Start();
 
+        await Task.Delay(TimeSpan.FromSeconds(0.25));
+
         var logger = new OverlayLogger(_logger);
 
         var sfactory = new SocketFactory();
