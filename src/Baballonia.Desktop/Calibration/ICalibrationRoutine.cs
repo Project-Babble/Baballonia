@@ -411,8 +411,7 @@ public class EyeCalibration
             _eyeCaptureStepFactory.Create("blink",
                 CaptureFlags.FLAG_GOOD_DATA |
                 CaptureFlags.FLAG_IN_MOVEMENT |
-                CaptureFlags.FLAG_VERSION_BIT1 |
-                CaptureFlags.FLAG_ROUTINE_BIT1,
+                CaptureFlags.FLAG_VERSION_BIT1,
                 TimeSpan.FromSeconds(20), lid: 0
             ),
             // steps.Add(new BaseTutorialStep("dilationtutorial"));
