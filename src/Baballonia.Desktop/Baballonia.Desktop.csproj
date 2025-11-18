@@ -129,7 +129,7 @@
       </None>
     </ItemGroup>
 
-    <Target Name="CopyModulesToFolder" AfterTargets="AfterBuild;Build">
+    <Target Name="CopyModulesToFolder" AfterTargets="AfterBuild">
         <ItemGroup>
             <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.SerialCameraCapture.dll')" Include="$(OutputPath)Baballonia.SerialCameraCapture.dll" />
             <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.OpenCVCapture.dll')" Include="$(OutputPath)Baballonia.OpenCVCapture.dll" />
