@@ -145,12 +145,12 @@
     <!-- TODO: this sucks -->
     <Target Name="CopyModulesToFolderPublish" AfterTargets="Publish">
         <ItemGroup>
-            <ModuleDlls Include="$(OutputPath)\publish\Baballonia.SerialCameraCapture.dll" />
-            <ModuleDlls Include="$(OutputPath)\publish\Baballonia.OpenCVCapture.dll" />
-            <ModuleDlls Include="$(OutputPath)\publish\Baballonia.IPCameraCapture.dll" />
-            <ModuleDlls Include="$(OutputPath)\publish\Baballonia.VFTCapture.dll" />
+            <PublishModuleDlls Include="$(OutputPath)\publish\Baballonia.SerialCameraCapture.dll" />
+            <PublishModuleDlls Include="$(OutputPath)\publish\Baballonia.OpenCVCapture.dll" />
+            <PublishModuleDlls Include="$(OutputPath)\publish\Baballonia.IPCameraCapture.dll" />
+            <PublishModuleDlls Include="$(OutputPath)\publish\Baballonia.VFTCapture.dll" />
         </ItemGroup>
-        <Move SourceFiles="@(ModuleDlls)" DestinationFolder="$(OutputPath)\publish\Modules\" />
+        <Move SourceFiles="@(PublishModuleDlls)" DestinationFolder="$(OutputPath)\publish\Modules\" />
     </Target>
 
     <!-- SkiaSharp is currently broken on ARM for some reason -->
