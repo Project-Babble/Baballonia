@@ -13,7 +13,7 @@ namespace Baballonia;
 
 public static class Utils
 {
-    public const int EyeRawExpressions = 12;
+    public const int EyeRawExpressions = 10;
     public const int FaceRawExpressions = 45;
     public const int FramesForEyeInference = 4;
 

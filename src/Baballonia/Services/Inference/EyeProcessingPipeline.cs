@@ -101,13 +101,11 @@ public class EyeProcessingPipeline : DefaultProcessingPipeline, IDisposable
         convertedExpressions[2] = rightLid;               // left lid
         convertedExpressions[3] = arKitExpressions[3];
         convertedExpressions[4] = arKitExpressions[4];
-        convertedExpressions[5] = arKitExpressions[5];
-        convertedExpressions[6] = leftEyeYawCorrected;  // right pitch
-        convertedExpressions[7] = eyeY;                   // right yaw
-        convertedExpressions[8] = leftLid;                // right lid
+        convertedExpressions[5] = leftEyeYawCorrected;  // right pitch
+        convertedExpressions[6] = eyeY;                   // right yaw
+        convertedExpressions[7] = leftLid;                // right lid
+        convertedExpressions[8] = arKitExpressions[8];
         convertedExpressions[9] = arKitExpressions[9];
-        convertedExpressions[10] = arKitExpressions[10];
-        convertedExpressions[11] = arKitExpressions[11];
 
         arKitExpressions = convertedExpressions;
 

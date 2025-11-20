@@ -87,9 +87,9 @@ public class BabbleOsc
                             case "/LeftEyeWiden":
                                 EyeExpressions[(int)ExpressionMapping.EyeLeftWiden] = value;
                                 break;
-                            case "/LeftEyeLower":
-                                EyeExpressions[(int)ExpressionMapping.EyeLeftLower] = value;
-                                break;
+                            // case "/LeftEyeLower":
+                            //     EyeExpressions[(int)ExpressionMapping.EyeLeftLower] = value;
+                            //     break;
                             case "/LeftEyeBrow":
                                 EyeExpressions[(int)ExpressionMapping.EyeLeftSquint] = value;
                                 break;
@@ -105,9 +105,9 @@ public class BabbleOsc
                             case "/RightEyeWiden":
                                 EyeExpressions[(int)ExpressionMapping.EyeRightWiden] = value;
                                 break;
-                            case "/RightEyeLower":
-                                EyeExpressions[(int)ExpressionMapping.EyeRightLower] = value;
-                                break;
+                            // case "/RightEyeLower":
+                            //     EyeExpressions[(int)ExpressionMapping.EyeRightLower] = value;
+                            //     break;
                             case "/RightEyeBrow":
                                 EyeExpressions[(int)ExpressionMapping.EyeRightSquint] = value;
                                 break;
