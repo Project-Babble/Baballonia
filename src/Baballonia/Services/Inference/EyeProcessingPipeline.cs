@@ -73,9 +73,9 @@ public class EyeProcessingPipeline : DefaultProcessingPipeline, IDisposable
         var leftYaw = arKitExpressions[1] * mulV - mulV / 2;
         var leftLid = 1 - arKitExpressions[2];
 
-        var rightPitch = arKitExpressions[6] * mulY - mulY / 2;
-        var rightYaw = arKitExpressions[7] * mulV - mulV / 2;
-        var rightLid = 1 - arKitExpressions[8];
+        var rightPitch = arKitExpressions[5] * mulY - mulY / 2;
+        var rightYaw = arKitExpressions[6] * mulV - mulV / 2;
+        var rightLid = 1 - arKitExpressions[7];
 
         var eyeY = (leftPitch * leftLid + rightPitch * rightLid) / (leftLid + rightLid);
 
