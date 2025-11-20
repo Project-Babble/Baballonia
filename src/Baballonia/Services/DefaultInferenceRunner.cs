@@ -170,16 +170,16 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
     // Dictionary mapping eye output names to their indices
     private static readonly Dictionary<string, int> OutputIndexMap = new()
     {
-        { "\"leftEyePitch\"", 0 },
-        { "\"leftEyeYaw\"", 1 },
-        { "\"leftEyeLid\"", 2 },
-        { "\"leftEyeWiden\"", 3 },
-        { "\"leftBrow\"", 4 },
-        { "\"rightEyePitch\"", 5 },
-        { "\"rightEyeYaw\"", 6 },
-        { "\"rightEyeLid\"", 7 },
-        { "\"rightEyeWiden\"", 8 },
-        { "\"rightBrow\"", 9 }
+        { "leftEyePitch", 0 },
+        { "leftEyeYaw", 1 },
+        { "leftEyeLid", 2 },
+        { "leftEyeWiden", 3 },
+        { "leftBrow", 4 },
+        { "rightEyePitch", 5 },
+        { "rightEyeYaw", 6 },
+        { "rightEyeLid", 7 },
+        { "rightEyeWiden", 8 },
+        { "rightBrow", 9 }
     };
 
     // Guarantee an expression's index by using named parameter values
