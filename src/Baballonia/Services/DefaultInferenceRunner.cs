@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Baballonia.Contracts;
+using Baballonia.Helpers;
 using Microsoft.Extensions.Logging;
 using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
+using Newtonsoft.Json;
 using OpenCvSharp;
 
 namespace Baballonia.Services;
@@ -168,16 +170,16 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
     // Dictionary mapping eye output names to their indices
     private static readonly Dictionary<string, int> OutputIndexMap = new()
     {
-        { "leftEyePitch", 0 },
-        { "leftEyeYaw", 1 },
-        { "leftEyeLid", 2 },
-        { "leftEyeWiden", 3 },
-        { "leftBrow", 4 },
-        { "rightEyePitch", 5 },
-        { "rightEyeYaw", 6 },
-        { "rightEyeLid", 7 },
-        { "rightEyeWiden", 8 },
-        { "rightBrow", 9 }
+        { "\"leftEyePitch\"", 0 },
+        { "\"leftEyeYaw\"", 1 },
+        { "\"leftEyeLid\"", 2 },
+        { "\"leftEyeWiden\"", 3 },
+        { "\"leftBrow\"", 4 },
+        { "\"rightEyePitch\"", 5 },
+        { "\"rightEyeYaw\"", 6 },
+        { "\"rightEyeLid\"", 7 },
+        { "\"rightEyeWiden\"", 8 },
+        { "\"rightBrow\"", 9 }
     };
 
     // Guarantee an expression's index by using named parameter values
@@ -191,19 +193,20 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
         }
 
         // Else, order eye information
+
         // Flatten model output
         List<Tuple<string, float>> arKitExpressions = [];
-        var outputExpressionNames = _session.
+        var outputExpressionNames= JsonConvert.DeserializeObject<string[]>(_session.
             ModelMetadata.
-            CustomMetadataMap["blendshape_names"].
-            Trim('[', ']').
-            Split(", ");
-        foreach (var result in results.Zip(outputExpressionNames))
+            CustomMetadataMap["blendshape_names"])!;
+        int counter = 0;
+        foreach (var result in results)
         {
-            var exps = result.First.AsEnumerable<float>().ToArray();
+            var exps = result.AsEnumerable<float>().ToArray();
             foreach (var exp in exps)
             {
-                arKitExpressions.Add(new Tuple<string, float>(result.Second, exp));
+                arKitExpressions.Add(new Tuple<string, float>(outputExpressionNames[counter], exp));
+                counter++;
             }
         }
 
