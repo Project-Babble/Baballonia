@@ -18,17 +18,31 @@
   <ScrollViewer IsEnabled="{Binding IsInitialized}">
     <StackPanel Classes="Page" Margin="16">
 
-      <Grid ColumnDefinitions="*,Auto,12,Auto" Margin="0,0,0,12">
+      <Grid ColumnDefinitions="*,Auto,12,Auto,12,Auto" Margin="0,0,0,12">
         <TextBlock
             Classes="Header"
             FontSize="28"
             Grid.Column="0"
             Text="{x:Static assets:Resources.Home_Title_Header}" />
+
+        <Button
+          IsVisible="{x:Static utils:Utils.IsSupportedDesktopOS}"
+          Padding="12,8"
+          Click="RefreshDevices"
+          Grid.Column="1">
+          <Button.Content>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <PathIcon Data="{StaticResource ArrowSyncRegular}" />
+              <TextBlock x:Name="RefreshDevicesText" Text="Refresh Devices" VerticalAlignment="Center" />
+            </StackPanel>
+          </Button.Content>
+        </Button>
+
         <Button
           IsVisible="{x:Static utils:Utils.IsSupportedDesktopOS}"
           Padding="12,8"
           Click="EyeModelLoad"
-          Grid.Column="1">
+          Grid.Column="3">
           <Button.Content>
             <StackPanel Orientation="Horizontal" Spacing="8">
               <PathIcon Data="{StaticResource FolderOpenVerticalRegular}" />
@@ -36,10 +50,11 @@
             </StackPanel>
           </Button.Content>
         </Button>
+
         <SplitButton
             Command="{Binding RequestVRCalibrationCommand}"
             CornerRadius="4"
-            Grid.Column="3"
+            Grid.Column="5"
             IsVisible="{x:Static utils:Utils.IsSupportedDesktopOS}"
             Padding="12,8"
             x:Name="SplitCalibrationButton">
