@@ -609,7 +609,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             SetButtons(model, false, false);
             var address = model.DisplayAddress;
             var backend = model.SelectedCaptureMethod;
-            if (!model.CaptureMethodVisible || backend == "Default")
+            if (!model.CaptureMethodVisible || backend == Assets.Resources.Home_Backend_Default)
                 backend = "";
 
 
