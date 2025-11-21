@@ -89,6 +89,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             var camSettings = _localSettingsService.ReadSetting<CameraSettings>(Name);
             ShouldAutostart = _localSettingsService.ReadSetting("ShouldAutostart" + Name, false);
             var preferredCapture = _localSettingsService.ReadSetting<string>("LastOpenedPreferredCapture" + Name);
+            if (preferredCapture == "Default") preferredCapture = Assets.Resources.Home_Backend_Default;
 
             UpdateCameraDropDown(cameras);
             DisplayAddress = displayAddress;
@@ -144,7 +145,8 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         {
             var prev = _localSettingsService.ReadSetting<string>("LastOpenedPreferredCapture" + Name);
             if (prev != value)
-                _localSettingsService.SaveSetting("LastOpenedPreferredCapture" + Name, value);
+                _localSettingsService.SaveSetting("LastOpenedPreferredCapture" + Name,
+                    value == Assets.Resources.Home_Backend_Default ? "Default" : value);
         }
 
         partial void OnShouldAutostartChanged(bool value)
