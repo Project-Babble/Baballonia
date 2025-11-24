@@ -86,7 +86,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         private void Initialize(string[] cameras)
         {
             var displayAddress = _localSettingsService.ReadSetting<string>("LastOpened" + Name);
-            var camSettings = _localSettingsService.ReadSetting<CameraSettings>(Name);
+            var camSettings = _localSettingsService.ReadSetting<CameraSettings>(Name) ?? CameraSettings;
             ShouldAutostart = _localSettingsService.ReadSetting("ShouldAutostart" + Name, false);
             var preferredCapture = _localSettingsService.ReadSetting<string>("LastOpenedPreferredCapture" + Name);
             if (preferredCapture == "Default") preferredCapture = Assets.Resources.Home_Backend_Default;
