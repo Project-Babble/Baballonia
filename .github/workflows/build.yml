@@ -52,8 +52,8 @@ jobs:
       - name: Run publish
         run: |
           cd src/Baballonia.Desktop
-          dotnet publish -r ${{ matrix.arch }} -c "Linux Release" --self-contained -f net8.0
-          cd "bin/Linux Release/net8.0/${{ matrix.arch }}/publish"
+          dotnet publish -r ${{ matrix.arch }} -c Release --self-contained -f net8.0
+          cd "bin/Release/net8.0/${{ matrix.arch }}/publish"
           tar -czf ./../../../../${{ matrix.result }} *
 
       - name: Upload artifact
@@ -84,6 +84,8 @@ jobs:
         run: |
           cd src/Baballonia.Desktop
           dotnet publish -r win-x64 -c Release --self-contained -f net8.0
+          cd "bin/Release/net8.0/win-x64/publish"
+          tar -czf ./../../../../Baballonia.win.tar.gz *
 
       - name: Run makensis
         run: |
@@ -95,6 +97,12 @@ jobs:
         with:
           name: "Baballonia Setup.exe"
           path: "src/Baballonia.Desktop/Baballonia Setup.exe"
+
+      - name: Upload tarball artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: "Baballonia.win.tar.gz"
+          path: "src/Baballonia.Desktop/bin/Baballonia.win.tar.gz"
 
   publish-release:
     needs: [build-linux, build-windows-x64]
