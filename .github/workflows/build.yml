@@ -22,6 +22,10 @@ on:
         description: 'Release notes, auto generated if not given'
         type: string
         required: false
+      publish-steam:
+        description: 'Publish on Steam'
+        type: boolean
+        default: false
 
 jobs:
   build-linux:
@@ -183,3 +187,54 @@ jobs:
           prerelease: ${{ github.event.inputs.publish-pre-release }}
           body: ${{ steps.release-body.outputs.body }}
           generate_release_notes: ${{ steps.release-body.outputs.generate_notes }}
+
+  publish-steam:
+    needs: [build-linux, build-windows-x64]
+    if: ${{ github.event.inputs.publish-steam == 'true' }}
+    defaults:
+      run:
+        shell: bash
+
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Validate version number exists
+        run: |
+          if [ -z "${{ github.event.inputs.version-number }}" ]; then
+            exit 1
+          fi
+
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: Baballonia.win.tar.gz
+          path: ./artifacts
+
+      - name: Download Linux artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: Baballonia.x64.tar.gz
+          path: ./artifacts
+
+      #- name: Download Linux ARM artifact
+      #  uses: actions/download-artifact@v4
+      #  with:
+      #    name: Baballonia.arm64.tar.gz
+      #    path: ./artifacts
+
+      - name: Untar artifacts
+        run: |
+          tar -xf ./artifacts/Baballonia.win.tar.gz --directory ./builds/windows
+          tar -xf ./artifacts/Baballonia.x64.tar.gz --directory ./builds/linux-x64
+
+      - name: Upload to Steam
+        uses: game-ci/steam-deploy@v3
+        with:
+          username: ${{ secrets.STEAM_USERNAME }}
+          configVdf: ${{ secrets.STEAM_CONFIG_VDF }}
+          appId: 4091970
+          buildDescription: ${{ github.event.inputs.version-number }}
+          rootPath: builds
+          depot2Path: windows
+          depot3Path: linux-x64
+          releaseBranch: prerelease
