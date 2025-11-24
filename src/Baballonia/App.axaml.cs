@@ -124,6 +124,7 @@ public class App : Application
             services.AddTransient<OscQueryServiceWrapper>();
             services.AddSingleton<ParameterSenderService>();
             services.AddTransient<GithubService>();
+            services.AddTransient<DataUploaderService>();
             services.AddTransient<ICommandSenderFactory, CommandSenderFactory>();
             services.AddTransient<FirmwareService>();
             services.AddSingleton<IMainService, MainStandalone>();

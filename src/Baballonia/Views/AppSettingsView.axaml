@@ -375,6 +375,12 @@
         IconPath="SettingsRegular"
         SettingToggled="{Binding AdvancedOptions, Mode=TwoWay}" />
 
+      <controls:SettingsToggle
+        Title="Share eye/face data"
+        Description="Opt into sharing anonymous eye data to support improve our algorithms"
+        IconPath="DataUsageRegular"
+        SettingToggled="{Binding ShareEyeData, Mode=TwoWay}" />
+
       <Border
           Padding="15,5,15,5"
           Background="{DynamicResource SystemChromeMediumLowColor}"
