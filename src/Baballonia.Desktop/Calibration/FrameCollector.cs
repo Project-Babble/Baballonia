@@ -32,10 +32,10 @@ public class PositionalBinCollector
         return new CaptureFrameHeader
         {
             RoutineState = _headerFlags,
-            LeftEyePitch = -positionalData.LeftEyePitch, // Flip this
-            LeftEyeYaw = positionalData.LeftEyeYaw,
-            RightEyePitch = -positionalData.RightEyePitch, // Flip this
-            RightEyeYaw = positionalData.RightEyeYaw,
+            LeftEyePitch = positionalData.LeftEyePitch, // Flip this
+            LeftEyeYaw = -positionalData.LeftEyeYaw,
+            RightEyePitch = positionalData.RightEyePitch, // Flip this
+            RightEyeYaw = -positionalData.RightEyeYaw,
             RoutinePitch = positionalData.RoutinePitch,
             RoutineYaw = positionalData.RoutineYaw,
             RoutineDistance = positionalData.RoutineDistance,
@@ -111,9 +111,9 @@ public class BinCollector
         {
             RoutineState = _headerFlags,
             LeftEyePitch = positionalData.LeftEyePitch,
-            LeftEyeYaw = positionalData.LeftEyeYaw,
+            LeftEyeYaw = -positionalData.LeftEyeYaw,
             RightEyePitch = positionalData.RightEyePitch,
-            RightEyeYaw = positionalData.RightEyeYaw,
+            RightEyeYaw = -positionalData.RightEyeYaw,
             RoutinePitch = positionalData.RoutinePitch,
             RoutineYaw = positionalData.RoutineYaw,
             RoutineDistance = positionalData.RoutineDistance,

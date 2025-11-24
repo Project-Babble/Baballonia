@@ -85,17 +85,15 @@ public sealed class OpenCvCapture(string source, ILogger<OpenCvCapture> logger) 
 
     private Task VideoCapture_UpdateLoop(VideoCapture capture, CancellationToken ct)
     {
+        var frame = new Mat();
         while (!ct.IsCancellationRequested)
         {
             try
             {
-                var frame = new Mat();
                 IsReady = capture.Read(frame);
                 // no need to push empty Mat
-                if(IsReady)
+                if (IsReady)
                     SetRawMat(frame);
-                else
-                    frame.Dispose();
             }
             catch (Exception)
             {

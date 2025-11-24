@@ -32,9 +32,9 @@ public class LocalSettingsService : ILocalSettingsService
 
     public LocalSettingsService(IOptions<LocalSettingsOptions> options, ILogger<LocalSettingsService> logger)
     {
+        _logger = logger;
         var opt = options.Value;
 
-        _logger = logger;
         var applicationDataFolder =
             Path.Combine(_localApplicationData, opt.ApplicationDataFolder ?? DefaultApplicationDataFolder);
         _localSettingsFile = opt.LocalSettingsFile ?? Path.Combine(applicationDataFolder, DefaultLocalSettingsFile);

@@ -32,6 +32,7 @@ public sealed class SerialCameraCapture(string source, ILogger<SerialCameraCaptu
         return lowered.StartsWith("com") ||
                lowered.StartsWith("/dev/tty") ||
                lowered.StartsWith("/dev/cu") ||
+               lowered.StartsWith("/dev/serial/") ||
                lowered.StartsWith("/dev/ttyacm");
     }
 

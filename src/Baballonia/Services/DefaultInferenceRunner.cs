@@ -20,6 +20,8 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
     private ILogger _logger;
     private string _inputName;
     private InferenceSession _session;
+    private string[] _outputExpressionNames;
+    private bool _isOldEyeModel;
 
 
     /// <summary>
@@ -45,7 +47,23 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
 
         InputTensor = new DenseTensor<float>([1, dimensions[1], dimensions[2], dimensions[3]]);
 
+        InitializeModelMetadata();
+
         _logger.LogInformation("{} initialization finished", modelPath);
+    }
+
+    /// <summary>
+    /// Reads and caches model metadata once during initialization
+    /// </summary>
+    private void InitializeModelMetadata()
+    {
+        _isOldEyeModel = _session.ModelMetadata.CustomMetadataMap.Count() == 0;
+
+        if (!_isOldEyeModel)
+        {
+            var metadataJson = _session.ModelMetadata.CustomMetadataMap["blendshape_names"];
+            _outputExpressionNames = JsonConvert.DeserializeObject<string[]>(metadataJson)!;
+        }
     }
 
     /// <summary>
@@ -187,29 +205,27 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
     {
         // Is this model the face model?
         var candidate = results[0].AsEnumerable<float>().ToArray();
-        if (candidate.Length == 45)
+        if (candidate.Length == Utils.FaceRawExpressions)
         {
             return candidate;
         }
 
         // Else, is this an older eye model?
-        if (_session.ModelMetadata.CustomMetadataMap.Count() == 0)
+        if (_isOldEyeModel)
         {
             return [];
         }
 
-        // Else, order eye information
+        // Else, order eye information using cached metadata
+        // Start by flattening new eye ONNX output
         List<Tuple<string, float>> arKitExpressions = [];
-        var outputExpressionNames= JsonConvert.DeserializeObject<string[]>(_session.
-            ModelMetadata.
-            CustomMetadataMap["blendshape_names"])!;
         int counter = 0;
         foreach (var result in results)
         {
             var exps = result.AsEnumerable<float>().ToArray();
             foreach (var exp in exps)
             {
-                arKitExpressions.Add(new Tuple<string, float>(outputExpressionNames[counter], exp));
+                arKitExpressions.Add(new Tuple<string, float>(_outputExpressionNames[counter], exp));
                 counter++;
             }
         }
