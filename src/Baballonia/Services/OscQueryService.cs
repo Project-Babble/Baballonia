@@ -22,6 +22,7 @@ namespace Baballonia.Services;
 /// <param name="vrChatService"></param>
 public class OscQueryService(
     ILogger<OscQueryService> logger,
+    OscSendService oscSendService,
     ILocalSettingsService localSettingsService,
     VRCFaceTrackingService vrChatService
     )
@@ -95,8 +96,9 @@ public class OscQueryService(
                     // we'll just poll every 5000ms
                     if (ScanForVRChatClients())
                     {
-                        vrChatService.PullParametersFromOSCAddress(
-                            _vrchatProfile.address.ToString(), _vrchatProfile.port);
+                        var addr = _vrchatProfile.address;
+                        oscSendService.UpdateTarget(new IPEndPoint(addr, 9000));
+                        vrChatService.PullParametersFromOSCAddress(addr.ToString(), _vrchatProfile.port);
                     }
                 }
                 catch (Exception)

@@ -204,6 +204,7 @@ public class ParameterSenderService : BackgroundService
     {
         if (expressionMap == null || expressionMap.Count == 0)
         {
+            // If this is null just send the normal expressions
             var msg = new OscMessage(_prefix + faceElement.Value,
                 Math.Clamp(
                     weight.Remap(settings.Lower, settings.Upper, settings.Min, settings.Max),
@@ -212,11 +213,24 @@ public class ParameterSenderService : BackgroundService
             _sendQueue.Enqueue(msg);
             return;
         }
-        if (expressionMap.TryGetValue(faceElement.Key, out var fullLink))
+
+        // If we need to send OSCQuery names, do them here
+        foreach (var vals in expressionMap.Values)
         {
-            foreach (var s in fullLink)
+            foreach (var s in vals)
             {
-                var msg = new OscMessage(s,
+                // Skip binary parameters for now
+                if (char.IsDigit(s[s.Length - 1])) continue;
+                var addr = "/avatar/parameters/" + s;
+                if (!OscMessage.TryParse(addr, out _)) continue;
+
+                var msg = new OscMessage(addr,
+                    Math.Clamp(
+                        weight.Remap(settings.Lower, settings.Upper, settings.Min, settings.Max),
+                        settings.Min,
+                        settings.Max));
+                _sendQueue.Enqueue(msg);
+                msg = new OscMessage("/avatar/parameters/FT/" + s,
                     Math.Clamp(
                         weight.Remap(settings.Lower, settings.Upper, settings.Min, settings.Max),
                         settings.Min,

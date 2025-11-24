@@ -55,7 +55,7 @@ public class OscSendService
         };
     }
 
-    private void UpdateTarget(IPEndPoint endpoint)
+    public void UpdateTarget(IPEndPoint endpoint)
     {
         _cts.Cancel();
         _sendSocket?.Close();

@@ -78,7 +78,7 @@ public class VRCFaceTrackingService : BackgroundService
             if (expressionMap.TryGetValue(lastPart, out existing))
                 existing.Add(customFaceExpression.Name);
             else
-                expressionMap.Add(lastPart, new List<string>(){customFaceExpression.Name});
+                expressionMap.Add(lastPart, [customFaceExpression.Name]);
         }
 
         Dictionary<string, string[]> expressionArrayMap = [];
