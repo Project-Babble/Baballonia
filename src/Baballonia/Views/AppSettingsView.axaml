@@ -375,11 +375,69 @@
         IconPath="SettingsRegular"
         SettingToggled="{Binding AdvancedOptions, Mode=TwoWay}" />
 
-      <controls:SettingsToggle
-        Title="Share eye/face data"
-        Description="Opt into sharing anonymous eye data to support improve our algorithms"
-        IconPath="DataUsageRegular"
-        SettingToggled="{Binding ShareEyeData, Mode=TwoWay}" />
+      <Expander
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch"
+          HorizontalContentAlignment="Stretch"
+          IsExpanded="{Binding IsExpandedByDefault, RelativeSource={RelativeSource AncestorType=controls:SettingsExpander}}">
+        <Expander.Header>
+          <Grid ColumnDefinitions="Auto,Auto,*">
+            <PathIcon
+                Grid.Column="0"
+                Width="32"
+                Margin="10,10,20,10"
+                VerticalAlignment="Center"
+                Data="{StaticResource DataUsageRegular}" />
+            <StackPanel
+                Grid.Column="1"
+                Margin="0,10,0,10"
+                HorizontalAlignment="Stretch">
+              <TextBlock
+                  Margin="5"
+                  FontSize="16"
+                  FontWeight="SemiBold"
+                  Text="Share eye/face data" />
+              <TextBlock
+                  Margin="5"
+                  FontSize="14"
+                  Foreground="{DynamicResource SystemChromeGrayColor}"
+                  Text="Opt into sharing anonymous eye/face data to improve our algorithms" />
+            </StackPanel>
+          </Grid>
+        </Expander.Header>
+          <StackPanel>
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock
+                Grid.Row="0"
+                Text="Opt into data sharing?" />
+              <CheckBox
+                Grid.Column="1"
+                IsChecked="{Binding ShareEyeData, Mode=TwoWay}" />
+            </Grid>
+            <StackPanel Spacing="12">
+              <TextBlock Text="Your Identifier:"/>
+              <Border
+                Background="{DynamicResource SystemChromeMediumColor}"
+                CornerRadius="6"
+                Padding="15,5,15,5">
+                <Grid ColumnDefinitions="*,Auto">
+                  <TextBlock
+                    VerticalAlignment="Center"
+                    Grid.Column="0"
+                    Text="{Binding MachineID, FallbackValue='Loading...'}"/>
+                  <Button
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    Click="RequestMachineId">
+                    <Button.Content>
+                      <PathIcon Data="{StaticResource DocumentCopyRegular}" />
+                    </Button.Content>
+                  </Button>
+                </Grid>
+              </Border>
+            </StackPanel>
+          </StackPanel>
+      </Expander>
 
       <Border
           Padding="15,5,15,5"

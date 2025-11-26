@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Logging;
+using Avalonia.Threading;
 using Baballonia.Contracts;
 using Baballonia.Services;
 using Baballonia.Services.Inference;
 using Baballonia.Services.Inference.Filters;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 
 namespace Baballonia.ViewModels.SplitViewPane;
@@ -20,6 +22,8 @@ public partial class AppSettingsViewModel : ViewModelBase
     public GithubService GithubService { get; private set;}
     public ParameterSenderService ParameterSenderService { get; private set;}
     private OpenVRService OpenVrService { get; } = Ioc.Default.GetService<OpenVRService>();
+
+    public string MachineID => _identityService.GetUniqueUserId();
 
     [ObservableProperty]
     [property: SavedSetting("AppSettings_RecalibrateAddress", "/avatar/parameters/etvr_recalibrate")]
@@ -86,10 +90,16 @@ public partial class AppSettingsViewModel : ViewModelBase
     private ILogger<AppSettingsViewModel> _logger;
     private readonly FacePipelineManager _facePipelineManager;
     private readonly EyePipelineManager _eyePipelineManager;
-    public AppSettingsViewModel(FacePipelineManager facePipelineManager, EyePipelineManager eyePipelineManager)
+    private readonly IIdentityService _identityService;
+
+    public AppSettingsViewModel(
+        FacePipelineManager facePipelineManager,
+        EyePipelineManager eyePipelineManager,
+        IIdentityService identityService)
     {
         _facePipelineManager = facePipelineManager;
         _eyePipelineManager = eyePipelineManager;
+        _identityService = identityService;
 
         // General/Calibration Settings
         OscTarget = Ioc.Default.GetService<IOscTarget>()!;
