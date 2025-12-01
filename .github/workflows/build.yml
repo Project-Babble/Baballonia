@@ -224,6 +224,8 @@ jobs:
 
       - name: Untar artifacts
         run: |
+          mkdir -p ./builds/windows
+          mkdir -p ./builds/linux-x64
           tar -xf ./artifacts/Baballonia.win.tar.gz --directory ./builds/windows
           tar -xf ./artifacts/Baballonia.x64.tar.gz --directory ./builds/linux-x64
 
