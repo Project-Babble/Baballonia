@@ -236,7 +236,6 @@ jobs:
           configVdf: ${{ secrets.STEAM_CONFIG_VDF }}
           appId: 4091970
           buildDescription: ${{ github.event.inputs.version-number }}
-          rootPath: builds
-          depot2Path: windows
-          depot3Path: linux-x64
+          depot2Path: builds/windows
+          depot3Path: builds/linux-x64
           releaseBranch: prerelease
