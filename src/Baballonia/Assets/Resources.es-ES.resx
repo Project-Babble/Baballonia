@@ -733,4 +733,7 @@
   <data name="Settings_SteamVR_Auto_Start_Description" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
+  <data name="Godot_Locale" xml:space="preserve">
+      <value>es</value>
+  </data>
 </root>
