@@ -19,64 +19,54 @@ using OverlaySDK.Packets;
 
 namespace Baballonia.Desktop.Calibration;
 
-public class OverlayTrainerService : IVROverlay, IDisposable
+public class OverlayTrainerService(
+    ILogger<OverlayTrainerService> logger,
+    IOverlayProgram overlayProgram,
+    ILocalSettingsService localSettingsService,
+    EyePipelineManager eyePipelineManager,
+    EyeCalibration eyeCalibration,
+    DataUploaderService dataUploaderService)
+    : IVROverlay, IDisposable
 {
-    private ILocalSettingsService _localSettingsService;
-    private ILogger<OverlayTrainerService> _logger;
-    private IOverlayProgram _program;
 
-    private EyePipelineManager _eyePipelineManager;
-    private readonly EyeCalibration _eyeCalibration;
     private readonly CancellationTokenSource _tokenSource = new();
-
-
-    public OverlayTrainerService(ILogger<OverlayTrainerService> logger, IOverlayProgram overlayProgram,
-        ILocalSettingsService localSettingsService, EyePipelineManager eyePipelineManager,
-        EyeCalibration eyeCalibration)
-    {
-        _logger = logger;
-        _program = overlayProgram;
-        _localSettingsService = localSettingsService;
-        _eyePipelineManager = eyePipelineManager;
-        _eyeCalibration = eyeCalibration;
-    }
 
     public void Dispose()
     {
-        _program.Dispose();
+        overlayProgram.Dispose();
     }
 
     public async Task<(bool success, string status)> EyeTrackingCalibrationRequested(
         CalibrationRoutine.Routines routine)
     {
-        if (!_program.CanStart())
+        if (!overlayProgram.CanStart())
         {
             return (false, "Cannot start Overlay");
         }
 
-        _program.Start();
+        overlayProgram.Start();
 
         await Task.Delay(TimeSpan.FromSeconds(0.25));
 
-        var logger = new OverlayLogger(_logger);
+        var overlayLogger = new OverlayLogger(logger);
 
         var sfactory = new SocketFactory();
         var sock = sfactory.CreateServer("127.0.0.1", 2425);
-        logger.Info("Accepted connection");
+        overlayLogger.Info("Accepted connection");
 
         var tcp = new EventDrivenTcpClient(sock);
         var client = new EventDrivenJsonClient(tcp);
 
-        var messageDispatcher = new OverlayMessageDispatcher(logger, client);
+        var messageDispatcher = new OverlayMessageDispatcher(overlayLogger, client);
 
         if (!Directory.Exists(Utils.ModelDataDirectory)) Directory.CreateDirectory(Utils.ModelDataDirectory);
         if (!Directory.Exists(Utils.ModelsDirectory)) Directory.CreateDirectory(Utils.ModelsDirectory);
 
         var steps = routine switch
         {
-            CalibrationRoutine.Routines.BasicCalibration => _eyeCalibration.BasicAllCalibration(),
-            CalibrationRoutine.Routines.BasicCalibrationNoTutorial => _eyeCalibration.BasicAllCalibrationQuick(),
-            _ => _eyeCalibration.BasicAllCalibration()
+            CalibrationRoutine.Routines.BasicCalibration => eyeCalibration.BasicAllCalibration(),
+            CalibrationRoutine.Routines.BasicCalibrationNoTutorial => eyeCalibration.BasicAllCalibrationQuick(),
+            _ => eyeCalibration.BasicAllCalibration()
         };
         foreach (var calibrationStep in steps)
         {
@@ -89,10 +79,15 @@ public class OverlayTrainerService : IVROverlay, IDisposable
 
         File.Move(srcPath, destPath);
 
-        _localSettingsService.SaveSetting("EyeHome_EyeModel", destPath);
-        await _eyePipelineManager.LoadInferenceAsync();
+        localSettingsService.SaveSetting("EyeHome_EyeModel", destPath);
+        await eyePipelineManager.LoadInferenceAsync();
 
-        await _program.WaitForExitAsync();
+        if (localSettingsService.ReadSetting<bool>("AppSettings_ShareEyeData"))
+        {
+            await dataUploaderService.UploadDataAsync(destPath);
+        }
+
+        await overlayProgram.WaitForExitAsync();
 
         return (true, string.Empty);
     }

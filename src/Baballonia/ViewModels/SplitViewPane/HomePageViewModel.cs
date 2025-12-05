@@ -377,7 +377,6 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     // Necessary evil to store some globals that don't really have place to go :( _sob_
     private static bool _hasPerformedFirstTimeSetup = false;
 
-
     private int _messagesRecvd;
     [ObservableProperty] private string _messagesInPerSecCount;
 
@@ -417,7 +416,9 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         IVROverlay vrOverlay,
         IDeviceEnumerator deviceEnumerator,
         ILocalSettingsService localSettings,
-        ILogger<HomePageViewModel> logger, DropOverlayService dropOverlayService, IPlatformConnector platformConnector)
+        ILogger<HomePageViewModel> logger,
+        DropOverlayService dropOverlayService,
+        IPlatformConnector platformConnector)
     {
         _facePipelineManager = facePipelineManager;
         _eyePipelineManager = eyePipelineManager;

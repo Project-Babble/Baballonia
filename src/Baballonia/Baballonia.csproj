@@ -47,6 +47,7 @@
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.0" />
         <PackageReference Include="Avalonia.Xaml.Interactions.Draggable" Version="11.3.0.6" />
+        <PackageReference Include="AWSSDK.S3" Version="4.0.13.1" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
         <PackageReference Include="Discord.Net" Version="3.18.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
