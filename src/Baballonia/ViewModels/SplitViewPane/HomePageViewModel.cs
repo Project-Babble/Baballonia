@@ -330,6 +330,9 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
         partial void OnRotationChanged(float value)
         {
+            const float step = MathF.PI / 4;
+            var snapped = MathF.Floor(value / step + 0.5f) * step;
+            if (MathF.Abs(value - snapped) < MathF.PI / 16) _rotation = snapped;
             Save();
         }
 

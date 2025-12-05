@@ -362,8 +362,10 @@
                         Grid.Column="0"
                         Grid.ColumnSpan="3"
                         Grid.Row="3"
-                        Maximum="6.28"
+                        Maximum="6.283185307"
                         Minimum="0"
+                        TickFrequency="0.785398163"
+                        TickPlacement="TopLeft"
                         Value="{Binding LeftCamera.Rotation}"
                         x:Name="LeftRotationSlider" />
 
@@ -618,8 +620,10 @@
                         Grid.Column="0"
                         Grid.ColumnSpan="3"
                         Grid.Row="3"
-                        Maximum="6.28"
+                        Maximum="6.283185307"
                         Minimum="0"
+                        TickFrequency="0.785398163"
+                        TickPlacement="TopLeft"
                         Value="{Binding RightCamera.Rotation}"
                         x:Name="RightRotationSlider" />
 
@@ -871,8 +875,10 @@
                       Grid.Column="0"
                       Grid.ColumnSpan="3"
                       Grid.Row="3"
-                      Maximum="6.28"
+                      Maximum="6.283185307"
                       Minimum="0"
+                      TickFrequency="0.785398163"
+                      TickPlacement="TopLeft"
                       Value="{Binding FaceCamera.Rotation}"
                       x:Name="FaceRotationSlider" />
 
