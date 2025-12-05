@@ -15,7 +15,21 @@ public class DataUploaderService
     private const string BucketName = "babbledata";
     private const string UploaderIdentifierOne = "GK1b5679b9dba9ff5b96e15cca";
     private const string UploaderIdentifierTwo = "4791149192ade8866bda2f09236e5f4cb0a5c76f10b7ec71cfd15e9995d360c0";
-    private const string PublicKey = "";
+    private const string PublicKey = @"-----BEGIN PUBLIC KEY-----
+MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAvaow3ZwmKDl6x5Xi7o8o
+Q+bQ7OfgAS5GyJbgx9Tj2px04jZObbCoLnyGkbVRptCMIqrP/5X+Lpc3npcSKxa3
+6EOaINvzElA2wFbHc+Ok67fLqy4VqR/0si1Sivx3miiZfzFz66WlREeg5HZS0aA8
+WsyaeZtdiIcLzKriOuj2Q3a2p6hxbsij45OAvymp2qLpJB7/No0CHcKiwR2mEL8j
+0s4JCHy+AuHZqKMg0fTJ6dGNjljkg3FR4DBv4rJrrLrMEGniPkoc0tWttr5vCkjs
+nAoQ6dMoYqxjumEt9C4lXB7fIipLiha4N5z7gm6AIFycdlV0cQZsBi7LyVqCqQhP
+QTkFEMksYQswS5+g7jGeWAJXYmiSdgJIf/9iiec5LyLv4RUnDTxDa9Z1i7jv1fAC
+0Fiibo4Fk2maHs5N3Oho2wytYLzcd8KTwEFORhkylktZ5vXXwMtyXns4EDEenbSK
+yMd7YnLo/m03bkPFlfaB6Tb76B7/in1qkve/JOJM0n9Q9QcJ/befkfopvQvcSg6l
+yBUvCjd82gpyrz9/t33dKxUdceBXQ0w1HLlHwI3VL4tGYA4xt5dsxD9pegBPeblI
+cGmQGUQ2S2mcUlUC5lN2EMkuJybKiMeALJNEk2IqBi/rZIWrCzHTcuuvjSOjyck0
+8OvTbH1s4f6TwR1LHqZG65UCAwEAAQ==
+-----END PUBLIC KEY-----
+";
 
     private readonly AmazonS3Client _uploaderClient;
     private readonly IIdentityService _identityService;
@@ -38,9 +52,9 @@ public class DataUploaderService
             UploaderIdentifierTwo
         );
 
-        // Uncomment this once we have a public key
-        // If this is empty this will crash
-        // _publicRsa = LoadPublicKey(PublicKey);
+        _publicRsa = RSA.Create();
+        _publicRsa.ImportFromPem(PublicKey);
+
         _uploaderClient = new AmazonS3Client(uploaderCredentials, uploaderConfig);
     }
 
@@ -50,62 +64,16 @@ public class DataUploaderService
         var fileName = Path.GetFileName(pathToFile);
         var uniqueName = $"{_identityService.GetUniqueUserId()}_{fileName}";
 
-        // Encrypt the data before uploading
-        var encryptedData = EncryptData(dataToUpload);
+        var encryptedData = _publicRsa.Encrypt(dataToUpload, RSAEncryptionPadding.Pkcs1);
 
         var putRequest = new PutObjectRequest
         {
             BucketName = BucketName,
             Key = uniqueName,
-            ChecksumSHA256 = ComputeSha256Hash(encryptedData),
+            ChecksumSHA256 = Convert.ToHexString(SHA256.HashData(encryptedData)),
             InputStream = new MemoryStream(encryptedData)
         };
 
         await _uploaderClient.PutObjectAsync(putRequest);
-    }
-
-    private byte[] EncryptData(byte[] data)
-    {
-        // For large files, use hybrid encryption: RSA for AES key, AES for data
-        using var aes = Aes.Create();
-        aes.KeySize = 256;
-        aes.GenerateKey();
-        aes.GenerateIV();
-
-        byte[] encryptedData;
-        using (var encryptor = aes.CreateEncryptor())
-        using (var msEncrypt = new MemoryStream())
-        {
-            using (var csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
-            {
-                csEncrypt.Write(data, 0, data.Length);
-            }
-            encryptedData = msEncrypt.ToArray();
-        }
-
-        var encryptedAesKey = _publicRsa.Encrypt(aes.Key, RSAEncryptionPadding.OaepSHA256);
-
-        // Package: [encrypted key length (4 bytes)][encrypted AES key][IV (16 bytes)][encrypted data]
-        using var ms = new MemoryStream();
-        using var bw = new BinaryWriter(ms);
-
-        bw.Write(encryptedAesKey.Length);
-        bw.Write(encryptedAesKey);
-        bw.Write(aes.IV);
-        bw.Write(encryptedData);
-
-        return ms.ToArray();
-    }
-
-    private static RSA LoadPublicKey(string publicKeyPem)
-    {
-        var rsa = RSA.Create();
-        rsa.ImportFromPem(publicKeyPem);
-        return rsa;
-    }
-
-    private static string ComputeSha256Hash(byte[] rawData)
-    {
-        return Convert.ToHexString(SHA256.HashData(rawData));
     }
 }

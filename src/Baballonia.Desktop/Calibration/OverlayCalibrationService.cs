@@ -48,16 +48,16 @@ public class OverlayTrainerService(
 
         await Task.Delay(TimeSpan.FromSeconds(0.25));
 
-        var logger1 = new OverlayLogger(logger);
+        var overlayLogger = new OverlayLogger(logger);
 
         var sfactory = new SocketFactory();
         var sock = sfactory.CreateServer("127.0.0.1", 2425);
-        logger1.Info("Accepted connection");
+        overlayLogger.Info("Accepted connection");
 
         var tcp = new EventDrivenTcpClient(sock);
         var client = new EventDrivenJsonClient(tcp);
 
-        var messageDispatcher = new OverlayMessageDispatcher(logger1, client);
+        var messageDispatcher = new OverlayMessageDispatcher(overlayLogger, client);
 
         if (!Directory.Exists(Utils.ModelDataDirectory)) Directory.CreateDirectory(Utils.ModelDataDirectory);
         if (!Directory.Exists(Utils.ModelsDirectory)) Directory.CreateDirectory(Utils.ModelsDirectory);
