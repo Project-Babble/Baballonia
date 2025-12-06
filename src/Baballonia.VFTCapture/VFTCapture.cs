@@ -33,6 +33,7 @@ public sealed class VftCapture(string source, ILogger logger) : Capture(source, 
         {
             try
             {
+                Logger.LogDebug("Trying to enable device.");
                 // Open the VFT device and initialize it.
                 SetTrackerState(setActive: true);
 
@@ -97,25 +98,21 @@ public sealed class VftCapture(string source, ILogger logger) : Capture(source, 
 
     private void SetTrackerState(bool setActive)
     {
-        // Prev: var fd = ViveFacialTracker.open(Url, ViveFacialTracker.FileOpenFlags.O_RDWR);
-        var vftFileStream = File.Open(Source, FileMode.Open, FileAccess.ReadWrite);
-        var fd = vftFileStream.SafeFileHandle.DangerousGetHandle();
-        if (fd != IntPtr.Zero)
+        try
         {
-            try
-            {
-                // Activate the tracker and give it some time to warm up/cool down
-                if (setActive)
-                    ViveFacialTracker.activate_tracker((int)fd);
-                else
-                    ViveFacialTracker.deactivate_tracker((int)fd);
-                // await Task.Delay(1000);
-            }
-            finally
-            {
-                // Prev: ViveFacialTracker.close((int)fd);
-                vftFileStream.Close();
-            }
+            // Leverage IDisposable for GC-less release of handle.
+            using var device = new ViveFacialTracker(Source);
+            if (!device.IsValid)
+                throw new NullReferenceException();
+
+            var deviceBufferSz = device.ValidateBufferSizes();
+            Logger.LogDebug($"Found device buffer of {deviceBufferSz} bytes");
+
+            device.SetState(setActive);
+        }
+        catch(Exception e)
+        {
+            Logger.LogError(e.Message);
         }
     }
 
