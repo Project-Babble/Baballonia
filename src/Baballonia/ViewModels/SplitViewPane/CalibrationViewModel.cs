@@ -44,10 +44,10 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
             new("LeftEyeLid"),
             new("RightEyeLid"),
             new ("LeftEyeWiden"),
-            new ("LeftEyeLower"),
+            //new ("LeftEyeLower"),
             new ("LeftEyeBrow"),
             new ("RightEyeWiden"),
-            new ("RightEyeLower"),
+            //new ("RightEyeLower"),
             new ("RightEyeBrow"),
         ];
 
