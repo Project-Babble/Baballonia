@@ -225,15 +225,9 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
     {
         // Is this model the face model?
         var candidate = results[0].AsEnumerable<float>().ToArray();
-        if (candidate.Length == Utils.FaceRawExpressions)
+        if (candidate.Length == Utils.FaceRawExpressions || _isOldEyeModel)
         {
             return candidate;
-        }
-
-        // Else, is this an older eye model?
-        if (_isOldEyeModel)
-        {
-            return [];
         }
 
         // Else, order eye information using cached metadata
