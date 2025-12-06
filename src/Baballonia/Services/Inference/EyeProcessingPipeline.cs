@@ -48,8 +48,14 @@ public class EyeProcessingPipeline : DefaultProcessingPipeline, IDisposable
         if(inferenceResult == null)
             return null;
 
-        if(Filter != null)
+        // Hack - make old eye models (6 outputs!) work with newer logic
+        // Remove this once we have eyebrows!
+        Array.Resize(ref inferenceResult, Utils.EyeRawExpressions);
+
+        if (Filter != null)
+        {
             inferenceResult = Filter.Filter(inferenceResult);
+        }
 
         ProcessExpressions(ref inferenceResult);
 
@@ -99,9 +105,13 @@ public class EyeProcessingPipeline : DefaultProcessingPipeline, IDisposable
         convertedExpressions[0] = rightEyeYawCorrected; // left pitch
         convertedExpressions[1] = eyeY;                   // left yaw
         convertedExpressions[2] = rightLid;               // left lid
-        convertedExpressions[3] = leftEyeYawCorrected;  // right pitch
-        convertedExpressions[4] = eyeY;                   // right yaw
-        convertedExpressions[5] = leftLid;                // right lid
+        convertedExpressions[3] = 0f;
+        convertedExpressions[4] = 0f;
+        convertedExpressions[5] = leftEyeYawCorrected;  // right pitch
+        convertedExpressions[6] = eyeY;                   // right yaw
+        convertedExpressions[7] = leftLid;                // right lid
+        convertedExpressions[8] = 0f;
+        convertedExpressions[9] = 0f;
 
         arKitExpressions = convertedExpressions;
 
