@@ -58,23 +58,23 @@ public class OverlayProgram : IOverlayProgram, IDisposable
         var monado = processList.Any(p => p.ProcessName.ToLower().Contains("monado"));
         var isWindows = OperatingSystem.IsWindows();
 
-        var launchArgs = "";
+        var launchArgs = $"-l {Resources.Godot_Locale}";
 
         if (!steamvr && !monado)
         {
-            launchArgs = "--use-debug";
+            launchArgs += " --use-debug";
         }
         else
         {
             if (isWindows)
             {
                 if (steamvr)
-                    launchArgs = "--use-openvr";
-                else if (monado) launchArgs = "--xr-mode on"; //uhhhhh?????
+                    launchArgs += " --use-openvr";
+                else if (monado) launchArgs += " --xr-mode on"; //uhhhhh?????
             }
             else
             {
-                launchArgs = "--xr-mode on";
+                launchArgs += " --xr-mode on";
             }
         }
 
