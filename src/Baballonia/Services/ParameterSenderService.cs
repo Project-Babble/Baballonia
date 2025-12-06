@@ -25,20 +25,20 @@ public class ParameterSenderService : BackgroundService
     private readonly ConcurrentQueue<OscMessage> _sendQueue = new();
 
     // Expression parameter names
-    public readonly Dictionary<string, string> EyeExpressionMap = new()
+    private readonly Dictionary<string, string> _eyeExpressionMap = new()
     {
         { "LeftEyeX", "/LeftEyeX" },
         { "LeftEyeY", "/LeftEyeY" },
         { "LeftEyeLid", "/LeftEyeLid" },
-        { "LeftEyeWiden", "/LeftEyeWiden" },
-        // { "LeftEyeLower", "/LeftEyeLower" },
-        { "LeftEyeBrow", "/LeftEyeBrow" },
+        //{ "LeftEyeWiden", "/LeftEyeWiden" },
+        //{ "LeftEyeLower", "/LeftEyeLower" },
+        //{ "LeftEyeBrow", "/LeftEyeBrow" },
         { "RightEyeX", "/RightEyeX" },
         { "RightEyeY", "/RightEyeY" },
         { "RightEyeLid", "/RightEyeLid" },
-        { "RightEyeWiden", "/RightEyeWiden" },
-        // { "RightEyeLower", "/RightEyeLower" },
-        { "RightEyeBrow", "/RightEyeBrow" },
+        //{ "RightEyeWiden", "/RightEyeWiden" },
+        //{ "RightEyeLower", "/RightEyeLower" },
+        //{ "RightEyeBrow", "/RightEyeBrow" },
     };
 
     public readonly Dictionary<string, string> FaceExpressionMap = new()
@@ -109,7 +109,7 @@ public class ParameterSenderService : BackgroundService
     {
         _logger.LogDebug("Starting Parameter Sender Service...");
         _logger.LogDebug("OSC parameter mapping initialized with {EyeCount} eye expressions and {FaceCount} face expressions",
-            EyeExpressionMap.Count, FaceExpressionMap.Count);
+            _eyeExpressionMap.Count, FaceExpressionMap.Count);
 
         while (!cancellationToken.IsCancellationRequested)
         {
@@ -140,10 +140,10 @@ public class ParameterSenderService : BackgroundService
         if (expressions is null) return;
         if (expressions.Length == 0) return;
 
-        for (int i = 0; i < Math.Min(expressions.Length, EyeExpressionMap.Count); i++)
+        for (int i = 0; i < Math.Min(expressions.Length, _eyeExpressionMap.Count); i++)
         {
             var weight = expressions[i];
-            var eyeElement = EyeExpressionMap.ElementAt(i);
+            var eyeElement = _eyeExpressionMap.ElementAt(i);
             var settings = _calibrationService.GetExpressionSettings(eyeElement.Key);
 
             var msg = new OscMessage(_prefix + eyeElement.Value,
@@ -161,9 +161,9 @@ public class ParameterSenderService : BackgroundService
         var leftEyeX = expressions[0];
         var leftEyeY = expressions[1];
         var leftEyeLid = expressions[2];
-        var rightEyeX = expressions[3];
-        var rightEyeY = expressions[4];
-        var rightEyeLid = expressions[5];
+        var rightEyeX = expressions[5];
+        var rightEyeY = expressions[6];
+        var rightEyeLid = expressions[7];
 
         var leftEyeLidSettings = _calibrationService.GetExpressionSettings("LeftEyeLid");
         var rightEyeLidSettings = _calibrationService.GetExpressionSettings("RightEyeLid");
