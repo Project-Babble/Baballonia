@@ -129,14 +129,14 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
             { "LeftEyeY", 1 },
             { "LeftEyeLid", 2 },
             { "LeftEyeWiden", 3 },
-            { "LeftEyeLower", 4 },
-            { "LeftEyeBrow", 5 },
-            { "RightEyeX", 6 },
-            { "RightEyeY", 7 },
-            { "RightEyeLid", 8 },
-            { "RightEyeWiden", 9 },
-            { "RightEyeLower", 10 },
-            { "RightEyeBrow", 11 },
+            //{ "LeftEyeLower",  },
+            { "LeftEyeBrow", 4 },
+            { "RightEyeX", 5 },
+            { "RightEyeY", 6 },
+            { "RightEyeLid", 7 },
+            { "RightEyeWiden", 8 },
+            //{ "RightEyeLower",  },
+            { "RightEyeBrow", 9 },
         };
 
         _faceKeyIndexMap = _parameterSenderService.FaceExpressionMap.Keys

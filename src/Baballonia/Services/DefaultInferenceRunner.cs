@@ -200,7 +200,7 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
 
         using var results = _session.Run(inputs);
 
-        float[] output = OrganizeOutputShapes(results);
+        var output = results[0].AsEnumerable<float>().ToArray();
         OutputSize = output.Length;
         return output;
     }
@@ -220,44 +220,6 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
         { "rightBrow", 9 }
     };
 
-    // Guarantee an expression's index by using named parameter values
-    private float[] OrganizeOutputShapes(IDisposableReadOnlyCollection<DisposableNamedOnnxValue> results)
-    {
-        // Is this model the face model?
-        var candidate = results[0].AsEnumerable<float>().ToArray();
-        if (candidate.Length == Utils.FaceRawExpressions || _isOldEyeModel)
-        {
-            return candidate;
-        }
-
-        // Else, order eye information using cached metadata
-        // Start by flattening new eye ONNX output
-        List<Tuple<string, float>> arKitExpressions = [];
-        int counter = 0;
-        foreach (var result in results)
-        {
-            var exps = result.AsEnumerable<float>().ToArray();
-            foreach (var exp in exps)
-            {
-                arKitExpressions.Add(new Tuple<string, float>(_outputExpressionNames[counter], exp));
-                counter++;
-            }
-        }
-
-        float[] output = new float[arKitExpressions.Count];
-        foreach (var expression in arKitExpressions)
-        {
-            var name = expression.Item1;
-            var value = expression.Item2;
-
-            if (OutputIndexMap.TryGetValue(name, out var index))
-            {
-                output[index] = value;
-            }
-        }
-
-        return output;
-    }
 
     public DenseTensor<float> GetInputTensor()
     {
