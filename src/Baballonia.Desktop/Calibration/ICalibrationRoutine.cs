@@ -304,14 +304,9 @@ public class BaseEyeCaptureStep(
     }
 }
 
-public class CommandDispatchStep : ICalibrationStep
+public class CommandDispatchStep(string name) : ICalibrationStep
 {
-    public string Name { get; }
-
-    public CommandDispatchStep(string name)
-    {
-        Name = name;
-    }
+    public string Name { get; } = name;
 
     public Task ExecuteAsync(OverlayMessageDispatcher dispatcher, CancellationToken ct)
     {
@@ -320,27 +315,21 @@ public class CommandDispatchStep : ICalibrationStep
     }
 }
 
-public class TrainerCalibrationStep : ICalibrationStep
+public class TrainerCalibrationStep(ITrainerService overlayTrainer) : ICalibrationStep
 {
-    public string Name { get; }
-    private readonly ITrainerService _trainer;
-
-    public TrainerCalibrationStep(ITrainerService overlayTrainer)
-    {
-        _trainer = overlayTrainer;
-        Name = "trainer";
-    }
+    public string Name => "trainer";
+    private readonly ITrainerService _trainer = overlayTrainer;
 
     public async Task ExecuteAsync(OverlayMessageDispatcher dispatcher, CancellationToken ct)
     {
         dispatcher.Dispatch(new RunVariableLenghtRoutinePacket(Name, TimeSpan.FromSeconds(120)));
-        var onProgresHandler = (TrainerProgressReportPacket packet) => { dispatcher.Dispatch(packet); };
-        _trainer.OnProgress += onProgresHandler;
+        var onProgressHandler = (TrainerProgressReportPacket packet) => { dispatcher.Dispatch(packet); };
+        _trainer.OnProgress += onProgressHandler;
         _trainer.RunTraining(Path.Combine(Utils.ModelDataDirectory, "user_cal.bin"),
             Path.Combine(Utils.ModelDataDirectory, "tuned_temporal_eye_tracking_latest.onnx"));
         await _trainer.WaitAsync();
 
-        _trainer.OnProgress -= onProgresHandler;
+        _trainer.OnProgress -= onProgressHandler;
     }
 }
 
@@ -365,7 +354,7 @@ public class EyeCaptureStepFactory
 
 public class MergeBinsStep : ICalibrationStep
 {
-    public string Name { get; } = "bin_merger";
+    public string Name => "bin_merger";
     private string[] _binNames;
 
     public MergeBinsStep(params string[] binNames)
@@ -414,36 +403,12 @@ public class EyeCalibration
                 CaptureFlags.FLAG_VERSION_BIT1,
                 TimeSpan.FromSeconds(20), lid: 0
             ),
-            // steps.Add(new BaseTutorialStep("dilationtutorial"));
-            // steps.Add(_eyeCaptureStepFactory.Create("dilation",
-            //     CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_DILATION_BLACK));
 
-            new BaseTutorialStep("widentutorial", TimeSpan.FromSeconds(10)),
-            _eyeCaptureStepFactory.Create("widen",
-                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20), widen: 1, lid: 1),
-
-            new BaseTutorialStep("squinttutorial", TimeSpan.FromSeconds(10)),
-            _eyeCaptureStepFactory.Create("squint",
-                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20), squint: 1, lid: 1),
-
-            new BaseTutorialStep("browtutorial", TimeSpan.FromSeconds(10)),
-            _eyeCaptureStepFactory.Create("brow",
-                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20), browAngry: 1, lid: 1),
-            // steps.Add(new BaseTutorialStep("covergencetutorial"));
-            // steps.Add(_eyeCaptureStepFactory.Create("covergence",
-            //     CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_WHATEVER_NOT_IMPLEMENTED));
-
-            new MergeBinsStep("gaze.bin", "blink.bin", "widen.bin", "squint.bin", "brow.bin"),
+            new MergeBinsStep("gaze.bin", "blink.bin"),
             new TrainerCalibrationStep(_trainer),
             new CommandDispatchStep("close")
 
         ];
-        // steps.Add(new BaseTutorialStep("dilationtutorial"));
-        // steps.Add(_eyeCaptureStepFactory.Create("dilation",
-        //     CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_DILATION_BLACK));
-        // steps.Add(new BaseTutorialStep("covergencetutorial"));
-        // steps.Add(_eyeCaptureStepFactory.Create("covergence",
-        //     CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_WHATEVER_NOT_IMPLEMENTED));
 
         return steps;
     }
@@ -462,19 +427,7 @@ public class EyeCalibration
                 TimeSpan.FromSeconds(20)
             ),
 
-            new BaseTutorialStep("widentutorial", TimeSpan.FromSeconds(4)),
-            _eyeCaptureStepFactory.Create("widen",
-                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20)),
-
-            new BaseTutorialStep("squinttutorial", TimeSpan.FromSeconds(4)),
-            _eyeCaptureStepFactory.Create("squint",
-                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20)),
-
-            new BaseTutorialStep("browtutorial", TimeSpan.FromSeconds(4)),
-            _eyeCaptureStepFactory.Create("brow",
-                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20)),
-
-            new MergeBinsStep("gaze.bin", "blink.bin", "widen.bin", "squint.bin", "brow.bin"),
+            new MergeBinsStep("gaze.bin", "blink.bin"),
             new TrainerCalibrationStep(_trainer),
             new CommandDispatchStep("close")
 
