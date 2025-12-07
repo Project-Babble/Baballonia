@@ -30,22 +30,17 @@ public class ImageCollector : IImageTransformer
         // feed the most recent matrix here at the start
         var last4 = ImageQueue.Skip(ImageQueue.Count - 4).Take(4).Reverse().ToArray();
 
-        var leftChannels = new List<Mat>();
-        var rightChannels = new List<Mat>();
+        var channels = new List<Mat>();
         foreach (var m in last4)
         {
             Mat[] splitChannels = Cv2.Split(m);
-            leftChannels.Add(splitChannels[0]);
-            rightChannels.Add(splitChannels[1]);
+            channels.AddRange(splitChannels);
         }
 
         Mat octoMatrix = new Mat();
-        Cv2.Merge(leftChannels.Concat(rightChannels).ToArray(), octoMatrix);
+        Cv2.Merge(channels.ToArray(), octoMatrix);
 
-        foreach (var channel in leftChannels)
-            channel.Dispose();
-
-        foreach (var channel in rightChannels)
+        foreach (var channel in channels)
             channel.Dispose();
 
         return octoMatrix;
