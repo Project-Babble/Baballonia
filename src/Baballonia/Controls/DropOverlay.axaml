@@ -36,14 +36,17 @@
             TextWrapping="Wrap"
             Text="{x:Static assets:Resources.DropOverlay_Important_Header}" />
 
-          <TextBlock 
+          <TextBlock
             TextWrapping="Wrap"
-            Text="{x:Static assets:Resources.DropOverlay_Message}" />
+            Text="Project Babble now has a data sharing program to help us improve our eye and face tracking models. You can opt in or out anytime by visiting the settings page." />
 
           <Grid>
-            <CheckBox x:Name="WarningCheckbox" IsCheckedChanged="Changed" Content="{x:Static assets:Resources.DropOverlay_DontShowAgain}" />
+            <CheckBox
+              x:Name="EyeDataCheckbox"
+              IsCheckedChanged="Changed"
+              Content="Opt in" />
             <Button
-              Click="SecondWarningUnderstood"
+              Click="EyeDataOptInRead"
               Content="{x:Static assets:Resources.DropOverlay_Dismiss_Button}"
               CornerRadius="4"
               HorizontalAlignment="Right"

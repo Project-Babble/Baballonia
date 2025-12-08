@@ -29,11 +29,12 @@ public partial class DropOverlay : UserControl
 
     private void Changed(object? sender, RoutedEventArgs e)
     {
-        _localSettingsService.SaveSetting("SecondsWarningRead", WarningCheckbox.IsChecked);
+        _localSettingsService.SaveSetting("AppSettings_ShareEyeData", EyeDataCheckbox.IsChecked);
     }
 
-    private void SecondWarningUnderstood(object? sender, RoutedEventArgs e)
+    private void EyeDataOptInRead(object? sender, RoutedEventArgs e)
     {
+        _localSettingsService.SaveSetting("EyeDataOptInRead", true);
         IsOverlayVisible = false;
     }
 }

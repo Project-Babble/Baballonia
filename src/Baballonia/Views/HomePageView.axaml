@@ -134,24 +134,24 @@
           </StackPanel>
       </Border>
 
-            <Grid
-                ColumnDefinitions="2*,1*"
-                HorizontalAlignment="Stretch"
-                RowDefinitions="Auto"
-                x:Name="CameraControlsGrid">
-                <Grid ColumnDefinitions="1*,1*" x:Name="EyesGrid">
-                    <!--  Left Eye Panel  -->
-                    <Grid
-                        IsEnabled="{x:Static utils:Utils.IsSupportedDesktopOS}"
-                        IsVisible="{x:Static utils:Utils.IsSupportedDesktopOS}"
-                        RowDefinitions="Auto,Auto,Auto,Auto"
-                        VerticalAlignment="Top">
-                        <TextBlock
-                            FontSize="20"
-                            FontWeight="Medium"
-                            Grid.Row="0"
-                            Margin="0,0,12,12"
-                            Text="{x:Static assets:Resources.Home_Left_Camera_Header}" />
+      <Grid
+          ColumnDefinitions="2*,1*"
+          HorizontalAlignment="Stretch"
+          RowDefinitions="Auto"
+          x:Name="CameraControlsGrid">
+          <Grid ColumnDefinitions="1*,1*" x:Name="EyesGrid">
+              <!--  Left Eye Panel  -->
+              <Grid
+                  IsEnabled="{x:Static utils:Utils.IsSupportedDesktopOS}"
+                  IsVisible="{x:Static utils:Utils.IsSupportedDesktopOS}"
+                  RowDefinitions="Auto,Auto,Auto,Auto"
+                  VerticalAlignment="Top">
+                  <TextBlock
+                      FontSize="20"
+                      FontWeight="Medium"
+                      Grid.Row="0"
+                      Margin="0,0,12,12"
+                      Text="{x:Static assets:Resources.Home_Left_Camera_Header}" />
 
             <!--  Camera address section  -->
             <Border
