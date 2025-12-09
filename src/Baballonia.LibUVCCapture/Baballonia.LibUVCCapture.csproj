@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>disable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Baballonia.SDK\Baballonia.SDK.csproj" />
+        <PackageReference Include="Project-Babble.Uvc.NET" Version="1.0.2" />
+    </ItemGroup>
+
+</Project>

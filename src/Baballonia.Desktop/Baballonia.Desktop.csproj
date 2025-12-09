@@ -45,6 +45,7 @@
         <PackageReference Include="Project-Babble.OpenCvSharp4.mini.runtime.ubuntu.22.04-arm64" Version="4.11.0.1" Condition="$([MSBuild]::IsOSPlatform('Linux')) And $(RuntimeIdentifier.Contains('arm'))" />
 	    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.22.0" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
         <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.119.0" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
+        <PackageReference Include="Project-Babble.Uvc.NET" Version="1.0.2" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Baballonia.CaptureBin.IO\Baballonia.CaptureBin.IO.csproj" />
@@ -53,6 +54,7 @@
         <ProjectReference Include="..\Baballonia.SerialCameraCapture\Baballonia.SerialCameraCapture.csproj"/>
         <ProjectReference Include="..\Baballonia.IPCameraCapture\Baballonia.IPCameraCapture.csproj"/>
         <ProjectReference Include="..\Baballonia.VFTCapture\Baballonia.VFTCapture.csproj"/>
+        <ProjectReference Include="..\Baballonia.LibUVCCapture\Baballonia.LibUVCCapture.csproj" Condition="$([MSBuild]::IsOSPlatform('Linux'))"/>
         <ProjectReference Include="..\Baballonia\Baballonia.csproj" />
     </ItemGroup>
 
@@ -135,10 +137,12 @@
             <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.OpenCVCapture.dll')" Include="$(OutputPath)Baballonia.OpenCVCapture.dll" />
             <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.IPCameraCapture.dll')" Include="$(OutputPath)Baballonia.IPCameraCapture.dll" />
             <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.VFTCapture.dll')" Include="$(OutputPath)Baballonia.VFTCapture.dll" />
+            <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.LibUVCCapture.dll') And $([MSBuild]::IsOSPlatform('Linux'))" Include="$(OutputPath)Baballonia.LibUVCCapture.dll" />
             <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.SerialCameraCapture.pdb')" Include="$(OutputPath)Baballonia.SerialCameraCapture.pdb" />
             <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.OpenCVCapture.pdb')" Include="$(OutputPath)Baballonia.OpenCVCapture.pdb" />
             <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.IPCameraCapture.pdb')" Include="$(OutputPath)Baballonia.IPCameraCapture.pdb" />
             <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.VFTCapture.pdb')" Include="$(OutputPath)Baballonia.VFTCapture.pdb" />
+            <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.LibUVCCapture.pdb') And $([MSBuild]::IsOSPlatform('Linux'))" Include="$(OutputPath)Baballonia.LibUVCCapture.pdb" />
         </ItemGroup>
         <Move SourceFiles="@(ModuleDlls)" DestinationFolder="$(OutputPath)Modules\" />
     </Target>
@@ -149,6 +153,7 @@
             <PublishModuleDlls Include="$(OutputPath)\publish\Baballonia.OpenCVCapture.dll" />
             <PublishModuleDlls Include="$(OutputPath)\publish\Baballonia.IPCameraCapture.dll" />
             <PublishModuleDlls Include="$(OutputPath)\publish\Baballonia.VFTCapture.dll" />
+            <PublishModuleDlls Include="$(OutputPath)\publish\Baballonia.LibUVCCapture.dll" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
         </ItemGroup>
         <Move SourceFiles="@(PublishModuleDlls)" DestinationFolder="$(OutputPath)\publish\Modules\" />
     </Target>
