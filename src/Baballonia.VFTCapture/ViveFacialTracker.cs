@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using Microsoft.Extensions.Logging;
 
 namespace Baballonia.VFTCapture;
 
@@ -88,26 +89,37 @@ public partial class ViveFacialTracker : IDisposable
     /// Device control buffer size. For the Vive Face Tracker this
     /// is either 384 or 64.
     /// </summary>
-    public ushort BufferSize { get; private set; } = 64;
+    public ushort BufferSize { get; private set; } = 0;
 
     /// <summary>
     /// Check if the held handle is still valid.
     /// </summary>
     public bool IsValid { get => Handle != IntPtr.Zero; }
 
+    private readonly ILogger log;
+
     /// <summary>
     /// Opens a file and wraps the handle. It must point to a Vive Face Tracker device.
     /// </summary>
     /// <exception cref="Exception"></exception>
-    public ViveFacialTracker(string path, FileOpenFlags flags = FileOpenFlags.O_RDWR)
+    public ViveFacialTracker(ILogger logger, string path, FileOpenFlags flags = FileOpenFlags.O_RDWR)
     {
+        log = logger;
+
+        log.LogDebug($"VFT: opening '{path}' as '{flags}'");
         Handle = LinuxNative.Open(path, flags);
         var err = Marshal.GetLastPInvokeError();
         if (err != 0)
-        {
-            var msg = Marshal.GetLastPInvokeErrorMessage();
-            throw new Exception($"Error while opening native file:\n{msg}");
-        }
+            throw new Exception($"Error while opening native file:\n{Marshal.GetLastPInvokeErrorMessage()}");
+
+        log.LogDebug("VFT: validating buffer size");
+        var deviceBufferSz = GetLen();
+
+        log.LogDebug($"VFT: get buffer size: {deviceBufferSz}");
+        if (deviceBufferSz != 384 && deviceBufferSz != 64)
+            throw new Exception($"Got unexpected device buffer size: {deviceBufferSz}");
+
+        BufferSize = deviceBufferSz;
     }
 
     /// <summary>
@@ -172,12 +184,15 @@ public partial class ViveFacialTracker : IDisposable
         return (ushort)(data[1] << 8 | data[0]);
     }
 
-    private bool SetCur(byte[] data, int timeout = 1000)
+    private byte SetCur(byte[] data, int timeout = 1000)
     {
+        if (data.Length != BufferSize)
+            throw new Exception($"Got incorrect buffer size: {data.Length} expected: {BufferSize}");
+
         XuSetCur(2, data);
 
         if (timeout <= 0)
-            return true;
+            return 0;
 
         CancellationTokenSource cts = new(timeout);
         while (!cts.Token.IsCancellationRequested)
@@ -189,20 +204,23 @@ public partial class ViveFacialTracker : IDisposable
                     // Can do a lil' eep.
                     Thread.Sleep(1);
                     break;
-                case 0x56: // Done, but need to validate result.
-                    return Enumerable.SequenceEqual(data[0..16], result[1..17]);
-                default: // Device borked.
-                    return false;
+                case 0x56:
+                    if (Enumerable.SequenceEqual(data[0..16], result[1..17]))
+                    {
+                        return result[17];
+                    }
+                    throw new Exception($"Invalid response sequence: {result[1..17]} expected: {data[0..16]}");
+                default:
+                    throw new Exception($"Unexpected response from XU command: {result[0]}");
             }
         }
-        // Timeout
-        return false;
+        throw new TimeoutException("Got no rersponse from device.");
     }
 
     /// <summary>
     /// Applies a task to a register.
     /// </summary>
-    private byte[] RegisterTask(XuTask task, XuReg reg, byte addr, byte value = 0x00)
+    private byte RegisterTask(XuTask task, XuReg reg, byte addr, byte value = 0x00)
     {
         byte[] data = new byte[BufferSize];
 
@@ -229,61 +247,46 @@ public partial class ViveFacialTracker : IDisposable
         data[15] = 0x00;
         data[16] = value;
 
-        SetCur(data);
-
-        // TODO: check if this is correct. I'm not sure if
-        // we need to return the sent buffer or the received
-        // buffer.
-        if (task == XuTask.GET)
-            return XuGetCur(2, BufferSize);
-
-        return data;
+        return SetCur(data);
     }
 
     private void SetRegister(XuReg reg, byte addr, byte value)
         => RegisterTask(XuTask.SET, reg, addr, value);
 
     private byte GetRegister(XuReg reg, byte addr)
-        // TODO: check correctness, please see RegisterTask(...).
-        => RegisterTask(XuTask.GET, reg, addr)[17];
+        => RegisterTask(XuTask.GET, reg, addr);
 
     private void SetRegisterSensor(byte addr, byte value)
         => SetRegister(XuReg.SENSOR, addr, value);
 
     private void GetRegisterSensor(byte addr)
-        // TODO: check correctness, please see RegisterTask(...).
         => GetRegister(XuReg.SENSOR, addr);
 
     private void SetEnableStream(bool enable)
     {
+        log.LogDebug($"VFT: set stream: {(enable ? "on" : "off")}");
         byte[] data = new byte[BufferSize];
         data[0] = (byte)XuTask.SET;
         data[1] = 0x14; // Magic numbers, this does not have
         data[2] = 0x00; // the same pattern as RegisterTask!
         data[3] = (byte)(enable ? 0x01 : 0x00);
-        if (BufferSize > 256)
+        SetCur(data);
+    }
+
+    private void SendMagicPacket()
+    {
+        // I have no clue why we need to send this magic packet.
+        log.LogDebug("VFT: sending magic packet");
+        byte[] data = new byte[BufferSize];
+        data[0] = 0x51; // Magic numbers, this does not have
+        data[1] = 0x52; // the same pattern as RegisterTask!
+        if (BufferSize >= 256)
         {
             // Need to set magic numbers on large buffers.
             data[254] = 0x53;
             data[255] = 0x54;
         }
         SetCur(data);
-    }
-
-    /// <summary>
-    /// Checks if the device we're trying to access is a valid Vive Face Tracker.
-    /// </summary>
-    /// <returns>The control buffer size.</returns>
-    /// <exception cref="Exception"></exception>
-    public ushort ValidateBufferSizes()
-    {
-        var deviceBufferSz = GetLen();
-        if (deviceBufferSz != 384 && deviceBufferSz != 64)
-        {
-            throw new Exception($"Got unexpected device buffer size: {deviceBufferSz}");
-        }
-        BufferSize = deviceBufferSz;
-        return deviceBufferSz;
     }
 
     /// <summary>
@@ -291,22 +294,15 @@ public partial class ViveFacialTracker : IDisposable
     /// </summary>
     public void SetState(bool enabled)
     {
-        byte[] data = new byte[BufferSize];
-        data[0] = 0x51; // Magic numbers, this does not have
-        data[1] = 0x52; // the same pattern as RegisterTask!
-        if (BufferSize > 256)
-        {
-            // Need to set magic numbers on large buffers.
-            data[254] = 0x53;
-            data[255] = 0x54;
-        }
-
-        SetCur(data);
+        SendMagicPacket();
         SetEnableStream(false);
 
-        // Infra-red LED state.
-        byte irLedState = (byte)(enabled ? 0xff : 0x00);
+        Thread.Sleep(100);
 
+        // Set infra-red LED state.
+        byte irLedState = (byte)(enabled ? 0xff : 0x00);
+        log.LogDebug($"VFT: set camera: {(enabled ? "on" : "off")}");
+        SendMagicPacket();
         SetRegisterSensor(0x00, 0x40);
         SetRegisterSensor(0x08, 0x01);
         SetRegisterSensor(0x70, 0x00);
@@ -318,11 +314,15 @@ public partial class ViveFacialTracker : IDisposable
         SetRegisterSensor(0x06, 0xb2);
         SetRegisterSensor(0x07, 0xb2);
         SetRegisterSensor(0x0f, 0x03);
-        SetCur(data);
 
         // On enable, restore the stream.
         // On disable, skip this.
         if (enabled)
+        {
+            Thread.Sleep(100);
+
+            SendMagicPacket();
             SetEnableStream(true);
+        }
     }
 }

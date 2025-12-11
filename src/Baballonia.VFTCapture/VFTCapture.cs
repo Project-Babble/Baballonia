@@ -101,12 +101,9 @@ public sealed class VftCapture(string source, ILogger logger) : Capture(source, 
         try
         {
             // Leverage IDisposable for GC-less release of handle.
-            using var device = new ViveFacialTracker(Source);
+            using var device = new ViveFacialTracker(Logger, Source);
             if (!device.IsValid)
                 throw new NullReferenceException();
-
-            var deviceBufferSz = device.ValidateBufferSizes();
-            Logger.LogDebug($"Found device buffer of {deviceBufferSz} bytes");
 
             device.SetState(setActive);
         }
