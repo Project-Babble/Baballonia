@@ -21,15 +21,28 @@ public sealed class LibUVCCapture(string source, ILogger<LibUVCCapture> logger) 
     {
         _context = new Context();
         _device = FindDeviceByPath(Source, _context);
-        if (_device is null) return Task.FromResult(false);
+        if (_device is null)
+        {
+            _context.Dispose();
+            _context = null;
+            return Task.FromResult(false);
+        }
         return Task.Run(() =>
         {
             var open = _device.Open();
             try
             {
                 var formats = open.GetStreamControlFormats().ToArray().OrderBy(i => i.Width).ToList();
-                var formatIndex = formats.FindIndex(i => i is { Width: > 256, Height: > 256, Format: FrameFormat.Mjpeg });
-                if (formatIndex == -1) return false;
+                var formatIndex = formats.FindIndex(i => i is { Width: > 256, Height: > 256 });
+                if (formatIndex == -1)
+                {
+                    open.Dispose();
+                    _device.Dispose();
+                    _device = null;
+                    _context.Dispose();
+                    _context = null;
+                    return false;
+                }
                 var format = formats[formatIndex];
                 open.GetStreamControlFormatSize(format.Format, format.Width, format.Height, format.Fps, out var control);
                 try
@@ -81,6 +94,7 @@ public sealed class LibUVCCapture(string source, ILogger<LibUVCCapture> logger) 
     private void Callback(ref Frame frame, IntPtr userPtr)
     {
         if (!_connected) return;
+        if (frame.FrameFormat is not FrameFormat.Mjpeg) return;
         var data = frame.GetData();
         if (data.Length == 0) return;
         SetRawMat(Mat.FromImageData(data));
