@@ -7,7 +7,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Baballonia.SDK\Baballonia.SDK.csproj" />
-        <PackageReference Include="Project-Babble.Uvc.NET" Version="1.0.2" />
+        <PackageReference Include="Project-Babble.Uvc.NET" Version="1.0.3" />
     </ItemGroup>
 
 </Project>
