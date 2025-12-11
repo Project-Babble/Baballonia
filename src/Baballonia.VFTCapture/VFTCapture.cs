@@ -15,12 +15,6 @@ public sealed class VftCapture(string source, ILogger logger) : Capture(source, 
     private readonly Mat _originalMat = new();
     private bool _loop;
 
-    public override bool CanConnect(string connectionString)
-    {
-        var lowered = connectionString.ToLower();
-        return lowered.StartsWith("/dev/video") && OperatingSystem.IsLinux();
-    }
-
     /// <summary>
     /// Starts video capture and applies custom resolution and framerate settings.
     /// </summary>

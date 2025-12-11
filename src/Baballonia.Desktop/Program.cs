@@ -42,7 +42,7 @@ sealed class Program
             DesktopConnector
         >();
 
-        App.RegisterPlatformSpecifficServices(collection =>
+        App.RegisterPlatformSpecificServices(collection =>
         {
             collection.AddSingleton<IOverlayProgram, OverlayProgram>();
             collection.AddSingleton<ITrainerService, TrainerService>();

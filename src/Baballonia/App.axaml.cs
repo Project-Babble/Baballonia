@@ -49,7 +49,7 @@ public class App : Application
         };
     }
 
-    public static void RegisterPlatformSpecifficServices(Action<IServiceCollection> configure)
+    public static void RegisterPlatformSpecificServices(Action<IServiceCollection> configure)
     {
         _platformSpecifficServices = configure;
     }
@@ -66,14 +66,13 @@ public class App : Application
         // Check for a "reset" file in the root of the app directory.
         // If one is found, wipe all files from inside it and delete the file.
         var resetFile = Path.Combine(Utils.PersistentDataDirectory, "reset");
-        if (File.Exists(resetFile))
+        if (!File.Exists(resetFile)) return;
+
+        // Delete everything including files and folders in Utils.PersistentDataDirectory
+        foreach (var file in Directory.EnumerateFiles(Utils.PersistentDataDirectory, "*",
+                     SearchOption.AllDirectories))
         {
-            // Delete everything including files and folders in Utils.PersistentDataDirectory
-            foreach (var file in Directory.EnumerateFiles(Utils.PersistentDataDirectory, "*",
-                         SearchOption.AllDirectories))
-            {
-                File.Delete(file);
-            }
+            File.Delete(file);
         }
     }
 

@@ -25,17 +25,6 @@ public sealed class SerialCameraCapture(string source, ILogger<SerialCameraCaptu
         ReadTimeout = SerialPort.InfiniteTimeout,
     };
 
-
-    public override bool CanConnect(string connectionString)
-    {
-        var lowered = connectionString.ToLower();
-        return lowered.StartsWith("com") ||
-               lowered.StartsWith("/dev/tty") ||
-               lowered.StartsWith("/dev/cu") ||
-               lowered.StartsWith("/dev/serial/") ||
-               lowered.StartsWith("/dev/ttyacm");
-    }
-
     public override Task<bool> StartCapture()
     {
         Logger.LogDebug("Starting serial camera capture...");
