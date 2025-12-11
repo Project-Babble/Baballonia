@@ -15,7 +15,6 @@ public sealed class LibUVCCapture(string source, ILogger<LibUVCCapture> logger) 
     private Device _device;
     private DeviceHandle _deviceHandle;
     private bool _connected;
-    public override bool CanConnect(string connectionString) => connectionString.StartsWith("/dev/video");
 
     public override Task<bool> StartCapture()
     {
