@@ -26,8 +26,10 @@ public class OpenCvCaptureFactory : ICaptureFactory
                      lowered.StartsWith("/dev/ttyacm");;
         if (serial) return false;
 
-        return lowered.StartsWith("/dev/video") ||
-               lowered.EndsWith("appsink") ||
+        if (lowered.StartsWith("/dev/video"))
+            return false;
+
+        return lowered.EndsWith("appsink") ||
                int.TryParse(address, out _) ||
                Uri.TryCreate(address, UriKind.Absolute, out _);
     }
