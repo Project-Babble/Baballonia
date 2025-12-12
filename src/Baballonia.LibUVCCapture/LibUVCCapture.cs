@@ -32,9 +32,10 @@ public sealed class LibUVCCapture(string source, ILogger<LibUVCCapture> logger) 
             try
             {
                 var formats = open.GetStreamControlFormats().ToArray().OrderBy(i => i.Width).ToList();
-                var formatIndex = formats.FindIndex(i => i is { Width: > 256, Height: > 256 });
+                var formatIndex = formats.FindIndex(i => i is { Width: > 256, Height: > 256, Format: FrameFormat.Mjpeg });
                 if (formatIndex == -1)
                 {
+                    Logger.LogInformation("Couldn't find format index");
                     open.Dispose();
                     _device.Dispose();
                     _device = null;
@@ -42,11 +43,18 @@ public sealed class LibUVCCapture(string source, ILogger<LibUVCCapture> logger) 
                     _context = null;
                     return false;
                 }
+                Logger.LogInformation("Found format index");
                 var format = formats[formatIndex];
-                open.GetStreamControlFormatSize(format.Format, format.Width, format.Height, format.Fps, out var control);
+                var control = open.GetStreamControlFormatSize(format.Format, format.Width, format.Height, 0);
                 try
                 {
+                    Logger.LogInformation("Starting stream");
                     open.StartStreaming(ref control, Callback);
+                    Logger.LogInformation("Started stream");
+                    _deviceHandle = open;
+                    _connected = true;
+                    Logger.LogInformation("Blah");
+                    return true;
                 }
                 catch
                 {
@@ -69,9 +77,6 @@ public sealed class LibUVCCapture(string source, ILogger<LibUVCCapture> logger) 
                 _context = null;
                 return false;
             }
-            _deviceHandle = open;
-            _connected = true;
-            return true;
         });
     }
 
@@ -92,10 +97,14 @@ public sealed class LibUVCCapture(string source, ILogger<LibUVCCapture> logger) 
 
     private void Callback(ref Frame frame, IntPtr userPtr)
     {
+        Logger.LogInformation("Callback called");
         if (!_connected) return;
+        Logger.LogInformation("IsConnected");
         if (frame.FrameFormat is not FrameFormat.Mjpeg) return;
+        Logger.LogInformation("CorrectFormat");
         var data = frame.GetData();
         if (data.Length == 0) return;
+        Logger.LogInformation("HasData");
         SetRawMat(Mat.FromImageData(data));
     }
 
