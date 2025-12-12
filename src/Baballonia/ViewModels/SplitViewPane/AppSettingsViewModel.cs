@@ -38,18 +38,6 @@ public partial class AppSettingsViewModel : ViewModelBase
     private string _oscPrefix;
 
     [ObservableProperty]
-    [property: SavedSetting("AppSettings_OneEuroEnabled", true)]
-    private bool _oneEuroMinEnabled;
-
-    [ObservableProperty]
-    [property: SavedSetting("AppSettings_OneEuroMinFreqCutoff", 1f)]
-    private float _oneEuroMinFreqCutoff;
-
-    [ObservableProperty]
-    [property: SavedSetting("AppSettings_OneEuroSpeedCutoff", 1f)]
-    private float _oneEuroSpeedCutoff;
-
-    [ObservableProperty]
     [property: SavedSetting("AppSettings_UseGPU", true)]
     private bool _useGPU;
 

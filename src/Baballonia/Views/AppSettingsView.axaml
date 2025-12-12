@@ -226,26 +226,47 @@
             </StackPanel>
           </Grid>
         </Expander.Header>
-        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto">
+        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
           <StackPanel
               Grid.Row="0"
               Grid.Column="0"
               Margin="0,8">
-            <TextBlock FontWeight="Bold" Text="{x:Static assets:Resources.Settings_Filter_Enabled_Label}" />
-            <TextBlock Text="{x:Static assets:Resources.Settings_Filter_Enabled_Description}" />
+            <TextBlock FontWeight="Bold" Text="Gaze Filtering" />
+            <TextBlock Text="Controls how much filtering is applied to eye look" />
           </StackPanel>
-          <CheckBox
+          <StackPanel
               Grid.Row="0"
               Grid.Column="2"
-              Margin="0,8"
-              IsChecked="{Binding OneEuroMinEnabled, Mode=TwoWay}" />
+              Orientation="Horizontal"
+              Spacing="8">
+            <ComboBox
+                x:Name="GazeComboBox"
+                Margin="0,8"
+                PlaceholderText="{x:Static assets:Resources.Settings_Filter_Template_Placeholder}"
+                SelectionChanged="GazeComboBox_OnSelectionChanged">
+              <ComboBoxItem Tag="0.5"><TextBlock Text="Low" DataContext="0.5" /></ComboBoxItem>
+              <ComboBoxItem Tag="1.0"><TextBlock Text="Medium" DataContext="1.0" /></ComboBoxItem>
+              <ComboBoxItem Tag="2.0"><TextBlock Text="High" DataContext="2.0" /></ComboBoxItem>
+              <ComboBoxItem Tag="0"><TextBlock Text="Disabled" DataContext="0" /></ComboBoxItem>
+            </ComboBox>
+
+            <NumericUpDown
+              x:Name="GazeUpDown"
+                ValueChanged="GazeUpDown_OnValueChanged"
+                Margin="0,8"
+                FormatString="F1"
+                Increment="0.1"
+                Maximum="10"
+                Minimum="0.1"
+                Value="0" />
+          </StackPanel>
 
           <StackPanel
               Grid.Row="1"
               Grid.Column="0"
               Margin="0,8">
-            <TextBlock FontWeight="Bold" Text="{x:Static assets:Resources.Settings_Filter_MinFreq_Label}" />
-            <TextBlock Text="{x:Static assets:Resources.Settings_Filter_MinFreq_Description}" />
+            <TextBlock FontWeight="Bold" Text="Expression Filtering" />
+            <TextBlock Text="Controls how much filtering is applied to non-gaze expressions" />
           </StackPanel>
           <StackPanel
               Grid.Row="1"
@@ -253,80 +274,24 @@
               Orientation="Horizontal"
               Spacing="8">
             <ComboBox
-                x:Name="SelectedMinFreqCutoffComboBox"
+                x:Name="ExpressionsComboBox"
                 Margin="0,8"
                 PlaceholderText="{x:Static assets:Resources.Settings_Filter_Template_Placeholder}"
-                SelectionChanged="SelectedMinFreqCutoffComboBox_OnSelectionChanged">
-              <ComboBoxItem Tag="0.5">
-                <TextBlock>
-                  <TextBlock.Text>
-                    <MultiBinding StringFormat="{x:Static assets:Resources.Settings_Filter_Template_Low}">
-                      <Binding Source="0.5" />
-                    </MultiBinding>
-                  </TextBlock.Text>
-                </TextBlock>
-              </ComboBoxItem>
-
-              <ComboBoxItem Tag="1.0">
-                <TextBlock>
-                  <TextBlock.Text>
-                    <MultiBinding StringFormat="{x:Static assets:Resources.Settings_Filter_Template_Medium}">
-                      <Binding Source="1.0" />
-                    </MultiBinding>
-                  </TextBlock.Text>
-                </TextBlock>
-              </ComboBoxItem>
-
-              <ComboBoxItem Tag="2.0">
-                <TextBlock>
-                  <TextBlock.Text>
-                    <MultiBinding StringFormat="{x:Static assets:Resources.Settings_Filter_Template_High}">
-                      <Binding Source="2.0" />
-                    </MultiBinding>
-                  </TextBlock.Text>
-                </TextBlock>
-              </ComboBoxItem>
+                SelectionChanged="ExpressionsComboBox_OnSelectionChanged">
+              <ComboBoxItem Tag="0.5"><TextBlock Text="Low" DataContext="0.5" /></ComboBoxItem>
+              <ComboBoxItem Tag="1.0"><TextBlock Text="Medium" DataContext="1.0" /></ComboBoxItem>
+              <ComboBoxItem Tag="2.0"><TextBlock Text="High" DataContext="2.0" /></ComboBoxItem>
+              <ComboBoxItem Tag="0"><TextBlock Text="Disabled" DataContext="0" /></ComboBoxItem>
             </ComboBox>
-
             <NumericUpDown
-                x:Name="SelectedMinFreqCutoffUpDown"
+                x:Name="ExpressionsUpDown"
+                ValueChanged="ExpressionsUpDown_OnValueChanged"
                 Margin="0,8"
                 FormatString="F1"
                 Increment="0.1"
                 Maximum="10"
                 Minimum="0.1"
-                Value="{Binding OneEuroMinFreqCutoff, Mode=TwoWay}" />
-          </StackPanel>
-
-          <StackPanel
-              Grid.Row="2"
-              Grid.Column="0"
-              Margin="0,8">
-            <TextBlock FontWeight="Bold" Text="{x:Static assets:Resources.Settings_Filter_Speed_Label}" />
-            <TextBlock Text="{x:Static assets:Resources.Settings_Filter_Speed_Description}" />
-          </StackPanel>
-          <StackPanel
-              Grid.Row="2"
-              Grid.Column="2"
-              Orientation="Horizontal"
-              Spacing="8">
-            <ComboBox
-                x:Name="SelectedSpeedCutoffComboBox"
-                Margin="0,8"
-                PlaceholderText="{x:Static assets:Resources.Settings_Filter_Template_Placeholder}"
-                SelectionChanged="SelectedSpeedCutoffComboBox_OnSelectionChanged">
-              <ComboBoxItem Tag="0.5"><TextBlock Text="{x:Static assets:Resources.Settings_Filter_Template_Low}" DataContext="0.5" /></ComboBoxItem>
-              <ComboBoxItem Tag="1.0"><TextBlock Text="{x:Static assets:Resources.Settings_Filter_Template_Medium}" DataContext="1.0" /></ComboBoxItem>
-              <ComboBoxItem Tag="2.0"><TextBlock Text="{x:Static assets:Resources.Settings_Filter_Template_High}" DataContext="2.0" /></ComboBoxItem>
-            </ComboBox>
-            <NumericUpDown
-                x:Name="SelectedSpeedCutoffUpDown"
-                Margin="0,8"
-                FormatString="F1"
-                Increment="0.1"
-                Maximum="10"
-                Minimum="0.1"
-                Value="{Binding OneEuroSpeedCutoff, Mode=TwoWay}" />
+                Value="0" />
           </StackPanel>
         </Grid>
       </Expander>

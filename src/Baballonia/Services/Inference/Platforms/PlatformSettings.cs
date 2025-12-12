@@ -10,7 +10,7 @@ public class PlatformSettings(
     Size inputSize,
     InferenceSession session,
     DenseTensor<float> tensor,
-    OneEuroFilter oneEuroFilter,
+    IFilter oneEuroFilter,
     float lastTime,
     string inputName,
     string modelName)
@@ -19,7 +19,7 @@ public class PlatformSettings(
     public InferenceSession Session { get; } = session;
     public DenseTensor<float> Tensor { get; } = tensor;
 
-    public OneEuroFilter Filter { get; } = oneEuroFilter;
+    public IFilter Filter { get; } = oneEuroFilter;
     public float LastTime { get; set; } = lastTime;
     public string InputName { get; } = inputName;
     public string ModelName { get; } = modelName;

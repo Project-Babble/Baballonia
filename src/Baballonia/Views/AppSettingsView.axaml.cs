@@ -15,14 +15,16 @@ public partial class AppSettingsView : UserControl
 {
     private readonly IThemeSelectorService _themeSelectorService;
     private readonly ILanguageSelectorService _languageSelectorService;
+    private readonly ILocalSettingsService _localSettingsService;
     private readonly ComboBox _themeComboBox;
     private readonly ComboBox _langComboBox;
-    private readonly NumericUpDown _selectedMinFreqCutoffUpDown;
-    private readonly NumericUpDown _selectedSpeedCutoffUpDown;
+    private readonly NumericUpDown _gazeUpDown;
+    private readonly NumericUpDown _expressionsUpDown;
 
     public AppSettingsView()
     {
         InitializeComponent();
+        _localSettingsService =  Ioc.Default.GetService<ILocalSettingsService>()!;
 
         _themeSelectorService = Ioc.Default.GetService<IThemeSelectorService>()!;
         _themeComboBox = this.Find<ComboBox>("ThemeCombo")!;
@@ -32,8 +34,8 @@ public partial class AppSettingsView : UserControl
         _langComboBox = this.Find<ComboBox>("LangCombo")!;
         _langComboBox.SelectionChanged += LangComboBox_SelectionChanged;
 
-        _selectedMinFreqCutoffUpDown = this.Find<NumericUpDown>("SelectedMinFreqCutoffUpDown")!;
-        _selectedSpeedCutoffUpDown = this.Find<NumericUpDown>("SelectedSpeedCutoffUpDown")!;
+        _gazeUpDown = this.Find<NumericUpDown>("GazeUpDown")!;
+        _expressionsUpDown = this.Find<NumericUpDown>("ExpressionsUpDown")!;
 
         UpdateThemes();
 
@@ -147,30 +149,48 @@ public partial class AppSettingsView : UserControl
         }
     }
 
-    private void SelectedSpeedCutoffComboBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    private void ExpressionsComboBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (sender is not ComboBox comboBox) return;
 
-        _selectedSpeedCutoffUpDown.Value = comboBox.SelectedIndex switch
+        _expressionsUpDown.Value = comboBox.SelectedIndex switch
         {
             0 => 0.5m,
             1 => 1,
             2 => 2,
-            _ => _selectedSpeedCutoffUpDown.Value
+            _ => _expressionsUpDown.Value
         };
     }
 
-    private void SelectedMinFreqCutoffComboBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    private void ExpressionsUpDown_OnValueChanged(object? sender, NumericUpDownValueChangedEventArgs e)
+    {
+        if (DataContext is not AppSettingsViewModel) return;
+
+        _localSettingsService.SaveSetting("Filter_Expressions_Enabled", _expressionsUpDown.Value != 0);
+        _localSettingsService.SaveSetting("Filter_Expressions_MinFreq", _expressionsUpDown.Value);
+        _localSettingsService.SaveSetting("Filter_Expressions_Speed", _expressionsUpDown.Value);
+    }
+
+    private void GazeComboBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (sender is not ComboBox comboBox) return;
 
-        _selectedMinFreqCutoffUpDown.Value = comboBox.SelectedIndex switch
+        _gazeUpDown.Value = comboBox.SelectedIndex switch
         {
             0 => 0.5m,
             1 => 1,
             2 => 2,
-            _ => _selectedMinFreqCutoffUpDown.Value
+            _ => _gazeUpDown.Value
         };
+    }
+
+    private void GazeUpDown_OnValueChanged(object? sender, NumericUpDownValueChangedEventArgs e)
+    {
+        if (DataContext is not AppSettingsViewModel) return;
+
+        _localSettingsService.SaveSetting("Filter_Gaze_Enabled", _gazeUpDown.Value != 0);
+        _localSettingsService.SaveSetting("Filter_Gaze_Enabled_MinFreq", (float)_gazeUpDown.Value!);
+        _localSettingsService.SaveSetting("Filter_Gaze_Speed", (float)_gazeUpDown.Value);
     }
 
     public void RequestMachineId(object? sender, RoutedEventArgs routedEventArgs)
