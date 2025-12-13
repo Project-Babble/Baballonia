@@ -23,6 +23,7 @@ public enum v4l2_buf_type : uint
 public enum v4l2_pix_fmt : uint
 {
     V4L2_PIX_FMT_MJPEG = 1196444237,
+    V4L2_PIX_FMT_YUYV = 1448695129,
 }
 
 [Flags]

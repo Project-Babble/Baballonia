@@ -1,4 +1,5 @@
-﻿using Baballonia.LibV4L2Capture.V4L2;
+﻿using System.Runtime.InteropServices;
+using Baballonia.LibV4L2Capture.V4L2;
 using Microsoft.Extensions.Logging;
 using OpenCvSharp;
 using Capture = Baballonia.SDK.Capture;
@@ -20,6 +21,8 @@ public sealed class LibV4L2Capture(string source, ILogger<LibV4L2Capture> logger
             if (_device == null)
                 return Task.FromResult(false);
 
+            Logger.LogInformation($"Using pixel format: {_device.PixelFormat}");
+
             _device.StartCapture();
             IsReady = true;
         }
@@ -37,6 +40,22 @@ public sealed class LibV4L2Capture(string source, ILogger<LibV4L2Capture> logger
         return Task.FromResult(true);
     }
 
+    private void DecodeMJPEG(byte[] frame)
+    {
+        Mat mat = Cv2.ImDecode(frame, ImreadModes.Grayscale);
+        SetRawMat(mat);
+    }
+
+    private void DecodeYUYV(byte[] frame, uint width, uint height)
+    {
+        Mat yuyvMat = new Mat((int)height, (int)width, MatType.CV_8UC2);
+        Marshal.Copy(frame, 0, yuyvMat.Data, frame.Length);
+
+        Mat grayMat = new Mat();
+        Cv2.CvtColor(yuyvMat, grayMat, ColorConversionCodes.YUV2GRAY_YUY2);
+        SetRawMat(grayMat);
+    }
+
     private async Task VideoCapture_UpdateLoop(CancellationToken ct)
     {
         while (!ct.IsCancellationRequested && _device != null)
@@ -45,8 +64,21 @@ public sealed class LibV4L2Capture(string source, ILogger<LibV4L2Capture> logger
             {
                 if (_device.CaptureFrame(out byte[]? frame))
                 {
-                    Mat mat = Cv2.ImDecode(frame, ImreadModes.Grayscale);
-                    SetRawMat(mat);
+                    if (frame is { Length: > 0 })
+                    {
+                        switch (_device.PixelFormat)
+                        {
+                            case v4l2_pix_fmt.V4L2_PIX_FMT_MJPEG:
+                                DecodeMJPEG(frame);
+                                break;
+                            case v4l2_pix_fmt.V4L2_PIX_FMT_YUYV:
+                                var pix = _device.CurrentFormat.pix;
+                                DecodeYUYV(frame, pix.width, pix.height);
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                    }
                 }
                 else
                 {
@@ -55,6 +87,7 @@ public sealed class LibV4L2Capture(string source, ILogger<LibV4L2Capture> logger
             }
             catch(Exception e)
             {
+                SetRawMat(new Mat());
                 IsReady = false;
                 Logger.LogError(e.ToString());
                 _device.Dispose();

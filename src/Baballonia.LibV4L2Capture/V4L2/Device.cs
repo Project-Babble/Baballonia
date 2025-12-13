@@ -31,13 +31,13 @@ public class Device : IDisposable {
 
     }
 
-    private const int O_RDWR = 2;
-    private const int O_NONBLOCK = 0x800;
+    private static readonly v4l2_pix_fmt[] SupportedFormats = [v4l2_pix_fmt.V4L2_PIX_FMT_MJPEG, v4l2_pix_fmt.V4L2_PIX_FMT_YUYV];
 
-    private const int EAGAIN = 11;   // Resource temporarily unavailable
+    private const int O_RDWR = 2;
 
     public string Address { get; private set; }
-    public bool Connected { get; private set; }
+    public v4l2_pix_fmt PixelFormat { get; private set; }
+    public Data.v4l2_format CurrentFormat { get; private set; }
 
     private int _fileDescriptor;
 
@@ -60,23 +60,31 @@ public class Device : IDisposable {
 
         if (!caps.HasFlag(V4L2Capabilities.STREAMING)) throw new Exception("Device does not support streaming (required for mmap or userptr buffers)");
 
-        var formats = device.GetFormats().Where(f => f.pixelformat == v4l2_pix_fmt.V4L2_PIX_FMT_MJPEG).ToList();
+        var formats = device.GetFormats().Where(f => SupportedFormats.Contains(f.pixelformat)).ToList();
 
-        if (formats.Count <= 0) throw new Exception("Device does not support MJPEG");
+        if (formats.Count <= 0) throw new Exception($"Device does not support {string.Join(", ", SupportedFormats.Select(f => Enum.GetName(typeof(v4l2_pix_fmt), f)))}");
+
+        formats.Sort((a, b) =>
+        {
+            int indexA = Array.IndexOf(SupportedFormats, a.pixelformat);
+            int indexB = Array.IndexOf(SupportedFormats, b.pixelformat);
+            return indexA.CompareTo(indexB);
+        });
 
         var format = formats[0];
+        device.PixelFormat = format.pixelformat;
 
         Data.v4l2_frmivalenum bestInterval = default;
         double maxFps = 0;
         uint maxResolution = 0;
 
-        var sizes = device.EnumerateFrameSizes(format.pixelformat);
+        var sizes = device.EnumerateFrameSizes(device.PixelFormat);
         foreach (var size in sizes)
         {
-            var intervals = device.EnumerateFrameIntervals(format.pixelformat, size.discrete.width, size.discrete.height);
+            var intervals = device.EnumerateFrameIntervals(device.PixelFormat, size.discrete.width, size.discrete.height);
             foreach (var interval in intervals)
             {
-                double fps = 0d;
+                double fps;
                 switch (interval.type)
                 {
                     case v4l2_frmivaltypes.V4L2_FRMIVAL_TYPE_DISCRETE:
@@ -160,6 +168,8 @@ public class Device : IDisposable {
 
         int ret = NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_S_FMT, ref fmt);
         if (ret < 0) throw new Exception($"VIDIOC_S_FMT failed: errno={Marshal.GetLastWin32Error()}");
+
+        CurrentFormat = fmt;
     }
 
     public List<Data.v4l2_frmsizeenum> EnumerateFrameSizes(v4l2_pix_fmt pixelformat)
