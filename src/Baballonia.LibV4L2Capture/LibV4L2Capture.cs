@@ -23,7 +23,7 @@ public sealed class LibV4L2Capture(string source, ILogger<LibV4L2Capture> logger
         }
         catch (Exception e) {
             Logger.LogError(e.ToString());
-            return Task.FromResult(true);
+            return Task.FromResult(false);
         }
 
         _cts = new CancellationTokenSource();
