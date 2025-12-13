@@ -29,24 +29,30 @@ public sealed class LibV4L2Capture(string source, ILogger<LibV4L2Capture> logger
         _cts = new CancellationTokenSource();
         var token = _cts.Token;
 
-        _captureTask = Task.Run(() =>
-        {
-            while (!token.IsCancellationRequested)
-            {
-                try
-                {
-                    byte[] frame = _device.CaptureFrame();
-                    Mat mat = Cv2.ImDecode(frame, ImreadModes.Grayscale);
-                    SetRawMat(mat);
-                }
-                catch(Exception e)
-                {
-                    Logger.LogError(e.ToString());
-                }
-            }
-        }, token);
+        _captureTask = Task.Run(() => VideoCapture_UpdateLoop(token), token);
 
         return Task.FromResult(true);
+    }
+
+    private Task VideoCapture_UpdateLoop(CancellationToken ct)
+    {
+        while (!ct.IsCancellationRequested && _device != null)
+        {
+            try
+            {
+                byte[] frame = _device.CaptureFrame();
+                Mat mat = Cv2.ImDecode(frame, ImreadModes.Grayscale);
+                SetRawMat(mat);
+            }
+            catch(Exception e)
+            {
+                Logger.LogError(e.ToString());
+                _device.Dispose();
+                break;
+            }
+        }
+
+        return Task.CompletedTask;
     }
 
     public override Task<bool> StopCapture()
