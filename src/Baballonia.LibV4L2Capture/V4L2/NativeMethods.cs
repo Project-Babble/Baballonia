@@ -39,4 +39,7 @@ internal static class NativeMethods {
 
     [DllImport("libc", SetLastError = true)]
     public static extern int munmap(IntPtr addr, uint length);
+
+    [DllImport("libc", SetLastError = true)]
+    public static extern int poll([In, Out] Data.pollfd[] fds, uint nfds, int timeout);
 }

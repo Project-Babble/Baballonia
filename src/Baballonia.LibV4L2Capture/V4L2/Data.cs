@@ -205,4 +205,16 @@ public class Data {
         [FieldOffset(76)] public uint reserved2;
         [FieldOffset(80)] public uint reserved;
     }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct pollfd
+    {
+        public int fd;
+        public short events;
+        public short revents;
+    }
+
+    public const short POLLIN  = 0x0001;
+    public const short POLLERR = 0x0008;
+    public const short POLLHUP = 0x0010;
 }

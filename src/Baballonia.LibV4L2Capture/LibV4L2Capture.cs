@@ -34,25 +34,28 @@ public sealed class LibV4L2Capture(string source, ILogger<LibV4L2Capture> logger
         return Task.FromResult(true);
     }
 
-    private Task VideoCapture_UpdateLoop(CancellationToken ct)
-    {
+    private async Task VideoCapture_UpdateLoop(CancellationToken ct) {
         while (!ct.IsCancellationRequested && _device != null)
         {
-            try
-            {
-                byte[] frame = _device.CaptureFrame();
-                Mat mat = Cv2.ImDecode(frame, ImreadModes.Grayscale);
-                SetRawMat(mat);
+            try {
+                if (_device.CaptureFrame(out byte[]? frame))
+                {
+                    Mat mat = Cv2.ImDecode(frame, ImreadModes.Grayscale);
+                    SetRawMat(mat);
+                }
+                else
+                {
+                    await Task.Delay(1, ct);
+                }
             }
             catch(Exception e)
             {
+                IsReady = false;
                 Logger.LogError(e.ToString());
                 _device.Dispose();
                 break;
             }
         }
-
-        return Task.CompletedTask;
     }
 
     public override Task<bool> StopCapture()
