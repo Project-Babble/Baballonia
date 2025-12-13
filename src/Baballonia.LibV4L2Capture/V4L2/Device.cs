@@ -8,11 +8,27 @@ public class Device : IDisposable {
     public void Dispose()
     {
         StopCapture();
+        for (int i = 0; i < _bufferStarts.Length; i++)
+        {
+            if (_bufferStarts[i] != IntPtr.Zero && _bufferLengths[i] > 0)
+                NativeMethods.munmap(_bufferStarts[i], _bufferLengths[i]);
+        }
+
+        Data.v4l2_requestbuffers req = default;
+        req.count = 0;
+        req.type = v4l2_buf_type.V4L2_BUF_TYPE_VIDEO_CAPTURE;
+        req.memory = v4l2_memory.V4L2_MEMORY_MMAP;
+        NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_REQBUFS, ref req);
+
+        _bufferCount = 0;
+
         if (_fileDescriptor >= 0)
         {
             NativeMethods.v4l2_close(_fileDescriptor);
             _fileDescriptor = -1;
         }
+
+
     }
 
     private const int O_RDWR = 2;
