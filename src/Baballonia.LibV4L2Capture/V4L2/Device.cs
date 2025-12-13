@@ -284,7 +284,12 @@ public class Device : IDisposable {
         if (ret < 0)
             throw new Exception($"poll failed: errno={Marshal.GetLastWin32Error()}");
 
-        return ret > 0 && (fds[0].revents & Data.POLLIN) != 0;
+        short revents = fds[0].revents;
+
+        if ((revents & Data.POLLERR) != 0 || (revents & Data.POLLHUP) != 0)
+            throw new Exception("Device disconnected or error on file descriptor");
+
+        return (revents & Data.POLLIN) != 0;
     }
 
     public bool CaptureFrame(out byte[]? frame) {
