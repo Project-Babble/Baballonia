@@ -5,14 +5,16 @@ using Capture = Baballonia.SDK.Capture;
 
 namespace Baballonia.LibV4L2Capture;
 
-public sealed class LibV4L2Capture(string source, ILogger<LibV4L2Capture> logger) : Capture(source, logger) {
+public sealed class LibV4L2Capture(string source, ILogger<LibV4L2Capture> logger) : Capture(source, logger)
+{
     private Device? _device;
     private CancellationTokenSource? _cts;
     private Task? _captureTask;
 
     public override Task<bool> StartCapture()
     {
-        try {
+        try
+        {
             _device = Device.Connect(Source);
 
             if (_device == null)
@@ -21,7 +23,8 @@ public sealed class LibV4L2Capture(string source, ILogger<LibV4L2Capture> logger
             _device.StartCapture();
             IsReady = true;
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Logger.LogError(e.ToString());
             return Task.FromResult(false);
         }
@@ -34,10 +37,12 @@ public sealed class LibV4L2Capture(string source, ILogger<LibV4L2Capture> logger
         return Task.FromResult(true);
     }
 
-    private async Task VideoCapture_UpdateLoop(CancellationToken ct) {
+    private async Task VideoCapture_UpdateLoop(CancellationToken ct)
+    {
         while (!ct.IsCancellationRequested && _device != null)
         {
-            try {
+            try
+            {
                 if (_device.CaptureFrame(out byte[]? frame))
                 {
                     Mat mat = Cv2.ImDecode(frame, ImreadModes.Grayscale);
@@ -63,7 +68,8 @@ public sealed class LibV4L2Capture(string source, ILogger<LibV4L2Capture> logger
         if (_device is null)
             return Task.FromResult(false);
 
-        if (_captureTask != null) {
+        if (_captureTask != null)
+        {
             _cts?.Cancel();
             _captureTask.Wait();
         }

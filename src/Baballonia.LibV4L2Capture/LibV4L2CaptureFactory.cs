@@ -17,7 +17,8 @@ public class LibV4L2CaptureFactory : ICaptureFactory
         return new LibV4L2Capture(address, _loggerFactory.CreateLogger<LibV4L2Capture>());
     }
 
-    public bool CanConnect(string address) {
+    public bool CanConnect(string address)
+    {
         return address.StartsWith("/dev/video");
     }
 

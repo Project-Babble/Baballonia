@@ -1,6 +1,7 @@
 namespace Baballonia.LibV4L2Capture.V4L2;
 
-public enum v4l2_buf_type : uint {
+public enum v4l2_buf_type : uint
+{
     V4L2_BUF_TYPE_VIDEO_CAPTURE = 1,
     V4L2_BUF_TYPE_VIDEO_OUTPUT = 2,
     V4L2_BUF_TYPE_VIDEO_OVERLAY = 3,
@@ -19,12 +20,14 @@ public enum v4l2_buf_type : uint {
     V4L2_BUF_TYPE_PRIVATE = 0x80,
 }
 
-public enum v4l2_pix_fmt : uint {
+public enum v4l2_pix_fmt : uint
+{
     V4L2_PIX_FMT_MJPEG = 1196444237,
 }
 
 [Flags]
-public enum V4L2Capabilities : uint {
+public enum V4L2Capabilities : uint
+{
     VIDEO_CAPTURE = 0x00000001,
     VIDEO_OUTPUT = 0x00000002,
     VIDEO_OVERLAY = 0x00000004,
@@ -55,13 +58,15 @@ public enum V4L2Capabilities : uint {
     DEVICE_CAPS = 0x80000000
 }
 
-public enum v4l2_frmivaltypes : uint {
+public enum v4l2_frmivaltypes : uint
+{
     V4L2_FRMIVAL_TYPE_DISCRETE = 1,
     V4L2_FRMIVAL_TYPE_CONTINUOUS = 2,
     V4L2_FRMIVAL_TYPE_STEPWISE = 3
 }
 
-public enum v4l2_memory : uint {
+public enum v4l2_memory : uint
+{
     V4L2_MEMORY_MMAP = 1,
     V4L2_MEMORY_USERPTR = 2,
     V4L2_MEMORY_OVERLAY = 3,
