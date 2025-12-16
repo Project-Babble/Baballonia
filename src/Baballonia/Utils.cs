@@ -19,7 +19,7 @@ public static class Utils
 
     public static readonly bool IsSupportedDesktopOS = OperatingSystem.IsWindows() || OperatingSystem.IsMacOS() || OperatingSystem.IsLinux();
 
-    public const int MobileWidth = 900;
+    public const int MobileWidth = 975;
 
     private const string k_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 

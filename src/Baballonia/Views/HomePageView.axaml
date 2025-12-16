@@ -15,8 +15,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:assets="clr-namespace:Baballonia.Assets">
 
+
   <ScrollViewer IsEnabled="{Binding IsInitialized}">
     <StackPanel Classes="Page" Margin="16">
+
+      <StackPanel.Resources>
+        <converters:RadianDegreesConverter x:Key="RadianDegreesConverter"/>
+        <converters:GammaConverter x:Key="GammaConverter"/>
+      </StackPanel.Resources>
 
       <Grid ColumnDefinitions="*,Auto,12,Auto,12,Auto" Margin="0,0,0,12">
         <TextBlock
@@ -353,11 +359,10 @@
                       <NumericUpDown
                           Grid.Column="1"
                           Minimum="0"
-                          Maximum="6.283185307"
-                          Value="{Binding LeftCamera.Rotation, Mode=TwoWay}"
+                          Maximum="360"
                           FormatString="0.00"
-                          Increment="0.05"
-                          Watermark="{Binding LeftCamera.Rotation, StringFormat='{}{0}°'}" />
+                          Value="{Binding LeftCamera.Rotation, Mode=TwoWay, Converter={StaticResource RadianDegreesConverter}}"
+                          Increment="1"/>
                     </Grid>
                     <TextBlock
                         FontSize="12"
@@ -382,12 +387,11 @@
                           VerticalAlignment="Center" />
                       <NumericUpDown
                           Grid.Column="1"
-                          Minimum="0.5"
-                          Maximum="2"
-                          Value="{Binding LeftCamera.Gamma, Mode=TwoWay}"
+                          Minimum="0"
+                          Maximum="1"
+                          Value="{Binding LeftCamera.Gamma, Mode=TwoWay, Converter={StaticResource GammaConverter}}"
                           FormatString="0.00"
-                          Increment="0.05"
-                          Watermark="{Binding LeftCamera.Gamma, StringFormat='{}{0:0.0}'}" />
+                          Increment="0.05" />
                     </Grid>
                     <TextBlock
                         FontSize="12"
@@ -395,9 +399,8 @@
                     <Slider
                         Minimum="0.5"
                         Maximum="2"
-                        TickFrequency="0.5"
                         TickPlacement="BottomRight"
-                        Ticks="0.5,1,1.5,2"
+                        Ticks="0.5,1,2"
                         Value="{Binding LeftCamera.Gamma, Mode=TwoWay}" />
                   </StackPanel>
                 </StackPanel>
@@ -623,13 +626,12 @@
                           Text="{x:Static assets:Resources.Home_Cameras_Rotation_Header}"
                           VerticalAlignment="Center" />
                       <NumericUpDown
-                          Grid.Column="1"
-                          Minimum="0"
-                          Maximum="6.283185307"
-                          Value="{Binding RightCamera.Rotation, Mode=TwoWay}"
-                          FormatString="0.00"
-                          Increment="0.05"
-                          Watermark="{Binding RightCamera.Rotation, StringFormat='{}{0}°'}" />
+                        Grid.Column="1"
+                        Minimum="0"
+                        Maximum="360"
+                        FormatString="0.00"
+                        Value="{Binding RightCamera.Rotation, Mode=TwoWay, Converter={StaticResource RadianDegreesConverter}}"
+                        Increment="1"/>
                     </Grid>
                     <TextBlock
                         FontSize="12"
@@ -654,12 +656,11 @@
                           VerticalAlignment="Center" />
                       <NumericUpDown
                           Grid.Column="1"
-                          Minimum="0.5"
-                          Maximum="2"
-                          Value="{Binding RightCamera.Gamma, Mode=TwoWay}"
+                          Minimum="0"
+                          Maximum="1"
+                          Value="{Binding RightCamera.Gamma, Mode=TwoWay, Converter={StaticResource GammaConverter}}"
                           FormatString="0.00"
-                          Increment="0.05"
-                          Watermark="{Binding RightCamera.Gamma, StringFormat='{}{0:0.0}'}" />
+                          Increment="0.05" />
                     </Grid>
                     <TextBlock
                         FontSize="12"
@@ -667,9 +668,8 @@
                     <Slider
                         Minimum="0.5"
                         Maximum="2"
-                        TickFrequency="0.5"
                         TickPlacement="BottomRight"
-                        Ticks="0.5,1,1.5,2"
+                        Ticks="0.5,1,2"
                         Value="{Binding RightCamera.Gamma, Mode=TwoWay}" />
                   </StackPanel>
                 </StackPanel>
@@ -893,11 +893,11 @@
                     <NumericUpDown
                         Grid.Column="1"
                         Minimum="0"
-                        Maximum="6.283185307"
-                        Value="{Binding FaceCamera.Rotation, Mode=TwoWay}"
+                        Maximum="360"
                         FormatString="0.00"
-                        Increment="0.05"
-                        Watermark="{Binding FaceCamera.Rotation, StringFormat='{}{0}°'}" />
+                        Value="{Binding FaceCamera.Rotation, Mode=TwoWay, Converter={StaticResource RadianDegreesConverter}}"
+                        Increment="1"
+                        Watermark="{Binding FaceCamera.Rotation}" />
                   </Grid>
                   <TextBlock
                       FontSize="12"
@@ -922,12 +922,11 @@
                         VerticalAlignment="Center" />
                     <NumericUpDown
                         Grid.Column="1"
-                        Minimum="0.5"
-                        Maximum="2"
-                        Value="{Binding FaceCamera.Gamma, Mode=TwoWay}"
+                        Minimum="0"
+                        Maximum="1"
+                        Value="{Binding FaceCamera.Gamma, Mode=TwoWay, Converter={StaticResource GammaConverter}}"
                         FormatString="0.00"
-                        Increment="0.05"
-                        Watermark="{Binding FaceCamera.Gamma, StringFormat='{}{0:0.0}'}" />
+                        Increment="0.05"/>
                   </Grid>
                   <TextBlock
                       FontSize="12"
@@ -935,9 +934,8 @@
                   <Slider
                       Minimum="0.5"
                       Maximum="2"
-                      TickFrequency="0.5"
                       TickPlacement="BottomRight"
-                      Ticks="0.5,1,1.5,2"
+                      Ticks="0.5,1,2"
                       Value="{Binding FaceCamera.Gamma, Mode=TwoWay}" />
                 </StackPanel>
               </StackPanel>
