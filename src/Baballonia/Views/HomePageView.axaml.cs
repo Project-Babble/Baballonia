@@ -128,7 +128,7 @@ public partial class HomePageView : UserControl
         };
         Unloaded += (_, _) =>
         {
-            if (_usbService != null) return;
+            if (_usbService == null) return;
             _usbService!.OnUsbConnected -= RefreshDevices;
             _usbService!.OnUsbDisconnected -= RefreshDevices;
         };
