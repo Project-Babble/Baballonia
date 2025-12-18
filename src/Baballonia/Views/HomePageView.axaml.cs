@@ -6,11 +6,14 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 using Baballonia.Assets;
 using Baballonia.Contracts;
 using Baballonia.Helpers;
+using Baballonia.Services;
 using Baballonia.ViewModels.SplitViewPane;
+using CommunityToolkit.Mvvm.DependencyInjection;
 
 namespace Baballonia.Views;
 
@@ -26,6 +29,7 @@ public partial class HomePageView : UserControl
 
     private readonly IDeviceEnumerator _deviceEnumerator;
     private readonly ILocalSettingsService _localSettings;
+    private IUsbService _usbService;
 
     public HomePageView(IDeviceEnumerator deviceEnumerator, ILocalSettingsService localSettings)
     {
@@ -116,6 +120,17 @@ public partial class HomePageView : UserControl
 
             vm.SelectedCalibrationTextBlock = this.Find<TextBlock>("SelectedCalibrationTextBlockColor")!;
             vm.SelectedCalibrationTextBlock.Text = Assets.Resources.Home_Eye_Calibration;
+
+            if (!Utils.IsSupportedDesktopOS) return;
+            _usbService = Ioc.Default.GetService<IUsbService>()!;
+            _usbService.OnUsbConnected += RefreshDevices;
+            _usbService.OnUsbDisconnected += RefreshDevices;
+        };
+        Unloaded += (_, _) =>
+        {
+            if (_usbService != null) return;
+            _usbService!.OnUsbConnected -= RefreshDevices;
+            _usbService!.OnUsbDisconnected -= RefreshDevices;
         };
     }
 
@@ -197,6 +212,12 @@ public partial class HomePageView : UserControl
     {
         //if (DataContext is not HomePageViewModel vm) return;
         //vm.FaceCamera.UpdateCameraDropDown();
+    }
+
+    private async void RefreshDevices(string deviceName)
+    {
+        await Dispatcher.UIThread.InvokeAsync(
+            () => RefreshDevices(null, null!));
     }
 
     private async void RefreshDevices(object? sender, RoutedEventArgs e)
