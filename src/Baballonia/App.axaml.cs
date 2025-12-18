@@ -153,6 +153,7 @@ public class App : Application
                 services.AddTransient<FirmwareView>();
                 services.AddTransient<OnboardingViewModel>();
                 services.AddTransient<OnboardingView>();
+                services.AddTransient<IUsbService, UsbService>();
             }
 
             ConfigurePlatformServices.Invoke(services);

@@ -65,6 +65,7 @@
         <PackageReference Include="SoundFlow" Version="1.2.1" />
         <PackageReference Include="System.IO.Ports" Version="9.0.8" />
         <PackageReference Include="System.Management" Version="9.0.8" />
+        <PackageReference Include="Usb.Events" Version="11.1.1.1" />
         <PackageReference Include="VRChat.OSCQuery" Version="0.0.7" />
     </ItemGroup>
 
