@@ -10,10 +10,11 @@ public sealed class UsbService : IUsbService
     public event Action<string>? OnUsbDisconnected;
 
     private static readonly IUsbEventWatcher UsbEventWatcher = new UsbEventWatcher(
-        startImmediately: true,
-        addAlreadyPresentDevicesToList: true,
-        usePnPEntity: false,
-        includeTTY: true);
+        startImmediately: true,                 // True - This part is obvious
+        addAlreadyPresentDevicesToList: false,  // False - This part is less obvious.
+                                                // Don't check devices that are already plugged in! This will spam the refresh queue on launch
+        usePnPEntity: false,                    // False - PnP entity is slower, overkill for our use case
+        includeTTY: true);                      // True - Legacy Babble Tracker show up under /dev/ttyACM*
 
     private readonly TimeSpan _eventThrottleInterval = TimeSpan.FromSeconds(1);
     private DateTime _lastEventTime = DateTime.MinValue;
