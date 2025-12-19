@@ -23,8 +23,6 @@ public static class Utils
 
     private const string k_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-    private static readonly MD5 hasher = MD5.Create();
-
     // Timer resolution helpers
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage"), SuppressUnmanagedCodeSecurity]
     [DllImport("winmm.dll", EntryPoint = "timeBeginPeriod", SetLastError = true)]
@@ -124,8 +122,9 @@ public static class Utils
     public static string GenerateMD5(string filepath)
     {
         // Credit to delta for this method https://github.com/XDelta/
-        var stream = File.OpenRead(filepath);
-        var hash = hasher.ComputeHash(stream);
+        using var stream = File.OpenRead(filepath);
+        using var md5 = MD5.Create();
+        var hash = md5.ComputeHash(stream);
         return BitConverter.ToString(hash).Replace("-", "");
     }
 }

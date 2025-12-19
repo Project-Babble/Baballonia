@@ -6,6 +6,7 @@ using Baballonia.Services.Inference.Filters;
 using Baballonia.Services.Inference.Models;
 using Baballonia.Services.Inference.VideoSources;
 using Microsoft.Extensions.Logging;
+using System.Security.Cryptography;
 
 namespace Baballonia.Services.Inference;
 
@@ -132,5 +133,13 @@ public class FacePipelineManager
     public void SetFilter(IFilter? filter)
     {
         _pipeline.Filter = filter;
+    }
+
+    public static string GenerateMD5(string filepath)
+    {
+        using var stream = File.OpenRead(filepath);
+        using var md5 = MD5.Create();
+        var hash = md5.ComputeHash(stream);
+        return BitConverter.ToString(hash).Replace("-", "");
     }
 }
