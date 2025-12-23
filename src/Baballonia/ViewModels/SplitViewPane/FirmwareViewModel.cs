@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
@@ -21,24 +22,29 @@ using Microsoft.Extensions.Logging;
 
 namespace Baballonia.ViewModels.SplitViewPane;
 
+// TODO: New firmware now exposes the restart command. Possible automation to restart the board automatically after mode switch.
+// caveat: it changes the com port
+// possible solution: before restarting query and store the serial number and rescan the boards automatically assigning the one with the same serial as selected
+
+// TODO: Test with legacy firmware.
+
+// TODO: Conditional features with new commands, Version included in Session object
+
 public partial class FirmwareViewModel : ViewModelBase, IDisposable
 {
     private readonly FirmwareService _firmwareService = Ioc.Default.GetRequiredService<FirmwareService>();
     private readonly ILogger<FirmwareViewModel> _logger = Ioc.Default.GetRequiredService<ILogger<FirmwareViewModel>>();
-    private readonly Dictionary<string, FirmwareSession> _firmwareSessions = new();
+    private readonly Dictionary<string, IFirmwareSession> _firmwareSessions = new();
     private readonly Dictionary<string, CancellationTokenSource> _animationCancellationTokens = new();
+    private readonly FirmwareSessionFactory _firmwareSessionFactory;
 
-    [ObservableProperty]
-    private ObservableCollection<string> _availableSerialPorts = new();
+    [ObservableProperty] private ObservableCollection<string> _availableSerialPorts = new();
 
-    [ObservableProperty]
-    private ObservableCollection<string> _availableWifiNetworks = new();
+    [ObservableProperty] private ObservableCollection<string> _availableWifiNetworks = new();
 
-    [ObservableProperty]
-    private ObservableCollection<string> _availableFirmwareTypes = new();
+    [ObservableProperty] private ObservableCollection<string> _availableFirmwareTypes = new();
 
-    [ObservableProperty]
-    private int _selectedFirmwareIndex;
+    [ObservableProperty] private int _selectedFirmwareIndex;
 
     private readonly string _bundledFirmwarePath = Path.Combine(
         AppContext.BaseDirectory,
@@ -47,55 +53,42 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
 
     public string CustomFirmwarePath;
 
-    [ObservableProperty]
-    private string? _selectedSerialPort;
+    [ObservableProperty] private string? _selectedSerialPort;
 
-    [ObservableProperty]
-    private string? _trackerComboBox = Resources.Firmware_TrackerComboBox_Default;
+    [ObservableProperty] private string? _trackerComboBox = Resources.Firmware_TrackerComboBox_Default;
 
-    [ObservableProperty]
-    private string _wifiSsid;
+    [ObservableProperty] private string _wifiSsid;
 
-    [ObservableProperty]
-    private string _wifiPassword;
+    [ObservableProperty] private string _wifiPassword;
 
     // [ObservableProperty]
     // private string _mdns = "openiris";
 
-    [ObservableProperty]
-    private bool _isDeviceSelectionPresent;
+    [ObservableProperty] private bool _isDeviceSelectionPresent;
 
-    [ObservableProperty]
-    private bool _isValidDeviceSelected;
+    [ObservableProperty] private bool _isValidDeviceSelected;
 
-    [ObservableProperty]
-    private bool _isFlashing;
+    [ObservableProperty] private bool _isFlashing;
 
-    [ObservableProperty]
-    private bool _isFinished;
+    [ObservableProperty] private bool _isFinished;
 
-    [ObservableProperty]
-    private string? _modeSetButton = Resources.Firmware_ModeSetButton_Default;
+    [ObservableProperty] private string? _modeSetButton = Resources.Firmware_ModeSetButton_Default;
 
-    [ObservableProperty]
-    private string? _wifiSetButton = Resources.Firmware_WifiSetButton_Default;
+    [ObservableProperty] private string? _wifiSetButton = Resources.Firmware_WifiSetButton_Default;
 
-    [ObservableProperty]
-    private string? _wifiScanButton = Resources.Firmware_WifiScanButton_Default;
+    [ObservableProperty] private string? _wifiScanButton = Resources.Firmware_WifiScanButton_Default;
 
-    [ObservableProperty]
-    private string? _selectTracker = Resources.Firmware_SelectTracker_Default;
+    [ObservableProperty] private string? _selectTracker = Resources.Firmware_SelectTracker_Default;
 
-    [ObservableProperty]
-    private bool _hasScanned;
+    [ObservableProperty] private bool _hasScanned;
 
-    [ObservableProperty]
-    private string? _onRefreshDevicesButton = Resources.Firmware_RefreshDevices_Default;
+    [ObservableProperty] private string? _onRefreshDevicesButton = Resources.Firmware_RefreshDevices_Default;
 
     [ObservableProperty] private object? _deviceModeSelectedItem;
 
-    public FirmwareViewModel()
+    public FirmwareViewModel(FirmwareSessionFactory firmwareSessionFactory)
     {
+        _firmwareSessionFactory = firmwareSessionFactory;
         AvailableFirmwareTypes.Clear();
         var binaries = Directory.
             GetFiles(_bundledFirmwarePath, "*.bin").
@@ -108,7 +101,8 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
 
     private readonly ProgressBar _progressBar;
 
-    private async Task AnimateEllipsesAsync(string baseText, string propertyName, CancellationToken cancellationToken = default)
+    private async Task AnimateEllipsesAsync(string baseText, string propertyName,
+        CancellationToken cancellationToken = default)
     {
         var ellipsesStates = new[] { ".", "..", "..." };
         var currentIndex = 0;
@@ -186,28 +180,34 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     {
         if (IsDeviceSelectionPresent)
         {
-            await Task.Run(async () =>
+            // If we haven't already refreshed, create the new firmware session for the
+            // Manually typed in tracker
+            if (!_firmwareSessions.ContainsKey(SelectedSerialPort!))
             {
-                // If we haven't already refreshed, create the new firmware session for the
-                // Manually typed in tracker
-                if (!_firmwareSessions.ContainsKey(SelectedSerialPort!))
-                    _firmwareSessions.Add(SelectedSerialPort!, _firmwareService.StartSession(CommandSenderType.Serial, SelectedSerialPort!));
+                var s = await _firmwareSessionFactory.TryOpenSessionAsync(SelectedSerialPort!);
+                // TODO:
+                // ??????? what to do if we cant open session????
+                _firmwareSessions.Add(SelectedSerialPort!, s);
+            }
 
-                var res = await TrySendCommandAsync(new FirmwareRequests.SetPausedRequest(true), TimeSpan.FromSeconds(5));
-                IsValidDeviceSelected = !string.IsNullOrWhiteSpace(res);
-                if (IsValidDeviceSelected)
-                {
-                    SelectTracker = Resources.Firmware_SelectTracker_Connected;
-                    await Task.Delay(3000);
-                    SelectTracker = Resources.Firmware_SelectTracker_Default;
-                }
-                else
-                {
-                    SelectTracker = Resources.Firmware_SelectTracker_NoResponse;
-                    await Task.Delay(3000);
-                    SelectTracker = Resources.Firmware_SelectTracker_Default;
-                }
-            });
+            var session = _firmwareSessions[SelectedSerialPort!];
+            // for legacy only
+            if (session.Version < new Version(0, 0, 1))
+            {
+                var res = await TrySendCommandAsync(new FirmwareRequests.SetPausedRequest(true),
+                    TimeSpan.FromSeconds(5));
+                IsValidDeviceSelected = res.IsSuccess;
+            }
+            else
+                IsValidDeviceSelected = true;
+
+            if (IsValidDeviceSelected)
+                SelectTracker = Resources.Firmware_SelectTracker_Connected;
+            else
+                SelectTracker = Resources.Firmware_SelectTracker_NoResponse;
+
+            await Task.Delay(3000);
+            SelectTracker = Resources.Firmware_SelectTracker_Default;
         }
     }
 
@@ -215,23 +215,30 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     private async Task RefreshSerialPorts()
     {
         AvailableSerialPorts.Clear();
+        // all sessions should be disposed before querying
+        foreach (var s in _firmwareSessions)
+        {
+            s.Value.Dispose();
+        }
+
         _firmwareSessions.Clear();
 
         await Task.Run(async () =>
         {
             StartButtonAnimation(Resources.Firmware_RefreshDevices_Refreshing, nameof(OnRefreshDevicesButton));
 
-            var response = await _firmwareService.ProbeComPortsAsync(TimeSpan.FromSeconds(10));
-            TrackerComboBox = string.Format(Resources.Firmware_RefreshDevices_Found, response.Length);
-            foreach (var port in response)
+            var candidates = await _firmwareSessionFactory.TryOpenAllSessionsAsync();
+            TrackerComboBox = string.Format(Resources.Firmware_RefreshDevices_Found, candidates.Count());
+
+            foreach (var mappings in candidates)
             {
-                // Only add devices that need a first time set up - IE ones with a heartbeat
-                await Dispatcher.UIThread.InvokeAsync(() => AvailableSerialPorts.Add(port));
-                _firmwareSessions.Add(port, _firmwareService.StartSession(CommandSenderType.Serial, port));
+                await Dispatcher.UIThread.InvokeAsync(() => AvailableSerialPorts.Add(mappings.port));
+                _firmwareSessions.Add(mappings.port, mappings.session);
             }
 
             StopButtonAnimation(nameof(OnRefreshDevicesButton));
-            await Dispatcher.UIThread.InvokeAsync(() => OnRefreshDevicesButton = Resources.Firmware_RefreshDevices_Default);
+            await Dispatcher.UIThread.InvokeAsync(() =>
+                OnRefreshDevicesButton = Resources.Firmware_RefreshDevices_Default);
         });
     }
 
@@ -243,19 +250,18 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
         StartButtonAnimation(Resources.Firmware_WifiScanButton_Scanning, nameof(WifiScanButton));
 
         // By this point we should have a valid serial port, no need to do any error wrapping here
-        var response = await _firmwareSessions[SelectedSerialPort!].SendCommandAsync(new FirmwareRequests.ScanWifiRequest(), TimeSpan.FromSeconds(30));
-        if (response == null)
+        var response = await _firmwareSessions[SelectedSerialPort!]
+            .SendCommandAsync(new FirmwareRequests.ScanWifiRequest(), TimeSpan.FromSeconds(30));
+        if (!response.IsSuccess)
         {
             StopButtonAnimation(nameof(WifiScanButton));
             WifiScanButton = Resources.Firmware_WifiScanButton_Error;
             return;
         }
 
-        var networks = response!.Networks;
-        foreach (var port in networks.
-                     OrderByDescending(network => network.Rssi).
-                     Select(network => network.Ssid).
-                     Where(ssid => !string.IsNullOrEmpty(ssid)))
+        var networks = response.Value!.Networks;
+        foreach (var port in networks.OrderByDescending(network => network.Rssi).Select(network => network.Ssid)
+                     .Where(ssid => !string.IsNullOrEmpty(ssid)))
         {
             AvailableWifiNetworks.Add(port);
         }
@@ -275,7 +281,8 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
 
         StartButtonAnimation(Resources.Firmware_ModeSetButton_Setting, nameof(ModeSetButton));
 
-        await TrySendCommandAsync(new FirmwareRequests.SetModeRequest(m), TimeSpan.FromSeconds(30));
+        // TODO: add error handling in case command fails for whatever reason
+        await TrySendCommandAsync(new FirmwareRequests.SetModeRequest(m), TimeSpan.FromSeconds(5));
 
         StopButtonAnimation(nameof(ModeSetButton));
         ModeSetButton = Resources.Firmware_ModeSetButton_Success;
@@ -288,10 +295,13 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     {
         StartButtonAnimation(Resources.Firmware_WifiSetButton_Setting, nameof(WifiSetButton));
 
-        var res = await TrySendCommandAsync(new FirmwareRequests.SetWifiRequest(WifiSsid, WifiPassword), TimeSpan.FromSeconds(30));
+        var res = await TrySendCommandAsync(new FirmwareRequests.SetWifiRequest(WifiSsid, WifiPassword),
+            TimeSpan.FromSeconds(30));
 
         StopButtonAnimation(nameof(WifiSetButton));
-        WifiSetButton = string.IsNullOrEmpty(res) ? Resources.Firmware_WifiSetButton_Error : Resources.Firmware_WifiSetButton_Success;
+        WifiSetButton = !res.IsSuccess
+            ? Resources.Firmware_WifiSetButton_Error
+            : Resources.Firmware_WifiSetButton_Success;
         await Task.Delay(2000);
         WifiSetButton = Resources.Firmware_WifiSetButton_Default;
 
@@ -304,7 +314,7 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     [RelayCommand]
     private async Task FlashFirmware()
     {
-        if (_firmwareSessions.TryGetValue(SelectedSerialPort!, out FirmwareSession? value))
+        if (_firmwareSessions.TryGetValue(SelectedSerialPort!, out IFirmwareSession? value))
         {
             // True, this is a multimodal device that needs to be released prior to flashing
             await TrySendCommandAsync(new FirmwareRequests.SetPausedRequest(false), TimeSpan.FromSeconds(5));
@@ -335,10 +345,12 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
         {
             return;
         }
+
         IsFlashing = false;
 
         IsFinished = true;
-        _firmwareSessions[SelectedSerialPort!] = _firmwareService.StartSession(CommandSenderType.Serial, SelectedSerialPort!);
+        _firmwareSessions[SelectedSerialPort!] =
+            _firmwareService.StartSession(CommandSenderType.Serial, SelectedSerialPort!);
         await Task.Delay(5000);
         IsFinished = false;
     }
@@ -354,17 +366,16 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
         };
     }
 
-    private async Task<string?> TrySendCommandAsync(IFirmwareRequest request, TimeSpan timeSpan)
+    private async Task<FirmwareResponse<JsonDocument>> TrySendCommandAsync(IFirmwareRequest request, TimeSpan timeSpan)
     {
         try
         {
             return await _firmwareSessions[SelectedSerialPort!].SendCommandAsync(request, timeSpan);
-
         }
         catch (Exception e)
         {
             _logger.LogError("Error while sending command {Exception}", e);
-            return await Task.FromResult(string.Empty);
+            return await Task.FromResult(FirmwareResponse<JsonDocument>.Failure($"Error while sending command: {e}"));
         }
     }
 

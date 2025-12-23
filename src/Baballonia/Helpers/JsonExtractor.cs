@@ -58,7 +58,7 @@ namespace Baballonia.Helpers
                 if (!string.IsNullOrWhiteSpace(line))
                 {
                     _buffer.Append(line);
-                    _lastScannedIndex = Math.Max(0, _buffer.Length - line.Length);
+                    _lastScannedIndex = 0;
                 }
             }
         }

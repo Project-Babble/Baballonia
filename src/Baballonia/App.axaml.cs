@@ -113,6 +113,7 @@ public class App : Application
             services.AddSingleton<EyePipelineManager>();
             services.AddSingleton<IEyePipelineEventBus, EyePipelineEventBus>();
             services.AddSingleton<SingleCameraSourceFactory>();
+            services.AddSingleton<FirmwareSessionFactory>();
 
             // Core Services
             services.AddTransient<IIdentityService, IdentityService>();
