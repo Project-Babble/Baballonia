@@ -1,21 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Tmds.DBus.Protocol;
 
 namespace Baballonia.Helpers;
 
 public static class CalibrationRoutine
 {
-    public enum Routines
-    {
-        BasicCalibration,
-        BasicCalibrationNoTutorial,
-        GazeOnly,
-        BlinkOnly,
-    }
-    public static readonly Dictionary<string, Routines> Map = Enum.GetValues<Routines>().ToDictionary(i => i.ToString(), i => i);
-    /*
     public static readonly Dictionary<string, string> Map = new()
     {
         { "BasicCalibration", "0" },
@@ -42,5 +31,4 @@ public static class CalibrationRoutine
         { "DepthSimulation", "21" },
         { "QuickCalibrationNoTutorial", "22" },
     };
-    */
 }

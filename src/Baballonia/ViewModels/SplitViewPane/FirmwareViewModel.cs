@@ -90,9 +90,7 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     {
         _firmwareSessionFactory = firmwareSessionFactory;
         AvailableFirmwareTypes.Clear();
-        var binaries = Directory.
-            GetFiles(_bundledFirmwarePath, "*.bin").
-            OrderByDescending(x => x.Length);
+        var binaries = Directory.GetFiles(_bundledFirmwarePath, "*.bin");
         foreach (var bin in binaries)
         {
             AvailableFirmwareTypes.Add(Path.GetFileName(bin));

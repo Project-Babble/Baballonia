@@ -160,7 +160,7 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Prevents eyes from looking out in opposite directions, and improves pupil stability..
+        ///   Looks up a localized string similar to Prevents eyes from looking out in opposite directions, but may overcorrect..
         /// </summary>
         public static string Calibration_Eye_Expressions_Stabilize_Eyes_Description {
             get {
@@ -772,15 +772,6 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to en.
-        /// </summary>
-        public static string Godot_Locale {
-            get {
-                return ResourceManager.GetString("Godot_Locale", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Default.
         /// </summary>
         public static string Home_Backend_Default {
@@ -1245,24 +1236,6 @@ namespace Baballonia.Assets {
         public static string Output_Title_Header {
             get {
                 return ResourceManager.GetString("Output_Title_Header", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Advanced Settings.
-        /// </summary>
-        public static string Settings_Advanced_Description {
-            get {
-                return ResourceManager.GetString("Settings_Advanced_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Enable advanced settings.
-        /// </summary>
-        public static string Settings_Advanced_Header {
-            get {
-                return ResourceManager.GetString("Settings_Advanced_Header", resourceCulture);
             }
         }
         

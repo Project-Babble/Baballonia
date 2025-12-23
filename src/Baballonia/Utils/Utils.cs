@@ -13,15 +13,17 @@ namespace Baballonia;
 
 public static class Utils
 {
-    public const int EyeRawExpressions = 10;
+    public const int EyeRawExpressions = 6;
     public const int FaceRawExpressions = 45;
     public const int FramesForEyeInference = 4;
 
     public static readonly bool IsSupportedDesktopOS = OperatingSystem.IsWindows() || OperatingSystem.IsMacOS() || OperatingSystem.IsLinux();
 
-    public const int MobileWidth = 975;
+    public const int MobileWidth = 900;
 
     private const string k_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+    private static readonly MD5 hasher = MD5.Create();
 
     // Timer resolution helpers
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage"), SuppressUnmanagedCodeSecurity]
@@ -58,10 +60,6 @@ public static class Utils
 
     public static readonly string ModelsDirectory = IsSupportedDesktopOS
         ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ProjectBabble", "Models")
-        : AppContext.BaseDirectory;
-
-    public static readonly string ModelDataDirectory = IsSupportedDesktopOS
-        ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ProjectBabble", "ModelData")
         : AppContext.BaseDirectory;
 
     public static readonly string VrcftLibsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -122,9 +120,8 @@ public static class Utils
     public static string GenerateMD5(string filepath)
     {
         // Credit to delta for this method https://github.com/XDelta/
-        using var stream = File.OpenRead(filepath);
-        using var md5 = MD5.Create();
-        var hash = md5.ComputeHash(stream);
+        var stream = File.OpenRead(filepath);
+        var hash = hasher.ComputeHash(stream);
         return BitConverter.ToString(hash).Replace("-", "");
     }
 }

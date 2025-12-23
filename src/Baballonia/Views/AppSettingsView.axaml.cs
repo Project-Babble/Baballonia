@@ -6,7 +6,6 @@ using Avalonia.Styling;
 using Avalonia.Threading;
 using Baballonia.Contracts;
 using Baballonia.Services;
-using Baballonia.ViewModels.SplitViewPane;
 using CommunityToolkit.Mvvm.DependencyInjection;
 
 namespace Baballonia.Views;
@@ -171,18 +170,5 @@ public partial class AppSettingsView : UserControl
             2 => 2,
             _ => _selectedMinFreqCutoffUpDown.Value
         };
-    }
-
-    public void RequestMachineId(object? sender, RoutedEventArgs routedEventArgs)
-    {
-        if (DataContext is not AppSettingsViewModel vm) return;
-
-        var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
-        if (clipboard is null) return;
-
-        Dispatcher.UIThread.InvokeAsync(async () =>
-        {
-            await clipboard.SetTextAsync(vm.MachineID);
-        });
     }
 }

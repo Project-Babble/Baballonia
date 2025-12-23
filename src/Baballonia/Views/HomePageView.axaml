@@ -15,40 +15,20 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:assets="clr-namespace:Baballonia.Assets">
 
-
   <ScrollViewer IsEnabled="{Binding IsInitialized}">
     <StackPanel Classes="Page" Margin="16">
 
-      <StackPanel.Resources>
-        <converters:RadianDegreesConverter x:Key="RadianDegreesConverter"/>
-        <converters:GammaConverter x:Key="GammaConverter"/>
-      </StackPanel.Resources>
-
-      <Grid ColumnDefinitions="*,Auto,12,Auto,12,Auto" Margin="0,0,0,12">
+      <Grid ColumnDefinitions="*,Auto,12,Auto" Margin="0,0,0,12">
         <TextBlock
             Classes="Header"
             FontSize="28"
             Grid.Column="0"
             Text="{x:Static assets:Resources.Home_Title_Header}" />
-
-        <Button
-          IsVisible="{x:Static utils:Utils.IsSupportedDesktopOS}"
-          Padding="12,8"
-          Click="RefreshDevices"
-          Grid.Column="1">
-          <Button.Content>
-            <StackPanel Orientation="Horizontal" Spacing="8">
-              <PathIcon Data="{StaticResource ArrowSyncRegular}" />
-              <TextBlock x:Name="RefreshDevicesText" Text="Refresh Devices" VerticalAlignment="Center" />
-            </StackPanel>
-          </Button.Content>
-        </Button>
-
         <Button
           IsVisible="{x:Static utils:Utils.IsSupportedDesktopOS}"
           Padding="12,8"
           Click="EyeModelLoad"
-          Grid.Column="3">
+          Grid.Column="1">
           <Button.Content>
             <StackPanel Orientation="Horizontal" Spacing="8">
               <PathIcon Data="{StaticResource FolderOpenVerticalRegular}" />
@@ -56,11 +36,10 @@
             </StackPanel>
           </Button.Content>
         </Button>
-
         <SplitButton
             Command="{Binding RequestVRCalibrationCommand}"
             CornerRadius="4"
-            Grid.Column="5"
+            Grid.Column="3"
             IsVisible="{x:Static utils:Utils.IsSupportedDesktopOS}"
             Padding="12,8"
             x:Name="SplitCalibrationButton">
@@ -77,29 +56,17 @@
             </StackPanel>
           </SplitButton.Content>
           <SplitButton.Flyout>
-
             <MenuFlyout> <!-- Names come from CalibrationRoutine.cs -->
-              <MenuItem Click="OnCalibrationMenuItemClick" x:Name="BasicCalibration" Header="{x:Static assets:Resources.Home_Eye_Calibration}">
+              <MenuItem Click="OnCalibrationMenuItemClick" x:Name="QuickCalibration" Header="{x:Static assets:Resources.Home_Eye_Calibration}">
                 <MenuItem.Icon>
                   <PathIcon Data="{StaticResource HeadsetVrRegular}" />
                 </MenuItem.Icon>
               </MenuItem>
-              <MenuItem Click="OnCalibrationMenuItemClick" x:Name="BasicCalibrationNoTutorial" Header="Eye Calibration (No Tutorial)">
+              <!--<MenuItem Click="OnCalibrationMenuItemClick" x:Name="QuickCalibrationNoTutorial" Header="Eye Calibration (No Tutorial)">
                 <MenuItem.Icon>
                   <PathIcon Data="{StaticResource HeadsetVrRegular}" />
                 </MenuItem.Icon>
-              </MenuItem>
-              <MenuItem Click="OnCalibrationMenuItemClick" x:Name="GazeOnly" Header="Gaze Calibration">
-                <MenuItem.Icon>
-                  <PathIcon Data="{StaticResource HeadsetVrRegular}" />
-                </MenuItem.Icon>
-              </MenuItem>
-              <MenuItem Click="OnCalibrationMenuItemClick" x:Name="BlinkOnly" Header="Blink Calibration">
-                <MenuItem.Icon>
-                  <PathIcon Data="{StaticResource HeadsetVrRegular}" />
-                </MenuItem.Icon>
-              </MenuItem>
-
+              </MenuItem>-->
             </MenuFlyout>
           </SplitButton.Flyout>
         </SplitButton>
@@ -322,87 +289,75 @@
                 Collapsed="OnExpanderCollapsed"
                 Expanded="OnExpanderExpanded"
                 Grid.Row="3"
+                Header="{x:Static assets:Resources.Home_Left_Camera_Settings}"
                 HorizontalAlignment="Stretch"
                 IsExpanded="False"
                 IsVisible="{Binding !LeftCamera.IsCropMode}">
-              <Expander.Header>
-                <TextBlock Text="Camera Settings" VerticalAlignment="Center" />
-              </Expander.Header>
               <Border Background="{DynamicResource SystemChromeMediumLowColor}" CornerRadius="8">
-                <StackPanel Spacing="8">
-                  <!-- Flip Controls -->
-                  <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Left">
-                    <!-- Vertical Flip -->
-                    <ToggleButton
-                        IsChecked="{Binding LeftCamera.FlipVertically, Mode=TwoWay}"
-                        ToolTip.Tip="{x:Static assets:Resources.Home_Cameras_Vertical_Flip_Description}">
-                        <PathIcon Data="{StaticResource FlipVerticalRegular}" />
-                    </ToggleButton>
+                <StackPanel>
 
-                    <!-- Horizontal Flip -->
-                    <ToggleButton
-                        IsChecked="{Binding LeftCamera.FlipHorizontally, Mode=TwoWay}"
-                        ToolTip.Tip="{x:Static assets:Resources.Home_Cameras_Horizontal_Flip_Description}">
-                        <PathIcon Data="{StaticResource FlipHorizontalRegular}" />
-                    </ToggleButton>
-                  </StackPanel>
-
-                  <!-- Rotation -->
-                  <StackPanel>
-                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                  <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+                    <StackPanel Grid.Column="0" Grid.Row="0">
                       <TextBlock
-                          Grid.Column="0"
                           FontSize="14"
                           FontWeight="Medium"
-                          Text="{x:Static assets:Resources.Home_Cameras_Rotation_Header}"
-                          VerticalAlignment="Center" />
-                      <NumericUpDown
-                          Grid.Column="1"
-                          Minimum="0"
-                          Maximum="360"
-                          FormatString="0.00"
-                          Value="{Binding LeftCamera.Rotation, Mode=TwoWay, Converter={StaticResource RadianDegreesConverter}}"
-                          Increment="1"/>
-                    </Grid>
-                    <TextBlock
-                        FontSize="12"
-                        Text="{x:Static assets:Resources.Home_Cameras_Rotation_Description}" />
+                          Text="{x:Static assets:Resources.Home_Cameras_Vertical_Flip_Header}" />
+                      <TextBlock FontSize="12" Text="{x:Static assets:Resources.Home_Cameras_Vertical_Flip_Description}" />
+                    </StackPanel>
+                    <CheckBox
+                        Grid.Column="2"
+                        Grid.Row="0"
+                        IsChecked="{Binding LeftCamera.FlipVertically, Mode=TwoWay}" />
+
+                    <StackPanel
+                        Grid.Column="0"
+                        Grid.Row="1"
+                        Margin="0,12">
+                      <TextBlock
+                          FontSize="14"
+                          FontWeight="Medium"
+                          Text="{x:Static assets:Resources.Home_Cameras_Horizontal_Flip_Header}" />
+                      <TextBlock FontSize="12" Text="{x:Static assets:Resources.Home_Cameras_Horizontal_Flip_Description}" />
+                    </StackPanel>
+                    <CheckBox
+                        Grid.Column="2"
+                        Grid.Row="1"
+                        IsChecked="{Binding LeftCamera.FlipHorizontally, Mode=TwoWay}" />
+
+                    <StackPanel Grid.Column="0" Grid.Row="2">
+                      <TextBlock
+                          FontSize="14"
+                          FontWeight="Medium"
+                          Text="{x:Static assets:Resources.Home_Cameras_Rotation_Header}" />
+                      <TextBlock FontSize="12" Text="{x:Static assets:Resources.Home_Cameras_Rotation_Description}" />
+                    </StackPanel>
                     <Slider
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        Grid.Row="3"
+                        Maximum="6.28"
                         Minimum="0"
-                        Maximum="6.283185307"
-                        TickFrequency="0.392699081"
-                        TickPlacement="BottomRight"
-                        IsSnapToTickEnabled="True"
-                        Value="{Binding LeftCamera.Rotation, Mode=TwoWay}" />
-                  </StackPanel>
+                        Value="{Binding LeftCamera.Rotation}"
+                        x:Name="LeftRotationSlider" />
 
-                  <!-- Brightness -->
-                  <StackPanel>
-                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                    <StackPanel Grid.Column="0" Grid.Row="4">
                       <TextBlock
-                          Grid.Column="0"
                           FontSize="14"
                           FontWeight="Medium"
-                          Text="{x:Static assets:Resources.Home_Cameras_Brightness_Header}"
-                          VerticalAlignment="Center" />
-                      <NumericUpDown
-                          Grid.Column="1"
-                          Minimum="0"
-                          Maximum="1"
-                          Value="{Binding LeftCamera.Gamma, Mode=TwoWay, Converter={StaticResource GammaConverter}}"
-                          FormatString="0.00"
-                          Increment="0.05" />
-                    </Grid>
-                    <TextBlock
-                        FontSize="12"
-                        Text="{x:Static assets:Resources.Home_Cameras_Brightness_Description}" />
+                          Text="{x:Static assets:Resources.Home_Cameras_Brightness_Header}" />
+                      <TextBlock FontSize="12" Text="{x:Static assets:Resources.Home_Cameras_Brightness_Description}" />
+                    </StackPanel>
                     <Slider
-                        Minimum="0.5"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        Grid.Row="5"
                         Maximum="2"
+                        Minimum="0.5"
                         TickPlacement="BottomRight"
                         Ticks="0.5,1,2"
-                        Value="{Binding LeftCamera.Gamma, Mode=TwoWay}" />
-                  </StackPanel>
+                        Value="{Binding LeftCamera.Gamma, Mode=TwoWay}"
+                        x:Name="LeftEyeGammaSlider" />
+                  </Grid>
                 </StackPanel>
               </Border>
             </Expander>
@@ -410,7 +365,6 @@
 
           <!--  Center Panel  -->
           <Grid
-              Grid.Column="0"
               IsEnabled="{x:Static utils:Utils.IsSupportedDesktopOS}"
               IsVisible="{x:Static utils:Utils.IsSupportedDesktopOS}"
               RowDefinitions="Auto,Auto,Auto,Auto"
@@ -591,87 +545,75 @@
                 Collapsed="OnExpanderCollapsed"
                 Expanded="OnExpanderExpanded"
                 Grid.Row="3"
+                Header="{x:Static assets:Resources.Home_Right_Camera_Settings}"
                 HorizontalAlignment="Stretch"
                 IsExpanded="False"
                 IsVisible="{Binding !RightCamera.IsCropMode}">
-              <Expander.Header>
-                <TextBlock Text="Camera Settings" VerticalAlignment="Center" />
-              </Expander.Header>
               <Border Background="{DynamicResource SystemChromeMediumLowColor}" CornerRadius="8">
-                <StackPanel Spacing="8">
-                  <!-- Flip Controls -->
-                  <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Left">
-                    <!-- Vertical Flip -->
-                    <ToggleButton
-                        IsChecked="{Binding RightCamera.FlipVertically, Mode=TwoWay}"
-                        ToolTip.Tip="{x:Static assets:Resources.Home_Cameras_Vertical_Flip_Description}">
-                        <PathIcon Data="{StaticResource FlipVerticalRegular}" />
-                    </ToggleButton>
+                <StackPanel>
 
-                    <!-- Horizontal Flip -->
-                    <ToggleButton
-                        IsChecked="{Binding RightCamera.FlipHorizontally, Mode=TwoWay}"
-                        ToolTip.Tip="{x:Static assets:Resources.Home_Cameras_Horizontal_Flip_Description}">
-                        <PathIcon Data="{StaticResource FlipHorizontalRegular}" />
-                    </ToggleButton>
-                  </StackPanel>
-
-                  <!-- Rotation -->
-                  <StackPanel>
-                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                  <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+                    <StackPanel Grid.Column="0" Grid.Row="0">
                       <TextBlock
-                          Grid.Column="0"
                           FontSize="14"
                           FontWeight="Medium"
-                          Text="{x:Static assets:Resources.Home_Cameras_Rotation_Header}"
-                          VerticalAlignment="Center" />
-                      <NumericUpDown
-                        Grid.Column="1"
-                        Minimum="0"
-                        Maximum="360"
-                        FormatString="0.00"
-                        Value="{Binding RightCamera.Rotation, Mode=TwoWay, Converter={StaticResource RadianDegreesConverter}}"
-                        Increment="1"/>
-                    </Grid>
-                    <TextBlock
-                        FontSize="12"
-                        Text="{x:Static assets:Resources.Home_Cameras_Rotation_Description}" />
-                    <Slider
-                        Minimum="0"
-                        Maximum="6.283185307"
-                        TickFrequency="0.392699081"
-                        TickPlacement="BottomRight"
-                        IsSnapToTickEnabled="True"
-                        Value="{Binding RightCamera.Rotation, Mode=TwoWay}" />
-                  </StackPanel>
+                          Text="{x:Static assets:Resources.Home_Cameras_Vertical_Flip_Header}" />
+                      <TextBlock FontSize="12" Text="{x:Static assets:Resources.Home_Cameras_Vertical_Flip_Description}" />
+                    </StackPanel>
+                    <CheckBox
+                        Grid.Column="2"
+                        Grid.Row="0"
+                        IsChecked="{Binding RightCamera.FlipVertically, Mode=TwoWay}" />
 
-                  <!-- Brightness -->
-                  <StackPanel>
-                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                    <StackPanel
+                        Grid.Column="0"
+                        Grid.Row="1"
+                        Margin="0,12">
                       <TextBlock
-                          Grid.Column="0"
                           FontSize="14"
                           FontWeight="Medium"
-                          Text="{x:Static assets:Resources.Home_Cameras_Brightness_Header}"
-                          VerticalAlignment="Center" />
-                      <NumericUpDown
-                          Grid.Column="1"
-                          Minimum="0"
-                          Maximum="1"
-                          Value="{Binding RightCamera.Gamma, Mode=TwoWay, Converter={StaticResource GammaConverter}}"
-                          FormatString="0.00"
-                          Increment="0.05" />
-                    </Grid>
-                    <TextBlock
-                        FontSize="12"
-                        Text="{x:Static assets:Resources.Home_Cameras_Brightness_Description}" />
+                          Text="{x:Static assets:Resources.Home_Cameras_Horizontal_Flip_Header}" />
+                      <TextBlock FontSize="12" Text="{x:Static assets:Resources.Home_Cameras_Horizontal_Flip_Description}" />
+                    </StackPanel>
+                    <CheckBox
+                        Grid.Column="2"
+                        Grid.Row="1"
+                        IsChecked="{Binding RightCamera.FlipHorizontally, Mode=TwoWay}" />
+
+                    <StackPanel Grid.Column="0" Grid.Row="2">
+                      <TextBlock
+                          FontSize="14"
+                          FontWeight="Medium"
+                          Text="{x:Static assets:Resources.Home_Cameras_Rotation_Header}" />
+                      <TextBlock FontSize="12" Text="{x:Static assets:Resources.Home_Cameras_Rotation_Description}" />
+                    </StackPanel>
                     <Slider
-                        Minimum="0.5"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        Grid.Row="3"
+                        Maximum="6.28"
+                        Minimum="0"
+                        Value="{Binding RightCamera.Rotation}"
+                        x:Name="RightRotationSlider" />
+
+                    <StackPanel Grid.Column="0" Grid.Row="4">
+                      <TextBlock
+                          FontSize="14"
+                          FontWeight="Medium"
+                          Text="{x:Static assets:Resources.Home_Cameras_Brightness_Header}" />
+                      <TextBlock FontSize="12" Text="{x:Static assets:Resources.Home_Cameras_Brightness_Description}" />
+                    </StackPanel>
+                    <Slider
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        Grid.Row="5"
                         Maximum="2"
+                        Minimum="0.5"
                         TickPlacement="BottomRight"
                         Ticks="0.5,1,2"
-                        Value="{Binding RightCamera.Gamma, Mode=TwoWay}" />
-                  </StackPanel>
+                        Value="{Binding RightCamera.Gamma, Mode=TwoWay}"
+                        x:Name="RightEyeGammaSlider" />
+                  </Grid>
                 </StackPanel>
               </Border>
             </Expander>
@@ -679,7 +621,7 @@
 
         </Grid>
         <!--  Right Panel  -->
-        <Grid Grid.Column="0" RowDefinitions="Auto,Auto,Auto,Auto" VerticalAlignment="Top">
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto" VerticalAlignment="Top">
           <TextBlock
               FontSize="20"
               FontWeight="Medium"
@@ -856,88 +798,75 @@
               Collapsed="OnExpanderCollapsed"
               Expanded="OnExpanderExpanded"
               Grid.Row="3"
+              Header="{x:Static assets:Resources.Home_Face_Camera_Settings}"
               HorizontalAlignment="Stretch"
               IsExpanded="False"
               IsVisible="{Binding !FaceCamera.IsCropMode}">
-            <Expander.Header>
-              <TextBlock Text="Camera Settings" VerticalAlignment="Center" />
-            </Expander.Header>
             <Border Background="{DynamicResource SystemChromeMediumLowColor}" CornerRadius="8">
-              <StackPanel Spacing="8">
-                <!-- Flip Controls -->
-                <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Left">
-                  <!-- Vertical Flip -->
-                  <ToggleButton
-                      IsChecked="{Binding FaceCamera.FlipVertically, Mode=TwoWay}"
-                      ToolTip.Tip="{x:Static assets:Resources.Home_Cameras_Vertical_Flip_Description}">
-                      <PathIcon Data="{StaticResource FlipVerticalRegular}" />
-                  </ToggleButton>
+              <StackPanel>
 
-                  <!-- Horizontal Flip -->
-                  <ToggleButton
-                      IsChecked="{Binding FaceCamera.FlipHorizontally, Mode=TwoWay}"
-                      ToolTip.Tip="{x:Static assets:Resources.Home_Cameras_Horizontal_Flip_Description}">
-                      <PathIcon Data="{StaticResource FlipHorizontalRegular}" />
-                  </ToggleButton>
-                </StackPanel>
-
-                <!-- Rotation -->
-                <StackPanel>
-                  <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+                  <StackPanel Grid.Column="0" Grid.Row="0">
                     <TextBlock
-                        Grid.Column="0"
                         FontSize="14"
                         FontWeight="Medium"
-                        Text="{x:Static assets:Resources.Home_Cameras_Rotation_Header}"
-                        VerticalAlignment="Center" />
-                    <NumericUpDown
-                        Grid.Column="1"
-                        Minimum="0"
-                        Maximum="360"
-                        FormatString="0.00"
-                        Value="{Binding FaceCamera.Rotation, Mode=TwoWay, Converter={StaticResource RadianDegreesConverter}}"
-                        Increment="1"
-                        Watermark="{Binding FaceCamera.Rotation}" />
-                  </Grid>
-                  <TextBlock
-                      FontSize="12"
-                      Text="{x:Static assets:Resources.Home_Cameras_Rotation_Description}" />
+                        Text="{x:Static assets:Resources.Home_Cameras_Vertical_Flip_Header}" />
+                    <TextBlock FontSize="12" Text="{x:Static assets:Resources.Home_Cameras_Vertical_Flip_Description}" />
+                  </StackPanel>
+                  <CheckBox
+                      Grid.Column="2"
+                      Grid.Row="0"
+                      IsChecked="{Binding FaceCamera.FlipVertically, Mode=TwoWay}" />
+
+                  <StackPanel
+                      Grid.Column="0"
+                      Grid.Row="1"
+                      Margin="0,12">
+                    <TextBlock
+                        FontSize="14"
+                        FontWeight="Medium"
+                        Text="{x:Static assets:Resources.Home_Cameras_Horizontal_Flip_Header}" />
+                    <TextBlock FontSize="12" Text="{x:Static assets:Resources.Home_Cameras_Horizontal_Flip_Description}" />
+                  </StackPanel>
+                  <CheckBox
+                      Grid.Column="2"
+                      Grid.Row="1"
+                      IsChecked="{Binding FaceCamera.FlipHorizontally, Mode=TwoWay}" />
+
+                  <StackPanel Grid.Column="0" Grid.Row="2">
+                    <TextBlock
+                        FontSize="14"
+                        FontWeight="Medium"
+                        Text="{x:Static assets:Resources.Home_Cameras_Rotation_Header}" />
+                    <TextBlock FontSize="12" Text="{x:Static assets:Resources.Home_Cameras_Rotation_Description}" />
+                  </StackPanel>
                   <Slider
+                      Grid.Column="0"
+                      Grid.ColumnSpan="3"
+                      Grid.Row="3"
+                      Maximum="6.28"
                       Minimum="0"
-                      Maximum="6.283185307"
-                      TickFrequency="0.392699081"
-                      IsSnapToTickEnabled="True"
-                      TickPlacement="BottomRight"
-                      Value="{Binding FaceCamera.Rotation, Mode=TwoWay}" />
-                </StackPanel>
+                      Value="{Binding FaceCamera.Rotation}"
+                      x:Name="FaceRotationSlider" />
 
-                <!-- Brightness -->
-                <StackPanel>
-                  <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                  <StackPanel Grid.Column="0" Grid.Row="4">
                     <TextBlock
-                        Grid.Column="0"
                         FontSize="14"
                         FontWeight="Medium"
-                        Text="{x:Static assets:Resources.Home_Cameras_Brightness_Header}"
-                        VerticalAlignment="Center" />
-                    <NumericUpDown
-                        Grid.Column="1"
-                        Minimum="0"
-                        Maximum="1"
-                        Value="{Binding FaceCamera.Gamma, Mode=TwoWay, Converter={StaticResource GammaConverter}}"
-                        FormatString="0.00"
-                        Increment="0.05"/>
-                  </Grid>
-                  <TextBlock
-                      FontSize="12"
-                      Text="{x:Static assets:Resources.Home_Cameras_Brightness_Description}" />
+                        Text="{x:Static assets:Resources.Home_Cameras_Brightness_Header}" />
+                    <TextBlock FontSize="12" Text="{x:Static assets:Resources.Home_Cameras_Brightness_Description}" />
+                  </StackPanel>
                   <Slider
-                      Minimum="0.5"
+                      Grid.Column="0"
+                      Grid.ColumnSpan="3"
+                      Grid.Row="5"
                       Maximum="2"
+                      Minimum="0.5"
                       TickPlacement="BottomRight"
                       Ticks="0.5,1,2"
-                      Value="{Binding FaceCamera.Gamma, Mode=TwoWay}" />
-                </StackPanel>
+                      Value="{Binding FaceCamera.Gamma, Mode=TwoWay}"
+                      x:Name="FaceGammaSlider" />
+                </Grid>
               </StackPanel>
             </Border>
           </Expander>

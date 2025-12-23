@@ -4,9 +4,7 @@ using System.Threading.Tasks;
 using Baballonia.Contracts;
 using Baballonia.Services.Inference.Filters;
 using Baballonia.Services.Inference.Models;
-using Baballonia.Services.Inference.VideoSources;
 using Microsoft.Extensions.Logging;
-using System.Security.Cryptography;
 
 namespace Baballonia.Services.Inference;
 
@@ -100,21 +98,13 @@ public class FacePipelineManager
 
     public async Task<bool> StartVideoSource(string cameraAddress, string preferredBackend)
     {
-        if (string.IsNullOrEmpty(cameraAddress))
-            return false;
-
         if (_pipeline.VideoSource != null)
         {
             _pipeline.VideoSource.Dispose();
             _pipeline.VideoSource = null;
         }
 
-        SingleCameraSource cam;
-        if (string.IsNullOrEmpty(preferredBackend))
-            cam = await _singleCameraSourceFactory.CreateStart(cameraAddress);
-        else
-            cam = await _singleCameraSourceFactory.CreateStart(cameraAddress, preferredBackend);
-
+        var cam = await _singleCameraSourceFactory.CreateStart(cameraAddress, preferredBackend);
         if (cam == null)
             return false;
 
@@ -133,13 +123,5 @@ public class FacePipelineManager
     public void SetFilter(IFilter? filter)
     {
         _pipeline.Filter = filter;
-    }
-
-    public static string GenerateMD5(string filepath)
-    {
-        using var stream = File.OpenRead(filepath);
-        using var md5 = MD5.Create();
-        var hash = md5.ComputeHash(stream);
-        return BitConverter.ToString(hash).Replace("-", "");
     }
 }

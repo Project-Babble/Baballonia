@@ -15,28 +15,21 @@ namespace Baballonia.ViewModels.SplitViewPane;
 
 public partial class VrcViewModel : ViewModelBase
 {
-    private ILocalSettingsService LocalSettingsService { get; }
+    public ILocalSettingsService LocalSettingsService { get; }
 
-    [ObservableProperty]
-    [SavedSetting("VRC_UseNativeTracking", false)]
+    [ObservableProperty] [property: SavedSetting("VRC_UseNativeTracking", false)]
     private bool _useNativeVrcEyeTracking;
 
-    [ObservableProperty]
+    [ObservableProperty] [property: SavedSetting("VRC_SelectedModuleMode", "Face")]
     private string? _selectedModuleMode = "Face";
 
-    [ObservableProperty] private bool _vrcftDetected;
+    public ObservableCollection<string> ModuleModeOptions { get; set; } = ["Both", "Face", "Eyes"];
 
-    public ObservableCollection<string> ModuleModeOptions { get; set; } = ["Both", "Face", "Eyes", "Disabled"];
+    private static readonly string _baballoniaModulePath;
 
-    private string _baballoniaModulePath;
-
-    private bool TryGetModuleConfig(out ModuleConfig? config)
+    static VrcViewModel()
     {
-        if (!Directory.Exists(Utils.VrcftLibsDirectory))
-        {
-            config = null;
-            return false;
-        }
+        if (!Directory.Exists(Utils.VrcftLibsDirectory)) return;
 
         var moduleFiles = Directory.GetFiles(Utils.VrcftLibsDirectory, "*.json", SearchOption.AllDirectories);
         foreach (var moduleFile in moduleFiles)
@@ -45,27 +38,16 @@ public partial class VrcViewModel : ViewModelBase
 
             var contents = File.ReadAllText(moduleFile);
             var possibleBabbleConfig = JsonSerializer.Deserialize<ModuleConfig>(contents);
-            if (possibleBabbleConfig != null) _baballoniaModulePath = moduleFile;
-            config = possibleBabbleConfig;
-            return true;
+            if (possibleBabbleConfig != null)
+            {
+                _baballoniaModulePath = moduleFile;
+            }
         }
-        config = null;
-        return false;
     }
 
     public VrcViewModel()
     {
         LocalSettingsService = Ioc.Default.GetRequiredService<ILocalSettingsService>();
-
-        _vrcftDetected = TryGetModuleConfig(out var config);
-        if (_vrcftDetected && config is not null)
-        {
-            _selectedModuleMode = config.IsEyeSupported switch
-            {
-                true => config.IsFaceSupported ? "Both" : "Eyes",
-                false => config.IsFaceSupported ? "Face" : "Disabled"
-            };
-        }
 
         _ = LoadAsync();
         PropertyChanged += (_, _) => { LocalSettingsService.Save(this); };
@@ -73,37 +55,35 @@ public partial class VrcViewModel : ViewModelBase
 
     private async Task LoadAsync()
     {
-        var useNative = LocalSettingsService.ReadSetting("VRC_UseNativeTracking", false);
+        var selected = LocalSettingsService.ReadSetting<string>("VRC_SelectedModuleMode", "Face");
+        var useNative = LocalSettingsService.ReadSetting<bool>("VRC_UseNativeTracking", false);
 
         await Dispatcher.UIThread.InvokeAsync(() =>
         {
+            SelectedModuleMode = selected;
             UseNativeVrcEyeTracking = useNative;
         }, DispatcherPriority.Background);
-    }
-
-    private async Task WriteModuleConfig(ModuleConfig config)
-    {
-        if (!string.IsNullOrWhiteSpace(_baballoniaModulePath))
-            await File.WriteAllTextAsync(_baballoniaModulePath, JsonSerializer.Serialize(config));
     }
 
     async partial void OnSelectedModuleModeChanged(string? value)
     {
         try
         {
-            if (!TryGetModuleConfig(out var oldConfig)) return;
+            if (!Directory.Exists(Utils.VrcftLibsDirectory)) return;
+            if (string.IsNullOrEmpty(_baballoniaModulePath)) return;
 
+            var oldConfig = JsonSerializer.Deserialize<ModuleConfig>(await File.ReadAllTextAsync(_baballoniaModulePath));
             var newConfig = value switch
             {
                 "Both" => new ModuleConfig(oldConfig!.Host, oldConfig.Port, true, true),
                 "Eyes" => new ModuleConfig(oldConfig!.Host, oldConfig.Port, true, false),
                 "Face" => new ModuleConfig(oldConfig!.Host, oldConfig.Port, false, true),
-                "Disabled" => new ModuleConfig(oldConfig!.Host, oldConfig.Port, false, false),
                 _ => throw new InvalidOperationException()
             };
-            await WriteModuleConfig(newConfig);
+
+            await File.WriteAllTextAsync(_baballoniaModulePath, JsonSerializer.Serialize(newConfig));
         }
-        catch (Exception)
+        catch (Exception e)
         {
             // ignore lol
         }

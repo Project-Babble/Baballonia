@@ -33,8 +33,7 @@ def make_installer(output_dir, installer_dir, version):
         "--packVersion", version,
         "--packDir", output_dir,
         "--mainExe", "Baballonia.Desktop",
-        "--outputDir", installer_dir,
-        "--icon", "../Assets/IconOpaque_32x32.png"
+        "--outputDir", installer_dir
     ]
     print(f"Running: {' '.join(cmd)}")
     subprocess.run(cmd, check=True)

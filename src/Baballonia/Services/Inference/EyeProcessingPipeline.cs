@@ -73,9 +73,9 @@ public class EyeProcessingPipeline : DefaultProcessingPipeline, IDisposable
         var leftYaw = arKitExpressions[1] * mulV - mulV / 2;
         var leftLid = 1 - arKitExpressions[2];
 
-        var rightPitch = arKitExpressions[5] * mulY - mulY / 2;
-        var rightYaw = arKitExpressions[6] * mulV - mulV / 2;
-        var rightLid = 1 - arKitExpressions[7];
+        var rightPitch = arKitExpressions[3] * mulY - mulY / 2;
+        var rightYaw = arKitExpressions[4] * mulV - mulV / 2;
+        var rightLid = 1 - arKitExpressions[5];
 
         var eyeY = (leftPitch * leftLid + rightPitch * rightLid) / (leftLid + rightLid);
 
@@ -85,7 +85,7 @@ public class EyeProcessingPipeline : DefaultProcessingPipeline, IDisposable
         if (StabilizeEyes)
         {
             var rawConvergence = (rightEyeYawCorrected - leftEyeYawCorrected) / 2.0f;
-            var convergence = Math.Max(rawConvergence, 0.0f); // We clamp the value here to avoid accidental divergence, as the model sometimes decides that's a thing
+            var convergence = Math.Max(rawConvergence, 0.0f); //We clamp the value here to avoid accidental divergence, as the model sometimes decides that's a thing
 
             var averagedYaw = (rightEyeYawCorrected + leftEyeYawCorrected) / 2.0f;
 
@@ -96,16 +96,13 @@ public class EyeProcessingPipeline : DefaultProcessingPipeline, IDisposable
         // [left pitch, left yaw, left lid...
         float[] convertedExpressions = new float[Utils.EyeRawExpressions];
 
+        // swap eyes at this point
         convertedExpressions[0] = rightEyeYawCorrected; // left pitch
         convertedExpressions[1] = eyeY;                   // left yaw
         convertedExpressions[2] = rightLid;               // left lid
-        convertedExpressions[3] = arKitExpressions[3];
-        convertedExpressions[4] = arKitExpressions[4];
-        convertedExpressions[5] = leftEyeYawCorrected;  // right pitch
-        convertedExpressions[6] = eyeY;                   // right yaw
-        convertedExpressions[7] = leftLid;                // right lid
-        convertedExpressions[8] = arKitExpressions[8];
-        convertedExpressions[9] = arKitExpressions[9];
+        convertedExpressions[3] = leftEyeYawCorrected;  // right pitch
+        convertedExpressions[4] = eyeY;                   // right yaw
+        convertedExpressions[5] = leftLid;                // right lid
 
         arKitExpressions = convertedExpressions;
 

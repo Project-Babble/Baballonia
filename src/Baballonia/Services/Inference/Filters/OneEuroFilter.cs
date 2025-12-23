@@ -23,6 +23,7 @@ public class OneEuroFilter : IFilter
         this.xPrev = (float[])x0.Clone();
         this.dxPrev = CreateFilledArray(length, dx0);
         this.tPrev = DateTime.UtcNow;
+
     }
 
     public float[] Filter(float[] x)

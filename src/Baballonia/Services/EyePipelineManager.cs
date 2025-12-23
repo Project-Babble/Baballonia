@@ -64,33 +64,12 @@ public class EyePipelineManager
         var eyeModelName = _localSettings.ReadSetting<string>("EyeHome_EyeModel", defaultEyeModelName);
         var eyeModelPath = Path.Combine(AppContext.BaseDirectory, eyeModelName);
 
-        if (File.Exists(eyeModelPath))
-        {
-            var candidate = _inferenceFactory.Create(eyeModelPath);
-
-            // We need to set up the model and run it once to get the model's output size
-            candidate.Setup(eyeModelName);
-            candidate.Run();
-
-            // Get the output size of the model. If is different from our expected eye expression count,
-            // It is likely an old(er) model and will require a re-calibration
-            if (Utils.EyeRawExpressions == candidate.OutputSize)
-                return candidate;
-
-            _logger.LogInformation("Eye model output size {CandidateOutputSize} was different than expected {EyeRawExpressions}.",
-                candidate.OutputSize, Utils.EyeRawExpressions);
-            _logger.LogInformation("You likely have an old(er) model that only predicts gaze and blinking.");
-            _logger.LogInformation("Please re-calibrate to train a newer model on eyebrow angry, squint and wide!");
-        }
-        else
-        {
-            _logger.LogError("{} Does not exist, Loading default...", eyeModelPath);
-        }
-
+        if (File.Exists(eyeModelPath)) return _inferenceFactory.Create(eyeModelPath);
+        _logger.LogError("{} Does not exists, Loading default...", eyeModelPath);
         eyeModelName = defaultEyeModelName;
         eyeModelPath = Path.Combine(AppContext.BaseDirectory, eyeModelName);
 
-        return _inferenceFactory.Create(eyeModelPath);;
+        return _inferenceFactory.Create(eyeModelPath);
     }
 
 
@@ -108,14 +87,14 @@ public class EyePipelineManager
         if (!enabled)
             return;
 
-        var eyeArray = new float[Utils.EyeRawExpressions];
-        var eyeFilter = new OneEuroFilter(
-            eyeArray,
+        var faceArray = new float[Utils.EyeRawExpressions];
+        var faceFilter = new OneEuroFilter(
+            faceArray,
             minCutoff: cutoff,
             beta: speedCutoff
         );
 
-        _pipeline.Filter = eyeFilter;
+        _pipeline.Filter = faceFilter;
     }
 
     public void LoadEyeStabilization()
@@ -141,17 +120,9 @@ public class EyePipelineManager
 
     public async Task<bool> StartLeftVideoSource(string cameraAddress, string preferredBackend)
     {
-        if (string.IsNullOrEmpty(cameraAddress))
-            return false;
-
         if (_pipeline.VideoSource == null)
         {
-            SingleCameraSource cam;
-            if (string.IsNullOrEmpty(preferredBackend))
-                cam = await _singleCameraSourceFactory.CreateStart(cameraAddress);
-            else
-                cam = await _singleCameraSourceFactory.CreateStart(cameraAddress, preferredBackend);
-
+            var cam = await _singleCameraSourceFactory.CreateStart(cameraAddress, preferredBackend);
             if (cam == null)
                 return false;
 
@@ -210,17 +181,9 @@ public class EyePipelineManager
 
     public async Task<bool> StartRightVideoSource(string cameraAddress, string preferredBackend)
     {
-        if (string.IsNullOrEmpty(cameraAddress))
-            return false;
-
         if (_pipeline.VideoSource == null)
         {
-            SingleCameraSource cam;
-            if (string.IsNullOrEmpty(preferredBackend))
-                cam = await _singleCameraSourceFactory.CreateStart(cameraAddress);
-            else
-                cam = await _singleCameraSourceFactory.CreateStart(cameraAddress, preferredBackend);
-
+            var cam = await _singleCameraSourceFactory.CreateStart(cameraAddress, preferredBackend);
             if (cam == null)
                 return false;
 

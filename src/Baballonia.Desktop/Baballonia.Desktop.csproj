@@ -41,13 +41,11 @@
         <PackageReference Include="SkiaSharp.NativeAssets.macOS" Version="3.119.0" Condition="$([MSBuild]::IsOSPlatform('OSX'))" />
 
         <!-- Linux-specific -->
-        <PackageReference Include="Project-Babble.OpenCvSharp4.mini.runtime.ubuntu.22.04-x64" Version="4.11.0.1" Condition="$([MSBuild]::IsOSPlatform('Linux')) And !$(RuntimeIdentifier.Contains('arm'))" />
-        <PackageReference Include="Project-Babble.OpenCvSharp4.mini.runtime.ubuntu.22.04-arm64" Version="4.11.0.1" Condition="$([MSBuild]::IsOSPlatform('Linux')) And $(RuntimeIdentifier.Contains('arm'))" />
+        <PackageReference Include="Project-Babble.OpenCvSharp4.mini.runtime.ubuntu.22.04-x64" Version="4.11.0.1" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
 	    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.22.0" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
-        <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.119.0" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
+        <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.119.0" Condition="$([MSBuild]::IsOSPlatform('Linux'))"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Baballonia.CaptureBin.IO\Baballonia.CaptureBin.IO.csproj" />
         <ProjectReference Include="..\Baballonia.OpenCVCapture\Baballonia.OpenCVCapture.csproj"/>
         <ProjectReference Include="..\Baballonia.SDK\Baballonia.SDK.csproj" />
         <ProjectReference Include="..\Baballonia.SerialCameraCapture\Baballonia.SerialCameraCapture.csproj"/>
@@ -96,15 +94,38 @@
       <None Update="baseline_R.pth">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Calibration\Linux\**" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-          <Link>%(RecursiveDir)\%(Filename)%(Extension)</Link>
-          <TargetPath>%(RecursiveDir)\%(Filename)%(Extension)</TargetPath>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <None Update="Calibration\Linux\gaze_overlay">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Calibration\Windows\**" Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-          <Link>%(RecursiveDir)\%(Filename)%(Extension)</Link>
-          <TargetPath>%(RecursiveDir)\%(Filename)%(Extension)</TargetPath>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <None Update="Calibration\Linux\trainer">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Calibration\Windows\app.rc">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Calibration\Windows\app.res">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Calibration\Windows\calibration_runner.exe">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Calibration\Windows\capture_417272897.bin">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Calibration\Windows\gaze_overlay.exe">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Calibration\Windows\onnxruntime.dll">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Calibration\Windows\onnxruntime_providers_shared.dll">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Calibration\Windows\openvr_api.dll">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Calibration\Windows\turbojpeg.dll">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="onnx_artifacts\training\checkpoint\paramfrozen_tensors.pbseq">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -127,41 +148,54 @@
       <None Update="onnx_artifacts\temporal_eye_tracking_model.onnx">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+      <None Update="trainermin.exe">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="video.bin">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
-    <Target Name="CopyModulesToFolder" AfterTargets="AfterBuild">
-        <ItemGroup>
-            <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.SerialCameraCapture.dll')" Include="$(OutputPath)Baballonia.SerialCameraCapture.dll" />
-            <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.OpenCVCapture.dll')" Include="$(OutputPath)Baballonia.OpenCVCapture.dll" />
-            <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.IPCameraCapture.dll')" Include="$(OutputPath)Baballonia.IPCameraCapture.dll" />
-            <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.VFTCapture.dll')" Include="$(OutputPath)Baballonia.VFTCapture.dll" />
+
+	<Target Name="CopyModulesToFolder" AfterTargets="AfterBuild">
+	    <ItemGroup>
+	    	<ModuleDlls Include="$(OutputPath)Baballonia.SerialCameraCapture.dll" />
+	    	<ModuleDlls Include="$(OutputPath)Baballonia.OpenCVCapture.dll" />
+            <ModuleDlls Include="$(OutputPath)Baballonia.IPCameraCapture.dll" />
+            <ModuleDlls Include="$(OutputPath)Baballonia.VFTCapture.dll" />
             <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.SerialCameraCapture.pdb')" Include="$(OutputPath)Baballonia.SerialCameraCapture.pdb" />
             <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.OpenCVCapture.pdb')" Include="$(OutputPath)Baballonia.OpenCVCapture.pdb" />
             <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.IPCameraCapture.pdb')" Include="$(OutputPath)Baballonia.IPCameraCapture.pdb" />
             <ModuleDlls Condition="Exists('$(OutputPath)Baballonia.VFTCapture.pdb')" Include="$(OutputPath)Baballonia.VFTCapture.pdb" />
-        </ItemGroup>
-        <Move SourceFiles="@(ModuleDlls)" DestinationFolder="$(OutputPath)Modules\" />
-    </Target>
-    <!-- TODO: this sucks -->
-    <Target Name="CopyModulesToFolderPublish" AfterTargets="Publish">
-        <ItemGroup>
-            <PublishModuleDlls Include="$(OutputPath)\publish\Baballonia.SerialCameraCapture.dll" />
-            <PublishModuleDlls Include="$(OutputPath)\publish\Baballonia.OpenCVCapture.dll" />
-            <PublishModuleDlls Include="$(OutputPath)\publish\Baballonia.IPCameraCapture.dll" />
-            <PublishModuleDlls Include="$(OutputPath)\publish\Baballonia.VFTCapture.dll" />
-        </ItemGroup>
-        <Move SourceFiles="@(PublishModuleDlls)" DestinationFolder="$(OutputPath)\publish\Modules\" />
-    </Target>
+	    </ItemGroup>
+	  <MakeDir Directories="$(OutputPath)Modules" />
+	  <Copy SourceFiles="@(ModuleDlls)" DestinationFolder="$(OutputPath)Modules\" />
+	  <!-- Remove the DLLs from the root output directory -->
+	  <Delete Files="@(ModuleDlls)" />
+	</Target>
 
-    <!-- SkiaSharp is currently broken on ARM for some reason -->
-    <Target Name="PatchSkiaSharp" Condition="$([MSBuild]::IsOSPlatform('Linux')) And $(RuntimeIdentifier.Contains('arm')) And Exists('$(OutputPath)runtimes\linux-arm64\native\libSkiaSharp.so')" AfterTargets="AfterBuild;AfterPublish">
-        <Exec Command="patchelf --add-needed libuuid.so.1 '$(OutputPath)runtimes\linux-arm64\native\libSkiaSharp.so'"/>
-        <Exec Command="patchelf --add-needed libfreetype.so.6 '$(OutputPath)runtimes\linux-arm64\native\libSkiaSharp.so'"/>
-    </Target>
-    <Target Name="PatchSkiaSharp" Condition="$([MSBuild]::IsOSPlatform('Linux')) And $(RuntimeIdentifier.Contains('arm')) And Exists('$(OutputPath)libSkiaSharp.so')" AfterTargets="AfterBuild;AfterPublish">
-        <Exec Command="patchelf --add-needed libuuid.so.1 '$(OutputPath)libSkiaSharp.so'"/>
-        <Exec Command="patchelf --add-needed libfreetype.so.6 '$(OutputPath)libSkiaSharp.so'"/>
-    </Target>
+  <Target Name="ExtractZipIfNeeded" AfterTargets="Build" Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+      <PropertyGroup>
+          <ZipFilePath>$(ProjectDir)_internal.zip</ZipFilePath>
+          <ExtractToPath>$(OutputPath)_internal</ExtractToPath>
+      </PropertyGroup>
+
+      <Message Text="Extracting $(ZipFilePath) to $(ExtractToPath)"
+               Condition="Exists('$(ZipFilePath)') AND !Exists('$(ExtractToPath)')"
+               Importance="high" />
+
+      <Unzip SourceFiles="$(ZipFilePath)"
+             DestinationFolder="$(ExtractToPath)"
+             Condition="Exists('$(ZipFilePath)') AND !Exists('$(ExtractToPath)')"
+             OverwriteReadOnlyFiles="true" />
+
+      <Message Text="Extraction folder already exists: $(ExtractToPath)"
+               Condition="Exists('$(ExtractToPath)')"
+               Importance="normal" />
+
+      <Warning Text="Zip file not found: $(ZipFilePath)"
+               Condition="!Exists('$(ZipFilePath)')" />
+  </Target>
 
 </Project>
 

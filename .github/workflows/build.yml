@@ -22,23 +22,14 @@ on:
         description: 'Release notes, auto generated if not given'
         type: string
         required: false
-      publish-steam:
-        description: 'Publish on Steam'
-        type: boolean
-        default: false
 
 jobs:
-  build-linux:
+  build-linux-x64:
     defaults:
       run:
         shell: bash
-    strategy:
-      matrix:
-        include:
-          - { result: Baballonia.x64.tar.gz, runs-on: ubuntu-22.04, upload-path: src/Baballonia.Desktop/bin/Baballonia.x64.tar.gz, arch: linux-x64 }
-          - { result: Baballonia.arm64.tar.gz, runs-on: ubuntu-22.04-arm, upload-path: src/Baballonia.Desktop/bin/Baballonia.arm64.tar.gz, arch: linux-arm64  }
 
-    runs-on: ${{ matrix.runs-on }}
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout latest
@@ -46,25 +37,20 @@ jobs:
         with:
           submodules: 'recursive'
 
-      - name: Download dependencies
-        run: ./download_dependencies.sh
-
-      #- name: Install dependencies
-      #  run: |
-      #    dotnet tool install -g vpk
-
-      - name: Run publish
+      - name: Install dependencies
         run: |
-          cd src/Baballonia.Desktop
-          dotnet publish -r ${{ matrix.arch }} -c Release --self-contained -f net8.0
-          cd "bin/Release/net8.0/${{ matrix.arch }}/publish"
-          tar -czf ./../../../../${{ matrix.result }} *
+          dotnet tool install -g vpk
+
+      - name: Run publish script
+        run: |
+          cd src/Baballonia.Desktop/Publish
+          python publish_linux.py
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.result }}
-          path: ${{ matrix.upload-path }}
+          name: Baballonia.AppImage
+          path: src/Baballonia.Desktop/installers/linux-x64/Baballonia.AppImage
 
   build-windows-x64:
     defaults:
@@ -80,16 +66,15 @@ jobs:
           submodules: 'recursive'
           lfs: true
 
-      - name: Download dependencies
-        shell: pwsh
-        run: ./download_dependencies.ps1
+      - name: Fetch internal zip
+        run: |
+          cd src/Baballonia.Desktop
+          powershell ./fetch_internal.ps1
 
       - name: Build project
         run: |
           cd src/Baballonia.Desktop
           dotnet publish -r win-x64 -c Release --self-contained -f net8.0
-          cd "bin/Release/net8.0/win-x64/publish"
-          tar -czf ./../../../../Baballonia.win.tar.gz *
 
       - name: Run makensis
         run: |
@@ -102,22 +87,16 @@ jobs:
           name: "Baballonia Setup.exe"
           path: "src/Baballonia.Desktop/Baballonia Setup.exe"
 
-      - name: Upload tarball artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: "Baballonia.win.tar.gz"
-          path: "src/Baballonia.Desktop/bin/Baballonia.win.tar.gz"
-
   publish-release:
-    needs: [build-linux, build-windows-x64]
+    #needs: [build-linux-x64, build-windows-x64]
+    #for now, releases only include windows
+    needs: build-windows-x64
     if: ${{ github.event.inputs.publish-release == 'true' }}
     defaults:
       run:
         shell: bash
 
     runs-on: ubuntu-22.04
-    permissions:
-      contents: write
 
     steps:
       - name: Validate version number exists
@@ -132,17 +111,11 @@ jobs:
           name: "Baballonia Setup.exe"
           path: ./artifacts
 
-      - name: Download Linux artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: Baballonia.x64.tar.gz
-          path: ./artifacts
-
-      - name: Download Linux ARM artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: Baballonia.arm64.tar.gz
-          path: ./artifacts
+      #- name: Download Linux artifact
+      #  uses: actions/download-artifact@v4
+      #  with:
+      #    name: Baballonia.AppImage
+      #    path: ./artifacts
 
       - name: Rename artifacts
         env:
@@ -150,8 +123,7 @@ jobs:
         run: |
           cd artifacts
           mv "Baballonia Setup.exe" "Baballonia.Setup.${VERSION}.exe"
-          mv "Baballonia.x64.tar.gz" "Baballonia.x64.${VERSION}.tar.gz"
-          mv "Baballonia.arm64.tar.gz" "Baballonia.arm64.${VERSION}.tar.gz"
+      #    mv "Baballonia.AppImage" "Baballonia.${VERSION}.AppImage"
 
       - name: Set dynamic release name
         id: release-name
@@ -178,64 +150,13 @@ jobs:
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            artifacts/Baballonia.Setup.${{ github.event.inputs.version-number }}.exe
-            artifacts/Baballonia.x64.${{ github.event.inputs.version-number }}.tar.gz
-            artifacts/Baballonia.arm64.${{ github.event.inputs.version-number }}.tar.gz
+          files: artifacts/Baballonia.Setup.${{ github.event.inputs.version-number }}.exe
           tag_name: ${{ github.event.inputs.version-number }}
           name: ${{ steps.release-name.outputs.name }}
           prerelease: ${{ github.event.inputs.publish-pre-release }}
           body: ${{ steps.release-body.outputs.body }}
           generate_release_notes: ${{ steps.release-body.outputs.generate_notes }}
 
-  publish-steam:
-    needs: [build-linux, build-windows-x64]
-    if: ${{ github.event.inputs.publish-steam == 'true' }}
-    defaults:
-      run:
-        shell: bash
-
-    runs-on: ubuntu-22.04
-
-    steps:
-      - name: Validate version number exists
-        run: |
-          if [ -z "${{ github.event.inputs.version-number }}" ]; then
-            exit 1
-          fi
-
-      - name: Download Windows artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: Baballonia.win.tar.gz
-          path: ./artifacts
-
-      - name: Download Linux artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: Baballonia.x64.tar.gz
-          path: ./artifacts
-
-      #- name: Download Linux ARM artifact
-      #  uses: actions/download-artifact@v4
-      #  with:
-      #    name: Baballonia.arm64.tar.gz
-      #    path: ./artifacts
-
-      - name: Untar artifacts
-        run: |
-          mkdir -p ./builds/windows
-          mkdir -p ./builds/linux-x64
-          tar -xf ./artifacts/Baballonia.win.tar.gz --directory ./builds/windows
-          tar -xf ./artifacts/Baballonia.x64.tar.gz --directory ./builds/linux-x64
-
-      - name: Upload to Steam
-        uses: game-ci/steam-deploy@v3
-        with:
-          username: ${{ secrets.STEAM_USERNAME }}
-          configVdf: ${{ secrets.STEAM_CONFIG_VDF }}
-          appId: 4091970
-          buildDescription: ${{ github.event.inputs.version-number }}
-          depot2Path: builds/windows
-          depot3Path: builds/linux-x64
-          releaseBranch: prerelease
+          #files: |
+          #  artifacts/Baballonia.Setup.${{ github.event.inputs.versionNumber }}.exe
+          #  artifacts/Baballonia.${{ github.event.inputs.versionNumber }}.AppImage

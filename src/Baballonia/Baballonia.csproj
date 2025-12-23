@@ -13,15 +13,8 @@
 
     <ItemGroup>
         <AvaloniaResource Include="Assets\**" />
-        <None Update="Firmware\Windows\espflash.exe" Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-            <Link>%(RecursiveDir)\%(Filename)%(Extension)</Link>
-            <TargetPath>%(RecursiveDir)\%(Filename)%(Extension)</TargetPath>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Firmware\Linux\espflash" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-            <Link>%(RecursiveDir)\%(Filename)%(Extension)</Link>
-            <TargetPath>%(RecursiveDir)\%(Filename)%(Extension)</TargetPath>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <None Update="Firmware\Windows\espflash.exe">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="font.ttf">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -47,7 +40,6 @@
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.0" />
         <PackageReference Include="Avalonia.Xaml.Interactions.Draggable" Version="11.3.0.6" />
-        <PackageReference Include="AWSSDK.S3" Version="4.0.13.1" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
         <PackageReference Include="Discord.Net" Version="3.18.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
@@ -60,7 +52,6 @@
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="OpenCvSharp4" Version="4.11.0.20250507" />
         <PackageReference Include="OscCore" Version="1.0.5" />
-        <PackageReference Include="Project-Babble.Baballonia.OverlaySDK" Version="1.0.5-alpha" />
         <PackageReference Include="SkiaSharp" Version="3.119.0" />
         <PackageReference Include="SoundFlow" Version="1.2.1" />
         <PackageReference Include="System.IO.Ports" Version="9.0.8" />
@@ -113,7 +104,7 @@
 		<EmbeddedResource Include="faceModel.onnx">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</EmbeddedResource>
-        <EmbeddedResource Include="SteamVR\manifest.vrmanifest" Link="manifest.vrmanifest">
+        <EmbeddedResource Include="SteamVR\manifest.vrmanifest" Link ="manifest.vrmanifest">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </EmbeddedResource>
         <EmbeddedResource Include="SteamVR\openvr_api.dll" Link="openvr_api.dll">

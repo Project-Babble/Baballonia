@@ -118,331 +118,331 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Settings_Theme_Dark_Content" xml:space="preserve">
-    <value>어두운 테마</value>
+    <value>Dark</value>
   </data>
   <data name="Settings_Theme_Default_Content" xml:space="preserve">
-    <value>기본</value>
+    <value>Default</value>
   </data>
   <data name="Settings_Theme_Light_Content" xml:space="preserve">
-    <value>밝은 테마</value>
+    <value>Light</value>
   </data>
   <data name="Home_Title_Header" xml:space="preserve">
-    <value>홈</value>
+    <value>Home</value>
   </data>
   <data name="Settings_Theme_Header" xml:space="preserve">
-    <value>앱 테마</value>
+    <value>App theme</value>
   </data>
   <data name="Settings_Theme_Description" xml:space="preserve">
-    <value>표시할 앱 테마를 선택하세요</value>
+    <value>Select which app theme to display</value>
   </data>
   <data name="Settings_OSC_Description" xml:space="preserve">
-    <value>OSC 데이터를 어디로 보낼까요?</value>
+    <value>Where should OSC data be sent?</value>
   </data>
   <data name="Settings_OSC_Header" xml:space="preserve">
     <value>OSC</value>
   </data>
   <data name="Home_Eye_Calibration" xml:space="preserve">
-    <value>눈 트래킹 보정</value>
+    <value>Eye Calibration</value>
   </data>
   <data name="Home_Left_Camera_Address" xml:space="preserve">
-    <value>왼쪽 눈 카메라 주소</value>
+    <value>Left Camera Address</value>
   </data>
   <data name="Home_Cameras_Start_Camera" xml:space="preserve">
-    <value>카메라 시작</value>
+    <value>Start Camera</value>
   </data>
   <data name="Home_Cameras_Stop_Camera" xml:space="preserve">
-    <value>카메라 중지</value>
+    <value>Stop Camera</value>
   </data>
   <data name="Home_Cameras_Tracking_Mode" xml:space="preserve">
-    <value>트래킹</value>
+    <value>Tracking</value>
   </data>
   <data name="Home_Cameras_Cropping_Mode" xml:space="preserve">
-    <value>자르기</value>
+    <value>Cropping</value>
   </data>
   <data name="Home_Left_Camera_Select_Entire_Frame" xml:space="preserve">
-    <value>왼쪽 눈 영역 전체 선택</value>
+    <value>Select Left Frame</value>
   </data>
   <data name="Home_Cameras_Vertical_Flip_Header" xml:space="preserve">
-    <value>수직 반전</value>
+    <value>Vertical Flip</value>
   </data>
   <data name="Home_Cameras_Vertical_Flip_Description" xml:space="preserve">
-    <value>이미지를 수직으로 반전합니다.</value>
+    <value>Flip the image vertically</value>
   </data>
   <data name="Home_Cameras_Horizontal_Flip_Header" xml:space="preserve">
-    <value>수평 반전</value>
+    <value>Horizontal flip</value>
   </data>
   <data name="Home_Cameras_Horizontal_Flip_Description" xml:space="preserve">
-    <value>이미지를 수평으로 반전합니다.</value>
+    <value>Flip the image horizontally</value>
   </data>
   <data name="Home_Cameras_Rotation_Description" xml:space="preserve">
-    <value>이미지를 원형으로 회전합니다.</value>
+    <value>Rotates the image in a circle</value>
   </data>
   <data name="Home_Cameras_Brightness_Header" xml:space="preserve">
-    <value>이미지 밝기</value>
+    <value>Image Brightness</value>
   </data>
   <data name="Home_Cameras_Rotation_Header" xml:space="preserve">
-    <value>이미지 회전</value>
+    <value>Image Rotation</value>
   </data>
   <data name="Home_Cameras_Brightness_Description" xml:space="preserve">
-    <value>밝기를 조절합니다.</value>
+    <value>Adjust the brightness of the image</value>
   </data>
   <data name="Home_Right_Camera_Address" xml:space="preserve">
-    <value>오른쪽 눈 카메라 주소</value>
+    <value>Right Camera Address</value>
   </data>
   <data name="Home_Right_Camera_Select_Entire_Frame" xml:space="preserve">
-    <value>오른쪽 눈 영역 전체 선택</value>
+    <value>Select Right Frame</value>
   </data>
   <data name="Home_Face_Camera_Address" xml:space="preserve">
-    <value>얼굴 카메라 주소</value>
+    <value>Face Camera Address</value>
   </data>
   <data name="Home_Face_Camera_Select_Entire_Frame" xml:space="preserve">
-    <value>얼굴 영역 전체 선택</value>
+    <value>Select Face Frame</value>
   </data>
   <data name="Home_Left_Camera_Header" xml:space="preserve">
-    <value>왼쪽 눈 카메라</value>
+    <value>Left Eye Camera</value>
   </data>
   <data name="Home_Face_Camera_Header" xml:space="preserve">
-    <value>얼굴 카메라</value>
+    <value>Face Camera</value>
   </data>
   <data name="Home_Right_Camera_Header" xml:space="preserve">
-    <value>오른쪽 눈 카메라</value>
+    <value>Right Eye Camera</value>
   </data>
   <data name="Home_Left_Camera_Settings" xml:space="preserve">
-    <value>왼쪽 눈 카메라 설정</value>
+    <value>Left Camera Settings</value>
   </data>
   <data name="Home_Face_Camera_Settings" xml:space="preserve">
-    <value>얼굴 카메라 설정</value>
+    <value>Face Camera Settings</value>
   </data>
   <data name="Home_Right_Camera_Settings" xml:space="preserve">
-    <value>오른쪽 눈 카메라 설정</value>
+    <value>Right Camera Settings</value>
   </data>
   <data name="Common_Start_Typing" xml:space="preserve">
-    <value>입력하세요...</value>
+    <value>Start typing...</value>
   </data>
   <data name="Calibration_Title_Header" xml:space="preserve">
-    <value>보정</value>
+    <value>Calibration</value>
   </data>
   <data name="Calibration_Reset_Minimums" xml:space="preserve">
-    <value>최소값 초기화</value>
+    <value>Reset Minimums</value>
   </data>
   <data name="Calibration_Reset_Maximums" xml:space="preserve">
-    <value>최대값 초기화</value>
+    <value>Reset Maximums</value>
   </data>
   <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
-    <value>눈 표현</value>
+    <value>Eye Expressions</value>
   </data>
   <data name="Calibration_Nose_Expressions_Header" xml:space="preserve">
-    <value>코 표현</value>
+    <value>Nose Expressions</value>
   </data>
   <data name="Calibration_Tongue_Expressions_Header" xml:space="preserve">
-    <value>혀 표현</value>
+    <value>Tongue Expressions</value>
   </data>
   <data name="Calibration_Mouth_Expressions_Header" xml:space="preserve">
-    <value>입 표현</value>
+    <value>Mouth Expressions</value>
   </data>
   <data name="Calibration_Jaw_Expressions_Header" xml:space="preserve">
-    <value>턱 표현</value>
+    <value>Jaw Expressions</value>
   </data>
   <data name="Calibration_Cheek_Expressions_Header" xml:space="preserve">
-    <value>볼 표현</value>
+    <value>Cheek Expressions</value>
   </data>
   <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Header" xml:space="preserve">
-    <value>눈 안정화</value>
+    <value>Stabilize Eyes</value>
   </data>
   <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Description" xml:space="preserve">
-    <value>눈이 서로 반대로 보는 것을 방지하지만, 과도하게 보정할 수 있습니다.</value>
+    <value>Prevents eyes from looking out in opposite directions, but may overcorrect.</value>
   </data>
   <data name="Firmware_Title_Header" xml:space="preserve">
-    <value>펌웨어</value>
+    <value>Firmware</value>
   </data>
   <data name="Firmware_Select_Tracker_Header" xml:space="preserve">
-    <value>트래커 선택</value>
+    <value>Select your tracker</value>
   </data>
   <data name="Firmware_Device_Instructions_1" xml:space="preserve">
-    <value>• 장치를 켜거나 연결한 후 20초 이내에 "새로 고침"을 눌러 드롭다운에서 장치를 선택해야 합니다.</value>
+    <value>• After powering on/connecting your device you will have 20 seconds to press "Refresh" and select your device from the dropdown</value>
   </data>
   <data name="Firmware_Device_Instructions_2" xml:space="preserve">
-    <value>• 특정 구성 작업에는 시간이 조금 걸릴 수 있습니다!</value>
+    <value>• Certain configuration operations will take a little bit!</value>
   </data>
   <data name="Firmware_Device_Configuration_Header" xml:space="preserve">
-    <value>장치 구성</value>
+    <value>Device Configuration</value>
   </data>
   <data name="Firmware_Device_Configuration_Description" xml:space="preserve">
-    <value>유선/무선 모드 전환</value>
+    <value>Toggle wired/wireless mode</value>
   </data>
   <data name="Firmware_Device_Mode_Header" xml:space="preserve">
-    <value>유선/무선 모드 전환</value>
+    <value>Toggle wired/wireless mode</value>
   </data>
   <data name="Firmware_Device_Mode_Instruction_1" xml:space="preserve">
-    <value>• 모드를 변경한 후 트래커를 재시작해야 합니다.</value>
+    <value>• You WILL need to restart your tracker after changing the mode</value>
   </data>
   <data name="Firmware_Device_Mode_Instruction_2" xml:space="preserve">
-    <value>• 트래커가 표시되려면 플래시 후 앱을 재시작해야 할 수 있습니다.</value>
+    <value>• You MAY need to restart the app after a flash for trackers to show</value>
   </data>
   <data name="Firmware_Device_Mode_Select_Placeholder" xml:space="preserve">
-    <value>모드 선택...</value>
+    <value>Select a mode...</value>
   </data>
   <data name="Firmware_Wifi_Configuration_Header" xml:space="preserve">
-    <value>Wifi 구성</value>
+    <value>Wifi Configuration</value>
   </data>
   <data name="Firmware_Wifi_Configuration_Description" xml:space="preserve">
-    <value>Wifi 연결 및 기타 설정</value>
+    <value>Connect to Wifi and more</value>
   </data>
   <data name="Firmware_Wifi_Credentials_Header" xml:space="preserve">
-    <value>Wi-Fi 자격 증명 설정</value>
+    <value>Set your Wi-Fi credentials</value>
   </data>
   <data name="Firmware_Wifi_Instructions_1" xml:space="preserve">
-    <value>• 트래커를 무선으로 사용하려면 Wi-Fi 자격 증명을 설정해야 합니다.</value>
+    <value>• If you want to use your tracker wirelessly, you NEED to set its Wifi credentials</value>
   </data>
   <data name="Firmware_Wifi_Instructions_2" xml:space="preserve">
-    <value>• Wi-Fi 자격 증명을 설정하기 전에 Wi-Fi 네트워크를 스캔해야 합니다.</value>
+    <value>• You MUST scan for Wifi networks BEFORE you can set your Wifi credentials</value>
   </data>
   <data name="Firmware_Wifi_SSID_Label" xml:space="preserve">
-    <value>WiFi 네트워크 이름 (SSID)</value>
+    <value>WiFi Network Name (SSID)</value>
   </data>
   <data name="Firmware_Wifi_SSID_Placeholder" xml:space="preserve">
-    <value>WiFi 네트워크를 보려면 입력을 시작하세요...</value>
+    <value>Start typing to see WiFi networks...</value>
   </data>
   <data name="Firmware_Wifi_Password_Label" xml:space="preserve">
-    <value>WiFi 비밀번호</value>
+    <value>WiFi Password</value>
   </data>
   <data name="Firmware_Wifi_Password_Placeholder" xml:space="preserve">
-    <value>WiFi 비밀번호를 입력하세요...</value>
+    <value>Enter WiFi password...</value>
   </data>
   <data name="Firmware_Flashing_Header" xml:space="preserve">
-    <value>펌웨어 플래싱 옵션</value>
+    <value>Flashing Options</value>
   </data>
   <data name="Firmware_Flashing_Description" xml:space="preserve">
-    <value>장치의 펌웨어를 플래시합니다.</value>
+    <value>Flash your device's firmware</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>경고!! 이 작업은 트래커를 공장 초기화합니다. 트래커의 플래싱 후 초기 설정을 수행해야 합니다.</value>
+    <value>CAUTION!! THIS WILL FACTORY RESET YOUR TRACKER. YOU WILL NEED TO PERFORM A FIRST TIME SET UP AFTER FLASHING YOUR TRACKER.</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
-    <value>펌웨어 플래시</value>
+    <value>Flash Firmware</value>
   </data>
   <data name="Firmware_Flashing_Note" xml:space="preserve">
-    <value>약 10초 정도 소요됩니다. 이 페이지를 떠나지 마세요!</value>
+    <value>This will take around ~10 seconds. Don't leave this page!</value>
   </data>
   <data name="Firmware_Flashing_Complete" xml:space="preserve">
-    <value>완료! 트래커를 재시작해야 합니다</value>
+    <value>Done! You will need to restart your tracker</value>
   </data>
   <data name="Firmware_TrackerComboBox_Default" xml:space="preserve">
-    <value>클릭하여 트래커 보기...</value>
+    <value>Click to see trackers...</value>
   </data>
   <data name="Firmware_RefreshDevices_Default" xml:space="preserve">
-    <value>장치 새로 고침</value>
+    <value>Refresh Devices</value>
   </data>
   <data name="Firmware_RefreshDevices_Refreshing" xml:space="preserve">
-    <value>새로 고침 중</value>
+    <value>Refreshing</value>
   </data>
   <data name="Firmware_RefreshDevices_Found" xml:space="preserve">
-    <value>발견된 장치: {0}개</value>
+    <value>Found {0} device(s).</value>
   </data>
   <data name="Firmware_SelectTracker_Default" xml:space="preserve">
-    <value>트래커 선택</value>
+    <value>Select Tracker</value>
   </data>
   <data name="Firmware_SelectTracker_Connected" xml:space="preserve">
-    <value>트래커가 연결되었습니다!</value>
+    <value>Tracker connected!</value>
   </data>
   <data name="Firmware_SelectTracker_NoResponse" xml:space="preserve">
-    <value>트래커가 응답하지 않았습니다.</value>
+    <value>The tracker did not respond.</value>
   </data>
   <data name="Firmware_ModeSetButton_Default" xml:space="preserve">
-    <value>모드 설정</value>
+    <value>Set Mode</value>
   </data>
   <data name="Firmware_ModeSetButton_Setting" xml:space="preserve">
-    <value>모드 설정 중</value>
+    <value>Setting mode</value>
   </data>
   <data name="Firmware_ModeSetButton_Success" xml:space="preserve">
-    <value>설정 완료!</value>
+    <value>Set!</value>
   </data>
   <data name="Firmware_WifiSetButton_Default" xml:space="preserve">
-    <value>WiFi 자격 증명 설정</value>
+    <value>Set Wifi Creds</value>
   </data>
   <data name="Firmware_WifiSetButton_Setting" xml:space="preserve">
-    <value>WiFi 자격 증명 설정 중</value>
+    <value>Setting WiFi credentials</value>
   </data>
   <data name="Firmware_WifiSetButton_Success" xml:space="preserve">
-    <value>전송 완료!</value>
+    <value>Sent!</value>
   </data>
   <data name="Firmware_WifiSetButton_Error" xml:space="preserve">
-    <value>문제가 발생했습니다...</value>
+    <value>Something went wrong...</value>
   </data>
   <data name="Firmware_WifiScanButton_Default" xml:space="preserve">
-    <value>WiFi 네트워크 새로 고침</value>
+    <value>Refresh Wifi Networks</value>
   </data>
   <data name="Firmware_WifiScanButton_Scanning" xml:space="preserve">
-    <value>스캔 중입니다. 최대 30초 소요됩니다.</value>
+    <value>Scanning. This will take at most 30 seconds</value>
   </data>
   <data name="Firmware_WifiScanButton_Error" xml:space="preserve">
-    <value>스캔 실패. 다시 시도하려면 클릭하세요.</value>
+    <value>Scan failed. Click to try again.</value>
   </data>
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
-    <value>발견된 네트워크: {0}개. 다시 스캔하려면 클릭하세요.</value>
+    <value>Found {0} networks. Click to scan again.</value>
   </data>
   <data name="VRC_Title_Header" xml:space="preserve">
-    <value>VRChat + VRCFaceTracking 설정</value>
+    <value>VRChat + VRCFaceTracking Settings</value>
   </data>
   <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
-    <value>VRC 자체 아이트래킹</value>
+    <value>Use Native VRC Eye Tracking</value>
   </data>
   <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
-    <value>VRCFaceTracking이 없는 아바타에 아이트래킹을 제공합니다.</value>
+    <value>Brings eye tracking to avatars that do not have VRCFaceTracking</value>
   </data>
   <data name="VRC_ModuleMode_Header" xml:space="preserve">
-    <value>VRCFT 모듈 모드 설정</value>
+    <value>Set VRCFT module mode</value>
   </data>
   <data name="VRC_ModuleMode_Description" xml:space="preserve">
-    <value>눈, 얼굴 또는 둘 다 전송? (변경하려면 VRCFT 재시작 필요)</value>
+    <value>Send only eye, only face or both? (Change requires VRCFT restart)</value>
   </data>
   <data name="VRC_ModuleMode_Placeholder" xml:space="preserve">
-    <value>모드를 선택하세요...</value>
+    <value>Select a mode...</value>
   </data>
   <data name="Output_Title_Header" xml:space="preserve">
-    <value>출력</value>
+    <value>Output</value>
   </data>
   <data name="Output_CopyButton_Tooltip" xml:space="preserve">
-    <value>로그 출력을 클립보드에 복사</value>
+    <value>Copy the log's output to your clipboard</value>
   </data>
   <data name="Output_SaveButton_Tooltip" xml:space="preserve">
-    <value>로그 출력을 저장</value>
+    <value>Save the log's output</value>
   </data>
   <data name="Output_OpenLoggingDirectoryButton_Tooltip" xml:space="preserve">
-    <value>로그 디렉토리 열기</value>
+    <value>Open the logging directory</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>이 마법사는 새로운 Babble App의 설정을 안내합니다.</value>
+    <value>This wizard will guide you through setting up the new Babble App.</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
-    <value>유선인가요? 무선인가요?</value>
+    <value>Wired or Wireless?</value>
   </data>
   <data name="Onboarding_Wireless_Description1" xml:space="preserve">
-    <value>신형 Babble의 경우, 펌웨어 탭(위 아이콘)에서 처음 설정을 수행해야 합니다.</value>
+    <value>With newer Babbles, you'll need to perform a first time setup in the Firmware tab (Icon above).</value>
   </data>
   <data name="Onboarding_Wireless_Description2" xml:space="preserve">
-    <value>단 2분이면 됩니다! 트래커와 모드(유선 또는 무선)를 선택하세요. 이보다 간단할 수 없습니다.</value>
+    <value>It only takes 2 minutes! Select your tracker and mode (wired or wireless). It's that simple.</value>
   </data>
   <data name="Onboarding_Wireless_Note" xml:space="preserve">
-    <value>새 트래커는 카메라 모드로 전환되기 전에 20초의 대기 시간이 필요합니다.</value>
+    <value>Please note newer trackers have a 20-second window before they enter camera mode.</value>
   </data>
   <data name="Onboarding_Assembly_Header" xml:space="preserve">
-    <value>트래커 조립하기</value>
+    <value>Assemble Your Tracker</value>
   </data>
   <data name="Onboarding_Assembly_Description" xml:space="preserve">
-    <value>트래커 조립에 도움이 필요하면 유용한 유튜브 튜토리얼이 있습니다!</value>
+    <value>If you need help putting your tracker together, here's a useful Youtube tutorial!</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
-    <value>앱 설정</value>
+    <value>App Settings</value>
   </data>
   <data name="Settings_Language_Header" xml:space="preserve">
     <value>Language</value>
   </data>
   <data name="Settings_Language_Description" xml:space="preserve">
-    <value>앱의 언어를 설정합니다. 적용하려면 페이지를 전환하세요.</value>
+    <value>Set the app's language. Switch pages to apply.</value>
   </data>
   <data name="Settings_Language_Default" xml:space="preserve">
-    <value>기본(Default)</value>
+    <value>Default</value>
   </data>
   <data name="Settings_Language_English" xml:space="preserve">
     <value>English</value>
@@ -460,25 +460,25 @@
     <value>中文</value>
   </data>
   <data name="Settings_Filter_Header" xml:space="preserve">
-    <value>One-Euro 필터 설정</value>
+    <value>One-Euro filter settings</value>
   </data>
   <data name="Settings_Filter_Description" xml:space="preserve">
-    <value>필터 설정</value>
+    <value>Filter Settings</value>
   </data>
   <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
-    <value>활성화</value>
+    <value>Enabled</value>
   </data>
   <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
-    <value>필터링을 켜거나 끕니다.</value>
+    <value>Turn filtering on or off.</value>
   </data>
   <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
     <value>Minimum frequency cutoff</value>
   </data>
   <data name="Settings_Filter_MinFreq_Description" xml:space="preserve">
-    <value>느린 움직임에 얼마나 많은 스무딩이 적용되는지를 제어합니다.</value>
+    <value>Controls how much smoothing is applied to slow movements</value>
   </data>
   <data name="Settings_Filter_Template_Placeholder" xml:space="preserve">
-    <value>템플릿에서 선택</value>
+    <value>Select from a template</value>
   </data>
   <data name="Settings_Filter_Template_Low" xml:space="preserve">
     <value>Low ({0})</value>
@@ -496,37 +496,37 @@
     <value>Determines how the filter adapts when you move faster</value>
   </data>
   <data name="Settings_GPU_Header" xml:space="preserve">
-    <value>GPU 가속 사용</value>
+    <value>Use GPU acceleration</value>
   </data>
   <data name="Settings_GPU_Description" xml:space="preserve">
-    <value>GPU를 사용하여 작업을 더 빠르게 실행합니다! 재시작이 필요합니다</value>
+    <value>Use your GPU to make things run faster! Requires restart</value>
   </data>
   <data name="Settings_LogLevel_Header" xml:space="preserve">
-    <value>로그 수준</value>
+    <value>Log Level Verbosity</value>
   </data>
   <data name="Settings_LogLevel_Description" xml:space="preserve">
-    <value>최소 로깅 수준. 재시작이 필요합니다</value>
+    <value>Minimum logging level. Requires restart</value>
   </data>
   <data name="Settings_Updates_Header" xml:space="preserve">
-    <value>업데이트 확인</value>
+    <value>Check For Updates</value>
   </data>
   <data name="Settings_Updates_Description" xml:space="preserve">
-    <value>앱이 시작할 때 업데이트를 확인할까요?</value>
+    <value>Should the app check for updates on start?</value>
   </data>
   <data name="Settings_FirstTime_Header" xml:space="preserve">
-    <value>첫 실행시의 설정</value>
+    <value>Launch first time setup</value>
   </data>
   <data name="Settings_FirstTime_Description" xml:space="preserve">
-    <value>첫 실행 시 설정을 다시 시작합니다</value>
+    <value>Relaunches the first time setup</value>
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
-    <value>시작</value>
+    <value>Launch</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
-    <value>건너뛰기</value>
+    <value>Skip</value>
   </data>
   <data name="Onboarding_UI_Header" xml:space="preserve">
-    <value>어디에 어떤 것이 있나요?</value>
+    <value>Where is everything?</value>
   </data>
   <data name="Onboarding_UI_Home_Description" xml:space="preserve">
     <value>1. 홈 페이지에서는 카메라를 설정하고 아이 트래킹 보정을 수행할 수 있습니다.</value>
@@ -547,16 +547,16 @@
     <value>6. 설정에서는 테마, 언어 등 일반적인 앱 설정을 변경할 수 있습니다.</value>
   </data>
   <data name="Onboarding_Complete_Header" xml:space="preserve">
-    <value>설정 완료!</value>
+    <value>Setup Complete!</value>
   </data>
   <data name="Onboarding_Complete_Description1" xml:space="preserve">
-    <value>새로운 Babble App을 사용할 준비가 완료되었습니다!</value>
+    <value>You're all set to start using the new Babble App!</value>
   </data>
   <data name="Onboarding_Complete_Description2" xml:space="preserve">
-    <value>이 페이지는 설정에서 다시 방문할 수 있습니다.</value>
+    <value>You can revisit this page in the settings.</value>
   </data>
   <data name="Settings_OSC_IP_Label" xml:space="preserve">
-    <value>IP 주소</value>
+    <value>IP Address</value>
   </data>
   <data name="Settings_OSC_Prefix_Label" xml:space="preserve">
     <value>OSC Prefix</value>
@@ -568,55 +568,55 @@
     <value>Recenter Address</value>
   </data>
   <data name="Settings_OSC_SendPort_Label" xml:space="preserve">
-    <value>송신 포트</value>
+    <value>Send Port</value>
   </data>
   <data name="Settings_OSC_ReceivePort_Label" xml:space="preserve">
-    <value>수신 포트</value>
+    <value>Receive Port</value>
   </data>
   <data name="AdminWarning_Header" xml:space="preserve">
-    <value>관리자 모드 경고</value>
+    <value>Administrator Mode Warning</value>
   </data>
   <data name="AdminWarning_Message" xml:space="preserve">
-    <value>Baballonia를 관리자 권한으로 실행하지 마세요! 필요하지 않으며, 눈 추적 보정이 작동하지 않게 됩니다.</value>
+    <value>Do not run Baballonia as admin! There is no need, and it prevents eye tracking calibrations from working.</value>
   </data>
   <data name="Aero_Overlay_NotFound" xml:space="preserve">
-    <value>시선 보정 오버레이 프로그램이 존재하지 않습니다!</value>
+    <value>The gaze overlay program does not exist!</value>
   </data>
   <data name="Aero_Overlay_AlreadyRunning" xml:space="preserve">
-    <value>시선 보정 오버레이 프로그램이 이미 실행 중입니다! 닫고 다시 시도하세요.</value>
+    <value>The gaze overlay program is already running! Please close it and try again.</value>
   </data>
   <data name="Aero_SteamVR_NotRunning" xml:space="preserve">
-    <value>SteamVR이 실행되고 있지 않습니다. 실행하고 다시 시도하세요.</value>
+    <value>SteamVR is not running. Please run it and try again.</value>
   </data>
   <data name="Aero_CameraStream_Failed" xml:space="preserve">
-    <value>카메라 스트리밍을 시작하지 못했습니다!</value>
+    <value>Failed to start camera streaming!</value>
   </data>
   <data name="Aero_Calibration_Failed" xml:space="preserve">
-    <value>보정을 시작하지 못했습니다!</value>
+    <value>Failed to start calibration!</value>
   </data>
   <data name="Aero_Calibration_Success" xml:space="preserve">
-    <value>눈 추적 보정이 성공적으로 완료되었습니다!</value>
+    <value>Eye tracking calibration successful!</value>
   </data>
   <data name="Aero_Overlay_CleanupFailed" xml:space="preserve">
-    <value>오버레이를 종료하지 못했습니다!</value>
+    <value>Failed to stop/cleanup overlay!</value>
   </data>
   <data name="Calibration_Instructions_Line1" xml:space="preserve">
-    <value>아래 슬라이더는 다음을 보정하는 데 사용됩니다.</value>
+    <value>The below sliders are used to calibrate the</value>
   </data>
   <data name="Calibration_Instructions_Sensitivity" xml:space="preserve">
-    <value>민감도</value>
+    <value>sensitivity</value>
   </data>
   <data name="Calibration_Instructions_Line1_2" xml:space="preserve">
-    <value>얼굴 표정의 민감도를 조정합니다.</value>
+    <value>of your face expressions.</value>
   </data>
   <data name="Calibration_Instructions_Bullet1_1" xml:space="preserve">
-    <value>• </value>
+    <value>• Raising the</value>
   </data>
   <data name="Calibration_Instructions_Minimum" xml:space="preserve">
-    <value>최소</value>
+    <value>Minimum</value>
   </data>
   <data name="Calibration_Instructions_Bullet1_2" xml:space="preserve">
-    <value>값을 높이면 더 강한 표현을 해야 반영됩니다.</value>
+    <value>value requires a stronger expression before it starts to show.</value>
   </data>
   <data name="Settings_Language_Chinese_Simplified" xml:space="preserve">
     <value>Chinese (Simplified)</value>
@@ -634,7 +634,7 @@
     <value>Italian</value>
   </data>
   <data name="Settings_Language_Korean" xml:space="preserve">
-    <value>한국어</value>
+    <value>Korean</value>
   </data>
   <data name="Settings_Language_Portuguese_Brazil" xml:space="preserve">
     <value>Portuguese (Brazil)</value>
@@ -697,25 +697,25 @@
     <value>Serbian</value>
   </data>
   <data name="Calibration_Instructions_Bullet2_1" xml:space="preserve">
-    <value>• </value>
+    <value>• Lowering the</value>
   </data>
   <data name="Calibration_Instructions_Maximum" xml:space="preserve">
-    <value>최대</value>
+    <value>Maximum</value>
   </data>
   <data name="Calibration_Instructions_Bullet2_2" xml:space="preserve">
-    <value>값을 낮추면 더 작은 표현이 100%에 더 빨리 도달합니다.</value>
+    <value>value means a smaller expression will reach 100% faster.</value>
   </data>
   <data name="DropOverlay_Important_Header" xml:space="preserve">
-    <value>중요!</value>
+    <value>Important!</value>
   </data>
   <data name="DropOverlay_Message" xml:space="preserve">
-    <value>새로운 바블 트래커는 사용하기 전에 연결된 후 20초의 지연이 있습니다. 준비가 되면 USB 연결 소리가 납니다!</value>
+    <value>Newer babble trackers have a 20 second delay after being plugged in before they can be used. It will make a USB plugging-in sound when it is ready!</value>
   </data>
   <data name="DropOverlay_DontShowAgain" xml:space="preserve">
-    <value>이 경고를 다시 표시하지 않음</value>
+    <value>Don't show this warning again</value>
   </data>
   <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
-    <value>무시</value>
+    <value>Dismiss</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="Settings_OSC_VRCFT_Warning" type="System.Resources.ResXNullRef, System.Windows.Forms">

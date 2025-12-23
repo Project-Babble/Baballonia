@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -34,9 +33,8 @@ public class App : Application
     private IHost? _host;
     private bool IsTeardDown = false;
     private static Action<IServiceCollection> ConfigurePlatformServices { get; set; }
-    private static Action<IServiceCollection>? _platformSpecifficServices;
 
-    public static void RegisterRequiredPlatformServices<TOverlay, TDeviceEnumerator, TPlatformConnector>()
+    public static void RegisterPlatformServices<TOverlay, TDeviceEnumerator, TPlatformConnector>()
         where TOverlay : class, IVROverlay
         where TDeviceEnumerator : class, IDeviceEnumerator
         where TPlatformConnector : class, IPlatformConnector
@@ -47,11 +45,6 @@ public class App : Application
             services.AddSingleton<IDeviceEnumerator, TDeviceEnumerator>();
             services.AddSingleton<IPlatformConnector, TPlatformConnector>();
         };
-    }
-
-    public static void RegisterPlatformSpecificServices(Action<IServiceCollection> configure)
-    {
-        _platformSpecifficServices = configure;
     }
 
 
@@ -66,13 +59,14 @@ public class App : Application
         // Check for a "reset" file in the root of the app directory.
         // If one is found, wipe all files from inside it and delete the file.
         var resetFile = Path.Combine(Utils.PersistentDataDirectory, "reset");
-        if (!File.Exists(resetFile)) return;
-
-        // Delete everything including files and folders in Utils.PersistentDataDirectory
-        foreach (var file in Directory.EnumerateFiles(Utils.PersistentDataDirectory, "*",
-                     SearchOption.AllDirectories))
+        if (File.Exists(resetFile))
         {
-            File.Delete(file);
+            // Delete everything including files and folders in Utils.PersistentDataDirectory
+            foreach (var file in Directory.EnumerateFiles(Utils.PersistentDataDirectory, "*",
+                         SearchOption.AllDirectories))
+            {
+                File.Delete(file);
+            }
         }
     }
 
@@ -124,7 +118,6 @@ public class App : Application
             services.AddTransient<OscQueryServiceWrapper>();
             services.AddSingleton<ParameterSenderService>();
             services.AddTransient<GithubService>();
-            services.AddTransient<DataUploaderService>();
             services.AddTransient<ICommandSenderFactory, CommandSenderFactory>();
             services.AddTransient<FirmwareService>();
             services.AddSingleton<IMainService, MainStandalone>();
@@ -157,7 +150,6 @@ public class App : Application
             }
 
             ConfigurePlatformServices.Invoke(services);
-            _platformSpecifficServices?.Invoke(services);
 
             services.AddHostedService(provider => provider.GetService<OscRecvService>()!);
             services.AddHostedService(provider => provider.GetService<ParameterSenderService>()!);
@@ -229,7 +221,7 @@ public class App : Application
                 desktop.MainWindow.Loaded += (_, _) => { desktop.MainWindow.ShowOnboardingIfNeeded(); };
                 desktop.Exit += (s, e) =>
                 {
-                    OnShutdown(s, e);
+                    OnShutdown(s,e);
                     _host.Dispose();
                 };
                 desktop.ShutdownRequested += OnShutdown;

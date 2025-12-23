@@ -10,17 +10,17 @@
 
 Head to the releases tab and [download the latest installer](https://github.com/Project-Babble/Baballonia/releases/latest).
 
-You may be prompted to download the .NET runtime for desktop apps, install it if need be.
+You may be prompted to download the .NET runtime for desktop apps, install it if needs be.
 
-### Linux
+### MacOS & Linux
 
-Head to the releases tab and [download the latest tarball](https://github.com/Project-Babble/Baballonia/releases/latest).
+Baballonia currently does not have an installer for macOS or Linux. You will need to follow our build instructions and run it from source.
 
-You may be prompted to download the .NET runtime for desktop apps, install it if need be.
+Baballonia *can* be run through Wine, as documented on the [Linux VR Adventures Wiki](https://lvra.gitlab.io/docs/other/bigscreen-beyond-driver/#bigscreen-beyond-2e-eyetracking-via-baballonia-under-linux).
 
-### MacOS
+#### NixOS (Flakes)
 
-Baballonia currently does not have an installer for MacOS. You will need to follow our build instructions and run it from source.
+Simply run Baballonia with ``nix run github:Project-Babble/Baballonia``
 
 ## Platform Compatibility
 
@@ -66,36 +66,53 @@ Baballonia supports many kinds of hardware for eye and face tracking:
 
 ## Build Instructions
 
-### Baballonia.Desktop
+If you want to build from source, clone this repo, its submodules and open the `.sln`/`.csproj` files in an editor of your choice. This has been tested and built on Visual Studio 2022 and Rider, but it should work with other IDEs.
 
-1. Run the associated ``download_dependencies`` script for your given platform (``.ps1`` on Windows, ``.sh`` on Linux).
-2. If you are using an IDE, disable these projects:
-- `VRCFaceTracking`
-- `VRCFaceTracking.Core`
-- `VRCFaceTracking.SDK`
-- `VRCFaceTracking.Baballonia`
-- `Baballonia.iOS`
-- `Baballonia.Android`
-3. Run ``dotnet build`` inside the ``src/Baballonia.Desktop`` directory, or build with your IDE
+### The Desktop App
 
-### Baballonia.Android/iOS
+To build the desktop app, build and load the following projects:
 
-1. If you are using an IDE, disable these projects:
-- `VRCFaceTracking`
-- `VRCFaceTracking.Core`
-- `VRCFaceTracking.SDK`
-- `VRCFaceTracking.Baballonia`
+- `Baballonia.OpenCVCapture`
+- `Baballonia.SerialCameraCapture`
+- `HyperText.Avalonia`
+- `Baballonia`
+- `Baballonia.SDK`
 - `Baballonia.Desktop`
-- `Baballonia.iOS`, if you are building for Android
-- `Baballonia.Android`, if you are building for iOS
-2. Run ``dotnet build`` inside the ``src/Baballonia.Android`` or ``src/Baballonia.iOS`` directory, or build with your IDE
+- Optionally, `Baballonia.Tests`
 
-### VRCFaceTracking.Baballonia
+Run `Baballonia.Desktop`.
 
-1. If you are using an IDE, disable all projects except the following:
+#### Windows Notes - Trainer instructions
+
+In order to use the trainer, you must first a) download its dependencies or b) build them yourself. You can accomplish this by:
+- a) Run the `fetch_internal.ps1` script once after a clone. This will download and place the `_internal.zip` file into your `Baballonia.Desktop` project
+- b) Run `pyinstaller` on the `trainermin.py` file, zip up its `internal` directory contents into an archive called `_internal.zip` and place it in the `Baballonia.Desktop` project
+
+#### Linux notes
+
+`libtesseract 4` is deprecated in newer repositories, but is needed to build.
+
+### The Mobile App
+
+To build the Android mobile app, build and load the following projects:
+
+- `Baballonia.OpenCVCapture`
+- `Baballonia.IPCameraCapture`
+- `HyperText.Avalonia`
+- `Baballonia`
+- `Baballonia.SDK`
+- `Baballonia.Android`
+- Optionally, `Baballonia.Tests`
+
+`Baballonia.Android` will produce an APK you can install on an Android device (and Quest HMD).
+
+### The VRCFaceTrackingModule
+
+To build the VRCFaceTracking module, you'll want to build and load the following projects:
+
 - `VRCFaceTracking.Core`
 - `VRCFaceTracking.SDK`
 - `VRCFaceTracking.Baballonia`
-2. Run ``dotnet build`` inside the ``src/VRCFaceTracking.Baballonia`` directory, or build with your IDE
 
-This will create a `VRCFaceTracking.Baballonia.zip` module which you can install manually.
+`VRCFaceTracking.Baballonia` will produce a `.zip` module you can install, as well as the module DLL.
+

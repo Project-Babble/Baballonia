@@ -86,10 +86,9 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         private void Initialize(string[] cameras)
         {
             var displayAddress = _localSettingsService.ReadSetting<string>("LastOpened" + Name);
-            var camSettings = _localSettingsService.ReadSetting<CameraSettings>(Name) ?? CameraSettings;
+            var camSettings = _localSettingsService.ReadSetting<CameraSettings>(Name);
             ShouldAutostart = _localSettingsService.ReadSetting("ShouldAutostart" + Name, false);
             var preferredCapture = _localSettingsService.ReadSetting<string>("LastOpenedPreferredCapture" + Name);
-            if (preferredCapture == "Default") preferredCapture = Assets.Resources.Home_Backend_Default;
 
             UpdateCameraDropDown(cameras);
             DisplayAddress = displayAddress;
@@ -109,24 +108,13 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
         partial void OnDisplayAddressChanged(string value)
         {
-            // "it looks like shit" be damned, i've seen *way* too many instances of people needing to force
-            // a capture backend and this stupid visual preference garbage is getting in the way of it.
-            // we're going to get more support tickets from people who can't find this when they're on linux or
-            // using vive face trackers.
-            // if you think it looks bad, suck it, make it look better yourself, it has to be here,
-            // the NEED take precedent over visual preferences.
-            //var advancedEnabled = _localSettingsService.ReadSetting<bool>("AppSettings_AdvancedOptions");
-            var advancedEnabled = true;
             var availableCaptureFactories = _platformConnector.GetCaptureFactories()
                 .Where(factory => factory.CanConnect(value)).ToArray();
 
-            var shouldShow = advancedEnabled && availableCaptureFactories.Length >= 2;
+            var shouldShow = availableCaptureFactories.Length >= 2;
             CaptureMethodVisible = shouldShow;
 
             CaptureMethods.Clear();
-            // IF YOU'RE TRYING TO ENABLE A SPECIFIC BACKEND FOR A CAPTURE, DO NOT TOUCH THIS!
-            // THIS IS NOT WHERE YOU FORCE A BACKEND
-            // OVERRIDE THE CANCAPTURE() METHOD INSIDE THE CAPTURE'S CAPTURE FACTORY
             if (shouldShow)
             {
                 CaptureMethods.Add(Assets.Resources.Home_Backend_Default);
@@ -139,14 +127,14 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             {
                 SelectedCaptureMethod = "";
             }
+
         }
 
         partial void OnSelectedCaptureMethodChanged(string value)
         {
             var prev = _localSettingsService.ReadSetting<string>("LastOpenedPreferredCapture" + Name);
             if (prev != value)
-                _localSettingsService.SaveSetting("LastOpenedPreferredCapture" + Name,
-                    value == Assets.Resources.Home_Backend_Default ? "Default" : value);
+                _localSettingsService.SaveSetting("LastOpenedPreferredCapture" + Name, value);
         }
 
         partial void OnShouldAutostartChanged(bool value)
@@ -377,6 +365,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     // Necessary evil to store some globals that don't really have place to go :( _sob_
     private static bool _hasPerformedFirstTimeSetup = false;
 
+
     private int _messagesRecvd;
     [ObservableProperty] private string _messagesInPerSecCount;
 
@@ -406,7 +395,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     private readonly ILogger<HomePageViewModel> _logger;
     private readonly IPlatformConnector _platformConnector;
 
-    public CalibrationRoutine.Routines RequestedVRCalibration = CalibrationRoutine.Map["BasicCalibration"];
+    public string RequestedVRCalibration = CalibrationRoutine.Map["QuickCalibration"];
 
 
     public HomePageViewModel(FacePipelineManager facePipelineManager,
@@ -416,9 +405,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         IVROverlay vrOverlay,
         IDeviceEnumerator deviceEnumerator,
         ILocalSettingsService localSettings,
-        ILogger<HomePageViewModel> logger,
-        DropOverlayService dropOverlayService,
-        IPlatformConnector platformConnector)
+        ILogger<HomePageViewModel> logger, DropOverlayService dropOverlayService, IPlatformConnector platformConnector)
     {
         _facePipelineManager = facePipelineManager;
         _eyePipelineManager = eyePipelineManager;
@@ -612,7 +599,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
             SetButtons(model, false, false);
             var address = model.DisplayAddress;
             var backend = model.SelectedCaptureMethod;
-            if (!model.CaptureMethodVisible || backend == Assets.Resources.Home_Backend_Default)
+            if (!model.CaptureMethodVisible)
                 backend = "";
 
 
@@ -666,30 +653,29 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     [RelayCommand]
     private async Task RequestVRCalibration()
     {
-        var res = await Task.Run(async () =>
-            {
-                try
-                {
-                    return await _vrOverlay.EyeTrackingCalibrationRequested(RequestedVRCalibration);
-                }
-                catch (Exception ex)
-                {
-                    return (false, ex.Message);
-                }
-            }
-        );
-        if (res.Item1)
+        var res = await _vrOverlay.EyeTrackingCalibrationRequested(RequestedVRCalibration);
+        if (res.success)
         {
+            if (!Directory.Exists(Utils.ModelsDirectory))
+            {
+                Directory.CreateDirectory(Utils.ModelsDirectory);
+            }
+
+            var destPath = Path.Combine(Utils.ModelsDirectory,
+                $"tuned_temporal_eye_tracking_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.onnx");
+            File.Move("tuned_temporal_eye_tracking.onnx", destPath);
+            _localSettings.SaveSetting("EyeHome_EyeModel", destPath);
+            await _eyePipelineManager.LoadInferenceAsync();
             SelectedCalibrationTextBlock.Foreground = new SolidColorBrush(Colors.Green);
         }
         else
         {
             SelectedCalibrationTextBlock.Foreground = new SolidColorBrush(Colors.Red);
-            _logger.LogError(res.Item2);
+            _logger.LogError(res.status);
         }
 
         var previousText = SelectedCalibrationTextBlock.Text;
-        SelectedCalibrationTextBlock.Text = res.Item2;
+        SelectedCalibrationTextBlock.Text = res.status;
         await Task.Delay(5000);
         SelectedCalibrationTextBlock.Text = previousText;
         SelectedCalibrationTextBlock.Foreground = new SolidColorBrush(GetBaseHighColor());
