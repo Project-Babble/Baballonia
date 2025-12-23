@@ -184,7 +184,7 @@
     <value>Image Rotation</value>
   </data>
   <data name="Home_Cameras_Brightness_Description" xml:space="preserve">
-    <value>Adjust the brightness of the image</value>
+    <value>Adjust the brightness</value>
   </data>
   <data name="Home_Right_Camera_Address" xml:space="preserve">
     <value>Right Camera Address</value>

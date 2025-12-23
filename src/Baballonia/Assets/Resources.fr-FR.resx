@@ -127,7 +127,7 @@
     <value>Lumière</value>
   </data>
   <data name="Home_Title_Header" xml:space="preserve">
-    <value>Domicile</value>
+    <value>Accueil</value>
   </data>
   <data name="Settings_Theme_Header" xml:space="preserve">
     <value>Thème de l'application</value>
@@ -136,7 +136,7 @@
     <value>Sélectionnez le thème de l'application à afficher</value>
   </data>
   <data name="Settings_OSC_Description" xml:space="preserve">
-    <value>Où les données de la CVMO doivent-elles être envoyées?</value>
+    <value>Où doivent les données OSC être envoyées?</value>
   </data>
   <data name="Settings_OSC_Header" xml:space="preserve">
     <value>OSC</value>
@@ -148,10 +148,10 @@
     <value>Adresse de la caméra gauche</value>
   </data>
   <data name="Home_Cameras_Start_Camera" xml:space="preserve">
-    <value>Démarrer l'appareil photo</value>
+    <value>Démarrer la caméra</value>
   </data>
   <data name="Home_Cameras_Stop_Camera" xml:space="preserve">
-    <value>Arrêter la caméra</value>
+    <value>Stopper la caméra</value>
   </data>
   <data name="Home_Cameras_Tracking_Mode" xml:space="preserve">
     <value>Suivi</value>
@@ -196,7 +196,7 @@
     <value>Adresse de la caméra faciale</value>
   </data>
   <data name="Home_Face_Camera_Select_Entire_Frame" xml:space="preserve">
-    <value>Sélectionner une image de face</value>
+    <value>Sélectionner une image faciale</value>
   </data>
   <data name="Home_Left_Camera_Header" xml:space="preserve">
     <value>Caméra de l'œil gauche</value>
@@ -229,7 +229,7 @@
     <value>Reset Maximums</value>
   </data>
   <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
-    <value>Expressions oculaires</value>
+    <value>Expressions des yeux</value>
   </data>
   <data name="Calibration_Nose_Expressions_Header" xml:space="preserve">
     <value>Expressions du nez</value>
@@ -250,7 +250,7 @@
     <value>Stabiliser les yeux</value>
   </data>
   <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Description" xml:space="preserve">
-    <value>Empêche les yeux de regarder dans des directions opposées, mais peut être exagérée.</value>
+    <value>Empêche les yeux de regarder dans des directions opposées, mais peut potentiellement trop corriger.</value>
   </data>
   <data name="Firmware_Title_Header" xml:space="preserve">
     <value>Firmware</value>
@@ -286,7 +286,7 @@
     <value>Configuration Wifi</value>
   </data>
   <data name="Firmware_Wifi_Configuration_Description" xml:space="preserve">
-    <value>Se connecter au Wifi et plus encore</value>
+    <value>Se connecter au Wifi et plus</value>
   </data>
   <data name="Firmware_Wifi_Credentials_Header" xml:space="preserve">
     <value>Définir vos identifiants Wi-Fi</value>
@@ -310,22 +310,22 @@
     <value>Entrez le mot de passe WiFi...</value>
   </data>
   <data name="Firmware_Flashing_Header" xml:space="preserve">
-    <value>Flashing Options</value>
+    <value>Options de Flash</value>
   </data>
   <data name="Firmware_Flashing_Description" xml:space="preserve">
     <value>Flasher le firmware de votre appareil</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>ATTENTION!! CETTE FACTORIE REPARTIR À VOTRE TRACKER. VOUS AVEZ BESOIN DE PERFORMER UN PRÉSENT TEMPS DÉFINI PAR LA FLASHING DE VOTRE TRACKER.</value>
+    <value>ATTENTION!! CE BOUTON VA REMTTRE VOTRE TRACKER AU PARAMÈTRES D'USINE. VOUS AUREZ BESOIN DE REFAIRE LE PROCESSUS DE PREMIÈRE MISE EN ROUTE.</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>Flasher le firmware</value>
   </data>
   <data name="Firmware_Flashing_Note" xml:space="preserve">
-    <value>Cela prendra environ 10 secondes. Ne quittez pas cette page !</value>
+    <value>Cela prendra environ ~10 secondes. Ne quittez pas cette page !</value>
   </data>
   <data name="Firmware_Flashing_Complete" xml:space="preserve">
-    <value>Terminé ! Vous devrez redémarrer votre tracker</value>
+    <value>Terminé ! Merci de redémarrer votre tracker</value>
   </data>
   <data name="Firmware_TrackerComboBox_Default" xml:space="preserve">
     <value>Cliquez pour voir les trackers...</value>
@@ -337,7 +337,7 @@
     <value>Actualisation en cours</value>
   </data>
   <data name="Firmware_RefreshDevices_Found" xml:space="preserve">
-    <value>Appareil {0} trouvé.</value>
+    <value>{0}Appareil(s) trouvé(s).</value>
   </data>
   <data name="Firmware_SelectTracker_Default" xml:space="preserve">
     <value>Sélectionner un tracker</value>
@@ -349,16 +349,16 @@
     <value>Le tracker n'a pas répondu.</value>
   </data>
   <data name="Firmware_ModeSetButton_Default" xml:space="preserve">
-    <value>Définir le mode</value>
+    <value>Sélectionner le mode</value>
   </data>
   <data name="Firmware_ModeSetButton_Setting" xml:space="preserve">
-    <value>Mode de réglage</value>
+    <value>Mode réglage</value>
   </data>
   <data name="Firmware_ModeSetButton_Success" xml:space="preserve">
-    <value>Ensemble!</value>
+    <value>Sélectionné!</value>
   </data>
   <data name="Firmware_WifiSetButton_Default" xml:space="preserve">
-    <value>Définir le Wi-Fi Creds</value>
+    <value>Définir les identifiants Wi-Fi</value>
   </data>
   <data name="Firmware_WifiSetButton_Setting" xml:space="preserve">
     <value>Paramétrage des identifiants WiFi</value>
@@ -373,28 +373,28 @@
     <value>Rafraîchir les réseaux Wi-Fi</value>
   </data>
   <data name="Firmware_WifiScanButton_Scanning" xml:space="preserve">
-    <value>Scannage. Cela prendra au plus 30 secondes</value>
+    <value>Scannage. Cela prendra au max 30 secondes</value>
   </data>
   <data name="Firmware_WifiScanButton_Error" xml:space="preserve">
-    <value>L'analyse a échoué. Cliquez pour réessayer.</value>
+    <value>Le Scan a échoué. Cliquez pour réessayer.</value>
   </data>
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
-    <value>Réseaux {0} trouvés. Cliquez pour scanner à nouveau.</value>
+    <value>{0} Réseau(x) trouvé(s). Cliquez pour scanner à nouveau.</value>
   </data>
   <data name="VRC_Title_Header" xml:space="preserve">
-    <value>VRChat + VRCFaceTracking Paramètres</value>
+    <value>Paramètres VRChat + VRCFaceTracking</value>
   </data>
   <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
-    <value>Utiliser le suivi des yeux du VRC autochtone</value>
+    <value>Utiliser le suivi des yeux du VRC natif</value>
   </data>
   <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
-    <value>Apporte le suivi des yeux aux avatars qui n'ont pas de VRCFaceTracking</value>
+    <value>Apporte le suivi des yeux aux avatars pas compatible VRCFaceTracking</value>
   </data>
   <data name="VRC_ModuleMode_Header" xml:space="preserve">
     <value>Définir le mode module VRCFT</value>
   </data>
   <data name="VRC_ModuleMode_Description" xml:space="preserve">
-    <value>Envoyer seulement l'œil, seulement la face ou les deux ? (Le changement nécessite un redémarrage VRCFT)</value>
+    <value>Envoyer seulement les yeux, seulement la tête ou les deux ? (Le changement nécessite un redémarrage VRCFT)</value>
   </data>
   <data name="VRC_ModuleMode_Placeholder" xml:space="preserve">
     <value>Sélectionnez un mode...</value>
@@ -403,10 +403,10 @@
     <value>Sortie</value>
   </data>
   <data name="Output_CopyButton_Tooltip" xml:space="preserve">
-    <value>Copiez la sortie du journal dans votre presse-papiers</value>
+    <value>Copiez la sortie des logs dans votre presse-papiers</value>
   </data>
   <data name="Output_SaveButton_Tooltip" xml:space="preserve">
-    <value>Enregistrer la sortie du journal</value>
+    <value>Enregistrer la sortie des logs</value>
   </data>
   <data name="Output_OpenLoggingDirectoryButton_Tooltip" xml:space="preserve">
     <value>Ouvrir le répertoire des logs</value>
@@ -421,16 +421,16 @@
     <value>Avec des Babbles plus récents, vous devrez effectuer une première configuration dans l'onglet Firmware (Icon ci-dessus).</value>
   </data>
   <data name="Onboarding_Wireless_Description2" xml:space="preserve">
-    <value>Cela ne prend que 2 minutes! Sélectionnez votre tracker et votre mode (filaire ou sans fil). C'est aussi simple.</value>
+    <value>Cela ne prend que 2 minutes! Sélectionnez votre tracker et votre mode (filaire ou sans fil). C'est tout con.</value>
   </data>
   <data name="Onboarding_Wireless_Note" xml:space="preserve">
     <value>Veuillez noter que les trackers les plus récents ont une fenêtre de 20 secondes avant de passer en mode caméra.</value>
   </data>
   <data name="Onboarding_Assembly_Header" xml:space="preserve">
-    <value>Assembler votre Tracker</value>
+    <value>Assemblez votre Tracker</value>
   </data>
   <data name="Onboarding_Assembly_Description" xml:space="preserve">
-    <value>Si vous avez besoin d'aide pour mettre votre tracker en place, voici un tutoriel Youtube utile!</value>
+    <value>Si vous avez besoin d'aide pour monter votre tracker, voici un tuto Youtube !</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
     <value>Paramètres de l'application</value>
@@ -439,10 +439,10 @@
     <value>Langue</value>
   </data>
   <data name="Settings_Language_Description" xml:space="preserve">
-    <value>Définissez la langue de l'application. Changez de page pour l'appliquer.</value>
+    <value>Choisissez la langue de l'application. Changez de page pour l'appliquer.</value>
   </data>
   <data name="Settings_Language_Default" xml:space="preserve">
-    <value>Par défaut</value>
+    <value>Défaut</value>
   </data>
   <data name="Settings_Language_English" xml:space="preserve">
     <value>Anglais</value>
@@ -460,10 +460,10 @@
     <value>中文</value>
   </data>
   <data name="Settings_Filter_Header" xml:space="preserve">
-    <value>Paramètres de filtre pour un euro</value>
+    <value>Paramètres du filtre One-Euro</value>
   </data>
   <data name="Settings_Filter_Description" xml:space="preserve">
-    <value>Paramètres de filtre</value>
+    <value>Paramètres du filtre</value>
   </data>
   <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
     <value>Activé</value>
@@ -472,7 +472,7 @@
     <value>Activer ou désactiver le filtrage.</value>
   </data>
   <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
-    <value>Coupure de fréquence minimale</value>
+    <value>Fréquence de coupure minimale</value>
   </data>
   <data name="Settings_Filter_MinFreq_Description" xml:space="preserve">
     <value>Contrôle la quantité de lissage appliquée aux mouvements lents</value>
@@ -502,10 +502,10 @@
     <value>Utilisez votre GPU pour rendre les choses plus rapides ! Nécessite un redémarrage</value>
   </data>
   <data name="Settings_LogLevel_Header" xml:space="preserve">
-    <value>Niveau de verbosité du journal</value>
+    <value>Niveau de verbosité des logs</value>
   </data>
   <data name="Settings_LogLevel_Description" xml:space="preserve">
-    <value>Niveau de journalisation minimal. Nécessite un redémarrage</value>
+    <value>Niveau de Logs minimal. Nécessite un redémarrage</value>
   </data>
   <data name="Settings_Updates_Header" xml:space="preserve">
     <value>Vérifier les mises à jour</value>
@@ -517,7 +517,7 @@
     <value>Lancer la configuration de la première fois</value>
   </data>
   <data name="Settings_FirstTime_Description" xml:space="preserve">
-    <value>Relance la première configuration</value>
+    <value>Relance l'assistant de première configuration</value>
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>Lancer</value>
@@ -532,10 +532,10 @@
     <value>1. La page d'accueil est l'endroit où vous pouvez configurer vos caméras et effectuer un calibrage du suivi des yeux.</value>
   </data>
   <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
-    <value>2. L'étalonnage peut être utilisé pour ajuster individuellement vos expressions oculaires/faciales.</value>
+    <value>2. La calibration peut être utilisé pour ajuster individuellement vos expressions oculaires/faciales.</value>
   </data>
   <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
-    <value>3. La page du micrologiciel est utilisée pour configurer votre appareil ou le réinitialiser.</value>
+    <value>3. La page du firmware est utilisée pour configurer votre appareil ou le réinitialiser.</value>
   </data>
   <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
     <value>4. La page VRChat est utilisée pour modifier les paramètres spécifiques à VRChat/VRCFaceTracking.</value>
@@ -559,13 +559,13 @@
     <value>Adresse IP</value>
   </data>
   <data name="Settings_OSC_Prefix_Label" xml:space="preserve">
-    <value>OSC Prefix</value>
+    <value>Prefix OSC</value>
   </data>
   <data name="Settings_OSC_Recalibrate_Label" xml:space="preserve">
-    <value>Recalibrer l'adresse</value>
+    <value>Adresse de recalibration</value>
   </data>
   <data name="Settings_OSC_Recenter_Label" xml:space="preserve">
-    <value>Adresse récurrente</value>
+    <value>Adresse de Recentrage</value>
   </data>
   <data name="Settings_OSC_SendPort_Label" xml:space="preserve">
     <value>Port d'envoi</value>
@@ -577,28 +577,28 @@
     <value>Avertissement du mode administrateur</value>
   </data>
   <data name="AdminWarning_Message" xml:space="preserve">
-    <value>N'exécutez pas Baballonia en tant qu'administrateur ! Il n'y a pas de besoin et cela empêche les calibrages de suivre les yeux de fonctionner.</value>
+    <value>N'exécutez pas Baballonia en tant qu'administrateur ! Il n'y a pas de besoin et cela empêche la calibration du suivi des yeux de fonctionner.</value>
   </data>
   <data name="Aero_Overlay_NotFound" xml:space="preserve">
-    <value>Le programme de superposition du regard n'existe pas !</value>
+    <value>Le programme de l'overlay de la rotation des yeux n'existe pas !</value>
   </data>
   <data name="Aero_Overlay_AlreadyRunning" xml:space="preserve">
-    <value>Le programme de superposition des regards est déjà en cours ! Veuillez le fermer et réessayer.</value>
+    <value>Le programme de l'overlay de la rotation des yeux est déjà en cours ! Veuillez le fermer et réessayer.</value>
   </data>
   <data name="Aero_SteamVR_NotRunning" xml:space="preserve">
     <value>SteamVR n'est pas en cours d'exécution. Veuillez l'exécuter et réessayer.</value>
   </data>
   <data name="Aero_CameraStream_Failed" xml:space="preserve">
-    <value>Impossible de démarrer la diffusion de la caméra!</value>
+    <value>Impossible de démarrer le stream de la caméra!</value>
   </data>
   <data name="Aero_Calibration_Failed" xml:space="preserve">
-    <value>Impossible de démarrer l'étalonnage !</value>
+    <value>Impossible de démarrer la calibration !</value>
   </data>
   <data name="Aero_Calibration_Success" xml:space="preserve">
-    <value>Étalonnage réussi du suivi des yeux!</value>
+    <value>Calibration du suivi des yeux réussi!</value>
   </data>
   <data name="Aero_Overlay_CleanupFailed" xml:space="preserve">
-    <value>Impossible d'arrêter/nettoyer la superposition !</value>
+    <value>Impossible d'arrêter/nettoyer l'overlay !</value>
   </data>
   <data name="Calibration_Instructions_Line1" xml:space="preserve">
     <value>Les curseurs ci-dessous sont utilisés pour calibrer le</value>
@@ -610,7 +610,7 @@
     <value>de vos expressions de visage.</value>
   </data>
   <data name="Calibration_Instructions_Bullet1_1" xml:space="preserve">
-    <value>• Soulever le</value>
+    <value>• Monter le</value>
   </data>
   <data name="Calibration_Instructions_Minimum" xml:space="preserve">
     <value>Minimum</value>
@@ -709,7 +709,7 @@
     <value>Important!</value>
   </data>
   <data name="DropOverlay_Message" xml:space="preserve">
-    <value>Les nouveaux mouchards ont un délai de 20 secondes après avoir été branchés avant de pouvoir être utilisés. Il fera un son de branchement USB quand il sera prêt !</value>
+    <value>Les nouveaux trackers ont un délai de 20 secondes après avoir été branchés avant de pouvoir être utilisés. Il fera un son de branchement USB quand il sera prêt !</value>
   </data>
   <data name="DropOverlay_DontShowAgain" xml:space="preserve">
     <value>Ne plus afficher cet avertissement</value>

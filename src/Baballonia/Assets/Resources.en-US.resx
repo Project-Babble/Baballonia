@@ -184,7 +184,7 @@
     <value>Image Rotation</value>
   </data>
   <data name="Home_Cameras_Brightness_Description" xml:space="preserve">
-    <value>Adjust the brightness of the image</value>
+    <value>Adjust the brightness</value>
   </data>
   <data name="Home_Right_Camera_Address" xml:space="preserve">
     <value>Right Camera Address</value>
@@ -628,7 +628,7 @@
     <value>German</value>
   </data>
   <data name="Settings_Language_French" xml:space="preserve">
-    <value>French</value>
+    <value>Français</value>
   </data>
   <data name="Settings_Language_Italian" xml:space="preserve">
     <value>Italian</value>

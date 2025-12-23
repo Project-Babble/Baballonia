@@ -20,11 +20,6 @@ public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger)
     private const byte PicStart = 0xD8;
     private const byte PicEnd = 0xD9;
 
-    public override bool CanConnect(string connectionString)
-    {
-        return Uri.TryCreate(connectionString, UriKind.RelativeOrAbsolute, out _) && connectionString.StartsWith("http://");
-    }
-
     public override Task<bool> StartCapture()
     {
         Task.Run(() => StartStreaming(Source, null, null, _cancellationTokenSource.Token)); // Size of Babble frame

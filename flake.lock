@@ -1,29 +1,12 @@
 {
   "nodes": {
-    "hypertext": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1742072915,
-        "narHash": "sha256-lf+26hdcbHfmhdOwnjncc0YCXUpLaPzJMp8vEHq+apo=",
-        "owner": "dfgHiatus",
-        "repo": "HyperText.Avalonia",
-        "rev": "8a16a6bcce40344ce77a386cf212ca742819c5ad",
-        "type": "github"
-      },
-      "original": {
-        "owner": "dfgHiatus",
-        "repo": "HyperText.Avalonia",
-        "rev": "8a16a6bcce40344ce77a386cf212ca742819c5ad",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1754214453,
-        "narHash": "sha256-Q/I2xJn/j1wpkGhWkQnm20nShYnG7TI99foDBpXm1SY=",
+        "lastModified": 1765186076,
+        "narHash": "sha256-hM20uyap1a0M9d344I692r+ik4gTMyj60cQWO+hAYP8=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "5b09dc45f24cf32316283e62aec81ffee3c3e376",
+        "rev": "addf7cf5f383a3101ecfba091b98d0a1263dc9b8",
         "type": "github"
       },
       "original": {
@@ -35,26 +18,7 @@
     },
     "root": {
       "inputs": {
-        "hypertext": "hypertext",
-        "nixpkgs": "nixpkgs",
-        "vrcft": "vrcft"
-      }
-    },
-    "vrcft": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1739195724,
-        "narHash": "sha256-am1+GlemenmrgN2R/uUKJz0ftVxYeSj9u+bfFaNzfKc=",
-        "owner": "dfgHiatus",
-        "repo": "VRCFaceTracking",
-        "rev": "46453fcda63fdcfc56663813246764fbc028d73b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "dfgHiatus",
-        "repo": "VRCFaceTracking",
-        "rev": "46453fcda63fdcfc56663813246764fbc028d73b",
-        "type": "github"
+        "nixpkgs": "nixpkgs"
       }
     }
   },

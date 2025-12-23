@@ -7,9 +7,11 @@ stdenv.mkDerivation rec {
     tag = "4.11.0.20250507";
     hash = "sha256-CkG4Kx/AkZqyhtclMfS51a9a9R+hsqBRlM4fry32YJ0=";
   };
-  buildInputs = [ opencv ];
-  nativeBuildInputs = [ cmake ];
+
+  buildInputs = [opencv];
+  nativeBuildInputs = [cmake];
   sourceRoot = "${src.name}/src";
+  cmakeFlags = [ (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5") ];
 
   meta = with lib; {
     license = licenses.asl20;

@@ -20,7 +20,7 @@ public class VFTCaptureFactory : ICaptureFactory
     public bool CanConnect(string address)
     {
         var lowered = address.ToLower();
-        return lowered.StartsWith("/dev/video");
+        return lowered.StartsWith("/dev/video") && OperatingSystem.IsLinux();
     }
 
     public string GetProviderName()

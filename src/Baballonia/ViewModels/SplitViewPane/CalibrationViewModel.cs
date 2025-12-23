@@ -42,7 +42,13 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
         EyeSettings =
         [
             new("LeftEyeLid"),
-            new("RightEyeLid")
+            new("RightEyeLid"),
+            new ("LeftEyeWiden"),
+            new ("LeftEyeLower"),
+            new ("LeftEyeBrow"),
+            new ("RightEyeWiden"),
+            new ("RightEyeLower"),
+            new ("RightEyeBrow"),
         ];
 
         JawSettings =
@@ -117,14 +123,20 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
         }
 
         // Convert dictionary order into index mapping
-        _eyeKeyIndexMap = new Dictionary<string, int>()
+        _eyeKeyIndexMap = new Dictionary<string, int>
         {
             { "LeftEyeX", 0 },
             { "LeftEyeY", 1 },
-            { "RightEyeX", 3 },
-            { "RightEyeY", 4 },
             { "LeftEyeLid", 2 },
-            { "RightEyeLid", 5 }
+            { "LeftEyeWiden", 3 },
+            { "LeftEyeLower", 4 },
+            { "LeftEyeBrow", 5 },
+            { "RightEyeX", 6 },
+            { "RightEyeY", 7 },
+            { "RightEyeLid", 8 },
+            { "RightEyeWiden", 9 },
+            { "RightEyeLower", 10 },
+            { "RightEyeBrow", 11 },
         };
 
         _faceKeyIndexMap = _parameterSenderService.FaceExpressionMap.Keys

@@ -36,10 +36,10 @@
 ;--------------------------------
 ;UI
 
-  !define MUI_ICON "assets\IconOpaque.ico"
+  !define MUI_ICON "Assets\IconOpaque.ico"
   !define MUI_HEADERIMAGE
-  !define MUI_WELCOMEFINISHPAGE_BITMAP "assets\MUI_WELCOMEFINISHPAGE_BITMAP.bmp"
-  !define MUI_HEADERIMAGE_BITMAP "assets\MUI_HEADERIMAGE_BITMAP.bmp"
+  !define MUI_WELCOMEFINISHPAGE_BITMAP "Assets\MUI_WELCOMEFINISHPAGE_BITMAP.bmp"
+  !define MUI_HEADERIMAGE_BITMAP "Assets\MUI_HEADERIMAGE_BITMAP.bmp"
   !define MUI_ABORTWARNING
   !define MUI_WELCOMEPAGE_TITLE "${SLUG} Setup"
 
@@ -48,7 +48,7 @@
 
   ;Installer pages
   !insertmacro MUI_PAGE_WELCOME
-  !insertmacro MUI_PAGE_LICENSE "assets\license.txt"
+  !insertmacro MUI_PAGE_LICENSE "Assets\license.txt"
   !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES
@@ -69,7 +69,7 @@
     SetOutPath "$INSTDIR"
 
     ;Copy all files except Calibration, Firmware and publish folders
-    File /r /x "Calibration" /x "Firmware" /x "publish" "bin\Release\net8.0\win-x64\*"
+    File /r /x "Calibration" /x "Firmware" "bin\Release\net8.0\win-x64\publish\*"
 
     ;Create Firmware directory
     CreateDirectory "$INSTDIR\Firmware"
@@ -77,17 +77,17 @@
     ;Copy Windows-only Firmware tooling
     CreateDirectory "$INSTDIR\Firmware\Windows"
     SetOutPath "$INSTDIR\Firmware\Windows"
-    File /r "bin\Release\net8.0\win-x64\Firmware\Windows\*"
+    File /r "bin\Release\net8.0\win-x64\publish\Firmware\Windows\*"
 
     ;Copy firmware over
     CreateDirectory "$INSTDIR\Firmware\Binaries"
     SetOutPath "$INSTDIR\Firmware\Binaries"
-    File /r "bin\Release\net8.0\win-x64\Firmware\Binaries\*"
+    File /r "bin\Release\net8.0\win-x64\publish\Firmware\Binaries\*"
 
     ;Create Windows-only Calibration tooling
     CreateDirectory "$INSTDIR\Calibration"
     SetOutPath "$INSTDIR\Calibration"
-    File /r "bin\Release\net8.0\win-x64\Calibration\Windows"
+    File /r "bin\Release\net8.0\win-x64\publish\Calibration\Windows"
 
     ;Reset output path and write registry values
     SetOutPath "$INSTDIR"
