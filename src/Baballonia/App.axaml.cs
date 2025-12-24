@@ -147,6 +147,7 @@ public class App : Application
             {
                 services.AddSingleton<ICommandSenderFactory, CommandSenderFactory>();
                 services.AddSingleton<ICommandSender, SerialCommandSender>();
+                services.AddSingleton<IUsbService, UsbService>();
                 services.AddSingleton<OpenVRService>();
                 services.AddTransient<VrcViewModel>();
                 services.AddTransient<VrcView>();
@@ -154,7 +155,6 @@ public class App : Application
                 services.AddTransient<FirmwareView>();
                 services.AddTransient<OnboardingViewModel>();
                 services.AddTransient<OnboardingView>();
-                services.AddTransient<IUsbService, UsbService>();
             }
 
             ConfigurePlatformServices.Invoke(services);
