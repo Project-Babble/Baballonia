@@ -62,6 +62,10 @@ public partial class AppSettingsViewModel : ViewModelBase
     private bool _checkForUpdates;
 
     [ObservableProperty]
+    [property: SavedSetting("AppSettings_UseDiscordRPC", false)]
+    private bool _useDiscordRPC;
+
+    [ObservableProperty]
     [property: SavedSetting("AppSettings_ShareEyeData", false)]
     private bool _shareEyeData;
 

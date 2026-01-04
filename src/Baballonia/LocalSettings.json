@@ -371,5 +371,6 @@
   "AppSettings_SteamVRAutoStart": false,
   "AppSettings_UseGPU": true,
   "AppSettings_CheckForUpdates": true,
+  "AppSettings_UseDiscordRPC": false,
   "AppSettings_LogLevel": "Information"
 }

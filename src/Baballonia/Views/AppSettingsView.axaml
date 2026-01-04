@@ -363,6 +363,12 @@
           SettingToggled="{Binding CheckForUpdates, Mode=TwoWay}" />
 
       <controls:SettingsToggle
+        Title="Use Discord RPC"
+        Description="Display Baballonia in your discord activity status. Requires a restart"
+        IconPath="DiscordRegular"
+        SettingToggled="{Binding UseDiscordRPC, Mode=TwoWay}" />
+
+      <controls:SettingsToggle
                IsVisible="{x:Static utils:Utils.IsSupportedDesktopOS}"
                Title="{x:Static assets:Resources.Settings_SteamVR_Auto_Start_Header}"
                Description="{x:Static assets:Resources.Settings_SteamVR_Auto_Start_Description}"

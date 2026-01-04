@@ -15,7 +15,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:assets="clr-namespace:Baballonia.Assets">
 
-
   <ScrollViewer IsEnabled="{Binding IsInitialized}">
     <StackPanel Classes="Page" Margin="16">
 
