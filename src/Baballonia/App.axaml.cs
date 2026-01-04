@@ -120,7 +120,8 @@ public class App : Application
             services.AddTransient<IFileService, FileService>();
             services.AddSingleton<IOscTarget, OscTarget>();
             services.AddSingleton<OscRecvService>();
-            services.AddSingleton<OscSendService>();
+            services.AddSingleton<VrcftModuleSendService>();
+            services.AddSingleton<DfrSendService>();
             services.AddTransient<OscQueryServiceWrapper>();
             services.AddSingleton<ParameterSenderService>();
             services.AddTransient<GithubService>();

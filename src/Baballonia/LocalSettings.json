@@ -370,6 +370,7 @@
   "AppSettings_OneEuroSpeedCutoff": 1,
   "AppSettings_SteamVRAutoStart": false,
   "AppSettings_UseGPU": true,
+  "AppSettings_UseDFR": false,
   "AppSettings_CheckForUpdates": true,
   "AppSettings_LogLevel": "Information"
 }

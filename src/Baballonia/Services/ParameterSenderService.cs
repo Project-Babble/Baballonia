@@ -15,17 +15,20 @@ namespace Baballonia.Services;
 
 public class ParameterSenderService : BackgroundService
 {
-    private readonly OscSendService _oscSendService;
+    private readonly VrcftModuleSendService _vrcftModuleSendService;
+    private readonly DfrSendService _dfrSendService;
     private readonly ILocalSettingsService _localSettingsService;
     private readonly ICalibrationService _calibrationService;
     private readonly ILogger<ParameterSenderService> _logger;
 
     private string _prefix = "";
     private bool _sendNativeVrcEyeTracking;
-    private readonly ConcurrentQueue<OscMessage> _sendQueue = new();
+    private bool _useDfr;
+    private readonly ConcurrentQueue<OscMessage> _vrcftQueue = new();
+    private readonly ConcurrentQueue<OscMessage> _dfrQueue = new();
 
     // Expression parameter names
-    public readonly Dictionary<string, string> EyeExpressionMap = new()
+    private readonly Dictionary<string, string> _eyeExpressionMap = new()
     {
         { "LeftEyeX", "/LeftEyeX" },
         { "LeftEyeY", "/LeftEyeY" },
@@ -91,13 +94,15 @@ public class ParameterSenderService : BackgroundService
     };
 
     public ParameterSenderService(
-        OscSendService sendService,
+        VrcftModuleSendService vrcftModuleSendService,
+        DfrSendService dfrSendService,
         ILocalSettingsService localSettingsService,
         ICalibrationService calibrationService,
         ProcessingLoopService processingLoopService,
         ILogger<ParameterSenderService> logger)
     {
-        this._oscSendService = sendService;
+        this._vrcftModuleSendService = vrcftModuleSendService;
+        this._dfrSendService = dfrSendService;
         this._localSettingsService = localSettingsService;
         this._calibrationService = calibrationService;
         this._logger = logger;
@@ -109,7 +114,7 @@ public class ParameterSenderService : BackgroundService
     {
         _logger.LogDebug("Starting Parameter Sender Service...");
         _logger.LogDebug("OSC parameter mapping initialized with {EyeCount} eye expressions and {FaceCount} face expressions",
-            EyeExpressionMap.Count, FaceExpressionMap.Count);
+            _eyeExpressionMap.Count, FaceExpressionMap.Count);
 
         while (!cancellationToken.IsCancellationRequested)
         {
@@ -117,6 +122,7 @@ public class ParameterSenderService : BackgroundService
             {
                 _prefix = _localSettingsService.ReadSetting<string>("AppSettings_OSCPrefix");
                 _sendNativeVrcEyeTracking = _localSettingsService.ReadSetting<bool>("VRC_UseNativeTracking");
+                _useDfr = _localSettingsService.ReadSetting<bool>("AppSettings_UseDFR");
                 await SendAndClearQueue(cancellationToken);
                 await Task.Delay(10, cancellationToken);
             }
@@ -140,23 +146,25 @@ public class ParameterSenderService : BackgroundService
         if (expressions is null) return;
         if (expressions.Length == 0) return;
 
-        for (int i = 0; i < Math.Min(expressions.Length, EyeExpressionMap.Count); i++)
+        for (var i = 0; i < Math.Min(expressions.Length, _eyeExpressionMap.Count); i++)
         {
             var weight = expressions[i];
-            var eyeElement = EyeExpressionMap.ElementAt(i);
+            var eyeElement = _eyeExpressionMap.ElementAt(i);
             var settings = _calibrationService.GetExpressionSettings(eyeElement.Key);
 
             var msg = new OscMessage(_prefix + eyeElement.Value,
                 weight.Remap(settings.Lower, settings.Upper, settings.Min, settings.Max));
-            _sendQueue.Enqueue(msg);
+            _vrcftQueue.Enqueue(msg);
         }
 
-        if (!_sendNativeVrcEyeTracking) return;
+        if (_useDfr)
+            ProcessNativeVrcEyeTracking(expressions, _dfrQueue);
 
-        ProcessNativeVrcEyeTracking(expressions);
+        if (_sendNativeVrcEyeTracking)
+            ProcessNativeVrcEyeTracking(expressions, _vrcftQueue);
     }
 
-    private void ProcessNativeVrcEyeTracking(float[] expressions)
+    private void ProcessNativeVrcEyeTracking(float[] expressions, ConcurrentQueue<OscMessage> queue)
     {
         var leftEyeX = expressions[0];
         var leftEyeY = expressions[1];
@@ -170,7 +178,7 @@ public class ParameterSenderService : BackgroundService
         var weightedLeftEyeLid = leftEyeLid.Remap(leftEyeLidSettings.Lower, leftEyeLidSettings.Upper, leftEyeLidSettings.Min, leftEyeLidSettings.Max);
         var weightedRightEyeLid = rightEyeLid.Remap(rightEyeLidSettings.Lower, rightEyeLidSettings.Upper, rightEyeLidSettings.Min, rightEyeLidSettings.Max);
         var averageLid = (weightedLeftEyeLid + weightedRightEyeLid) / 2f;
-        _sendQueue.Enqueue(new OscMessage("/tracking/eye/EyesClosedAmount", 1f - Math.Clamp(averageLid, 0f, 1f)));
+        queue.Enqueue(new OscMessage("/tracking/eye/EyesClosedAmount", 1f - Math.Clamp(averageLid, 0f, 1f)));
 
         // Convert normalized eye positions to angles
         const float maxEyeAngle = 45f;
@@ -178,7 +186,7 @@ public class ParameterSenderService : BackgroundService
         leftEyeY *= -maxEyeAngle; // Negative because Y is inverted (up is negative pitch)
         rightEyeX *= maxEyeAngle;
         rightEyeY *= -maxEyeAngle; // Negative because Y is inverted (up is negative pitch)
-        _sendQueue.Enqueue(new OscMessage("/tracking/eye/LeftRightPitchYaw", leftEyeY, rightEyeX, rightEyeY, leftEyeX));
+        queue.Enqueue(new OscMessage("/tracking/eye/LeftRightPitchYaw", leftEyeY, rightEyeX, rightEyeY, leftEyeX));
     }
 
     private void ProcessFaceExpressionData(float[] expressions)
@@ -186,7 +194,7 @@ public class ParameterSenderService : BackgroundService
         if (expressions == null) return;
         if (expressions.Length == 0) return;
 
-        for (int i = 0; i < Math.Min(expressions.Length, FaceExpressionMap.Count); i++)
+        for (var i = 0; i < Math.Min(expressions.Length, FaceExpressionMap.Count); i++)
         {
             var weight = expressions[i];
             var faceElement = FaceExpressionMap.ElementAt(i);
@@ -197,16 +205,22 @@ public class ParameterSenderService : BackgroundService
                     weight.Remap(settings.Lower, settings.Upper, settings.Min, settings.Max),
                     settings.Min,
                     settings.Max));
-            _sendQueue.Enqueue(msg);
+            _vrcftQueue.Enqueue(msg);
         }
     }
 
     private async Task SendAndClearQueue(CancellationToken cancellationToken)
     {
-        if (_sendQueue.Count == 0)
-            return;
+        if (!_vrcftQueue.IsEmpty)
+        {
+            await _vrcftModuleSendService.Send(_vrcftQueue.ToArray(), cancellationToken);
+            _vrcftQueue.Clear();
+        }
 
-        await _oscSendService.Send(_sendQueue.ToArray(), cancellationToken);
-        _sendQueue.Clear();
+        if (!_dfrQueue.IsEmpty)
+        {
+            await _dfrSendService.Send(_dfrQueue.ToArray(), cancellationToken);
+            _dfrQueue.Clear();
+        }
     }
 }

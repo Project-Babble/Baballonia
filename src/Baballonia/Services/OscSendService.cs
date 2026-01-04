@@ -12,73 +12,33 @@ namespace Baballonia.Services;
 /// <summary>
 /// OscSendService is responsible for encoding osc messages and sending them over OSC
 /// </summary>
-public class OscSendService
+public abstract class OscSendService(
+    ILogger<OscSendService> logger,
+    IOscTarget oscTarget)
 {
-    private readonly ILogger<OscSendService> _logger;
-    private readonly IOscTarget _oscTarget;
-
-    private CancellationTokenSource _cts;
-    private Socket _sendSocket;
     public event Action<int> OnMessagesDispatched = _ => { };
+    protected readonly IOscTarget OscTarget = oscTarget;
+    private Socket _sendSocket;
 
-    public OscSendService(
-        ILogger<OscSendService> logger,
-        IOscTarget oscTarget
-    )
+    protected void UpdateTarget(IPEndPoint endpoint)
     {
-        _logger = logger;
-        _cts = new CancellationTokenSource();
-
-        _oscTarget = oscTarget;
-        UpdateTarget(new IPEndPoint(IPAddress.Parse(_oscTarget.DestinationAddress), _oscTarget.OutPort));
-
-        _oscTarget.PropertyChanged += (_, args) =>
-        {
-            if (args.PropertyName is not nameof(IOscTarget.OutPort))
-            {
-                return;
-            }
-
-            if (_oscTarget.OutPort == default)
-            {
-                _oscTarget.OutPort = 8888;
-            }
-
-            if (_oscTarget.DestinationAddress is not null)
-            {
-                UpdateTarget(new IPEndPoint(IPAddress.Parse(_oscTarget.DestinationAddress), _oscTarget.OutPort));
-            }
-            else
-            {
-                _oscTarget.DestinationAddress = IPAddress.Loopback.ToString();
-            }
-        };
-    }
-
-    private void UpdateTarget(IPEndPoint endpoint)
-    {
-        _cts.Cancel();
         _sendSocket?.Close();
-        _oscTarget.IsConnected = false;
+        OscTarget.IsConnected = false;
 
         _sendSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
         try
         {
             _sendSocket.Connect(endpoint);
-            _oscTarget.IsConnected = true;
+            OscTarget.IsConnected = true;
         }
         catch (SocketException ex)
         {
-            _logger.LogWarning($"Failed to bind to sender endpoint: {endpoint}. {ex.Message}");
+            logger.LogWarning("Failed to bind to sender endpoint: {IpEndPoint}. {ExMessage}", endpoint, ex.Message);
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Unexpected Exception while binding to sender endpoint: {endpoint}. {ex.Message}");
-        }
-        finally
-        {
-            _cts = new CancellationTokenSource();
+            logger.LogError("Unexpected Exception while binding to sender endpoint: {IpEndPoint}. {ExMessage}", endpoint, ex.Message);
         }
     }
 
@@ -91,13 +51,13 @@ public class OscSendService
 
         try
         {
-            var ip = IPEndPoint.Parse(_oscTarget.DestinationAddress);
+            var ip = IPEndPoint.Parse(OscTarget.DestinationAddress);
             await _sendSocket.SendToAsync(message.ToByteArray(), SocketFlags.None, ip, ct);
             OnMessagesDispatched(1);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error sending OSC message");
+            logger.LogError(ex, "Error sending OSC message");
         }
     }
 
@@ -119,7 +79,7 @@ public class OscSendService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error sending OSC bundle");
+            logger.LogError(ex, "Error sending OSC bundle");
         }
     }
 }

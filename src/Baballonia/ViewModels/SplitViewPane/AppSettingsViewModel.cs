@@ -50,6 +50,10 @@ public partial class AppSettingsViewModel : ViewModelBase
     private float _oneEuroSpeedCutoff;
 
     [ObservableProperty]
+    [property: SavedSetting("AppSettings_UseDFR", false)]
+    private bool _useDFR;
+
+    [ObservableProperty]
     [property: SavedSetting("AppSettings_UseGPU", true)]
     private bool _useGPU;
 

@@ -338,6 +338,12 @@
           SettingToggled="{Binding UseGPU, Mode=TwoWay}" />
 
       <controls:SettingsToggle
+        Title="Use DFR"
+        Description="Enable Pimax4All dynamic foveated rendering for select titles"
+        IconPath="GamesRegular"
+        SettingToggled="{Binding UseDFR, Mode=TwoWay}" />
+
+      <controls:SettingsToggle
           Title="{x:Static assets:Resources.Calibration_Eye_Expressions_Stabilize_Eyes_Header}"
           Description="{x:Static assets:Resources.Calibration_Eye_Expressions_Stabilize_Eyes_Description}"
           IconPath="EyeTrackingRegular"
