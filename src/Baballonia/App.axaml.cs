@@ -123,6 +123,7 @@ public class App : Application
             services.AddSingleton<OscSendService>();
             services.AddTransient<OscQueryServiceWrapper>();
             services.AddSingleton<ParameterSenderService>();
+            services.AddSingleton<DiscordRPCService>();
             services.AddTransient<GithubService>();
             services.AddTransient<DataUploaderService>();
             services.AddTransient<ICommandSenderFactory, CommandSenderFactory>();

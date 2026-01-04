@@ -404,6 +404,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     private readonly IDeviceEnumerator _deviceEnumerator;
     private readonly ILocalSettingsService _localSettings;
     private readonly ILogger<HomePageViewModel> _logger;
+    private readonly DiscordRPCService  _discordRpcService;
     private readonly IPlatformConnector _platformConnector;
 
     public CalibrationRoutine.Routines RequestedVRCalibration = CalibrationRoutine.Map["BasicCalibration"];
@@ -418,6 +419,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         ILocalSettingsService localSettings,
         ILogger<HomePageViewModel> logger,
         DropOverlayService dropOverlayService,
+        DiscordRPCService discordRpcService,
         IPlatformConnector platformConnector)
     {
         _facePipelineManager = facePipelineManager;
@@ -429,6 +431,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         _localSettings = localSettings;
         _logger = logger;
         _dropOverlayService = dropOverlayService;
+        _discordRpcService = discordRpcService;
         _platformConnector = platformConnector;
 
         _localSettings.Load(this);
