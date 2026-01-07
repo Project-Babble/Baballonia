@@ -152,6 +152,7 @@
             <PublishModuleDlls Include="$(OutputPath)\publish\Baballonia.OpenCVCapture.dll" />
             <PublishModuleDlls Include="$(OutputPath)\publish\Baballonia.IPCameraCapture.dll" />
             <PublishModuleDlls Include="$(OutputPath)\publish\Baballonia.VFTCapture.dll" />
+            <PublishModuleDlls Include="$(OutputPath)\publish\Baballonia.LibV4L2Capture.dll" />
         </ItemGroup>
         <Move SourceFiles="@(PublishModuleDlls)" DestinationFolder="$(OutputPath)\publish\Modules\" />
     </Target>

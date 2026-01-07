@@ -3,14 +3,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Baballonia.LibV4L2Capture;
 
-public class LibV4L2CaptureFactory : ICaptureFactory
+public class LibV4L2CaptureFactory(ILoggerFactory loggerFactory) : ICaptureFactory
 {
-    private readonly ILoggerFactory _loggerFactory;
-
-    public LibV4L2CaptureFactory(ILoggerFactory loggerFactory)
-    {
-        _loggerFactory = loggerFactory;
-    }
+    private readonly ILoggerFactory _loggerFactory = loggerFactory;
 
     public Capture Create(string address)
     {
