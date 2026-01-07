@@ -42,16 +42,16 @@ public sealed class LibV4L2Capture(string source, ILogger<LibV4L2Capture> logger
 
     private void DecodeMJPEG(byte[] frame)
     {
-        Mat mat = Cv2.ImDecode(frame, ImreadModes.Grayscale);
+        var mat = Cv2.ImDecode(frame, ImreadModes.Grayscale);
         SetRawMat(mat);
     }
 
     private void DecodeYUYV(byte[] frame, uint width, uint height)
     {
-        Mat yuyvMat = new Mat((int)height, (int)width, MatType.CV_8UC2);
+        var yuyvMat = new Mat((int)height, (int)width, MatType.CV_8UC2);
         Marshal.Copy(frame, 0, yuyvMat.Data, frame.Length);
 
-        Mat grayMat = new Mat();
+        var grayMat = new Mat();
         Cv2.CvtColor(yuyvMat, grayMat, ColorConversionCodes.YUV2GRAY_YUY2);
         SetRawMat(grayMat);
     }

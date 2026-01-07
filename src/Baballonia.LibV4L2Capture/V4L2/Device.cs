@@ -8,7 +8,7 @@ public class Device : IDisposable {
     {
         StopCapture();
 
-        for (int i = 0; i < _bufferStarts.Length; i++)
+        for (var i = 0; i < _bufferStarts.Length; i++)
         {
             if (_bufferStarts[i] != IntPtr.Zero && _bufferLengths[i] > 0)
                 NativeMethods.munmap(_bufferStarts[i], _bufferLengths[i]);
@@ -47,14 +47,14 @@ public class Device : IDisposable {
 
     public static Device? Connect(string address)
     {
-        Device device = new Device
+        var device = new Device
         {
             Address = address
         };
 
         if (!device.AttemptOpen())
             return null;
-        Data.v4l2_capability caps = device.GetCapabilities();
+        var caps = device.GetCapabilities();
 
         if (!caps.HasFlag(V4L2Capabilities.VIDEO_CAPTURE)) throw new Exception("Device cannot capture video");
 
@@ -66,8 +66,8 @@ public class Device : IDisposable {
 
         formats.Sort((a, b) =>
         {
-            int indexA = Array.IndexOf(SupportedFormats, a.pixelformat);
-            int indexB = Array.IndexOf(SupportedFormats, b.pixelformat);
+            var indexA = Array.IndexOf(SupportedFormats, a.pixelformat);
+            var indexB = Array.IndexOf(SupportedFormats, b.pixelformat);
             return indexA.CompareTo(indexB);
         });
 
@@ -97,7 +97,7 @@ public class Device : IDisposable {
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-                uint resolution = size.discrete.width * size.discrete.height;
+                var resolution = size.discrete.width * size.discrete.height;
 
                 if (fps > maxFps || (Math.Abs(fps - maxFps) < 0.001 && resolution > maxResolution))
                 {
@@ -116,7 +116,7 @@ public class Device : IDisposable {
     public Data.v4l2_capability GetCapabilities()
     {
         Data.v4l2_capability cap = default;
-        int ret = NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_QUERYCAP, ref cap);
+        var ret = NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_QUERYCAP, ref cap);
 
         if (ret < 0) throw new Exception($"VIDIOC_QUERYCAP failed: errno={Marshal.GetLastWin32Error()}");
         return cap;
@@ -124,9 +124,9 @@ public class Device : IDisposable {
 
     public List<Data.v4l2_fmtdesc> GetFormats()
     {
-        List<Data.v4l2_fmtdesc> formats = new List<Data.v4l2_fmtdesc>();
+        var formats = new List<Data.v4l2_fmtdesc>();
         uint index = 0;
-        v4l2_buf_type type = v4l2_buf_type.V4L2_BUF_TYPE_VIDEO_CAPTURE;
+        var type = v4l2_buf_type.V4L2_BUF_TYPE_VIDEO_CAPTURE;
 
         while (true)
         {
@@ -137,7 +137,7 @@ public class Device : IDisposable {
             fmt.flags = 0;
             fmt.pixelformat = 0;
 
-            int ret = NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_ENUM_FMT, ref fmt);
+            var ret = NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_ENUM_FMT, ref fmt);
             if (ret < 0) break; // no more formats
 
             formats.Add(fmt);
@@ -152,7 +152,7 @@ public class Device : IDisposable {
         Data.v4l2_format fmt = default;
         fmt.type = v4l2_buf_type.V4L2_BUF_TYPE_VIDEO_CAPTURE;
 
-        int ret = NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_G_FMT, ref fmt);
+        var ret = NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_G_FMT, ref fmt);
         if (ret < 0) throw new Exception($"VIDIOC_G_FMT failed: errno={Marshal.GetLastWin32Error()}");
 
         return fmt;
@@ -166,7 +166,7 @@ public class Device : IDisposable {
         fmt.pix.height = format.height;
         fmt.pix.pixelformat = format.pixel_format;
 
-        int ret = NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_S_FMT, ref fmt);
+        var ret = NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_S_FMT, ref fmt);
         if (ret < 0) throw new Exception($"VIDIOC_S_FMT failed: errno={Marshal.GetLastWin32Error()}");
 
         CurrentFormat = fmt;
@@ -174,7 +174,7 @@ public class Device : IDisposable {
 
     public List<Data.v4l2_frmsizeenum> EnumerateFrameSizes(v4l2_pix_fmt pixelformat)
     {
-        List<Data.v4l2_frmsizeenum> sizes = new List<Data.v4l2_frmsizeenum>();
+        var sizes = new List<Data.v4l2_frmsizeenum>();
         uint index = 0;
 
         while (true)
@@ -183,7 +183,7 @@ public class Device : IDisposable {
             fsize.index = index;
             fsize.pixel_format = pixelformat;
 
-            int ret = NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_ENUM_FRAMESIZES, ref fsize);
+            var ret = NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_ENUM_FRAMESIZES, ref fsize);
 
             if (ret < 0) break;
             sizes.Add(fsize);
@@ -195,7 +195,7 @@ public class Device : IDisposable {
 
     public List<Data.v4l2_frmivalenum> EnumerateFrameIntervals(v4l2_pix_fmt pixelformat, uint width, uint height)
     {
-        List<Data.v4l2_frmivalenum> intervals = new List<Data.v4l2_frmivalenum>();
+        var intervals = new List<Data.v4l2_frmivalenum>();
         uint index = 0;
 
         while (true)
@@ -206,7 +206,7 @@ public class Device : IDisposable {
             fival.width = width;
             fival.height = height;
 
-            int ret = NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_ENUM_FRAMEINTERVALS, ref fival);
+            var ret = NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_ENUM_FRAMEINTERVALS, ref fival);
 
             if (ret < 0) break;
             intervals.Add(fival);
@@ -223,7 +223,7 @@ public class Device : IDisposable {
         req.type = v4l2_buf_type.V4L2_BUF_TYPE_VIDEO_CAPTURE;
         req.memory = v4l2_memory.V4L2_MEMORY_MMAP;
 
-        int ret = NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_REQBUFS, ref req);
+        var ret = NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_REQBUFS, ref req);
         if (ret < 0) throw new Exception($"VIDIOC_REQBUFS failed: errno={Marshal.GetLastWin32Error()}");
 
         return req;
@@ -244,7 +244,7 @@ public class Device : IDisposable {
             buf.memory = v4l2_memory.V4L2_MEMORY_MMAP;
             buf.index = i;
 
-            int ret = NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_QUERYBUF, ref buf);
+            var ret = NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_QUERYBUF, ref buf);
             if (ret < 0) throw new Exception($"VIDIOC_QUERYBUF failed: errno={Marshal.GetLastWin32Error()}");
 
             _bufferLengths[i] = buf.length;
@@ -267,15 +267,15 @@ public class Device : IDisposable {
             buf.memory = v4l2_memory.V4L2_MEMORY_MMAP;
             buf.index = i;
 
-            int ret = NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_QBUF, ref buf);
+            var ret = NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_QBUF, ref buf);
             if (ret < 0) throw new Exception($"VIDIOC_QBUF failed: errno={Marshal.GetLastWin32Error()}");
         }
     }
 
     public void StartStreaming()
     {
-        v4l2_buf_type type = v4l2_buf_type.V4L2_BUF_TYPE_VIDEO_CAPTURE;
-        int ret = NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_STREAMON, ref type);
+        var type = v4l2_buf_type.V4L2_BUF_TYPE_VIDEO_CAPTURE;
+        var ret = NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_STREAMON, ref type);
         if (ret < 0) throw new Exception($"VIDIOC_STREAMON failed: errno={Marshal.GetLastWin32Error()}");
     }
 
@@ -290,11 +290,11 @@ public class Device : IDisposable {
             }
         ];
 
-        int ret = NativeMethods.poll(fds, 1, timeoutMs);
+        var ret = NativeMethods.poll(fds, 1, timeoutMs);
         if (ret < 0)
             throw new Exception($"poll failed: errno={Marshal.GetLastWin32Error()}");
 
-        short revents = fds[0].revents;
+        var revents = fds[0].revents;
 
         if ((revents & Data.POLLERR) != 0 || (revents & Data.POLLHUP) != 0)
             throw new Exception("Device disconnected or error on file descriptor");
@@ -311,7 +311,7 @@ public class Device : IDisposable {
         buf.type = v4l2_buf_type.V4L2_BUF_TYPE_VIDEO_CAPTURE;
         buf.memory = v4l2_memory.V4L2_MEMORY_MMAP;
 
-        int ret = NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_DQBUF, ref buf);
+        var ret = NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_DQBUF, ref buf);
         if (ret != 0)
             throw new Exception($"VIDIOC_DQBUF failed: errno={Marshal.GetLastWin32Error()}");
 
@@ -325,8 +325,8 @@ public class Device : IDisposable {
 
     public void StopStreaming()
     {
-        v4l2_buf_type type = v4l2_buf_type.V4L2_BUF_TYPE_VIDEO_CAPTURE;
-        int ret = NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_STREAMOFF, ref type);
+        var type = v4l2_buf_type.V4L2_BUF_TYPE_VIDEO_CAPTURE;
+        var ret = NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_STREAMOFF, ref type);
         //if (ret < 0) throw new Exception($"VIDIOC_STREAMOFF failed: errno={Marshal.GetLastWin32Error()}");
     }
 
