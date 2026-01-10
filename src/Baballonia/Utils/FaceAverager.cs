@@ -82,7 +82,7 @@ public static class FaceAverager
         {
             // Get the index of each expression
             faceNameIndexMap.TryGetValue(leftKey, out int leftIndex);
-            faceNameIndexMap.TryGetValue(rightKey, out var rightIndex);
+            faceNameIndexMap.TryGetValue(rightKey, out int rightIndex);
 
             float left = expressionsWeights[leftIndex];
             float right = expressionsWeights[rightIndex];
