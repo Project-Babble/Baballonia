@@ -733,4 +733,22 @@
   <data name="Settings_SteamVR_Auto_Start_Description" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
+  <data name="Settings_Advanced_Header" xml:space="preserve">
+    <value>Active les paramètres avancés</value>
+  </data>
+  <data name="Settings_Advanced_Description" xml:space="preserve">
+    <value>Paramètres avancés</value>
+  </data>
+  <data name="Settings_FaceAverage_Header" xml:space="preserve">
+    <value>Moyenne des expressions de la bouche (gauche/droite)</value>
+  </data>
+  <data name="Settings_FaceAverage_Description" xml:space="preserve">
+    <value>Moyenne les poids des expressions faciales gauche et droite afin d’améliorer la stabilité du suivi, au détriment de la fidélité.</value>
+  </data>
+  <data name="Settings_FaceAverage_Enabled_Label" xml:space="preserve">
+    <value>Activé</value>
+  </data>
+  <data name="Settings_FaceAverage_Enabled_Description" xml:space="preserve">
+    <value>Active le moyennage des expressions de la bouche gauche et droite.</value>
+  </data>
 </root>

@@ -343,6 +343,206 @@
           IconPath="EyeTrackingRegular"
           SettingToggled="{Binding StabilizeEyes, Mode=TwoWay}" />
 
+      <Expander
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        HorizontalContentAlignment="Stretch"
+        IsExpanded="{Binding IsExpandedByDefault, RelativeSource={RelativeSource AncestorType=controls:SettingsExpander}}">
+        <Expander.Header>
+          <Grid ColumnDefinitions="Auto,Auto,*">
+            <PathIcon
+                Grid.Column="0"
+                Width="32"
+                Margin="10,10,20,10"
+                VerticalAlignment="Center"
+                Data="{StaticResource DataFunnelRegular}" />
+            <StackPanel
+                Grid.Column="1"
+                Margin="0,10,0,10"
+                HorizontalAlignment="Stretch">
+              <TextBlock
+                  Margin="5"
+                  FontSize="16"
+                  FontWeight="SemiBold"
+                  Text="{x:Static assets:Resources.Settings_FaceAverage_Header}" />
+              <TextBlock
+                  Margin="5"
+                  FontSize="14"
+                  Foreground="{DynamicResource SystemChromeGrayColor}"
+                  Text="{x:Static assets:Resources.Settings_FaceAverage_Description}" />
+            </StackPanel>
+          </Grid>
+        </Expander.Header>
+        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+          <StackPanel
+              Grid.Row="0"
+              Grid.Column="0"
+              Margin="0,8">
+            <TextBlock FontWeight="Bold" Text="{x:Static assets:Resources.Settings_FaceAverage_Enabled_Label}" />
+            <TextBlock Text="{x:Static assets:Resources.Settings_FaceAverage_Enabled_Description}" />
+          </StackPanel>
+          <CheckBox
+              Grid.Row="0"
+              Grid.Column="2"
+              Margin="0,8"
+              IsChecked="{Binding AverageMouthEnabled, Mode=TwoWay}" />
+
+          <StackPanel
+              Grid.Row="2"
+              Grid.Column="0"
+              Margin="0,8">
+            <TextBlock FontWeight="Bold" Text="AverageSmileAmount" />
+          </StackPanel>
+          <StackPanel
+              Grid.Row="2"
+              Grid.Column="2"
+              Orientation="Horizontal"
+              Spacing="8">
+
+            <NumericUpDown
+                x:Name="AverageSmileAmount"
+                Margin="0,8"
+                FormatString="F1"
+                Increment="0.1"
+                Maximum="1"
+                Minimum="0"
+                Value="{Binding AverageSmileAmount, Mode=TwoWay}" />
+          </StackPanel>
+
+          <StackPanel
+              Grid.Row="3"
+              Grid.Column="0"
+              Margin="0,8">
+            <TextBlock FontWeight="Bold" Text="AverageFrownAmount" />
+          </StackPanel>
+          <StackPanel
+              Grid.Row="3"
+              Grid.Column="2"
+              Orientation="Horizontal"
+              Spacing="8">
+
+            <NumericUpDown
+                x:Name="AverageFrownAmount"
+                Margin="0,8"
+                FormatString="F1"
+                Increment="0.1"
+                Maximum="1"
+                Minimum="0"
+                Value="{Binding AverageFrownAmount, Mode=TwoWay}" />
+          </StackPanel>
+
+          <StackPanel
+              Grid.Row="4"
+              Grid.Column="0"
+              Margin="0,8">
+            <TextBlock FontWeight="Bold" Text="AverageDimpleAmount" />
+          </StackPanel>
+          <StackPanel
+              Grid.Row="4"
+              Grid.Column="2"
+              Orientation="Horizontal"
+              Spacing="8">
+
+            <NumericUpDown
+                x:Name="AverageDimpleAmount"
+                Margin="0,8"
+                FormatString="F1"
+                Increment="0.1"
+                Maximum="1"
+                Minimum="0"
+                Value="{Binding AverageDimpleAmount, Mode=TwoWay}" />
+          </StackPanel>
+
+          <StackPanel
+              Grid.Row="5"
+              Grid.Column="0"
+              Margin="0,8">
+            <TextBlock FontWeight="Bold" Text="AverageUpperUpAmount" />
+          </StackPanel>
+          <StackPanel
+            Grid.Row="5"
+            Grid.Column="2"
+            Orientation="Horizontal"
+            Spacing="8">
+
+            <NumericUpDown
+                x:Name="AverageUpperUpAmount"
+                Margin="0,8"
+                FormatString="F1"
+                Increment="0.1"
+                Maximum="1"
+                Minimum="0"
+                Value="{Binding AverageUpperUpAmount, Mode=TwoWay}" />
+          </StackPanel>
+
+          <StackPanel
+              Grid.Row="6"
+              Grid.Column="0"
+              Margin="0,8">
+            <TextBlock FontWeight="Bold" Text="LowerDownAmount" />
+          </StackPanel>
+          <StackPanel
+            Grid.Row="6"
+            Grid.Column="2"
+            Orientation="Horizontal"
+            Spacing="8">
+
+            <NumericUpDown
+                x:Name="AverageLowerDownAmount"
+                Margin="0,8"
+                FormatString="F1"
+                Increment="0.1"
+                Maximum="1"
+                Minimum="0"
+                Value="{Binding AverageLowerDownAmount, Mode=TwoWay}" />
+          </StackPanel>
+
+          <StackPanel
+              Grid.Row="7"
+              Grid.Column="0"
+              Margin="0,8">
+            <TextBlock FontWeight="Bold" Text="AveragePressAmount" />
+          </StackPanel>
+          <StackPanel
+            Grid.Row="7"
+            Grid.Column="2"
+            Orientation="Horizontal"
+            Spacing="8">
+
+            <NumericUpDown
+                x:Name="AveragePressAmount"
+                Margin="0,8"
+                FormatString="F1"
+                Increment="0.1"
+                Maximum="1"
+                Minimum="0"
+                Value="{Binding AveragePressAmount, Mode=TwoWay}" />
+          </StackPanel>
+
+          <StackPanel
+              Grid.Row="8"
+              Grid.Column="0"
+              Margin="0,8">
+            <TextBlock FontWeight="Bold" Text="AverageStretchAmount" />
+          </StackPanel>
+          <StackPanel
+            Grid.Row="8"
+            Grid.Column="2"
+            Orientation="Horizontal"
+            Spacing="8">
+
+            <NumericUpDown
+                x:Name="AverageStretchAmount"
+                Margin="0,8"
+                FormatString="F1"
+                Increment="0.1"
+                Maximum="1"
+                Minimum="0"
+                Value="{Binding AverageStretchAmount, Mode=TwoWay}" />
+          </StackPanel>
+        </Grid>
+      </Expander>
+
       <controls:SettingsBlock
         Title="{x:Static assets:Resources.Settings_LogLevel_Header}"
         Description="{x:Static assets:Resources.Settings_LogLevel_Description}"

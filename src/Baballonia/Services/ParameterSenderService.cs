@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Baballonia.Contracts;
 using Baballonia.Helpers;
-using Baballonia.Services.Inference;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OscCore;
@@ -186,17 +185,30 @@ public class ParameterSenderService : BackgroundService
         if (expressions == null) return;
         if (expressions.Length == 0) return;
 
-        for (int i = 0; i < Math.Min(expressions.Length, FaceExpressionMap.Count); i++)
+        // Min/max calibration
+        int expressionsCount = Math.Min(expressions.Length, FaceExpressionMap.Count);
+        var calibratedExpressions = new float[expressionsCount];
+        for (int i = 0; i < expressionsCount; i++)
         {
             var weight = expressions[i];
             var faceElement = FaceExpressionMap.ElementAt(i);
             var settings = _calibrationService.GetExpressionSettings(faceElement.Key);
 
-            var msg = new OscMessage(_prefix + faceElement.Value,
-                Math.Clamp(
-                    weight.Remap(settings.Lower, settings.Upper, settings.Min, settings.Max),
-                    settings.Min,
-                    settings.Max));
+            calibratedExpressions[i] = Math.Clamp(
+                weight.Remap(settings.Lower, settings.Upper, settings.Min, settings.Max),
+                settings.Min,
+                settings.Max
+            );
+        }
+
+        // Apply left/right face averaging from the min/max calibrated expressions
+        FaceAverager.ApplyAveraging(ref calibratedExpressions, _localSettingsService);
+
+        // Send the filtered and averaged values via OSC
+        for (int i = 0; i < expressionsCount; i++)
+        {
+            var faceElement = FaceExpressionMap.ElementAt(i);
+            var msg = new OscMessage(_prefix + faceElement.Value, calibratedExpressions[i]);
             _sendQueue.Enqueue(msg);
         }
     }

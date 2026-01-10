@@ -77,6 +77,38 @@ public partial class AppSettingsViewModel : ViewModelBase
     [property: SavedSetting("AppSettings_StabilizeEyes", true)]
     private bool _stabilizeEyes;
 
+    [ObservableProperty]
+    [property: SavedSetting("AppSettings_AverageMouthEnabled", false)]
+    private bool _averageMouthEnabled;
+
+    [ObservableProperty]
+    [property: SavedSetting("AppSettings_AverageSmileAmount", 0.4f)]
+    private float _averageSmileAmount;
+
+    [ObservableProperty]
+    [property: SavedSetting("AppSettings_AverageFrownAmount", 0.4f)]
+    private float _averageFrownAmount;
+
+    [ObservableProperty]
+    [property: SavedSetting("AppSettings_AverageDimpleAmount", 0.4f)]
+    private float _averageDimpleAmount;
+
+    [ObservableProperty]
+    [property: SavedSetting("AppSettings_AverageUpperUpAmount", 0.6f)]
+    private float _averageUpperUpAmount;
+
+    [ObservableProperty]
+    [property: SavedSetting("AppSettings_AverageLowerDownAmount", 0.6f)]
+    private float _averageLowerDownAmount;
+
+    [ObservableProperty]
+    [property: SavedSetting("AppSettings_AveragePressAmount", 0.4f)]
+    private float _averagePressAmount;
+
+    [ObservableProperty]
+    [property: SavedSetting("AppSettings_AverageStretchAmount", 0.4f)]
+    private float _averageStretchAmount;
+
     public List<string> LowestLogLevel { get; } =
     [
         "Debug",

@@ -790,7 +790,7 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adjust the brightness of the image.
+        ///   Looks up a localized string similar to Adjust the brightness.
         /// </summary>
         public static string Home_Cameras_Brightness_Description {
             get {
@@ -1267,6 +1267,42 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Averages left and right facial expression weights to improve tracking stability at the expense of fidelity..
+        /// </summary>
+        public static string Settings_FaceAverage_Description {
+            get {
+                return ResourceManager.GetString("Settings_FaceAverage_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable the averaging of the left and right mouth expressions..
+        /// </summary>
+        public static string Settings_FaceAverage_Enabled_Description {
+            get {
+                return ResourceManager.GetString("Settings_FaceAverage_Enabled_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enabled.
+        /// </summary>
+        public static string Settings_FaceAverage_Enabled_Label {
+            get {
+                return ResourceManager.GetString("Settings_FaceAverage_Enabled_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Left and Right Mouth Expressions Averaging.
+        /// </summary>
+        public static string Settings_FaceAverage_Header {
+            get {
+                return ResourceManager.GetString("Settings_FaceAverage_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter Settings.
         /// </summary>
         public static string Settings_Filter_Description {
@@ -1609,7 +1645,7 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Korean.
+        ///   Looks up a localized string similar to 한국어.
         /// </summary>
         public static string Settings_Language_Korean {
             get {
