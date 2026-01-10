@@ -391,7 +391,7 @@
               Grid.Row="2"
               Grid.Column="0"
               Margin="0,8">
-            <TextBlock FontWeight="Bold" Text="AverageSmileAmount" />
+            <TextBlock FontWeight="Bold" Text="MouthSmile" />
           </StackPanel>
           <StackPanel
               Grid.Row="2"
@@ -400,7 +400,7 @@
               Spacing="8">
 
             <NumericUpDown
-                x:Name="AverageSmileAmount"
+                x:Name="MouthSmile"
                 Margin="0,8"
                 FormatString="F1"
                 Increment="0.1"
@@ -413,7 +413,7 @@
               Grid.Row="3"
               Grid.Column="0"
               Margin="0,8">
-            <TextBlock FontWeight="Bold" Text="AverageFrownAmount" />
+            <TextBlock FontWeight="Bold" Text="MouthFrown" />
           </StackPanel>
           <StackPanel
               Grid.Row="3"
@@ -422,7 +422,7 @@
               Spacing="8">
 
             <NumericUpDown
-                x:Name="AverageFrownAmount"
+                x:Name="MouthFrown"
                 Margin="0,8"
                 FormatString="F1"
                 Increment="0.1"
@@ -435,7 +435,7 @@
               Grid.Row="4"
               Grid.Column="0"
               Margin="0,8">
-            <TextBlock FontWeight="Bold" Text="AverageDimpleAmount" />
+            <TextBlock FontWeight="Bold" Text="MouthDimple" />
           </StackPanel>
           <StackPanel
               Grid.Row="4"
@@ -444,7 +444,7 @@
               Spacing="8">
 
             <NumericUpDown
-                x:Name="AverageDimpleAmount"
+                x:Name="MouthDimple"
                 Margin="0,8"
                 FormatString="F1"
                 Increment="0.1"
@@ -457,7 +457,7 @@
               Grid.Row="5"
               Grid.Column="0"
               Margin="0,8">
-            <TextBlock FontWeight="Bold" Text="AverageUpperUpAmount" />
+            <TextBlock FontWeight="Bold" Text="MouthUpperUp" />
           </StackPanel>
           <StackPanel
             Grid.Row="5"
@@ -466,7 +466,7 @@
             Spacing="8">
 
             <NumericUpDown
-                x:Name="AverageUpperUpAmount"
+                x:Name="MouthUpperUp"
                 Margin="0,8"
                 FormatString="F1"
                 Increment="0.1"
@@ -479,7 +479,7 @@
               Grid.Row="6"
               Grid.Column="0"
               Margin="0,8">
-            <TextBlock FontWeight="Bold" Text="LowerDownAmount" />
+            <TextBlock FontWeight="Bold" Text="MouthLowerDown" />
           </StackPanel>
           <StackPanel
             Grid.Row="6"
@@ -488,7 +488,7 @@
             Spacing="8">
 
             <NumericUpDown
-                x:Name="AverageLowerDownAmount"
+                x:Name="MouthLowerDown"
                 Margin="0,8"
                 FormatString="F1"
                 Increment="0.1"
@@ -501,7 +501,7 @@
               Grid.Row="7"
               Grid.Column="0"
               Margin="0,8">
-            <TextBlock FontWeight="Bold" Text="AveragePressAmount" />
+            <TextBlock FontWeight="Bold" Text="MouthPress" />
           </StackPanel>
           <StackPanel
             Grid.Row="7"
@@ -510,7 +510,7 @@
             Spacing="8">
 
             <NumericUpDown
-                x:Name="AveragePressAmount"
+                x:Name="MouthPress"
                 Margin="0,8"
                 FormatString="F1"
                 Increment="0.1"
@@ -523,7 +523,7 @@
               Grid.Row="8"
               Grid.Column="0"
               Margin="0,8">
-            <TextBlock FontWeight="Bold" Text="AverageStretchAmount" />
+            <TextBlock FontWeight="Bold" Text="MouthStretch" />
           </StackPanel>
           <StackPanel
             Grid.Row="8"
@@ -532,7 +532,7 @@
             Spacing="8">
 
             <NumericUpDown
-                x:Name="AverageStretchAmount"
+                x:Name="MouthStretch"
                 Margin="0,8"
                 FormatString="F1"
                 Increment="0.1"
