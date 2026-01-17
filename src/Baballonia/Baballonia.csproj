@@ -29,10 +29,13 @@
         <None Update="LocalSettings.json">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Firmware\Binaries\babble_multimodal_firmware_1.0.0.bin">
+        <None Update="Firmware\Binaries\babblefw_1.0.0.bin">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Firmware\Binaries\babble_expremental_mutimodal_firmware_1.1.0.bin">
+        <None Update="Firmware\Binaries\babblefw_1.1.0.bin">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Firmware\Binaries\babblefw_1.2.0.bin">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>

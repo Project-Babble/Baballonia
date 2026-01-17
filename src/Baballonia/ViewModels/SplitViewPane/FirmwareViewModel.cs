@@ -92,7 +92,7 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
         AvailableFirmwareTypes.Clear();
         var binaries = Directory.
             GetFiles(_bundledFirmwarePath, "*.bin").
-            OrderByDescending(x => x.Length);
+            OrderByDescending(x => x); // descending version number
         foreach (var bin in binaries)
         {
             AvailableFirmwareTypes.Add(Path.GetFileName(bin));
