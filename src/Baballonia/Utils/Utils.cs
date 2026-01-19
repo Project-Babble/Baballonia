@@ -7,7 +7,6 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
 using System.Security.Principal;
-using Avalonia.Logging;
 
 namespace Baballonia;
 
@@ -32,41 +31,27 @@ public static class Utils
     [DllImport("winmm.dll", EntryPoint = "timeEndPeriod", SetLastError = true)]
     public static extern uint TimeEndPeriod(uint uMilliseconds);
 
-    // Proc memory read helpers
-    public const int ProcessVmRead = 0x0010;
-
-    [DllImport("kernel32.dll")]
-    public static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
-
-    [DllImport("kernel32.dll")]
-    public static extern bool ReadProcessMemory(int hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int dwSize, ref int lpNumberOfBytesRead);
-
-    [DllImport("kernel32.dll", SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    public static extern bool DeleteFile(string lpFileName);
-
-    [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-    public static extern uint GetFileAttributes(string lpFileName);
-
     public static readonly bool HasAdmin = OperatingSystem.IsWindows() && new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
 
-    public static readonly string UserAccessibleDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ProjectBabble");
+    public static readonly string UserAccessibleDataDirectory = IsSupportedDesktopOS
+        ? @$"{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ProjectBabble")}"
+        : AppContext.BaseDirectory;
 
     public static readonly string PersistentDataDirectory = IsSupportedDesktopOS
-        ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ProjectBabble")
+        ? @$"{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ProjectBabble")}"
         : AppContext.BaseDirectory;
 
     public static readonly string ModelsDirectory = IsSupportedDesktopOS
-        ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ProjectBabble", "Models")
+        ? @$"{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ProjectBabble", "Models")}"
         : AppContext.BaseDirectory;
 
     public static readonly string ModelDataDirectory = IsSupportedDesktopOS
-        ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ProjectBabble", "ModelData")
+        ? @$"{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ProjectBabble", "ModelData")}"
         : AppContext.BaseDirectory;
 
-    public static readonly string VrcftLibsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-        "VRCFaceTracking",
-        "CustomLibs");
+    public static readonly string VrcftLibsDirectory = IsSupportedDesktopOS
+        ? @$"{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VRCFaceTracking", "CustomLibs")}"
+        : AppContext.BaseDirectory;
 
     public static void ExtractEmbeddedResource(Assembly assembly, string resourceName, string file, bool overwrite = false)
     {
