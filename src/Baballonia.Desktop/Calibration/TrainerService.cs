@@ -107,7 +107,7 @@ public partial class TrainerService : ITrainerService
             if (trainerProcess != null)
                 throw new Exception("Training process already running");
 
-            var launchArgs = $"{usercalbinPath} {outputfilePath}";
+            var launchArgs = $"{usercalbinPath} \"{outputfilePath}\"";
             var startInfo = new ProcessStartInfo
             {
                 FileName = trainerPath,
