@@ -35,8 +35,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - { result: Baballonia.x64.tar.gz, runs-on: ubuntu-22.04, upload-path: src/Baballonia.Desktop/bin/Baballonia.x64.tar.gz, arch: linux-x64 }
-          - { result: Baballonia.arm64.tar.gz, runs-on: ubuntu-22.04-arm, upload-path: src/Baballonia.Desktop/bin/Baballonia.arm64.tar.gz, arch: linux-arm64  }
+          - { result: Baballonia.x64.tar.xz, runs-on: ubuntu-22.04, upload-path: src/Baballonia.Desktop/bin/Baballonia.x64.tar.xz, arch: linux-x64 }
+          - { result: Baballonia.arm64.tar.xz, runs-on: ubuntu-22.04-arm, upload-path: src/Baballonia.Desktop/bin/Baballonia.arm64.tar.xz, arch: linux-arm64  }
 
     runs-on: ${{ matrix.runs-on }}
 
@@ -58,7 +58,7 @@ jobs:
           cd src/Baballonia.Desktop
           dotnet publish -r ${{ matrix.arch }} -c Release --self-contained -f net8.0
           cd "bin/Release/net8.0/${{ matrix.arch }}/publish"
-          tar -czf ./../../../../${{ matrix.result }} *
+          tar -cJf ./../../../../${{ matrix.result }} *
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -89,7 +89,7 @@ jobs:
           cd src/Baballonia.Desktop
           dotnet publish -r win-x64 -c Release --self-contained -f net8.0
           cd "bin/Release/net8.0/win-x64/publish"
-          tar -czf ./../../../../Baballonia.win.tar.gz *
+          tar -cJf ./../../../../Baballonia.win.tar.xz *
 
       - name: Run makensis
         run: |
@@ -105,8 +105,8 @@ jobs:
       - name: Upload tarball artifact
         uses: actions/upload-artifact@v4
         with:
-          name: "Baballonia.win.tar.gz"
-          path: "src/Baballonia.Desktop/bin/Baballonia.win.tar.gz"
+          name: "Baballonia.win.tar.xz"
+          path: "src/Baballonia.Desktop/bin/Baballonia.win.tar.xz"
 
   publish-release:
     needs: [build-linux, build-windows-x64]
@@ -135,13 +135,13 @@ jobs:
       - name: Download Linux artifact
         uses: actions/download-artifact@v4
         with:
-          name: Baballonia.x64.tar.gz
+          name: Baballonia.x64.tar.xz
           path: ./artifacts
 
       - name: Download Linux ARM artifact
         uses: actions/download-artifact@v4
         with:
-          name: Baballonia.arm64.tar.gz
+          name: Baballonia.arm64.tar.xz
           path: ./artifacts
 
       - name: Rename artifacts
@@ -150,8 +150,8 @@ jobs:
         run: |
           cd artifacts
           mv "Baballonia Setup.exe" "Baballonia.Setup.${VERSION}.exe"
-          mv "Baballonia.x64.tar.gz" "Baballonia.x64.${VERSION}.tar.gz"
-          mv "Baballonia.arm64.tar.gz" "Baballonia.arm64.${VERSION}.tar.gz"
+          mv "Baballonia.x64.tar.xz" "Baballonia.x64.${VERSION}.tar.xz"
+          mv "Baballonia.arm64.tar.xz" "Baballonia.arm64.${VERSION}.tar.xz"
 
       - name: Set dynamic release name
         id: release-name
@@ -180,8 +180,8 @@ jobs:
         with:
           files: |
             artifacts/Baballonia.Setup.${{ github.event.inputs.version-number }}.exe
-            artifacts/Baballonia.x64.${{ github.event.inputs.version-number }}.tar.gz
-            artifacts/Baballonia.arm64.${{ github.event.inputs.version-number }}.tar.gz
+            artifacts/Baballonia.x64.${{ github.event.inputs.version-number }}.tar.xz
+            artifacts/Baballonia.arm64.${{ github.event.inputs.version-number }}.tar.xz
           tag_name: ${{ github.event.inputs.version-number }}
           name: ${{ steps.release-name.outputs.name }}
           prerelease: ${{ github.event.inputs.publish-pre-release }}
@@ -207,27 +207,27 @@ jobs:
       - name: Download Windows artifact
         uses: actions/download-artifact@v4
         with:
-          name: Baballonia.win.tar.gz
+          name: Baballonia.win.tar.xz
           path: ./artifacts
 
       - name: Download Linux artifact
         uses: actions/download-artifact@v4
         with:
-          name: Baballonia.x64.tar.gz
+          name: Baballonia.x64.tar.xz
           path: ./artifacts
 
       #- name: Download Linux ARM artifact
       #  uses: actions/download-artifact@v4
       #  with:
-      #    name: Baballonia.arm64.tar.gz
+      #    name: Baballonia.arm64.tar.xz
       #    path: ./artifacts
 
       - name: Untar artifacts
         run: |
           mkdir -p ./builds/windows
           mkdir -p ./builds/linux-x64
-          tar -xf ./artifacts/Baballonia.win.tar.gz --directory ./builds/windows
-          tar -xf ./artifacts/Baballonia.x64.tar.gz --directory ./builds/linux-x64
+          tar -xf ./artifacts/Baballonia.win.tar.xz --directory ./builds/windows
+          tar -xf ./artifacts/Baballonia.x64.tar.xz --directory ./builds/linux-x64
 
       - name: Upload to Steam
         uses: game-ci/steam-deploy@v3

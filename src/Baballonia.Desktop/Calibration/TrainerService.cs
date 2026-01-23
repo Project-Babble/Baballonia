@@ -115,6 +115,8 @@ public partial class TrainerService : ITrainerService
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 WorkingDirectory = basePath,
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
             };
 
             trainerProcess = new Process

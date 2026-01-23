@@ -15,16 +15,15 @@ namespace Baballonia.ViewModels.SplitViewPane;
 
 public partial class VrcViewModel : ViewModelBase
 {
-    private ILocalSettingsService LocalSettingsService { get; }
-
     [ObservableProperty]
-    [SavedSetting("VRC_UseNativeTracking", false)]
+    [property: SavedSetting("VRC_UseNativeTracking", false)]
     private bool _useNativeVrcEyeTracking;
 
     [ObservableProperty]
     private string? _selectedModuleMode = "Face";
 
-    [ObservableProperty] private bool _vrcftDetected;
+    [ObservableProperty]
+    private bool _vrcftDetected;
 
     public ObservableCollection<string> ModuleModeOptions { get; set; } = ["Both", "Face", "Eyes", "Disabled"];
 
@@ -44,6 +43,12 @@ public partial class VrcViewModel : ViewModelBase
             if (Path.GetFileName(moduleFile) != "BabbleConfig.json") continue;
 
             var contents = File.ReadAllText(moduleFile);
+            if (string.IsNullOrEmpty(contents))
+            {
+                // How do we even get here??
+                config = null;
+                return false;
+            }
             var possibleBabbleConfig = JsonSerializer.Deserialize<ModuleConfig>(contents);
             if (possibleBabbleConfig != null) _baballoniaModulePath = moduleFile;
             config = possibleBabbleConfig;
@@ -53,32 +58,23 @@ public partial class VrcViewModel : ViewModelBase
         return false;
     }
 
-    public VrcViewModel()
+    public VrcViewModel(ILocalSettingsService localSettingsService)
     {
-        LocalSettingsService = Ioc.Default.GetRequiredService<ILocalSettingsService>();
-
-        _vrcftDetected = TryGetModuleConfig(out var config);
-        if (_vrcftDetected && config is not null)
+        VrcftDetected = TryGetModuleConfig(out var config);
+        if (VrcftDetected && config is not null)
         {
-            _selectedModuleMode = config.IsEyeSupported switch
+            SelectedModuleMode = config.IsEyeSupported switch
             {
                 true => config.IsFaceSupported ? "Both" : "Eyes",
                 false => config.IsFaceSupported ? "Face" : "Disabled"
             };
         }
 
-        _ = LoadAsync();
-        PropertyChanged += (_, _) => { LocalSettingsService.Save(this); };
-    }
-
-    private async Task LoadAsync()
-    {
-        var useNative = LocalSettingsService.ReadSetting("VRC_UseNativeTracking", false);
-
-        await Dispatcher.UIThread.InvokeAsync(() =>
+        PropertyChanged += (_, p) =>
         {
-            UseNativeVrcEyeTracking = useNative;
-        }, DispatcherPriority.Background);
+            localSettingsService.Save(this);
+        };
+        localSettingsService.Load(this);
     }
 
     private async Task WriteModuleConfig(ModuleConfig config)

@@ -80,6 +80,12 @@ Baballonia supports many kinds of hardware for eye and face tracking:
 - `Baballonia.Android`
 3. Run ``dotnet build`` inside the ``src/Baballonia.Desktop`` directory, or build with your IDE
 
+
+#### Publishing
+
+If you want to publish a standalone installer for Baballonia, download [NSIS](https://github.com/negrutiu/nsis) here, or use your package manager. Then, run the 
+`.iss` script located at `src/Baballonia.Desktop/main.nsi`
+
 ### Baballonia.Android/iOS
 
 1. If you are using an IDE, disable these projects:
