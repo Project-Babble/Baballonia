@@ -465,12 +465,6 @@
   <data name="Settings_Filter_Description" xml:space="preserve">
     <value>Suodattimen Asetukset</value>
   </data>
-  <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
-    <value>Käytössä</value>
-  </data>
-  <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
-    <value>Ota suodatus käyttöön tai pois päältä.</value>
-  </data>
   <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
     <value>Vähimmäistaajuus katto</value>
   </data>

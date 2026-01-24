@@ -465,12 +465,6 @@
   <data name="Settings_Filter_Description" xml:space="preserve">
     <value>Ustawienia filtra</value>
   </data>
-  <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
-    <value>Włączone</value>
-  </data>
-  <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
-    <value>Włącz lub wyłącz filtrowanie.</value>
-  </data>
   <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
     <value>Minimalna częstotliwość odcięcia</value>
   </data>

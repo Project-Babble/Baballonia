@@ -465,12 +465,6 @@
   <data name="Settings_Filter_Description" xml:space="preserve">
     <value>フィルタ設定</value>
   </data>
-  <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
-    <value>有効</value>
-  </data>
-  <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
-    <value>フィルタリングをオンまたはオフにします。</value>
-  </data>
   <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
     <value>最小頻度カットオフ</value>
   </data>

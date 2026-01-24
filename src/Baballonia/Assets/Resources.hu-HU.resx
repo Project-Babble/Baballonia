@@ -465,12 +465,6 @@
   <data name="Settings_Filter_Description" xml:space="preserve">
     <value>Filter Settings</value>
   </data>
-  <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
-    <value>Enabled</value>
-  </data>
-  <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
-    <value>Turn filtering on or off.</value>
-  </data>
   <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
     <value>Minimum frequency cutoff</value>
   </data>

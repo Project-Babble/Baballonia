@@ -465,12 +465,6 @@
   <data name="Settings_Filter_Description" xml:space="preserve">
     <value>إعدادات الفلتر</value>
   </data>
-  <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
-    <value>تمكين</value>
-  </data>
-  <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
-    <value>تشغيل الفلتر أو إيقاف تشغيله.</value>
-  </data>
   <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
     <value>الحد الأدنى من قطع التردد</value>
   </data>

@@ -465,12 +465,6 @@
   <data name="Settings_Filter_Description" xml:space="preserve">
     <value>Ρυθμίσεις Φίλτρου</value>
   </data>
-  <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
-    <value>Ενεργοποιημένο</value>
-  </data>
-  <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
-    <value>Ενεργοποίηση ή απενεργοποίηση φιλτραρίσματος.</value>
-  </data>
   <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
     <value>Περικοπή ελάχιστης συχνότητας</value>
   </data>

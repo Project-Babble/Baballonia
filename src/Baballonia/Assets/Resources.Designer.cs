@@ -790,7 +790,7 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adjust the brightness of the image.
+        ///   Looks up a localized string similar to Adjust the brightness.
         /// </summary>
         public static string Home_Cameras_Brightness_Description {
             get {
@@ -1276,24 +1276,6 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Turn filtering on or off..
-        /// </summary>
-        public static string Settings_Filter_Enabled_Description {
-            get {
-                return ResourceManager.GetString("Settings_Filter_Enabled_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Enabled.
-        /// </summary>
-        public static string Settings_Filter_Enabled_Label {
-            get {
-                return ResourceManager.GetString("Settings_Filter_Enabled_Label", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to One-Euro filter settings.
         /// </summary>
         public static string Settings_Filter_Header {
@@ -1609,7 +1591,7 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Korean.
+        ///   Looks up a localized string similar to 한국어.
         /// </summary>
         public static string Settings_Language_Korean {
             get {
