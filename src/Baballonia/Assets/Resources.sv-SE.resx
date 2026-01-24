@@ -739,10 +739,4 @@
   <data name="Settings_FaceAverage_Description" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
-  <data name="Settings_FaceAverage_Enabled_Label" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="Settings_FaceAverage_Enabled_Description" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
 </root>

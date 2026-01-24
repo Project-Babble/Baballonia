@@ -1276,24 +1276,6 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable the averaging of the left and right mouth expressions..
-        /// </summary>
-        public static string Settings_FaceAverage_Enabled_Description {
-            get {
-                return ResourceManager.GetString("Settings_FaceAverage_Enabled_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Enabled.
-        /// </summary>
-        public static string Settings_FaceAverage_Enabled_Label {
-            get {
-                return ResourceManager.GetString("Settings_FaceAverage_Enabled_Label", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Left and Right Mouth Expressions Averaging.
         /// </summary>
         public static string Settings_FaceAverage_Header {

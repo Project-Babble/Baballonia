@@ -355,7 +355,7 @@
         HorizontalContentAlignment="Stretch"
         IsExpanded="{Binding IsExpandedByDefault, RelativeSource={RelativeSource AncestorType=controls:SettingsExpander}}">
         <Expander.Header>
-          <Grid ColumnDefinitions="Auto,Auto,*">
+          <Grid ColumnDefinitions="Auto,Auto,*,Auto">
             <PathIcon
                 Grid.Column="0"
                 Width="32"
@@ -377,22 +377,12 @@
                   Foreground="{DynamicResource SystemChromeGrayColor}"
                   Text="{x:Static assets:Resources.Settings_FaceAverage_Description}" />
             </StackPanel>
+            <ToggleSwitch
+              Grid.Column="3"
+              IsChecked="{Binding AverageMouthEnabled,  Mode=TwoWay}"/>
           </Grid>
         </Expander.Header>
         <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
-          <StackPanel
-              Grid.Row="0"
-              Grid.Column="0"
-              Margin="0,8">
-            <TextBlock FontWeight="Bold" Text="{x:Static assets:Resources.Settings_FaceAverage_Enabled_Label}" />
-            <TextBlock Text="{x:Static assets:Resources.Settings_FaceAverage_Enabled_Description}" />
-          </StackPanel>
-          <CheckBox
-              Grid.Row="0"
-              Grid.Column="2"
-              Margin="0,8"
-              IsChecked="{Binding AverageMouthEnabled, Mode=TwoWay}" />
-
           <StackPanel
               Grid.Row="2"
               Grid.Column="0"
