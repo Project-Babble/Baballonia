@@ -92,25 +92,10 @@ public sealed class WindowsVftCapture(string source, ILogger logger) : Capture(s
 
     private void SetTrackerState(bool setActive)
     {
-        // Prev: var fd = ViveFacialTracker.open(Url, ViveFacialTracker.FileOpenFlags.O_RDWR);
-        var vftFileStream = File.Open(Source, FileMode.Open, FileAccess.ReadWrite);
-        var fd = vftFileStream.SafeFileHandle.DangerousGetHandle();
-        if (fd == IntPtr.Zero) return;
-
-        try
-        {
-            // Activate the tracker and give it some time to warm up/cool down
-            if (setActive)
-                WindowsUsbCommunicator.activate_tracker((int)fd);
-            else
-                WindowsUsbCommunicator.deactivate_tracker((int)fd);
-            // await Task.Delay(1000);
-        }
-        finally
-        {
-            // Prev: ViveFacialTracker.close((int)fd);
-            vftFileStream.Close();
-        }
+        if (setActive)
+            WindowsUsbCommunicator.activate_tracker(0);
+        else
+            WindowsUsbCommunicator.deactivate_tracker(0);
     }
 
     /// <summary>
