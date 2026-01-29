@@ -1,7 +1,8 @@
 
-using System.Text.RegularExpressions;
+using System.Runtime.InteropServices;
 using Microsoft.Extensions.Logging;
 using OpenCvSharp;
+using Baballonia.VFTCapture.V4L2;
 using Capture = Baballonia.SDK.Capture;
 
 namespace Baballonia.VFTCapture;
@@ -11,8 +12,9 @@ namespace Baballonia.VFTCapture;
 /// </summary>
 public sealed class VftCapture(string source, ILogger logger) : Capture(source, logger)
 {
-    private VideoCapture? _videoCapture;
-    private readonly Mat _originalMat = new();
+    private Device? _device;
+    private CancellationTokenSource? _cts;
+    private Task? _captureTask;
     private bool _loop;
 
     /// <summary>
@@ -27,18 +29,30 @@ public sealed class VftCapture(string source, ILogger logger) : Capture(source, 
         {
             try
             {
-                // Open the VFT device and initialize it.
                 SetTrackerState(setActive: true);
 
-                // Initialize VideoCapture with URL, timeout for robustness
-                // Set capture mode to YUYV
-                // Prevent automatic conversion to RGB
-                _videoCapture = await Task.Run(() => new VideoCapture(Source, VideoCaptureAPIs.V4L2), cts.Token);
-                _videoCapture.Set(VideoCaptureProperties.Mode, 3);
-                _videoCapture.Set(VideoCaptureProperties.ConvertRgb, 0);
+                _device = Device.Connect(Source);
 
+                if (_device == null)
+                {
+                    Logger.LogError("Failed to connect to VFT device via V4L2");
+                    IsReady = false;
+                    return IsReady;
+                }
+
+                // Set capture mode to YUYV if possible
+                // Logger.LogInformation($"Using pixel format: {_device.PixelFormat}");
+                // if (_device.PixelFormat != v4l2_pix_fmt.V4L2_PIX_FMT_YUYV)
+                // {
+                //     Logger.LogWarning($"Device pixel format is {_device.PixelFormat}, expected YUYV");
+                // }
+
+                _device.StartCapture();
                 _loop = true;
-                _ = Task.Run(VideoCapture_UpdateLoop);
+
+                _cts = new CancellationTokenSource();
+                var token = _cts.Token;
+                _captureTask = Task.Run(() => VideoCapture_UpdateLoop(token), token);
             }
             catch (Exception ex)
             {
@@ -48,70 +62,84 @@ public sealed class VftCapture(string source, ILogger logger) : Capture(source, 
             }
         }
 
-        IsReady = _videoCapture!.IsOpened();
+        IsReady = _device != null;
         Logger.LogDebug("VFT camera capture started successfully: " + IsReady);
         return IsReady;
     }
 
-    private Task VideoCapture_UpdateLoop()
+    private async Task VideoCapture_UpdateLoop(CancellationToken ct)
     {
         Mat lut = new Mat(new Size(1,256), MatType.CV_8U);
         for (var i = 0; i <= 255; i++)
         {
             lut.Set(i, (byte)(Math.Pow(i / 2048.0, (1 / 2.5)) * 255.0));
         }
-        while (_loop)
+
+        while (!ct.IsCancellationRequested && _loop && _device != null)
         {
             try
             {
-                IsReady = _videoCapture?.Read(_originalMat) == true;
-                if (IsReady)
+                if (_device.CaptureFrame(out byte[]? frame))
                 {
-                    var yuvConvert = Mat.FromPixelData(400, 400, MatType.CV_8UC2, _originalMat.Data);
-                    yuvConvert = yuvConvert.CvtColor(ColorConversionCodes.YUV2GRAY_Y422, 0);
-                    yuvConvert = yuvConvert.ColRange(new OpenCvSharp.Range(0, 200));
-                    yuvConvert = yuvConvert.Resize(new Size(400, 400));
-                    yuvConvert = yuvConvert.GaussianBlur(new Size(15, 15), 0);
+                    if (frame is { Length: > 0 })
+                    {
+                        IsReady = true;
 
-                    var rawMat = yuvConvert.LUT(lut);
-                    SetRawMat(rawMat);
+                        // Convert YUYV frame to Mat for processing
+                        var pix = _device.CurrentFormat.pix;
+                        var yuyvMat = new Mat((int)pix.height, (int)pix.width, MatType.CV_8UC2);
+                        Marshal.Copy(frame, 0, yuyvMat.Data, frame.Length);
 
-                    yuvConvert.Dispose();
+                        // Apply the same processing pipeline as before
+                        var yuvConvert = yuyvMat.CvtColor(ColorConversionCodes.YUV2GRAY_Y422, 0);
+                        yuvConvert = yuvConvert.ColRange(new OpenCvSharp.Range(0, 200));
+                        yuvConvert = yuvConvert.Resize(new Size(400, 400));
+                        yuvConvert = yuvConvert.GaussianBlur(new Size(15, 15), 0);
+
+                        var rawMat = yuvConvert.LUT(lut);
+                        SetRawMat(rawMat);
+
+                        yuvConvert.Dispose();
+                        yuyvMat.Dispose();
+                    }
+                    else
+                    {
+                        IsReady = false;
+                    }
+                }
+                else
+                {
+                    await Task.Delay(1, ct);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // ignored
+                Logger.LogError(ex, "Error in VFT capture loop");
+                IsReady = false;
+                await Task.Delay(10, ct);
             }
         }
-        lut.Dispose();
 
-        return Task.CompletedTask;
+        lut.Dispose();
     }
 
     private void SetTrackerState(bool setActive)
     {
-        // Prev: var fd = ViveFacialTracker.open(Url, ViveFacialTracker.FileOpenFlags.O_RDWR);
-        var vftFileStream = File.Open(Source, FileMode.Open, FileAccess.ReadWrite);
-        var fd = vftFileStream.SafeFileHandle.DangerousGetHandle();
-        if (fd != IntPtr.Zero)
+        try
         {
-            try
-            {
-                // Activate the tracker and give it some time to warm up/cool down
-                if (setActive)
-                    ViveFacialTracker.activate_tracker((int)fd);
-                else
-                    ViveFacialTracker.deactivate_tracker((int)fd);
-                // await Task.Delay(1000);
-            }
-            finally
-            {
-                // Prev: ViveFacialTracker.close((int)fd);
-                vftFileStream.Close();
-            }
+            // Leverage IDisposable for GC-less release of handle.
+            using var device = new ViveFacialTracker(Logger, Source);
+            if (!device.IsValid)
+                throw new NullReferenceException();
+
+            device.SetState(setActive);
+        }
+        catch(Exception e)
+        {
+            Logger.LogError(e.Message);
         }
     }
+
 
     /// <summary>
     /// Stops video capture and cleans up resources.
@@ -121,17 +149,23 @@ public sealed class VftCapture(string source, ILogger logger) : Capture(source, 
     {
         Logger.LogDebug("Stopping VFT camera capture...");
 
-        if (_videoCapture is null)
+        if (_device is null)
         {
-            Logger.LogDebug("VFT VideoCapture is already null, returning false");
+            Logger.LogDebug("VFT Device is already null, returning false");
             return Task.FromResult(false);
         }
 
         _loop = false;
         IsReady = false;
-        _videoCapture.Release();
-        _videoCapture.Dispose();
-        _videoCapture = null;
+
+        if (_captureTask != null)
+        {
+            _cts?.Cancel();
+            _captureTask.Wait();
+        }
+
+        _device.Dispose();
+        _device = null;
         SetTrackerState(false);
         Logger.LogDebug("VFT camera capture stopped successfully");
         return Task.FromResult(true);
