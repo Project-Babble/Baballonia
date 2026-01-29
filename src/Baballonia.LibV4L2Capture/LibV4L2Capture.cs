@@ -85,6 +85,10 @@ public sealed class LibV4L2Capture(string source, ILogger<LibV4L2Capture> logger
                     await Task.Delay(1, ct);
                 }
             }
+            // catch (TaskCanceledException)
+            // {
+            //     return;
+            // }
             catch(Exception e)
             {
                 SetRawMat(new Mat());

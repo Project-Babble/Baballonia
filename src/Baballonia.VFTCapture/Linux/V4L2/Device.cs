@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace Baballonia.VFTCapture.V4L2;
+namespace Baballonia.VFTCapture.Linux.V4L2;
 
 
 public class Device : IDisposable {

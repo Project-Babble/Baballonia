@@ -1,26 +1,37 @@
 ﻿using Baballonia.SDK;
+using Baballonia.VFTCapture.Linux;
+using Baballonia.VFTCapture.Windows;
 using Microsoft.Extensions.Logging;
 
 namespace Baballonia.VFTCapture;
 
-public class VFTCaptureFactory : ICaptureFactory
+public class VFTCaptureFactory(ILoggerFactory loggerFactory) : ICaptureFactory
 {
-    private readonly ILoggerFactory _loggerFactory;
-
-    public VFTCaptureFactory(ILoggerFactory loggerFactory)
-    {
-        _loggerFactory = loggerFactory;
-    }
-
     public Capture Create(string address)
     {
-        return new VftCapture(address, _loggerFactory.CreateLogger<VftCapture>());
+        if (OperatingSystem.IsWindows())
+            return new WindowsVftCapture(address, loggerFactory.CreateLogger<WindowsVftCapture>());
+
+        if (OperatingSystem.IsLinux())
+            return new LinuxVftCapture(address, loggerFactory.CreateLogger<LinuxVftCapture>());
+
+        throw new InvalidOperationException("Unsupported operating system for VFTCapture.");
     }
 
     public bool CanConnect(string address)
     {
-        var lowered = address.ToLower();
-        return lowered.StartsWith("/dev/video") && OperatingSystem.IsLinux();
+        if (OperatingSystem.IsWindows())
+        {
+            return true;
+        }
+
+        if (OperatingSystem.IsLinux())
+        {
+            var lowered = address.ToLower();
+            return lowered.StartsWith("/dev/video");
+        }
+
+        return false;
     }
 
     public string GetProviderName()

@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace Baballonia.VFTCapture.V4L2;
+namespace Baballonia.VFTCapture.Linux.V4L2;
 
 internal static class NativeMethods {
     [DllImport("libv4l2", SetLastError = true, CallingConvention = CallingConvention.Cdecl)]

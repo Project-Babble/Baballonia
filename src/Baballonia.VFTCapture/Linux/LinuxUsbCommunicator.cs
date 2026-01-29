@@ -1,9 +1,9 @@
 using System.Runtime.InteropServices;
 using Microsoft.Extensions.Logging;
 
-namespace Baballonia.VFTCapture;
+namespace Baballonia.VFTCapture.Linux;
 
-public partial class ViveFacialTracker : IDisposable
+public partial class LinuxUsbCommunicator : IDisposable
 {
     /// <summary>
     /// Native interop functions for Linux.
@@ -102,7 +102,7 @@ public partial class ViveFacialTracker : IDisposable
     /// Opens a file and wraps the handle. It must point to a Vive Face Tracker device.
     /// </summary>
     /// <exception cref="Exception"></exception>
-    public ViveFacialTracker(ILogger logger, string path, FileOpenFlags flags = FileOpenFlags.O_RDWR)
+    public LinuxUsbCommunicator(ILogger logger, string path, FileOpenFlags flags = FileOpenFlags.O_RDWR)
     {
         log = logger;
 
@@ -130,12 +130,11 @@ public partial class ViveFacialTracker : IDisposable
         // We must ensure we actually hold a valid pointer.
         if (IsValid)
             LinuxNative.Close(Handle);
-        // After closing we must ensure the handle cannot be used anymore!
+        // After closing, we must ensure the handle cannot be used anymore!
         Handle = IntPtr.Zero;
     }
 
-    ~ViveFacialTracker()
-        => Dispose();
+    ~LinuxUsbCommunicator() => Dispose();
 
     private void XuQueryCur(byte unit, byte selector, UvcQuery query, byte[] data)
     {

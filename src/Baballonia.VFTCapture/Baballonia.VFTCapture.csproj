@@ -11,4 +11,10 @@
       <ProjectReference Include="..\Baballonia.SDK\Baballonia.SDK.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="blluc.dll" Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

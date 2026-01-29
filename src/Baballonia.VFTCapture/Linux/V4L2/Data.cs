@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Baballonia.VFTCapture.V4L2;
+namespace Baballonia.VFTCapture.Linux.V4L2;
 
 public class Data {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]

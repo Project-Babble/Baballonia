@@ -1,16 +1,15 @@
-
 using System.Runtime.InteropServices;
+using Baballonia.VFTCapture.Linux.V4L2;
 using Microsoft.Extensions.Logging;
 using OpenCvSharp;
-using Baballonia.VFTCapture.V4L2;
 using Capture = Baballonia.SDK.Capture;
 
-namespace Baballonia.VFTCapture;
+namespace Baballonia.VFTCapture.Linux;
 
 /// <summary>
 /// Vive Facial Tracker camera capture
 /// </summary>
-public sealed class VftCapture(string source, ILogger logger) : Capture(source, logger)
+public sealed class LinuxVftCapture(string source, ILogger logger) : Capture(source, logger)
 {
     private Device? _device;
     private CancellationTokenSource? _cts;
@@ -112,6 +111,10 @@ public sealed class VftCapture(string source, ILogger logger) : Capture(source, 
                     await Task.Delay(1, ct);
                 }
             }
+            // catch (TaskCanceledException)
+            // {
+            //     return;
+            // }
             catch (Exception ex)
             {
                 Logger.LogError(ex, "Error in VFT capture loop");
@@ -128,7 +131,7 @@ public sealed class VftCapture(string source, ILogger logger) : Capture(source, 
         try
         {
             // Leverage IDisposable for GC-less release of handle.
-            using var device = new ViveFacialTracker(Logger, Source);
+            using var device = new LinuxUsbCommunicator(Logger, Source);
             if (!device.IsValid)
                 throw new NullReferenceException();
 
@@ -139,7 +142,6 @@ public sealed class VftCapture(string source, ILogger logger) : Capture(source, 
             Logger.LogError(e.Message);
         }
     }
-
 
     /// <summary>
     /// Stops video capture and cleans up resources.

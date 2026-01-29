@@ -1,4 +1,4 @@
-namespace Baballonia.VFTCapture.V4L2;
+namespace Baballonia.VFTCapture.Linux.V4L2;
 
 public enum v4l2_buf_type : uint
 {
