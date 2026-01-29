@@ -68,12 +68,8 @@ public sealed class LinuxVftCapture(string source, ILogger logger) : Capture(sou
 
     private async Task VideoCapture_UpdateLoop(CancellationToken ct)
     {
-        Mat lut = new Mat(new Size(1,256), MatType.CV_8U);
-        for (var i = 0; i <= 255; i++)
-        {
-            lut.Set(i, (byte)(Math.Pow(i / 2048.0, (1 / 2.5)) * 255.0));
-        }
-
+        Mat yuvConvert = new();
+        Mat yuyvMat = new();
         while (!ct.IsCancellationRequested && _loop && _device != null)
         {
             try
@@ -86,20 +82,17 @@ public sealed class LinuxVftCapture(string source, ILogger logger) : Capture(sou
 
                         // Convert YUYV frame to Mat for processing
                         var pix = _device.CurrentFormat.pix;
-                        var yuyvMat = new Mat((int)pix.height, (int)pix.width, MatType.CV_8UC2);
+                        yuyvMat = new Mat((int)pix.height, (int)pix.width, MatType.CV_8UC2);
                         Marshal.Copy(frame, 0, yuyvMat.Data, frame.Length);
 
                         // Apply the same processing pipeline as before
-                        var yuvConvert = yuyvMat.CvtColor(ColorConversionCodes.YUV2GRAY_Y422, 0);
-                        yuvConvert = yuvConvert.ColRange(new OpenCvSharp.Range(0, 200));
-                        yuvConvert = yuvConvert.Resize(new Size(400, 400));
-                        yuvConvert = yuvConvert.GaussianBlur(new Size(15, 15), 0);
+                        yuvConvert = yuyvMat.CvtColor(ColorConversionCodes.YUV2GRAY_Y422, 0);
+                        yuvConvert = yuvConvert.ColRange(VFTCommon.ColumnRange);
+                        yuvConvert = yuvConvert.Resize(VFTCommon.ImageSize);
+                        yuvConvert = yuvConvert.GaussianBlur(VFTCommon.GaussianBlurSize, 0);
 
-                        var rawMat = yuvConvert.LUT(lut);
+                        var rawMat = yuvConvert.LUT(VFTCommon.Lut);
                         SetRawMat(rawMat);
-
-                        yuvConvert.Dispose();
-                        yuyvMat.Dispose();
                     }
                     else
                     {
@@ -123,7 +116,8 @@ public sealed class LinuxVftCapture(string source, ILogger logger) : Capture(sou
             }
         }
 
-        lut.Dispose();
+        yuvConvert.Dispose();
+        yuyvMat.Dispose();
     }
 
     private void SetTrackerState(bool setActive)

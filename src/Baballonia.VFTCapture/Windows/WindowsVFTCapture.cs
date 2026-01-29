@@ -9,8 +9,8 @@ namespace Baballonia.VFTCapture.Windows;
 /// </summary>
 public sealed class WindowsVftCapture(string source, ILogger logger) : Capture(source, logger)
 {
-    private VideoCapture? _videoCapture;
     private readonly Mat _originalMat = new();
+    private VideoCapture? _videoCapture;
     private bool _loop;
 
     /// <summary>
@@ -29,11 +29,10 @@ public sealed class WindowsVftCapture(string source, ILogger logger) : Capture(s
                 SetTrackerState(setActive: true);
 
                 // Initialize VideoCapture with URL, timeout for robustness
-                // Set capture mode to YUYV
-                // Prevent automatic conversion to RGB
-                _videoCapture = await Task.Run(() => new VideoCapture(Source, VideoCaptureAPIs.V4L2), cts.Token);
-                _videoCapture.Set(VideoCaptureProperties.Mode, 3);
-                _videoCapture.Set(VideoCaptureProperties.ConvertRgb, 0);
+                if (int.TryParse(Source, out var index))
+                    _videoCapture = await Task.Run(() => VideoCapture.FromCamera(index, VideoCaptureAPIs.DSHOW), cts.Token);
+                else
+                    _videoCapture = await Task.Run(() => new VideoCapture(Source), cts.Token);
 
                 _loop = true;
                 _ = Task.Run(VideoCapture_UpdateLoop);
@@ -53,11 +52,7 @@ public sealed class WindowsVftCapture(string source, ILogger logger) : Capture(s
 
     private Task VideoCapture_UpdateLoop()
     {
-        Mat lut = new Mat(new Size(1,256), MatType.CV_8U);
-        for (var i = 0; i <= 255; i++)
-        {
-            lut.Set(i, (byte)(Math.Pow(i / 2048.0, (1 / 2.5)) * 255.0));
-        }
+        Mat yuvConvert = new();
         while (_loop)
         {
             try
@@ -65,16 +60,13 @@ public sealed class WindowsVftCapture(string source, ILogger logger) : Capture(s
                 IsReady = _videoCapture?.Read(_originalMat) == true;
                 if (!IsReady) continue;
 
-                var yuvConvert = Mat.FromPixelData(400, 400, MatType.CV_8UC2, _originalMat.Data);
-                yuvConvert = yuvConvert.CvtColor(ColorConversionCodes.YUV2GRAY_Y422, 0);
-                yuvConvert = yuvConvert.ColRange(new OpenCvSharp.Range(0, 200));
-                yuvConvert = yuvConvert.Resize(new Size(400, 400));
-                yuvConvert = yuvConvert.GaussianBlur(new Size(15, 15), 0);
+                Cv2.ExtractChannel(_originalMat, yuvConvert, 0);
+                yuvConvert = yuvConvert.ColRange(VFTCommon.ColumnRange);
+                yuvConvert = yuvConvert.Resize(VFTCommon.ImageSize);
+                yuvConvert = yuvConvert.GaussianBlur(VFTCommon.GaussianBlurSize, 0);
 
-                var rawMat = yuvConvert.LUT(lut);
+                var rawMat = yuvConvert.LUT(VFTCommon.Lut);
                 SetRawMat(rawMat);
-
-                yuvConvert.Dispose();
             }
             // catch (TaskCanceledException)
             // {
@@ -85,7 +77,7 @@ public sealed class WindowsVftCapture(string source, ILogger logger) : Capture(s
                 // ignored
             }
         }
-        lut.Dispose();
+        yuvConvert.Dispose();
 
         return Task.CompletedTask;
     }

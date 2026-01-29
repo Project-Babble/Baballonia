@@ -28,6 +28,7 @@ public class OpenCvCaptureFactory : ICaptureFactory
 
         return lowered.StartsWith("/dev/video") ||
                lowered.EndsWith("appsink") ||
+               address == "HTC Multimedia Camera" ||
                int.TryParse(address, out _) ||
                Uri.TryCreate(address, UriKind.Absolute, out _);
     }
