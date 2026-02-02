@@ -9,18 +9,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Baballonia.Models;
 
-public class FirmwareSessionFactory
+public class FirmwareSessionFactory(ILoggerFactory loggerFactory, ICommandSenderFactory commandSenderFactory)
 {
-    private readonly ILoggerFactory _loggerFactory;
-    private readonly ILogger<FirmwareSessionFactory> _logger;
-    private readonly ICommandSenderFactory _commandSenderFactory;
-
-    public FirmwareSessionFactory(ILoggerFactory loggerFactory, ICommandSenderFactory commandSenderFactory)
-    {
-        _loggerFactory = loggerFactory;
-        _commandSenderFactory = commandSenderFactory;
-        _logger = loggerFactory.CreateLogger<FirmwareSessionFactory>();
-    }
+    private readonly ILogger<FirmwareSessionFactory> _logger = loggerFactory.CreateLogger<FirmwareSessionFactory>();
 
     private string[] FindAvailableSerialPorts()
     {
@@ -86,8 +77,8 @@ public class FirmwareSessionFactory
     private FirmwareSessionV2? TryOpenV2Session(string port)
     {
         _logger.LogInformation($"Attempting to open V2 session for {port}");
-        var sender = _commandSenderFactory.Create(CommandSenderType.Serial, port);
-        var sessionV2 = new FirmwareSessionV2(sender, _loggerFactory.CreateLogger<FirmwareSessionV2>());
+        var sender = commandSenderFactory.Create(CommandSenderType.Serial, port);
+        var sessionV2 = new FirmwareSessionV2(sender, loggerFactory.CreateLogger<FirmwareSessionV2>());
         var response = sessionV2.SendCommand(new FirmwareRequests.GetWhoAmIRequest(), TimeSpan.FromSeconds(3));
         if (!response.IsSuccess)
         {
@@ -111,8 +102,8 @@ public class FirmwareSessionFactory
     private FirmwareSessionV1? TryOpenV1Session(string port)
     {
         _logger.LogInformation($"Attempting to open V1 session for {port}");
-        var sender = _commandSenderFactory.Create(CommandSenderType.Serial, port);
-        var sessionV1 = new FirmwareSessionV1(sender, _loggerFactory.CreateLogger<FirmwareSessionV1>());
+        var sender = commandSenderFactory.Create(CommandSenderType.Serial, port);
+        var sessionV1 = new FirmwareSessionV1(sender, loggerFactory.CreateLogger<FirmwareSessionV1>());
         var heartbeat = sessionV1.WaitForHeartbeat(TimeSpan.FromSeconds(3));
         if (heartbeat == null)
         {

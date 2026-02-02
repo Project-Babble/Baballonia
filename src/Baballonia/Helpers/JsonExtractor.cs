@@ -18,12 +18,12 @@ namespace Baballonia.Helpers
                 if (DateTime.Now - startTime > timeout)
                     throw new TimeoutException("Timeout reached");
 
-                string content = _buffer.ToString();
+                var content = _buffer.ToString();
 
-                int start = -1;
-                int braceDepth = 0;
+                var start = -1;
+                var braceDepth = 0;
 
-                for (int i = _lastScannedIndex; i < content.Length; i++)
+                for (var i = _lastScannedIndex; i < content.Length; i++)
                 {
                     if (content[i] == '{')
                     {
@@ -34,32 +34,28 @@ namespace Baballonia.Helpers
                     else if (content[i] == '}')
                     {
                         braceDepth--;
-                        if (braceDepth == 0 && start != -1)
-                        {
-                            int lenghh = i - start + 1;
-                            string candidatestr = content.Substring(start, lenghh);
+                        if (braceDepth != 0 || start == -1) continue;
 
-                            var candidate = TryParseJson(candidatestr);
-                            if(candidate != null)
-                            {
-                                _buffer.Remove(0, i + 1);
-                                _lastScannedIndex = 0;
-                                return candidate;
-                            }
+                        var lenghh = i - start + 1;
+                        var candidatestr = content.Substring(start, lenghh);
 
-                        }
+                        var candidate = TryParseJson(candidatestr);
+                        if (candidate == null) continue;
+
+                        _buffer.Remove(0, i + 1);
+                        _lastScannedIndex = 0;
+                        return candidate;
                     }
 
                 }
                 _lastScannedIndex = Math.Max(0, content.Length - 1);
 
                 // Only read if buffer was processed and still no JSON
-                string line = readLineFunction();
-                if (!string.IsNullOrWhiteSpace(line))
-                {
-                    _buffer.Append(line);
-                    _lastScannedIndex = 0;
-                }
+                var line = readLineFunction();
+                if (string.IsNullOrWhiteSpace(line)) continue;
+
+                _buffer.Append(line);
+                _lastScannedIndex = 0;
             }
         }
 
