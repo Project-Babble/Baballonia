@@ -9,10 +9,10 @@ using Microsoft.Extensions.Logging;
 
 namespace Baballonia.Desktop.Calibration.Aero;
 
-public class OverlayProgram : IOverlayProgram, IDisposable
+public class OverlayProgram : IOverlayProgram
 {
-    private ILogger<OverlayProgram> _logger;
-    private string? _executablePath;
+    private readonly ILogger<OverlayProgram> _logger;
+    private readonly string? _executablePath;
     private Process? _process;
 
     public OverlayProgram(ILogger<OverlayProgram> logger)
@@ -20,63 +20,48 @@ public class OverlayProgram : IOverlayProgram, IDisposable
         var isWindows = OperatingSystem.IsWindows();
         var isArm = RuntimeInformation.OSArchitecture is Architecture.Arm or Architecture.Arm64 or Architecture.Armv6;
         var architectureIdentifier = isArm ? "arm64" : "x86_64";
-        var OverlayPath = Path.Combine(AppContext.BaseDirectory, "Calibration", isWindows ? "Windows" : "Linux",
+        var overlayPath = Path.Combine(AppContext.BaseDirectory, "Calibration", isWindows ? "Windows" : "Linux",
             "Overlay");
-        var Overlay = Path.Combine(OverlayPath,
+        var overlay = Path.Combine(overlayPath,
             isWindows ? $"BabbleCalibration.{architectureIdentifier}.exe" : $"BabbleCalibration.{architectureIdentifier}");
-        _executablePath = Overlay;
+        _executablePath = overlay;
         _logger = logger;
     }
 
     public bool CanStart()
     {
-        if (!File.Exists(_executablePath))
-        {
-            _logger.LogError("Trainer program not found: {} not exists", _executablePath);
-            return false;
-        }
-        return true;
+        if (File.Exists(_executablePath)) return true;
+        _logger.LogError("Trainer program not found: {} not exists", _executablePath);
+        return false;
     }
 
     public void Start()
     {
-        if (_executablePath == null)
-            return;
-
         _process?.Kill();
 
-        var hitList = Process.GetProcesses()
-            .Where(p => p.ProcessName == Path.GetFileNameWithoutExtension(_executablePath)).ToArray();
-        if (hitList.Length > 0)
+        var processName = Path.GetFileNameWithoutExtension(_executablePath);
+        foreach (var p in Process.GetProcesses().Where(p => p.ProcessName == processName))
         {
-            foreach (var p in hitList) p.Kill(true);
+            p.Kill(true);
         }
 
+        var processes = Process.GetProcesses();
+        var hasSteamVr = IsProcessRunning(processes, "vrserver");
+        var hasMonado = IsProcessRunning(processes, "monado");
+        var hasWivrn = IsProcessRunning(processes, "wivrn-server");
 
-        var processList = Process.GetProcesses();
-        var steamvr = processList.Any(p => p.ProcessName.ToLower().Contains("vrserver"));
-        var monado = processList.Any(p => p.ProcessName.ToLower().Contains("monado"));
-        var isWindows = OperatingSystem.IsWindows();
+        var xrMode =
+            !hasSteamVr && !hasMonado && !hasWivrn ? XrMode.Debug :
+            OperatingSystem.IsWindows() && hasSteamVr ? XrMode.OpenVr :
+            XrMode.OpenXr;
 
-        var launchArgs = $"-l {Resources.Godot_Locale}";
-
-        if (!steamvr && !monado)
+        var launchArgs = $"-l {Resources.Godot_Locale}" + xrMode switch
         {
-            launchArgs += " --use-debug";
-        }
-        else
-        {
-            if (isWindows)
-            {
-                if (steamvr)
-                    launchArgs += " --use-openvr";
-                else if (monado) launchArgs += " --xr-mode on"; //uhhhhh?????
-            }
-            else
-            {
-                launchArgs += " --xr-mode on";
-            }
-        }
+            XrMode.Debug  => " --use-debug",
+            XrMode.OpenVr => " --use-openvr",
+            XrMode.OpenXr => " --xr-mode on",
+            _ => throw new ArgumentOutOfRangeException()
+        };
 
         var startInfo = new ProcessStartInfo
         {
@@ -95,12 +80,14 @@ public class OverlayProgram : IOverlayProgram, IDisposable
         _process.Start();
     }
 
+    private static bool IsProcessRunning(Process[] ps, string name) =>
+        ps.Any(p => p.ProcessName.Contains(name, StringComparison.OrdinalIgnoreCase));
+
     public Task WaitForExitAsync()
     {
-        if (_process == null)
-            return Task.CompletedTask;
-
-        return _process.WaitForExitAsync();
+        return _process == null ?
+            Task.CompletedTask :
+            _process.WaitForExitAsync();
     }
 
     public void Dispose()
@@ -108,4 +95,12 @@ public class OverlayProgram : IOverlayProgram, IDisposable
         _process?.Kill();
         _process = null;
     }
+
+    private enum XrMode
+    {
+        Debug,
+        OpenVr,
+        OpenXr
+    }
+
 }
