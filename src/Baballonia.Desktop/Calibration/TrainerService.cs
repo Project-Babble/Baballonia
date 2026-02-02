@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,7 +8,7 @@ using Baballonia.Contracts;
 using Microsoft.Extensions.Logging;
 using OverlaySDK.Packets;
 
-namespace Baballonia.Desktop.Trainer;
+namespace Baballonia.Desktop.Calibration;
 
 public partial class TrainerService : ITrainerService
 {

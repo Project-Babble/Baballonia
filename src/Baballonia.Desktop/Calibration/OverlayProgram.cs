@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Baballonia.Assets;
 using Microsoft.Extensions.Logging;
 
-namespace Baballonia.Desktop.Calibration.Aero;
+namespace Baballonia.Desktop.Calibration;
 
 public class OverlayProgram : IOverlayProgram
 {
