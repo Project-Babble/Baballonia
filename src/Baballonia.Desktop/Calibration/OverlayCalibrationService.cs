@@ -17,7 +17,7 @@ public class OverlayTrainerService(
     EyePipelineManager eyePipelineManager,
     EyeCalibration eyeCalibration,
     DataUploaderService dataUploaderService)
-    : IVROverlay, IDisposable
+    : IVROverlay
 {
 
     private readonly CancellationTokenSource _tokenSource = new();

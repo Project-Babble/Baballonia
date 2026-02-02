@@ -10,18 +10,12 @@ using OverlaySDK.Packets;
 
 namespace Baballonia.Desktop.Calibration;
 
-public partial class TrainerService : ITrainerService
+public partial class TrainerService(ILogger<TrainerService> logger) : ITrainerService
 {
     private readonly object _lock = new();
 
-    private readonly ILogger<TrainerService> _logger;
-    private Process? trainerProcess;
+    private Process? _trainerProcess;
     public event Action<TrainerProgressReportPacket>? OnProgress;
-
-    public TrainerService(ILogger<TrainerService> logger)
-    {
-        _logger = logger;
-    }
 
     [GeneratedRegex(@"Batch\s+(\d+)/(\d+),\s+Loss:\s+([0-9.]+)")]
     private static partial Regex ParseBatchRegex();
@@ -30,7 +24,7 @@ public partial class TrainerService : ITrainerService
         var match = ParseBatchRegex().Match(line);
         if (!match.Success)
             return null;
-        _logger.LogDebug(line);
+        logger.LogDebug(line);
 
         var currentBatch = int.Parse(match.Groups[1].Value);
         var totalBatches = int.Parse(match.Groups[2].Value);
@@ -46,7 +40,7 @@ public partial class TrainerService : ITrainerService
         if (!match.Success)
             return null;
 
-        _logger.LogDebug(line);
+        logger.LogDebug(line);
 
         var currentEpoch = int.Parse(match.Groups[1].Value);
         var totalEpochs = int.Parse(match.Groups[2].Value);
@@ -61,14 +55,14 @@ public partial class TrainerService : ITrainerService
     {
         var match = ParseTrainingCompleteRegex().Match(line);
 
-        _logger.LogDebug(line);
+        logger.LogDebug(line);
 
         return match.Success;
     }
 
     void NewLineEventHandler(object sender, DataReceivedEventArgs dataReceivedEventArgs)
     {
-        _logger.LogDebug(dataReceivedEventArgs.Data);
+        logger.LogDebug(dataReceivedEventArgs.Data);
         if (dataReceivedEventArgs.Data == null)
             return;
 
@@ -100,10 +94,10 @@ public partial class TrainerService : ITrainerService
 
         lock (_lock)
         {
-            if (trainerProcess != null && trainerProcess.HasExited)
-                trainerProcess = null;
+            if (_trainerProcess != null && _trainerProcess.HasExited)
+                _trainerProcess = null;
 
-            if (trainerProcess != null)
+            if (_trainerProcess != null)
                 throw new Exception("Training process already running");
 
             // Wrap both args in quotes to handle spaces in user names
@@ -119,16 +113,16 @@ public partial class TrainerService : ITrainerService
                 WindowStyle = ProcessWindowStyle.Hidden,
             };
 
-            trainerProcess = new Process
+            _trainerProcess = new Process
             {
                 StartInfo = startInfo,
                 EnableRaisingEvents = true,
             };
-            trainerProcess.OutputDataReceived += NewLineEventHandler;
-            trainerProcess.Exited += (sender, args) => { Interlocked.Exchange(ref trainerProcess, null); };
+            _trainerProcess.OutputDataReceived += NewLineEventHandler;
+            _trainerProcess.Exited += (sender, args) => { Interlocked.Exchange(ref _trainerProcess, null); };
 
-            trainerProcess.Start();
-            trainerProcess.BeginOutputReadLine();
+            _trainerProcess.Start();
+            _trainerProcess.BeginOutputReadLine();
         }
     }
 
@@ -137,7 +131,7 @@ public partial class TrainerService : ITrainerService
         Process? process;
         lock (_lock)
         {
-            process = trainerProcess;
+            process = _trainerProcess;
         }
 
         return process != null
@@ -149,7 +143,7 @@ public partial class TrainerService : ITrainerService
     {
         lock (_lock)
         {
-            trainerProcess?.Kill();
+            _trainerProcess?.Kill();
         }
     }
 }

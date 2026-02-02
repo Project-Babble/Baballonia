@@ -21,128 +21,107 @@ public interface ICalibrationStep
     Task ExecuteAsync(OverlayMessageDispatcher dispatcher, CancellationToken ct);
 }
 
-public class BaseTutorialStep : PacketHandlerAdapter, ICalibrationStep
+public sealed class BaseTutorialStep(string name, TimeSpan time) : PacketHandlerAdapter, ICalibrationStep
 {
-    public string Name { get; }
-    public TimeSpan timeToRun { get; }
-    protected TaskCompletionSource _token = new();
+    public string Name { get; } = name;
+    public TimeSpan TimeToRun { get; } = time;
+    private TaskCompletionSource Token = new();
 
     public BaseTutorialStep(string name) : this(name, TimeSpan.FromSeconds(30))
     {
     }
 
-    public BaseTutorialStep(string name, TimeSpan time)
-    {
-        Name = name;
-        timeToRun = time;
-    }
-
-    public virtual async Task ExecuteAsync(OverlayMessageDispatcher dispatcher, CancellationToken ct)
+    public async Task ExecuteAsync(OverlayMessageDispatcher dispatcher, CancellationToken ct)
     {
         dispatcher.RegisterHandler(this);
 
-        dispatcher.Dispatch(new RunVariableLenghtRoutinePacket(Name, timeToRun));
+        dispatcher.Dispatch(new RunVariableLenghtRoutinePacket(Name, TimeToRun));
         await WaitForRoutineFinishAsync(ct);
 
         dispatcher.UnRegisterHandler(this);
     }
 
-    protected async Task WaitForRoutineFinishAsync(CancellationToken ct)
+    private async Task WaitForRoutineFinishAsync(CancellationToken ct)
     {
-        await _token.Task.WaitAsync(ct);
+        await Token.Task.WaitAsync(ct);
     }
 
     public override void OnRoutineFinishedPacket(RoutineFinishedPacket packet)
     {
-        _token.SetResult();
+        Token.SetResult();
     }
 }
 
-public abstract class PositionalAwareCaptureStep : PacketHandlerAdapter, ICalibrationStep
+public abstract class PositionalAwareCaptureStep(string name, uint flags, TimeSpan time)
+    : PacketHandlerAdapter, ICalibrationStep
 {
-    public string Name { get; }
-    public uint Flags { get; }
+    public string Name { get; } = name;
+    public uint Flags { get; } = flags;
 
-    protected PositionalBinCollector _positionalBinCollector;
-    protected TaskCompletionSource _token = new();
-    protected bool _shouldCollect = false;
-    protected TimeSpan _timeToTun;
-
-    public PositionalAwareCaptureStep(string name, uint flags, TimeSpan time)
-    {
-        Name = name;
-        Flags = flags;
-        _positionalBinCollector = new PositionalBinCollector(flags);
-        _timeToTun = time;
-    }
+    protected PositionalBinCollector PositionalBinCollector = new(flags);
+    protected TaskCompletionSource Token = new();
+    protected bool ShouldCollect = false;
+    protected TimeSpan TimeToTun = time;
 
     public abstract Task ExecuteAsync(OverlayMessageDispatcher dispatcher, CancellationToken ct);
 
     public override void OnHmdPositionalData(HmdPositionalDataPacket positionalData)
     {
-        if (!_shouldCollect)
+        if (!ShouldCollect)
             return;
-        _positionalBinCollector.UpdatePositionalData(positionalData);
+        PositionalBinCollector.UpdatePositionalData(positionalData);
     }
 
     public virtual void OnNewEyeFrame(EyePipelineEvents.NewTransformedFrameEvent frame)
     {
-        if (!_shouldCollect)
+        if (!ShouldCollect)
             return;
 
         var images = frame.image.Split();
-        _positionalBinCollector.AddFrame(images[1], images[0]);
+        PositionalBinCollector.AddFrame(images[1], images[0]);
     }
 
     protected void StartCollecting()
     {
-        _shouldCollect = true;
+        ShouldCollect = true;
     }
 
     protected void StopCollecting()
     {
-        _shouldCollect = false;
+        ShouldCollect = false;
     }
 
     protected async Task WaitForRoutineFinishAsync(CancellationToken ct)
     {
-        await _token.Task.WaitAsync(ct);
+        await Token.Task.WaitAsync(ct);
     }
 
     public override void OnRoutineFinishedPacket(RoutineFinishedPacket packet)
     {
-        _token.SetResult();
+        Token.SetResult();
     }
 
     public void Dispose()
     {
-        _token.SetCanceled();
+        Token.SetCanceled();
     }
 }
 
-public abstract class BaseCaptureStep : PacketHandlerAdapter, ICalibrationStep
+public abstract class BaseCaptureStep(string name, uint flags, TimeSpan time) : PacketHandlerAdapter, ICalibrationStep
 {
-    public string Name { get; }
-    public uint Flags { get; }
+    public string Name { get; } = name;
+    public uint Flags { get; } = flags;
 
-    protected BinCollector _binCollector;
-    protected TaskCompletionSource _token = new();
-    protected bool _shouldCollect = false;
-    protected TimeSpan _timeToTun;
-
-    public BaseCaptureStep(string name, uint flags, TimeSpan time)
-    {
-        Name = name;
-        Flags = flags;
-        _binCollector = new BinCollector(flags);
-        _timeToTun = time;
-    }
+    protected BinCollector BinCollector = new(flags);
+    protected TaskCompletionSource Token = new();
+    protected bool ShouldCollect = false;
+    protected TimeSpan TimeToTun = time;
 
     public abstract Task ExecuteAsync(OverlayMessageDispatcher dispatcher, CancellationToken ct);
 
     public virtual void OnNewEyeFrame(EyePipelineEvents.NewTransformedFrameEvent frame)
     {
-        if (!_shouldCollect)
+        if (!ShouldCollect)
             return;
 
         var images = frame.image.Split();
@@ -151,36 +130,40 @@ public abstract class BaseCaptureStep : PacketHandlerAdapter, ICalibrationStep
 
     public virtual Frame AddFrame(Mat[] images)
     {
-        return _binCollector.AddFrame(images[1], images[0]);
+        return BinCollector.AddFrame(images[1], images[0]);
     }
 
     protected void StartCollecting()
     {
-        _shouldCollect = true;
+        ShouldCollect = true;
     }
 
     protected void StopCollecting()
     {
-        _shouldCollect = false;
+        ShouldCollect = false;
     }
 
     protected async Task WaitForRoutineFinishAsync(CancellationToken ct)
     {
-        await _token.Task.WaitAsync(ct);
+        await Token.Task.WaitAsync(ct);
     }
 
     public override void OnRoutineFinishedPacket(RoutineFinishedPacket packet)
     {
-        _token.SetResult();
+        Token.SetResult();
     }
 
     public void Dispose()
     {
-        _token.SetCanceled();
+        Token.SetCanceled();
     }
 }
 
-public class GazeCaptureStep : BasePositionalAwareEyeCaptureStep
+public class GazeCaptureStep(IEyePipelineEventBus bus, TimeSpan time) : BasePositionalAwareEyeCaptureStep(bus, "gaze",
+    CaptureFlags.FLAG_GOOD_DATA |
+    CaptureFlags.FLAG_IN_MOVEMENT |
+    CaptureFlags.FLAG_VERSION_BIT1 |
+    CaptureFlags.FLAG_ROUTINE_BIT1, time)
 {
     private Stopwatch _posDataTimer = new();
     private readonly TimeSpan _posDataTimeout = TimeSpan.FromSeconds(0.2);
@@ -189,31 +172,23 @@ public class GazeCaptureStep : BasePositionalAwareEyeCaptureStep
     {
     }
 
-    public GazeCaptureStep(IEyePipelineEventBus bus, TimeSpan time) : base(bus, "gaze",
-        CaptureFlags.FLAG_GOOD_DATA |
-        CaptureFlags.FLAG_IN_MOVEMENT |
-        CaptureFlags.FLAG_VERSION_BIT1 |
-        CaptureFlags.FLAG_ROUTINE_BIT1, time)
-    {
-    }
-
     public override void OnHmdPositionalData(HmdPositionalDataPacket positionalData)
     {
-        if (!_shouldCollect)
+        if (!ShouldCollect)
             return;
 
-        _positionalBinCollector.UpdatePositionalData(positionalData);
+        PositionalBinCollector.UpdatePositionalData(positionalData);
         _posDataTimer.Restart();
     }
 
     public override void OnNewEyeFrame(EyePipelineEvents.NewTransformedFrameEvent frame)
     {
-        if (!_shouldCollect)
+        if (!ShouldCollect)
             return;
         if (_posDataTimer.Elapsed <= _posDataTimeout)
         {
             var images = frame.image.Split();
-            var f = _positionalBinCollector.AddFrame(images[1], images[0]);
+            var f = PositionalBinCollector.AddFrame(images[1], images[0]);
             if (f is not null)
             {
                 f.Header = f.Header with
@@ -239,7 +214,7 @@ public class BasePositionalAwareEyeCaptureStep(
 
         eyePipelineEvent.Subscribe<EyePipelineEvents.NewTransformedFrameEvent>(OnNewEyeFrame);
 
-        dispatcher.Dispatch(new RunVariableLenghtRoutinePacket(Name, _timeToTun));
+        dispatcher.Dispatch(new RunVariableLenghtRoutinePacket(Name, TimeToTun));
         StartCollecting();
         await WaitForRoutineFinishAsync(ct);
 
@@ -249,7 +224,7 @@ public class BasePositionalAwareEyeCaptureStep(
         if (ct.IsCancellationRequested)
             return;
 
-        _positionalBinCollector.WriteBin(Name + ".bin");
+        PositionalBinCollector.WriteBin(Name + ".bin");
     }
 }
 
@@ -272,7 +247,7 @@ public class BaseEyeCaptureStep(
 
         eyePipelineEvent.Subscribe<EyePipelineEvents.NewTransformedFrameEvent>(OnNewEyeFrame);
 
-        dispatcher.Dispatch(new RunVariableLenghtRoutinePacket(Name, _timeToTun));
+        dispatcher.Dispatch(new RunVariableLenghtRoutinePacket(Name, TimeToTun));
         StartCollecting();
         await WaitForRoutineFinishAsync(ct);
 
@@ -282,7 +257,7 @@ public class BaseEyeCaptureStep(
         if (ct.IsCancellationRequested)
             return;
 
-        _binCollector.WriteBin(Name + ".bin");
+        BinCollector.WriteBin(Name + ".bin");
     }
 
     public override Frame AddFrame(Mat[] images)
@@ -316,30 +291,22 @@ public class CommandDispatchStep(string name) : ICalibrationStep
 public class TrainerCalibrationStep(ITrainerService overlayTrainer) : ICalibrationStep
 {
     public string Name => "trainer";
-    private readonly ITrainerService _trainer = overlayTrainer;
 
     public async Task ExecuteAsync(OverlayMessageDispatcher dispatcher, CancellationToken ct)
     {
         dispatcher.Dispatch(new RunVariableLenghtRoutinePacket(Name, TimeSpan.FromSeconds(120)));
         var onProgressHandler = (TrainerProgressReportPacket packet) => { dispatcher.Dispatch(packet); };
-        _trainer.OnProgress += onProgressHandler;
-        _trainer.RunTraining(Path.Combine(Utils.ModelDataDirectory, "user_cal.bin"),
+        overlayTrainer.OnProgress += onProgressHandler;
+        overlayTrainer.RunTraining(Path.Combine(Utils.ModelDataDirectory, "user_cal.bin"),
             Path.Combine(Utils.ModelDataDirectory, "tuned_temporal_eye_tracking_latest.onnx"));
-        await _trainer.WaitAsync();
+        await overlayTrainer.WaitAsync();
 
-        _trainer.OnProgress -= onProgressHandler;
+        overlayTrainer.OnProgress -= onProgressHandler;
     }
 }
 
-public class EyeCaptureStepFactory
+public class EyeCaptureStepFactory(IEyePipelineEventBus eyePipelineEvent)
 {
-    private readonly IEyePipelineEventBus _eyePipelineEvent;
-
-    public EyeCaptureStepFactory(IEyePipelineEventBus eyePipelineEvent)
-    {
-        _eyePipelineEvent = eyePipelineEvent;
-    }
-
     public BaseEyeCaptureStep Create(string name, uint flags, TimeSpan time,
         float lid = 0,
         float browRaise = 0,
@@ -347,22 +314,16 @@ public class EyeCaptureStepFactory
         float widen = 0,
         float squint = 0,
         float dilate = 0) =>
-        new(_eyePipelineEvent, name, flags, time, lid, browRaise, browAngry, widen, squint, dilate);
+        new(eyePipelineEvent, name, flags, time, lid, browRaise, browAngry, widen, squint, dilate);
 }
 
-public class MergeBinsStep : ICalibrationStep
+public class MergeBinsStep(params string[] binNames) : ICalibrationStep
 {
     public string Name => "bin_merger";
-    private string[] _binNames;
-
-    public MergeBinsStep(params string[] binNames)
-    {
-        _binNames = binNames;
-    }
 
     public Task ExecuteAsync(OverlayMessageDispatcher dispatcher, CancellationToken ct)
     {
-        MergeBins("user_cal.bin", _binNames);
+        MergeBins("user_cal.bin", binNames);
         return Task.CompletedTask;
     }
 
@@ -393,7 +354,22 @@ public class EyeCalibration(
                 TimeSpan.FromSeconds(20), lid: 0
             ),
 
-            new MergeBinsStep("gaze.bin", "blink.bin"),
+            new BaseTutorialStep("widentutorial", TimeSpan.FromSeconds(10)),
+            eyeCaptureStepFactory.Create("widen",
+                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20), widen: 1, lid: 1),
+
+            new BaseTutorialStep("squinttutorial", TimeSpan.FromSeconds(10)),
+            eyeCaptureStepFactory.Create("squint",
+                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20), squint: 1, lid: 1),
+
+            new BaseTutorialStep("browtutorial", TimeSpan.FromSeconds(10)),
+            eyeCaptureStepFactory.Create("brow",
+                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20), browAngry: 1, lid: 1),
+            // steps.Add(new BaseTutorialStep("covergencetutorial"));
+            // steps.Add(_eyeCaptureStepFactory.Create("covergence",
+            //     CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_WHATEVER_NOT_IMPLEMENTED));
+
+            new MergeBinsStep("gaze.bin", "blink.bin", "widen.bin", "squint.bin", "brow.bin"),
             new TrainerCalibrationStep(trainer),
             new CommandDispatchStep("close")
 
@@ -407,7 +383,7 @@ public class EyeCalibration(
         List<ICalibrationStep> steps =
         [
             new BaseTutorialStep("gazetutorialshort", TimeSpan.FromSeconds(5)),
-            new GazeCaptureStep(eyePipelineEventBus),
+            new GazeCaptureStep(eyePipelineEventBus, TimeSpan.FromSeconds(10)),
             new BaseTutorialStep("blinktutorial", TimeSpan.FromSeconds(4)),
             eyeCaptureStepFactory.Create("blink",
                 CaptureFlags.FLAG_GOOD_DATA |
@@ -417,45 +393,19 @@ public class EyeCalibration(
                 TimeSpan.FromSeconds(20)
             ),
 
-            new MergeBinsStep("gaze.bin", "blink.bin"),
-            new TrainerCalibrationStep(trainer),
-            new CommandDispatchStep("close")
+            new BaseTutorialStep("widentutorial", TimeSpan.FromSeconds(4)),
+            eyeCaptureStepFactory.Create("widen",
+                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20)),
 
-        ];
+            new BaseTutorialStep("squinttutorial", TimeSpan.FromSeconds(4)),
+            eyeCaptureStepFactory.Create("squint",
+                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20)),
 
-        return steps;
-    }
+            new BaseTutorialStep("browtutorial", TimeSpan.FromSeconds(4)),
+            eyeCaptureStepFactory.Create("brow",
+                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20)),
 
-    public IEnumerable<ICalibrationStep> GazeCalibration()
-    {
-        List<ICalibrationStep> steps =
-        [
-            new BaseTutorialStep("gazetutorialshort", TimeSpan.FromSeconds(5)),
-            new GazeCaptureStep(eyePipelineEventBus),
-
-            new MergeBinsStep("gaze.bin", "blink.bin"),
-            new TrainerCalibrationStep(trainer),
-            new CommandDispatchStep("close")
-
-        ];
-
-        return steps;
-    }
-
-    public IEnumerable<ICalibrationStep> BlinkCalibration()
-    {
-        List<ICalibrationStep> steps =
-        [
-            new BaseTutorialStep("blinktutorial", TimeSpan.FromSeconds(4)),
-            eyeCaptureStepFactory.Create("blink",
-                CaptureFlags.FLAG_GOOD_DATA |
-                CaptureFlags.FLAG_IN_MOVEMENT |
-                CaptureFlags.FLAG_VERSION_BIT1 |
-                CaptureFlags.FLAG_ROUTINE_BIT1,
-                TimeSpan.FromSeconds(20)
-            ),
-
-            new MergeBinsStep("gaze.bin", "blink.bin"),
+            new MergeBinsStep("gaze.bin", "blink.bin", "widen.bin", "squint.bin", "brow.bin"),
             new TrainerCalibrationStep(trainer),
             new CommandDispatchStep("close")
 

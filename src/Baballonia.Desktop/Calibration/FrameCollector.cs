@@ -8,17 +8,11 @@ using OverlaySDK.Packets;
 
 namespace Baballonia.Desktop.Calibration;
 
-public class PositionalBinCollector
+public class PositionalBinCollector(uint headerFlags)
 {
     private readonly object _lock = new();
     private readonly List<Frame> _frames = new();
     private HmdPositionalDataPacket? _latestPosData;
-    private uint _headerFlags;
-
-    public PositionalBinCollector(uint headerFlags)
-    {
-        _headerFlags = headerFlags;
-    }
 
     public void UpdatePositionalData(HmdPositionalDataPacket posData)
     {
@@ -30,7 +24,7 @@ public class PositionalBinCollector
         var time = (ulong)DateTimeOffset.Now.ToUnixTimeMilliseconds();
         return new CaptureFrameHeader
         {
-            RoutineState = _headerFlags,
+            RoutineState = headerFlags,
             LeftEyePitch = positionalData.LeftEyePitch, // Flip this
             LeftEyeYaw = -positionalData.LeftEyeYaw,
             RightEyePitch = positionalData.RightEyePitch, // Flip this
@@ -89,18 +83,13 @@ public class PositionalBinCollector
         CaptureBin.IO.CaptureBin.WriteAll(Path.Combine(Utils.ModelDataDirectory, path), copy);
     }
 }
-public class BinCollector
+public class BinCollector(uint headerFlags)
 {
     private readonly object _lock = new();
     private readonly List<Frame> _frames = new();
-    private uint _headerFlags;
-    // empty data, because bin
-    HmdPositionalDataPacket positionalData = new HmdPositionalDataPacket();
 
-    public BinCollector(uint headerFlags)
-    {
-        _headerFlags = headerFlags;
-    }
+    // empty data, because bin
+    HmdPositionalDataPacket _positionalData = new HmdPositionalDataPacket();
 
 
     private CaptureFrameHeader GenerateHeader()
@@ -108,16 +97,16 @@ public class BinCollector
         var time = (ulong)DateTimeOffset.Now.ToUnixTimeMilliseconds();
         return new CaptureFrameHeader
         {
-            RoutineState = _headerFlags,
-            LeftEyePitch = positionalData.LeftEyePitch,
-            LeftEyeYaw = -positionalData.LeftEyeYaw,
-            RightEyePitch = positionalData.RightEyePitch,
-            RightEyeYaw = -positionalData.RightEyeYaw,
-            RoutinePitch = positionalData.RoutinePitch,
-            RoutineYaw = positionalData.RoutineYaw,
-            RoutineDistance = positionalData.RoutineDistance,
-            RoutineConvergence = positionalData.RoutineConvergence,
-            FovAdjustDistance = positionalData.FovAdjustDistance,
+            RoutineState = headerFlags,
+            LeftEyePitch = _positionalData.LeftEyePitch,
+            LeftEyeYaw = -_positionalData.LeftEyeYaw,
+            RightEyePitch = _positionalData.RightEyePitch,
+            RightEyeYaw = -_positionalData.RightEyeYaw,
+            RoutinePitch = _positionalData.RoutinePitch,
+            RoutineYaw = _positionalData.RoutineYaw,
+            RoutineDistance = _positionalData.RoutineDistance,
+            RoutineConvergence = _positionalData.RoutineConvergence,
+            FovAdjustDistance = _positionalData.FovAdjustDistance,
             Timestamp = time,
             TimestampLeft = time,
             TimestampRight = time,
