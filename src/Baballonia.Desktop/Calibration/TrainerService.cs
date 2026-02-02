@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
@@ -35,7 +36,7 @@ public partial class TrainerService : ITrainerService
 
         var currentBatch = int.Parse(match.Groups[1].Value);
         var totalBatches = int.Parse(match.Groups[2].Value);
-        var loss = double.Parse(match.Groups[3].Value);
+        var loss = double.Parse(match.Groups[3].Value, CultureInfo.InvariantCulture);
 
         return new TrainerProgressReportPacket("Batch", currentBatch, totalBatches, loss);
     }
@@ -51,7 +52,7 @@ public partial class TrainerService : ITrainerService
 
         var currentEpoch = int.Parse(match.Groups[1].Value);
         var totalEpochs = int.Parse(match.Groups[2].Value);
-        var loss = double.Parse(match.Groups[3].Value);
+        var loss = double.Parse(match.Groups[3].Value, CultureInfo.InvariantCulture);
 
         return new TrainerProgressReportPacket("Epoch", currentEpoch, totalEpochs, loss);
     }
