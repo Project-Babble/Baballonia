@@ -190,21 +190,25 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
                 _firmwareSessions.Add(SelectedSerialPort!, s);
             }
 
-            var session = _firmwareSessions[SelectedSerialPort!];
             // for legacy only
-            if (session.Version < new Version(0, 0, 1))
+            var session = _firmwareSessions[SelectedSerialPort!];
+            if (session != null)
             {
-                var res = await TrySendCommandAsync(new FirmwareRequests.SetPausedRequest(true),
-                    TimeSpan.FromSeconds(5));
-                IsValidDeviceSelected = res.IsSuccess;
+                if (session.Version < new Version(0, 0, 1))
+                {
+                    var res = await TrySendCommandAsync(new FirmwareRequests.SetPausedRequest(true),
+                        TimeSpan.FromSeconds(5));
+                    IsValidDeviceSelected = res.IsSuccess;
+                }
             }
             else
+            {
                 IsValidDeviceSelected = true;
+            }
 
-            if (IsValidDeviceSelected)
-                SelectTracker = Resources.Firmware_SelectTracker_Connected;
-            else
-                SelectTracker = Resources.Firmware_SelectTracker_NoResponse;
+            SelectTracker = IsValidDeviceSelected ?
+                Resources.Firmware_SelectTracker_Connected :
+                Resources.Firmware_SelectTracker_NoResponse;
 
             await Task.Delay(3000);
             SelectTracker = Resources.Firmware_SelectTracker_Default;
@@ -370,13 +374,15 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     {
         try
         {
-            return await _firmwareSessions[SelectedSerialPort!].SendCommandAsync(request, timeSpan);
+            if (_firmwareSessions[SelectedSerialPort!] != null)
+                return await _firmwareSessions[SelectedSerialPort!].SendCommandAsync(request, timeSpan);
         }
         catch (Exception e)
         {
             _logger.LogError("Error while sending command {Exception}", e);
-            return await Task.FromResult(FirmwareResponse<JsonDocument>.Failure($"Error while sending command: {e}"));
         }
+
+        return await Task.FromResult(FirmwareResponse<JsonDocument>.Failure("Error while sending command."));
     }
 
     public void Dispose()

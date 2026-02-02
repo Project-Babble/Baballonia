@@ -38,14 +38,12 @@ namespace Baballonia.Helpers
                     _serialPort.DiscardOutBuffer();
                     break;
                 }
-                catch (IOException)
-                {
-                    // Timeout
-                    maxRetries = 0;
-                }
                 catch (Exception ex)
                 {
-                    if (ex is not FileNotFoundException && ex is not UnauthorizedAccessException) throw;
+                    if (ex is IOException or InvalidOperationException)
+                        maxRetries = 0; // Timeout
+                    if (ex is not FileNotFoundException && ex is not UnauthorizedAccessException)
+                        throw; // Problem, leave
                     maxRetries--;
                     Thread.Sleep(sleepTimeInMs);
                 }
@@ -63,14 +61,20 @@ namespace Baballonia.Helpers
         public string ReadLine(TimeSpan timeout)
         {
             string data;
-
-            // Read available data
-            if (_serialPort.BytesToRead > 0)
+            try
             {
-                data = _serialPort.ReadExisting();
-                data = data.Trim();
+                // Read available data
+                if (_serialPort.BytesToRead > 0)
+                {
+                    data = _serialPort.ReadExisting();
+                    data = data.Trim();
+                }
+                else
+                {
+                    return "";
+                }
             }
-            else
+            catch (InvalidOperationException) // Port is closed
             {
                 return "";
             }
