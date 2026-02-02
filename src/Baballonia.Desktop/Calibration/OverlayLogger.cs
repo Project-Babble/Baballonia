@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Extensions.Logging;
 
-namespace Baballonia.Desktop.Calibration.Aero;
+namespace Baballonia.Desktop.Calibration;
 
 public class OverlayLogger(ILogger logger) : OverlaySDK.ILogger
 {
