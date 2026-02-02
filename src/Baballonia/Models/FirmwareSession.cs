@@ -75,7 +75,7 @@ public class FirmwareSessionV1 : IVersionedFirmwareSession, IDisposable
         }
     }
 
-    public FirmwareResponses.Heartbeat? WaitForHeartbeat()
+    private FirmwareResponses.Heartbeat? WaitForHeartbeat()
     {
         return WaitForHeartbeat(new TimeSpan(5000));
     }
@@ -121,11 +121,21 @@ public class FirmwareSessionV1 : IVersionedFirmwareSession, IDisposable
             if (response == null)
                 return FirmwareResponse<JsonDocument>.Failure("Wtf?");
 
-            var result =  JsonSerializer.Deserialize<FirmwareResponses.GenericResult>(response.results.First());
-
-            return FirmwareResponse<JsonDocument>.Success(JsonSerializer.Deserialize<JsonDocument>(result!.result)!);
+            try
+            {
+                // Attempt to extract inner content
+                var result = JsonSerializer.Deserialize<FirmwareResponses.GenericResult>(response.results.First());
+                return FirmwareResponse<JsonDocument>.Success(
+                    JsonSerializer.Deserialize<JsonDocument>(result!.result)!);
+            }
+            catch (JsonException)
+            {
+                // Attempt to extract outer content
+                return FirmwareResponse<JsonDocument>.Success(
+                    JsonSerializer.Deserialize<JsonDocument>(response.results.First())!);
+            }
         }
-        catch (TimeoutException ex)
+        catch (TimeoutException)
         {
             return FirmwareResponse<JsonDocument>.Failure("Timeout reached");
         }
