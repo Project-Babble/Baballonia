@@ -191,8 +191,7 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
             }
 
             // for legacy only
-            var session = _firmwareSessions[SelectedSerialPort!];
-            if (session != null)
+            if (_firmwareSessions.TryGetValue(SelectedSerialPort!, out var session))
             {
                 if (session.Version < new Version(0, 0, 1))
                 {
@@ -309,6 +308,7 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
         await Task.Delay(2000);
         WifiSetButton = Resources.Firmware_WifiSetButton_Default;
 
+        // By this point we should have a valid serial port, no need to do any error wrapping here
         //if (!string.IsNullOrEmpty(Mdns))
         //{
         //    _firmwareSessions[SelectedSerialPort!].SendCommand(new FirmwareRequests.SetMdns(Mdns), TimeSpan.FromSeconds(30));
@@ -318,7 +318,7 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     [RelayCommand]
     private async Task FlashFirmware()
     {
-        if (_firmwareSessions.TryGetValue(SelectedSerialPort!, out IFirmwareSession? value))
+        if (_firmwareSessions.TryGetValue(SelectedSerialPort!, out var value))
         {
             // True, this is a multimodal device that needs to be released prior to flashing
             await TrySendCommandAsync(new FirmwareRequests.SetPausedRequest(false), TimeSpan.FromSeconds(5));
@@ -353,6 +353,7 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
         IsFlashing = false;
 
         IsFinished = true;
+        // No need to check if this is a valid Babble tracker - treat it like a normal device
         _firmwareSessions[SelectedSerialPort!] =
             _firmwareService.StartSession(CommandSenderType.Serial, SelectedSerialPort!);
         await Task.Delay(5000);
@@ -374,8 +375,10 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     {
         try
         {
-            if (_firmwareSessions[SelectedSerialPort!] != null)
-                return await _firmwareSessions[SelectedSerialPort!].SendCommandAsync(request, timeSpan);
+            if (_firmwareSessions.TryGetValue(SelectedSerialPort!, out var session))
+            {
+                return await session.SendCommandAsync(request, timeSpan);
+            }
         }
         catch (Exception e)
         {
