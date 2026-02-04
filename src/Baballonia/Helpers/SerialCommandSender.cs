@@ -40,12 +40,22 @@ public class SerialCommandSender : ICommandSender
             }
             catch (Exception ex)
             {
-                if (ex is IOException or InvalidOperationException)
-                    maxRetries = 0; // Timeout
-                if (ex is not FileNotFoundException && ex is not UnauthorizedAccessException)
-                    throw; // Problem, leave
-                maxRetries--;
-                Thread.Sleep(sleepTimeInMs);
+                switch (ex)
+                {
+                    case FileNotFoundException:
+                    case UnauthorizedAccessException:
+                        maxRetries--;
+                        Thread.Sleep(sleepTimeInMs);
+                        break;
+
+                    case IOException:
+                    case InvalidOperationException:
+                        maxRetries = 0;
+                        break;
+
+                    default:
+                        throw;
+                }
             }
         }
     }
@@ -78,17 +88,18 @@ public class SerialCommandSender : ICommandSender
                 return "";
             }
         }
-        catch (IOException)               // Port is closed
+        catch (Exception ex)
         {
-            return "";
-        }
-        catch (InvalidOperationException) // Port is closed
-        {
-            return "";
-        }
-        catch (OperationCanceledException) // Port is closed
-        {
-            return "";
+            switch (ex)
+            {
+                case IOException:
+                case InvalidOperationException:
+                case OperationCanceledException:
+                    return ""; // Port is closed
+
+                default:
+                    throw;
+            }
         }
 
         return data;
