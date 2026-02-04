@@ -5,110 +5,109 @@ using System.Text;
 using System.Threading;
 using Baballonia.Contracts;
 
-namespace Baballonia.Helpers
+namespace Baballonia.Helpers;
+
+public class SerialCommandSender : ICommandSender
 {
-    public class SerialCommandSender : ICommandSender
+    private const int DefaultBaudRate = 115200; // esptool-rs: Setting baud rate higher than 115,200 can cause issues
+    private readonly SerialPort _serialPort;
+
+    public SerialCommandSender(string port)
     {
-        private const int DefaultBaudRate = 115200; // esptool-rs: Setting baud rate higher than 115,200 can cause issues
-        private readonly SerialPort _serialPort;
+        _serialPort = new SerialPort(port, DefaultBaudRate);
 
-        public SerialCommandSender(string port)
-        {
-            _serialPort = new SerialPort(port, DefaultBaudRate);
+        // Set serial port parameters
+        _serialPort.DataBits = 8;
+        _serialPort.StopBits = StopBits.One;
+        _serialPort.Parity = Parity.None;
+        _serialPort.Handshake = Handshake.None;
 
-            // Set serial port parameters
-            _serialPort.DataBits = 8;
-            _serialPort.StopBits = StopBits.One;
-            _serialPort.Parity = Parity.None;
-            _serialPort.Handshake = Handshake.None;
+        // Set read/write timeouts
+        _serialPort.ReadTimeout = 30000;
+        _serialPort.WriteTimeout = 30000;
+        _serialPort.Encoding = Encoding.UTF8;
 
-            // Set read/write timeouts
-            _serialPort.ReadTimeout = 30000;
-            _serialPort.WriteTimeout = 30000;
-            _serialPort.Encoding = Encoding.UTF8;
-
-            int maxRetries = 5;
-            const int sleepTimeInMs = 50;
-            while (maxRetries > 0)
-            {
-                try
-                {
-                    _serialPort.Open();
-                    _serialPort.DiscardInBuffer();
-                    _serialPort.DiscardOutBuffer();
-                    break;
-                }
-                catch (Exception ex)
-                {
-                    if (ex is IOException or InvalidOperationException)
-                        maxRetries = 0; // Timeout
-                    if (ex is not FileNotFoundException && ex is not UnauthorizedAccessException)
-                        throw; // Problem, leave
-                    maxRetries--;
-                    Thread.Sleep(sleepTimeInMs);
-                }
-            }
-        }
-
-        public void Dispose()
+        int maxRetries = 5;
+        const int sleepTimeInMs = 50;
+        while (maxRetries > 0)
         {
             try
             {
-                if (_serialPort.IsOpen)
-                    _serialPort.Close();
-
-                _serialPort.Dispose();
+                _serialPort.Open();
+                _serialPort.DiscardInBuffer();
+                _serialPort.DiscardOutBuffer();
+                break;
             }
-            catch (IOException) { }
+            catch (Exception ex)
+            {
+                if (ex is IOException or InvalidOperationException)
+                    maxRetries = 0; // Timeout
+                if (ex is not FileNotFoundException && ex is not UnauthorizedAccessException)
+                    throw; // Problem, leave
+                maxRetries--;
+                Thread.Sleep(sleepTimeInMs);
+            }
+        }
+    }
+
+    public void Dispose()
+    {
+        try
+        {
+            if (_serialPort.IsOpen)
+                _serialPort.Close();
+
+            _serialPort.Dispose();
+        }
+        catch (IOException) { }
+    }
+
+    public string ReadLine(TimeSpan timeout)
+    {
+        string data;
+        try
+        {
+            // Read available data
+            if (_serialPort.BytesToRead > 0)
+            {
+                data = _serialPort.ReadExisting();
+                data = data.Trim();
+            }
+            else
+            {
+                return "";
+            }
+        }
+        catch (IOException)               // Port is closed
+        {
+            return "";
+        }
+        catch (InvalidOperationException) // Port is closed
+        {
+            return "";
+        }
+        catch (OperationCanceledException) // Port is closed
+        {
+            return "";
         }
 
-        public string ReadLine(TimeSpan timeout)
+        return data;
+    }
+
+    public void WriteLine(string payload)
+    {
+        _serialPort.DiscardInBuffer();
+
+        // Convert the payload to bytes
+        byte[] payloadBytes = Encoding.UTF8.GetBytes(payload);
+
+        // Write the payload to the serial port
+        const int chunkSize = 256;
+        for (int i = 0; i < payloadBytes.Length; i += chunkSize)
         {
-            string data;
-            try
-            {
-                // Read available data
-                if (_serialPort.BytesToRead > 0)
-                {
-                    data = _serialPort.ReadExisting();
-                    data = data.Trim();
-                }
-                else
-                {
-                    return "";
-                }
-            }
-            catch (IOException)               // Port is closed
-            {
-                return "";
-            }
-            catch (InvalidOperationException) // Port is closed
-            {
-                return "";
-            }
-            catch (OperationCanceledException) // Port is closed
-            {
-                return "";
-            }
-
-            return data;
-        }
-
-        public void WriteLine(string payload)
-        {
-            _serialPort.DiscardInBuffer();
-
-            // Convert the payload to bytes
-            byte[] payloadBytes = Encoding.UTF8.GetBytes(payload);
-
-            // Write the payload to the serial port
-            const int chunkSize = 256;
-            for (int i = 0; i < payloadBytes.Length; i += chunkSize)
-            {
-                int length = Math.Min(chunkSize, payloadBytes.Length - i);
-                _serialPort.Write(payloadBytes, i, length);
-                Thread.Sleep(50); // Small pause between chunks
-            }
+            int length = Math.Min(chunkSize, payloadBytes.Length - i);
+            _serialPort.Write(payloadBytes, i, length);
+            Thread.Sleep(50); // Small pause between chunks
         }
     }
 }
