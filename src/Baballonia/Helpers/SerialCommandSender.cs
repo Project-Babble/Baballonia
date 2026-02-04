@@ -78,6 +78,10 @@ namespace Baballonia.Helpers
                     return "";
                 }
             }
+            catch (IOException)               // Port is closed
+            {
+                return "";
+            }
             catch (InvalidOperationException) // Port is closed
             {
                 return "";
