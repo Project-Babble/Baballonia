@@ -178,7 +178,8 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     [RelayCommand]
     private async Task SelectSerialPort()
     {
-        if (IsDeviceSelectionPresent)
+        // No, 'openiristracker' is not a valid COM object or device path
+        if (IsDeviceSelectionPresent && CanConnect(SelectedSerialPort!))
         {
             // If we haven't already refreshed, create the new firmware session for the
             // Manually typed in tracker
@@ -223,6 +224,16 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
             await Task.Delay(3000);
             SelectTracker = Resources.Firmware_SelectTracker_Default;
         }
+    }
+
+    // Plucked from SerialCameraCaptureFactory.cs
+    private bool CanConnect(string address)
+    {
+        var lowered = address.ToLower();
+        return lowered.StartsWith("com") ||
+               lowered.StartsWith("/dev/tty") ||
+               lowered.StartsWith("/dev/cu") ||
+               lowered.StartsWith("/dev/ttyacm");
     }
 
     [RelayCommand]
