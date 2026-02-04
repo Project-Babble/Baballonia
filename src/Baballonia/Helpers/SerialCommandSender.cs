@@ -52,10 +52,14 @@ namespace Baballonia.Helpers
 
         public void Dispose()
         {
-            if (_serialPort.IsOpen)
-                _serialPort.Close();
+            try
+            {
+                if (_serialPort.IsOpen)
+                    _serialPort.Close();
 
-            _serialPort.Dispose();
+                _serialPort.Dispose();
+            }
+            catch (IOException) { }
         }
 
         public string ReadLine(TimeSpan timeout)
@@ -75,6 +79,10 @@ namespace Baballonia.Helpers
                 }
             }
             catch (InvalidOperationException) // Port is closed
+            {
+                return "";
+            }
+            catch (OperationCanceledException) // Port is closed
             {
                 return "";
             }

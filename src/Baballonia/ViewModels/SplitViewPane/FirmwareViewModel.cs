@@ -190,19 +190,30 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
                 _firmwareSessions.Add(SelectedSerialPort!, s);
             }
 
-            // for legacy only
             if (_firmwareSessions.TryGetValue(SelectedSerialPort!, out var session))
             {
-                if (session.Version < new Version(0, 0, 1))
+                if (session == null)
+                {
+                    IsValidDeviceSelected = false;
+                }
+                else if (session.Version < new Version(0, 0, 1))      // open v1 device. v1 devices do not report version, but they respond to commands
                 {
                     var res = await TrySendCommandAsync(new FirmwareRequests.SetPausedRequest(true),
                         TimeSpan.FromSeconds(5));
-                    IsValidDeviceSelected = res.IsSuccess;
+                    IsValidDeviceSelected = res.IsSuccess; 
+                }
+                else if (session.Version > new Version(0, 2, 0)) // open v2 device. v2 devices report version and respond to commands
+                {
+                    IsValidDeviceSelected = true;
+                }
+                else
+                {
+                    IsValidDeviceSelected = false;               // wtf?
                 }
             }
             else
             {
-                IsValidDeviceSelected = true;
+                IsValidDeviceSelected = false;                    // open legacy device. legacy devices do not have versions or commands
             }
 
             SelectTracker = IsValidDeviceSelected ?
@@ -320,6 +331,8 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     {
         if (_firmwareSessions.TryGetValue(SelectedSerialPort!, out var value))
         {
+            if (value == null) return;
+
             // True, this is a multimodal device that needs to be released prior to flashing
             await TrySendCommandAsync(new FirmwareRequests.SetPausedRequest(false), TimeSpan.FromSeconds(5));
             value.Dispose();
@@ -398,7 +411,8 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
 
         foreach (var sessions in _firmwareSessions.Values)
         {
-            sessions.SendCommand(new FirmwareRequests.SetPausedRequest(false), TimeSpan.FromSeconds(5));
+            if (sessions != null)
+                sessions.SendCommand(new FirmwareRequests.SetPausedRequest(false), TimeSpan.FromSeconds(5));
         }
     }
 }
