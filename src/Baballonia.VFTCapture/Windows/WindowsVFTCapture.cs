@@ -30,9 +30,11 @@ public sealed class WindowsVftCapture(string source, ILogger logger) : Capture(s
 
                 // Initialize VideoCapture with URL, timeout for robustness
                 if (int.TryParse(Source, out var index))
-                    _videoCapture = await Task.Run(() => VideoCapture.FromCamera(index, VideoCaptureAPIs.DSHOW), cts.Token);
+                    _videoCapture = await Task.Run(() => VideoCapture.FromCamera(index, VideoCaptureAPIs.MSMF), cts.Token);
                 else
                     _videoCapture = await Task.Run(() => new VideoCapture(Source), cts.Token);
+
+                _videoCapture.ConvertRgb = false;
 
                 _loop = true;
                 _ = Task.Run(VideoCapture_UpdateLoop);
@@ -52,6 +54,7 @@ public sealed class WindowsVftCapture(string source, ILogger logger) : Capture(s
 
     private Task VideoCapture_UpdateLoop()
     {
+        Mat yuyvMat = new();
         Mat yuvConvert = new();
         while (_loop)
         {
@@ -60,7 +63,9 @@ public sealed class WindowsVftCapture(string source, ILogger logger) : Capture(s
                 IsReady = _videoCapture?.Read(_originalMat) == true;
                 if (!IsReady) continue;
 
-                Cv2.ExtractChannel(_originalMat, yuvConvert, 0);
+                yuyvMat = Mat.FromPixelData(400, 400, MatType.CV_8UC2, _originalMat.Data);
+
+                yuvConvert = yuyvMat.CvtColor(ColorConversionCodes.YUV2GRAY_Y422, 0);
                 yuvConvert = yuvConvert.ColRange(VFTCommon.ColumnRange);
                 yuvConvert = yuvConvert.Resize(VFTCommon.ImageSize);
                 yuvConvert = yuvConvert.GaussianBlur(VFTCommon.GaussianBlurSize, 0);
@@ -77,6 +82,7 @@ public sealed class WindowsVftCapture(string source, ILogger logger) : Capture(s
                 // ignored
             }
         }
+        yuyvMat.Dispose();
         yuvConvert.Dispose();
 
         return Task.CompletedTask;
