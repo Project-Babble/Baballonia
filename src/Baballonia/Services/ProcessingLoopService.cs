@@ -29,6 +29,9 @@ public class ProcessingLoopService : IDisposable
     private readonly EyeProcessingPipeline _eyeProcessingPipeline;
     private readonly EyePipelineManager _eyePipelineManager;
     private readonly IEyePipelineEventBus _eyePipelineEventBus;
+    private int _faceTrackingExceptions = 0;
+    private int _eyeTrackingExceptions = 0;
+    
 
     private readonly DispatcherTimer _drawTimer = new()
     {
@@ -63,11 +66,19 @@ public class ProcessingLoopService : IDisposable
             var faceExpression = _faceProcessingPipeline.RunUpdate();
             if (faceExpression != null)
                 expressions.FaceExpression = faceExpression;
+            _faceTrackingExceptions = 0;
         }
         catch (Exception ex)
         {
-            _logger.LogError("Unexpected exception in Face Tracking pipeline, stopping... : {}", ex);
-            _facePipelineManager.StopCamera();
+            if (_faceTrackingExceptions++ < 3)
+            {
+                _logger.LogError("Unexpected exception in Face Tracking pipeline, allowing to continue in case its anomalous... : {}", ex);
+            }
+            else
+            {
+                _logger.LogError("Unexpected exception in Face Tracking pipeline, stopping due to exceeding failure limit... : {}", ex);
+                _facePipelineManager.StopCamera();
+            }
             _facePipelineEventBus.Publish(new FacePipelineEvents.ExceptionEvent(ex));
         }
 
@@ -76,11 +87,19 @@ public class ProcessingLoopService : IDisposable
             var eyeExpression = _eyeProcessingPipeline.RunUpdate();
             if (eyeExpression != null)
                 expressions.EyeExpression = eyeExpression;
+            _eyeTrackingExceptions = 0;
         }
         catch (Exception ex)
         {
-            _logger.LogError("Unexpected exception in Eye Tracking pipeline, stopping... : {}", ex);
-            _eyePipelineManager.StopAllCameras();
+            if (_eyeTrackingExceptions++ < 3)
+            {
+                _logger.LogError("Unexpected exception in Eye Tracking pipeline, allowing to continue in case its anomalous... : {}", ex);
+            }
+            else
+            {
+                _logger.LogError("Unexpected exception in Eye Tracking pipeline, stopping due to exceeding failure limit... : {}", ex);
+            }
+            //_eyePipelineManager.StopAllCameras();
             _eyePipelineEventBus.Publish(new EyePipelineEvents.ExceptionEvent(ex));
         }
 
