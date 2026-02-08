@@ -5,9 +5,9 @@ namespace Baballonia.VFTCapture;
 public static class VFTCommon
 {
     public static readonly Mat Lut = new();
-    public static readonly OpenCvSharp.Range ColumnRange = new OpenCvSharp.Range(0, 200);
-    public static readonly Size ImageSize = new Size(400, 400);
-    public static readonly Size GaussianBlurSize = new Size(5, 5);
+    public static readonly OpenCvSharp.Range ColumnRange = new(0, 200);
+    public static readonly Size ImageSize = new(400, 400);
+    public static readonly Size GaussianBlurSize = new(5, 5);
     public static readonly double InvGamma = 1.0 / 2.5;
 
     static VFTCommon()
