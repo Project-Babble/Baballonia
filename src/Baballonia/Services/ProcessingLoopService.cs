@@ -120,7 +120,10 @@ public class ProcessingLoopService : IDisposable
                 if (_eyeTrackingExceptions++ < 3)
                     _logger.LogError("Unexpected exception in Eye Tracking pipeline; allowing it to continue in case it is anomalous: {}", ex);
                 else
+                {
                     _logger.LogError("Unexpected exception in Eye Tracking pipeline; failure limit exceeded: {}", ex);
+                    _eyePipelineManager.StopAllCameras();
+                }
                 _eyePipelineEventBus.Publish(new EyePipelineEvents.ExceptionEvent(ex));
             }
         }
