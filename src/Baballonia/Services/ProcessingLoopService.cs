@@ -98,8 +98,8 @@ public class ProcessingLoopService : IDisposable
             else
             {
                 _logger.LogError("Unexpected exception in Eye Tracking pipeline, stopping due to exceeding failure limit... : {}", ex);
+                _eyePipelineManager.StopAllCameras();
             }
-            //_eyePipelineManager.StopAllCameras();
             _eyePipelineEventBus.Publish(new EyePipelineEvents.ExceptionEvent(ex));
         }
 
