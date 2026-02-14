@@ -4,90 +4,89 @@ using Baballonia.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Baballonia.Tests.FirmwareTests
+namespace Baballonia.Tests.FirmwareTests;
+
+// Here we'll put integration testing with a real microcontroller
+[TestClass]
+public class FirmwareIntegrationTest
 {
-    // Here we'll put integration testing with a real microcontroller
-    [TestClass]
-    public class FirmwareIntegrationTest
+    private static readonly string PORT = "COM4";
+    private static readonly string WIFI_SSID = "ASUS_50";
+    private static readonly string WIFI_PWD = "172839456";
+
+    private ILogger _logger;
+
+    [TestInitialize]
+    public void Initialize()
     {
-        private static readonly string PORT = "COM4";
-        private static readonly string WIFI_SSID = "ASUS_50";
-        private static readonly string WIFI_PWD = "172839456";
-
-        private ILogger _logger;
-
-        [TestInitialize]
-        public void Initialize()
+        var loggerFactory = LoggerFactory.Create(builder =>
         {
-            var loggerFactory = LoggerFactory.Create(builder =>
-            {
-                builder
-                    .AddConsole()
-                    .SetMinimumLevel(LogLevel.Debug);
-            });
+            builder
+                .AddConsole()
+                .SetMinimumLevel(LogLevel.Debug);
+        });
 
-            _logger = loggerFactory.CreateLogger("TEST");
-        }
+        _logger = loggerFactory.CreateLogger("TEST");
+    }
 
-        [TestMethod]
-        public void TestBoard()
-        {
-            var session = new FirmwareSessionV1(new SerialCommandSender(PORT), _logger);
-            Assert.IsNotNull(session.WaitForHeartbeat(TimeSpan.FromSeconds(10)));
-        }
+    [TestMethod]
+    public void TestBoard()
+    {
+        var session = new FirmwareSessionV1(new SerialCommandSender(PORT), _logger);
+        Assert.IsNotNull(session.WaitForHeartbeat(TimeSpan.FromSeconds(10)));
+    }
 
-        [TestMethod]
-        public void FindAndConnectWifiSuccess()
-        {
-            var session = new FirmwareSessionV1(new SerialCommandSender(PORT), _logger);
+    [TestMethod]
+    public void FindAndConnectWifiSuccess()
+    {
+        var session = new FirmwareSessionV1(new SerialCommandSender(PORT), _logger);
 
-            session.WaitForHeartbeat(TimeSpan.FromSeconds(10));
-            session.SendCommand(new FirmwareRequests.SetPausedRequest(true), TimeSpan.FromSeconds(30));
-            var networks = session.SendCommand(new FirmwareRequests.ScanWifiRequest(), TimeSpan.FromSeconds(30));
-            Assert.IsTrue(networks.IsSuccess);
+        session.WaitForHeartbeat(TimeSpan.FromSeconds(10));
+        session.SendCommand(new FirmwareRequests.SetPausedRequest(true), TimeSpan.FromSeconds(30));
+        var networks = session.SendCommand(new FirmwareRequests.ScanWifiRequest(), TimeSpan.FromSeconds(30));
+        Assert.IsTrue(networks.IsSuccess);
 
-            var find = networks.Value!.Networks.Find(network => network.Ssid == WIFI_SSID);
-            Assert.IsNotNull(find);
+        var find = networks.Value!.Networks.Find(network => network.Ssid == WIFI_SSID);
+        Assert.IsNotNull(find);
 
-            session.SendCommand(new FirmwareRequests.SetWifiRequest(WIFI_SSID, WIFI_PWD), TimeSpan.FromSeconds(30));
+        session.SendCommand(new FirmwareRequests.SetWifiRequest(WIFI_SSID, WIFI_PWD), TimeSpan.FromSeconds(30));
 
-            var connectionres = session.SendCommand(new FirmwareRequests.ConnectWifiRequest(), TimeSpan.FromSeconds(30));
-            Assert.IsNotNull(connectionres);
+        var connectionres = session.SendCommand(new FirmwareRequests.ConnectWifiRequest(), TimeSpan.FromSeconds(30));
+        Assert.IsNotNull(connectionres);
 
-            var wifistatus = session.SendCommand(new FirmwareRequests.GetWifiStatusRequest(), TimeSpan.FromSeconds(30));
-            Assert.IsTrue(wifistatus.IsSuccess);
-            Assert.AreEqual("connected", wifistatus.Value!.Status);
+        var wifistatus = session.SendCommand(new FirmwareRequests.GetWifiStatusRequest(), TimeSpan.FromSeconds(30));
+        Assert.IsTrue(wifistatus.IsSuccess);
+        Assert.AreEqual("connected", wifistatus.Value!.Status);
 
-            session.SendCommand(new FirmwareRequests.SetPausedRequest(false), TimeSpan.FromSeconds(30));
+        session.SendCommand(new FirmwareRequests.SetPausedRequest(false), TimeSpan.FromSeconds(30));
 
-            session.Dispose();
-        }
+        session.Dispose();
+    }
 
-        [TestMethod]
-        public void FindAndConnectWifiFail()
-        {
-            var session = new FirmwareSessionV1(new SerialCommandSender(PORT), _logger);
+    [TestMethod]
+    public void FindAndConnectWifiFail()
+    {
+        var session = new FirmwareSessionV1(new SerialCommandSender(PORT), _logger);
 
-            session.WaitForHeartbeat(TimeSpan.FromSeconds(10));
-            session.SendCommand(new FirmwareRequests.SetPausedRequest(true), TimeSpan.FromSeconds(30));
-            var networks = session.SendCommand(new FirmwareRequests.ScanWifiRequest(), TimeSpan.FromSeconds(30));
-            Assert.IsTrue(networks.IsSuccess);
+        session.WaitForHeartbeat(TimeSpan.FromSeconds(10));
+        session.SendCommand(new FirmwareRequests.SetPausedRequest(true), TimeSpan.FromSeconds(30));
+        var networks = session.SendCommand(new FirmwareRequests.ScanWifiRequest(), TimeSpan.FromSeconds(30));
+        Assert.IsTrue(networks.IsSuccess);
 
-            var find = networks.Value!.Networks.Find(network => network.Ssid == WIFI_SSID);
-            Assert.IsNotNull(find);
+        var find = networks.Value!.Networks.Find(network => network.Ssid == WIFI_SSID);
+        Assert.IsNotNull(find);
 
-            session.SendCommand(new FirmwareRequests.SetWifiRequest("", WIFI_PWD), TimeSpan.FromSeconds(30));
+        session.SendCommand(new FirmwareRequests.SetWifiRequest("", WIFI_PWD), TimeSpan.FromSeconds(30));
 
-            var connectionres = session.SendCommand(new FirmwareRequests.ConnectWifiRequest(), TimeSpan.FromSeconds(30));
-            Assert.IsNotNull(connectionres);
+        var connectionres = session.SendCommand(new FirmwareRequests.ConnectWifiRequest(), TimeSpan.FromSeconds(30));
+        Assert.IsNotNull(connectionres);
 
-            var wifistatus = session.SendCommand(new FirmwareRequests.GetWifiStatusRequest(), TimeSpan.FromSeconds(30));
-            Assert.IsTrue(wifistatus.IsSuccess);
-            Assert.AreEqual("error", wifistatus.Value!.Status);
+        var wifistatus = session.SendCommand(new FirmwareRequests.GetWifiStatusRequest(), TimeSpan.FromSeconds(30));
+        Assert.IsTrue(wifistatus.IsSuccess);
+        Assert.AreEqual("error", wifistatus.Value!.Status);
 
-            session.SendCommand(new FirmwareRequests.SetPausedRequest(false), TimeSpan.FromSeconds(30));
+        session.SendCommand(new FirmwareRequests.SetPausedRequest(false), TimeSpan.FromSeconds(30));
 
-            session.Dispose();
-        }
+        session.Dispose();
     }
 }

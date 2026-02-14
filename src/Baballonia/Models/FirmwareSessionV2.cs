@@ -10,47 +10,35 @@ using Microsoft.Extensions.Logging;
 
 namespace Baballonia.Models;
 
-public class FirmwareSessionV2 : IVersionedFirmwareSession, IDisposable
+public class FirmwareSessionV2(ICommandSender commandSender, ILogger logger) : IVersionedFirmwareSession, IDisposable
 {
-    private ICommandSender _commandSender;
-    private ILogger _logger;
-
     // default to minimal required version for which this Session is expected to work
     // will be overridden by factory if needed
-    public Version Version { get; set; } = new Version(0, 0, 1);
+    public Version Version { get; set; } = new(0, 0, 1);
 
-    JsonExtractor jsonExtractor = new JsonExtractor();
+    private readonly JsonExtractor _jsonExtractor = new();
 
-    private SemaphoreSlim _lock = new(1, 1);
+    private readonly SemaphoreSlim _lock = new(1, 1);
 
-    JsonSerializerOptions _options = new()
+    private static readonly JsonSerializerOptions Options = new()
     {
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
         WriteIndented = false
     };
 
-    public FirmwareSessionV2(ICommandSender commandSender, ILogger logger)
-    {
-        _commandSender = commandSender;
-        _logger = logger;
-    }
-
     private FirmwareResponses.GenericResponseV2? ReadResponse(TimeSpan timeout)
     {
-        JsonDocument json = jsonExtractor.ReadUntilValidJson(() => _commandSender.ReadLine(timeout), timeout);
-        _logger.LogDebug("Received json: {}", json.RootElement.GetRawText());
+        var json = _jsonExtractor.ReadUntilValidJson(() => commandSender.ReadLine(timeout), timeout);
+        logger.LogDebug("Received json: {}", json.RootElement.GetRawText());
         var response = json.Deserialize<FirmwareResponses.GenericResponseV2>();
-        if (response == null)
-            return null;
-
-        return response;
+        return response ?? null;
     }
 
     private void SendCommand(string command)
     {
         var payload = command + "\n";
-        _logger.LogDebug("Sending payload: {}", payload);
-        _commandSender.WriteLine(payload);
+        logger.LogDebug("Sending payload: {}", payload);
+        commandSender.WriteLine(payload);
     }
 
 
@@ -63,7 +51,7 @@ public class FirmwareSessionV2 : IVersionedFirmwareSession, IDisposable
         {
             var genericReqList = new { commands = new[] { request } };
 
-            var serialized = JsonSerializer.Serialize(genericReqList, _options);
+            var serialized = JsonSerializer.Serialize(genericReqList, Options);
             SendCommand(serialized);
 
             var response = ReadResponse(timeout);
@@ -100,7 +88,7 @@ public class FirmwareSessionV2 : IVersionedFirmwareSession, IDisposable
         {
             var genericReqList = new { commands = new[] { request } };
 
-            var serialized = JsonSerializer.Serialize(genericReqList, _options);
+            var serialized = JsonSerializer.Serialize(genericReqList, Options);
             SendCommand(serialized);
 
             var response = ReadResponse(timeout);
@@ -154,7 +142,7 @@ public class FirmwareSessionV2 : IVersionedFirmwareSession, IDisposable
 
     public void Dispose()
     {
-        if (_commandSender != null)
-            _commandSender.Dispose();
+        if (commandSender != null)
+            commandSender.Dispose();
     }
 }

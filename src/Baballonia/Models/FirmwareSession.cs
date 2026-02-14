@@ -13,30 +13,22 @@ namespace Baballonia.Models;
 /// <summary>
 /// Thread safe, async supported Session object for sending and receiving commands in json format
 /// </summary>
-public class FirmwareSessionV1 : IVersionedFirmwareSession, IDisposable
+public class FirmwareSessionV1(ICommandSender commandSender, ILogger logger) : IVersionedFirmwareSession, IDisposable
 {
-    private ICommandSender _commandSender;
-    private ILogger _logger;
     // this is legacy by default so it will always stay as 0.0.0
-    public Version Version { get; set; } = new Version(0, 0, 0);
+    public Version Version { get; set; } = new(0, 0, 0);
 
-    JsonExtractor jsonExtractor = new JsonExtractor();
+    private readonly JsonExtractor _jsonExtractor = new();
 
-    private SemaphoreSlim _lock = new(1, 1);
+    private readonly SemaphoreSlim _lock = new(1, 1);
 
-    JsonSerializerOptions _options = new()
+    private static readonly JsonSerializerOptions Options = new()
     {
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
         WriteIndented = false
     };
 
-    public FirmwareSessionV1(ICommandSender commandSender, ILogger logger)
-    {
-        _commandSender = commandSender;
-        _logger = logger;
-    }
-
-    private bool JsonHasPrefix(JsonDocument json, string key)
+    private static bool JsonHasPrefix(JsonDocument json, string key)
     {
         if (json.RootElement.ValueKind != JsonValueKind.Object) return false;
 
@@ -52,8 +44,8 @@ public class FirmwareSessionV1 : IVersionedFirmwareSession, IDisposable
     private void SendCommand(string command)
     {
         var payload = command;
-        _logger.LogDebug("Sending payload: {}", payload);
-        _commandSender.WriteLine(payload);
+        logger.LogDebug("Sending payload: {}", payload);
+        commandSender.WriteLine(payload);
     }
 
     private JsonDocument? ReadResponse(string responseJsonRootKey, TimeSpan timeout)
@@ -62,16 +54,15 @@ public class FirmwareSessionV1 : IVersionedFirmwareSession, IDisposable
         {
             Thread.Sleep(10); // give it some breathing time
 
-            JsonDocument json = jsonExtractor.ReadUntilValidJson(() => _commandSender.ReadLine(timeout), timeout);
-            _logger.LogDebug("Received json: {}", json.RootElement.GetRawText());
+            var json = _jsonExtractor.ReadUntilValidJson(() => commandSender.ReadLine(timeout), timeout);
+            logger.LogDebug("Received json: {}", json.RootElement.GetRawText());
             if (JsonHasPrefix(json, responseJsonRootKey))
                 return json;
-            if (JsonHasPrefix(json, "error"))
-            {
-                var err = JsonSerializer.Deserialize<FirmwareResponses.Error>(json);
-                _logger.LogError(err.error);
-                return null;
-            }
+            if (!JsonHasPrefix(json, "error")) continue;
+
+            var err = json.Deserialize<FirmwareResponses.Error>();
+            logger.LogError(err.error);
+            return null;
         }
     }
 
@@ -95,9 +86,9 @@ public class FirmwareSessionV1 : IVersionedFirmwareSession, IDisposable
                 return res?.Deserialize<FirmwareResponses.Heartbeat>();
             }
         }
-        catch (TimeoutException ex)
+        catch (TimeoutException)
         {
-            _logger.LogError("Timeout reached");
+            logger.LogError("Timeout reached");
             return null;
         }
         finally
@@ -114,7 +105,7 @@ public class FirmwareSessionV1 : IVersionedFirmwareSession, IDisposable
         try
         {
             var genericReqList = new { commands = new[] { request } };
-            var serialized = JsonSerializer.Serialize(genericReqList, _options);
+            var serialized = JsonSerializer.Serialize(genericReqList, Options);
             SendCommand(serialized);
             var jsonDoc = ReadResponse("results", timeout);
             var response = jsonDoc?.Deserialize<FirmwareResponses.GenericResponse>();
@@ -154,7 +145,7 @@ public class FirmwareSessionV1 : IVersionedFirmwareSession, IDisposable
         {
             var genericReqList = new { commands = new[] { request } };
 
-            var serialized = JsonSerializer.Serialize(genericReqList, _options);
+            var serialized = JsonSerializer.Serialize(genericReqList, Options);
             SendCommand(serialized);
 
             // special case because a list of networks comes in a separate json
@@ -219,7 +210,7 @@ public class FirmwareSessionV1 : IVersionedFirmwareSession, IDisposable
 
     public void Dispose()
     {
-        if (_commandSender != null)
-            _commandSender.Dispose();
+        if (commandSender != null)
+            commandSender.Dispose();
     }
 }
