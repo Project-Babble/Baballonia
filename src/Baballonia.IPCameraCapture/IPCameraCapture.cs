@@ -6,11 +6,6 @@ using Capture = Baballonia.SDK.Capture;
 
 namespace Baballonia.IPCameraCapture;
 
-/// <summary>
-/// Captures and decodes a known-size MJPEG stream, commonly used by IP Cameras
-/// https://github.com/Larry57/SimpleMJPEGStreamViewer
-/// https://stackoverflow.com/questions/3801275/how-to-convert-image-to-byte-array
-/// </summary>
 public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger) : Capture(url, logger)
 {
     private readonly CancellationTokenSource _cancellationTokenSource = new();
@@ -20,54 +15,102 @@ public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger)
     private const byte PicStart = 0xD8;
     private const byte PicEnd = 0xD9;
 
+    // Timeout duration
+    private readonly TimeSpan _readTimeout = TimeSpan.FromMilliseconds(500);
+
     public override Task<bool> StartCapture()
     {
-        Task.Run(() => StartStreaming(Source, null, null, _cancellationTokenSource.Token)); // Size of Babble frame
+        Task.Run(() => StartStreaming(Source, null, null, _cancellationTokenSource.Token));
         IsReady = true;
         return Task.FromResult(true);
     }
 
-    /// <summary>
-    /// Start a MJPEG on a http stream
-    /// </summary>
-    /// <param name="url">url of the http stream (only basic auth is implemented)</param>
-    /// <param name="login">optional login</param>
-    /// <param name="password">optional password (only basic auth is implemented)</param>
-    /// <param name="token">cancellation token used to cancel the stream parsing</param>
-    /// <param name="chunkMaxSize">Max chunk byte size when reading stream</param>
-    /// <param name="frameBufferSize">Maximum frame byte size</param>
-    /// <returns></returns>
-    ///
     private async Task StartStreaming(string url, string? login = null, string? password = null, CancellationToken? token = null,
         int chunkMaxSize = 1024, int frameBufferSize = 1024 * 1024)
     {
-        var tok = token ?? CancellationToken.None;
+        var masterToken = token ?? CancellationToken.None;
 
-        using var cli = new HttpClient();
-
-        if (!string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(password))
-            cli.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
-                Convert.ToBase64String(Encoding.ASCII.GetBytes($"{login}:{password}")));
-
-        using var stream = await cli.GetStreamAsync(url).ConfigureAwait(false);
-
-        var streamBuffer = new byte[chunkMaxSize];      // Stream chunk read
-        var frameBuffer = new byte[frameBufferSize];    // Frame buffer
-
-        var frameIdx = 0;       // Last written byte location in the frame buffer
-        var inPicture = false;  // Are we currently parsing a picture ?
-        byte current = 0x00;    // The last byte read
-        byte previous = 0x00;   // The byte before
-
-        // Continuously pump the stream. The cancellation token is used to get out of there
-        while (true)
+        // OUTER LOOP: Keeps trying to connect/reconnect until the user stops capture
+        while (!masterToken.IsCancellationRequested)
         {
-            var streamLength = await stream.ReadAsync(streamBuffer, 0, chunkMaxSize, tok).ConfigureAwait(false);
-            ParseStreamBuffer(frameBuffer, ref frameIdx, streamLength, streamBuffer, ref inPicture, ref previous, ref current);
-        };
+            try
+            {
+                using var cli = new HttpClient();
+                // Optimization: Set a conservative timeout on the client itself just in case headers hang
+                cli.Timeout = TimeSpan.FromSeconds(1);
+
+                if (!string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(password))
+                    cli.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
+                        Convert.ToBase64String(Encoding.ASCII.GetBytes($"{login}:{password}")));
+
+                // Pass the master token here so we can cancel during the connection phase
+                using var stream = await cli.GetStreamAsync(url, masterToken).ConfigureAwait(false);
+
+                var streamBuffer = new byte[chunkMaxSize];
+                var frameBuffer = new byte[frameBufferSize];
+
+                var frameIdx = 0;
+                var inPicture = false;
+                byte current = 0x00;
+                byte previous = 0x00;
+
+                logger.LogInformation($"Connected to stream: {url}");
+
+                // INNER LOOP: Pumps data
+                while (!masterToken.IsCancellationRequested)
+                {
+                    // Create a timeout token specifically for this read operation
+                    using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(masterToken);
+                    timeoutCts.CancelAfter(_readTimeout);
+
+                    int streamLength;
+                    try
+                    {
+                        // We await with the TIMEOUT token, not the master token
+                        streamLength = await stream.ReadAsync(streamBuffer, 0, chunkMaxSize, timeoutCts.Token).ConfigureAwait(false);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        // Check if the master token was cancelled (User requested stop)
+                        if (masterToken.IsCancellationRequested)
+                        {
+                            return; // Exit gracefully
+                        }
+
+                        // Otherwise, it was our timeoutCts that fired
+                        logger.LogWarning($"Stream read timed out ({_readTimeout.TotalMilliseconds}ms). Restarting capture...");
+                        break; // Break the INNER loop to trigger the OUTER loop (reconnect)
+                    }
+
+                    // 0 bytes usually means the server closed the connection gracefully
+                    if (streamLength == 0)
+                    {
+                        logger.LogWarning("Stream closed by server (0 bytes). Restarting...");
+                        break;
+                    }
+
+                    ParseStreamBuffer(frameBuffer, ref frameIdx, streamLength, streamBuffer, ref inPicture, ref previous, ref current);
+                }
+            }
+            catch (Exception ex) when (!masterToken.IsCancellationRequested)
+            {
+                // Catch network errors (ConnectionRefused, etc) preventing a crash
+                logger.LogError(ex, "Error in stream capture. Retrying in 1 second...");
+
+                // Wait a moment before reconnecting to avoid spamming a dead server
+                try
+                {
+                    await Task.Delay(1000, masterToken);
+                }
+                catch (OperationCanceledException)
+                {
+                    return;
+                }
+            }
+        }
     }
 
-    // Parse the stream buffer
+    // ... Rest of the parsing logic (ParseStreamBuffer, SearchPicture, ParsePicture, etc.) remains exactly the same ...
 
     private void ParseStreamBuffer(byte[] frameBuffer, ref int frameIdx, int streamLength, byte[] streamBuffer,
         ref bool inPicture, ref byte previous, ref byte current)
@@ -88,7 +131,6 @@ public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger)
         }
     }
 
-    // While we are looking for a picture, look for a FFD8 (end of JPEG) sequence.
     private void SearchPicture(byte[] frameBuffer, ref int frameIdx, ref int streamLength, byte[] streamBuffer,
         ref int idx, ref bool inPicture, ref byte previous, ref byte current)
     {
@@ -97,7 +139,6 @@ public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger)
             previous = current;
             current = streamBuffer[idx++];
 
-            // JPEG picture start ?
             if (previous == PicMarker && current == PicStart)
             {
                 frameIdx = 2;
@@ -109,7 +150,6 @@ public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger)
         } while (idx < streamLength);
     }
 
-    // While we are parsing a picture, fill the frame buffer until a FFD9 is reach.
     private void ParsePicture(byte[] frameBuffer, ref int frameIdx, ref int streamLength, byte[] streamBuffer,
         ref int idx, ref bool inPicture, ref byte previous, ref byte current)
     {
@@ -119,10 +159,8 @@ public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger)
             current = streamBuffer[idx++];
             frameBuffer[frameIdx++] = current;
 
-            // JPEG picture end ?
             if (previous == PicMarker && current == PicEnd)
             {
-                // Using a memory stream this way prevent arrays copy and allocations
                 using (var s = new MemoryStream(frameBuffer, 0, frameIdx))
                 {
                     try
@@ -152,9 +190,8 @@ public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger)
     private static byte[] TrimEnd(byte[] array)
     {
         int lastIndex = Array.FindLastIndex(array, b => b != 0);
-
         Array.Resize(ref array, lastIndex + 1);
-
         return array;
     }
 }
+
