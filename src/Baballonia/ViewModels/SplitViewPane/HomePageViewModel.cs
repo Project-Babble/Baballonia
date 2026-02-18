@@ -519,13 +519,13 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     private async Task TryStartCamerasAsync()
     {
         if (!FaceCamera.IsCameraRunning && FaceCamera.ShouldAutostart)
-            await StartCamera(FaceCamera);
+            await StartCameraWithMaximization(FaceCamera, startMaximized: false);
 
         if (!LeftCamera.IsCameraRunning && LeftCamera.ShouldAutostart)
-            await StartCamera(LeftCamera);
+            await StartCameraWithMaximization(LeftCamera, startMaximized: false);
 
         if (!RightCamera.IsCameraRunning && RightCamera.ShouldAutostart)
-            await StartCamera(RightCamera);
+            await StartCameraWithMaximization(RightCamera, startMaximized: false);
     }
 
     private void EyePipelineExceptionHandler(EyePipelineEvents.ExceptionEvent e)
@@ -607,6 +607,11 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     [RelayCommand]
     public async Task StartCamera(CameraControllerModel model)
     {
+        await StartCameraWithMaximization(model, startMaximized: true);
+    }
+
+	private async Task StartCameraWithMaximization(CameraControllerModel model, bool startMaximized)
+    {
         try
         {
             SetButtons(model, false, false);
@@ -635,6 +640,11 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
             if (success)
             {
+                if (startMaximized)
+                {
+                    model.SelectWholeFrame();
+                }
+
                 SetCameraRunning(model);
                 _localSettings.SaveSetting("LastOpened" + model.Name, model.DisplayAddress);
             }
