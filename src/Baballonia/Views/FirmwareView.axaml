@@ -214,6 +214,7 @@
                 </Expander.Header>
                 <StackPanel Spacing="24">
 
+                  <!-- Warning Block -->
                   <Border
                     Background="Orange"
                     CornerRadius="8"
@@ -227,7 +228,6 @@
                         Width="20" />
                       <StackPanel Grid.Column="2" Spacing="4">
                         <TextBlock
-                          FontSize="14"
                           FontWeight="DemiBold"
                           Foreground="Black"
                           Text="{x:Static assets:Resources.Firmware_Flashing_Warning}"
@@ -236,7 +236,26 @@
                     </Grid>
                   </Border>
 
-                  <Grid ColumnDefinitions="*,Auto,8,Auto">
+                  <!-- Info Block -->
+                  <Border
+                    CornerRadius="8"
+                    Background="{DynamicResource SystemChromeMediumColor}"
+                    Padding="16,12">
+                    <Grid ColumnDefinitions="Auto,12,*">
+                      <PathIcon
+                        Grid.Column="0"
+                        Data="{StaticResource InfoRegular}"
+                        Height="20"
+                        Width="20" />
+                      <StackPanel Grid.Column="2" Spacing="4">
+                        <TextBlock
+                          Text="{x:Static assets:Resources.Firmware_Flashing_Wireless_Prompt}"
+                          TextWrapping="Wrap" />
+                      </StackPanel>
+                    </Grid>
+                  </Border>
+
+                  <Grid ColumnDefinitions="*,Auto,12,Auto">
                     <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Resources.Firmware_Type_To_Flash}" />
                     <Button
                       Click="CustomFirmwareLoad"

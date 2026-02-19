@@ -809,5 +809,8 @@
   </data>
   <data name="About_Contributors_Commits" xml:space="preserve">
     <value>{0} commits</value>
+  <data name="Firmware_Flashing_Wireless_Prompt" xml:space="preserve">
+    <value>Flashing custom firmware onto your Babble Tracker works best when the device is set to “Wireless” mode first. 
+You don’t need to enter any Wi-Fi credentials. Just switch the tracker to “Wireless” mode, then restart it before flashing.</value>
   </data>
 </root>

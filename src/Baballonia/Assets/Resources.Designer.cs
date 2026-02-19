@@ -691,6 +691,16 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Flashing custom firmware onto your Babble Tracker works best when the device is set to “Wireless” mode first. 
+        ///You don’t need to enter any Wi-Fi credentials. Just switch the tracker to “Wireless” mode, then restart it before flashing..
+        /// </summary>
+        public static string Firmware_Flashing_Wireless_Prompt {
+            get {
+                return ResourceManager.GetString("Firmware_Flashing_Wireless_Prompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Set Mode.
         /// </summary>
         public static string Firmware_ModeSetButton_Default {
