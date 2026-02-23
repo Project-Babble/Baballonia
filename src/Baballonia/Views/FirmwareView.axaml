@@ -16,6 +16,24 @@
         <StackPanel Classes="Page">
             <TextBlock Classes="Header" Text="{x:Static assets:Resources.Firmware_Title_Header}" />
 
+            <Border
+              CornerRadius="8"
+              Background="{DynamicResource SystemChromeMediumLowColor}"
+              Padding="16,12">
+              <Grid ColumnDefinitions="Auto,12,*">
+                <PathIcon
+                  Grid.Column="0"
+                  Data="{StaticResource InfoRegular}"
+                  Height="20"
+                  Width="20" />
+                <StackPanel Grid.Column="2" Spacing="4">
+                  <TextBlock
+                    Text="{x:Static assets:Resources.Firmware_Flashing_Header_Alert}"
+                    TextWrapping="Wrap" />
+                </StackPanel>
+              </Grid>
+            </Border>
+
             <controls:ContentExample>
                 <StackPanel Spacing="12">
                     <TextBlock FontWeight="Bold" Text="{x:Static assets:Resources.Firmware_Select_Tracker_Header}" />

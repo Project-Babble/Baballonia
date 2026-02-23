@@ -673,6 +673,18 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If you are using a Babble Tracker with a Valve Index or Bigscreen Beyond (with/without 1.0 base stations), you might notice:
+        ///• Your screen turning grey unexpectedly
+        ///• Tracking cutting out or frequently losing position
+        ///This is usually easy to fix! Just install the “Tracking Loss Fix” firmware below..
+        /// </summary>
+        public static string Firmware_Flashing_Header_Alert {
+            get {
+                return ResourceManager.GetString("Firmware_Flashing_Header_Alert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This will take around ~10 seconds. Don&apos;t leave this page!.
         /// </summary>
         public static string Firmware_Flashing_Note {

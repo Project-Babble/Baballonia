@@ -813,4 +813,10 @@
     <value>Flashing custom firmware onto your Babble Tracker works best when the device is set to “Wireless” mode first. 
 You don’t need to enter any Wi-Fi credentials. Just switch the tracker to “Wireless” mode, then restart it before flashing.</value>
   </data>
+  <data name="Firmware_Flashing_Header_Alert" xml:space="preserve">
+    <value>If you are using a Babble Tracker with a Valve Index or Bigscreen Beyond (with/without 1.0 base stations), you might notice:
+• Your screen turning grey unexpectedly
+• Tracking cutting out or frequently losing position
+This is usually easy to fix! Just install the “Tracking Loss Fix” firmware below.</value>
+  </data>
 </root>
