@@ -11,7 +11,7 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 
 namespace Baballonia.Views;
 
-public partial class AppSettingsView : UserControl
+public partial class AppSettingsView : ViewBase
 {
     private readonly IThemeSelectorService _themeSelectorService;
     private readonly ILanguageSelectorService _languageSelectorService;

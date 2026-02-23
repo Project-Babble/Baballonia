@@ -408,7 +408,6 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
     public CalibrationRoutine.Routines RequestedVRCalibration = CalibrationRoutine.Map["BasicCalibration"];
 
-
     public HomePageViewModel(FacePipelineManager facePipelineManager,
         EyePipelineManager eyePipelineManager,
         IFacePipelineEventBus facePipelineEventBus,

@@ -7,7 +7,7 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 
 namespace Baballonia.Views;
 
-public partial class CalibrationView : UserControl
+public partial class CalibrationView : ViewBase
 {
     public CalibrationView()
     {

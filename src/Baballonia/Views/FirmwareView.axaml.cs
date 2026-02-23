@@ -7,7 +7,7 @@ using Baballonia.ViewModels.SplitViewPane;
 
 namespace Baballonia.Views;
 
-public partial class FirmwareView : UserControl
+public partial class FirmwareView : ViewBase
 {
     public static FilePickerFileType BinAll { get; } = new("Firmware")
     {

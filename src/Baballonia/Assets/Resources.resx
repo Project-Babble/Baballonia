@@ -747,4 +747,67 @@
   <data name="Godot_Locale" xml:space="preserve">
     <value>en</value>
   </data>
+  <data name="About_Title_Header" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="About_AboutUs_Header" xml:space="preserve">
+    <value>About Us</value>
+  </data>
+  <data name="About_AboutUs_Description" xml:space="preserve">
+    <value>Links to our Quickstart guide, Social Media, Documentation, etc.</value>
+  </data>
+  <data name="About_AboutBaballonia_Header" xml:space="preserve">
+    <value>About Baballonia</value>
+  </data>
+  <data name="About_AboutBaballonia_Description" xml:space="preserve">
+    <value>Links for nerds (GitHub and so on)</value>
+  </data>
+  <data name="About_Credits_Header" xml:space="preserve">
+    <value>Credits</value>
+  </data>
+  <data name="About_Credits_Description" xml:space="preserve">
+    <value>The people who made this project what it is. Thanks, everyone!</value>
+  </data>
+  <data name="About_QuickstartGuide_Alias" xml:space="preserve">
+    <value>Quickstart Guide ⧉</value>
+  </data>
+  <data name="About_BabbleDiscord_Alias" xml:space="preserve">
+    <value>Babble Discord ⧉</value>
+  </data>
+  <data name="About_PishockDiscord_Alias" xml:space="preserve">
+    <value>PiShock Discord ⧉</value>
+  </data>
+  <data name="About_BabbleDocs_Alias" xml:space="preserve">
+    <value>Babble Docs ⧉</value>
+  </data>
+  <data name="About_BabbleSite_Alias" xml:space="preserve">
+    <value>Babble Site ⧉</value>
+  </data>
+  <data name="About_BabbleBlog_Alias" xml:space="preserve">
+    <value>Babble Blog ⧉</value>
+  </data>
+  <data name="About_BabbleDataPrivacyPolicy_Alias" xml:space="preserve">
+    <value>Data Privacy Policy ⧉</value>
+  </data>
+  <data name="About_YoutubeLink_Alias" xml:space="preserve">
+    <value>Babble YouTube Page ⧉</value>
+  </data>
+  <data name="About_BabbleTwitter_Alias" xml:space="preserve">
+    <value>Babble Twitter ⧉</value>
+  </data>
+  <data name="About_BaballoniaGithub_Alias" xml:space="preserve">
+    <value>Baballonia GitHub ⧉</value>
+  </data>
+  <data name="About_BaballoniaGithubIssues_Alias" xml:space="preserve">
+    <value>Baballonia GitHub Issues ⧉</value>
+  </data>
+  <data name="About_BaballoniaLicense_Alias" xml:space="preserve">
+    <value>Baballonia License ⧉</value>
+  </data>
+  <data name="About_BaballoniaBuildInstructions_Alias" xml:space="preserve">
+    <value>Baballonia Build Instructions ⧉</value>
+  </data>
+  <data name="About_Contributors_Commits" xml:space="preserve">
+    <value>{0} commits</value>
+  </data>
 </root>

@@ -1,10 +1,9 @@
 ﻿using System;
 using Avalonia;
-using Avalonia.Controls;
 
 namespace Baballonia.Views;
 
-public partial class MainView : UserControl
+public partial class MainView : ViewBase
 {
     public MainView()
     {

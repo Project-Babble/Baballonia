@@ -1,0 +1,219 @@
+<UserControl
+    d:DesignHeight="800"
+    d:DesignWidth="800"
+    mc:Ignorable="d"
+    xmlns:splitViewPane="clr-namespace:Baballonia.ViewModels.SplitViewPane"
+    xmlns:local="clr-namespace:Baballonia.Views"
+    x:Class="Baballonia.Views.AboutPageView"
+    x:DataType="splitViewPane:AboutPageViewModel"
+    xmlns:assets="clr-namespace:Baballonia.Assets"
+    xmlns:hypertext="clr-namespace:HyperText.Avalonia.Controls;assembly=HyperText.Avalonia"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ScrollViewer>
+    <StackPanel Classes="Page">
+      <TextBlock Classes="Header" Text="{x:Static assets:Resources.About_Title_Header}" />
+
+      <Expander
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        HorizontalContentAlignment="Stretch"
+        IsExpanded="{Binding IsExpandedByDefault}">
+        <Expander.Header>
+          <Grid ColumnDefinitions="Auto,Auto,*">
+            <PathIcon
+              Data="{StaticResource LinkSquareRegular}"
+              Grid.Column="0"
+              Margin="10,10,20,10"
+              VerticalAlignment="Center"
+              Width="32" />
+            <StackPanel
+              Grid.Column="1"
+              HorizontalAlignment="Stretch"
+              Margin="0,10,0,10">
+              <TextBlock
+                FontWeight="SemiBold"
+                Margin="5"
+                Text="{x:Static assets:Resources.About_AboutUs_Header}" />
+              <TextBlock
+                FontSize="14"
+                Foreground="{DynamicResource SystemChromeGrayColor}"
+                Margin="5"
+                Text="{x:Static assets:Resources.About_AboutUs_Description}" />
+            </StackPanel>
+          </Grid>
+        </Expander.Header>
+        <StackPanel Spacing="12">
+          <hypertext:Hyperlink
+              Alias="{x:Static assets:Resources.About_QuickstartGuide_Alias}"
+              Command="{Binding OpenUrlInBrowserCommand, RelativeSource={RelativeSource AncestorType=local:AboutPageView}}"
+              CommandParameter="{Binding QuickstartGuide}"
+              Url="{Binding QuickstartGuide}" />
+
+          <Separator Margin="0,0" />
+
+          <hypertext:Hyperlink
+              Alias="{x:Static assets:Resources.About_BabbleDiscord_Alias}"
+              Command="{Binding OpenUrlInBrowserCommand, RelativeSource={RelativeSource AncestorType=local:AboutPageView}}"
+              CommandParameter="{Binding BabbleDiscord}"
+              Url="{Binding BabbleDiscord}" />
+
+          <hypertext:Hyperlink
+              Alias="{x:Static assets:Resources.About_PishockDiscord_Alias}"
+              Command="{Binding OpenUrlInBrowserCommand, RelativeSource={RelativeSource AncestorType=local:AboutPageView}}"
+              CommandParameter="{Binding PishockDiscord}"
+              Url="{Binding PishockDiscord}" />
+
+          <Separator Margin="0,0" />
+
+          <hypertext:Hyperlink
+              Alias="{x:Static assets:Resources.About_BabbleDocs_Alias}"
+              Command="{Binding OpenUrlInBrowserCommand, RelativeSource={RelativeSource AncestorType=local:AboutPageView}}"
+              CommandParameter="{Binding BabbleDocs}"
+              Url="{Binding BabbleDocs}" />
+
+          <hypertext:Hyperlink
+              Alias="{x:Static assets:Resources.About_BabbleSite_Alias}"
+              Command="{Binding OpenUrlInBrowserCommand, RelativeSource={RelativeSource AncestorType=local:AboutPageView}}"
+              CommandParameter="{Binding BabbleSite}"
+              Url="{Binding BabbleSite}" />
+
+          <hypertext:Hyperlink
+              Alias="{x:Static assets:Resources.About_BabbleBlog_Alias}"
+              Command="{Binding OpenUrlInBrowserCommand, RelativeSource={RelativeSource AncestorType=local:AboutPageView}}"
+              CommandParameter="{Binding BabbleBlog}"
+              Url="{Binding BabbleBlog}" />
+
+          <hypertext:Hyperlink
+              Alias="{x:Static assets:Resources.About_BabbleDataPrivacyPolicy_Alias}"
+              Command="{Binding OpenUrlInBrowserCommand, RelativeSource={RelativeSource AncestorType=local:AboutPageView}}"
+              CommandParameter="{Binding BabbleDataPrivacyPolicy}"
+              Url="{Binding BabbleDataPrivacyPolicy}" />
+
+          <Separator Margin="0,0" />
+
+          <hypertext:Hyperlink
+              Alias="{x:Static assets:Resources.About_YoutubeLink_Alias}"
+              Command="{Binding OpenUrlInBrowserCommand, RelativeSource={RelativeSource AncestorType=local:AboutPageView}}"
+              CommandParameter="{Binding YoutubeLink}"
+              Url="{Binding YoutubeLink}" />
+
+          <hypertext:Hyperlink
+              Alias="{x:Static assets:Resources.About_BabbleTwitter_Alias}"
+              Command="{Binding OpenUrlInBrowserCommand, RelativeSource={RelativeSource AncestorType=local:AboutPageView}}"
+              CommandParameter="{Binding BabbleTwitter}"
+              Url="{Binding BabbleTwitter}" />
+        </StackPanel>
+      </Expander>
+
+      <Expander
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        HorizontalContentAlignment="Stretch">
+        <Expander.Header>
+          <Grid ColumnDefinitions="Auto,Auto,*">
+            <PathIcon
+              Data="{StaticResource WindowDevToolsRegular}"
+              Grid.Column="0"
+              Margin="10,10,20,10"
+              VerticalAlignment="Center"
+              Width="32" />
+            <StackPanel
+              Grid.Column="1"
+              HorizontalAlignment="Stretch"
+              Margin="0,10,0,10">
+              <TextBlock
+                FontWeight="SemiBold"
+                Margin="5"
+                Text="{x:Static assets:Resources.About_AboutBaballonia_Header}" />
+              <TextBlock
+                FontSize="14"
+                Foreground="{DynamicResource SystemChromeGrayColor}"
+                Margin="5"
+                Text="{x:Static assets:Resources.About_AboutBaballonia_Description}" />
+            </StackPanel>
+          </Grid>
+        </Expander.Header>
+        <StackPanel Spacing="12">
+          <hypertext:Hyperlink
+              Alias="{x:Static assets:Resources.About_BaballoniaGithub_Alias}"
+              Command="{Binding OpenUrlInBrowserCommand, RelativeSource={RelativeSource AncestorType=local:AboutPageView}}"
+              CommandParameter="{Binding BaballoniaGithub}"
+              Url="{Binding BaballoniaGithub}" />
+
+          <hypertext:Hyperlink
+              Alias="{x:Static assets:Resources.About_BaballoniaGithubIssues_Alias}"
+              Command="{Binding OpenUrlInBrowserCommand, RelativeSource={RelativeSource AncestorType=local:AboutPageView}}"
+              CommandParameter="{Binding BaballoniaGithubIssues}"
+              Url="{Binding BaballoniaGithubIssues}" />
+
+          <hypertext:Hyperlink
+              Alias="{x:Static assets:Resources.About_BaballoniaLicense_Alias}"
+              Command="{Binding OpenUrlInBrowserCommand, RelativeSource={RelativeSource AncestorType=local:AboutPageView}}"
+              CommandParameter="{Binding BaballoniaLicense}"
+              Url="{Binding BaballoniaLicense}" />
+
+          <hypertext:Hyperlink
+              Alias="{x:Static assets:Resources.About_BaballoniaBuildInstructions_Alias}"
+              Command="{Binding OpenUrlInBrowserCommand, RelativeSource={RelativeSource AncestorType=local:AboutPageView}}"
+              CommandParameter="{Binding BaballoniaBuildInstructions}"
+              Url="{Binding BaballoniaBuildInstructions}" />
+        </StackPanel>
+      </Expander>
+
+      <Expander
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        HorizontalContentAlignment="Stretch">
+        <Expander.Header>
+          <Grid ColumnDefinitions="Auto,Auto,*">
+            <PathIcon
+              Data="{StaticResource PeopleCommunityRegular}"
+              Grid.Column="0"
+              Margin="10,10,20,10"
+              VerticalAlignment="Center"
+              Width="32" />
+            <StackPanel
+              Grid.Column="1"
+              HorizontalAlignment="Stretch"
+              Margin="0,10,0,10">
+              <TextBlock
+                FontWeight="SemiBold"
+                Margin="5"
+                Text="{x:Static assets:Resources.About_Credits_Header}" />
+              <TextBlock
+                FontSize="14"
+                Foreground="{DynamicResource SystemChromeGrayColor}"
+                Margin="5"
+                Text="{x:Static assets:Resources.About_Credits_Description}" />
+            </StackPanel>
+          </Grid>
+        </Expander.Header>
+        <StackPanel Spacing="12">
+          <ItemsControl ItemsSource="{Binding Contributors}" IsVisible="{Binding !IsLoadingContributors}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Grid ColumnDefinitions="*,Auto" Margin="0,4">
+                  <hypertext:Hyperlink
+                    Grid.Column="0"
+                    Alias="{Binding Login}"
+                    Command="{Binding OpenUrlInBrowserCommand, RelativeSource={RelativeSource AncestorType=local:AboutPageView}}"
+                    CommandParameter="{Binding HtmlUrl}"
+                    Url="{Binding HtmlUrl}"
+                    VerticalAlignment="Center" />
+                  <TextBlock
+                    Grid.Column="1"
+                    Text="{Binding Contributions, StringFormat={x:Static assets:Resources.About_Contributors_Commits}}"
+                    VerticalAlignment="Center"
+                    Margin="20,0,0,0"/>
+                </Grid>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </Expander>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

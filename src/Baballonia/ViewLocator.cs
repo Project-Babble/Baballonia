@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using Baballonia.Services.Inference;
 using Baballonia.ViewModels;
 using Baballonia.ViewModels.SplitViewPane;
 using Baballonia.Views;
@@ -13,7 +12,7 @@ namespace Baballonia;
 
 public class ViewLocator : IDataTemplate
 {
-    private readonly Dictionary<Type, Func<Control?>> _locator = new();
+    private readonly Dictionary<Type, Func<Control?>> _locator = [];
 
     public ViewLocator()
     {
@@ -22,6 +21,7 @@ public class ViewLocator : IDataTemplate
         RegisterViewFactory<CalibrationViewModel, CalibrationView>();
         RegisterViewFactory<OutputPageViewModel, OutputPageView>();
         RegisterViewFactory<AppSettingsViewModel, AppSettingsView>();
+        RegisterViewFactory<AboutPageViewModel, AboutPageView>();
 
         if (!Utils.IsSupportedDesktopOS) return;
 

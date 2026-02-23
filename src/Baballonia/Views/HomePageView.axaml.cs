@@ -7,16 +7,14 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
-using Baballonia.Assets;
 using Baballonia.Contracts;
 using Baballonia.Helpers;
 using Baballonia.ViewModels.SplitViewPane;
 
 namespace Baballonia.Views;
 
-public partial class HomePageView : UserControl
+public partial class HomePageView : ViewBase
 {
-
     public static FilePickerFileType ONNXAll { get; } = new("ONNX Models")
     {
         Patterns = ["*.onnx"],

@@ -11,7 +11,7 @@ using Baballonia.Contracts;
 
 namespace Baballonia.ViewModels;
 
-public partial class OnboardingViewModel : ObservableObject
+public partial class OnboardingViewModel : ViewModelBase
 {
     private readonly ILocalSettingsService _localSettingsService;
 
@@ -23,12 +23,6 @@ public partial class OnboardingViewModel : ObservableObject
 
     [ObservableProperty]
     private string _nextButtonText = "Next";
-
-    [ObservableProperty] private string _babbleFirmwareDocs =
-        "https://docs.babble.diy/docs/hardware/Firmware";
-
-    [ObservableProperty] private string _youtubeLink =
-        "https://www.youtube.com/watch?v=iPRabTew0KU";
 
     [ObservableProperty]
     private bool _canGoBack;
@@ -104,16 +98,6 @@ public partial class OnboardingViewModel : ObservableObject
         {
             FinishOnboarding();
         }
-    }
-
-    public void OpenBabbleModuleUrl()
-    {
-        Utils.OpenUrl(BabbleFirmwareDocs);
-    }
-
-    public void OpenYoutubeUrl()
-    {
-        Utils.OpenUrl(YoutubeLink);
     }
 
     private async void FinishOnboarding()

@@ -1,19 +1,15 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using Avalonia.Interactivity;
 using Avalonia.Platform;
-using Baballonia.Services;
 using Baballonia.Contracts;
 using Baballonia.ViewModels;
 using CommunityToolkit.Mvvm.DependencyInjection;
 
 namespace Baballonia.Views;
 
-public partial class OnboardingView : UserControl
+public partial class OnboardingView : ViewBase
 {
     private readonly OnboardingViewModel _viewModel;
 

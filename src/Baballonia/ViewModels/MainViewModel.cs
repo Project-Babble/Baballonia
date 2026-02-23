@@ -44,6 +44,7 @@ public partial class MainViewModel : ViewModelBase
         new(typeof(VrcViewModel), "CommentRegular", "VRChat"),
         new(typeof(OutputPageViewModel), "TextFirstLineRegular", "Output"),
         new(typeof(AppSettingsViewModel), "SettingsRegular", "Settings"),
+        new(typeof(AboutPageViewModel), "InfoRegular", "About"),
     ];
 
     private readonly List<ListItemTemplate> _mobileTemplates =
@@ -52,6 +53,7 @@ public partial class MainViewModel : ViewModelBase
         new(typeof(CalibrationViewModel), "EditRegular", "Calibration"),
         new(typeof(OutputPageViewModel), "TextFirstLineRegular", "Output"),
         new(typeof(AppSettingsViewModel), "SettingsRegular", "Settings"),
+        new(typeof(AboutPageViewModel), "InfoRegular", "About"),
     ];
 
     public MainViewModel() : this(new WeakReferenceMessenger()) { }

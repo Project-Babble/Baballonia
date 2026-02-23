@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -21,24 +22,40 @@ public class GithubService
 
     public async Task<List<GithubContributor>> GetContributors(string owner, string repo)
     {
-        var response = await Client.GetAsync($"https://api.github.com/repos/{owner}/{repo}/contributors");
-        if (!response.IsSuccessStatusCode)
+        try
+        {
+            var response = await Client.GetAsync($"https://api.github.com/repos/{owner}/{repo}/contributors");
+            if (!response.IsSuccessStatusCode)
+            {
+                return Enumerable.Empty<GithubContributor>().ToList();
+            }
+            var content = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<List<GithubContributor>>(content)!;
+        }
+        catch
         {
             return Enumerable.Empty<GithubContributor>().ToList();
         }
-        var content = await response.Content.ReadAsStringAsync();
-        return JsonSerializer.Deserialize<List<GithubContributor>>(content)!;
     }
 
     public async Task<GithubRelease> GetReleases(string owner, string repo)
     {
-        var response = await Client.GetAsync($"https://api.github.com/repos/{owner}/{repo}/releases/latest");
-        if (!response.IsSuccessStatusCode)
+        try
+        {
+            var response = await Client.GetAsync($"https://api.github.com/repos/{owner}/{repo}/releases/latest");
+            if (!response.IsSuccessStatusCode)
+            {
+                return new GithubRelease();
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<GithubRelease>(content)!;
+        }
+        catch
         {
             return new GithubRelease();
         }
-        var content = await response.Content.ReadAsStringAsync();
-        return JsonSerializer.Deserialize<GithubRelease>(content)!;
+
     }
 
     /// <summary>
@@ -53,7 +70,7 @@ public class GithubService
         var bytes = await Client.GetByteArrayAsync(asset);
 
         await File.WriteAllBytesAsync(zipFile, bytes);
-        ZipFile.ExtractToDirectory(zipFile, tempDir);
+        await ZipFile.ExtractToDirectoryAsync(zipFile, tempDir);
 
         var manifest = Path.Combine(tempDir, "manifest.json");
         var manifestText = await File.ReadAllTextAsync(manifest);

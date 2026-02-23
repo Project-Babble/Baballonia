@@ -19,7 +19,7 @@ namespace Baballonia.Assets {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -57,6 +57,195 @@ namespace Baballonia.Assets {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Links for nerds (GitHub and so on).
+        /// </summary>
+        public static string About_AboutBaballonia_Description {
+            get {
+                return ResourceManager.GetString("About_AboutBaballonia_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About Baballonia.
+        /// </summary>
+        public static string About_AboutBaballonia_Header {
+            get {
+                return ResourceManager.GetString("About_AboutBaballonia_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Links to our Quickstart guide, Social Media, Documentation, etc..
+        /// </summary>
+        public static string About_AboutUs_Description {
+            get {
+                return ResourceManager.GetString("About_AboutUs_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About Us.
+        /// </summary>
+        public static string About_AboutUs_Header {
+            get {
+                return ResourceManager.GetString("About_AboutUs_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Baballonia Build Instructions ⧉.
+        /// </summary>
+        public static string About_BaballoniaBuildInstructions_Alias {
+            get {
+                return ResourceManager.GetString("About_BaballoniaBuildInstructions_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Baballonia GitHub ⧉.
+        /// </summary>
+        public static string About_BaballoniaGithub_Alias {
+            get {
+                return ResourceManager.GetString("About_BaballoniaGithub_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Baballonia GitHub Issues ⧉.
+        /// </summary>
+        public static string About_BaballoniaGithubIssues_Alias {
+            get {
+                return ResourceManager.GetString("About_BaballoniaGithubIssues_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Baballonia License ⧉.
+        /// </summary>
+        public static string About_BaballoniaLicense_Alias {
+            get {
+                return ResourceManager.GetString("About_BaballoniaLicense_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Babble Blog ⧉.
+        /// </summary>
+        public static string About_BabbleBlog_Alias {
+            get {
+                return ResourceManager.GetString("About_BabbleBlog_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data Privacy Policy ⧉.
+        /// </summary>
+        public static string About_BabbleDataPrivacyPolicy_Alias {
+            get {
+                return ResourceManager.GetString("About_BabbleDataPrivacyPolicy_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Babble Discord ⧉.
+        /// </summary>
+        public static string About_BabbleDiscord_Alias {
+            get {
+                return ResourceManager.GetString("About_BabbleDiscord_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Babble Docs ⧉.
+        /// </summary>
+        public static string About_BabbleDocs_Alias {
+            get {
+                return ResourceManager.GetString("About_BabbleDocs_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Babble Site ⧉.
+        /// </summary>
+        public static string About_BabbleSite_Alias {
+            get {
+                return ResourceManager.GetString("About_BabbleSite_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Babble Twitter ⧉.
+        /// </summary>
+        public static string About_BabbleTwitter_Alias {
+            get {
+                return ResourceManager.GetString("About_BabbleTwitter_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} commits.
+        /// </summary>
+        public static string About_Contributors_Commits {
+            get {
+                return ResourceManager.GetString("About_Contributors_Commits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The people who made this project what it is. Thanks, everyone!.
+        /// </summary>
+        public static string About_Credits_Description {
+            get {
+                return ResourceManager.GetString("About_Credits_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Credits.
+        /// </summary>
+        public static string About_Credits_Header {
+            get {
+                return ResourceManager.GetString("About_Credits_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PiShock Discord ⧉.
+        /// </summary>
+        public static string About_PishockDiscord_Alias {
+            get {
+                return ResourceManager.GetString("About_PishockDiscord_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quickstart Guide ⧉.
+        /// </summary>
+        public static string About_QuickstartGuide_Alias {
+            get {
+                return ResourceManager.GetString("About_QuickstartGuide_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string About_Title_Header {
+            get {
+                return ResourceManager.GetString("About_Title_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Babble YouTube Page ⧉.
+        /// </summary>
+        public static string About_YoutubeLink_Alias {
+            get {
+                return ResourceManager.GetString("About_YoutubeLink_Alias", resourceCulture);
             }
         }
         

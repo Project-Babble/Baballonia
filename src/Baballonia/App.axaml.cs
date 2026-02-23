@@ -143,6 +143,8 @@ public class App : Application
             services.AddTransient<OutputPageView>();
             services.AddTransient<AppSettingsViewModel>();
             services.AddTransient<AppSettingsView>();
+            services.AddTransient<AboutPageViewModel>();
+            services.AddTransient<AboutPageView>();
 
             if (Utils.IsSupportedDesktopOS)
             {
