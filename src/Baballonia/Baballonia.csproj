@@ -13,6 +13,21 @@
 
     <ItemGroup>
         <AvaloniaResource Include="Assets\**" />
+        <None Update="Firmware\Binaries\BabbleFirmware1.0.bin">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Firmware\Binaries\BabbleFirmware1.1.bin">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Firmware\Binaries\BabbleFirmware1.2.bin">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Firmware\Binaries\BabbleFirmware1.2_TrackingLossFix.bin">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Firmware\Binaries\BabbleFirmware1.3.bin">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
         <None Update="Firmware\Windows\espflash.exe" Condition="$([MSBuild]::IsOSPlatform('Windows'))">
             <Link>%(RecursiveDir)\%(Filename)%(Extension)</Link>
             <TargetPath>%(RecursiveDir)\%(Filename)%(Extension)</TargetPath>
@@ -27,15 +42,6 @@
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="LocalSettings.json">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Firmware\Binaries\babblefw_1.0.0.bin">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Firmware\Binaries\babblefw_1.1.0.bin">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Firmware\Binaries\babblefw_1.2.0.bin">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
