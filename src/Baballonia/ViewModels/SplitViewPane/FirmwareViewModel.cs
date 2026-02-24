@@ -299,6 +299,7 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
 
         // TODO: add error handling in case command fails for whatever reason
         await TrySendCommandAsync(new FirmwareRequests.SetModeRequest(m), TimeSpan.FromSeconds(5));
+        await TrySendCommandAsync(new FirmwareRequests.RestartDeviceRequest(), TimeSpan.FromSeconds(5));
 
         StopButtonAnimation(nameof(ModeSetButton));
         ModeSetButton = Resources.Firmware_ModeSetButton_Success;
@@ -365,7 +366,9 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
             return;
         }
 
+        await TrySendCommandAsync(new FirmwareRequests.RestartDeviceRequest(), TimeSpan.FromSeconds(5));
         IsFlashing = false;
+
 
         IsFinished = true;
         // No need to check if this is a valid Babble tracker - treat it like a normal device
