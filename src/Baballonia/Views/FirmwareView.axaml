@@ -236,7 +236,7 @@
                     </Grid>
                   </Border>
 
-                  <Grid ColumnDefinitions="*,Auto,12,Auto">
+                  <Grid ColumnDefinitions="*,Auto,8,Auto">
                     <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Resources.Firmware_Type_To_Flash}" />
                     <Button
                       Click="CustomFirmwareLoad"
@@ -248,7 +248,7 @@
                         </StackPanel>
                       </Button.Content>
                     </Button>
-                    <ComboBox Width="200" Grid.Column="3" ItemsSource="{Binding AvailableFirmwareTypes}"
+                    <ComboBox Width="210" Grid.Column="3" ItemsSource="{Binding AvailableFirmwareTypes}"
                               SelectedIndex="{Binding SelectedFirmwareIndex}">
                     </ComboBox>
                   </Grid>
