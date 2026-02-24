@@ -819,4 +819,7 @@ You don’t need to enter any Wi-Fi credentials. Just switch the tracker to “W
 • Tracking cutting out or frequently losing position
 This is usually easy to fix! Just install the “Tracking Loss Fix” firmware below.</value>
   </data>
+  <data name="Common_Note" xml:space="preserve">
+    <value>Note</value>
+  </data>
 </root>
