@@ -36,11 +36,11 @@ public partial class AppSettingsViewModel : ViewModelBase
     private bool _oneEuroMinEnabled;
 
     [ObservableProperty]
-    [property: SavedSetting("AppSettings_OneEuroMinFreqCutoff", 1f)]
+    [property: SavedSetting("AppSettings_OneEuroMinFreqCutoff", 0.5f)]
     private float _oneEuroMinFreqCutoff;
 
     [ObservableProperty]
-    [property: SavedSetting("AppSettings_OneEuroSpeedCutoff", 1f)]
+    [property: SavedSetting("AppSettings_OneEuroSpeedCutoff", 3f)]
     private float _oneEuroSpeedCutoff;
 
     [ObservableProperty]
