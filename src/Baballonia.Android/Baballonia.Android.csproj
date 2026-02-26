@@ -27,14 +27,15 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia.Android" Version="11.3.1" />
-        <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.22.0" />
-        <PackageReference Include="Sdcb.OpenCvSharp4.mini.runtime.android-arm64" Version="4.8.0.20230708" />
-        <PackageReference Include="Sdcb.OpenCvSharp4.mini.runtime.android-x64" Version="4.8.0.20230708" />
-        <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.16" />
+        <PackageReference Include="Avalonia.Android" Version="11.3.12" />
+        <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.24.2" />
+        <PackageReference Include="Sdcb.OpenCvSharp4.mini.runtime.android-arm64" Version="4.11.0.35" />
+        <PackageReference Include="Sdcb.OpenCvSharp4.mini.runtime.android-x64" Version="4.11.0.35" />
+        <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.2.0.1" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Baballonia\Baballonia.csproj" />
+      <ProjectReference Include="..\Baballonia.IPCameraCapture\Baballonia.IPCameraCapture.csproj" />
+      <ProjectReference Include="..\Baballonia\Baballonia.csproj" />
     </ItemGroup>
 </Project>

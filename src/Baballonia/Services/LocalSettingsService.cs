@@ -12,7 +12,7 @@ namespace Baballonia.Services;
 
 public class LocalSettingsService : ILocalSettingsService
 {
-    public const string DefaultApplicationDataFolder = "ApplicationData";
+    public static readonly string DefaultApplicationDataFolder = Utils.IsSupportedDesktopOS ? "ApplicationData" : "";
     public const string DefaultLocalSettingsFile = "LocalSettings.json";
 
     private readonly string _localApplicationData = Utils.PersistentDataDirectory;

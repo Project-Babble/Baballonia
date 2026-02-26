@@ -104,6 +104,41 @@ public partial class HomePageView : ViewBase
                 }
             };
         }
+        else
+        {
+            Loaded += (_, _) =>
+            {
+                var camerasGrid = this.FindControl<Grid>("CameraControlsGrid");
+                var eyesGrid = this.FindControl<Grid>("EyesGrid");
+
+                // Single column, full-width layout for Android
+                camerasGrid!.RowDefinitions.Clear();
+                camerasGrid.ColumnDefinitions.Clear();
+                camerasGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+
+                eyesGrid!.RowDefinitions.Clear();
+                eyesGrid.ColumnDefinitions.Clear();
+                eyesGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+
+                for (var i = 0; i < camerasGrid.Children.Count; i++)
+                {
+                    camerasGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+                    var child = camerasGrid.Children[i];
+                    Grid.SetRow(child, i);
+                    Grid.SetColumn(child, 0);
+                    child.Margin = new Avalonia.Thickness(0, 0, 0, 16);
+                }
+
+                for (var i = 0; i < eyesGrid.Children.Count; i++)
+                {
+                    eyesGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+                    var child = eyesGrid.Children[i];
+                    Grid.SetRow(child, i);
+                    Grid.SetColumn(child, 0);
+                    child.Margin = new Avalonia.Thickness(0, 0, 0, 16);
+                }
+            };
+        }
         Loaded += (_, _) =>
         {
             if (DataContext is not HomePageViewModel vm) return;

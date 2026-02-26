@@ -10,8 +10,10 @@ using Baballonia.Android.Calibration;
 using Baballonia.Android.Captures;
 using Baballonia.Android.Receivers;
 using Baballonia.Android.Services;
+using Baballonia.Contracts;
 using Baballonia.Services;
 using Baballonia.Views;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 
@@ -87,17 +89,14 @@ public class MainActivity : AvaloniaMainActivity<App>
 
     protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
     {
+        App.RegisterRequiredPlatformServices<
+            AndroidOverlayTrainerCombo,
+            AndroidDeviceEnumerator,
+            AndroidConnector
+        >();
+
         try
         {
-            Log.Info("MainActivity", "CustomizeAppBuilder started");
-
-            App.Overlay = new DummyOverlayTrainerCombo();
-            App.Calibrator = new DummyOverlayTrainerCombo();
-            App.PlatformConnectorType = typeof(AndroidConnector);
-            App.DeviceEnumerator = new AndroidDeviceEnumerator();
-
-            Log.Info("MainActivity", "CustomizeAppBuilder completed");
-
             return base.CustomizeAppBuilder(builder)
                 .WithInterFont();
         }

@@ -19,7 +19,7 @@ public sealed class AndroidDeviceEnumerator : IDeviceEnumerator
     /// Lists available cameras with friendly names as dictionary keys and device identifiers as values.
     /// </summary>
     /// <returns>Dictionary with friendly names as keys and device IDs as values</returns>
-    public async Task<Dictionary<string, string>> UpdateCameras()
+    public Dictionary<string, string> UpdateCameras()
     {
         var cameraDict = new Dictionary<string, string>();
 

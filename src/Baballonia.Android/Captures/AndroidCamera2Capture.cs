@@ -7,13 +7,12 @@ using Android.Media;
 using Android.OS;
 using Android.Util;
 using Android.Views;
-using Baballonia.Services.Inference;
 using Java.Lang;
+using Microsoft.Extensions.Logging;
 using OpenCvSharp;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using Java.Nio;
 using Capture = Baballonia.SDK.Capture;
 using Exception = System.Exception;
 
@@ -43,11 +42,6 @@ public class AndroidCamera2Capture : Capture
         _cameraManager = (CameraManager)_context.GetSystemService(Context.CameraService)!;
     }
 
-
-    public override bool CanConnect(string connectionString)
-    {
-        return int.TryParse(connectionString, out _);
-    }
 
     public override async Task<bool> StartCapture()
     {
@@ -120,7 +114,7 @@ public class AndroidCamera2Capture : Capture
             _imageReader = ImageReader.NewInstance(
                 256,
                 256,
-                ImageFormatType.Yuv420888,
+                ImageFormatType.Jpeg,
                 2);
 
             _imageReader.SetOnImageAvailableListener(new ImageAvailableListener(this), _backgroundHandler);
@@ -128,7 +122,7 @@ public class AndroidCamera2Capture : Capture
             var cameraIds = _cameraManager.GetCameraIdList();
 
             // Fallback to first available camera
-            string targetCameraId = string.Empty;
+            var targetCameraId = string.Empty;
 
             if (cameraIds.Length > 0)
             {
@@ -201,7 +195,7 @@ public class AndroidCamera2Capture : Capture
             var captureRequestBuilder = _cameraDevice.CreateCaptureRequest(CameraTemplate.Preview);
             captureRequestBuilder.AddTarget(surface);
 
-            List<Surface> list = new();
+            List<Surface> list = [];
             var array = Java.Util.Arrays.AsList(surface);
             foreach (var item in array)
             {
@@ -256,81 +250,47 @@ public class AndroidCamera2Capture : Capture
         }
     }
 
+    private byte[] _imageBuffer = [];
+
     private Mat ConvertImageToMat(Image image)
     {
-        // Get Y, U, V planes from YUV_420_888 format
-        var planes = image.GetPlanes();
-        var yPlane = planes[0];
-        var uPlane = planes[1];
-        var vPlane = planes[2];
+        var bb = image.GetPlanes()[0].Buffer;
+        var size = bb.Remaining();
 
-        var yBuffer = yPlane.Buffer;
-        var uBuffer = uPlane.Buffer;
-        var vBuffer = vPlane.Buffer;
+        if (_imageBuffer.Length != size)
+            _imageBuffer = new byte[size];
 
-        var ySize = yBuffer.Remaining();
-        var uSize = uBuffer.Remaining();
-        var vSize = vBuffer.Remaining();
-
-        var yuvBytes = new byte[ySize + uSize + vSize];
-
-        // Copy Y, U, V data
-        yBuffer.Get(yuvBytes, 0, ySize);
-        uBuffer.Get(yuvBytes, ySize, uSize);
-        vBuffer.Get(yuvBytes, ySize + uSize, vSize);
-
-        // Create Mat from YUV data
-        var yuvMat = Mat.FromArray(yuvBytes);
-
-        // Convert YUV to BGR
-        var bgrMat = new Mat();
-        Cv2.CvtColor(yuvMat, bgrMat, ColorConversionCodes.YUV2BGR_I420);
-
-        yuvMat.Dispose();
-        return bgrMat;
+        bb.Get(_imageBuffer);
+        return Mat.FromImageData(_imageBuffer);
     }
 
     // Callback classes
-    private class CameraStateCallback : CameraDevice.StateCallback
+    private class CameraStateCallback(AndroidCamera2Capture parent) : CameraDevice.StateCallback
     {
-        private readonly AndroidCamera2Capture _parent;
-
-        public CameraStateCallback(AndroidCamera2Capture parent)
-        {
-            _parent = parent;
-        }
-
         public override void OnOpened(CameraDevice camera)
         {
-            _parent.OnCameraOpened(camera);
+            parent.OnCameraOpened(camera);
         }
 
         public override void OnDisconnected(CameraDevice camera)
         {
             camera.Close();
-            _parent._cameraDevice = null;
+            parent._cameraDevice = null;
         }
 
         public override void OnError(CameraDevice camera, CameraError error)
         {
             Log.Error("AndroidCameraClass", $"Camera error: {error}");
             camera.Close();
-            _parent._cameraDevice = null;
+            parent._cameraDevice = null;
         }
     }
 
-    private class CaptureSessionStateCallback : CameraCaptureSession.StateCallback
+    private class CaptureSessionStateCallback(AndroidCamera2Capture parent) : CameraCaptureSession.StateCallback
     {
-        private readonly AndroidCamera2Capture _parent;
-
-        public CaptureSessionStateCallback(AndroidCamera2Capture parent)
-        {
-            _parent = parent;
-        }
-
         public override void OnConfigured(CameraCaptureSession session)
         {
-            _parent.OnCaptureSessionConfigured(session);
+            parent.OnCaptureSessionConfigured(session);
         }
 
         public override void OnConfigureFailed(CameraCaptureSession session)
@@ -339,21 +299,15 @@ public class AndroidCamera2Capture : Capture
         }
     }
 
-    private class ImageAvailableListener : Java.Lang.Object, ImageReader.IOnImageAvailableListener
+    private class ImageAvailableListener(AndroidCamera2Capture parent)
+        : Java.Lang.Object, ImageReader.IOnImageAvailableListener
     {
-        private readonly AndroidCamera2Capture _parent;
-
-        public ImageAvailableListener(AndroidCamera2Capture parent)
-        {
-            _parent = parent;
-        }
-
         public void OnImageAvailable(ImageReader reader)
         {
             var image = reader?.AcquireLatestImage();
             if (image != null)
             {
-                _parent.ProcessImage(image);
+                parent.ProcessImage(image);
             }
         }
     }
