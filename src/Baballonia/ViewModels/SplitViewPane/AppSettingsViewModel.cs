@@ -83,6 +83,10 @@ public partial class AppSettingsViewModel : ViewModelBase
     [property: SavedSetting("AppSettings_StabilizeEyes", true)]
     private bool _stabilizeEyes;
 
+    [ObservableProperty]
+    [property: SavedSetting("AppSettings_AutoCalibrationEnabled", false)]
+    private bool _autoCalibrationEnabled;
+
     [ObservableProperty] private bool _onboardingEnabled;
 
     public string MachineID => _identityService.GetUniqueUserId();
@@ -95,6 +99,7 @@ public partial class AppSettingsViewModel : ViewModelBase
     private readonly ILogger<AppSettingsViewModel> _logger;
     private readonly ILocalSettingsService _localSettingsService;
     private readonly OpenVRService _openVrService;
+    private readonly ICalibrationService _calibrationService;
 
     public AppSettingsViewModel(
         FacePipelineManager facePipelineManager,
@@ -105,7 +110,8 @@ public partial class AppSettingsViewModel : ViewModelBase
         GithubService githubService,
         ParameterSenderService parameterSenderService,
         ILogger<AppSettingsViewModel> logger,
-        IThemeSelectorService themeSelectorService)
+        IThemeSelectorService themeSelectorService,
+        ICalibrationService calibrationService)
     {
         OscTarget = oscTarget;
         _localSettingsService = localSettingsService;
@@ -113,9 +119,13 @@ public partial class AppSettingsViewModel : ViewModelBase
         _eyePipelineManager = eyePipelineManager;
         _identityService = identityService;
         _logger = logger;
+        _calibrationService = calibrationService;
         _localSettingsService.Load(this);
 
         LogLevel = _localSettingsService.ReadSetting("AppSettings_LogLevel", "Debug");
+
+        // Sync persisted auto-calibration state to service
+        _calibrationService.AutoCalibrationEnabled = AutoCalibrationEnabled;
 
         // Handle edge case where OSC port is used and the system freaks out
         if (OscTarget.OutPort == 0)
@@ -207,6 +217,21 @@ public partial class AppSettingsViewModel : ViewModelBase
         catch (Exception e)
         {
             _logger.LogError("DLL not found!", e);
+        }
+    }
+
+    partial void OnAutoCalibrationEnabledChanged(bool value)
+    {
+        if (value)
+        {
+            // Reset seeds BEFORE enabling tracking, so the UI can
+            // refresh to show 0.5 seed values before they get pushed
+            _calibrationService.ResetAutoCalibration();
+            _calibrationService.AutoCalibrationEnabled = true;
+        }
+        else
+        {
+            _calibrationService.AutoCalibrationEnabled = false;
         }
     }
 
