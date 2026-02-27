@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using Baballonia.Contracts;
 using Baballonia.Services.Calibration;
 using System.Collections.Concurrent;
@@ -80,25 +81,7 @@ public class CalibrationService : ICalibrationService
         { "TongueTwistRight", "/tongueTwistRight" }
     };
 
-    // Face expression names ordered by inference output index (matches ParameterSenderService.FaceExpressionMap)
-    private static readonly string[] FaceExpressionNames =
-    [
-        "CheekPuffLeft", "CheekPuffRight", "CheekSuckLeft", "CheekSuckRight",
-        "JawOpen", "JawForward", "JawLeft", "JawRight",
-        "NoseSneerLeft", "NoseSneerRight",
-        "MouthFunnel", "MouthPucker", "MouthLeft", "MouthRight",
-        "MouthRollUpper", "MouthRollLower", "MouthShrugUpper", "MouthShrugLower",
-        "MouthClose", "MouthSmileLeft", "MouthSmileRight",
-        "MouthFrownLeft", "MouthFrownRight",
-        "MouthDimpleLeft", "MouthDimpleRight",
-        "MouthUpperUpLeft", "MouthUpperUpRight",
-        "MouthLowerDownLeft", "MouthLowerDownRight",
-        "MouthPressLeft", "MouthPressRight",
-        "MouthStretchLeft", "MouthStretchRight",
-        "TongueOut", "TongueUp", "TongueDown", "TongueLeft", "TongueRight",
-        "TongueRoll", "TongueBendDown", "TongueCurlUp", "TongueSquish",
-        "TongueFlat", "TongueTwistLeft", "TongueTwistRight"
-    ];
+    private static readonly string[] FaceExpressionNames = ParameterSenderService.FaceExpressionMap.Keys.ToArray();
 
     // Eye lid expression names and their indices in the eye output array
     private static readonly (string Name, int Index)[] EyeLidExpressions =

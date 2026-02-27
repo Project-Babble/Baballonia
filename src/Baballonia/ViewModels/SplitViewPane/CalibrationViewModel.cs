@@ -24,7 +24,6 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
 
     private ILocalSettingsService _settingsService { get; }
     private readonly ICalibrationService _calibrationService;
-    private readonly ParameterSenderService _parameterSenderService;
     private readonly ProcessingLoopService _processingLoopService;
     private readonly EyePipelineManager _eyePipelineManager;
 
@@ -35,7 +34,6 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
         _eyePipelineManager = eyePipelineManager;
         _settingsService = Ioc.Default.GetService<ILocalSettingsService>()!;
         _calibrationService = Ioc.Default.GetService<ICalibrationService>()!;
-        _parameterSenderService = Ioc.Default.GetService<ParameterSenderService>()!;
         _processingLoopService = Ioc.Default.GetService<ProcessingLoopService>()!;
 
         EyeSettings =
@@ -138,7 +136,7 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
             //{ "RightEyeBrow", },
         };
 
-        _faceKeyIndexMap = _parameterSenderService.FaceExpressionMap.Keys
+        _faceKeyIndexMap = ParameterSenderService.FaceExpressionMap.Keys
             .Select((key, index) => new { key, index })
             .ToDictionary(x => x.key, x => x.index);
 
