@@ -15,7 +15,7 @@ namespace Baballonia.Views;
 
 public partial class HomePageView : ViewBase
 {
-    public static FilePickerFileType ONNXAll { get; } = new("ONNX Models")
+    private static readonly FilePickerFileType OnnxAll = new("ONNX Models")
     {
         Patterns = ["*.onnx"],
     };
@@ -246,7 +246,7 @@ public partial class HomePageView : ViewBase
             vm.RightCamera.UpdateCameraDropDown(friendlyNames);
             vm.FaceCamera.UpdateCameraDropDown(friendlyNames);
         }
-        catch (Exception exception)
+        catch (Exception)
         {
         }
 
@@ -263,7 +263,7 @@ public partial class HomePageView : ViewBase
             Title = "Select ONNX Model",
             AllowMultiple = false,
             SuggestedStartLocation = suggestedStartLocation, // Falls back to desktop if Models folder hasn't been created yet
-            FileTypeFilter = [ONNXAll]
+            FileTypeFilter = [OnnxAll]
         })!;
 
         if (file.Count == 0) return;
