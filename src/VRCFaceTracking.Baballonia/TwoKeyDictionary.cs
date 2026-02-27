@@ -30,7 +30,7 @@ public class TwoKeyDictionary<TKey1, TKey2, TValue> : IEnumerable where TKey1 : 
     /// <returns>Returns true if the value was added, false if the value was already present in the dictionary.</returns>
     public bool Add(TKey1 key1, TKey2 key2, TValue value)
     {
-        if (key1 == null || key2 == null || ContainsKey1(key1) || ContainsKey2(key2))
+        if (key1 == null || key2 == null || ContainsKey1(key1))
         {
             return false;
         }
