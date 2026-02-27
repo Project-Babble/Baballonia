@@ -638,7 +638,11 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
             if (success)
             {
-                if (startMaximized)
+                // Only select the entire frame if and only if
+                // 1) This call originates from the UI, IE a user has requested it
+                // 2) The current camera differs from the previous (IE, an existing connection was interrupted)
+                var lastOpenedCameraName = _localSettings.ReadSetting<string>("LastOpened" + model.Name);
+                if (startMaximized && lastOpenedCameraName != model.DisplayAddress)
                 {
                     model.SelectWholeFrame();
                 }
