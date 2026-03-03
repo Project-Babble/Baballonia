@@ -171,6 +171,7 @@
                 x:Name="OscPrefix"
                 Grid.Row="4"
                 Grid.Column="2"
+                Background="{Binding OscPrefixBackgroundColor}"
                 Text="{Binding OscPrefix, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue=''}" />
 
             <TextBlock

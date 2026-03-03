@@ -4,18 +4,22 @@ using Baballonia.Services.Inference;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using OscCore;
 using System;
 using System.Collections.Generic;
+using Avalonia;
+using Avalonia.Media;
+using Avalonia.Styling;
 
 namespace Baballonia.ViewModels.SplitViewPane;
 
 public partial class AppSettingsViewModel : ViewModelBase
 {
-    public IOscTarget OscTarget { get; private set;}
-    public ILocalSettingsService SettingsService { get; }
+    public IOscTarget OscTarget { get; }
     public GithubService GithubService { get; private set;}
     public ParameterSenderService ParameterSenderService { get; private set;}
     private OpenVRService OpenVrService { get; } = Ioc.Default.GetService<OpenVRService>();
+    private ILocalSettingsService SettingsService { get; }
 
     public string MachineID => _identityService.GetUniqueUserId();
 
@@ -30,6 +34,11 @@ public partial class AppSettingsViewModel : ViewModelBase
     [ObservableProperty]
     [property: SavedSetting("AppSettings_OSCPrefix", "")]
     private string _oscPrefix;
+
+    [ObservableProperty]
+    private IBrush _oscPrefixBackgroundColor;
+
+    private bool _isOscPrefixValid = true;
 
     [ObservableProperty]
     [property: SavedSetting("AppSettings_OneEuroEnabled", true)]
@@ -85,7 +94,7 @@ public partial class AppSettingsViewModel : ViewModelBase
 
     [ObservableProperty] private bool _onboardingEnabled;
 
-    private ILogger<AppSettingsViewModel> _logger;
+    private readonly ILogger<AppSettingsViewModel> _logger;
     private readonly FacePipelineManager _facePipelineManager;
     private readonly EyePipelineManager _eyePipelineManager;
     private readonly IIdentityService _identityService;
@@ -93,7 +102,8 @@ public partial class AppSettingsViewModel : ViewModelBase
     public AppSettingsViewModel(
         FacePipelineManager facePipelineManager,
         EyePipelineManager eyePipelineManager,
-        IIdentityService identityService)
+        IIdentityService identityService,
+        IThemeSelectorService themeSelectorService)
     {
         _facePipelineManager = facePipelineManager;
         _eyePipelineManager = eyePipelineManager;
@@ -114,6 +124,14 @@ public partial class AppSettingsViewModel : ViewModelBase
             SettingsService.SaveSetting("OSCOutPort", port);
         }
 
+        // Edge case: Update the OscPrefix Background color if and only if
+        // The theme changes and the previous input WAS valid (IE keep red)
+        themeSelectorService.ThemeChanged += variant =>
+        {
+            if (_isOscPrefixValid)
+                SetOscPrefixBackgroundColor(variant);
+        };
+
         // Risky Settings
         ParameterSenderService = Ioc.Default.GetService<ParameterSenderService>()!;
 
@@ -129,6 +147,34 @@ public partial class AppSettingsViewModel : ViewModelBase
             {
                 _eyePipelineManager.LoadEyeStabilization();
             }
+        };
+    }
+
+    partial void OnOscPrefixChanged(string value)
+    {
+        // 1) A valid OSC prefix is also a valid message itself
+        // IE: /foo/bar + /cheekPuffLeft
+        // 2) Empty strings are also valid, IE no prefix
+        _isOscPrefixValid = OscMessage.TryParse(value, out _) || string.IsNullOrEmpty(value);
+
+        if (_isOscPrefixValid)
+        {
+            SettingsService.SaveSetting("AppSettings_OSCPrefix", value);
+            SetOscPrefixBackgroundColor(Application.Current!.ActualThemeVariant);
+            return;
+        }
+
+        OscPrefixBackgroundColor = new SolidColorBrush(Colors.PaleVioletRed);
+    }
+
+    private void SetOscPrefixBackgroundColor(ThemeVariant theme)
+    {
+        // Workaround to get proper SystemChromeMediumColor color
+        OscPrefixBackgroundColor = theme.ToString() switch
+        {
+            "Light" => new SolidColorBrush(Colors.White),
+            "Dark" => SolidColorBrush.Parse("#ff202020"),
+            _ => OscPrefixBackgroundColor
         };
     }
 

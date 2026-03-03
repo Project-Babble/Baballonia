@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using System;
+using Avalonia;
 using Avalonia.Styling;
 using Avalonia.Threading;
 using Baballonia.Contracts;
@@ -7,9 +8,11 @@ namespace Baballonia.Services;
 
 public class ThemeSelectorService(ILocalSettingsService localSettingsService) : IThemeSelectorService
 {
+    public event Action<ThemeVariant>? ThemeChanged;
+
     private const string SettingsKey = "AppBackgroundRequestedTheme";
 
-    public ThemeVariant Theme { get; set; } = ThemeVariant.Default;
+    public ThemeVariant Theme { get; private set; } = ThemeVariant.Default;
 
     public void Initialize()
     {
@@ -22,6 +25,7 @@ public class ThemeSelectorService(ILocalSettingsService localSettingsService) : 
         Theme = theme;
         SetRequestedTheme();
         SaveThemeInSettingsAsync(Theme);
+        ThemeChanged?.Invoke(Theme);
     }
 
     public void SetRequestedTheme()
