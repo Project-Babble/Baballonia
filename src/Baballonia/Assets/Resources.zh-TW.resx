@@ -118,109 +118,109 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Settings_Theme_Dark_Content" xml:space="preserve">
-    <value>Dark</value>
+    <value>深色</value>
   </data>
   <data name="Settings_Theme_Default_Content" xml:space="preserve">
-    <value>Default</value>
+    <value>預設</value>
   </data>
   <data name="Settings_Theme_Light_Content" xml:space="preserve">
-    <value>Light</value>
+    <value>淺色</value>
   </data>
   <data name="Home_Title_Header" xml:space="preserve">
-    <value>Home</value>
+    <value>主頁</value>
   </data>
   <data name="Settings_Theme_Header" xml:space="preserve">
-    <value>App theme</value>
+    <value>應用程式主題</value>
   </data>
   <data name="Settings_Theme_Description" xml:space="preserve">
-    <value>Select which app theme to display</value>
+    <value>選擇要顯示的應用程式主題</value>
   </data>
   <data name="Settings_OSC_Description" xml:space="preserve">
-    <value>Where should OSC data be sent?</value>
+    <value>OSC 數據應傳送到哪裡？</value>
   </data>
   <data name="Settings_OSC_Header" xml:space="preserve">
     <value>OSC</value>
   </data>
   <data name="Home_Eye_Calibration" xml:space="preserve">
-    <value>Eye Calibration</value>
+    <value>眼部校準</value>
   </data>
   <data name="Home_Left_Camera_Address" xml:space="preserve">
-    <value>Left Camera Address</value>
+    <value>左側攝影機地址</value>
   </data>
   <data name="Home_Cameras_Start_Camera" xml:space="preserve">
-    <value>Start Camera</value>
+    <value>啟動攝影機</value>
   </data>
   <data name="Home_Cameras_Stop_Camera" xml:space="preserve">
-    <value>Stop Camera</value>
+    <value>停止攝影機</value>
   </data>
   <data name="Home_Cameras_Tracking_Mode" xml:space="preserve">
-    <value>Tracking</value>
+    <value>追蹤</value>
   </data>
   <data name="Home_Cameras_Cropping_Mode" xml:space="preserve">
-    <value>Cropping</value>
+    <value>裁剪</value>
   </data>
   <data name="Home_Left_Camera_Select_Entire_Frame" xml:space="preserve">
-    <value>Select Left Frame</value>
+    <value>選擇左側框架</value>
   </data>
   <data name="Home_Cameras_Vertical_Flip_Header" xml:space="preserve">
-    <value>Vertical Flip</value>
+    <value>垂直翻轉</value>
   </data>
   <data name="Home_Cameras_Vertical_Flip_Description" xml:space="preserve">
-    <value>Flip the image vertically</value>
+    <value>垂直翻轉圖像</value>
   </data>
   <data name="Home_Cameras_Horizontal_Flip_Header" xml:space="preserve">
-    <value>Horizontal flip</value>
+    <value>水平翻轉</value>
   </data>
   <data name="Home_Cameras_Horizontal_Flip_Description" xml:space="preserve">
-    <value>Flip the image horizontally</value>
+    <value>水平翻轉圖像</value>
   </data>
   <data name="Home_Cameras_Rotation_Description" xml:space="preserve">
-    <value>Rotates the image in a circle</value>
+    <value>圓形旋轉圖像</value>
   </data>
   <data name="Home_Cameras_Brightness_Header" xml:space="preserve">
-    <value>Image Brightness</value>
+    <value>圖像亮度</value>
   </data>
   <data name="Home_Cameras_Rotation_Header" xml:space="preserve">
-    <value>Image Rotation</value>
+    <value>圖像旋轉</value>
   </data>
   <data name="Home_Cameras_Brightness_Description" xml:space="preserve">
-    <value>Adjust the brightness</value>
+    <value>調整亮度</value>
   </data>
   <data name="Home_Right_Camera_Address" xml:space="preserve">
-    <value>Right Camera Address</value>
+    <value>右側攝影機地址</value>
   </data>
   <data name="Home_Right_Camera_Select_Entire_Frame" xml:space="preserve">
-    <value>Select Right Frame</value>
+    <value>選擇右側框架</value>
   </data>
   <data name="Home_Face_Camera_Address" xml:space="preserve">
-    <value>Face Camera Address</value>
+    <value>臉部攝影機地址</value>
   </data>
   <data name="Home_Face_Camera_Select_Entire_Frame" xml:space="preserve">
-    <value>Select Face Frame</value>
+    <value>選擇臉部框架</value>
   </data>
   <data name="Home_Left_Camera_Header" xml:space="preserve">
-    <value>Left Eye Camera</value>
+    <value>左眼攝影機</value>
   </data>
   <data name="Home_Face_Camera_Header" xml:space="preserve">
-    <value>Face Camera</value>
+    <value>臉部攝影機</value>
   </data>
   <data name="Home_Right_Camera_Header" xml:space="preserve">
-    <value>Right Eye Camera</value>
+    <value>右眼攝影機</value>
   </data>
   <data name="Home_Left_Camera_Settings" xml:space="preserve">
-    <value>Left Camera Settings</value>
+    <value>左側攝影機設定</value>
   </data>
   <data name="Home_Face_Camera_Settings" xml:space="preserve">
-    <value>Face Camera Settings</value>
+    <value>臉部攝影機設定</value>
   </data>
   <data name="Home_Right_Camera_Settings" xml:space="preserve">
-    <value>Right Camera Settings</value>
+    <value>右側攝影機設定</value>
   </data>
   <data name="Common_Start_Typing" xml:space="preserve">
-    <value>Start typing...</value>
+    <value>開始輸入...</value>
   </data>
   <data name="Calibration_Title_Header" xml:space="preserve">
-    <value>Calibration</value>
+    <value>校準</value>
   </data>
   <data name="Calibration_Reset_Minimums" xml:space="preserve">
     <value>重置最小值</value>
@@ -229,394 +229,421 @@
     <value>重置最大值</value>
   </data>
   <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
-    <value>Eye Expressions</value>
+    <value>眼部表情</value>
   </data>
   <data name="Calibration_Nose_Expressions_Header" xml:space="preserve">
-    <value>Nose Expressions</value>
+    <value>鼻子表情</value>
   </data>
   <data name="Calibration_Tongue_Expressions_Header" xml:space="preserve">
-    <value>Tongue Expressions</value>
+    <value>舌頭表情</value>
   </data>
   <data name="Calibration_Mouth_Expressions_Header" xml:space="preserve">
-    <value>Mouth Expressions</value>
+    <value>嘴巴表情</value>
   </data>
   <data name="Calibration_Jaw_Expressions_Header" xml:space="preserve">
-    <value>Jaw Expressions</value>
+    <value>下巴表情</value>
   </data>
   <data name="Calibration_Cheek_Expressions_Header" xml:space="preserve">
-    <value>Cheek Expressions</value>
+    <value>臉頰表情</value>
   </data>
   <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Header" xml:space="preserve">
-    <value>Stabilize Eyes</value>
+    <value>穩定眼部</value>
   </data>
   <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Description" xml:space="preserve">
-    <value>Prevents eyes from looking out in opposite directions, but may overcorrect.</value>
+    <value>防止眼睛看向相反方向，但可能過度校正。</value>
   </data>
   <data name="Firmware_Title_Header" xml:space="preserve">
-    <value>Firmware</value>
+    <value>固件</value>
   </data>
   <data name="Firmware_Select_Tracker_Header" xml:space="preserve">
-    <value>Select your tracker</value>
+    <value>選擇您的追蹤器</value>
   </data>
   <data name="Firmware_Device_Instructions_1" xml:space="preserve">
-    <value>• After powering on/connecting your device you will have 20 seconds to press "Refresh" and select your device from the dropdown</value>
+    <value>• 開機/連接您的裝置後，您將有 20 秒時間按「重新整理」並從下拉選單中選擇您的裝置</value>
   </data>
   <data name="Firmware_Device_Instructions_2" xml:space="preserve">
-    <value>• Certain configuration operations will take a little bit!</value>
+    <value>• 某些配置操作將需要一些時間！</value>
   </data>
   <data name="Firmware_Device_Configuration_Header" xml:space="preserve">
-    <value>Device Configuration</value>
+    <value>裝置配置</value>
   </data>
   <data name="Firmware_Device_Configuration_Description" xml:space="preserve">
-    <value>Toggle wired/wireless mode</value>
+    <value>切換有線/無線模式</value>
   </data>
   <data name="Firmware_Device_Mode_Header" xml:space="preserve">
-    <value>Toggle wired/wireless mode</value>
+    <value>切換有線/無線模式</value>
   </data>
   <data name="Firmware_Device_Mode_Instruction_1" xml:space="preserve">
-    <value>• You WILL need to restart your tracker after changing the mode</value>
+    <value>• 更改模式後您將需要重新啟動您的追蹤器</value>
   </data>
   <data name="Firmware_Device_Mode_Instruction_2" xml:space="preserve">
-    <value>• You MAY need to restart the app after a flash for trackers to show</value>
+    <value>• 刷新固件後您可能需要重新啟動應用程式以顯示追蹤器</value>
   </data>
   <data name="Firmware_Device_Mode_Select_Placeholder" xml:space="preserve">
-    <value>Select a mode...</value>
+    <value>選擇模式...</value>
   </data>
   <data name="Firmware_Wifi_Configuration_Header" xml:space="preserve">
-    <value>Wifi Configuration</value>
+    <value>WiFi 配置</value>
   </data>
   <data name="Firmware_Wifi_Configuration_Description" xml:space="preserve">
-    <value>Connect to Wifi and more</value>
+    <value>連接到 WiFi 及更多</value>
   </data>
   <data name="Firmware_Wifi_Credentials_Header" xml:space="preserve">
-    <value>Set your Wi-Fi credentials</value>
+    <value>設定您的 WiFi 憑證</value>
   </data>
   <data name="Firmware_Wifi_Instructions_1" xml:space="preserve">
-    <value>• If you want to use your tracker wirelessly, you NEED to set its Wifi credentials</value>
+    <value>• 如果您想無線使用您的追蹤器，您需要設定其 WiFi 憑證</value>
   </data>
   <data name="Firmware_Wifi_Instructions_2" xml:space="preserve">
-    <value>• You MUST scan for Wifi networks BEFORE you can set your Wifi credentials</value>
+    <value>• 在設定 WiFi 憑證之前，您必須掃描 WiFi 網絡</value>
   </data>
   <data name="Firmware_Wifi_SSID_Label" xml:space="preserve">
-    <value>WiFi Network Name (SSID)</value>
+    <value>WiFi 網絡名稱 (SSID)</value>
   </data>
   <data name="Firmware_Wifi_SSID_Placeholder" xml:space="preserve">
-    <value>Start typing to see WiFi networks...</value>
+    <value>開始輸入以查看 WiFi 網絡...</value>
   </data>
   <data name="Firmware_Wifi_Password_Label" xml:space="preserve">
-    <value>WiFi Password</value>
+    <value>WiFi 密碼</value>
   </data>
   <data name="Firmware_Wifi_Password_Placeholder" xml:space="preserve">
-    <value>Enter WiFi password...</value>
+    <value>輸入 WiFi 密碼...</value>
   </data>
   <data name="Firmware_Flashing_Header" xml:space="preserve">
-    <value>Flashing Options</value>
+    <value>刷新選項</value>
   </data>
   <data name="Firmware_Flashing_Description" xml:space="preserve">
-    <value>Flash your device's firmware</value>
+    <value>刷新您的裝置固件</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>CAUTION!! THIS WILL FACTORY RESET YOUR TRACKER. YOU WILL NEED TO PERFORM A FIRST TIME SET UP AFTER FLASHING YOUR TRACKER.</value>
+    <value>注意！！這將恢復出廠設定您的追蹤器。刷新您的追蹤器後，您將需要執行首次設定。</value>
+  </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>固件類型要刷新：</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>刷新固件</value>
   </data>
   <data name="Firmware_Flashing_Note" xml:space="preserve">
-    <value>This will take around ~10 seconds. Don't leave this page!</value>
+    <value>這將需要大約 10 秒。不要離開此頁面！</value>
   </data>
   <data name="Firmware_Flashing_Complete" xml:space="preserve">
-    <value>Done! You will need to restart your tracker</value>
+    <value>完成！您將需要重新啟動您的追蹤器</value>
   </data>
   <data name="Firmware_TrackerComboBox_Default" xml:space="preserve">
-    <value>Click to see trackers...</value>
+    <value>點擊查看追蹤器...</value>
   </data>
   <data name="Firmware_RefreshDevices_Default" xml:space="preserve">
-    <value>Refresh Devices</value>
+    <value>重新整理裝置</value>
   </data>
   <data name="Firmware_RefreshDevices_Refreshing" xml:space="preserve">
-    <value>Refreshing</value>
+    <value>重新整理中</value>
   </data>
   <data name="Firmware_RefreshDevices_Found" xml:space="preserve">
-    <value>Found {0} device(s).</value>
+    <value>找到 {0} 個裝置。</value>
   </data>
   <data name="Firmware_SelectTracker_Default" xml:space="preserve">
-    <value>Select Tracker</value>
+    <value>選擇追蹤器</value>
   </data>
   <data name="Firmware_SelectTracker_Connected" xml:space="preserve">
-    <value>Tracker connected!</value>
+    <value>追蹤器已連接！</value>
   </data>
   <data name="Firmware_SelectTracker_NoResponse" xml:space="preserve">
-    <value>The tracker did not respond.</value>
+    <value>追蹤器沒有回應。</value>
   </data>
   <data name="Firmware_ModeSetButton_Default" xml:space="preserve">
-    <value>Set Mode</value>
+    <value>設定模式</value>
   </data>
   <data name="Firmware_ModeSetButton_Setting" xml:space="preserve">
-    <value>Setting mode</value>
+    <value>設定模式中</value>
   </data>
   <data name="Firmware_ModeSetButton_Success" xml:space="preserve">
-    <value>Set!</value>
+    <value>已設定！</value>
   </data>
   <data name="Firmware_WifiSetButton_Default" xml:space="preserve">
-    <value>Set Wifi Creds</value>
+    <value>設定 WiFi 憑證</value>
   </data>
   <data name="Firmware_WifiSetButton_Setting" xml:space="preserve">
-    <value>Setting WiFi credentials</value>
+    <value>設定 WiFi 憑證中</value>
   </data>
   <data name="Firmware_WifiSetButton_Success" xml:space="preserve">
-    <value>Sent!</value>
+    <value>已發送！</value>
   </data>
   <data name="Firmware_WifiSetButton_Error" xml:space="preserve">
-    <value>Something went wrong...</value>
+    <value>出錯了...</value>
   </data>
   <data name="Firmware_WifiScanButton_Default" xml:space="preserve">
-    <value>Refresh Wifi Networks</value>
+    <value>重新整理 WiFi 網絡</value>
   </data>
   <data name="Firmware_WifiScanButton_Scanning" xml:space="preserve">
-    <value>Scanning. This will take at most 30 seconds</value>
+    <value>掃描中。這將最多需要 30 秒</value>
   </data>
   <data name="Firmware_WifiScanButton_Error" xml:space="preserve">
-    <value>Scan failed. Click to try again.</value>
+    <value>掃描失敗。點擊重試。</value>
   </data>
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
-    <value>Found {0} networks. Click to scan again.</value>
+    <value>找到 {0} 個網絡。點擊再次掃描。</value>
   </data>
   <data name="VRC_Title_Header" xml:space="preserve">
-    <value>VRChat + VRCFaceTracking Settings</value>
+    <value>VRChat + VRCFaceTracking 設定</value>
   </data>
   <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
-    <value>Use Native VRC Eye Tracking</value>
+    <value>使用 VRC 原生眼部追蹤</value>
   </data>
   <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
-    <value>Brings eye tracking to avatars that do not have VRCFaceTracking</value>
+    <value>將眼部追蹤帶給沒有 VRCFaceTracking 的虛擬形象</value>
   </data>
   <data name="VRC_ModuleMode_Header" xml:space="preserve">
-    <value>Set VRCFT module mode</value>
+    <value>設定 VRCFT 模組模式</value>
   </data>
   <data name="VRC_ModuleMode_Description" xml:space="preserve">
-    <value>Send only eye, only face or both? (Change requires VRCFT restart)</value>
+    <value>只發送眼部、只發送臉部或兩者都發送？（更改需要重新啟動 VRCFT）</value>
   </data>
   <data name="VRC_ModuleMode_Placeholder" xml:space="preserve">
-    <value>Select a mode...</value>
+    <value>選擇模式...</value>
   </data>
   <data name="Output_Title_Header" xml:space="preserve">
-    <value>Output</value>
+    <value>輸出</value>
   </data>
   <data name="Output_CopyButton_Tooltip" xml:space="preserve">
-    <value>Copy the log's output to your clipboard</value>
+    <value>將日誌輸出複製到您的剪貼板</value>
   </data>
   <data name="Output_SaveButton_Tooltip" xml:space="preserve">
-    <value>Save the log's output</value>
+    <value>保存日誌輸出</value>
   </data>
   <data name="Output_OpenLoggingDirectoryButton_Tooltip" xml:space="preserve">
-    <value>Open the logging directory</value>
+    <value>開啟日誌目錄</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>This wizard will guide you through setting up the new Babble App.</value>
+    <value>本嚮導將幫助您設定新的 Babble 應用程式。</value>
+  </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>歡迎!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>韌體</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>組裝</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>用戶界面概覽</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>完成!</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>下一步</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>完成</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
-    <value>Wired or Wireless?</value>
+    <value>有線還是無線？</value>
   </data>
   <data name="Onboarding_Wireless_Description1" xml:space="preserve">
-    <value>With newer Babbles, you'll need to perform a first time setup in the Firmware tab (Icon above).</value>
+    <value>使用較新的 Babble，您需要在固件標籤頁中執行首次設定（上方圖標）。</value>
   </data>
   <data name="Onboarding_Wireless_Description2" xml:space="preserve">
-    <value>It only takes 2 minutes! Select your tracker and mode (wired or wireless). It's that simple.</value>
+    <value>只需 2 分鐘！選擇您的追蹤器和模式（有線或無線）。就是這麼簡單。</value>
   </data>
   <data name="Onboarding_Wireless_Note" xml:space="preserve">
-    <value>Please note newer trackers have a 20-second window before they enter camera mode.</value>
+    <value>請注意較新的追蹤器在進入攝影機模式之前有 20 秒的時間窗口。</value>
   </data>
   <data name="Onboarding_Assembly_Header" xml:space="preserve">
-    <value>Assemble Your Tracker</value>
+    <value>組裝您的追蹤器</value>
   </data>
   <data name="Onboarding_Assembly_Description" xml:space="preserve">
-    <value>If you need help putting your tracker together, here's a useful Youtube tutorial!</value>
+    <value>如果您需要幫助組裝您的追蹤器，這裡有一個有用的 YouTube 教學！</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
-    <value>App Settings</value>
+    <value>應用程式設定</value>
   </data>
   <data name="Settings_Language_Header" xml:space="preserve">
-    <value>Language</value>
+    <value>語言</value>
   </data>
   <data name="Settings_Language_Description" xml:space="preserve">
-    <value>Set the app's language. Switch pages to apply.</value>
+    <value>設定應用程式的語言。切換頁面以應用。</value>
   </data>
   <data name="Settings_Language_Default" xml:space="preserve">
-    <value>Default</value>
+    <value>預設</value>
   </data>
   <data name="Settings_Language_English" xml:space="preserve">
-    <value>English</value>
+    <value>英文</value>
   </data>
   <data name="Settings_Language_Spanish" xml:space="preserve">
-    <value>Español</value>
+    <value>西班牙文</value>
   </data>
   <data name="Settings_Language_Japanese" xml:space="preserve">
-    <value>日本語</value>
+    <value>日文</value>
   </data>
   <data name="Settings_Language_Polish" xml:space="preserve">
-    <value>Polski</value>
+    <value>波蘭文</value>
   </data>
   <data name="Settings_Language_Chinese" xml:space="preserve">
     <value>中文</value>
   </data>
   <data name="Settings_Filter_Header" xml:space="preserve">
-    <value>One-Euro filter settings</value>
+    <value>一歐過濾器設定</value>
   </data>
   <data name="Settings_Filter_Description" xml:space="preserve">
-    <value>Filter Settings</value>
+    <value>過濾器設定</value>
   </data>
   <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
-    <value>Minimum frequency cutoff</value>
+    <value>最小頻率截止</value>
   </data>
   <data name="Settings_Filter_MinFreq_Description" xml:space="preserve">
-    <value>Controls how much smoothing is applied to slow movements</value>
+    <value>控制對緩慢移動應用多少平滑處理</value>
   </data>
   <data name="Settings_Filter_Template_Placeholder" xml:space="preserve">
-    <value>Select from a template</value>
+    <value>從模板選擇</value>
   </data>
   <data name="Settings_Filter_Template_Low" xml:space="preserve">
-    <value>Low ({0})</value>
+    <value>低 ({0})</value>
   </data>
   <data name="Settings_Filter_Template_Medium" xml:space="preserve">
-    <value>Medium ({0})</value>
+    <value>中 ({0})</value>
   </data>
   <data name="Settings_Filter_Template_High" xml:space="preserve">
-    <value>High ({0})</value>
+    <value>高 ({0})</value>
   </data>
   <data name="Settings_Filter_Speed_Label" xml:space="preserve">
-    <value>Speed coefficient</value>
+    <value>速度係數</value>
   </data>
   <data name="Settings_Filter_Speed_Description" xml:space="preserve">
-    <value>Determines how the filter adapts when you move faster</value>
+    <value>決定過濾器在您移動更快時如何適應</value>
   </data>
   <data name="Settings_GPU_Header" xml:space="preserve">
-    <value>Use GPU acceleration</value>
+    <value>使用 GPU 加速</value>
   </data>
   <data name="Settings_GPU_Description" xml:space="preserve">
-    <value>Use your GPU to make things run faster! Requires restart</value>
+    <value>使用您的 GPU 讓事情運行得更快！需要重新啟動</value>
   </data>
   <data name="Settings_LogLevel_Header" xml:space="preserve">
-    <value>Log Level Verbosity</value>
+    <value>日誌詳細程度</value>
   </data>
   <data name="Settings_LogLevel_Description" xml:space="preserve">
-    <value>Minimum logging level. Requires restart</value>
+    <value>最小日誌記錄級別。需要重新啟動</value>
   </data>
   <data name="Settings_Updates_Header" xml:space="preserve">
-    <value>Check For Updates</value>
+    <value>檢查更新</value>
   </data>
   <data name="Settings_Updates_Description" xml:space="preserve">
-    <value>Should the app check for updates on start?</value>
+    <value>應用程式應該在啟動時檢查更新嗎？</value>
   </data>
   <data name="Settings_FirstTime_Header" xml:space="preserve">
-    <value>Launch first time setup</value>
+    <value>啟動首次設定</value>
   </data>
   <data name="Settings_FirstTime_Description" xml:space="preserve">
-    <value>Relaunches the first time setup</value>
+    <value>重新啟動首次設定</value>
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
-    <value>Launch</value>
+    <value>啟動</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>上一步</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
-    <value>Skip</value>
+    <value>跳過</value>
   </data>
   <data name="Onboarding_UI_Header" xml:space="preserve">
-    <value>Where is everything?</value>
+    <value>所有東西都在哪裡？</value>
   </data>
   <data name="Onboarding_UI_Home_Description" xml:space="preserve">
-    <value>1. The Home Page is where you can set up your cameras, and perform an eye tracking calibration.</value>
+    <value>1. 主頁是您設定攝影機和執行眼部追蹤校準的地方。</value>
   </data>
   <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
-    <value>2. The Calibration can be used to tweak your eye/face expressions individually.</value>
+    <value>2. 校準可用於單獨調整您的眼部/臉部表情。</value>
   </data>
   <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
-    <value>3. The Firmware Page is used to set up your device, or reset it.</value>
+    <value>3. 固件頁面用於設定您的裝置或重置它。</value>
   </data>
   <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
-    <value>4. The VRChat Page is used to alter VRChat/VRCFaceTracking specific settings.</value>
+    <value>4. VRChat 頁面用於更改 VRChat/VRCFaceTracking 特定設定。</value>
   </data>
   <data name="Onboarding_UI_Output_Description" xml:space="preserve">
-    <value>5. The Output Page shows the status of the app and other useful information.</value>
+    <value>5. 輸出頁面顯示應用程式的狀態和其他有用資訊。</value>
   </data>
   <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
-    <value>6. The Settings is for general app settings, such as theme, language and more.</value>
+    <value>6. 設定用於一般應用程式設定，如主題、語言等。</value>
   </data>
   <data name="Onboarding_Complete_Header" xml:space="preserve">
-    <value>Setup Complete!</value>
+    <value>設定完成！</value>
   </data>
   <data name="Onboarding_Complete_Description1" xml:space="preserve">
-    <value>You're all set to start using the new Babble App!</value>
+    <value>您已準備好開始使用新的 Babble 應用程式！</value>
   </data>
   <data name="Onboarding_Complete_Description2" xml:space="preserve">
-    <value>You can revisit this page in the settings.</value>
+    <value>您可以在設定中重新訪問此頁面。</value>
   </data>
   <data name="Settings_OSC_IP_Label" xml:space="preserve">
-    <value>IP Address</value>
+    <value>IP 地址</value>
   </data>
   <data name="Settings_OSC_Prefix_Label" xml:space="preserve">
-    <value>OSC Prefix</value>
+    <value>OSC 前綴</value>
   </data>
   <data name="Settings_OSC_Recalibrate_Label" xml:space="preserve">
-    <value>Recalibrate Address</value>
+    <value>重新校準地址</value>
   </data>
   <data name="Settings_OSC_Recenter_Label" xml:space="preserve">
-    <value>Recenter Address</value>
+    <value>重新置中地址</value>
   </data>
   <data name="Settings_OSC_SendPort_Label" xml:space="preserve">
-    <value>Send Port</value>
+    <value>發送端口</value>
   </data>
   <data name="Settings_OSC_ReceivePort_Label" xml:space="preserve">
-    <value>Receive Port</value>
+    <value>接收端口</value>
   </data>
   <data name="AdminWarning_Header" xml:space="preserve">
-    <value>Administrator Mode Warning</value>
+    <value>管理員模式警告</value>
   </data>
   <data name="AdminWarning_Message" xml:space="preserve">
-    <value>Do not run Baballonia as admin! There is no need, and it prevents eye tracking calibrations from working.</value>
+    <value>不要以管理員身份運行 Baballonia！沒有必要，而且會阻止眼部追蹤校準正常工作。</value>
   </data>
   <data name="Aero_Overlay_NotFound" xml:space="preserve">
-    <value>The gaze overlay program does not exist!</value>
+    <value>注視覆蓋程式不存在！</value>
   </data>
   <data name="Aero_Overlay_AlreadyRunning" xml:space="preserve">
-    <value>The gaze overlay program is already running! Please close it and try again.</value>
+    <value>注視覆蓋程式已在運行！請關閉它並重試。</value>
   </data>
   <data name="Aero_SteamVR_NotRunning" xml:space="preserve">
-    <value>SteamVR is not running. Please run it and try again.</value>
+    <value>SteamVR 未運行。請運行它並重試。</value>
   </data>
   <data name="Aero_CameraStream_Failed" xml:space="preserve">
-    <value>Failed to start camera streaming!</value>
+    <value>啟動攝影機串流失敗！</value>
   </data>
   <data name="Aero_Calibration_Failed" xml:space="preserve">
-    <value>Failed to start calibration!</value>
+    <value>啟動校準失敗！</value>
   </data>
   <data name="Aero_Calibration_Success" xml:space="preserve">
-    <value>Eye tracking calibration successful!</value>
+    <value>眼部追蹤校準成功！</value>
   </data>
   <data name="Aero_Overlay_CleanupFailed" xml:space="preserve">
-    <value>Failed to stop/cleanup overlay!</value>
+    <value>停止/清理覆蓋失敗！</value>
   </data>
   <data name="Calibration_Instructions_Line1" xml:space="preserve">
-    <value>The below sliders are used to calibrate the</value>
+    <value>下面的滑塊用於校準</value>
   </data>
   <data name="Calibration_Instructions_Sensitivity" xml:space="preserve">
-    <value>sensitivity</value>
+    <value>靈敏度</value>
   </data>
   <data name="Calibration_Instructions_Line1_2" xml:space="preserve">
-    <value>of your face expressions.</value>
-  </data>
-  <data name="Calibration_Instructions_Bullet1_1" xml:space="preserve">
-    <value>• Raising the</value>
-  </data>
-  <data name="Calibration_Instructions_Minimum" xml:space="preserve">
-    <value>Minimum</value>
-  </data>
-  <data name="Calibration_Instructions_Bullet1_2" xml:space="preserve">
-    <value>value requires a stronger expression before it starts to show.</value>
-  </data>
-  <data name="Settings_Language_Chinese_Simplified" xml:space="preserve">
     <value>Chinese (Simplified)</value>
   </data>
+  <data name="Calibration_Instructions_Bullet1_1" xml:space="preserve">
+    <value>• 提高</value>
+  </data>
+  <data name="Calibration_Instructions_Minimum" xml:space="preserve">
+    <value>最小值</value>
+  </data>
+  <data name="Calibration_Instructions_Bullet1_2" xml:space="preserve">
+    <value>該值需要更強的表達式才能開始顯現效果。</value>
+  </data>
+  <data name="Settings_Language_Chinese_Simplified" xml:space="preserve">
+    <value>中文(简体)</value>
+  </data>
   <data name="Settings_Language_Chinese_Traditional" xml:space="preserve">
-    <value>Chinese (Traditional)</value>
+    <value>中文(繁体)</value>
   </data>
   <data name="Settings_Language_German" xml:space="preserve">
     <value>German</value>
@@ -691,25 +718,25 @@
     <value>Serbian</value>
   </data>
   <data name="Calibration_Instructions_Bullet2_1" xml:space="preserve">
-    <value>• Lowering the</value>
+    <value>• 降低</value>
   </data>
   <data name="Calibration_Instructions_Maximum" xml:space="preserve">
-    <value>Maximum</value>
+    <value>最大值</value>
   </data>
   <data name="Calibration_Instructions_Bullet2_2" xml:space="preserve">
-    <value>value means a smaller expression will reach 100% faster.</value>
+    <value>值表示較小的表情將更快達到 100%。</value>
   </data>
   <data name="DropOverlay_Important_Header" xml:space="preserve">
-    <value>Important!</value>
+    <value>重要！</value>
   </data>
   <data name="DropOverlay_Message" xml:space="preserve">
-    <value>Newer babble trackers have a 20 second delay after being plugged in before they can be used. It will make a USB plugging-in sound when it is ready!</value>
+    <value>較新的 babble 追蹤器在插入後有 20 秒延遲才能使用。準備好時會發出 USB 插入聲音！</value>
   </data>
   <data name="DropOverlay_DontShowAgain" xml:space="preserve">
-    <value>Don't show this warning again</value>
+    <value>不要再顯示此警告</value>
   </data>
   <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
-    <value>Dismiss</value>
+    <value>關閉</value>
   </data>
   <data name="Settings_OSC_VRCFT_Warning" xml:space="preserve">
     <value>如果您與 VRCFaceTracking 一起使用 Baballonia，則無需更改這些端口</value>
@@ -817,7 +844,7 @@
   <data name="Common_Note" xml:space="preserve">
     <value>注意</value>
   </data>
-<data name="Home_Cameras_Linux_Workarounds" xml:space="preserve">
+  <data name="Home_Cameras_Linux_Workarounds" xml:space="preserve">
     <value>解決方法:
 - 嘗試 Steam scout 1.0 運行時（不是 sniper 3.0），安裝 libudev，從源代碼構建，或加入 plugdev 組。
 - 我們只支持 Steam 和 tarball 版本，不支持 AUR 包。

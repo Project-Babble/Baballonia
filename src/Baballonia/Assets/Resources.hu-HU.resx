@@ -118,109 +118,109 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Settings_Theme_Dark_Content" xml:space="preserve">
-    <value>Dark</value>
+    <value>Sötét</value>
   </data>
   <data name="Settings_Theme_Default_Content" xml:space="preserve">
-    <value>Default</value>
+    <value>Alapértelmezett</value>
   </data>
   <data name="Settings_Theme_Light_Content" xml:space="preserve">
-    <value>Light</value>
+    <value>Világos</value>
   </data>
   <data name="Home_Title_Header" xml:space="preserve">
-    <value>Home</value>
+    <value>Kezdőlap</value>
   </data>
   <data name="Settings_Theme_Header" xml:space="preserve">
-    <value>App theme</value>
+    <value>Alkalmazás témája</value>
   </data>
   <data name="Settings_Theme_Description" xml:space="preserve">
-    <value>Select which app theme to display</value>
+    <value>Válassza ki, melyik alkalmazás témát jelenítse meg</value>
   </data>
   <data name="Settings_OSC_Description" xml:space="preserve">
-    <value>Where should OSC data be sent?</value>
+    <value>Hova küldje az OSC adatokat?</value>
   </data>
   <data name="Settings_OSC_Header" xml:space="preserve">
     <value>OSC</value>
   </data>
   <data name="Home_Eye_Calibration" xml:space="preserve">
-    <value>Eye Calibration</value>
+    <value>Szem kalibrálás</value>
   </data>
   <data name="Home_Left_Camera_Address" xml:space="preserve">
-    <value>Left Camera Address</value>
+    <value>Bal kamera címe</value>
   </data>
   <data name="Home_Cameras_Start_Camera" xml:space="preserve">
-    <value>Start Camera</value>
+    <value>Kamera indítása</value>
   </data>
   <data name="Home_Cameras_Stop_Camera" xml:space="preserve">
-    <value>Stop Camera</value>
+    <value>Kamera leállítása</value>
   </data>
   <data name="Home_Cameras_Tracking_Mode" xml:space="preserve">
-    <value>Tracking</value>
+    <value>Követés</value>
   </data>
   <data name="Home_Cameras_Cropping_Mode" xml:space="preserve">
-    <value>Cropping</value>
+    <value>Vágás</value>
   </data>
   <data name="Home_Left_Camera_Select_Entire_Frame" xml:space="preserve">
-    <value>Select Left Frame</value>
+    <value>Bal keret kiválasztása</value>
   </data>
   <data name="Home_Cameras_Vertical_Flip_Header" xml:space="preserve">
-    <value>Vertical Flip</value>
+    <value>Függőleges tükrözés</value>
   </data>
   <data name="Home_Cameras_Vertical_Flip_Description" xml:space="preserve">
-    <value>Flip the image vertically</value>
+    <value>Kép tükrözése függőlegesen</value>
   </data>
   <data name="Home_Cameras_Horizontal_Flip_Header" xml:space="preserve">
-    <value>Horizontal flip</value>
+    <value>Vízszintes tükrözés</value>
   </data>
   <data name="Home_Cameras_Horizontal_Flip_Description" xml:space="preserve">
-    <value>Flip the image horizontally</value>
+    <value>Kép tükrözése vízszintesen</value>
   </data>
   <data name="Home_Cameras_Rotation_Description" xml:space="preserve">
-    <value>Rotates the image in a circle</value>
+    <value>A képet körbe forgatja</value>
   </data>
   <data name="Home_Cameras_Brightness_Header" xml:space="preserve">
-    <value>Image Brightness</value>
+    <value>Kép fényerőssége</value>
   </data>
   <data name="Home_Cameras_Rotation_Header" xml:space="preserve">
-    <value>Image Rotation</value>
+    <value>Kép forgatása</value>
   </data>
   <data name="Home_Cameras_Brightness_Description" xml:space="preserve">
-    <value>Adjust the brightness</value>
+    <value>Fényerő beállítása</value>
   </data>
   <data name="Home_Right_Camera_Address" xml:space="preserve">
-    <value>Right Camera Address</value>
+    <value>Jobb kamera címe</value>
   </data>
   <data name="Home_Right_Camera_Select_Entire_Frame" xml:space="preserve">
-    <value>Select Right Frame</value>
+    <value>Jobb keret kiválasztása</value>
   </data>
   <data name="Home_Face_Camera_Address" xml:space="preserve">
-    <value>Face Camera Address</value>
+    <value>Arckamera címe</value>
   </data>
   <data name="Home_Face_Camera_Select_Entire_Frame" xml:space="preserve">
-    <value>Select Face Frame</value>
+    <value>Arc keret kiválasztása</value>
   </data>
   <data name="Home_Left_Camera_Header" xml:space="preserve">
-    <value>Left Eye Camera</value>
+    <value>Bal szem kamera</value>
   </data>
   <data name="Home_Face_Camera_Header" xml:space="preserve">
-    <value>Face Camera</value>
+    <value>Arckamera</value>
   </data>
   <data name="Home_Right_Camera_Header" xml:space="preserve">
-    <value>Right Eye Camera</value>
+    <value>Jobb szem kamera</value>
   </data>
   <data name="Home_Left_Camera_Settings" xml:space="preserve">
-    <value>Left Camera Settings</value>
+    <value>Bal kamera beállítások</value>
   </data>
   <data name="Home_Face_Camera_Settings" xml:space="preserve">
-    <value>Face Camera Settings</value>
+    <value>Arckamera beállítások</value>
   </data>
   <data name="Home_Right_Camera_Settings" xml:space="preserve">
-    <value>Right Camera Settings</value>
+    <value>Jobb kamera beállítások</value>
   </data>
   <data name="Common_Start_Typing" xml:space="preserve">
-    <value>Start typing...</value>
+    <value>Kezdjen el gépelni...</value>
   </data>
   <data name="Calibration_Title_Header" xml:space="preserve">
-    <value>Calibration</value>
+    <value>Kalibrálás</value>
   </data>
   <data name="Calibration_Reset_Minimums" xml:space="preserve">
     <value>Minimumok Visszaállítása</value>
@@ -229,487 +229,514 @@
     <value>Maximumok Visszaállítása</value>
   </data>
   <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
-    <value>Eye Expressions</value>
+    <value>Szem kifejezések</value>
   </data>
   <data name="Calibration_Nose_Expressions_Header" xml:space="preserve">
-    <value>Nose Expressions</value>
+    <value>Orr kifejezések</value>
   </data>
   <data name="Calibration_Tongue_Expressions_Header" xml:space="preserve">
-    <value>Tongue Expressions</value>
+    <value>Nyelv kifejezések</value>
   </data>
   <data name="Calibration_Mouth_Expressions_Header" xml:space="preserve">
-    <value>Mouth Expressions</value>
+    <value>Száj kifejezések</value>
   </data>
   <data name="Calibration_Jaw_Expressions_Header" xml:space="preserve">
-    <value>Jaw Expressions</value>
+    <value>Állkapocs kifejezések</value>
   </data>
   <data name="Calibration_Cheek_Expressions_Header" xml:space="preserve">
-    <value>Cheek Expressions</value>
+    <value>Arc kifejezések</value>
   </data>
   <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Header" xml:space="preserve">
-    <value>Stabilize Eyes</value>
+    <value>Semek stabilizálása</value>
   </data>
   <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Description" xml:space="preserve">
-    <value>Prevents eyes from looking out in opposite directions, but may overcorrect.</value>
+    <value>Megakadályozza, hogy a szemek ellentétes irányba nézzenek, de túlságosan korrigálhat.</value>
   </data>
   <data name="Firmware_Title_Header" xml:space="preserve">
     <value>Firmware</value>
   </data>
   <data name="Firmware_Select_Tracker_Header" xml:space="preserve">
-    <value>Select your tracker</value>
+    <value>Válassza ki a követőt</value>
   </data>
   <data name="Firmware_Device_Instructions_1" xml:space="preserve">
-    <value>• After powering on/connecting your device you will have 20 seconds to press "Refresh" and select your device from the dropdown</value>
+    <value>• Az eszköz bekapcsolása/csatlakoztatása után 20 másodperc áll rendelkezésére, hogy megnyomja a „Frissítés" gombot és kiválassza az eszközt a legördülő menüből</value>
   </data>
   <data name="Firmware_Device_Instructions_2" xml:space="preserve">
-    <value>• Certain configuration operations will take a little bit!</value>
+    <value>• Bizonyos konfigurációs műveletek egy kis ideig tartanak!</value>
   </data>
   <data name="Firmware_Device_Configuration_Header" xml:space="preserve">
-    <value>Device Configuration</value>
+    <value>Eszköz konfiguráció</value>
   </data>
   <data name="Firmware_Device_Configuration_Description" xml:space="preserve">
-    <value>Toggle wired/wireless mode</value>
+    <value>Vezetékes/vezeték nélküli mód váltása</value>
   </data>
   <data name="Firmware_Device_Mode_Header" xml:space="preserve">
-    <value>Toggle wired/wireless mode</value>
+    <value>Vezetékes/vezeték nélküli mód váltása</value>
   </data>
   <data name="Firmware_Device_Mode_Instruction_1" xml:space="preserve">
-    <value>• You WILL need to restart your tracker after changing the mode</value>
+    <value>• A mód megváltoztatása után újra kell indítania a követőt</value>
   </data>
   <data name="Firmware_Device_Mode_Instruction_2" xml:space="preserve">
-    <value>• You MAY need to restart the app after a flash for trackers to show</value>
+    <value>• Lehet, hogy újra kell indítania az alkalmazást egy flash után, hogy a követők megjelenjenek</value>
   </data>
   <data name="Firmware_Device_Mode_Select_Placeholder" xml:space="preserve">
-    <value>Select a mode...</value>
+    <value>Válasszon egy módot...</value>
   </data>
   <data name="Firmware_Wifi_Configuration_Header" xml:space="preserve">
-    <value>Wifi Configuration</value>
+    <value>WiFi konfiguráció</value>
   </data>
   <data name="Firmware_Wifi_Configuration_Description" xml:space="preserve">
-    <value>Connect to Wifi and more</value>
+    <value>Csatlakozás a WiFi-hez és egyebek</value>
   </data>
   <data name="Firmware_Wifi_Credentials_Header" xml:space="preserve">
-    <value>Set your Wi-Fi credentials</value>
+    <value>Állítsa be a WiFi hitelesítő adatait</value>
   </data>
   <data name="Firmware_Wifi_Instructions_1" xml:space="preserve">
-    <value>• If you want to use your tracker wirelessly, you NEED to set its Wifi credentials</value>
+    <value>• Ha vezeték nélkül szeretné használni a követőt, BE KELL állítania a WiFi hitelesítő adatait</value>
   </data>
   <data name="Firmware_Wifi_Instructions_2" xml:space="preserve">
-    <value>• You MUST scan for Wifi networks BEFORE you can set your Wifi credentials</value>
+    <value>• SCANNELNIE KELL a WiFi hálózatok után, MIELŐTT beállíthatja a WiFi hitelesítő adatait</value>
   </data>
   <data name="Firmware_Wifi_SSID_Label" xml:space="preserve">
-    <value>WiFi Network Name (SSID)</value>
+    <value>WiFi hálózat neve (SSID)</value>
   </data>
   <data name="Firmware_Wifi_SSID_Placeholder" xml:space="preserve">
-    <value>Start typing to see WiFi networks...</value>
+    <value>Kezdjen el gépelni a WiFi hálózatok megjelenítéséhez...</value>
   </data>
   <data name="Firmware_Wifi_Password_Label" xml:space="preserve">
-    <value>WiFi Password</value>
+    <value>WiFi jelszó</value>
   </data>
   <data name="Firmware_Wifi_Password_Placeholder" xml:space="preserve">
-    <value>Enter WiFi password...</value>
+    <value>Adja meg a WiFi jelszót...</value>
   </data>
   <data name="Firmware_Flashing_Header" xml:space="preserve">
-    <value>Flashing Options</value>
+    <value>Flash opciók</value>
   </data>
   <data name="Firmware_Flashing_Description" xml:space="preserve">
-    <value>Flash your device's firmware</value>
+    <value>Flash-elje az eszköz firmware-ét</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>CAUTION!! THIS WILL FACTORY RESET YOUR TRACKER. YOU WILL NEED TO PERFORM A FIRST TIME SET UP AFTER FLASHING YOUR TRACKER.</value>
+    <value>FIGYELEM!! EZ VISSZAALLÍTJA A KÖVETŐT A GYÁRI BEÁLLÍTÁSOKRA. ELŐSZÖR ELŐKÉSZÍTÉST KELL VÉGEZNI A KÖVETŐ FLASH-ELÉ UTÁN.</value>
+  </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>Flash firmware típusa:</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
-    <value>Firmware Flash</value>
+    <value>Firmware flash</value>
   </data>
   <data name="Firmware_Flashing_Note" xml:space="preserve">
-    <value>This will take around ~10 seconds. Don't leave this page!</value>
+    <value>Ez körülbelül 10 másodpercet vesz igénybe. Ne hagyja el ezt az oldalt!</value>
   </data>
   <data name="Firmware_Flashing_Complete" xml:space="preserve">
-    <value>Done! You will need to restart your tracker</value>
+    <value>Kész! Újra kell indítania a követőt</value>
   </data>
   <data name="Firmware_TrackerComboBox_Default" xml:space="preserve">
-    <value>Click to see trackers...</value>
+    <value>Kattintson a követők megtekintéséhez...</value>
   </data>
   <data name="Firmware_RefreshDevices_Default" xml:space="preserve">
-    <value>Refresh Devices</value>
+    <value>Eszközök frissítése</value>
   </data>
   <data name="Firmware_RefreshDevices_Refreshing" xml:space="preserve">
-    <value>Refreshing</value>
+    <value>Frissítés</value>
   </data>
   <data name="Firmware_RefreshDevices_Found" xml:space="preserve">
-    <value>Found {0} device(s).</value>
+    <value>Talált {0} eszközt.</value>
   </data>
   <data name="Firmware_SelectTracker_Default" xml:space="preserve">
-    <value>Select Tracker</value>
+    <value>Követő kiválasztása</value>
   </data>
   <data name="Firmware_SelectTracker_Connected" xml:space="preserve">
-    <value>Tracker connected!</value>
+    <value>A követő csatlakoztatva van!</value>
   </data>
   <data name="Firmware_SelectTracker_NoResponse" xml:space="preserve">
-    <value>The tracker did not respond.</value>
+    <value>A követő nem válaszolt.</value>
   </data>
   <data name="Firmware_ModeSetButton_Default" xml:space="preserve">
-    <value>Set Mode</value>
+    <value>Mód beállítása</value>
   </data>
   <data name="Firmware_ModeSetButton_Setting" xml:space="preserve">
-    <value>Setting mode</value>
+    <value>Mód beállítása</value>
   </data>
   <data name="Firmware_ModeSetButton_Success" xml:space="preserve">
-    <value>Set!</value>
+    <value>Beállítva!</value>
   </data>
   <data name="Firmware_WifiSetButton_Default" xml:space="preserve">
-    <value>Set Wifi Creds</value>
+    <value>WiFi adatok beállítása</value>
   </data>
   <data name="Firmware_WifiSetButton_Setting" xml:space="preserve">
-    <value>Setting WiFi credentials</value>
+    <value>WiFi hitelesítő adatok beállítása</value>
   </data>
   <data name="Firmware_WifiSetButton_Success" xml:space="preserve">
-    <value>Sent!</value>
+    <value>Elküldve!</value>
   </data>
   <data name="Firmware_WifiSetButton_Error" xml:space="preserve">
-    <value>Something went wrong...</value>
+    <value>Valami hiba történt...</value>
   </data>
   <data name="Firmware_WifiScanButton_Default" xml:space="preserve">
-    <value>Refresh Wifi Networks</value>
+    <value>WiFi hálózatok frissítése</value>
   </data>
   <data name="Firmware_WifiScanButton_Scanning" xml:space="preserve">
-    <value>Scanning. This will take at most 30 seconds</value>
+    <value>Scannelés. Ez legfeljebb 30 másodpercet vesz igénybe</value>
   </data>
   <data name="Firmware_WifiScanButton_Error" xml:space="preserve">
-    <value>Scan failed. Click to try again.</value>
+    <value>A scannelés sikertelen. Kattintson az újrapróbálkozáshoz.</value>
   </data>
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
-    <value>Found {0} networks. Click to scan again.</value>
+    <value>Talált {0} hálózatot. Kattintson az újrascanneléshez.</value>
   </data>
   <data name="VRC_Title_Header" xml:space="preserve">
-    <value>VRChat + VRCFaceTracking Settings</value>
+    <value>VRChat + VRCFaceTracking beállítások</value>
   </data>
   <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
-    <value>Use Native VRC Eye Tracking</value>
+    <value>Natív VRC szemkövetés használata</value>
   </data>
   <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
-    <value>Brings eye tracking to avatars that do not have VRCFaceTracking</value>
+    <value>Szemkövetést hoz az avatárokhoz, amelyek nem rendelkeznek VRCFaceTracking-kel</value>
   </data>
   <data name="VRC_ModuleMode_Header" xml:space="preserve">
-    <value>Set VRCFT module mode</value>
+    <value>VRCFT modul módjának beállítása</value>
   </data>
   <data name="VRC_ModuleMode_Description" xml:space="preserve">
-    <value>Send only eye, only face or both? (Change requires VRCFT restart)</value>
+    <value>Csak szemet, csak arcot vagy mindkettőt küldjön? (A változtatáshoz a VRCFT újraindítása szükséges)</value>
   </data>
   <data name="VRC_ModuleMode_Placeholder" xml:space="preserve">
-    <value>Select a mode...</value>
+    <value>Válasszon egy módot...</value>
   </data>
   <data name="Output_Title_Header" xml:space="preserve">
-    <value>Output</value>
+    <value>Kimenet</value>
   </data>
   <data name="Output_CopyButton_Tooltip" xml:space="preserve">
-    <value>Copy the log's output to your clipboard</value>
+    <value>A napló kimenetének másolása a vágólapra</value>
   </data>
   <data name="Output_SaveButton_Tooltip" xml:space="preserve">
-    <value>Save the log's output</value>
+    <value>A napló kimenetének mentése</value>
   </data>
   <data name="Output_OpenLoggingDirectoryButton_Tooltip" xml:space="preserve">
-    <value>Open the logging directory</value>
+    <value>A naplózási könyvtár megnyitása</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>This wizard will guide you through setting up the new Babble App.</value>
+    <value>Ez az útmutató végigvezeti Önt az új Babble alkalmazás beállításán.</value>
+  </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>Üdvözöljük!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>Firmware</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>Összeszerelés</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>Felhasználói felület áttekintése</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>Kész!</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>Következő</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>Befejezés</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
-    <value>Wired or Wireless?</value>
+    <value>Vezetékes vagy vezeték nélküli?</value>
   </data>
   <data name="Onboarding_Wireless_Description1" xml:space="preserve">
-    <value>With newer Babbles, you'll need to perform a first time setup in the Firmware tab (Icon above).</value>
+    <value>Újabb Babble-k esetében el kell végeznie egy első beállítást a Firmware fülön (fenti ikon).</value>
   </data>
   <data name="Onboarding_Wireless_Description2" xml:space="preserve">
-    <value>It only takes 2 minutes! Select your tracker and mode (wired or wireless). It's that simple.</value>
+    <value>Csak 2 percet vesz igénybe! Válassza ki a követőt és a módot (vezetékes vagy vezeték nélküli). Ennyire egyszerű.</value>
   </data>
   <data name="Onboarding_Wireless_Note" xml:space="preserve">
-    <value>Please note newer trackers have a 20-second window before they enter camera mode.</value>
+    <value>Kérjük, vegye figyelembe, hogy az újabb követőknek 20 másodperces ablakuk van, mielőtt kamera módba lépnek.</value>
   </data>
   <data name="Onboarding_Assembly_Header" xml:space="preserve">
-    <value>Assemble Your Tracker</value>
+    <value>Szerelje össze a követőt</value>
   </data>
   <data name="Onboarding_Assembly_Description" xml:space="preserve">
-    <value>If you need help putting your tracker together, here's a useful Youtube tutorial!</value>
+    <value>Ha segítségre van szüksége a követő összeállításában, itt van egy hasznos YouTube oktatóanyag!</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
-    <value>App Settings</value>
+    <value>Alkalmazás beállítások</value>
   </data>
   <data name="Settings_Language_Header" xml:space="preserve">
-    <value>Language</value>
+    <value>Nyelv</value>
   </data>
   <data name="Settings_Language_Description" xml:space="preserve">
-    <value>Set the app's language. Switch pages to apply.</value>
+    <value>Állítsa be az alkalmazás nyelvét. Váltson oldalakat az alkalmazáshoz.</value>
   </data>
   <data name="Settings_Language_Default" xml:space="preserve">
-    <value>Default</value>
+    <value>Alapértelmezett</value>
   </data>
   <data name="Settings_Language_English" xml:space="preserve">
-    <value>English</value>
+    <value>Angol</value>
   </data>
   <data name="Settings_Language_Spanish" xml:space="preserve">
-    <value>Español</value>
+    <value>Spanyol</value>
   </data>
   <data name="Settings_Language_Japanese" xml:space="preserve">
-    <value>日本語</value>
+    <value>Japán</value>
   </data>
   <data name="Settings_Language_Polish" xml:space="preserve">
-    <value>Polski</value>
+    <value>Lengyel</value>
   </data>
   <data name="Settings_Language_Chinese" xml:space="preserve">
-    <value>中文</value>
+    <value>Kínai</value>
   </data>
   <data name="Settings_Filter_Header" xml:space="preserve">
-    <value>One-Euro filter settings</value>
+    <value>One-Euro szűrő beállítások</value>
   </data>
   <data name="Settings_Filter_Description" xml:space="preserve">
-    <value>Filter Settings</value>
+    <value>Szűrő beállítások</value>
   </data>
   <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
-    <value>Minimum frequency cutoff</value>
+    <value>Minimum frekvencia vágás</value>
   </data>
   <data name="Settings_Filter_MinFreq_Description" xml:space="preserve">
-    <value>Controls how much smoothing is applied to slow movements</value>
+    <value>Szabályozza, mennyi simítás kerül alkalmazásra a lassú mozgásokra</value>
   </data>
   <data name="Settings_Filter_Template_Placeholder" xml:space="preserve">
-    <value>Select from a template</value>
+    <value>Válasszon sablonból</value>
   </data>
   <data name="Settings_Filter_Template_Low" xml:space="preserve">
-    <value>Low ({0})</value>
+    <value>Alacsony ({0})</value>
   </data>
   <data name="Settings_Filter_Template_Medium" xml:space="preserve">
-    <value>Medium ({0})</value>
+    <value>Közepes ({0})</value>
   </data>
   <data name="Settings_Filter_Template_High" xml:space="preserve">
-    <value>High ({0})</value>
+    <value>Magas ({0})</value>
   </data>
   <data name="Settings_Filter_Speed_Label" xml:space="preserve">
-    <value>Speed coefficient</value>
+    <value>Sebesség együttható</value>
   </data>
   <data name="Settings_Filter_Speed_Description" xml:space="preserve">
-    <value>Determines how the filter adapts when you move faster</value>
+    <value>Meghatározza, hogyan alkalmazkodik a szűrő, amikor gyorsabban mozog</value>
   </data>
   <data name="Settings_GPU_Header" xml:space="preserve">
-    <value>Use GPU acceleration</value>
+    <value>GPU gyorsítás használata</value>
   </data>
   <data name="Settings_GPU_Description" xml:space="preserve">
-    <value>Use your GPU to make things run faster! Requires restart</value>
+    <value>Használja a GPU-t, hogy a dolgok gyorsabban fussanak! Újraindítást igényel</value>
   </data>
   <data name="Settings_LogLevel_Header" xml:space="preserve">
-    <value>Log Level Verbosity</value>
+    <value>Naplózási szint részletessége</value>
   </data>
   <data name="Settings_LogLevel_Description" xml:space="preserve">
-    <value>Minimum logging level. Requires restart</value>
+    <value>Minimum naplózási szint. Újraindítást igényel</value>
   </data>
   <data name="Settings_Updates_Header" xml:space="preserve">
-    <value>Check For Updates</value>
+    <value>Frissítések keresése</value>
   </data>
   <data name="Settings_Updates_Description" xml:space="preserve">
-    <value>Should the app check for updates on start?</value>
+    <value>Keresse-e az alkalmazás a frissítéseket indításkor?</value>
   </data>
   <data name="Settings_FirstTime_Header" xml:space="preserve">
-    <value>Launch first time setup</value>
+    <value>Első beállítás indítása</value>
   </data>
   <data name="Settings_FirstTime_Description" xml:space="preserve">
-    <value>Relaunches the first time setup</value>
+    <value>Újraindítja az első beállítást</value>
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
-    <value>Launch</value>
+    <value>Indítás</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>Előző</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
     <value>Skip</value>
   </data>
   <data name="Onboarding_UI_Header" xml:space="preserve">
-    <value>Where is everything?</value>
+    <value>Hol van minden?</value>
   </data>
   <data name="Onboarding_UI_Home_Description" xml:space="preserve">
-    <value>1. The Home Page is where you can set up your cameras, and perform an eye tracking calibration.</value>
+    <value>1. A Kezdőlap az a hely, ahol beállíthatja a kamerákat, és elvégezhet egy szemkövetési kalibrációt.</value>
   </data>
   <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
-    <value>2. The Calibration can be used to tweak your eye/face expressions individually.</value>
+    <value>2. A Kalibrációt használhatja a szem/arc kifejezések egyedi beállítására.</value>
   </data>
   <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
-    <value>3. The Firmware Page is used to set up your device, or reset it.</value>
+    <value>3. A Firmware oldalt használja az eszköz beállításához vagy visszaállításához.</value>
   </data>
   <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
-    <value>4. The VRChat Page is used to alter VRChat/VRCFaceTracking specific settings.</value>
+    <value>4. A VRChat oldalt használja a VRChat/VRCFaceTracking specifikus beállítások módosítására.</value>
   </data>
   <data name="Onboarding_UI_Output_Description" xml:space="preserve">
-    <value>5. The Output Page shows the status of the app and other useful information.</value>
+    <value>5. A Kimenet oldal megmutatja az alkalmazás állapotát és egyéb hasznos információkat.</value>
   </data>
   <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
-    <value>6. The Settings is for general app settings, such as theme, language and more.</value>
+    <value>6. A Beállítások az általános alkalmazásbeállításokhoz vannak, mint például téma, nyelv és egyebek.</value>
   </data>
   <data name="Onboarding_Complete_Header" xml:space="preserve">
-    <value>Setup Complete!</value>
+    <value>Beállítás kész!</value>
   </data>
   <data name="Onboarding_Complete_Description1" xml:space="preserve">
-    <value>You're all set to start using the new Babble App!</value>
+    <value>Készen áll az új Babble alkalmazás használatára!</value>
   </data>
   <data name="Onboarding_Complete_Description2" xml:space="preserve">
-    <value>You can revisit this page in the settings.</value>
+    <value>Újralátogathatja ezt az oldalt a beállításokban.</value>
   </data>
   <data name="Settings_OSC_IP_Label" xml:space="preserve">
-    <value>IP Address</value>
+    <value>IP cím</value>
   </data>
   <data name="Settings_OSC_Prefix_Label" xml:space="preserve">
-    <value>OSC Prefix</value>
+    <value>OSC előtag</value>
   </data>
   <data name="Settings_OSC_Recalibrate_Label" xml:space="preserve">
-    <value>Recalibrate Address</value>
+    <value>Újra kalibrálási cím</value>
   </data>
   <data name="Settings_OSC_Recenter_Label" xml:space="preserve">
-    <value>Recenter Address</value>
+    <value>Újraközpontosítási cím</value>
   </data>
   <data name="Settings_OSC_SendPort_Label" xml:space="preserve">
-    <value>Send Port</value>
+    <value>Küldő port</value>
   </data>
   <data name="Settings_OSC_ReceivePort_Label" xml:space="preserve">
-    <value>Receive Port</value>
+    <value>Fogadó port</value>
   </data>
   <data name="AdminWarning_Header" xml:space="preserve">
-    <value>Administrator Mode Warning</value>
+    <value>Adminisztrátor mód figyelmeztetés</value>
   </data>
   <data name="AdminWarning_Message" xml:space="preserve">
-    <value>Do not run Baballonia as admin! There is no need, and it prevents eye tracking calibrations from working.</value>
+    <value>Ne futtassa a Baballonia-t adminisztrátorként! Nincs rá szükség, és megakadályozza a szemkövetési kalibrációk működését.</value>
   </data>
   <data name="Aero_Overlay_NotFound" xml:space="preserve">
-    <value>The gaze overlay program does not exist!</value>
+    <value>A szem overlay program nem létezik!</value>
   </data>
   <data name="Aero_Overlay_AlreadyRunning" xml:space="preserve">
-    <value>The gaze overlay program is already running! Please close it and try again.</value>
+    <value>A szem overlay program már fut! Zárja be és próbálja újra.</value>
   </data>
   <data name="Aero_SteamVR_NotRunning" xml:space="preserve">
-    <value>SteamVR is not running. Please run it and try again.</value>
+    <value>A SteamVR nem fut. Futtassa és próbálja újra.</value>
   </data>
   <data name="Aero_CameraStream_Failed" xml:space="preserve">
-    <value>Failed to start camera streaming!</value>
+    <value>A kamera streaming indítása sikertelen!</value>
   </data>
   <data name="Aero_Calibration_Failed" xml:space="preserve">
-    <value>Failed to start calibration!</value>
+    <value>A kalibráció indítása sikertelen!</value>
   </data>
   <data name="Aero_Calibration_Success" xml:space="preserve">
-    <value>Eye tracking calibration successful!</value>
+    <value>A szemkövetési kalibráció sikeres!</value>
   </data>
   <data name="Aero_Overlay_CleanupFailed" xml:space="preserve">
-    <value>Failed to stop/cleanup overlay!</value>
+    <value>Az overlay leállítása/tisztítása sikertelen!</value>
   </data>
   <data name="Calibration_Instructions_Line1" xml:space="preserve">
-    <value>The below sliders are used to calibrate the</value>
+    <value>Az alábbi csúszkákat használják a</value>
   </data>
   <data name="Calibration_Instructions_Sensitivity" xml:space="preserve">
-    <value>sensitivity</value>
+    <value>érzékenység</value>
   </data>
   <data name="Calibration_Instructions_Line1_2" xml:space="preserve">
-    <value>of your face expressions.</value>
+    <value>az arc kifejezéseinek.</value>
   </data>
   <data name="Calibration_Instructions_Bullet1_1" xml:space="preserve">
-    <value>• Raising the</value>
+    <value>• A(z)</value>
   </data>
   <data name="Calibration_Instructions_Minimum" xml:space="preserve">
     <value>Minimum</value>
   </data>
   <data name="Calibration_Instructions_Bullet1_2" xml:space="preserve">
-    <value>value requires a stronger expression before it starts to show.</value>
+    <value>érték erősebb kifejezést igényel, mielőtt megjelenik.</value>
   </data>
   <data name="Settings_Language_Chinese_Simplified" xml:space="preserve">
-    <value>Chinese (Simplified)</value>
+    <value>Kínai (egyszerűsített)</value>
   </data>
   <data name="Settings_Language_Chinese_Traditional" xml:space="preserve">
-    <value>Chinese (Traditional)</value>
+    <value>Kínai (hagyományos)</value>
   </data>
   <data name="Settings_Language_German" xml:space="preserve">
-    <value>German</value>
+    <value>Német</value>
   </data>
   <data name="Settings_Language_French" xml:space="preserve">
-    <value>French</value>
+    <value>Francia</value>
   </data>
   <data name="Settings_Language_Italian" xml:space="preserve">
-    <value>Italian</value>
+    <value>Olasz</value>
   </data>
   <data name="Settings_Language_Korean" xml:space="preserve">
-    <value>Korean</value>
+    <value>Koreai</value>
   </data>
   <data name="Settings_Language_Portuguese_Brazil" xml:space="preserve">
-    <value>Portuguese (Brazil)</value>
+    <value>Portugál (Brazil)</value>
   </data>
   <data name="Settings_Language_Portuguese_Portugal" xml:space="preserve">
-    <value>Portuguese (Portugal)</value>
+    <value>Portugál (Portugália)</value>
   </data>
   <data name="Settings_Language_Russian" xml:space="preserve">
-    <value>Russian</value>
+    <value>Orosz</value>
   </data>
   <data name="Settings_Language_Arabic" xml:space="preserve">
-    <value>Arabic</value>
+    <value>Arab</value>
   </data>
   <data name="Settings_Language_Turkish" xml:space="preserve">
-    <value>Turkish</value>
+    <value>Török</value>
   </data>
   <data name="Settings_Language_Dutch" xml:space="preserve">
-    <value>Dutch</value>
+    <value>Holland</value>
   </data>
   <data name="Settings_Language_Swedish" xml:space="preserve">
-    <value>Swedish</value>
+    <value>Svéd</value>
   </data>
   <data name="Settings_Language_Finnish" xml:space="preserve">
-    <value>Finnish</value>
+    <value>Finn</value>
   </data>
   <data name="Settings_Language_Danish" xml:space="preserve">
-    <value>Danish</value>
+    <value>Dán</value>
   </data>
   <data name="Settings_Language_Norwegian" xml:space="preserve">
-    <value>Norwegian</value>
+    <value>Norvég</value>
   </data>
   <data name="Settings_Language_Czech" xml:space="preserve">
-    <value>Czech</value>
+    <value>Cseh</value>
   </data>
   <data name="Settings_Language_Hungarian" xml:space="preserve">
-    <value>Hungarian</value>
+    <value>Magyar</value>
   </data>
   <data name="Settings_Language_Romanian" xml:space="preserve">
-    <value>Romanian</value>
+    <value>Román</value>
   </data>
   <data name="Settings_Language_Vietnamese" xml:space="preserve">
-    <value>Vietnamese</value>
+    <value>Vietnámi</value>
   </data>
   <data name="Settings_Language_Ukrainian" xml:space="preserve">
-    <value>Ukrainian</value>
+    <value>Ukrán</value>
   </data>
   <data name="Settings_Language_Greek" xml:space="preserve">
-    <value>Greek</value>
+    <value>Görög</value>
   </data>
   <data name="Settings_Language_Hebrew" xml:space="preserve">
-    <value>Hebrew</value>
+    <value>Héber</value>
   </data>
   <data name="Settings_Language_Afrikaans" xml:space="preserve">
     <value>Afrikaans</value>
   </data>
   <data name="Settings_Language_Catalan" xml:space="preserve">
-    <value>Catalan</value>
+    <value>Katalán</value>
   </data>
   <data name="Settings_Language_Serbian" xml:space="preserve">
-    <value>Serbian</value>
+    <value>Szerb</value>
   </data>
   <data name="Calibration_Instructions_Bullet2_1" xml:space="preserve">
-    <value>• Lowering the</value>
+    <value>• A(z)</value>
   </data>
   <data name="Calibration_Instructions_Maximum" xml:space="preserve">
     <value>Maximum</value>
   </data>
   <data name="Calibration_Instructions_Bullet2_2" xml:space="preserve">
-    <value>value means a smaller expression will reach 100% faster.</value>
+    <value>érték azt jelenti, hogy egy kisebb kifejezés gyorsabban éri el a 100%-ot.</value>
   </data>
   <data name="DropOverlay_Important_Header" xml:space="preserve">
-    <value>Important!</value>
+    <value>Fontos!</value>
   </data>
   <data name="DropOverlay_Message" xml:space="preserve">
-    <value>Newer babble trackers have a 20 second delay after being plugged in before they can be used. It will make a USB plugging-in sound when it is ready!</value>
+    <value>Az újabb babble követőknek 20 másodperces késleltetésük van a csatlakozás után, mielőtt használhatók lennének. USB csatlakozási hangot ad ki, amikor kész!</value>
   </data>
   <data name="DropOverlay_DontShowAgain" xml:space="preserve">
-    <value>Don't show this warning again</value>
+    <value>Ne jelenítse meg újra ezt a figyelmeztetést</value>
   </data>
   <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
-    <value>Dismiss</value>
+    <value>Eltüntetés</value>
   </data>
   <data name="Settings_OSC_VRCFT_Warning" xml:space="preserve">
     <value>Ha a Baballonia-t VRCFaceTracking-kel használja, nem kell módosítani ezeket a portokat</value>

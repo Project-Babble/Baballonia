@@ -316,7 +316,10 @@
     <value>장치의 펌웨어를 플래시합니다.</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>경고!! 이 작업은 트래커를 공장 초기화합니다. 트래커의 플래싱 후 초기 설정을 수행해야 합니다.</value>
+    <value>주의!! 이것은 트래커를 공장 초기 설정으로 재설정합니다. 플래시한 후에 처음 설정을 수행해야 합니다.</value>
+  </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>플래시할 펌웨어 유형:</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>펌웨어 플래시</value>
@@ -407,12 +410,33 @@
   </data>
   <data name="Output_SaveButton_Tooltip" xml:space="preserve">
     <value>로그 출력을 저장</value>
-  </data>
+  </data>Home_Cameras_Linux_Workarounds
   <data name="Output_OpenLoggingDirectoryButton_Tooltip" xml:space="preserve">
     <value>로그 디렉토리 열기</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>이 마법사는 새로운 Babble App의 설정을 안내합니다.</value>
+    <value>이 마법사는 새로운 Babble 앱을 설정하는 안내를 도와드립니다.</value>
+  </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>환영합니다!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>펌웨어</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>조립</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>UI 개요</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>완료!</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>다음</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>완료</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
     <value>유선인가요? 무선인가요?</value>
@@ -515,6 +539,9 @@
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>시작</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>이전</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
     <value>건너뛰기</value>

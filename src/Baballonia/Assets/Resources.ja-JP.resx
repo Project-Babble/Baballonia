@@ -316,7 +316,10 @@
     <value>デバイスのファームウェアをフラッシュする</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>注意！このファクトリーはあなたのトレーカーをリセットします。あなたのトレーカーをフラッシング後に最初の時間を設定する必要があります。</value>
+    <value>警告!! これによりトラッカーが工場出荷時設定にリセットされます。フラッシュした後、最初のセットアップを行う必要があります。</value>
+  </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>フラッシュするファームウェアの種類：</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>ファームウェアをフラッシュする</value>
@@ -412,7 +415,34 @@
     <value>ロギングディレクトリを開く</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>このウィザードでは、新しいBabbleアプリのセットアップをご案内します。</value>
+    <value>このウィザードは、新しいBabbleアプリのセットアップをガイドします。</value>
+  </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>ようこそ!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>ファームウェア</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>組み立て</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>UI概要</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>完了!</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>次へ</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>完了</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>前へ</value>
+  </data>
+  <data name="Onboarding_Skip_Button" xml:space="preserve">
+    <value>スキップ</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
     <value>Wirelessですか？</value>
@@ -515,6 +545,9 @@
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>起動</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>前へ</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
     <value>スキップ</value>

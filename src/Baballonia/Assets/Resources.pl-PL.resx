@@ -316,7 +316,10 @@
     <value>Wgraj oprogramowanie Twojego urządzenia</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>UWAGA!! TEN WSPÓŁCZYNNIK ZRESETUJ TWOJE TRACKER. OCZEKUJ SIĘ DO ZEZWOLENIA PIERWSZEGO CZASU PO PASZU TWOJEGO TRACKERA.</value>
+    <value>UWAGA!! TEN WSPÓŁCZYNNIK ZRESETUJE TWÓJ TRACKER DO USTAWIEŃ FABRYCZNYCH. BĘDZIESZ MUSIAŁ WYKONAĆ PIERWSZE USTAWIENIE PO FLASHOWANIU TWOJEGO TRACKERA.</value>
+  </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>Typ firmware do flashowania:</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>Wgraj Firmware</value>
@@ -412,7 +415,34 @@
     <value>Otwórz katalog logowania</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>Ten kreator poprowadzi Cię poprzez skonfigurowanie nowej aplikacji Babble.</value>
+    <value>Ten kreator przeprowadzi Cię przez konfigurację nowej aplikacji Babble.</value>
+  </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>Witamy!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>Firmware</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>Montaż</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>Przegląd interfejsu użytkownika</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>Zakończone!</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>Dalej</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>Zakończ</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>Wstecz</value>
+  </data>
+  <data name="Onboarding_Skip_Button" xml:space="preserve">
+    <value>Pomiń</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
     <value>Przewody czy bezprzewodowe?</value>
@@ -515,6 +545,9 @@
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>Uruchom</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>Wstecz</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
     <value>Pomiń</value>

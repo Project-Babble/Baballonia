@@ -318,6 +318,9 @@
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
     <value>КАЗАНОТ!! Це таке! БУДЬ-ЛАСКАЙТЕ СВІТ ВАШ ТРАКЕР. ВИ ЗАРАХОВАЙТЕ В PERFORM БЕЗПРАВНИЙ ЧАСОВИЙ ЧАСТРАХ САЙТУ, ЩО ВАШ КОРИСТУВАЧА.</value>
   </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>Firmware type to flash:</value>
+  </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>Прошити прошивку</value>
   </data>
@@ -412,7 +415,28 @@
     <value>Відкрити папку журналювання</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>Цей майстер проведе вас через налаштування нового Babble додатка.</value>
+    <value>Цей майстер допоможе вам налаштувати новий додаток Babble.</value>
+  </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>Ласкаво просимо!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>Прошивка</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>Збірка</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>Огляд інтерфейсу</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>Завершено!</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>Далі</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>Завершити</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
     <value>Може, проводились чи бездротові мережі?</value>
@@ -515,6 +539,9 @@
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>Запустити</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>Попередній</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
     <value>Пропустити</value>
@@ -817,7 +844,7 @@
   <data name="Common_Note" xml:space="preserve">
     <value>Примітка</value>
   </data>
-<data name="Home_Cameras_Linux_Workarounds" xml:space="preserve">
+  <data name="Home_Cameras_Linux_Workarounds" xml:space="preserve">
     <value>Тимчасові рішення:
 • Спробуйте середовище виконання Steam scout 1.0 (не sniper 3.0), встановіть libudev, збережіть з вихідного коду або приєднайтеся до групи plugdev.
 • Ми підтримуємо лише релізи Steam та tarball, а не пакет AUR.

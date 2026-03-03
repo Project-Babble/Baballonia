@@ -1,3 +1,4 @@
+using Baballonia.Assets;
 using Baballonia.Contracts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
@@ -56,12 +57,12 @@ public partial class OnboardingViewModel : ViewModelBase
     {
         CurrentSlideName = CurrentSlideIndex switch
         {
-            0 => "Welcome!",
-            1 => "Firmware",
-            2 => "Assembly",
-            3 => "UI Overview",
-            4 => "Finished!",
-            _ => "Welcome"
+            0 => Resources.Onboarding_Slide_Welcome,    // "Welcome!",
+            1 => Resources.Onboarding_Slide_Firmware,   // "Firmware",
+            2 => Resources.Onboarding_Slide_Assembly,   // "Assembly",
+            3 => Resources.Onboarding_Slide_UIOverview, // "UI Overview",
+            4 => Resources.Onboarding_Slide_Finished,   // "Finished!",
+            _ => Resources.Onboarding_Slide_Welcome,    // "Welcome"
         };
 
         // Update indicators
@@ -72,7 +73,9 @@ public partial class OnboardingViewModel : ViewModelBase
 
         // Update button states
         CanGoBack = CurrentSlideIndex > 0;
-        NextButtonText = CurrentSlideIndex == SlideIndicators.Count - 1 ? "Finish" : "Next";
+        NextButtonText = CurrentSlideIndex == SlideIndicators.Count - 1 ? 
+            Resources.Onboarding_Finish_Button : // "Finish"
+            Resources.Onboarding_Next_Button;    // "Next"
     }
 
     public void GoToPrevious()

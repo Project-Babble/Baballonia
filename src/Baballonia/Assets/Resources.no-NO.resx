@@ -412,7 +412,28 @@
     <value>Åpne loggmappen</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>Denne veiviseren vil lede deg gjennom å sette opp den nye Babble appen.</value>
+    <value>Denne veiviseren vil guide deg gjennom oppsett av den nye Babble-appen.</value>
+  </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>Velkommen!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>Firmware</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>Montering</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>Brukergrensesnitt oversikt</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>Ferdig!</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>Neste</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>Fullfør</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
     <value>Kablet eller trådløst?</value>
@@ -521,6 +542,9 @@
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>Start</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>Forrige</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
     <value>Hopp</value>

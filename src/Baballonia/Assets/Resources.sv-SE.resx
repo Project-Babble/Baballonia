@@ -316,7 +316,10 @@
     <value>Blinka enhetens inbyggda programvara</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>VARNING!! DETTA KOMMER FAKTORA ÅTERSTÄLL DITT BESTÄLLNING. DU BEHÖVER ATT PERFORM EN FÖRSTA TID ÅTERSTÄLL EFTER FASHING DITT BESTÄLLNING.</value>
+    <value>VARNING!! DETTA ÅTERSTÄLLER DIN TRACKER TILL FABRIKSINSTÄLLNINGAR. DU BEHÖVER GENOMFÖRA EN FÖRSTA GÅNGSINSTÄLLNING EFTER ATT DU FLASHAT DIN TRACKER.</value>
+  </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>Firmware-typ att flasha:</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>Flasha Firmware</value>
@@ -412,7 +415,28 @@
     <value>Öppna loggningsmappen</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>Den här guiden kommer att guida dig genom att sätta upp den nya Babble-appen.</value>
+    <value>Denna guide hjälper dig att konfigurera den nya Babble-appen.</value>
+  </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>Välkommen!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>Firmware</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>Montering</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>Gränssnittsöversikt</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>Klart!</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>Nästa</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>Slutför</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
     <value>Trådbunden eller trådlös?</value>
@@ -515,6 +539,9 @@
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>Starta</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>Föregående</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
     <value>Hoppa</value>

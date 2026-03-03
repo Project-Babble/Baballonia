@@ -316,7 +316,10 @@
     <value>Flash din enheds firmware</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>ADVARSEL!! DETTE VIL FAKTORI GENNEMFØRELSE DIN TRACKER. DU VIL VIL TIL AT PERFORM EN FØRSTE TID SÆT OP EFTER SPILLER DIN TRACKER.</value>
+    <value>ADVARSEL!! DETTE NULSTILLER DIN TRACKER TIL FABRIKSINDSTILLINGER. DU VIL SKALLE UDFØRE EN FØRSTE GANGS INDBLING EFTER AT DU FLASHET DIN TRACKER.</value>
+  </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>Firmware type til flash:</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>Flash Firmware</value>
@@ -412,7 +415,28 @@
     <value>Åbn logmappen</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>Denne guide vil guide dig gennem opsætning af den nye Babble App.</value>
+    <value>Denne guide hjælper dig med at konfigurere den nye Babble-app.</value>
+  </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>Velkommen!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>Firmware</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>Samling</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>Brugerflade oversigt</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>Færdig!</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>Næste</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>Færdig</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
     <value>Kablet eller trådløs?</value>
@@ -515,6 +539,9 @@
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>Start</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>Forrige</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
     <value>Overspring</value>

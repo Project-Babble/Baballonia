@@ -316,7 +316,10 @@
     <value>Прошивка устройства</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>ПРЕДУПРЕЖДЕНИЕ!! ЭТО БУДЕТ СБОРИТЕ ВАШЕГО ТРекера. ВЫ ПОДПИСАТЬСЯ ВРЕМЯ ПРЕДОСТАВЛЯЕТСЯ ПОСЛЕДУЮЩИМ ТРекером.</value>
+    <value>ВНИМАНИЕ!! ЭТО СБРОСИТ ВАШ ТРЕКЕР ДО ЗАВОДСКИХ НАСТРОЕК. ВАМ ПОНАДОБИТСЯ ВЫПОЛНИТЬ ПЕРВОНАЧАЛЬНУЮ НАСТРОЙКУ ПОСЛЕ ПРОШИВКИ ВАШЕГО ТРЕКЕРА.</value>
+  </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>Тип прошивки для прошивки:</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>Прошивка Flash</value>
@@ -413,6 +416,27 @@
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
     <value>Этот мастер поможет вам настроить новое приложение Babble.</value>
+  </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>Добро пожаловать!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>Прошивка</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>Сборка</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>Обзор пользовательского интерфейса</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>Завершено!</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>Далее</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>Завершить</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
     <value>Проводка или Wireless?</value>
@@ -515,6 +539,9 @@
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>Запуск</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>Назад</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
     <value>Пропустить</value>

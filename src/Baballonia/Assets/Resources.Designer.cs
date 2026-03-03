@@ -1319,6 +1319,24 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Finish.
+        /// </summary>
+        public static string Onboarding_Finish_Button {
+            get {
+                return ResourceManager.GetString("Onboarding_Finish_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next.
+        /// </summary>
+        public static string Onboarding_Next_Button {
+            get {
+                return ResourceManager.GetString("Onboarding_Next_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Previous.
         /// </summary>
         public static string Onboarding_Previous_Button {
@@ -1333,6 +1351,51 @@ namespace Baballonia.Assets {
         public static string Onboarding_Skip_Button {
             get {
                 return ResourceManager.GetString("Onboarding_Skip_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assembly.
+        /// </summary>
+        public static string Onboarding_Slide_Assembly {
+            get {
+                return ResourceManager.GetString("Onboarding_Slide_Assembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finished!.
+        /// </summary>
+        public static string Onboarding_Slide_Finished {
+            get {
+                return ResourceManager.GetString("Onboarding_Slide_Finished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Firmware.
+        /// </summary>
+        public static string Onboarding_Slide_Firmware {
+            get {
+                return ResourceManager.GetString("Onboarding_Slide_Firmware", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UI Overview.
+        /// </summary>
+        public static string Onboarding_Slide_UIOverview {
+            get {
+                return ResourceManager.GetString("Onboarding_Slide_UIOverview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Welcome!.
+        /// </summary>
+        public static string Onboarding_Slide_Welcome {
+            get {
+                return ResourceManager.GetString("Onboarding_Slide_Welcome", resourceCulture);
             }
         }
         

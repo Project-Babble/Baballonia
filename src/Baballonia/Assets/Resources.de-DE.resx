@@ -316,7 +316,10 @@
     <value>Firmware Ihres Geräts flashen</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>ACHTUNG! DIESE FAKTORY RESET IHRER TRACKER. SIE MIT PERFORM EINEN ERSTEN ZEIT SET NACH IHRER TRACKER.</value>
+    <value>VORSICHT!! DIESES WERKZEUG WIRD IHRER FABRIK ZURÜCKSETZEN. SIE MÜSSEN EINE ERSTE MAL EINSTELLUNG NACH DEM FLASHEN IHRER FABRIK DURCHFÜHREN.</value>
+  </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>Firmware-Typ zum Flashen:</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>Flash-Firmware</value>
@@ -412,7 +415,28 @@
     <value>Logging-Verzeichnis öffnen</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>Dieser Assistent führt Sie durch das Einrichten der neuen Babble-App.</value>
+    <value>Dieser Assistent führt Sie durch die Einrichtung der neuen Babble App.</value>
+  </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>Willkommen!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>Firmware</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>Montage</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>UI-Übersicht</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>Fertig!</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>Weiter</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>Beenden</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
     <value>Drahtlos oder drahtlos?</value>
@@ -515,6 +539,9 @@
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>Starten</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>Zurück</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
     <value>Überspringen</value>

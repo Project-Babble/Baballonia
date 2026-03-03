@@ -316,7 +316,10 @@
     <value>Flash your device's firmware</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>CAUTION!! THIS WILL FACTORY RESET YOUR TRACKER. YOU WILL NEED TO PERFORM A FIRST TIME SET UP AFTER FLASHING YOUR TRACKER.</value>
+    <value>ADVERTÈNCIA!! AIXÒ REINICIARÀ EL VOSTRE TRACKER A LA CONFIGURACIÓ DE FÀBRICA. HAUREU DE FER UNA CONFIGURACIÓ INICIAL DESPRÉS DE FLASHEJAR EL VOSTRE TRACKER.</value>
+  </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>Tipus de firmware a flashar:</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>Flash Firmware</value>
@@ -413,6 +416,27 @@
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
     <value>This wizard will guide you through setting up the new Babble App.</value>
+  </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>Benvingut/da!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>Firmware</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>Muntatge</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>Visió general de la UL</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>Finalitzat!</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>Següent</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>Finalitza</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
     <value>Wired or Wireless?</value>
@@ -516,8 +540,11 @@
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>Launch</value>
   </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>Anterior</value>
+  </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
-    <value>Skip</value>
+    <value>Omet</value>
   </data>
   <data name="Onboarding_UI_Header" xml:space="preserve">
     <value>On està tot?</value>
@@ -817,7 +844,7 @@ Això normalment és fàcil d'arreglar! Simplement instal·leu el firmware "Trac
   <data name="Common_Note" xml:space="preserve">
     <value>Nota</value>
   </data>
-<data name="Home_Cameras_Linux_Workarounds" xml:space="preserve">
+  <data name="Home_Cameras_Linux_Workarounds" xml:space="preserve">
     <value>Solucions temporals:
 - Proveu el runtime Steam scout 1.0 (no sniper 3.0), instal·leu libudev, compileu des del codi font, o uniu-vos al grup plugdev.
 - Només donem suport a les versions Steam i tarball, no al paquet AUR.

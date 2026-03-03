@@ -316,7 +316,10 @@
     <value>Flash your device's firmware</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>CAUTION!! THIS WILL FACTORY RESET YOUR TRACKER. YOU WILL NEED TO PERFORM A FIRST TIME SET UP AFTER FLASHING YOUR TRACKER.</value>
+    <value>WAARSKU!! DIT SAL U TRACKER NA FABRIEKINSTELLINGS HERSTEL. U SAL 'N EERSTE TYD INSTELLEN DOEN NADAT U U TRACKER GEFLASH HET.</value>
+  </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>Firmware tipe om te flash:</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>Flash Firmware</value>
@@ -412,7 +415,28 @@
     <value>Open the logging directory</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>This wizard will guide you through setting up the new Babble App.</value>
+    <value>Hierdie gids sal u deur die opstelling van die nuwe Babble-toepassing lei.</value>
+  </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>Welkom!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>Firmware</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>Montering</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>Koppelvlak oorsig</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>Klaar!</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>Volgende</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>Voltooi</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
     <value>Wired or Wireless?</value>
@@ -515,6 +539,9 @@
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>Launch</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>Vorige</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
     <value>Skip</value>

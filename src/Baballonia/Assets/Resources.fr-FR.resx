@@ -316,7 +316,10 @@
     <value>Flasher le firmware de votre appareil</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>ATTENTION!! CE BOUTON VA REMTTRE VOTRE TRACKER AU PARAMÈTRES D'USINE. VOUS AUREZ BESOIN DE REFAIRE LE PROCESSUS DE PREMIÈRE MISE EN ROUTE.</value>
+    <value>ATTENTION !! CELA RÉINITIALISERA VOTRE TRACKER AUX PARAMÈTRES D'USINE. VOUS DEVREZ EFFECTUER UNE PREMIÈRE CONFIGURATION APRÈS AVOIR FLASHÉ VOTRE TRACKER.</value>
+  </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>Type de firmware à flasher :</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>Flasher le firmware</value>
@@ -412,13 +415,34 @@
     <value>Ouvrir le répertoire des logs</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>Cet assistant vous guidera dans la mise en place de la nouvelle application Babble.</value>
+    <value>Cet assistant vous guidera dans la configuration de la nouvelle application Babble.</value>
+  </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>Bienvenue!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>Avec des Babbles plus récents, vous devrez effectuer une première configuration dans l'onglet Firmware (Icon ci-dessus).</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>Si vous avez besoin d'aide pour monter votre tracker, voici un tuto Youtube !</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>6. Les paramètres sont destinés aux paramètres généraux de l'application, tels que le thème, la langue et plus encore.</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>Vous pouvez revisiter cette page dans les paramètres.</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>Suivant</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>Terminer</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
-    <value>Filaire ou sans fil ?</value>
+    <value>Connexion filaire ou sans fil ?</value>
   </data>
   <data name="Onboarding_Wireless_Description1" xml:space="preserve">
-    <value>Avec des Babbles plus récents, vous devrez effectuer une première configuration dans l'onglet Firmware (Icon ci-dessus).</value>
+    <value>Avec les modèles Babble les plus récents, vous devrez effectuer une première configuration dans l'onglet « Micrologiciel » (icône ci-dessus).</value>
   </data>
   <data name="Onboarding_Wireless_Description2" xml:space="preserve">
     <value>Cela ne prend que 2 minutes! Sélectionnez votre tracker et votre mode (filaire ou sans fil). C'est tout con.</value>
@@ -515,6 +539,9 @@
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>Lancer</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>Précédent</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
     <value>Ignorer</value>
@@ -817,7 +844,7 @@ Ceci est généralement facile à corriger ! Installez simplement le firmware "T
   <data name="Common_Note" xml:space="preserve">
     <value>Note</value>
   </data>
-<data name="Home_Cameras_Linux_Workarounds" xml:space="preserve">
+  <data name="Home_Cameras_Linux_Workarounds" xml:space="preserve">
     <value>Solutions de contournement :
 - Essayez le runtime Steam scout 1.0 (pas sniper 3.0), installez libudev, compilez depuis les sources, ou rejoignez le groupe plugdev.
 - Nous ne supportons que les versions Steam et tarball, pas le paquet AUR.

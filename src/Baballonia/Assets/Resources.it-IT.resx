@@ -316,7 +316,10 @@
     <value>Flash del firmware del dispositivo</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>ATTENZIONE!! QUESTO FATTORIO RESETTE IL TUO TRACKER. VAI ALLA PERFORMA DI UN PRIMO TEMPO RICERCA DOPO FLASHING IL TUO TRACKER.</value>
+    <value>ATTENZIONE!! QUESTO REIMPOSTERÀ IL TUO TRACKER. DOVRAI ESEGUIRE UNA PRIMA CONFIGURAZIONE DOPO AVER FLASHATO IL TUO TRACKER.</value>
+  </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>Tipo di firmware da flashare:</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>Firmware Flash</value>
@@ -412,7 +415,28 @@
     <value>Apri la directory di registrazione</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>Questa procedura guidata ti guiderà attraverso la creazione della nuova app Babble.</value>
+    <value>Questa guida ti aiuterà a configurare la nuova app Babble.</value>
+  </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>Benvenuto!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>Firmware</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>Assemblaggio</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>Panoramica interfaccia utente</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>Finito!</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>Avanti</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>Termina</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
     <value>Cablato o senza fili?</value>
@@ -515,6 +539,9 @@
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>Avvia</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>Precedente</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
     <value>Salta</value>

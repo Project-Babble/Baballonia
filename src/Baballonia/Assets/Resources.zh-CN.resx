@@ -316,7 +316,10 @@
     <value>刷入您设备的固件</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>警告！！这个问题将会使您的跟踪恢复。您将需要完成第一个任务设置在您之前的闪光灯中。</value>
+    <value>警告!! 这将重置您的追踪器到出厂设置。您需要在闪存您的追踪器后执行首次设置。</value>
+  </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>要闪存的固件类型：</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>闪光固件</value>
@@ -412,7 +415,34 @@
     <value>打开日志目录</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>这个向导将通过设置新的 Babble 应用引导您。</value>
+    <value>本向导将帮助您设置新的Babble应用程序。</value>
+  </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>欢迎!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>固件</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>组装</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>用户界面概览</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>完成!</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>下一步</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>完成</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>上一步</value>
+  </data>
+  <data name="Onboarding_Skip_Button" xml:space="preserve">
+    <value>跳过</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
     <value>有线或无线网络？</value>
@@ -515,6 +545,9 @@
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>启动</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>上一步</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
     <value>跳过</value>
