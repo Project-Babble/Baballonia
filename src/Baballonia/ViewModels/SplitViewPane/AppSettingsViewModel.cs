@@ -84,6 +84,10 @@ public partial class AppSettingsViewModel : ViewModelBase
     [property: SavedSetting("AppSettings_StabilizeEyes", true)]
     private bool _stabilizeEyes;
 
+    [ObservableProperty]
+    [property: SavedSetting("AppSettings_AutoCalibrationEnabled", false)]
+    private bool _autoCalibrationEnabled;
+
     public List<string> LowestLogLevel { get; } =
     [
         "Debug",
@@ -98,6 +102,7 @@ public partial class AppSettingsViewModel : ViewModelBase
     private readonly FacePipelineManager _facePipelineManager;
     private readonly EyePipelineManager _eyePipelineManager;
     private readonly IIdentityService _identityService;
+    private readonly ICalibrationService _calibrationService;
 
     public AppSettingsViewModel(
         FacePipelineManager facePipelineManager,
@@ -114,7 +119,11 @@ public partial class AppSettingsViewModel : ViewModelBase
         GithubService = Ioc.Default.GetService<GithubService>()!;
         SettingsService = Ioc.Default.GetService<ILocalSettingsService>()!;
         _logger = Ioc.Default.GetService<ILogger<AppSettingsViewModel>>()!;
+        _calibrationService = Ioc.Default.GetService<ICalibrationService>()!;
         SettingsService.Load(this);
+
+        // Sync persisted auto-calibration state to service
+        _calibrationService.AutoCalibrationEnabled = AutoCalibrationEnabled;
 
         // Handle edge case where OSC port is used and the system freaks out
         if (OscTarget.OutPort == 0)
@@ -192,6 +201,21 @@ public partial class AppSettingsViewModel : ViewModelBase
         catch (Exception e)
         {
             _logger.LogError("DLL not found!", e);
+        }
+    }
+
+    partial void OnAutoCalibrationEnabledChanged(bool value)
+    {
+        if (value)
+        {
+            // Reset seeds BEFORE enabling tracking, so the UI can
+            // refresh to show 0.5 seed values before they get pushed
+            _calibrationService.ResetAutoCalibration();
+            _calibrationService.AutoCalibrationEnabled = true;
+        }
+        else
+        {
+            _calibrationService.AutoCalibrationEnabled = false;
         }
     }
 

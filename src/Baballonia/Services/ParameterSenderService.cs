@@ -27,7 +27,7 @@ public class ParameterSenderService : BackgroundService
     private readonly ConcurrentQueue<OscMessage> _dfrQueue = new();
 
     // Expression parameter names
-    private readonly Dictionary<string, string> _eyeExpressionMap = new()
+    public static readonly Dictionary<string, string> EyeExpressionMap = new()
     {
         { "LeftEyeX", "/LeftEyeX" },
         { "LeftEyeY", "/LeftEyeY" },
@@ -43,7 +43,7 @@ public class ParameterSenderService : BackgroundService
         //{ "RightEyeBrow", "/RightEyeBrow" },
     };
 
-    public readonly Dictionary<string, string> FaceExpressionMap = new()
+    public static readonly Dictionary<string, string> FaceExpressionMap = new()
     {
         { "CheekPuffLeft", "/cheekPuffLeft" },
         { "CheekPuffRight", "/cheekPuffRight" },
@@ -113,7 +113,7 @@ public class ParameterSenderService : BackgroundService
     {
         _logger.LogDebug("Starting Parameter Sender Service...");
         _logger.LogDebug("OSC parameter mapping initialized with {EyeCount} eye expressions and {FaceCount} face expressions",
-            _eyeExpressionMap.Count, FaceExpressionMap.Count);
+            EyeExpressionMap.Count, FaceExpressionMap.Count);
 
         while (!cancellationToken.IsCancellationRequested)
         {
@@ -145,10 +145,10 @@ public class ParameterSenderService : BackgroundService
         if (expressions is null) return;
         if (expressions.Length == 0) return;
 
-        for (var i = 0; i < Math.Min(expressions.Length, _eyeExpressionMap.Count); i++)
+        for (var i = 0; i < Math.Min(expressions.Length, EyeExpressionMap.Count); i++)
         {
             var weight = expressions[i];
-            var eyeElement = _eyeExpressionMap.ElementAt(i);
+            var eyeElement = EyeExpressionMap.ElementAt(i);
             var settings = _calibrationService.GetExpressionSettings(eyeElement.Key);
 
             var msg = new OscMessage(_prefix + eyeElement.Value,

@@ -324,6 +324,12 @@
       </Expander>
 
       <controls:SettingsToggle
+          Title="Auto Calibration"
+          Description="Automatically adjust calibration ranges based on your expressions"
+          IconPath="DataBarVerticalRegular"
+          SettingToggled="{Binding AutoCalibrationEnabled, Mode=TwoWay}" />
+
+      <controls:SettingsToggle
           Title="{x:Static assets:Resources.Settings_GPU_Header}"
           Description="{x:Static assets:Resources.Settings_GPU_Description}"
           IconPath="TopSpeedRegular"

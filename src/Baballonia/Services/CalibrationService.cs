@@ -1,4 +1,8 @@
-﻿using Baballonia.Contracts;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using Baballonia.Contracts;
 using Baballonia.Services.Calibration;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -7,6 +11,8 @@ namespace Baballonia.Services;
 
 public class CalibrationService : ICalibrationService
 {
+    private const float AutoCalSeed = 0.5f;
+
     // Expression parameter names
     private readonly Dictionary<string, string> _eyeExpressionMap = new()
     {
@@ -75,15 +81,72 @@ public class CalibrationService : ICalibrationService
         { "TongueTwistRight", "/tongueTwistRight" }
     };
 
+    private static readonly string[] FaceExpressionNames = ParameterSenderService.FaceExpressionMap.Keys.ToArray();
+
+    // Eye lid expression names and their indices in the eye output array
+    private static readonly (string Name, int Index)[] EyeLidExpressions =
+    [
+        ("LeftEyeLid", 2),
+        ("RightEyeLid", 5)
+    ];
+
     private readonly ConcurrentDictionary<string, CalibrationParameter> _expressionSettings = new();
 
     private readonly ILocalSettingsService _localSettingsService;
+    private readonly ProcessingLoopService _processingLoopService;
 
-    public CalibrationService(ILocalSettingsService localSettingsService)
+    public bool AutoCalibrationEnabled { get; set; }
+
+    public event Action? AutoCalibrationReset;
+
+    public CalibrationService(ILocalSettingsService localSettingsService, ProcessingLoopService processingLoopService)
     {
         _localSettingsService = localSettingsService;
+        _processingLoopService = processingLoopService;
+
+        _processingLoopService.ExpressionChangeEvent += OnExpressionChanged;
 
         Load();
+    }
+
+    private void OnExpressionChanged(ProcessingLoopService.Expressions expressions)
+    {
+        if (!AutoCalibrationEnabled)
+            return;
+
+        // Auto-calibrate face expressions (indexed same as ParameterSenderService.FaceExpressionMap)
+        if (expressions.FaceExpression != null)
+        {
+            for (var i = 0; i < FaceExpressionNames.Length && i < expressions.FaceExpression.Length; i++)
+            {
+                var name = FaceExpressionNames[i];
+                var rawValue = expressions.FaceExpression[i];
+                if (_expressionSettings.TryGetValue(name, out var param))
+                {
+                    if (rawValue > param.Upper) param.Upper = rawValue;
+                    if (rawValue < param.Lower) param.Lower = rawValue;
+                }
+            }
+        }
+
+        // Auto-calibrate eye lid expressions
+        if (expressions.EyeExpression != null)
+        {
+            foreach (var (name, index) in EyeLidExpressions)
+            {
+                if (index >= expressions.EyeExpression.Length)
+                    continue;
+
+                var rawValue = expressions.EyeExpression[index];
+                if (_expressionSettings.TryGetValue(name, out var param))
+                {
+                    if (rawValue > param.Upper) param.Upper = rawValue;
+                    if (rawValue < param.Lower) param.Lower = rawValue;
+                }
+            }
+        }
+
+        SaveAsync();
     }
 
     public void SetExpression(string expression, float value)
@@ -194,5 +257,30 @@ public class CalibrationService : ICalibrationService
             parameter.Upper = parameter.Max;
         }
         SaveAsync();
+    }
+
+    public void ResetAutoCalibration()
+    {
+        // Reset Lower/Upper to seed values for all face expressions and eye lids
+        foreach (var name in FaceExpressionNames)
+        {
+            if (_expressionSettings.TryGetValue(name, out var param))
+            {
+                param.Lower = AutoCalSeed;
+                param.Upper = AutoCalSeed;
+            }
+        }
+
+        foreach (var (name, _) in EyeLidExpressions)
+        {
+            if (_expressionSettings.TryGetValue(name, out var param))
+            {
+                param.Lower = AutoCalSeed;
+                param.Upper = AutoCalSeed;
+            }
+        }
+
+        SaveAsync();
+        AutoCalibrationReset?.Invoke();
     }
 }
