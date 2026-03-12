@@ -223,28 +223,28 @@
     <value>Kalibracja</value>
   </data>
   <data name="Calibration_Reset_Minimums" xml:space="preserve">
-    <value>Zresetuj Minimum</value>
+    <value>Zresetuj Minima</value>
   </data>
   <data name="Calibration_Reset_Maximums" xml:space="preserve">
-    <value>Zresetuj Maksimum</value>
+    <value>Zresetuj Maksima</value>
   </data>
   <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
-    <value>Ruch oczu</value>
+    <value>Ekspresje oczu</value>
   </data>
   <data name="Calibration_Nose_Expressions_Header" xml:space="preserve">
-    <value>Ruch Nosa</value>
+    <value>Ekspresje nosa</value>
   </data>
   <data name="Calibration_Tongue_Expressions_Header" xml:space="preserve">
-    <value>Ruch języka</value>
+    <value>Ekspresje języka</value>
   </data>
   <data name="Calibration_Mouth_Expressions_Header" xml:space="preserve">
-    <value>Ruch ust</value>
+    <value>Ekspresje ust</value>
   </data>
   <data name="Calibration_Jaw_Expressions_Header" xml:space="preserve">
-    <value>Ruch Szczęki</value>
+    <value>Ekspresje szczęki</value>
   </data>
   <data name="Calibration_Cheek_Expressions_Header" xml:space="preserve">
-    <value>Ruch policzków</value>
+    <value>Ekspresje policzków</value>
   </data>
   <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Header" xml:space="preserve">
     <value>Stabilizacja oczu</value>
@@ -259,7 +259,7 @@
     <value>Wybierz swój tracker</value>
   </data>
   <data name="Firmware_Device_Instructions_1" xml:space="preserve">
-    <value>• Po włączeniu / podłączeniu urządzenia będziesz miał 20 sekund na naciśnięcie "Odśwież urządzenie" i wybranie urządzenia z listy</value>
+    <value>• Po włączeniu / podłączeniu Trackera będziesz miał 20 sekund na naciśnięcie "Odśwież urządzenie" i wybranie urządzenia z listy</value>
   </data>
   <data name="Firmware_Device_Instructions_2" xml:space="preserve">
     <value>• Niektóre operacje konfiguracyji potrwają trochę czasu!</value>
@@ -268,13 +268,13 @@
     <value>Konfiguracja urządzenia</value>
   </data>
   <data name="Firmware_Device_Configuration_Description" xml:space="preserve">
-    <value>Przełącz tryb przewodowy/bezprzewodowy</value>
+    <value>Przełącz w tryb przewodowy/bezprzewodowy</value>
   </data>
   <data name="Firmware_Device_Mode_Header" xml:space="preserve">
-    <value>Przełącz tryb przewodowy/bezprzewodowy</value>
+    <value>Przełącz w tryb przewodowy/bezprzewodowy</value>
   </data>
   <data name="Firmware_Device_Mode_Instruction_1" xml:space="preserve">
-    <value>• Po zmianie trybu musisz zrestartować swój tracker</value>
+    <value>• Po zmianie trybu musisz zrestartować swój Tracker</value>
   </data>
   <data name="Firmware_Device_Mode_Instruction_2" xml:space="preserve">
     <value>• Po wgraniu oprogramowania MOŻE być wymagane zrestartowanie aplikacji</value>
@@ -292,7 +292,7 @@
     <value>Wpisz dane logowania do WiFi</value>
   </data>
   <data name="Firmware_Wifi_Instructions_1" xml:space="preserve">
-    <value>• Jeśli chcesz korzystać z trackera bezprzewodowo, MUSISZ wpisać dane do logowania WiFi</value>
+    <value>• Jeśli chcesz korzystać z Trackera bezprzewodowo, MUSISZ wpisać dane do logowania WiFi</value>
   </data>
   <data name="Firmware_Wifi_Instructions_2" xml:space="preserve">
     <value>• PRZED wpisaniem danych do logowania zeskanuj w poszukiwaniu sieci WiFi.</value>
@@ -313,10 +313,10 @@
     <value>Opcje wygrywania oprogramowania</value>
   </data>
   <data name="Firmware_Flashing_Description" xml:space="preserve">
-    <value>Wgraj oprogramowanie na twojego Trackera</value>
+    <value>Wgraj oprogramowanie na swój Tracker</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>UWAGA!! TA AKCJA ZRESETUJE TWÓJ TRACKER DO USTAWIEŃ FABRYCZNYCH. BĘDZIESZ MUSIAŁ PONOWNIE WYKONAĆ WSTĘPNĄ KONFIGURACJE PO FLASHOWANIU TWOJEGO TRACKERA.</value>
+    <value>UWAGA!! TA AKCJA ZRESETUJE TWÓJ TRACKER DO USTAWIEŃ FABRYCZNYCH. BĘDZIESZ MUSIAŁ PONOWNIE WYKONAĆ WSTĘPNĄ KONFIGURACJE PO WGRANIU NOWEGO OPROGRAMOWANIA NA TWOJEGO TRACKERA.</value>
   </data>
   <data name="Firmware_Type_To_Flash" xml:space="preserve">
     <value>Typ oprogramowania do wgrania:</value>
@@ -328,10 +328,10 @@
     <value>To zajmie około ~10 sekund. Nie opuszczaj tej strony!</value>
   </data>
   <data name="Firmware_Flashing_Complete" xml:space="preserve">
-    <value>Gotowe! Teraz musisz zrestartować swój tracker</value>
+    <value>Gotowe! Teraz musisz zrestartować swój Tracker</value>
   </data>
   <data name="Firmware_TrackerComboBox_Default" xml:space="preserve">
-    <value>Kliknij, aby zobaczyć trackery...</value>
+    <value>Kliknij, aby zobaczyć Trackery...</value>
   </data>
   <data name="Firmware_RefreshDevices_Default" xml:space="preserve">
     <value>Odśwież urządzenia</value>
@@ -343,7 +343,7 @@
     <value>Znaleziono urządzenia {0}.</value>
   </data>
   <data name="Firmware_SelectTracker_Default" xml:space="preserve">
-    <value>Wybierz tracker</value>
+    <value>Wybierz Tracker</value>
   </data>
   <data name="Firmware_SelectTracker_Connected" xml:space="preserve">
     <value>Tracker podłączony!</value>
@@ -355,7 +355,7 @@
     <value>Ustaw tryb</value>
   </data>
   <data name="Firmware_ModeSetButton_Setting" xml:space="preserve">
-    <value>Ustawianie trubu</value>
+    <value>Ustawianie trybu</value>
   </data>
   <data name="Firmware_ModeSetButton_Success" xml:space="preserve">
     <value>Ustawione!</value>
@@ -373,7 +373,7 @@
     <value>Coś poszło nie tak...</value>
   </data>
   <data name="Firmware_WifiScanButton_Default" xml:space="preserve">
-    <value>Odśwież sieci Wi-Fi</value>
+    <value>Odśwież listę sieci Wi-Fi</value>
   </data>
   <data name="Firmware_WifiScanButton_Scanning" xml:space="preserve">
     <value>Skanowanie. To zajmie nie więcej niż 30 sekund</value>
@@ -439,13 +439,13 @@
     <value>Zakończ</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
-    <value>Przewodowo czy bezprzewodowo?</value>
+    <value>Przewodowe czy bezprzewodowe?</value>
   </data>
   <data name="Onboarding_Wireless_Description1" xml:space="preserve">
-    <value>Z nowszymi Trackerami musisz wykonać pierwszą konfigurację w zakładce Firmware (Ikona powyżej).</value>
+    <value>Z nowszymi Trackerami musisz wykonać pierwszą konfigurację w zakładce Oprogromowanie (Ikona powyżej).</value>
   </data>
   <data name="Onboarding_Wireless_Description2" xml:space="preserve">
-    <value>To zajmuje tylko 2 minuty! Wybierz swój tracker i tryb (przewodowy lub bezprzewodowy).</value>
+    <value>Zajmuje to tylko 2 minuty! Wybierz swój tracker i tryb (przewodowy lub bezprzewodowy).</value>
   </data>
   <data name="Onboarding_Wireless_Note" xml:space="preserve">
     <value>Pamiętaj, że nowszym trackerom zajmuje około 20 sekund przejście w tryb kamery.</value>
@@ -472,7 +472,7 @@
     <value>Angielski</value>
   </data>
   <data name="Settings_Language_Spanish" xml:space="preserve">
-    <value>Español</value>
+    <value>Hiszpański</value>
   </data>
   <data name="Settings_Language_Japanese" xml:space="preserve">
     <value>日本語</value>
@@ -553,19 +553,19 @@
     <value>1. Strona główna to miejsce, w którym możesz skonfigurować kamery i wykonać kalibrację śledzenia oczu.</value>
   </data>
   <data name="Onboarding_UI_Calibration_Description" xml:space="preserve">
-    <value>2. Kalibracja pozwala dostosować indywidualnie wyrazy oczu i twarzy.</value>
+    <value>2. Zakładka Kalibracji pozwala dostosować indywidualnie ruchy oczu i twarzy.</value>
   </data>
   <data name="Onboarding_UI_Firmware_Description" xml:space="preserve">
-    <value>3. Zakładka oprogramowania służy do konfiguracji lub resetowania urządzenia.</value>
+    <value>3. Zakładka Oprogramowania służy do konfiguracji lub resetowania Trackera.</value>
   </data>
   <data name="Onboarding_UI_VRChat_Description" xml:space="preserve">
     <value>4. Zakładka VRChat służy do zmiany ustawień specyficznych dla VRChat/VRCFaceTracking.</value>
   </data>
   <data name="Onboarding_UI_Output_Description" xml:space="preserve">
-    <value>5. Zakładka wyjścia pokazuje status aplikacji i inne przydatne informacje.</value>
+    <value>5. Zakładka Wyjścia pokazuje status aplikacji i inne przydatne informacje.</value>
   </data>
   <data name="Onboarding_UI_Settings_Description" xml:space="preserve">
-    <value>6. Ustawienia zawierają ogólne opcje aplikacji, takie jak motyw, język i inne.</value>
+    <value>6. Zakładka Ustawienia zawiera ogólne opcje aplikacji, takie jak motyw, język i inne.</value>
   </data>
   <data name="Onboarding_Complete_Header" xml:space="preserve">
     <value>Konfiguracja zakończona!</value>
@@ -640,22 +640,22 @@
     <value>spowoduje potrzebę wykonania większego ruchu zanim Tracker go wykryje.</value>
   </data>
   <data name="Settings_Language_Chinese_Simplified" xml:space="preserve">
-    <value>Chiński (uproszczony)</value>
+    <value>Chiński (Uproszczony)</value>
   </data>
   <data name="Settings_Language_Chinese_Traditional" xml:space="preserve">
     <value>Chiński (Tradycyjny)</value>
   </data>
   <data name="Settings_Language_German" xml:space="preserve">
-    <value>niemiecki</value>
+    <value>Niemiecki</value>
   </data>
   <data name="Settings_Language_French" xml:space="preserve">
     <value>Francuski</value>
   </data>
   <data name="Settings_Language_Italian" xml:space="preserve">
-    <value>włoski</value>
+    <value>Włoski</value>
   </data>
   <data name="Settings_Language_Korean" xml:space="preserve">
-    <value>koreański</value>
+    <value>Koreański</value>
   </data>
   <data name="Settings_Language_Portuguese_Brazil" xml:space="preserve">
     <value>Portugalski (Brazylia)</value>
@@ -664,13 +664,13 @@
     <value>Portugalski (Portugalia)</value>
   </data>
   <data name="Settings_Language_Russian" xml:space="preserve">
-    <value>rosyjski</value>
+    <value>Rosyjski</value>
   </data>
   <data name="Settings_Language_Arabic" xml:space="preserve">
-    <value>arabski</value>
+    <value>Arabski</value>
   </data>
   <data name="Settings_Language_Turkish" xml:space="preserve">
-    <value>turecki</value>
+    <value>Turecki</value>
   </data>
   <data name="Settings_Language_Dutch" xml:space="preserve">
     <value>Holenderski</value>
@@ -679,31 +679,31 @@
     <value>Szwedzki</value>
   </data>
   <data name="Settings_Language_Finnish" xml:space="preserve">
-    <value>fiński</value>
+    <value>Fiński</value>
   </data>
   <data name="Settings_Language_Danish" xml:space="preserve">
-    <value>duński</value>
+    <value>Duński</value>
   </data>
   <data name="Settings_Language_Norwegian" xml:space="preserve">
-    <value>norweski</value>
+    <value>Norweski</value>
   </data>
   <data name="Settings_Language_Czech" xml:space="preserve">
-    <value>czeski</value>
+    <value>Czeski</value>
   </data>
   <data name="Settings_Language_Hungarian" xml:space="preserve">
-    <value>węgierski</value>
+    <value>Węgierski</value>
   </data>
   <data name="Settings_Language_Romanian" xml:space="preserve">
-    <value>rumuński</value>
+    <value>Rumuński</value>
   </data>
   <data name="Settings_Language_Vietnamese" xml:space="preserve">
     <value>Vietnamese</value>
   </data>
   <data name="Settings_Language_Ukrainian" xml:space="preserve">
-    <value>ukraiński</value>
+    <value>Ukraiński</value>
   </data>
   <data name="Settings_Language_Greek" xml:space="preserve">
-    <value>grecki</value>
+    <value>Grecki</value>
   </data>
   <data name="Settings_Language_Hebrew" xml:space="preserve">
     <value>Hebrajski</value>
@@ -712,7 +712,7 @@
     <value>Afrikaans</value>
   </data>
   <data name="Settings_Language_Catalan" xml:space="preserve">
-    <value>kataloński</value>
+    <value>Kataloński</value>
   </data>
   <data name="Settings_Language_Serbian" xml:space="preserve">
     <value>serbski</value>
@@ -724,13 +724,13 @@
     <value>Maksimum</value>
   </data>
   <data name="Calibration_Instructions_Bullet2_2" xml:space="preserve">
-    <value>spowoduje że tracker wykryje ruch jako 100% szybciej, zmniejszając potrzebę na większe ruchy twarzy.</value>
+    <value>spowoduje że Tracker wykryje ruch jako 100% szybciej, zmniejszając potrzebę na większe ruchy twarzy.</value>
   </data>
   <data name="DropOverlay_Important_Header" xml:space="preserve">
     <value>Ważne!</value>
   </data>
   <data name="DropOverlay_Message" xml:space="preserve">
-    <value>Nowsze trackery mają 20 sekundowe opóźnienie po podłączeniu zanim będą mogły zostać użyte. Gdy Tracker będzie gotowy usłyszysz dźwięk podłączenia USB.</value>
+    <value>Nowsze Trackery mają 20 sekundowe opóźnienie po podłączeniu zanim będą mogły zostać użyte. Gdy Tracker będzie gotowy usłyszysz dźwięk podłączenia USB.</value>
   </data>
   <data name="DropOverlay_DontShowAgain" xml:space="preserve">
     <value>Nie pokazuj tego ostrzeżenia ponownie</value>
@@ -766,7 +766,7 @@
     <value>Zaawansowane ustawienia</value>
   </data>
   <data name="Godot_Locale" xml:space="preserve">
-    <value>pl</value>
+    <value>Pl</value>
   </data>
   <data name="About_Title_Header" xml:space="preserve">
     <value>O programie</value>
@@ -775,7 +775,7 @@
     <value>O nas</value>
   </data>
   <data name="About_AboutUs_Description" xml:space="preserve">
-    <value>Linki do naszego przewodnika szybkiego startu, mediów społecznościowych, dokumentacji itp.</value>
+    <value>Linki do przewodnika szybkiego startu, naszych mediów społecznościowych, dokumentacji itp.</value>
   </data>
   <data name="About_AboutBaballonia_Header" xml:space="preserve">
     <value>O Baballonia</value>
@@ -787,7 +787,7 @@
     <value>Zasługi</value>
   </data>
   <data name="About_Credits_Description" xml:space="preserve">
-    <value>Ludzie, którzy sprawili, że ten projekt jest tym, czym jest. Dziękujemy wszystkim!</value>
+    <value>Ludzie dzięki którym ten projekt jest tym czym jest. Dziękujemy wszystkim!</value>
   </data>
   <data name="About_QuickstartGuide_Alias" xml:space="preserve">
     <value>Przewodnik szybkiego startu ⧉</value>
@@ -826,17 +826,17 @@
     <value>Licencja Baballonia ⧉</value>
   </data>
   <data name="About_BaballoniaBuildInstructions_Alias" xml:space="preserve">
-    <value>Instrukcje budowania Baballonia ⧉</value>
+    <value>Instrukcje budowania Baballonia z źródła ⧉</value>
   </data>
   <data name="About_Contributors_Commits" xml:space="preserve">
-    <value>{0} zatwierdzeń</value>
+    <value>{0} commits</value>
   </data>
   <data name="Firmware_Flashing_Wireless_Prompt" xml:space="preserve">
-    <value>Flashowanie niestandardowego firmware na Twoim Babble Tracker działa najlepiej, gdy urządzenie jest najpierw ustawione w trybie "Bezprzewodowym".
-Nie musisz wprowadzać żadnych danych logowania do Wi-Fi. Wystarczy przełączyć tracker w tryb "Wireless", a następnie uruchomić go ponownie przed wgraniem oprogramowania.</value>
+    <value>Wgrywanie niestandardowego oprogramowania na Twoim Babble Tracker działa najlepiej gdy Tracker jest najpierw ustawione w trybie "Bezprzewodowym".
+Nie musisz wprowadzać żadnych danych logowania do Wi-Fi. Wystarczy przełączyć Tracker w tryb "Wireless", a następnie uruchomić go ponownie przed wgraniem oprogramowania.</value>
   </data>
   <data name="Firmware_Flashing_Header_Alert" xml:space="preserve">
-    <value>Jeśli używasz Babble Tracker z Valve Index lub Bigscreen Beyond (z/bez stacji bazowych 1.0), możesz zauważyć:
+    <value>Jeśli używasz Babble Tracker z Valve Index lub Bigscreen Beyond (z lub bez stacji bazowych 1.0), możesz zauważyć:
 • Twój ekran staje się nieoczekiwanie szary
 • Śledzenie przerywa lub często traci pozycję
 Zazwyczaj można to łatwo naprawić! Po prostu zainstaluj oprogramowanie "Tracking Loss Fix" poniżej.</value>
@@ -846,7 +846,7 @@ Zazwyczaj można to łatwo naprawić! Po prostu zainstaluj oprogramowanie "Track
   </data>
   <data name="Home_Cameras_Linux_Workarounds" xml:space="preserve">
     <value>Rozwiązania:
-• Spróbuj środowisko Steam scout 1.0 (nie sniper 3.0), zainstaluj libudev, zbuduj z źródła, lub dołącz do grupy plugdev.
+• Spróbuj użyć środowiska Steam scout 1.0 (nie sniper 3.0), zainstaluj libudev, zbuduj z źródła, lub dołącz do grupy plugdev.
 • Wspieramy tylko wydania Steam i tarball, nie pakiet AUR.
 • Płyty Babble nie obsługują UVC/Szeregowego na Linuksie, użyj konfiguracji bezprzewodowej.</value>
   </data>
@@ -855,12 +855,13 @@ Zazwyczaj można to łatwo naprawić! Po prostu zainstaluj oprogramowanie "Track
     <value>Udostępnij dane oczu/twarzy</value>
   </data>
   <data name="Settings_ShareData_Description" xml:space="preserve">
-    <value>Zgódź się na udostępnianie anonimowych danych oczu/twarzy w celu poprawy naszych algorytmów</value>
+    <value>Zgadzasz się na udostępnianie anonimowych danych dotyczących oczu/twarzy w celu poprawy naszych algorytmów</value>
   </data>
   <data name="Settings_DFR_Header" xml:space="preserve">
-    <value>Użyj DFR</value>
+    <value>Włącz DFR</value>
   </data>
   <data name="Settings_DFR_Description" xml:space="preserve">
-    <value>Włącz dynamiczne renderowanie z foveacją Pimax4All dla wybranych tytułów</value>
+    <value>Włącza dynamiczne renderowanie fov Pimax4All dla obsługiwanych tytułów</value>
   </data>
+
 </root>
