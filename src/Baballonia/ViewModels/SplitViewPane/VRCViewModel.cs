@@ -22,7 +22,7 @@ public partial class VrcViewModel : ViewModelBase
     [ObservableProperty]
     private bool _vrcftDetected;
 
-    public ObservableCollection<string> ModuleModeOptions { get; set; } = [
+    public ObservableCollection<string> ModuleModeOptions { get; } = [
         Resources.Firmware_Mode_Both,
         Resources.Firmware_Mode_Face,
         Resources.Firmware_Mode_Eyes,

@@ -350,6 +350,7 @@
             x:Name="LogLevelCombo"
             VerticalAlignment="Center"
             ItemsSource="{Binding LowestLogLevel}"
+            PlaceholderText="{x:Static assets:Resources.Settings_LogLevel_Level}"
             SelectedItem="{Binding LogLevel}" />
         </controls:SettingsBlock.SettingsContent>
       </controls:SettingsBlock>
