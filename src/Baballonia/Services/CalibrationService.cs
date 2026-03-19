@@ -1,8 +1,7 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Baballonia.Contracts;
+﻿using Baballonia.Contracts;
 using Baballonia.Services.Calibration;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace Baballonia.Services;
 
@@ -20,7 +19,15 @@ public class CalibrationService : ICalibrationService
     private readonly Dictionary<string, string> _faceExpressionMap = new()
     {
         { "LeftEyeLid", "/LeftEyeLid" },
+        { "LeftEyeWiden", "/LeftEyeWiden" },
+        // { "LeftEyeLower", "/LeftEyeLower" },
+        { "LeftEyeBrow", "/LeftEyeBrow" },
+        { "RightEyeX", "/RightEyeX" },
+        { "RightEyeY", "/RightEyeY" },
         { "RightEyeLid", "/RightEyeLid" },
+        { "RightEyeWiden", "/RightEyeWiden" },
+        // { "RightEyeLower", "/RightEyeLower" },
+        { "RightEyeBrow", "/RightEyeBrow" },
         { "CheekPuffLeft", "/cheekPuffLeft" },
         { "CheekPuffRight", "/cheekPuffRight" },
         { "CheekSuckLeft", "/cheekSuckLeft" },

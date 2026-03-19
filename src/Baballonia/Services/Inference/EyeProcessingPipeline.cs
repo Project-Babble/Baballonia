@@ -1,21 +1,15 @@
-﻿using System;
-using Baballonia.Services.events;
+﻿using Baballonia.Services.events;
 using Baballonia.Services.Inference.Enums;
+using System;
 
 namespace Baballonia.Services.Inference;
 
-public class EyeProcessingPipeline : DefaultProcessingPipeline, IDisposable
+public class EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus) : DefaultProcessingPipeline, IDisposable
 {
-    private readonly IEyePipelineEventBus _eyePipelineEventBus;
     private readonly FastCorruptionDetector.FastCorruptionDetector _fastCorruptionDetector = new();
     private readonly ImageCollector _imageCollector = new();
 
-    public EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus)
-    {
-        _eyePipelineEventBus = eyePipelineEventBus;
-    }
-
-    public bool StabilizeEyes { get; set; } = false;
+    public bool StabilizeEyes { get; set; } = true;
 
     public float[]? RunUpdate()
     {
@@ -26,13 +20,13 @@ public class EyeProcessingPipeline : DefaultProcessingPipeline, IDisposable
         if (_fastCorruptionDetector.IsCorrupted(frame).isCorrupted)
             return null;
 
-        _eyePipelineEventBus.Publish(new EyePipelineEvents.NewFrameEvent(frame));
+        eyePipelineEventBus.Publish(new EyePipelineEvents.NewFrameEvent(frame));
 
         var transformed = ImageTransformer?.Apply(frame);
         if(transformed == null)
             return null;
 
-        _eyePipelineEventBus.Publish(new EyePipelineEvents.NewTransformedFrameEvent(transformed));
+        eyePipelineEventBus.Publish(new EyePipelineEvents.NewTransformedFrameEvent(transformed));
 
         var collected = _imageCollector.Apply(transformed);
         transformed.Dispose();
@@ -48,12 +42,14 @@ public class EyeProcessingPipeline : DefaultProcessingPipeline, IDisposable
         if(inferenceResult == null)
             return null;
 
-        if(Filter != null)
+        if (Filter != null)
+        {
             inferenceResult = Filter.Filter(inferenceResult);
+        }
 
         ProcessExpressions(ref inferenceResult);
 
-        _eyePipelineEventBus.Publish(new EyePipelineEvents.NewFilteredResultEvent(inferenceResult));
+        eyePipelineEventBus.Publish(new EyePipelineEvents.NewFilteredResultEvent(inferenceResult));
 
         frame.Dispose();
         transformed.Dispose();
@@ -85,7 +81,7 @@ public class EyeProcessingPipeline : DefaultProcessingPipeline, IDisposable
         if (StabilizeEyes)
         {
             var rawConvergence = (rightEyeYawCorrected - leftEyeYawCorrected) / 2.0f;
-            var convergence = Math.Max(rawConvergence, 0.0f); //We clamp the value here to avoid accidental divergence, as the model sometimes decides that's a thing
+            var convergence = Math.Max(rawConvergence, 0.0f); // We clamp the value here to avoid accidental divergence, as the model sometimes decides that's a thing
 
             var averagedYaw = (rightEyeYawCorrected + leftEyeYawCorrected) / 2.0f;
 
@@ -96,7 +92,6 @@ public class EyeProcessingPipeline : DefaultProcessingPipeline, IDisposable
         // [left pitch, left yaw, left lid...
         float[] convertedExpressions = new float[Utils.EyeRawExpressions];
 
-        // swap eyes at this point
         convertedExpressions[0] = rightEyeYawCorrected; // left pitch
         convertedExpressions[1] = eyeY;                   // left yaw
         convertedExpressions[2] = rightLid;               // left lid

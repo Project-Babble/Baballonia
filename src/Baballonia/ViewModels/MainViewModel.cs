@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
-using Avalonia.Controls;
-using Baballonia.Views;
+﻿using Avalonia.Controls;
+using Baballonia.Assets;
 using Baballonia.Models;
 using Baballonia.Services;
 using Baballonia.ViewModels.SplitViewPane;
@@ -12,6 +7,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Baballonia.ViewModels;
 
@@ -38,20 +37,22 @@ public partial class MainViewModel : ViewModelBase
 
     private readonly List<ListItemTemplate> _desktopTemplates =
     [
-        new(typeof(HomePageViewModel), "HomeRegular", "Home"),
-        new(typeof(CalibrationViewModel), "EditRegular", "Calibration"),
-        new(typeof(FirmwareViewModel), "DeveloperBoardRegular", "Firmware"),
-        new(typeof(VrcViewModel), "CommentRegular", "VRChat"),
-        new(typeof(OutputPageViewModel), "TextFirstLineRegular", "Output"),
-        new(typeof(AppSettingsViewModel), "SettingsRegular", "Settings"),
+        new(typeof(HomePageViewModel), "HomeRegular", Resources.Home_Title_Header), // Home
+        new(typeof(CalibrationViewModel), "EditRegular", Resources.Calibration_Title_Header), // Calibration
+        new(typeof(FirmwareViewModel), "DeveloperBoardRegular", Resources.Firmware_Title_Header), // Firmware
+        new(typeof(VrcViewModel), "CommentRegular", "VRChat"), // VRChat. No translation :P
+        new(typeof(OutputPageViewModel), "TextFirstLineRegular", Resources.Output_Title_Header), // Output
+        new(typeof(AppSettingsViewModel), "SettingsRegular", Resources.Settings_Title_Header), // Settings
+        new(typeof(AboutPageViewModel), "InfoRegular", Resources.About_Title_Header), // About
     ];
 
     private readonly List<ListItemTemplate> _mobileTemplates =
     [
-        new(typeof(HomePageViewModel), "HomeRegular", "Home"),
-        new(typeof(CalibrationViewModel), "EditRegular", "Calibration"),
-        new(typeof(OutputPageViewModel), "TextFirstLineRegular", "Output"),
-        new(typeof(AppSettingsViewModel), "SettingsRegular", "Settings"),
+        new(typeof(HomePageViewModel), "HomeRegular", Resources.Home_Title_Header), // Home
+        new(typeof(CalibrationViewModel), "EditRegular", Resources.Calibration_Title_Header), // Calibration
+        new(typeof(OutputPageViewModel), "TextFirstLineRegular", Resources.Output_Title_Header), // Output
+        new(typeof(AppSettingsViewModel), "SettingsRegular", Resources.Settings_Title_Header), // Settings
+        new(typeof(AboutPageViewModel), "InfoRegular", Resources.About_Title_Header), // About
     ];
 
     public MainViewModel() : this(new WeakReferenceMessenger()) { }

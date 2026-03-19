@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Baballonia.Services.Calibration;
+﻿using Baballonia.Services.Calibration;
 
 namespace Baballonia.Contracts;
 

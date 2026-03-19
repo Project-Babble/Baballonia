@@ -223,10 +223,10 @@
     <value>Калібрування</value>
   </data>
   <data name="Calibration_Reset_Minimums" xml:space="preserve">
-    <value>Reset Minimums</value>
+    <value>Скинути Мінімуми</value>
   </data>
   <data name="Calibration_Reset_Maximums" xml:space="preserve">
-    <value>Reset Maximums</value>
+    <value>Скинути Максимуми</value>
   </data>
   <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
     <value>Дані про очі</value>
@@ -317,6 +317,9 @@
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
     <value>КАЗАНОТ!! Це таке! БУДЬ-ЛАСКАЙТЕ СВІТ ВАШ ТРАКЕР. ВИ ЗАРАХОВАЙТЕ В PERFORM БЕЗПРАВНИЙ ЧАСОВИЙ ЧАСТРАХ САЙТУ, ЩО ВАШ КОРИСТУВАЧА.</value>
+  </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>Firmware type to flash:</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>Прошити прошивку</value>
@@ -412,7 +415,28 @@
     <value>Відкрити папку журналювання</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>Цей майстер проведе вас через налаштування нового Babble додатка.</value>
+    <value>Цей майстер допоможе вам налаштувати новий додаток Babble.</value>
+  </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>Ласкаво просимо!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>Прошивка</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>Збірка</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>Огляд інтерфейсу</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>Завершено!</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>Далі</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>Завершити</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
     <value>Може, проводились чи бездротові мережі?</value>
@@ -465,12 +489,6 @@
   <data name="Settings_Filter_Description" xml:space="preserve">
     <value>Налаштування фільтру</value>
   </data>
-  <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
-    <value>Увімкнено</value>
-  </data>
-  <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
-    <value>Включити або виключити фільтрування.</value>
-  </data>
   <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
     <value>Мінімальне припинення частоти</value>
   </data>
@@ -521,6 +539,9 @@
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>Запустити</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>Попередній</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
     <value>Пропустити</value>
@@ -717,20 +738,155 @@
   <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
     <value>Відхилити</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Settings_OSC_VRCFT_Warning" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Settings_OSC_VRCFT_Warning" xml:space="preserve">
+    <value>Якщо ви використовуєте Baballonia з VRCFaceTracking, вам не потрібно змінювати ці порти</value>
   </data>
-  <data name="Home_Eye_Load_Model" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Home_Preferred_Backend" xml:space="preserve">
+    <value>Бажаний бекенд</value>
   </data>
-  <data name="Firmware_Custom_Firmware_Load" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Home_Backend_Default" xml:space="preserve">
+    <value>За замовчуванням</value>
   </data>
-  <data name="Settings_SteamVR_Auto_Start_Header" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Home_Eye_Load_Model" xml:space="preserve">
+    <value>Завантажити модель ока</value>
   </data>
-  <data name="Settings_SteamVR_Auto_Start_Description" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Firmware_Custom_Firmware_Load" xml:space="preserve">
+    <value>Завантажити власний прошивку</value>
+  </data>
+  <data name="Settings_SteamVR_Auto_Start_Header" xml:space="preserve">
+    <value>Автоматичний запуск з SteamVR</value>
+  </data>
+  <data name="Settings_SteamVR_Auto_Start_Description" xml:space="preserve">
+    <value>Чи повинен додаток запускатися з SteamVR? (Зміна вимагає перезапуску SteamVR.)</value>
+  </data>
+  <data name="Settings_Advanced_Header" xml:space="preserve">
+    <value>Увімкнути розширені налаштування</value>
+  </data>
+  <data name="Settings_Advanced_Description" xml:space="preserve">
+    <value>Розширені налаштування</value>
+  </data>
+  <data name="Godot_Locale" xml:space="preserve">
+    <value>uk</value>
+  </data>
+  <data name="About_Title_Header" xml:space="preserve">
+    <value>Про програму</value>
+  </data>
+  <data name="About_AboutUs_Header" xml:space="preserve">
+    <value>Про нас</value>
+  </data>
+  <data name="About_AboutUs_Description" xml:space="preserve">
+    <value>Посилання на наш швидкий посібник, соціальні мережі, документацію тощо</value>
+  </data>
+  <data name="About_AboutBaballonia_Header" xml:space="preserve">
+    <value>Про Baballonia</value>
+  </data>
+  <data name="About_AboutBaballonia_Description" xml:space="preserve">
+    <value>Посилання для гіків (GitHub і так далі)</value>
+  </data>
+  <data name="About_Credits_Header" xml:space="preserve">
+    <value>Подяки</value>
+  </data>
+  <data name="About_Credits_Description" xml:space="preserve">
+    <value>Люди, які зробили цей проект тим, чим він є. Дякуємо всім!</value>
+  </data>
+  <data name="About_QuickstartGuide_Alias" xml:space="preserve">
+    <value>Швидкий посібник </value>
+  </data>
+  <data name="About_BabbleDiscord_Alias" xml:space="preserve">
+    <value>Discord Babble </value>
+  </data>
+  <data name="About_PishockDiscord_Alias" xml:space="preserve">
+    <value>Discord PiShock </value>
+  </data>
+  <data name="About_BabbleDocs_Alias" xml:space="preserve">
+    <value>Документація Babble </value>
+  </data>
+  <data name="About_BabbleSite_Alias" xml:space="preserve">
+    <value>Сайт Babble </value>
+  </data>
+  <data name="About_BabbleBlog_Alias" xml:space="preserve">
+    <value>Блог Babble </value>
+  </data>
+  <data name="About_BabbleDataPrivacyPolicy_Alias" xml:space="preserve">
+    <value>Політика конфіденційності даних </value>
+  </data>
+  <data name="About_YoutubeLink_Alias" xml:space="preserve">
+    <value>Сторінка YouTube Babble </value>
+  </data>
+  <data name="About_BabbleTwitter_Alias" xml:space="preserve">
+    <value>Twitter Babble </value>
+  </data>
+  <data name="About_BaballoniaGithub_Alias" xml:space="preserve">
+    <value>GitHub Baballonia </value>
+  </data>
+  <data name="About_BaballoniaGithubIssues_Alias" xml:space="preserve">
+    <value>Проблеми GitHub Baballonia </value>
+  </data>
+  <data name="About_BaballoniaLicense_Alias" xml:space="preserve">
+    <value>Ліцензія Baballonia </value>
+  </data>
+  <data name="About_BaballoniaBuildInstructions_Alias" xml:space="preserve">
+    <value>Інструкції зі збірки Baballonia </value>
+  </data>
+  <data name="About_Contributors_Commits" xml:space="preserve">
+    <value>{0} комітів</value>
+  </data>
+  <data name="Firmware_Flashing_Wireless_Prompt" xml:space="preserve">
+    <value>Прошивка власної прошивки на вашому Babble Tracker працює найкраще, коли пристрій спочатку встановлено в режим "Бездротовий".
+Вам не потрібно вводити жодних облікових даних Wi-Fi. Просто переведіть трекер у режим "Бездротовий", а потім перезапустіть його перед прошивкою.</value>
+  </data>
+  <data name="Firmware_Flashing_Header_Alert" xml:space="preserve">
+    <value>Якщо ви використовуєте Babble Tracker з Valve Index або Bigscreen Beyond (з/без базових станцій 1.0), ви можете помітити:
+• Ваш екран несподівано стає сірим
+• Відстеження переривається або часто втрачає позицію
+Це зазвичай легко виправити! Просто встановіть прошивку "Tracking Loss Fix" нижче.</value>
+  </data>
+  <data name="Common_Note" xml:space="preserve">
+    <value>Примітка</value>
+  </data>
+  <data name="Home_Cameras_Linux_Workarounds" xml:space="preserve">
+    <value>Тимчасові рішення:
+• Спробуйте середовище виконання Steam scout 1.0 (не sniper 3.0), встановіть libudev, збережіть з вихідного коду або приєднайтеся до групи plugdev.
+• Ми підтримуємо лише релізи Steam та tarball, а не пакет AUR.
+• Плати Babble не підтримують UVC/Послідовний порт в Linux, використовуйте бездротову конфігурацію.</value>
+  </data>
+  <data name="Settings_ShareData_Header" xml:space="preserve">
+    <value>Поділитися даними очей/обличчя</value>
+  </data>
+  <data name="Settings_ShareData_Description" xml:space="preserve">
+    <value>Погодитися на обмін анонімними даними очей/обличчя для покращення наших алгоритмів</value>
+  </data>
+  <data name="Settings_DFR_Header" xml:space="preserve">
+    <value>Використовувати DFR</value>
+  </data>
+  <data name="Settings_DFR_Description" xml:space="preserve">
+    <value>Увімкнути Pimax4All динамічний фовеальний рендеринг для вибраних ігор</value>
+  </data>
+  <data name="Firmware_Mode_Both" xml:space="preserve">
+    <value>Обидва</value>
+  </data>
+  <data name="Firmware_Mode_Eyes" xml:space="preserve">
+    <value>Очі</value>
+  </data>
+  <data name="Firmware_Mode_Face" xml:space="preserve">
+    <value>Обличчя</value>
+  </data>
+  <data name="Firmware_Mode_None" xml:space="preserve">
+    <value>Немає</value>
+  </data>
+  <data name="Settings_LogLevel_Debug" xml:space="preserve">
+    <value>Налагодження</value>
+  </data>
+  <data name="Settings_LogLevel_Information" xml:space="preserve">
+    <value>Інформація</value>
+  </data>
+  <data name="Settings_LogLevel_Warning" xml:space="preserve">
+    <value>Попередження</value>
+  </data>
+  <data name="Settings_LogLevel_Error" xml:space="preserve">
+    <value>Помилка</value>
+  </data>
+  <data name="Settings_LogLevel_Level" xml:space="preserve">
+    <value>Вибрати рівень...</value>
   </data>
 </root>

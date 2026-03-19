@@ -38,21 +38,6 @@ public sealed class OpenCvCapture(string source, ILogger<OpenCvCapture> logger) 
         }
     }
 
-    public override bool CanConnect(string connectionString)
-    {
-        var lowered = connectionString.ToLower();
-        var serial = lowered.StartsWith("com") ||
-                     lowered.StartsWith("/dev/tty") ||
-                     lowered.StartsWith("/dev/cu") ||
-                     lowered.StartsWith("/dev/ttyacm");;
-        if (serial) return false;
-
-        return lowered.StartsWith("/dev/video") ||
-               lowered.EndsWith("appsink") ||
-               int.TryParse(connectionString, out _) ||
-               Uri.TryCreate(connectionString, UriKind.Absolute, out _);
-    }
-
     public override async Task<bool> StartCapture()
     {
         using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(15)))
@@ -85,17 +70,15 @@ public sealed class OpenCvCapture(string source, ILogger<OpenCvCapture> logger) 
 
     private Task VideoCapture_UpdateLoop(VideoCapture capture, CancellationToken ct)
     {
+        var frame = new Mat();
         while (!ct.IsCancellationRequested)
         {
             try
             {
-                var frame = new Mat();
                 IsReady = capture.Read(frame);
                 // no need to push empty Mat
-                if(IsReady)
+                if (IsReady)
                     SetRawMat(frame);
-                else
-                    frame.Dispose();
             }
             catch (Exception)
             {

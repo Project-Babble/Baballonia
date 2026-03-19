@@ -1,5 +1,5 @@
-using System.Runtime.InteropServices;
 using OpenCvSharp;
+using System.Runtime.InteropServices;
 
 namespace Baballonia.CaptureBin.IO;
 
@@ -49,7 +49,7 @@ public struct CaptureFrameHeader
 /// </summary>
 public sealed class Frame
 {
-    private static FastCorruptionDetector.FastCorruptionDetector _fastCorruptionDetector = new();
+    private static readonly FastCorruptionDetector.FastCorruptionDetector _fastCorruptionDetector = new();
 
     public CaptureFrameHeader Header;
     public byte[] LeftJpeg = [];

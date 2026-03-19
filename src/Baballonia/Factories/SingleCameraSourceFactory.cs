@@ -1,14 +1,12 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Baballonia.Contracts;
-using Baballonia.Factories;
+﻿using Baballonia.Contracts;
 using Baballonia.SDK;
 using Baballonia.Services.Inference.Platforms;
 using Baballonia.Services.Inference.VideoSources;
-using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Baballonia.Services.Inference;
 

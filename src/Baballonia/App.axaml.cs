@@ -1,16 +1,11 @@
-using System;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
-using Baballonia.Helpers;
 using Baballonia.Activation;
 using Baballonia.Contracts;
 using Baballonia.Factories;
+using Baballonia.Helpers;
 using Baballonia.Models;
 using Baballonia.Services;
 using Baballonia.Services.Inference;
@@ -24,7 +19,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using OpenCvSharp.XPhoto;
+using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Baballonia;
 
@@ -33,8 +32,9 @@ public class App : Application
     private IHost? _host;
     private bool IsTeardDown = false;
     private static Action<IServiceCollection> ConfigurePlatformServices { get; set; }
+    private static Action<IServiceCollection>? _platformSpecifficServices;
 
-    public static void RegisterPlatformServices<TOverlay, TDeviceEnumerator, TPlatformConnector>()
+    public static void RegisterRequiredPlatformServices<TOverlay, TDeviceEnumerator, TPlatformConnector>()
         where TOverlay : class, IVROverlay
         where TDeviceEnumerator : class, IDeviceEnumerator
         where TPlatformConnector : class, IPlatformConnector
@@ -45,6 +45,11 @@ public class App : Application
             services.AddSingleton<IDeviceEnumerator, TDeviceEnumerator>();
             services.AddSingleton<IPlatformConnector, TPlatformConnector>();
         };
+    }
+
+    public static void RegisterPlatformSpecificServices(Action<IServiceCollection> configure)
+    {
+        _platformSpecifficServices = configure;
     }
 
 
@@ -59,14 +64,13 @@ public class App : Application
         // Check for a "reset" file in the root of the app directory.
         // If one is found, wipe all files from inside it and delete the file.
         var resetFile = Path.Combine(Utils.PersistentDataDirectory, "reset");
-        if (File.Exists(resetFile))
+        if (!File.Exists(resetFile)) return;
+
+        // Delete everything including files and folders in Utils.PersistentDataDirectory
+        foreach (var file in Directory.EnumerateFiles(Utils.PersistentDataDirectory, "*",
+                     SearchOption.AllDirectories))
         {
-            // Delete everything including files and folders in Utils.PersistentDataDirectory
-            foreach (var file in Directory.EnumerateFiles(Utils.PersistentDataDirectory, "*",
-                         SearchOption.AllDirectories))
-            {
-                File.Delete(file);
-            }
+            File.Delete(file);
         }
     }
 
@@ -107,16 +111,19 @@ public class App : Application
             services.AddSingleton<EyePipelineManager>();
             services.AddSingleton<IEyePipelineEventBus, EyePipelineEventBus>();
             services.AddSingleton<SingleCameraSourceFactory>();
+            services.AddSingleton<FirmwareSessionFactory>();
 
             // Core Services
             services.AddTransient<IIdentityService, IdentityService>();
             services.AddTransient<IFileService, FileService>();
             services.AddSingleton<IOscTarget, OscTarget>();
             services.AddSingleton<OscRecvService>();
-            services.AddSingleton<OscSendService>();
+            services.AddSingleton<VrcftModuleSendService>();
+            services.AddSingleton<DfrSendService>();
             services.AddTransient<OscQueryServiceWrapper>();
             services.AddSingleton<ParameterSenderService>();
             services.AddTransient<GithubService>();
+            services.AddTransient<DataUploaderService>();
             services.AddTransient<ICommandSenderFactory, CommandSenderFactory>();
             services.AddTransient<FirmwareService>();
             services.AddSingleton<IMainService, MainStandalone>();
@@ -134,6 +141,8 @@ public class App : Application
             services.AddTransient<OutputPageView>();
             services.AddTransient<AppSettingsViewModel>();
             services.AddTransient<AppSettingsView>();
+            services.AddTransient<AboutPageViewModel>();
+            services.AddTransient<AboutPageView>();
 
             if (Utils.IsSupportedDesktopOS)
             {
@@ -149,6 +158,7 @@ public class App : Application
             }
 
             ConfigurePlatformServices.Invoke(services);
+            _platformSpecifficServices?.Invoke(services);
 
             services.AddHostedService(provider => provider.GetService<OscRecvService>()!);
             services.AddHostedService(provider => provider.GetService<ParameterSenderService>()!);
@@ -220,7 +230,7 @@ public class App : Application
                 desktop.MainWindow.Loaded += (_, _) => { desktop.MainWindow.ShowOnboardingIfNeeded(); };
                 desktop.Exit += (s, e) =>
                 {
-                    OnShutdown(s,e);
+                    OnShutdown(s, e);
                     _host.Dispose();
                 };
                 desktop.ShutdownRequested += OnShutdown;

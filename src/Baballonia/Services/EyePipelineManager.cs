@@ -1,13 +1,13 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-using Baballonia.Contracts;
+﻿using Baballonia.Contracts;
 using Baballonia.Services.Inference;
 using Baballonia.Services.Inference.Filters;
 using Baballonia.Services.Inference.Models;
 using Baballonia.Services.Inference.VideoSources;
 using Microsoft.Extensions.Logging;
 using OpenCvSharp;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Baballonia.Services;
 
@@ -66,6 +66,7 @@ public class EyePipelineManager
 
         if (File.Exists(eyeModelPath)) return _inferenceFactory.Create(eyeModelPath);
         _logger.LogError("{} Does not exists, Loading default...", eyeModelPath);
+
         eyeModelName = defaultEyeModelName;
         eyeModelPath = Path.Combine(AppContext.BaseDirectory, eyeModelName);
 
@@ -87,19 +88,19 @@ public class EyePipelineManager
         if (!enabled)
             return;
 
-        var faceArray = new float[Utils.EyeRawExpressions];
-        var faceFilter = new OneEuroFilter(
-            faceArray,
+        var eyeArray = new float[Utils.EyeRawExpressions];
+        var eyeFilter = new OneEuroFilter(
+            eyeArray,
             minCutoff: cutoff,
             beta: speedCutoff
         );
 
-        _pipeline.Filter = faceFilter;
+        _pipeline.Filter = eyeFilter;
     }
 
     public void LoadEyeStabilization()
     {
-        var stabilizeEyes = _localSettings.ReadSetting<bool>("AppSettings_StabilizeEyes", false);
+        var stabilizeEyes = _localSettings.ReadSetting<bool>("AppSettings_StabilizeEyes", true);
         _pipeline.StabilizeEyes = stabilizeEyes;
     }
 
@@ -120,9 +121,17 @@ public class EyePipelineManager
 
     public async Task<bool> StartLeftVideoSource(string cameraAddress, string preferredBackend)
     {
+        if (string.IsNullOrEmpty(cameraAddress))
+            return false;
+
         if (_pipeline.VideoSource == null)
         {
-            var cam = await _singleCameraSourceFactory.CreateStart(cameraAddress, preferredBackend);
+            SingleCameraSource cam;
+            if (string.IsNullOrEmpty(preferredBackend))
+                cam = await _singleCameraSourceFactory.CreateStart(cameraAddress);
+            else
+                cam = await _singleCameraSourceFactory.CreateStart(cameraAddress, preferredBackend);
+
             if (cam == null)
                 return false;
 
@@ -181,9 +190,17 @@ public class EyePipelineManager
 
     public async Task<bool> StartRightVideoSource(string cameraAddress, string preferredBackend)
     {
+        if (string.IsNullOrEmpty(cameraAddress))
+            return false;
+
         if (_pipeline.VideoSource == null)
         {
-            var cam = await _singleCameraSourceFactory.CreateStart(cameraAddress, preferredBackend);
+            SingleCameraSource cam;
+            if (string.IsNullOrEmpty(preferredBackend))
+                cam = await _singleCameraSourceFactory.CreateStart(cameraAddress);
+            else
+                cam = await _singleCameraSourceFactory.CreateStart(cameraAddress, preferredBackend);
+
             if (cam == null)
                 return false;
 

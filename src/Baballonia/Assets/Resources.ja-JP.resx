@@ -223,10 +223,10 @@
     <value>調整</value>
   </data>
   <data name="Calibration_Reset_Minimums" xml:space="preserve">
-    <value>Reset Minimums</value>
+    <value>最小値をリセット</value>
   </data>
   <data name="Calibration_Reset_Maximums" xml:space="preserve">
-    <value>Reset Maximums</value>
+    <value>最大値をリセット</value>
   </data>
   <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
     <value>目の表現</value>
@@ -316,7 +316,10 @@
     <value>デバイスのファームウェアをフラッシュする</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>注意！このファクトリーはあなたのトレーカーをリセットします。あなたのトレーカーをフラッシング後に最初の時間を設定する必要があります。</value>
+    <value>警告!! これによりトラッカーが工場出荷時設定にリセットされます。フラッシュした後、最初のセットアップを行う必要があります。</value>
+  </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>フラッシュするファームウェアの種類：</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>ファームウェアをフラッシュする</value>
@@ -412,7 +415,28 @@
     <value>ロギングディレクトリを開く</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>このウィザードでは、新しいBabbleアプリのセットアップをご案内します。</value>
+    <value>このウィザードは、新しいBabbleアプリのセットアップをガイドします。</value>
+  </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>ようこそ!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>ファームウェア</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>組み立て</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>UI概要</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>完了!</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>次へ</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>完了</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
     <value>Wirelessですか？</value>
@@ -465,12 +489,6 @@
   <data name="Settings_Filter_Description" xml:space="preserve">
     <value>フィルタ設定</value>
   </data>
-  <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
-    <value>有効</value>
-  </data>
-  <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
-    <value>フィルタリングをオンまたはオフにします。</value>
-  </data>
   <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
     <value>最小頻度カットオフ</value>
   </data>
@@ -521,6 +539,9 @@
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>起動</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>前へ</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
     <value>スキップ</value>
@@ -717,20 +738,155 @@
   <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
     <value>却下する</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Settings_OSC_VRCFT_Warning" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Settings_OSC_VRCFT_Warning" xml:space="preserve">
+    <value>BaballoniaをVRCFaceTrackingと一緒に使用している場合、これらのポートを変更する必要はありません</value>
   </data>
-  <data name="Home_Eye_Load_Model" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Home_Preferred_Backend" xml:space="preserve">
+    <value>優先バックエンド</value>
   </data>
-  <data name="Firmware_Custom_Firmware_Load" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Home_Backend_Default" xml:space="preserve">
+    <value>デフォルト</value>
   </data>
-  <data name="Settings_SteamVR_Auto_Start_Header" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Home_Eye_Load_Model" xml:space="preserve">
+    <value>アイモデルを読み込み</value>
   </data>
-  <data name="Settings_SteamVR_Auto_Start_Description" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Firmware_Custom_Firmware_Load" xml:space="preserve">
+    <value>カスタムファームウェアを読み込み</value>
+  </data>
+  <data name="Settings_SteamVR_Auto_Start_Header" xml:space="preserve">
+    <value>SteamVRで自動開始</value>
+  </data>
+  <data name="Settings_SteamVR_Auto_Start_Description" xml:space="preserve">
+    <value>アプリをSteamVRで起動しますか？（変更にはSteamVRの再起動が必要です。）</value>
+  </data>
+  <data name="Settings_Advanced_Header" xml:space="preserve">
+    <value>詳細設定を有効にする</value>
+  </data>
+  <data name="Settings_Advanced_Description" xml:space="preserve">
+    <value>詳細設定</value>
+  </data>
+  <data name="Godot_Locale" xml:space="preserve">
+    <value>ja</value>
+  </data>
+  <data name="About_Title_Header" xml:space="preserve">
+    <value>について</value>
+  </data>
+  <data name="About_AboutUs_Header" xml:space="preserve">
+    <value>私たちについて</value>
+  </data>
+  <data name="About_AboutUs_Description" xml:space="preserve">
+    <value>クイックスタートガイド、ソーシャルメディア、ドキュメントなどのリンク</value>
+  </data>
+  <data name="About_AboutBaballonia_Header" xml:space="preserve">
+    <value>Baballoniaについて</value>
+  </data>
+  <data name="About_AboutBaballonia_Description" xml:space="preserve">
+    <value>オタク向けリンク（GitHubなど）</value>
+  </data>
+  <data name="About_Credits_Header" xml:space="preserve">
+    <value>クレジット</value>
+  </data>
+  <data name="About_Credits_Description" xml:space="preserve">
+    <value>このプロジェクトを今あるものにした人々。皆さん、ありがとう！</value>
+  </data>
+  <data name="About_QuickstartGuide_Alias" xml:space="preserve">
+    <value>クイックスタートガイド ⧉</value>
+  </data>
+  <data name="About_BabbleDiscord_Alias" xml:space="preserve">
+    <value>Babble Discord ⧉</value>
+  </data>
+  <data name="About_PishockDiscord_Alias" xml:space="preserve">
+    <value>PiShock Discord ⧉</value>
+  </data>
+  <data name="About_BabbleDocs_Alias" xml:space="preserve">
+    <value>Babbleドキュメント ⧉</value>
+  </data>
+  <data name="About_BabbleSite_Alias" xml:space="preserve">
+    <value>Babbleサイト ⧉</value>
+  </data>
+  <data name="About_BabbleBlog_Alias" xml:space="preserve">
+    <value>Babbleブログ ⧉</value>
+  </data>
+  <data name="About_BabbleDataPrivacyPolicy_Alias" xml:space="preserve">
+    <value>データプライバシーポリシー ⧉</value>
+  </data>
+  <data name="About_YoutubeLink_Alias" xml:space="preserve">
+    <value>Babble YouTubeページ ⧉</value>
+  </data>
+  <data name="About_BabbleTwitter_Alias" xml:space="preserve">
+    <value>Babble Twitter ⧉</value>
+  </data>
+  <data name="About_BaballoniaGithub_Alias" xml:space="preserve">
+    <value>Baballonia GitHub ⧉</value>
+  </data>
+  <data name="About_BaballoniaGithubIssues_Alias" xml:space="preserve">
+    <value>Baballonia GitHub Issues ⧉</value>
+  </data>
+  <data name="About_BaballoniaLicense_Alias" xml:space="preserve">
+    <value>Baballoniaライセンス ⧉</value>
+  </data>
+  <data name="About_BaballoniaBuildInstructions_Alias" xml:space="preserve">
+    <value>Baballoniaビルド手順 ⧉</value>
+  </data>
+  <data name="About_Contributors_Commits" xml:space="preserve">
+    <value>{0} コミット</value>
+  </data>
+  <data name="Firmware_Flashing_Wireless_Prompt" xml:space="preserve">
+    <value>Babble Trackerにカスタムファームウェアをフラッシュするのは、デバイスを最初に「ワイヤレス」モードに設定した場合に最もよく機能します。
+Wi-Fi認証情報を入力する必要はありません。トラッカーを「ワイヤレス」モードに切り替えてから、フラッシュする前に再起動してください。</value>
+  </data>
+  <data name="Firmware_Flashing_Header_Alert" xml:space="preserve">
+    <value>Valve IndexまたはBigscreen Beyond（1.0ベースステーションの有無にかかわらず）でBabble Trackerを使用している場合、以下の問題が発生する可能性があります：
+• 画面が予期せず灰色になる
+• トラッキングが途切れたり、頻繁に位置を失ったりする
+これは通常、簡単に修正できます！以下の「Tracking Loss Fix」ファームウェアをインストールしてください。</value>
+  </data>
+  <data name="Common_Note" xml:space="preserve">
+    <value>注</value>
+  </data>
+  <data name="Home_Cameras_Linux_Workarounds" xml:space="preserve">
+    <value>回避策:
+• Steam scout 1.0 ランタイム（sniper 3.0 ではない）を試す、libudev をインストールする、ソースからビルドする、または plugdev グループに参加する。
+• Steam と tarball リリースのみサポートしており、AUR パッケージはサポートしていません。
+• Babble ボードは Linux で UVC/シリアルをサポートしていないため、ワイヤレス構成を使用してください。</value>
+  </data>
+  <data name="Settings_ShareData_Header" xml:space="preserve">
+    <value>目/顔データを共有</value>
+  </data>
+  <data name="Settings_ShareData_Description" xml:space="preserve">
+    <value>アルゴリズム改善のため、匿名の目/顔データの共有にオプトイン</value>
+  </data>
+  <data name="Settings_DFR_Header" xml:space="preserve">
+    <value>DFRを使用</value>
+  </data>
+  <data name="Settings_DFR_Description" xml:space="preserve">
+    <value>選択されたタイトルでPimax4All動的フォベーションレンダリングを有効にする</value>
+  </data>
+  <data name="Firmware_Mode_Both" xml:space="preserve">
+    <value>両方</value>
+  </data>
+  <data name="Firmware_Mode_Eyes" xml:space="preserve">
+    <value>目</value>
+  </data>
+  <data name="Firmware_Mode_Face" xml:space="preserve">
+    <value>顔</value>
+  </data>
+  <data name="Firmware_Mode_None" xml:space="preserve">
+    <value>なし</value>
+  </data>
+  <data name="Settings_LogLevel_Debug" xml:space="preserve">
+    <value>デバッグ</value>
+  </data>
+  <data name="Settings_LogLevel_Information" xml:space="preserve">
+    <value>情報</value>
+  </data>
+  <data name="Settings_LogLevel_Warning" xml:space="preserve">
+    <value>警告</value>
+  </data>
+  <data name="Settings_LogLevel_Error" xml:space="preserve">
+    <value>エラー</value>
+  </data>
+  <data name="Settings_LogLevel_Level" xml:space="preserve">
+    <value>レベルを選択...</value>
   </data>
 </root>

@@ -1,22 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Baballonia.Contracts;
+﻿using Baballonia.Contracts;
 using Microsoft.Extensions.Logging;
 using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
+using Newtonsoft.Json;
 using OpenCvSharp;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Baballonia.Services;
 
 public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRunner
 {
+    public Size InputSize { get; private set; }
+    public int OutputSize { get; private set; }
+    public DenseTensor<float> InputTensor;
     private ILogger _logger;
     private string _inputName;
     private InferenceSession _session;
-    public DenseTensor<float> InputTensor;
-    public Size InputSize { get; private set; }
+    private string[] _outputExpressionNames;
+    private bool _isOldEyeModel;
 
 
     /// <summary>
@@ -42,7 +46,23 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
 
         InputTensor = new DenseTensor<float>([1, dimensions[1], dimensions[2], dimensions[3]]);
 
+        InitializeModelMetadata();
+
         _logger.LogInformation("{} initialization finished", modelPath);
+    }
+
+    /// <summary>
+    /// Reads and caches model metadata once during initialization
+    /// </summary>
+    private void InitializeModelMetadata()
+    {
+        _isOldEyeModel = _session.ModelMetadata.CustomMetadataMap.Count() == 0;
+
+        if (!_isOldEyeModel)
+        {
+            var metadataJson = _session.ModelMetadata.CustomMetadataMap["blendshape_names"];
+            _outputExpressionNames = JsonConvert.DeserializeObject<string[]>(metadataJson)!;
+        }
     }
 
     /// <summary>
@@ -85,9 +105,8 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
                 _logger.LogInformation("Initialized ExecutionProvider: DirectML for {ModelName}", modelName);
                 return;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _logger.LogError(ex, "Failed to configure Gpu.");
                 _logger.LogWarning("Failed to create DML Execution Provider on Windows. Falling back to CUDA...");
             }
         }
@@ -101,24 +120,45 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
             _logger.LogInformation("Initialized ExecutionProvider: CUDA for {ModelName}", modelName);
             return;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            _logger.LogError(ex, "Failed to configure Gpu.");
             _logger.LogWarning("Failed to create CUDA Execution Provider.");
         }
 
         // And, if CUDA fails (or we have an AMD card)
-        // Try one more time with ROCm
+        // Try one more time with MiGraphX/ROCm
         try
         {
             sessionOptions.AppendExecutionProvider_ROCm();
             _logger.LogInformation("Initialized ExecutionProvider: ROCm for {ModelName}", modelName);
             return;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            _logger.LogError(ex, "Failed to configure ROCm.");
             _logger.LogWarning("Failed to create ROCm Execution Provider.");
+        }
+
+        try
+        {
+            sessionOptions.AppendExecutionProvider_MIGraphX();
+            _logger.LogInformation("Initialized ExecutionProvider: MIGraphX for {ModelName}", modelName);
+            return;
+        }
+        catch (Exception)
+        {
+            _logger.LogWarning("Failed to create MIGraphX Execution Provider.");
+        }
+
+        // Finally, try OpenVINO (for Intel CPUs/GPUs)
+        try
+        {
+            sessionOptions.AppendExecutionProvider_OpenVINO();
+            _logger.LogInformation("Initialized ExecutionProvider: OpenVINO for {ModelName}", modelName);
+            return;
+        }
+        catch (Exception)
+        {
+            _logger.LogWarning("Failed to create OpenVINO Execution Provider.");
         }
 
         _logger.LogWarning("No GPU acceleration will be applied.");
@@ -159,9 +199,26 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
 
         using var results = _session.Run(inputs);
 
-        var arKitExpressions = results[0].AsEnumerable<float>().ToArray();
-        return arKitExpressions;
+        var output = results[0].AsEnumerable<float>().ToArray();
+        OutputSize = output.Length;
+        return output;
     }
+
+    // Dictionary mapping eye output names to their indices
+    private static readonly Dictionary<string, int> OutputIndexMap = new()
+    {
+        { "leftEyePitch", 0 },
+        { "leftEyeYaw", 1 },
+        { "leftEyeLid", 2 },
+        { "leftEyeWiden", 3 },
+        { "leftBrow", 4 },
+        { "rightEyePitch", 5 },
+        { "rightEyeYaw", 6 },
+        { "rightEyeLid", 7 },
+        { "rightEyeWiden", 8 },
+        { "rightBrow", 9 }
+    };
+
 
     public DenseTensor<float> GetInputTensor()
     {

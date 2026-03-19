@@ -19,7 +19,7 @@ namespace Baballonia.Assets {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -57,6 +57,195 @@ namespace Baballonia.Assets {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Links for nerds (GitHub and so on).
+        /// </summary>
+        public static string About_AboutBaballonia_Description {
+            get {
+                return ResourceManager.GetString("About_AboutBaballonia_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About Baballonia.
+        /// </summary>
+        public static string About_AboutBaballonia_Header {
+            get {
+                return ResourceManager.GetString("About_AboutBaballonia_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Links to our Quickstart guide, Social Media, Documentation, etc..
+        /// </summary>
+        public static string About_AboutUs_Description {
+            get {
+                return ResourceManager.GetString("About_AboutUs_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About Us.
+        /// </summary>
+        public static string About_AboutUs_Header {
+            get {
+                return ResourceManager.GetString("About_AboutUs_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Baballonia Build Instructions ⧉.
+        /// </summary>
+        public static string About_BaballoniaBuildInstructions_Alias {
+            get {
+                return ResourceManager.GetString("About_BaballoniaBuildInstructions_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Baballonia GitHub ⧉.
+        /// </summary>
+        public static string About_BaballoniaGithub_Alias {
+            get {
+                return ResourceManager.GetString("About_BaballoniaGithub_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Baballonia GitHub Issues ⧉.
+        /// </summary>
+        public static string About_BaballoniaGithubIssues_Alias {
+            get {
+                return ResourceManager.GetString("About_BaballoniaGithubIssues_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Baballonia License ⧉.
+        /// </summary>
+        public static string About_BaballoniaLicense_Alias {
+            get {
+                return ResourceManager.GetString("About_BaballoniaLicense_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Babble Blog ⧉.
+        /// </summary>
+        public static string About_BabbleBlog_Alias {
+            get {
+                return ResourceManager.GetString("About_BabbleBlog_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data Privacy Policy ⧉.
+        /// </summary>
+        public static string About_BabbleDataPrivacyPolicy_Alias {
+            get {
+                return ResourceManager.GetString("About_BabbleDataPrivacyPolicy_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Babble Discord ⧉.
+        /// </summary>
+        public static string About_BabbleDiscord_Alias {
+            get {
+                return ResourceManager.GetString("About_BabbleDiscord_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Babble Docs ⧉.
+        /// </summary>
+        public static string About_BabbleDocs_Alias {
+            get {
+                return ResourceManager.GetString("About_BabbleDocs_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Babble Site ⧉.
+        /// </summary>
+        public static string About_BabbleSite_Alias {
+            get {
+                return ResourceManager.GetString("About_BabbleSite_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Babble Twitter ⧉.
+        /// </summary>
+        public static string About_BabbleTwitter_Alias {
+            get {
+                return ResourceManager.GetString("About_BabbleTwitter_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} commits.
+        /// </summary>
+        public static string About_Contributors_Commits {
+            get {
+                return ResourceManager.GetString("About_Contributors_Commits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The people who made this project what it is. Thanks, everyone!.
+        /// </summary>
+        public static string About_Credits_Description {
+            get {
+                return ResourceManager.GetString("About_Credits_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Credits.
+        /// </summary>
+        public static string About_Credits_Header {
+            get {
+                return ResourceManager.GetString("About_Credits_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PiShock Discord ⧉.
+        /// </summary>
+        public static string About_PishockDiscord_Alias {
+            get {
+                return ResourceManager.GetString("About_PishockDiscord_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quickstart Guide ⧉.
+        /// </summary>
+        public static string About_QuickstartGuide_Alias {
+            get {
+                return ResourceManager.GetString("About_QuickstartGuide_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string About_Title_Header {
+            get {
+                return ResourceManager.GetString("About_Title_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Babble YouTube Page ⧉.
+        /// </summary>
+        public static string About_YoutubeLink_Alias {
+            get {
+                return ResourceManager.GetString("About_YoutubeLink_Alias", resourceCulture);
             }
         }
         
@@ -160,7 +349,7 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Prevents eyes from looking out in opposite directions, but may overcorrect..
+        ///   Looks up a localized string similar to Prevents eyes from looking out in opposite directions, and improves pupil stability..
         /// </summary>
         public static string Calibration_Eye_Expressions_Stabilize_Eyes_Description {
             get {
@@ -318,6 +507,15 @@ namespace Baballonia.Assets {
         public static string Calibration_Tongue_Expressions_Header {
             get {
                 return ResourceManager.GetString("Calibration_Tongue_Expressions_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note.
+        /// </summary>
+        public static string Common_Note {
+            get {
+                return ResourceManager.GetString("Common_Note", resourceCulture);
             }
         }
         
@@ -484,6 +682,18 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If you are using a Babble Tracker with a Valve Index or Bigscreen Beyond (with/without 1.0 base stations), you might notice:
+        ///• Your screen turning grey unexpectedly
+        ///• Tracking cutting out or frequently losing position
+        ///This is usually easy to fix! Just install the “Tracking Loss Fix” firmware below..
+        /// </summary>
+        public static string Firmware_Flashing_Header_Alert {
+            get {
+                return ResourceManager.GetString("Firmware_Flashing_Header_Alert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This will take around ~10 seconds. Don&apos;t leave this page!.
         /// </summary>
         public static string Firmware_Flashing_Note {
@@ -498,6 +708,52 @@ namespace Baballonia.Assets {
         public static string Firmware_Flashing_Warning {
             get {
                 return ResourceManager.GetString("Firmware_Flashing_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Flashing custom firmware onto your Babble Tracker works best when the device is set to “Wireless” mode first. 
+        ///You don’t need to enter any Wi-Fi credentials. Just switch the tracker to “Wireless” mode, then restart it before flashing..
+        /// </summary>
+        public static string Firmware_Flashing_Wireless_Prompt {
+            get {
+                return ResourceManager.GetString("Firmware_Flashing_Wireless_Prompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Both.
+        /// </summary>
+        public static string Firmware_Mode_Both {
+            get {
+                return ResourceManager.GetString("Firmware_Mode_Both", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Eyes.
+        /// </summary>
+        public static string Firmware_Mode_Eyes {
+            get {
+                return ResourceManager.GetString("Firmware_Mode_Eyes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Face.
+        /// </summary>
+        public static string Firmware_Mode_Face {
+            get {
+                return ResourceManager.GetString("Firmware_Mode_Face", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string Firmware_Mode_None {
+            get {
+                return ResourceManager.GetString("Firmware_Mode_None", resourceCulture);
             }
         }
         
@@ -772,6 +1028,15 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to en.
+        /// </summary>
+        public static string Godot_Locale {
+            get {
+                return ResourceManager.GetString("Godot_Locale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Default.
         /// </summary>
         public static string Home_Backend_Default {
@@ -781,7 +1046,7 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adjust the brightness of the image.
+        ///   Looks up a localized string similar to Adjust the brightness.
         /// </summary>
         public static string Home_Cameras_Brightness_Description {
             get {
@@ -822,6 +1087,18 @@ namespace Baballonia.Assets {
         public static string Home_Cameras_Horizontal_Flip_Header {
             get {
                 return ResourceManager.GetString("Home_Cameras_Horizontal_Flip_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Workarounds:
+        ///• Try the Steam scout 1.0 runtime (not sniper 3.0), installing libudev, building from source, or joining the plugdev group.
+        ///• We only support Steam and tarball releases, not the AUR package.
+        ///• Babble Boards do not support UVC/Serial on Linux, use a wireless configuration..
+        /// </summary>
+        public static string Home_Cameras_Linux_Workarounds {
+            get {
+                return ResourceManager.GetString("Home_Cameras_Linux_Workarounds", resourceCulture);
             }
         }
         
@@ -1078,6 +1355,24 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Finish.
+        /// </summary>
+        public static string Onboarding_Finish_Button {
+            get {
+                return ResourceManager.GetString("Onboarding_Finish_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next.
+        /// </summary>
+        public static string Onboarding_Next_Button {
+            get {
+                return ResourceManager.GetString("Onboarding_Next_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Previous.
         /// </summary>
         public static string Onboarding_Previous_Button {
@@ -1092,6 +1387,51 @@ namespace Baballonia.Assets {
         public static string Onboarding_Skip_Button {
             get {
                 return ResourceManager.GetString("Onboarding_Skip_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assembly.
+        /// </summary>
+        public static string Onboarding_Slide_Assembly {
+            get {
+                return ResourceManager.GetString("Onboarding_Slide_Assembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finished!.
+        /// </summary>
+        public static string Onboarding_Slide_Finished {
+            get {
+                return ResourceManager.GetString("Onboarding_Slide_Finished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Firmware.
+        /// </summary>
+        public static string Onboarding_Slide_Firmware {
+            get {
+                return ResourceManager.GetString("Onboarding_Slide_Firmware", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UI Overview.
+        /// </summary>
+        public static string Onboarding_Slide_UIOverview {
+            get {
+                return ResourceManager.GetString("Onboarding_Slide_UIOverview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Welcome!.
+        /// </summary>
+        public static string Onboarding_Slide_Welcome {
+            get {
+                return ResourceManager.GetString("Onboarding_Slide_Welcome", resourceCulture);
             }
         }
         
@@ -1240,29 +1580,47 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Advanced Settings.
+        /// </summary>
+        public static string Settings_Advanced_Description {
+            get {
+                return ResourceManager.GetString("Settings_Advanced_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable advanced settings.
+        /// </summary>
+        public static string Settings_Advanced_Header {
+            get {
+                return ResourceManager.GetString("Settings_Advanced_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable Pimax4All dynamic foveated rendering for select titles.
+        /// </summary>
+        public static string Settings_DFR_Description {
+            get {
+                return ResourceManager.GetString("Settings_DFR_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use DFR.
+        /// </summary>
+        public static string Settings_DFR_Header {
+            get {
+                return ResourceManager.GetString("Settings_DFR_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter Settings.
         /// </summary>
         public static string Settings_Filter_Description {
             get {
                 return ResourceManager.GetString("Settings_Filter_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Turn filtering on or off..
-        /// </summary>
-        public static string Settings_Filter_Enabled_Description {
-            get {
-                return ResourceManager.GetString("Settings_Filter_Enabled_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Enabled.
-        /// </summary>
-        public static string Settings_Filter_Enabled_Label {
-            get {
-                return ResourceManager.GetString("Settings_Filter_Enabled_Label", resourceCulture);
             }
         }
         
@@ -1582,7 +1940,7 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Korean.
+        ///   Looks up a localized string similar to 한국어.
         /// </summary>
         public static string Settings_Language_Korean {
             get {
@@ -1699,6 +2057,15 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Debug.
+        /// </summary>
+        public static string Settings_LogLevel_Debug {
+            get {
+                return ResourceManager.GetString("Settings_LogLevel_Debug", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Minimum logging level. Requires restart.
         /// </summary>
         public static string Settings_LogLevel_Description {
@@ -1708,11 +2075,47 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string Settings_LogLevel_Error {
+            get {
+                return ResourceManager.GetString("Settings_LogLevel_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log Level Verbosity.
         /// </summary>
         public static string Settings_LogLevel_Header {
             get {
                 return ResourceManager.GetString("Settings_LogLevel_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Information.
+        /// </summary>
+        public static string Settings_LogLevel_Information {
+            get {
+                return ResourceManager.GetString("Settings_LogLevel_Information", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Level....
+        /// </summary>
+        public static string Settings_LogLevel_Level {
+            get {
+                return ResourceManager.GetString("Settings_LogLevel_Level", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning.
+        /// </summary>
+        public static string Settings_LogLevel_Warning {
+            get {
+                return ResourceManager.GetString("Settings_LogLevel_Warning", resourceCulture);
             }
         }
         
@@ -1794,6 +2197,24 @@ namespace Baballonia.Assets {
         public static string Settings_OSC_VRCFT_Warning {
             get {
                 return ResourceManager.GetString("Settings_OSC_VRCFT_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opt into sharing anonymous eye/face data to improve our algorithms.
+        /// </summary>
+        public static string Settings_ShareData_Description {
+            get {
+                return ResourceManager.GetString("Settings_ShareData_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Share eye/face data.
+        /// </summary>
+        public static string Settings_ShareData_Header {
+            get {
+                return ResourceManager.GetString("Settings_ShareData_Header", resourceCulture);
             }
         }
         

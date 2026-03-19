@@ -1,7 +1,7 @@
-﻿using System;
-using System.Globalization;
-using Avalonia.Data.Converters;
+﻿using Avalonia.Data.Converters;
 using Avalonia.Styling;
+using System;
+using System.Globalization;
 
 namespace Baballonia.Helpers;
 

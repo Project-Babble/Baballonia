@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using System;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Baballonia.Services;
 
@@ -15,18 +15,29 @@ public class LogFileProvider : ILoggerProvider
 
     public LogFileProvider()
     {
-        if (!Directory.Exists(Utils.UserAccessibleDataDirectory)) // Eat my ass windows
-            Directory.CreateDirectory(Utils.UserAccessibleDataDirectory);
+        try
+        {
+            if (!Directory.Exists(Utils.UserAccessibleDataDirectory)) // Eat my ass windows
+                Directory.CreateDirectory(Utils.UserAccessibleDataDirectory);
 
-        CleanupOldLogFiles();
+            CleanupOldLogFiles();
 
-        var timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-        var logFileName = $"baballonia_desktop.{timestamp}.log";
-        var logPath = Path.Combine(Utils.UserAccessibleDataDirectory, logFileName);
+            var timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+            var logFileName = $"baballonia_desktop.{timestamp}.log";
+            var logPath = Path.Combine(Utils.UserAccessibleDataDirectory, logFileName);
 
-        var file = new FileStream(logPath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite, 4096,
-            FileOptions.WriteThrough);
-        _writer = new StreamWriter(file);
+            var file = new FileStream(logPath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite, 4096,
+                FileOptions.WriteThrough);
+            _writer = new StreamWriter(file);
+        }
+        catch
+        {
+            // If we can't create the log file (e.g. OneDrive Documents folder
+            // is unavailable), continue without file logging rather than
+            // crashing the entire application. CreateLogger will return
+            // NullLogger.Instance when _writer is null.
+            _writer = null;
+        }
     }
 
     private void CleanupOldLogFiles()

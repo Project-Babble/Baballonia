@@ -223,10 +223,10 @@
     <value>校准</value>
   </data>
   <data name="Calibration_Reset_Minimums" xml:space="preserve">
-    <value>Reset Minimums</value>
+    <value>重置最小值</value>
   </data>
   <data name="Calibration_Reset_Maximums" xml:space="preserve">
-    <value>Reset Maximums</value>
+    <value>重置最大值</value>
   </data>
   <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
     <value>眼睛表达式</value>
@@ -316,7 +316,10 @@
     <value>刷入您设备的固件</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>警告！！这个问题将会使您的跟踪恢复。您将需要完成第一个任务设置在您之前的闪光灯中。</value>
+    <value>警告!! 这将重置您的追踪器到出厂设置。您需要在闪存您的追踪器后执行首次设置。</value>
+  </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>要闪存的固件类型：</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>闪光固件</value>
@@ -412,7 +415,28 @@
     <value>打开日志目录</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>这个向导将通过设置新的 Babble 应用引导您。</value>
+    <value>本向导将帮助您设置新的Babble应用程序。</value>
+  </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>欢迎!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>固件</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>组装</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>用户界面概览</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>完成!</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>下一步</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>完成</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
     <value>有线或无线网络？</value>
@@ -465,12 +489,6 @@
   <data name="Settings_Filter_Description" xml:space="preserve">
     <value>过滤器设置</value>
   </data>
-  <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
-    <value>已启用</value>
-  </data>
-  <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
-    <value>打开或关闭过滤。</value>
-  </data>
   <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
     <value>最小频率剪切数</value>
   </data>
@@ -521,6 +539,9 @@
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>启动</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>上一步</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
     <value>跳过</value>
@@ -717,20 +738,155 @@
   <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
     <value>关闭</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Settings_OSC_VRCFT_Warning" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Settings_OSC_VRCFT_Warning" xml:space="preserve">
+    <value>如果您将Baballonia与VRCFaceTracking一起使用，则无需更改这些端口</value>
   </data>
-  <data name="Home_Eye_Load_Model" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Home_Preferred_Backend" xml:space="preserve">
+    <value>首选后端</value>
   </data>
-  <data name="Firmware_Custom_Firmware_Load" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Home_Backend_Default" xml:space="preserve">
+    <value>默认</value>
   </data>
-  <data name="Settings_SteamVR_Auto_Start_Header" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Home_Eye_Load_Model" xml:space="preserve">
+    <value>加载眼部模型</value>
   </data>
-  <data name="Settings_SteamVR_Auto_Start_Description" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Firmware_Custom_Firmware_Load" xml:space="preserve">
+    <value>加载自定义固件</value>
+  </data>
+  <data name="Settings_SteamVR_Auto_Start_Header" xml:space="preserve">
+    <value>与SteamVR自动启动</value>
+  </data>
+  <data name="Settings_SteamVR_Auto_Start_Description" xml:space="preserve">
+    <value>应用程序是否应与SteamVR一起启动？（更改需要重启SteamVR。）</value>
+  </data>
+  <data name="Settings_Advanced_Header" xml:space="preserve">
+    <value>启用高级设置</value>
+  </data>
+  <data name="Settings_Advanced_Description" xml:space="preserve">
+    <value>高级设置</value>
+  </data>
+  <data name="Godot_Locale" xml:space="preserve">
+    <value>zh_CN</value>
+  </data>
+  <data name="About_Title_Header" xml:space="preserve">
+    <value>关于</value>
+  </data>
+  <data name="About_AboutUs_Header" xml:space="preserve">
+    <value>关于我们</value>
+  </data>
+  <data name="About_AboutUs_Description" xml:space="preserve">
+    <value>我们的快速入门指南、社交媒体、文档等链接</value>
+  </data>
+  <data name="About_AboutBaballonia_Header" xml:space="preserve">
+    <value>关于Baballonia</value>
+  </data>
+  <data name="About_AboutBaballonia_Description" xml:space="preserve">
+    <value>技术爱好者链接（GitHub等）</value>
+  </data>
+  <data name="About_Credits_Header" xml:space="preserve">
+    <value>致谢</value>
+  </data>
+  <data name="About_Credits_Description" xml:space="preserve">
+    <value>让这个项目成为现在这样的人。谢谢大家！</value>
+  </data>
+  <data name="About_QuickstartGuide_Alias" xml:space="preserve">
+    <value>快速入门指南 ⧉</value>
+  </data>
+  <data name="About_BabbleDiscord_Alias" xml:space="preserve">
+    <value>Babble Discord ⧉</value>
+  </data>
+  <data name="About_PishockDiscord_Alias" xml:space="preserve">
+    <value>PiShock Discord ⧉</value>
+  </data>
+  <data name="About_BabbleDocs_Alias" xml:space="preserve">
+    <value>Babble 文档 ⧉</value>
+  </data>
+  <data name="About_BabbleSite_Alias" xml:space="preserve">
+    <value>Babble 网站 ⧉</value>
+  </data>
+  <data name="About_BabbleBlog_Alias" xml:space="preserve">
+    <value>Babble 博客 ⧉</value>
+  </data>
+  <data name="About_BabbleDataPrivacyPolicy_Alias" xml:space="preserve">
+    <value>数据隐私政策 ⧉</value>
+  </data>
+  <data name="About_YoutubeLink_Alias" xml:space="preserve">
+    <value>Babble YouTube 页面 ⧉</value>
+  </data>
+  <data name="About_BabbleTwitter_Alias" xml:space="preserve">
+    <value>Babble Twitter ⧉</value>
+  </data>
+  <data name="About_BaballoniaGithub_Alias" xml:space="preserve">
+    <value>Baballonia GitHub ⧉</value>
+  </data>
+  <data name="About_BaballoniaGithubIssues_Alias" xml:space="preserve">
+    <value>Baballonia GitHub 问题 ⧉</value>
+  </data>
+  <data name="About_BaballoniaLicense_Alias" xml:space="preserve">
+    <value>Baballonia 许可证 ⧉</value>
+  </data>
+  <data name="About_BaballoniaBuildInstructions_Alias" xml:space="preserve">
+    <value>Baballonia 构建说明 ⧉</value>
+  </data>
+  <data name="About_Contributors_Commits" xml:space="preserve">
+    <value>{0} 次提交</value>
+  </data>
+  <data name="Firmware_Flashing_Wireless_Prompt" xml:space="preserve">
+    <value>在您的Babble Tracker上刷写自定义固件时，最好先将设备设置为“无线”模式。
+您无需输入任何Wi-Fi凭据。只需将跟踪器切换到“无线”模式，然后在刷写前重启它。</value>
+  </data>
+  <data name="Firmware_Flashing_Header_Alert" xml:space="preserve">
+    <value>如果您将Babble Tracker与Valve Index或Bigscreen Beyond（带/不带1.0基站）一起使用，您可能会注意到：
+• 您的屏幕意外变灰
+• 跟踪中断或频繁丢失位置
+这通常很容易修复！只需在下面安装“跟踪丢失修复”固件。</value>
+  </data>
+  <data name="Common_Note" xml:space="preserve">
+    <value>注意</value>
+  </data>
+  <data name="Home_Cameras_Linux_Workarounds" xml:space="preserve">
+    <value>解决方法:
+• 尝试 Steam scout 1.0 运行时（不是 sniper 3.0），安装 libudev，从源代码构建，或加入 plugdev 组。
+• 我们只支持 Steam 和 tarball 版本，不支持 AUR 包。
+• Babble 板在 Linux 上不支持 UVC/串口，请使用无线配置。</value>
+  </data>
+  <data name="Settings_ShareData_Header" xml:space="preserve">
+    <value>共享眼睛/面部数据</value>
+  </data>
+  <data name="Settings_ShareData_Description" xml:space="preserve">
+    <value>选择共享匿名眼睛/面部数据以改进我们的算法</value>
+  </data>
+  <data name="Settings_DFR_Header" xml:space="preserve">
+    <value>使用DFR</value>
+  </data>
+  <data name="Settings_DFR_Description" xml:space="preserve">
+    <value>为选定的游戏启用Pimax4All动态注视点渲染</value>
+  </data>
+  <data name="Firmware_Mode_Both" xml:space="preserve">
+    <value>两者</value>
+  </data>
+  <data name="Firmware_Mode_Eyes" xml:space="preserve">
+    <value>眼睛</value>
+  </data>
+  <data name="Firmware_Mode_Face" xml:space="preserve">
+    <value>面部</value>
+  </data>
+  <data name="Firmware_Mode_None" xml:space="preserve">
+    <value>无</value>
+  </data>
+  <data name="Settings_LogLevel_Debug" xml:space="preserve">
+    <value>调试</value>
+  </data>
+  <data name="Settings_LogLevel_Information" xml:space="preserve">
+    <value>信息</value>
+  </data>
+  <data name="Settings_LogLevel_Warning" xml:space="preserve">
+    <value>警告</value>
+  </data>
+  <data name="Settings_LogLevel_Error" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="Settings_LogLevel_Level" xml:space="preserve">
+    <value>选择级别...</value>
   </data>
 </root>

@@ -1,35 +1,43 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Reflection;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Avalonia.Controls;
-using Avalonia.Threading;
+﻿using Baballonia.Assets;
 using Baballonia.Contracts;
 using Baballonia.Helpers;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.DependencyInjection;
+using System;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace Baballonia.ViewModels.SplitViewPane;
 
 public partial class VrcViewModel : ViewModelBase
 {
-    public ILocalSettingsService LocalSettingsService { get; }
-
-    [ObservableProperty] [property: SavedSetting("VRC_UseNativeTracking", false)]
+    [ObservableProperty]
+    [property: SavedSetting("VRC_UseNativeTracking", false)]
     private bool _useNativeVrcEyeTracking;
 
-    [ObservableProperty] [property: SavedSetting("VRC_SelectedModuleMode", "Face")]
-    private string? _selectedModuleMode = "Face";
+    [ObservableProperty]
+    private string? _selectedModuleMode = Resources.Firmware_Mode_Face;
 
-    public ObservableCollection<string> ModuleModeOptions { get; set; } = ["Both", "Face", "Eyes"];
+    [ObservableProperty]
+    private bool _vrcftDetected;
 
-    private static readonly string _baballoniaModulePath;
+    public ObservableCollection<string> ModuleModeOptions { get; } = [
+        Resources.Firmware_Mode_Both,
+        Resources.Firmware_Mode_Face,
+        Resources.Firmware_Mode_Eyes,
+        Resources.Firmware_Mode_None
+    ];
 
-    static VrcViewModel()
+    private string _baballoniaModulePath;
+
+    private bool TryGetModuleConfig(out ModuleConfig? config)
     {
-        if (!Directory.Exists(Utils.VrcftLibsDirectory)) return;
+        if (!Directory.Exists(Utils.VrcftLibsDirectory))
+        {
+            config = null;
+            return false;
+        }
 
         var moduleFiles = Directory.GetFiles(Utils.VrcftLibsDirectory, "*.json", SearchOption.AllDirectories);
         foreach (var moduleFile in moduleFiles)
@@ -37,53 +45,62 @@ public partial class VrcViewModel : ViewModelBase
             if (Path.GetFileName(moduleFile) != "BabbleConfig.json") continue;
 
             var contents = File.ReadAllText(moduleFile);
-            var possibleBabbleConfig = JsonSerializer.Deserialize<ModuleConfig>(contents);
-            if (possibleBabbleConfig != null)
+            if (string.IsNullOrEmpty(contents))
             {
-                _baballoniaModulePath = moduleFile;
+                // How do we even get here??
+                config = null;
+                return false;
             }
+            var possibleBabbleConfig = JsonSerializer.Deserialize<ModuleConfig>(contents);
+            if (possibleBabbleConfig != null) _baballoniaModulePath = moduleFile;
+            config = possibleBabbleConfig;
+            return true;
         }
+        config = null;
+        return false;
     }
 
-    public VrcViewModel()
+    public VrcViewModel(ILocalSettingsService localSettingsService)
     {
-        LocalSettingsService = Ioc.Default.GetRequiredService<ILocalSettingsService>();
-
-        _ = LoadAsync();
-        PropertyChanged += (_, _) => { LocalSettingsService.Save(this); };
-    }
-
-    private async Task LoadAsync()
-    {
-        var selected = LocalSettingsService.ReadSetting<string>("VRC_SelectedModuleMode", "Face");
-        var useNative = LocalSettingsService.ReadSetting<bool>("VRC_UseNativeTracking", false);
-
-        await Dispatcher.UIThread.InvokeAsync(() =>
+        VrcftDetected = TryGetModuleConfig(out var config);
+        if (VrcftDetected && config is not null)
         {
-            SelectedModuleMode = selected;
-            UseNativeVrcEyeTracking = useNative;
-        }, DispatcherPriority.Background);
+            SelectedModuleMode = config.IsEyeSupported switch
+            {
+                true => config.IsFaceSupported ? Resources.Firmware_Mode_Both : Resources.Firmware_Mode_Eyes,
+                false => config.IsFaceSupported ? Resources.Firmware_Mode_Face : Resources.Firmware_Mode_None
+            };
+        }
+
+        PropertyChanged += (_, p) =>
+        {
+            localSettingsService.Save(this);
+        };
+        localSettingsService.Load(this);
+    }
+
+    private async Task WriteModuleConfig(ModuleConfig config)
+    {
+        if (!string.IsNullOrWhiteSpace(_baballoniaModulePath))
+            await File.WriteAllTextAsync(_baballoniaModulePath, JsonSerializer.Serialize(config));
     }
 
     async partial void OnSelectedModuleModeChanged(string? value)
     {
         try
         {
-            if (!Directory.Exists(Utils.VrcftLibsDirectory)) return;
-            if (string.IsNullOrEmpty(_baballoniaModulePath)) return;
-
-            var oldConfig = JsonSerializer.Deserialize<ModuleConfig>(await File.ReadAllTextAsync(_baballoniaModulePath));
+            if (!TryGetModuleConfig(out var oldConfig)) return;
             var newConfig = value switch
             {
-                "Both" => new ModuleConfig(oldConfig!.Host, oldConfig.Port, true, true),
-                "Eyes" => new ModuleConfig(oldConfig!.Host, oldConfig.Port, true, false),
-                "Face" => new ModuleConfig(oldConfig!.Host, oldConfig.Port, false, true),
+                var v when v == Resources.Firmware_Mode_Both => new ModuleConfig(oldConfig!.Host, oldConfig.Port, true, true),
+                var v when v == Resources.Firmware_Mode_Eyes => new ModuleConfig(oldConfig!.Host, oldConfig.Port, true, false),
+                var v when v == Resources.Firmware_Mode_Face => new ModuleConfig(oldConfig!.Host, oldConfig.Port, false, true),
+                var v when v == Resources.Firmware_Mode_None => new ModuleConfig(oldConfig!.Host, oldConfig.Port, false, false),
                 _ => throw new InvalidOperationException()
             };
-
-            await File.WriteAllTextAsync(_baballoniaModulePath, JsonSerializer.Serialize(newConfig));
+            await WriteModuleConfig(newConfig);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             // ignore lol
         }

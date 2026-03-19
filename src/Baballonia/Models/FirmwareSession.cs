@@ -1,40 +1,34 @@
-﻿using System;
+﻿using Baballonia.Contracts;
+using Baballonia.Helpers;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using Baballonia.Contracts;
-using Baballonia.Helpers;
-using Microsoft.Extensions.Logging;
 
 namespace Baballonia.Models;
 
 /// <summary>
 /// Thread safe, async supported Session object for sending and receiving commands in json format
 /// </summary>
-public class FirmwareSession
+public class FirmwareSessionV1(ICommandSender commandSender, ILogger logger) : IVersionedFirmwareSession, IDisposable
 {
-    private ICommandSender _commandSender;
-    private ILogger _logger;
+    // this is legacy by default so it will always stay as 0.0.0
+    public Version Version { get; set; } = new(0, 0, 0);
 
-    JsonExtractor jsonExtractor = new JsonExtractor();
+    private readonly JsonExtractor _jsonExtractor = new();
 
-    private SemaphoreSlim _lock = new(1, 1);
+    private readonly SemaphoreSlim _lock = new(1, 1);
 
-    JsonSerializerOptions _options = new()
+    private static readonly JsonSerializerOptions Options = new()
     {
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
         WriteIndented = false
     };
 
-    public FirmwareSession(ICommandSender commandSender, ILogger logger)
-    {
-        _commandSender = commandSender;
-        _logger = logger;
-    }
-
-    private bool JsonHasPrefix(JsonDocument json, string key)
+    private static bool JsonHasPrefix(JsonDocument json, string key)
     {
         if (json.RootElement.ValueKind != JsonValueKind.Object) return false;
 
@@ -50,8 +44,8 @@ public class FirmwareSession
     private void SendCommand(string command)
     {
         var payload = command;
-        _logger.LogDebug("Sending payload: {}", payload);
-        _commandSender.WriteLine(payload);
+        logger.LogDebug("Sending payload: {}", payload);
+        commandSender.WriteLine(payload);
     }
 
     private JsonDocument? ReadResponse(string responseJsonRootKey, TimeSpan timeout)
@@ -60,20 +54,19 @@ public class FirmwareSession
         {
             Thread.Sleep(10); // give it some breathing time
 
-            JsonDocument json = jsonExtractor.ReadUntilValidJson(() => _commandSender.ReadLine(timeout), timeout);
-            _logger.LogDebug("Received json: {}", json.RootElement.GetRawText());
+            var json = _jsonExtractor.ReadUntilValidJson(() => commandSender.ReadLine(timeout), timeout);
+            logger.LogDebug("Received json: {}", json.RootElement.GetRawText());
             if (JsonHasPrefix(json, responseJsonRootKey))
                 return json;
-            if (JsonHasPrefix(json, "error"))
-            {
-                var err = JsonSerializer.Deserialize<FirmwareResponses.Error>(json);
-                _logger.LogError(err.error);
-                return null;
-            }
+            if (!JsonHasPrefix(json, "error")) continue;
+
+            var err = json.Deserialize<FirmwareResponses.Error>();
+            logger.LogError(err.error);
+            return null;
         }
     }
 
-    public FirmwareResponses.Heartbeat? WaitForHeartbeat()
+    private FirmwareResponses.Heartbeat? WaitForHeartbeat()
     {
         return WaitForHeartbeat(new TimeSpan(5000));
     }
@@ -93,9 +86,9 @@ public class FirmwareSession
                 return res?.Deserialize<FirmwareResponses.Heartbeat>();
             }
         }
-        catch (TimeoutException ex)
+        catch (TimeoutException)
         {
-            _logger.LogError("Timeout reached");
+            logger.LogError("Timeout reached");
             return null;
         }
         finally
@@ -104,27 +97,38 @@ public class FirmwareSession
         }
     }
 
-    public string? SendCommand(IFirmwareRequest request, TimeSpan timeout)
+    public FirmwareResponse<JsonDocument> SendCommand(IFirmwareRequest request, TimeSpan timeout)
     {
+        RequestVersionGuard.ValidateRequestForVersion(request, Version);
+
         _lock.Wait();
         try
         {
             var genericReqList = new { commands = new[] { request } };
-            var serialized = JsonSerializer.Serialize(genericReqList, _options);
+            var serialized = JsonSerializer.Serialize(genericReqList, Options);
             SendCommand(serialized);
             var jsonDoc = ReadResponse("results", timeout);
             var response = jsonDoc?.Deserialize<FirmwareResponses.GenericResponse>();
             if (response == null)
-                return null;
+                return FirmwareResponse<JsonDocument>.Failure("Wtf?");
 
-            var result =  JsonSerializer.Deserialize<FirmwareResponses.GenericResult>(response.results.First());
-
-            return result?.result;
+            try
+            {
+                // Attempt to extract inner content
+                var result = JsonSerializer.Deserialize<FirmwareResponses.GenericResult>(response.results.First());
+                return FirmwareResponse<JsonDocument>.Success(
+                    JsonSerializer.Deserialize<JsonDocument>(result!.result)!);
+            }
+            catch (JsonException)
+            {
+                // Attempt to extract outer content
+                return FirmwareResponse<JsonDocument>.Success(
+                    JsonSerializer.Deserialize<JsonDocument>(response.results.First())!);
+            }
         }
-        catch (TimeoutException ex)
+        catch (TimeoutException)
         {
-            _logger.LogError("Timeout reached");
-            return null;
+            return FirmwareResponse<JsonDocument>.Failure("Timeout reached");
         }
         finally
         {
@@ -132,14 +136,16 @@ public class FirmwareSession
         }
     }
 
-    public T? SendCommand<T>(IFirmwareRequest<T> request, TimeSpan timeout)
+    public FirmwareResponse<T> SendCommand<T>(IFirmwareRequest<T> request, TimeSpan timeout)
     {
+        RequestVersionGuard.ValidateRequestForVersion(request, Version);
+
         _lock.Wait();
         try
         {
             var genericReqList = new { commands = new[] { request } };
 
-            var serialized = JsonSerializer.Serialize(genericReqList, _options);
+            var serialized = JsonSerializer.Serialize(genericReqList, Options);
             SendCommand(serialized);
 
             // special case because a list of networks comes in a separate json
@@ -147,24 +153,29 @@ public class FirmwareSession
             {
                 var networks = ReadResponse("networks", timeout);
                 if (networks == null)
-                    return default;
+                    return FirmwareResponse<T>.Failure("No networks found");
 
                 ReadResponse("results", timeout); // to discard the actual response
-                return networks.Deserialize<T>();
+                return FirmwareResponse<T>.Success(networks.Deserialize<T>()!);
             }
 
             var jsonDoc = ReadResponse("results", timeout);
             var response = jsonDoc?.Deserialize<FirmwareResponses.GenericResponse>();
             if (response == null)
-                return default;
+                return FirmwareResponse<T>.Failure("Invalid response from tracker");
 
             var result =  JsonSerializer.Deserialize<FirmwareResponses.GenericResult>(response.results.First());
-            return result == null ? default : JsonSerializer.Deserialize<T>(result.result);
+            return result != null
+                ? FirmwareResponse<T>.Success(JsonSerializer.Deserialize<T>(result.result)!)
+                : FirmwareResponse<T>.Failure(response.ToString());
         }
-        catch (TimeoutException ex)
+        catch (TimeoutException)
         {
-            _logger.LogError("Timeout reached");
-            return default;
+            return FirmwareResponse<T>.Failure("Timeout reached");
+        }
+        catch (Exception any)
+        {
+            return FirmwareResponse<T>.Failure(any.Message);
         }
         finally
         {
@@ -172,15 +183,19 @@ public class FirmwareSession
         }
     }
 
-    public async Task<T?> SendCommandAsync<T>(IFirmwareRequest<T> request, TimeSpan timeSpan)
+    public async Task<FirmwareResponse<T>> SendCommandAsync<T>(IFirmwareRequest<T> request, TimeSpan timeSpan)
     {
+        RequestVersionGuard.ValidateRequestForVersion(request, Version);
+
         return await Task.Run(() =>
             SendCommand(request, timeSpan)
         );
     }
 
-    public async Task<string?> SendCommandAsync(IFirmwareRequest request, TimeSpan timeSpan)
+    public async Task<FirmwareResponse<JsonDocument>> SendCommandAsync(IFirmwareRequest request, TimeSpan timeSpan)
     {
+        RequestVersionGuard.ValidateRequestForVersion(request, Version);
+
         return await Task.Run(() =>
             SendCommand(request, timeSpan)
         );
@@ -198,7 +213,7 @@ public class FirmwareSession
 
     public void Dispose()
     {
-        if (_commandSender != null)
-            _commandSender.Dispose();
+        if (commandSender != null)
+            commandSender.Dispose();
     }
 }

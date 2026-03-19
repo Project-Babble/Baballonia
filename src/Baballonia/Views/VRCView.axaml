@@ -24,7 +24,8 @@
                 <ComboBox x:Name="ModeCombo" VerticalAlignment="Center"
                           ItemsSource="{Binding ModuleModeOptions}"
                           SelectedItem="{Binding SelectedModuleMode, Mode=TwoWay}"
-                          PlaceholderText="{x:Static assets:Resources.VRC_ModuleMode_Placeholder}"/>
+                          PlaceholderText="{x:Static assets:Resources.VRC_ModuleMode_Placeholder}"
+                          IsEnabled="{Binding VrcftDetected}"/>
               </controls:SettingsBlock.SettingsContent>
             </controls:SettingsBlock>
 

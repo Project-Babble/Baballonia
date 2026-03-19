@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.IO;
-using System.Net;
-using System.Threading.Tasks;
-using Avalonia.Media.Imaging;
-using Avalonia.Threading;
-using Baballonia.Contracts;
+﻿using Avalonia.Threading;
 using Baballonia.Services.events;
 using Baballonia.Services.Inference;
-using Baballonia.Services.Inference.Filters;
-using CommunityToolkit.Mvvm.DependencyInjection;
-using HarfBuzzSharp;
 using Microsoft.Extensions.Logging;
-using OpenCvSharp;
+using System;
 
 namespace Baballonia.Services;
 

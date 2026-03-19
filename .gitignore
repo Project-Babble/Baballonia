@@ -404,4 +404,15 @@ FodyWeavers.xsd
 
 # macOS files
 .DS_Store
+
+# this chonky bastard
 src/Baballonia.Desktop/_internal.zip
+
+/src/Baballonia.Desktop/python
+
+src/Baballonia.Desktop/Calibration/Windows/Overlay/*
+src/Baballonia.Desktop/Calibration/Linux/Overlay/*
+src/Baballonia/Firmware/Windows/espflash.exe
+src/Baballonia/Firmware/Linux/espflash
+src/Baballonia.Desktop/Calibration/Windows/Trainer/BabbleTrainer.exe
+src/Baballonia.Desktop/Calibration/Linux/Trainer/BabbleTrainer

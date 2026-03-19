@@ -1,35 +1,59 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using Baballonia.Contracts;
-using Baballonia.Services.Inference;
+﻿using Baballonia.SDK;
 using Baballonia.Services.Inference.Platforms;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
 
 namespace Baballonia.Android.Captures;
 
-/// <summary>
-/// Special class for iOS, Android and UWP platforms where VideoCapture is not fully implemented
-/// Support for MJPEG video streams only presently!
-/// </summary>
-public class AndroidConnector : PlatformConnector, IPlatformConnector
+public class AndroidConnector : IPlatformConnector
 {
-    private static readonly HashSet<Regex> IpConnectionsPrefixes
-        = new() { new Regex(@"^https?://", RegexOptions.IgnoreCase) };
+    private readonly List<ICaptureFactory> _captureFactories;
+    private readonly IServiceProvider _serviceProvider;
+    private readonly ILogger<AndroidConnector> _logger;
 
-    private static readonly HashSet<Regex> IpConnectionsSuffixes
-        = new() { new Regex(@"\.local/?$", RegexOptions.IgnoreCase) };
-
-    private static readonly HashSet<Regex> AndroidCamera2CapturePrefixes
-        = new() { new Regex(@"^\d+$") };
-
-    public AndroidConnector(string url, ILogger logger, ILocalSettingsService settingsService) : base(url, logger)
+    public AndroidConnector(IServiceProvider serviceProvider, ILogger<AndroidConnector> logger)
     {
-        Captures = new()
+        _serviceProvider = serviceProvider;
+        _logger = logger;
+
+        _captureFactories = LoadFactories();
+        _logger.LogDebug("Loaded {CaptureCount} capture types", _captureFactories.Count);
+    }
+
+    private List<ICaptureFactory> LoadFactories()
+    {
+        // Hardcoding this, I don't want to mess around with DLL loading on Android
+        var types = new[]
         {
-            { (IpConnectionsPrefixes), typeof(IpCameraCapture) },
-            { (IpConnectionsSuffixes), typeof(IpCameraCapture) },
-            { (AndroidCamera2CapturePrefixes), typeof(AndroidCamera2Capture) }
+            typeof(IpCameraCaptureFactory),
+            typeof(AndroidCamera2CaptureFactory)
         };
+
+        var returnList = new List<ICaptureFactory>();
+
+        foreach (var type in types)
+        {
+            try
+            {
+                _logger.LogDebug("Loading capture type '{CaptureTypeName}'", type.Name);
+                var factory = (ICaptureFactory)ActivatorUtilities.CreateInstance(_serviceProvider, type);
+                returnList.Add(factory);
+                _logger.LogDebug("Successfully loaded capture type '{CaptureTypeName}'", type.Name);
+            }
+            catch (Exception e)
+            {
+                _logger.LogWarning("Capture type '{CaptureTypeName}' could not be loaded. Skipping. Error: {ErrorMessage}",
+                    type.Name, e.Message);
+            }
+        }
+
+        return returnList;
+    }
+
+    public ICaptureFactory[] GetCaptureFactories()
+    {
+        return _captureFactories.ToArray();
     }
 }

@@ -1,23 +1,21 @@
-using System;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
-using Baballonia.Assets;
 using Baballonia.Contracts;
 using Baballonia.Helpers;
 using Baballonia.ViewModels.SplitViewPane;
+using System;
+using System.ComponentModel;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Baballonia.Views;
 
-public partial class HomePageView : UserControl
+public partial class HomePageView : ViewBase
 {
-
-    public static FilePickerFileType ONNXAll { get; } = new("ONNX Models")
+    private static readonly FilePickerFileType OnnxAll = new("ONNX Models")
     {
         Patterns = ["*.onnx"],
     };
@@ -106,6 +104,41 @@ public partial class HomePageView : UserControl
                 }
             };
         }
+        else
+        {
+            Loaded += (_, _) =>
+            {
+                var camerasGrid = this.FindControl<Grid>("CameraControlsGrid");
+                var eyesGrid = this.FindControl<Grid>("EyesGrid");
+
+                // Single column, full-width layout for Android
+                camerasGrid!.RowDefinitions.Clear();
+                camerasGrid.ColumnDefinitions.Clear();
+                camerasGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+
+                eyesGrid!.RowDefinitions.Clear();
+                eyesGrid.ColumnDefinitions.Clear();
+                eyesGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+
+                for (var i = 0; i < camerasGrid.Children.Count; i++)
+                {
+                    camerasGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+                    var child = camerasGrid.Children[i];
+                    Grid.SetRow(child, i);
+                    Grid.SetColumn(child, 0);
+                    child.Margin = new Avalonia.Thickness(0, 0, 0, 16);
+                }
+
+                for (var i = 0; i < eyesGrid.Children.Count; i++)
+                {
+                    eyesGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+                    var child = eyesGrid.Children[i];
+                    Grid.SetRow(child, i);
+                    Grid.SetColumn(child, 0);
+                    child.Margin = new Avalonia.Thickness(0, 0, 0, 16);
+                }
+            };
+        }
         Loaded += (_, _) =>
         {
             if (DataContext is not HomePageViewModel vm) return;
@@ -183,20 +216,41 @@ public partial class HomePageView : UserControl
 
     private void RefreshLeftEyeConnectedDevices(object? sender, CancelEventArgs e)
     {
-        if (DataContext is not HomePageViewModel vm) return;
-        vm.LeftCamera.UpdateCameraDropDown();
+        //if (DataContext is not HomePageViewModel vm) return;
+        //vm.LeftCamera.UpdateCameraDropDown();
     }
 
     private void RefreshRightEyeDevices(object? sender, CancelEventArgs e)
     {
-        if (DataContext is not HomePageViewModel vm) return;
-        vm.RightCamera.UpdateCameraDropDown();
+        //if (DataContext is not HomePageViewModel vm) return;
+        //vm.RightCamera.UpdateCameraDropDown();
     }
 
     private void RefreshConnectedFaceDevices(object? sender, CancelEventArgs e)
     {
+        //if (DataContext is not HomePageViewModel vm) return;
+        //vm.FaceCamera.UpdateCameraDropDown();
+    }
+
+    private async void RefreshDevices(object? sender, RoutedEventArgs e)
+    {
         if (DataContext is not HomePageViewModel vm) return;
-        vm.FaceCamera.UpdateCameraDropDown();
+        RefreshDevicesText.IsEnabled = false;
+
+        try
+        {
+            var cameras = _deviceEnumerator.UpdateCameras();
+            var friendlyNames = cameras.Keys.ToArray();
+
+            vm.LeftCamera.UpdateCameraDropDown(friendlyNames);
+            vm.RightCamera.UpdateCameraDropDown(friendlyNames);
+            vm.FaceCamera.UpdateCameraDropDown(friendlyNames);
+        }
+        catch (Exception)
+        {
+        }
+
+        RefreshDevicesText.IsEnabled = true;
     }
 
     private async void EyeModelLoad(object? sender, RoutedEventArgs e)
@@ -209,7 +263,7 @@ public partial class HomePageView : UserControl
             Title = "Select ONNX Model",
             AllowMultiple = false,
             SuggestedStartLocation = suggestedStartLocation, // Falls back to desktop if Models folder hasn't been created yet
-            FileTypeFilter = [ONNXAll]
+            FileTypeFilter = [OnnxAll]
         })!;
 
         if (file.Count == 0) return;

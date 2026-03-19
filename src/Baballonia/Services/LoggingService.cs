@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using Avalonia.Threading;
+﻿using Avalonia.Threading;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.ObjectModel;
 
 namespace Baballonia.Services;
 

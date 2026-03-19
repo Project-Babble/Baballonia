@@ -89,6 +89,8 @@ public static class CaptureBin
     /// </summary>
     public static void WriteAll(string path, IEnumerable<Frame> frames)
     {
+        // this throws if for some reason there is no parent dir for "path"
+        Directory.CreateDirectory(Directory.GetParent(path)!.ToString());
         using var fs = File.Open(path, FileMode.Create, FileAccess.Write, FileShare.None);
         Write(fs, frames);
     }

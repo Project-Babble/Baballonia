@@ -3,18 +3,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Baballonia.OpenCVCapture;
 
-public class OpenCvCaptureFactory : ICaptureFactory
+public class OpenCvCaptureFactory(ILoggerFactory loggerFactory) : ICaptureFactory
 {
-    private readonly ILoggerFactory _loggerFactory;
-
-    public OpenCvCaptureFactory(ILoggerFactory loggerFactory)
-    {
-        _loggerFactory = loggerFactory;
-    }
-
     public Capture Create(string address)
     {
-        return new OpenCvCapture(address, _loggerFactory.CreateLogger<OpenCvCapture>());
+        return new OpenCvCapture(address, loggerFactory.CreateLogger<OpenCvCapture>());
     }
 
     public bool CanConnect(string address)
@@ -28,6 +21,7 @@ public class OpenCvCaptureFactory : ICaptureFactory
 
         return lowered.StartsWith("/dev/video") ||
                lowered.EndsWith("appsink") ||
+               address == "HTC Multimedia Camera" ||
                int.TryParse(address, out _) ||
                Uri.TryCreate(address, UriKind.Absolute, out _);
     }

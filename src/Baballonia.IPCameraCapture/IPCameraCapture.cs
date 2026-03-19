@@ -1,7 +1,7 @@
-using System.Net.Http.Headers;
-using System.Text;
 using Microsoft.Extensions.Logging;
 using OpenCvSharp;
+using System.Net.Http.Headers;
+using System.Text;
 using Capture = Baballonia.SDK.Capture;
 
 namespace Baballonia.IPCameraCapture;
@@ -19,11 +19,6 @@ public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger)
     private const byte PicMarker = 0xFF;
     private const byte PicStart = 0xD8;
     private const byte PicEnd = 0xD9;
-
-    public override bool CanConnect(string connectionString)
-    {
-        return Uri.TryCreate(connectionString, UriKind.RelativeOrAbsolute, out _) && connectionString.StartsWith("http://");
-    }
 
     public override Task<bool> StartCapture()
     {

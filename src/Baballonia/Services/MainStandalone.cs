@@ -1,7 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using Baballonia.Contracts;
+﻿using Baballonia.Contracts;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
 
 namespace Baballonia.Services;
 

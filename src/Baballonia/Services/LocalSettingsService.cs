@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Baballonia.Contracts;
+﻿using Baballonia.Contracts;
 using Baballonia.Helpers;
 using Baballonia.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Concurrent;
+using System.IO;
+using System.Text.Json;
 
 namespace Baballonia.Services;
 
 public class LocalSettingsService : ILocalSettingsService
 {
-    public const string DefaultApplicationDataFolder = "ApplicationData";
+    public static readonly string DefaultApplicationDataFolder = Utils.IsSupportedDesktopOS ? "ApplicationData" : "";
     public const string DefaultLocalSettingsFile = "LocalSettings.json";
 
     private readonly string _localApplicationData = Utils.PersistentDataDirectory;
@@ -32,9 +30,9 @@ public class LocalSettingsService : ILocalSettingsService
 
     public LocalSettingsService(IOptions<LocalSettingsOptions> options, ILogger<LocalSettingsService> logger)
     {
+        _logger = logger;
         var opt = options.Value;
 
-        _logger = logger;
         var applicationDataFolder =
             Path.Combine(_localApplicationData, opt.ApplicationDataFolder ?? DefaultApplicationDataFolder);
         _localSettingsFile = opt.LocalSettingsFile ?? Path.Combine(applicationDataFolder, DefaultLocalSettingsFile);

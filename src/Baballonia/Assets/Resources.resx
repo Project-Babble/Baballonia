@@ -184,7 +184,7 @@
     <value>Image Rotation</value>
   </data>
   <data name="Home_Cameras_Brightness_Description" xml:space="preserve">
-    <value>Adjust the brightness of the image</value>
+    <value>Adjust the brightness</value>
   </data>
   <data name="Home_Right_Camera_Address" xml:space="preserve">
     <value>Right Camera Address</value>
@@ -250,7 +250,7 @@
     <value>Stabilize Eyes</value>
   </data>
   <data name="Calibration_Eye_Expressions_Stabilize_Eyes_Description" xml:space="preserve">
-    <value>Prevents eyes from looking out in opposite directions, but may overcorrect.</value>
+    <value>Prevents eyes from looking out in opposite directions, and improves pupil stability.</value>
   </data>
   <data name="Firmware_Title_Header" xml:space="preserve">
     <value>Firmware</value>
@@ -417,6 +417,27 @@
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
     <value>This wizard will guide you through setting up the new Babble App.</value>
   </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>Welcome!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>Firmware</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>Assembly</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>UI Overview</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>Finished!</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>Finish</value>
+  </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
     <value>Wired or Wireless?</value>
   </data>
@@ -467,12 +488,6 @@
   </data>
   <data name="Settings_Filter_Description" xml:space="preserve">
     <value>Filter Settings</value>
-  </data>
-  <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
-    <value>Enabled</value>
-  </data>
-  <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
-    <value>Turn filtering on or off.</value>
   </data>
   <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
     <value>Minimum frequency cutoff</value>
@@ -640,7 +655,7 @@
     <value>Italian</value>
   </data>
   <data name="Settings_Language_Korean" xml:space="preserve">
-    <value>Korean</value>
+    <value>한국어</value>
   </data>
   <data name="Settings_Language_Portuguese_Brazil" xml:space="preserve">
     <value>Portuguese (Brazil)</value>
@@ -743,5 +758,135 @@
   </data>
   <data name="Settings_SteamVR_Auto_Start_Description" xml:space="preserve">
     <value>Should the app launch with SteamVR? (Change requires a SteamVR restart.)</value>
+  </data>
+  <data name="Settings_Advanced_Header" xml:space="preserve">
+    <value>Enable advanced settings</value>
+  </data>
+  <data name="Settings_Advanced_Description" xml:space="preserve">
+    <value>Advanced Settings</value>
+  </data>
+  <data name="Godot_Locale" xml:space="preserve">
+    <value>en</value>
+  </data>
+  <data name="About_Title_Header" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="About_AboutUs_Header" xml:space="preserve">
+    <value>About Us</value>
+  </data>
+  <data name="About_AboutUs_Description" xml:space="preserve">
+    <value>Links to our Quickstart guide, Social Media, Documentation, etc.</value>
+  </data>
+  <data name="About_AboutBaballonia_Header" xml:space="preserve">
+    <value>About Baballonia</value>
+  </data>
+  <data name="About_AboutBaballonia_Description" xml:space="preserve">
+    <value>Links for nerds (GitHub and so on)</value>
+  </data>
+  <data name="About_Credits_Header" xml:space="preserve">
+    <value>Credits</value>
+  </data>
+  <data name="About_Credits_Description" xml:space="preserve">
+    <value>The people who made this project what it is. Thanks, everyone!</value>
+  </data>
+  <data name="About_QuickstartGuide_Alias" xml:space="preserve">
+    <value>Quickstart Guide ⧉</value>
+  </data>
+  <data name="About_BabbleDiscord_Alias" xml:space="preserve">
+    <value>Babble Discord ⧉</value>
+  </data>
+  <data name="About_PishockDiscord_Alias" xml:space="preserve">
+    <value>PiShock Discord ⧉</value>
+  </data>
+  <data name="About_BabbleDocs_Alias" xml:space="preserve">
+    <value>Babble Docs ⧉</value>
+  </data>
+  <data name="About_BabbleSite_Alias" xml:space="preserve">
+    <value>Babble Site ⧉</value>
+  </data>
+  <data name="About_BabbleBlog_Alias" xml:space="preserve">
+    <value>Babble Blog ⧉</value>
+  </data>
+  <data name="About_BabbleDataPrivacyPolicy_Alias" xml:space="preserve">
+    <value>Data Privacy Policy ⧉</value>
+  </data>
+  <data name="About_YoutubeLink_Alias" xml:space="preserve">
+    <value>Babble YouTube Page ⧉</value>
+  </data>
+  <data name="About_BabbleTwitter_Alias" xml:space="preserve">
+    <value>Babble Twitter ⧉</value>
+  </data>
+  <data name="About_BaballoniaGithub_Alias" xml:space="preserve">
+    <value>Baballonia GitHub ⧉</value>
+  </data>
+  <data name="About_BaballoniaGithubIssues_Alias" xml:space="preserve">
+    <value>Baballonia GitHub Issues ⧉</value>
+  </data>
+  <data name="About_BaballoniaLicense_Alias" xml:space="preserve">
+    <value>Baballonia License ⧉</value>
+  </data>
+  <data name="About_BaballoniaBuildInstructions_Alias" xml:space="preserve">
+    <value>Baballonia Build Instructions ⧉</value>
+  </data>
+  <data name="About_Contributors_Commits" xml:space="preserve">
+    <value>{0} commits</value>
+  </data>
+  <data name="Firmware_Flashing_Wireless_Prompt" xml:space="preserve">
+    <value>Flashing custom firmware onto your Babble Tracker works best when the device is set to “Wireless” mode first. 
+You don’t need to enter any Wi-Fi credentials. Just switch the tracker to “Wireless” mode, then restart it before flashing.</value>
+  </data>
+  <data name="Firmware_Flashing_Header_Alert" xml:space="preserve">
+    <value>If you are using a Babble Tracker with a Valve Index or Bigscreen Beyond (with/without 1.0 base stations), you might notice:
+• Your screen turning grey unexpectedly
+• Tracking cutting out or frequently losing position
+This is usually easy to fix! Just install the “Tracking Loss Fix” firmware below.</value>
+  </data>
+  <data name="Common_Note" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="Home_Cameras_Linux_Workarounds" xml:space="preserve">
+    <value>Workarounds:
+• Try the Steam scout 1.0 runtime (not sniper 3.0), installing libudev, building from source, or joining the plugdev group.
+• We only support Steam and tarball releases, not the AUR package.
+• Babble Boards do not support UVC/Serial on Linux, use a wireless configuration.</value>
+  </data>
+  <data name="Settings_ShareData_Header" xml:space="preserve">
+    <value>Share eye/face data</value>
+  </data>
+  <data name="Settings_ShareData_Description" xml:space="preserve">
+    <value>Opt into sharing anonymous eye/face data to improve our algorithms</value>
+  </data>
+  <data name="Settings_DFR_Header" xml:space="preserve">
+    <value>Use DFR</value>
+  </data>
+  <data name="Settings_DFR_Description" xml:space="preserve">
+    <value>Enable Pimax4All dynamic foveated rendering for select titles</value>
+  </data>
+  <data name="Firmware_Mode_Both" xml:space="preserve">
+    <value>Both</value>
+  </data>
+  <data name="Firmware_Mode_Eyes" xml:space="preserve">
+    <value>Eyes</value>
+  </data>
+  <data name="Firmware_Mode_Face" xml:space="preserve">
+    <value>Face</value>
+  </data>
+  <data name="Firmware_Mode_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="Settings_LogLevel_Debug" xml:space="preserve">
+    <value>Debug</value>
+  </data>
+  <data name="Settings_LogLevel_Information" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="Settings_LogLevel_Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="Settings_LogLevel_Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Settings_LogLevel_Level" xml:space="preserve">
+    <value>Select Level...</value>
   </data>
 </root>

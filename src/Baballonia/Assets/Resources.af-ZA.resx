@@ -184,7 +184,7 @@
     <value>Image Rotation</value>
   </data>
   <data name="Home_Cameras_Brightness_Description" xml:space="preserve">
-    <value>Adjust the brightness of the image</value>
+    <value>Adjust the brightness</value>
   </data>
   <data name="Home_Right_Camera_Address" xml:space="preserve">
     <value>Right Camera Address</value>
@@ -223,10 +223,10 @@
     <value>Calibration</value>
   </data>
   <data name="Calibration_Reset_Minimums" xml:space="preserve">
-    <value>Reset Minimums</value>
+    <value>Stel Minimume Herstel</value>
   </data>
   <data name="Calibration_Reset_Maximums" xml:space="preserve">
-    <value>Reset Maximums</value>
+    <value>Stel Maksimume Herstel</value>
   </data>
   <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
     <value>Eye Expressions</value>
@@ -316,7 +316,10 @@
     <value>Flash your device's firmware</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>CAUTION!! THIS WILL FACTORY RESET YOUR TRACKER. YOU WILL NEED TO PERFORM A FIRST TIME SET UP AFTER FLASHING YOUR TRACKER.</value>
+    <value>WAARSKU!! DIT SAL U TRACKER NA FABRIEKINSTELLINGS HERSTEL. U SAL 'N EERSTE TYD INSTELLEN DOEN NADAT U U TRACKER GEFLASH HET.</value>
+  </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>Firmware tipe om te flash:</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>Flash Firmware</value>
@@ -412,7 +415,28 @@
     <value>Open the logging directory</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>This wizard will guide you through setting up the new Babble App.</value>
+    <value>Hierdie gids sal u deur die opstelling van die nuwe Babble-toepassing lei.</value>
+  </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>Welkom!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>Firmware</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>Montering</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>Koppelvlak oorsig</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>Klaar!</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>Volgende</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>Voltooi</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
     <value>Wired or Wireless?</value>
@@ -465,12 +489,6 @@
   <data name="Settings_Filter_Description" xml:space="preserve">
     <value>Filter Settings</value>
   </data>
-  <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
-    <value>Enabled</value>
-  </data>
-  <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
-    <value>Turn filtering on or off.</value>
-  </data>
   <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
     <value>Minimum frequency cutoff</value>
   </data>
@@ -521,6 +539,9 @@
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>Launch</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>Vorige</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
     <value>Skip</value>
@@ -717,20 +738,155 @@
   <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
     <value>Dismiss</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Settings_OSC_VRCFT_Warning" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Settings_OSC_VRCFT_Warning" xml:space="preserve">
+    <value>As jy Baballonia met VRCFaceTracking gebruik, hoef jy nie hierdie poorte te verander nie</value>
   </data>
-  <data name="Home_Eye_Load_Model" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Home_Preferred_Backend" xml:space="preserve">
+    <value>Voorkeur backend</value>
   </data>
-  <data name="Firmware_Custom_Firmware_Load" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Home_Backend_Default" xml:space="preserve">
+    <value>Verstek</value>
   </data>
-  <data name="Settings_SteamVR_Auto_Start_Header" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Home_Eye_Load_Model" xml:space="preserve">
+    <value>Laai oogmodel</value>
   </data>
-  <data name="Settings_SteamVR_Auto_Start_Description" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Firmware_Custom_Firmware_Load" xml:space="preserve">
+    <value>Laai pasgemaakte firmware</value>
+  </data>
+  <data name="Settings_SteamVR_Auto_Start_Header" xml:space="preserve">
+    <value>Outomatiese begin met SteamVR</value>
+  </data>
+  <data name="Settings_SteamVR_Auto_Start_Description" xml:space="preserve">
+    <value>Moet die toep met SteamVR begin? (Verandering vereis herstart van SteamVR.)</value>
+  </data>
+  <data name="Settings_Advanced_Header" xml:space="preserve">
+    <value>Aktiveer gevorderde instellings</value>
+  </data>
+  <data name="Settings_Advanced_Description" xml:space="preserve">
+    <value>Gevorderde instellings</value>
+  </data>
+  <data name="Godot_Locale" xml:space="preserve">
+    <value>af</value>
+  </data>
+  <data name="About_Title_Header" xml:space="preserve">
+    <value>Oor</value>
+  </data>
+  <data name="About_AboutUs_Header" xml:space="preserve">
+    <value>Oor ons</value>
+  </data>
+  <data name="About_AboutUs_Description" xml:space="preserve">
+    <value>Skakel na ons vinnige begin gids, sosiale media, dokumentasie, ens.</value>
+  </data>
+  <data name="About_AboutBaballonia_Header" xml:space="preserve">
+    <value>Oor Baballonia</value>
+  </data>
+  <data name="About_AboutBaballonia_Description" xml:space="preserve">
+    <value>Skakels vir nerds (GitHub ens.)</value>
+  </data>
+  <data name="About_Credits_Header" xml:space="preserve">
+    <value>Krediete</value>
+  </data>
+  <data name="About_Credits_Description" xml:space="preserve">
+    <value>Mense wat hierdie projek gemaak het wat dit is. Dankie aan almal!</value>
+  </data>
+  <data name="About_QuickstartGuide_Alias" xml:space="preserve">
+    <value>Vinnige begin gids ⧉</value>
+  </data>
+  <data name="About_BabbleDiscord_Alias" xml:space="preserve">
+    <value>Discord Babble ⧉</value>
+  </data>
+  <data name="About_PishockDiscord_Alias" xml:space="preserve">
+    <value>Discord PiShock ⧉</value>
+  </data>
+  <data name="About_BabbleDocs_Alias" xml:space="preserve">
+    <value>Babble Dokumentasie ⧉</value>
+  </data>
+  <data name="About_BabbleSite_Alias" xml:space="preserve">
+    <value>Babble Webwerf ⧉</value>
+  </data>
+  <data name="About_BabbleBlog_Alias" xml:space="preserve">
+    <value>Babble Blog ⧉</value>
+  </data>
+  <data name="About_BabbleDataPrivacyPolicy_Alias" xml:space="preserve">
+    <value>Data Privaatsbeleid ⧉</value>
+  </data>
+  <data name="About_YoutubeLink_Alias" xml:space="preserve">
+    <value>Babble YouTube Bladsy ⧉</value>
+  </data>
+  <data name="About_BabbleTwitter_Alias" xml:space="preserve">
+    <value>Twitter Babble ⧉</value>
+  </data>
+  <data name="About_BaballoniaGithub_Alias" xml:space="preserve">
+    <value>GitHub Baballonia ⧉</value>
+  </data>
+  <data name="About_BaballoniaGithubIssues_Alias" xml:space="preserve">
+    <value>GitHub Issues Baballonia ⧉</value>
+  </data>
+  <data name="About_BaballoniaLicense_Alias" xml:space="preserve">
+    <value>Baballonia Lisensie ⧉</value>
+  </data>
+  <data name="About_BaballoniaBuildInstructions_Alias" xml:space="preserve">
+    <value>Baballonia Bou Instruksies ⧉</value>
+  </data>
+  <data name="About_Contributors_Commits" xml:space="preserve">
+    <value>{0} commits</value>
+  </data>
+  <data name="Firmware_Flashing_Wireless_Prompt" xml:space="preserve">
+    <value>Flash van pasgemaakte firmware op jou Babble Tracker werk die beste wanneer die toestel eers in "Wireless" modus gestel is.
+Jy hoef geen Wi-Fi inliggings in te voer. Verander die tracker na "Wireless" modus en herstart dit voor die flash.</value>
+  </data>
+  <data name="Firmware_Flashing_Header_Alert" xml:space="preserve">
+    <value>As jy 'n Babble Tracker met Valve Index of Bigscreen Beyond (met/zonder 1.0 basisstasies) gebruik, kan jy opmerk:
+• Jou skerm word onverwag gry
+• Volging onderbreek of verloor dikwels die posisie
+Dit is gewoon maklik om reg te maak! Installeer net die "Tracking Loss Fix" firmware hieronder.</value>
+  </data>
+  <data name="Common_Note" xml:space="preserve">
+    <value>Nota</value>
+  </data>
+  <data name="Home_Cameras_Linux_Workarounds" xml:space="preserve">
+    <value>Tydelike oplossings:
+- Probeer die Steam scout 1.0 runtime (nie sniper 3.0 nie), installeer libudev, bou vanaf die bronkode, of sluit aan by die plugdev-groep.
+- Ons ondersteun slegs Steam- en tarball-vrystellings, nie die AUR-pakket nie.
+- Babble-borde ondersteun nie UVC/Serieel op Linux nie, gebruik 'n draadlose konfigurasie.</value>
+  </data>
+  <data name="Settings_ShareData_Header" xml:space="preserve">
+    <value>Deel oog/gesig data</value>
+  </data>
+  <data name="Settings_ShareData_Description" xml:space="preserve">
+    <value>Stem in tot die deel van anonieme oog/gesig data om ons algoritmes te verbeter</value>
+  </data>
+  <data name="Settings_DFR_Header" xml:space="preserve">
+    <value>Gebruik DFR</value>
+  </data>
+  <data name="Settings_DFR_Description" xml:space="preserve">
+    <value>Stel Pimax4All dinamiese foveated rendering in vir geselekteerde titels</value>
+  </data>
+  <data name="Firmware_Mode_Both" xml:space="preserve">
+    <value>Beide</value>
+  </data>
+  <data name="Firmware_Mode_Eyes" xml:space="preserve">
+    <value>Oë</value>
+  </data>
+  <data name="Firmware_Mode_Face" xml:space="preserve">
+    <value>Gesig</value>
+  </data>
+  <data name="Firmware_Mode_None" xml:space="preserve">
+    <value>Geen</value>
+  </data>
+  <data name="Settings_LogLevel_Debug" xml:space="preserve">
+    <value>Debug</value>
+  </data>
+  <data name="Settings_LogLevel_Information" xml:space="preserve">
+    <value>Informasie</value>
+  </data>
+  <data name="Settings_LogLevel_Warning" xml:space="preserve">
+    <value>Waarskuwing</value>
+  </data>
+  <data name="Settings_LogLevel_Error" xml:space="preserve">
+    <value>Fout</value>
+  </data>
+  <data name="Settings_LogLevel_Level" xml:space="preserve">
+    <value>Kies Vlak...</value>
   </data>
 </root>

@@ -1,13 +1,12 @@
-﻿using System;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
-using Avalonia.Threading;
 using Baballonia.ViewModels.SplitViewPane;
+using System;
 
 namespace Baballonia.Views;
 
-public partial class FirmwareView : UserControl
+public partial class FirmwareView : ViewBase
 {
     public static FilePickerFileType BinAll { get; } = new("Firmware")
     {

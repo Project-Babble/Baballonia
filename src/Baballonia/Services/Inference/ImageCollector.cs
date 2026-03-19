@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using OpenCvSharp;
+using System.Collections.Generic;
 using System.Linq;
-using OpenCvSharp;
 
 namespace Baballonia.Services.Inference;
 
@@ -36,6 +36,7 @@ public class ImageCollector : IImageTransformer
             Mat[] splitChannels = Cv2.Split(m);
             channels.AddRange(splitChannels);
         }
+
         Mat octoMatrix = new Mat();
         Cv2.Merge(channels.ToArray(), octoMatrix);
 

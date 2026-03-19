@@ -1,11 +1,12 @@
 ﻿using Avalonia;
-using Baballonia.Desktop.Calibration.Aero;
+using Baballonia.Contracts;
+using Baballonia.Desktop.Calibration;
 using Baballonia.Desktop.Captures;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;
-using Baballonia.Contracts;
-using Microsoft.Extensions.DependencyInjection;
 using Velopack;
+using TrainerService = Baballonia.Desktop.Calibration.TrainerService;
 
 namespace Baballonia.Desktop;
 
@@ -34,11 +35,19 @@ sealed class Program
 
         VelopackApp.Build().Run();
 
-        App.RegisterPlatformServices<
-            AeroOverlayTrainerCombo,
+        App.RegisterRequiredPlatformServices<
+            OverlayTrainerService,
             DesktopDeviceEnumerator,
             DesktopConnector
         >();
+
+        App.RegisterPlatformSpecificServices(collection =>
+        {
+            collection.AddSingleton<IOverlayProgram, OverlayProgram>();
+            collection.AddSingleton<ITrainerService, TrainerService>();
+            collection.AddSingleton<EyeCaptureStepFactory>();
+            collection.AddSingleton<EyeCalibration>();
+        });
 
         try
         {

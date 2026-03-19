@@ -171,6 +171,7 @@
                 x:Name="OscPrefix"
                 Grid.Row="4"
                 Grid.Column="2"
+                Background="{Binding OscPrefixBackgroundColor}"
                 Text="{Binding OscPrefix, Mode=TwoWay, UpdateSourceTrigger=LostFocus, FallbackValue=''}" />
 
             <TextBlock
@@ -202,7 +203,7 @@
           HorizontalContentAlignment="Stretch"
           IsExpanded="{Binding IsExpandedByDefault, RelativeSource={RelativeSource AncestorType=controls:SettingsExpander}}">
         <Expander.Header>
-          <Grid ColumnDefinitions="Auto,Auto,*">
+          <Grid ColumnDefinitions="Auto,Auto,*,Auto">
             <PathIcon
                 Grid.Column="0"
                 Width="32"
@@ -224,31 +225,22 @@
                   Foreground="{DynamicResource SystemChromeGrayColor}"
                   Text="{x:Static assets:Resources.Settings_Filter_Description}" />
             </StackPanel>
+            <ToggleSwitch
+              Grid.Column="3"
+              IsChecked="{Binding OneEuroMinEnabled,  Mode=TwoWay}"/>
           </Grid>
         </Expander.Header>
-        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto">
-          <StackPanel
-              Grid.Row="0"
-              Grid.Column="0"
-              Margin="0,8">
-            <TextBlock FontWeight="Bold" Text="{x:Static assets:Resources.Settings_Filter_Enabled_Label}" />
-            <TextBlock Text="{x:Static assets:Resources.Settings_Filter_Enabled_Description}" />
-          </StackPanel>
-          <CheckBox
-              Grid.Row="0"
-              Grid.Column="2"
-              Margin="0,8"
-              IsChecked="{Binding OneEuroMinEnabled, Mode=TwoWay}" />
+        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
 
           <StackPanel
-              Grid.Row="1"
+              Grid.Row="0"
               Grid.Column="0"
               Margin="0,8">
             <TextBlock FontWeight="Bold" Text="{x:Static assets:Resources.Settings_Filter_MinFreq_Label}" />
             <TextBlock Text="{x:Static assets:Resources.Settings_Filter_MinFreq_Description}" />
           </StackPanel>
           <StackPanel
-              Grid.Row="1"
+              Grid.Row="0"
               Grid.Column="2"
               Orientation="Horizontal"
               Spacing="8">
@@ -299,14 +291,14 @@
           </StackPanel>
 
           <StackPanel
-              Grid.Row="2"
+              Grid.Row="1"
               Grid.Column="0"
               Margin="0,8">
             <TextBlock FontWeight="Bold" Text="{x:Static assets:Resources.Settings_Filter_Speed_Label}" />
             <TextBlock Text="{x:Static assets:Resources.Settings_Filter_Speed_Description}" />
           </StackPanel>
           <StackPanel
-              Grid.Row="2"
+              Grid.Row="1"
               Grid.Column="2"
               Orientation="Horizontal"
               Spacing="8">
@@ -337,6 +329,18 @@
           IconPath="TopSpeedRegular"
           SettingToggled="{Binding UseGPU, Mode=TwoWay}" />
 
+      <controls:SettingsToggle
+        Title="{x:Static assets:Resources.Settings_DFR_Header}"
+        Description="{x:Static assets:Resources.Settings_DFR_Description}"
+        IconPath="GamesRegular"
+        SettingToggled="{Binding UseDFR, Mode=TwoWay}" />
+
+      <controls:SettingsToggle
+          Title="{x:Static assets:Resources.Calibration_Eye_Expressions_Stabilize_Eyes_Header}"
+          Description="{x:Static assets:Resources.Calibration_Eye_Expressions_Stabilize_Eyes_Description}"
+          IconPath="EyeTrackingRegular"
+          SettingToggled="{Binding StabilizeEyes, Mode=TwoWay}" />
+
       <controls:SettingsBlock
         Title="{x:Static assets:Resources.Settings_LogLevel_Header}"
         Description="{x:Static assets:Resources.Settings_LogLevel_Description}"
@@ -346,15 +350,10 @@
             x:Name="LogLevelCombo"
             VerticalAlignment="Center"
             ItemsSource="{Binding LowestLogLevel}"
+            PlaceholderText="{x:Static assets:Resources.Settings_LogLevel_Level}"
             SelectedItem="{Binding LogLevel}" />
         </controls:SettingsBlock.SettingsContent>
       </controls:SettingsBlock>
-
-      <controls:SettingsToggle
-          Title="{x:Static assets:Resources.Settings_Updates_Header}"
-          Description="{x:Static assets:Resources.Settings_Updates_Description}"
-          IconPath="ArrowSyncRegular"
-          SettingToggled="{Binding CheckForUpdates, Mode=TwoWay}" />
 
       <controls:SettingsToggle
                IsVisible="{x:Static utils:Utils.IsSupportedDesktopOS}"
@@ -362,6 +361,75 @@
                Description="{x:Static assets:Resources.Settings_SteamVR_Auto_Start_Description}"
                IconPath="PowerRegular"
                SettingToggled="{Binding SteamvrAutoStart, Mode=TwoWay}" />
+
+      <controls:SettingsToggle
+        Title="{x:Static assets:Resources.Settings_Advanced_Header}"
+        Description="{x:Static assets:Resources.Settings_Advanced_Description}"
+        IconPath="SettingsRegular"
+        SettingToggled="{Binding AdvancedOptions, Mode=TwoWay}" />
+
+      <Expander
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch"
+          HorizontalContentAlignment="Stretch"
+          IsExpanded="{Binding IsExpandedByDefault, RelativeSource={RelativeSource AncestorType=controls:SettingsExpander}}">
+        <Expander.Header>
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <PathIcon
+              Data="{StaticResource DataUsageRegular}"
+              Grid.Column="0"
+              Margin="10,10,20,10"
+              VerticalAlignment="Center"
+              Width="32" />
+            <StackPanel
+              Grid.Column="1"
+              HorizontalAlignment="Stretch"
+              Margin="0,10,0,10">
+              <TextBlock
+                FontSize="16"
+                FontWeight="SemiBold"
+                Margin="5"
+                Text="{x:Static assets:Resources.Settings_ShareData_Header}" />
+              <TextBlock
+                FontSize="14"
+                Foreground="{DynamicResource SystemChromeGrayColor}"
+                Margin="5"
+                Text="{x:Static assets:Resources.Settings_ShareData_Description}" />
+            </StackPanel>
+            <ToggleSwitch
+              Grid.Column="3"
+              IsChecked="{Binding ShareEyeData,  Mode=TwoWay}"/>
+          </Grid>
+        </Expander.Header>
+          <StackPanel Spacing="12">
+            <TextBlock Text="Your Identifier:"/>
+            <Border
+              Background="{DynamicResource SystemChromeMediumColor}"
+              CornerRadius="6"
+              Padding="15,5,15,5">
+              <Grid ColumnDefinitions="*,Auto">
+                <TextBlock
+                  VerticalAlignment="Center"
+                  Grid.Column="0"
+                  Text="{Binding MachineID, FallbackValue='Loading...'}"/>
+                <Button
+                  Grid.Column="1"
+                  VerticalAlignment="Center"
+                  Click="RequestMachineId">
+                  <Button.Content>
+                    <PathIcon Data="{StaticResource DocumentCopyRegular}" />
+                  </Button.Content>
+                </Button>
+              </Grid>
+            </Border>
+          </StackPanel>
+      </Expander>
 
       <Border
           Padding="15,5,15,5"

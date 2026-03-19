@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Baballonia.Contracts;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Baballonia.Contracts;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using VRC.OSCQuery;
 
 namespace Baballonia.Services;
@@ -46,7 +46,7 @@ public class OscQueryServiceWrapper(ILogger<OscQueryServiceWrapper> logger, ILoc
         logger.LogInformation(
             $"[VRCFTReceiver] Started OSCQueryService {_serviceWrapper.ServerName} at TCP {tcpPort}, UDP {udpPort}, HTTP http://{_serviceWrapper.HostIP}:{tcpPort}");
 
-        _serviceWrapper.AddEndpoint<string>("/avatar/change", Attributes.AccessValues.ReadWrite, ["default"]);
+        _serviceWrapper.AddEndpoint<string>("/avatar/change", VRC.OSCQuery.Attributes.AccessValues.ReadWrite, ["default"]);
         _serviceWrapper.OnOscQueryServiceAdded += AddProfileToList;
 
         StartAutoRefreshServices(5000);

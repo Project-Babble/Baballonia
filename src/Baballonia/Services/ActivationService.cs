@@ -1,6 +1,6 @@
 ﻿using Baballonia.Contracts;
-using Microsoft.Extensions.Logging;
 using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Baballonia.Services;
 

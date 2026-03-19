@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Baballonia.Contracts;
+﻿namespace Baballonia.Contracts;
 
 public interface IActivationService
 {

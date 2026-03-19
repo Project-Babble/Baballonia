@@ -1,6 +1,6 @@
-﻿using System;
-using Avalonia.Threading;
+﻿using Avalonia.Threading;
 using Baballonia.Contracts;
+using System;
 
 namespace Baballonia.Services;
 

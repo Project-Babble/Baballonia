@@ -1,16 +1,15 @@
-using CommunityToolkit.Mvvm.ComponentModel;
-using Baballonia.Models;
+using Avalonia.Threading;
 using Baballonia.Contracts;
+using Baballonia.Helpers;
+using Baballonia.Models;
+using Baballonia.Services;
 using CommunityToolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using Avalonia.Threading;
-using Baballonia.Helpers;
-using Baballonia.Services;
-using CommunityToolkit.Mvvm.Input;
 
 namespace Baballonia.ViewModels.SplitViewPane;
 
@@ -22,10 +21,6 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
     public ObservableCollection<SliderBindableSetting> TongueSettings { get; set; }
     public ObservableCollection<SliderBindableSetting> NoseSettings { get; set; }
     public ObservableCollection<SliderBindableSetting> CheekSettings { get; set; }
-
-    [ObservableProperty]
-    [property: SavedSetting("AppSettings_StabilizeEyes", false)]
-    private bool _stabilizeEyes;
 
     private ILocalSettingsService _settingsService { get; }
     private readonly ICalibrationService _calibrationService;
@@ -46,7 +41,13 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
         EyeSettings =
         [
             new("LeftEyeLid"),
-            new("RightEyeLid")
+            new("RightEyeLid"),
+            //new ("LeftEyeWiden"),
+            //new ("LeftEyeLower"),
+            //new ("LeftEyeBrow"),
+            //new ("RightEyeWiden"),
+            //new ("RightEyeLower"),
+            //new ("RightEyeBrow"),
         ];
 
         JawSettings =
@@ -121,14 +122,20 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
         }
 
         // Convert dictionary order into index mapping
-        _eyeKeyIndexMap = new Dictionary<string, int>()
+        _eyeKeyIndexMap = new Dictionary<string, int>
         {
             { "LeftEyeX", 0 },
             { "LeftEyeY", 1 },
+            { "LeftEyeLid", 2 },
+            //{ "LeftEyeWiden", },
+            //{ "LeftEyeLower",  },
+            //{ "LeftEyeBrow", },
             { "RightEyeX", 3 },
             { "RightEyeY", 4 },
-            { "LeftEyeLid", 2 },
-            { "RightEyeLid", 5 }
+            { "RightEyeLid", 5 },
+            //{ "RightEyeWiden", },
+            //{ "RightEyeLower",  },
+            //{ "RightEyeBrow", },
         };
 
         _faceKeyIndexMap = _parameterSenderService.FaceExpressionMap.Keys
@@ -150,15 +157,6 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
 
         LoadInitialSettings();
         _settingsService.Load(this);
-
-        PropertyChanged += (o, p) =>
-        {
-            if (p.PropertyName == nameof(StabilizeEyes))
-            {
-                _settingsService.SaveSetting("AppSettings_StabilizeEyes", StabilizeEyes);
-                _eyePipelineManager.LoadEyeStabilization();
-            }
-        };
     }
 
     private void ExpressionUpdateHandler(ProcessingLoopService.Expressions expressions)

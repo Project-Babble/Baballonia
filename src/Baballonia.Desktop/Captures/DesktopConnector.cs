@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.Loader;
-using System.Text.RegularExpressions;
-using System.Threading;
-using Baballonia.Contracts;
-using Baballonia.SDK;
+﻿using Baballonia.SDK;
 using Baballonia.Services.Inference.Platforms;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Capture = Baballonia.SDK.Capture;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.Loader;
 
 namespace Baballonia.Desktop.Captures;
 

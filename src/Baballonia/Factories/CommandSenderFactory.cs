@@ -1,6 +1,6 @@
-﻿using System;
-using Baballonia.Contracts;
+﻿using Baballonia.Contracts;
 using Baballonia.Helpers;
+using System;
 
 namespace Baballonia.Factories
 {

@@ -1,9 +1,9 @@
-﻿using System.Buffers.Binary;
+﻿using Microsoft.Extensions.Logging;
+using OpenCvSharp;
+using System.Buffers.Binary;
 using System.IO.Ports;
 using System.Numerics;
 using System.Text.RegularExpressions;
-using Microsoft.Extensions.Logging;
-using OpenCvSharp;
 using Capture = Baballonia.SDK.Capture;
 
 namespace Baballonia.SerialCameraCapture;
@@ -24,16 +24,6 @@ public sealed class SerialCameraCapture(string source, ILogger<SerialCameraCaptu
         BaudRate = BaudRate,
         ReadTimeout = SerialPort.InfiniteTimeout,
     };
-
-
-    public override bool CanConnect(string connectionString)
-    {
-        var lowered = connectionString.ToLower();
-        return lowered.StartsWith("com") ||
-               lowered.StartsWith("/dev/tty") ||
-               lowered.StartsWith("/dev/cu") ||
-               lowered.StartsWith("/dev/ttyacm");
-    }
 
     public override Task<bool> StartCapture()
     {

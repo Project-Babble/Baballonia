@@ -32,34 +32,44 @@ public class EyePipelineEventBus : GenericEventBus, IEyePipelineEventBus
 public class GenericEventBus : IEventBus
 {
     private readonly Dictionary<Type, List<Delegate>> _subscribers = new();
+    private object _lock = new();
 
     public void Subscribe<T>(Action<T> callback)
     {
-        if (!_subscribers.TryGetValue(typeof(T), out var list))
+        lock (_lock)
         {
-            list = new List<Delegate>();
-            _subscribers[typeof(T)] = list;
-        }
+            if (!_subscribers.TryGetValue(typeof(T), out var list))
+            {
+                list = new List<Delegate>();
+                _subscribers[typeof(T)] = list;
+            }
 
-        list.Add(callback);
+            list.Add(callback);
+        }
     }
 
     public void Unsubscribe<T>(Action<T> callback)
     {
-        if (_subscribers.TryGetValue(typeof(T), out var list))
+        lock (_lock)
         {
-            list.Remove(callback);
-            if (list.Count == 0)
-                _subscribers.Remove(typeof(T));
+            if (_subscribers.TryGetValue(typeof(T), out var list))
+            {
+                list.Remove(callback);
+                if (list.Count == 0)
+                    _subscribers.Remove(typeof(T));
+            }
         }
     }
 
     public void Publish<T>(T data)
     {
-        if (_subscribers.TryGetValue(typeof(T), out var list))
+        lock (_lock)
         {
-            foreach (var callback in list.Cast<Action<T>>())
-                callback(data);
+            if (_subscribers.TryGetValue(typeof(T), out var list))
+            {
+                foreach (var callback in list.Cast<Action<T>>())
+                    callback(data);
+            }
         }
     }
 }

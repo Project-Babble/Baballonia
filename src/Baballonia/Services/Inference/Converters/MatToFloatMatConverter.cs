@@ -1,7 +1,7 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using Microsoft.ML.OnnxRuntime.Tensors;
+﻿using Microsoft.ML.OnnxRuntime.Tensors;
 using OpenCvSharp;
+using System;
+using System.Runtime.InteropServices;
 
 namespace Baballonia.Services.Inference;
 

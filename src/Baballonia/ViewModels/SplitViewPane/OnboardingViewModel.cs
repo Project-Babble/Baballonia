@@ -1,17 +1,15 @@
-using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Windows.Input;
+using Baballonia.Assets;
+using Baballonia.Contracts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
-using Baballonia.Services;
-using Baballonia.Contracts;
+using System;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace Baballonia.ViewModels;
 
-public partial class OnboardingViewModel : ObservableObject
+public partial class OnboardingViewModel : ViewModelBase
 {
     private readonly ILocalSettingsService _localSettingsService;
 
@@ -23,12 +21,6 @@ public partial class OnboardingViewModel : ObservableObject
 
     [ObservableProperty]
     private string _nextButtonText = "Next";
-
-    [ObservableProperty] private string _babbleFirmwareDocs =
-        "https://docs.babble.diy/docs/hardware/Firmware";
-
-    [ObservableProperty] private string _youtubeLink =
-        "https://www.youtube.com/watch?v=iPRabTew0KU";
 
     [ObservableProperty]
     private bool _canGoBack;
@@ -65,12 +57,12 @@ public partial class OnboardingViewModel : ObservableObject
     {
         CurrentSlideName = CurrentSlideIndex switch
         {
-            0 => "Welcome!",
-            1 => "Firmware",
-            2 => "Assembly",
-            3 => "UI Overview",
-            4 => "Finished!",
-            _ => "Welcome"
+            0 => Resources.Onboarding_Slide_Welcome,    // "Welcome!",
+            1 => Resources.Onboarding_Slide_Firmware,   // "Firmware",
+            2 => Resources.Onboarding_Slide_Assembly,   // "Assembly",
+            3 => Resources.Onboarding_Slide_UIOverview, // "UI Overview",
+            4 => Resources.Onboarding_Slide_Finished,   // "Finished!",
+            _ => Resources.Onboarding_Slide_Welcome,    // "Welcome"
         };
 
         // Update indicators
@@ -81,7 +73,9 @@ public partial class OnboardingViewModel : ObservableObject
 
         // Update button states
         CanGoBack = CurrentSlideIndex > 0;
-        NextButtonText = CurrentSlideIndex == SlideIndicators.Count - 1 ? "Finish" : "Next";
+        NextButtonText = CurrentSlideIndex == SlideIndicators.Count - 1 ? 
+            Resources.Onboarding_Finish_Button : // "Finish"
+            Resources.Onboarding_Next_Button;    // "Next"
     }
 
     public void GoToPrevious()
@@ -104,16 +98,6 @@ public partial class OnboardingViewModel : ObservableObject
         {
             FinishOnboarding();
         }
-    }
-
-    public void OpenBabbleModuleUrl()
-    {
-        Utils.OpenUrl(BabbleFirmwareDocs);
-    }
-
-    public void OpenYoutubeUrl()
-    {
-        Utils.OpenUrl(YoutubeLink);
     }
 
     private async void FinishOnboarding()

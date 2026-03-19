@@ -1,7 +1,5 @@
-﻿using System;
-using Baballonia.Contracts;
+﻿using Baballonia.Contracts;
 using Baballonia.Services.Inference.Enums;
-using OpenCvSharp;
 
 namespace Baballonia.Services.Inference;
 
@@ -16,8 +14,6 @@ public class DefaultProcessingPipeline : IProcessingPipeline
     public IImageConverter? ImageConverter;
     public IInferenceRunner? InferenceService;
     public IFilter? Filter;
-
-
 
     public float[]? RunUpdate()
     {

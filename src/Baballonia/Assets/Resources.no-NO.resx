@@ -135,6 +135,9 @@
   <data name="Settings_Theme_Description" xml:space="preserve">
     <value>Velg hvilket app tema som skal vises</value>
   </data>
+  <data name="Settings_DFR_Description" xml:space="preserve">
+    <value>Aktiver Pimax4All dynamisk foveated rendering for valgte titler</value>
+  </data>
   <data name="Settings_OSC_Description" xml:space="preserve">
     <value>Hvor skal OSC-data sendes?</value>
   </data>
@@ -193,7 +196,7 @@
     <value>Velg høyre ramme</value>
   </data>
   <data name="Home_Face_Camera_Address" xml:space="preserve">
-    <value>Ansiktskamera-adresse (Automatic Translation)</value>
+    <value>Ansiktskamera-adresse</value>
   </data>
   <data name="Home_Face_Camera_Select_Entire_Frame" xml:space="preserve">
     <value>Velg Ansikts-Ramme</value>
@@ -223,10 +226,10 @@
     <value>Kalibrering</value>
   </data>
   <data name="Calibration_Reset_Minimums" xml:space="preserve">
-    <value>Reset Minimums</value>
+    <value>Nullstill Minimum</value>
   </data>
   <data name="Calibration_Reset_Maximums" xml:space="preserve">
-    <value>Reset Maximums</value>
+    <value>Nullstill Maksimum</value>
   </data>
   <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
     <value>Øyeuttrykk</value>
@@ -319,7 +322,7 @@
     <value>ADVARSEL! DENNE VIL FULLFØRE TILGJENGELIG DIN TRACKER. DU VIL IKKE FOR Å PERFORERTE FØRSTE GANG TIL OPPEN FELLES DINE TRACKER.</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
-    <value>Flash firmware</value>
+    <value>Flash Firmware</value>
   </data>
   <data name="Firmware_Flashing_Note" xml:space="preserve">
     <value>Dette tar omtrent 10 sekunder. Ikke forlat denne siden!</value>
@@ -412,7 +415,28 @@
     <value>Åpne loggmappen</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>Denne veiviseren vil lede deg gjennom å sette opp den nye Babble appen.</value>
+    <value>Denne veiviseren vil guide deg gjennom oppsett av den nye Babble-appen.</value>
+  </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>Velkommen!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>Firmware</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>Montering</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>Brukergrensesnitt oversikt</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>Ferdig!</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>Neste</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>Fullfør</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
     <value>Kablet eller trådløst?</value>
@@ -439,7 +463,7 @@
     <value>Språk</value>
   </data>
   <data name="Settings_Language_Description" xml:space="preserve">
-    <value>Angi programmets språk. Bytt sider til det gjelder. (Automatic Translation)</value>
+    <value>Angi programmets språk. Bytt sider til det gjelder.</value>
   </data>
   <data name="Settings_Language_Default" xml:space="preserve">
     <value>Standard</value>
@@ -521,6 +545,9 @@
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>Start</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>Forrige</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
     <value>Hopp</value>
@@ -716,5 +743,50 @@
   </data>
   <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
     <value>Avvis</value>
+  </data>
+  <data name="Home_Cameras_Linux_Workarounds" xml:space="preserve">
+    <value>Midlertidige løsninger:
+- Prøv Steam scout 1.0 runtime (ikke sniper 3.0), installer libudev, bygg fra kildekoden, eller bli med i plugdev-gruppen.
+- Vi støtter kun Steam- og tarball-utgivelser, ikke AUR-pakken.
+- Babble-kort støtter ikke UVC/Serielt på Linux, bruk en trådløs konfigurasjon.</value>
+  </data>
+  <data name="Settings_ShareData_Header" xml:space="preserve">
+    <value>Del øye-/ansiktsdata</value>
+  </data>
+  <data name="Settings_ShareData_Description" xml:space="preserve">
+    <value>Samtykk til å dele anonyme øye-/ansiktsdata for å forbedre våre algoritmer</value>
+  </data>
+  <data name="Settings_DFR_Header" xml:space="preserve">
+    <value>Bruk DFR</value>
+  </data>
+  <data name="Settings_DFR_Description" xml:space="preserve">
+    <value>Aktiver Pimax4All dynamisk foveated rendering for valgte titler</value>
+  </data>
+  <data name="Firmware_Mode_Both" xml:space="preserve">
+    <value>Begge</value>
+  </data>
+  <data name="Firmware_Mode_Eyes" xml:space="preserve">
+    <value>Øyne</value>
+  </data>
+  <data name="Firmware_Mode_Face" xml:space="preserve">
+    <value>Ansikt</value>
+  </data>
+  <data name="Firmware_Mode_None" xml:space="preserve">
+    <value>Ingen</value>
+  </data>
+  <data name="Settings_LogLevel_Debug" xml:space="preserve">
+    <value>Debug</value>
+  </data>
+  <data name="Settings_LogLevel_Information" xml:space="preserve">
+    <value>Informasjon</value>
+  </data>
+  <data name="Settings_LogLevel_Warning" xml:space="preserve">
+    <value>Advarsel</value>
+  </data>
+  <data name="Settings_LogLevel_Error" xml:space="preserve">
+    <value>Feil</value>
+  </data>
+  <data name="Settings_LogLevel_Level" xml:space="preserve">
+    <value>Velg Nivå...</value>
   </data>
 </root>

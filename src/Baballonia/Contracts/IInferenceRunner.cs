@@ -1,5 +1,4 @@
 ﻿using Microsoft.ML.OnnxRuntime.Tensors;
-using OpenCvSharp;
 
 namespace Baballonia.Contracts;
 

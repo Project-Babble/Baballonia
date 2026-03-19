@@ -1,19 +1,14 @@
+using Baballonia.Contracts;
+using Baballonia.Models;
+using MeaMod.DNS.Server;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
-using Baballonia.Contracts;
-using Baballonia.Models;
-using Baballonia.Services.Firmware;
-using MeaMod.DNS.Server;
-using Microsoft.Extensions.Logging;
 
 namespace Baballonia.Services;
 
@@ -42,9 +37,9 @@ public class FirmwareService(ILogger<FirmwareService> logger, ICommandSenderFact
         }
     }
 
-    public FirmwareSession StartSession(CommandSenderType type, string port)
+    public FirmwareSessionV1 StartSession(CommandSenderType type, string port)
     {
-        return new FirmwareSession(commandSenderFactory.Create(type, port), logger);
+        return new FirmwareSessionV1(commandSenderFactory.Create(type, port), logger);
     }
 
     /// <summary>
@@ -169,7 +164,7 @@ public class FirmwareService(ILogger<FirmwareService> logger, ICommandSenderFact
 
                 session.Dispose();
             }
-            catch (TimeoutException ex)
+            catch (TimeoutException)
             {
                 logger.LogInformation("probing port {}: timeout reached", port);
             }

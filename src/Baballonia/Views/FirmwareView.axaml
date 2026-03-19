@@ -16,9 +16,26 @@
         <StackPanel Classes="Page">
             <TextBlock Classes="Header" Text="{x:Static assets:Resources.Firmware_Title_Header}" />
 
+            <Border
+              CornerRadius="8"
+              Background="{DynamicResource SystemChromeMediumLowColor}"
+              Padding="16,12">
+              <StackPanel Spacing="12">
+                <TextBlock
+                  Text="{x:Static assets:Resources.Common_Note}"
+                  FontWeight="Bold"
+                  TextWrapping="Wrap" />
+                <TextBlock
+                  Text="{x:Static assets:Resources.Firmware_Flashing_Header_Alert}"
+                  TextWrapping="Wrap" />
+              </StackPanel>
+            </Border>
+
             <controls:ContentExample>
                 <StackPanel Spacing="12">
-                    <TextBlock FontWeight="Bold" Text="{x:Static assets:Resources.Firmware_Select_Tracker_Header}" />
+                    <TextBlock FontWeight="Bold"
+                               TextWrapping="Wrap"
+                               Text="{x:Static assets:Resources.Firmware_Select_Tracker_Header}" />
                     <TextBlock TextWrapping="Wrap">
                       <Run Text="{x:Static assets:Resources.Firmware_Device_Instructions_1}" />
                       <LineBreak/>
@@ -214,6 +231,7 @@
                 </Expander.Header>
                 <StackPanel Spacing="24">
 
+                  <!-- Warning Block -->
                   <Border
                     Background="Orange"
                     CornerRadius="8"
@@ -227,10 +245,28 @@
                         Width="20" />
                       <StackPanel Grid.Column="2" Spacing="4">
                         <TextBlock
-                          FontSize="14"
                           FontWeight="DemiBold"
                           Foreground="Black"
                           Text="{x:Static assets:Resources.Firmware_Flashing_Warning}"
+                          TextWrapping="Wrap" />
+                      </StackPanel>
+                    </Grid>
+                  </Border>
+
+                  <!-- Info Block -->
+                  <Border
+                    CornerRadius="8"
+                    Background="{DynamicResource SystemChromeMediumColor}"
+                    Padding="16,12">
+                    <Grid ColumnDefinitions="Auto,12,*">
+                      <PathIcon
+                        Grid.Column="0"
+                        Data="{StaticResource InfoRegular}"
+                        Height="20"
+                        Width="20" />
+                      <StackPanel Grid.Column="2" Spacing="4">
+                        <TextBlock
+                          Text="{x:Static assets:Resources.Firmware_Flashing_Wireless_Prompt}"
                           TextWrapping="Wrap" />
                       </StackPanel>
                     </Grid>
@@ -248,7 +284,7 @@
                         </StackPanel>
                       </Button.Content>
                     </Button>
-                    <ComboBox Width="200" Grid.Column="3" ItemsSource="{Binding AvailableFirmwareTypes}"
+                    <ComboBox Width="210" Grid.Column="3" ItemsSource="{Binding AvailableFirmwareTypes}"
                               SelectedIndex="{Binding SelectedFirmwareIndex}">
                     </ComboBox>
                   </Grid>

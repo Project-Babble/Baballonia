@@ -223,10 +223,10 @@
     <value>Kalibrering</value>
   </data>
   <data name="Calibration_Reset_Minimums" xml:space="preserve">
-    <value>Reset Minimums</value>
+    <value>Återställ Minimivärden</value>
   </data>
   <data name="Calibration_Reset_Maximums" xml:space="preserve">
-    <value>Reset Maximums</value>
+    <value>Återställ Maximivärden</value>
   </data>
   <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
     <value>Ögonuttryck</value>
@@ -316,10 +316,13 @@
     <value>Blinka enhetens inbyggda programvara</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>VARNING!! DETTA KOMMER FAKTORA ÅTERSTÄLL DITT BESTÄLLNING. DU BEHÖVER ATT PERFORM EN FÖRSTA TID ÅTERSTÄLL EFTER FASHING DITT BESTÄLLNING.</value>
+    <value>VARNING!! DETTA ÅTERSTÄLLER DIN TRACKER TILL FABRIKSINSTÄLLNINGAR. DU BEHÖVER GENOMFÖRA EN FÖRSTA GÅNGSINSTÄLLNING EFTER ATT DU FLASHAT DIN TRACKER.</value>
+  </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>Firmware-typ att flasha:</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
-    <value>Flash Firmware</value>
+    <value>Flasha Firmware</value>
   </data>
   <data name="Firmware_Flashing_Note" xml:space="preserve">
     <value>Detta kommer att ta cirka ~10 sekunder. Lämna inte denna sida!</value>
@@ -412,7 +415,28 @@
     <value>Öppna loggningsmappen</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>Den här guiden kommer att guida dig genom att sätta upp den nya Babble-appen.</value>
+    <value>Denna guide hjälper dig att konfigurera den nya Babble-appen.</value>
+  </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>Välkommen!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>Firmware</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>Montering</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>Gränssnittsöversikt</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>Klart!</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>Nästa</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>Slutför</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
     <value>Trådbunden eller trådlös?</value>
@@ -465,12 +489,6 @@
   <data name="Settings_Filter_Description" xml:space="preserve">
     <value>Filtrera inställningar</value>
   </data>
-  <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
-    <value>Aktiverad</value>
-  </data>
-  <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
-    <value>Slå på eller av filtrering.</value>
-  </data>
   <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
     <value>Minsta frekvens avstängd</value>
   </data>
@@ -521,6 +539,9 @@
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>Starta</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>Föregående</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
     <value>Hoppa</value>
@@ -717,20 +738,155 @@
   <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
     <value>Avfärda</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Settings_OSC_VRCFT_Warning" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Settings_OSC_VRCFT_Warning" xml:space="preserve">
+    <value>Om du använder Baballonia med VRCFaceTracking behöver du inte ändra dessa portar</value>
   </data>
-  <data name="Home_Eye_Load_Model" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Home_Preferred_Backend" xml:space="preserve">
+    <value>Föredragen backend</value>
   </data>
-  <data name="Firmware_Custom_Firmware_Load" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Home_Backend_Default" xml:space="preserve">
+    <value>Standard</value>
   </data>
-  <data name="Settings_SteamVR_Auto_Start_Header" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Home_Eye_Load_Model" xml:space="preserve">
+    <value>Ladda ögonmodell</value>
   </data>
-  <data name="Settings_SteamVR_Auto_Start_Description" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Firmware_Custom_Firmware_Load" xml:space="preserve">
+    <value>Ladda anpassad firmware</value>
+  </data>
+  <data name="Settings_SteamVR_Auto_Start_Header" xml:space="preserve">
+    <value>Starta automatiskt med SteamVR</value>
+  </data>
+  <data name="Settings_SteamVR_Auto_Start_Description" xml:space="preserve">
+    <value>Ska applikationen starta med SteamVR? (Ändring kräver omstart av SteamVR.)</value>
+  </data>
+  <data name="Settings_Advanced_Header" xml:space="preserve">
+    <value>Aktivera avancerade inställningar</value>
+  </data>
+  <data name="Settings_Advanced_Description" xml:space="preserve">
+    <value>Avancerade inställningar</value>
+  </data>
+  <data name="Godot_Locale" xml:space="preserve">
+    <value>sv</value>
+  </data>
+  <data name="About_Title_Header" xml:space="preserve">
+    <value>Om</value>
+  </data>
+  <data name="About_AboutUs_Header" xml:space="preserve">
+    <value>Om oss</value>
+  </data>
+  <data name="About_AboutUs_Description" xml:space="preserve">
+    <value>Länkar till vår snabbstartsguide, sociala medier, dokumentation etc.</value>
+  </data>
+  <data name="About_AboutBaballonia_Header" xml:space="preserve">
+    <value>Om Baballonia</value>
+  </data>
+  <data name="About_AboutBaballonia_Description" xml:space="preserve">
+    <value>Länkar för nördar (GitHub och så vidare)</value>
+  </data>
+  <data name="About_Credits_Header" xml:space="preserve">
+    <value>Erkännanden</value>
+  </data>
+  <data name="About_Credits_Description" xml:space="preserve">
+    <value>Personerna som gjorde detta projekt till vad det är. Tack till alla!</value>
+  </data>
+  <data name="About_QuickstartGuide_Alias" xml:space="preserve">
+    <value>Snabbstartsguide ⧉</value>
+  </data>
+  <data name="About_BabbleDiscord_Alias" xml:space="preserve">
+    <value>Babble Discord ⧉</value>
+  </data>
+  <data name="About_PishockDiscord_Alias" xml:space="preserve">
+    <value>PiShock Discord ⧉</value>
+  </data>
+  <data name="About_BabbleDocs_Alias" xml:space="preserve">
+    <value>Babble Dokumentation ⧉</value>
+  </data>
+  <data name="About_BabbleSite_Alias" xml:space="preserve">
+    <value>Babble Webbplats ⧉</value>
+  </data>
+  <data name="About_BabbleBlog_Alias" xml:space="preserve">
+    <value>Babble Blogg ⧉</value>
+  </data>
+  <data name="About_BabbleDataPrivacyPolicy_Alias" xml:space="preserve">
+    <value>Dataintegritetspolicy ⧉</value>
+  </data>
+  <data name="About_YoutubeLink_Alias" xml:space="preserve">
+    <value>Babble YouTube Sida ⧉</value>
+  </data>
+  <data name="About_BabbleTwitter_Alias" xml:space="preserve">
+    <value>Babble Twitter ⧉</value>
+  </data>
+  <data name="About_BaballoniaGithub_Alias" xml:space="preserve">
+    <value>Baballonia GitHub ⧉</value>
+  </data>
+  <data name="About_BaballoniaGithubIssues_Alias" xml:space="preserve">
+    <value>Baballonia GitHub Issues ⧉</value>
+  </data>
+  <data name="About_BaballoniaLicense_Alias" xml:space="preserve">
+    <value>Baballonia Licens ⧉</value>
+  </data>
+  <data name="About_BaballoniaBuildInstructions_Alias" xml:space="preserve">
+    <value>Baballonia Bygginstruktioner ⧉</value>
+  </data>
+  <data name="About_Contributors_Commits" xml:space="preserve">
+    <value>{0} commits</value>
+  </data>
+  <data name="Firmware_Flashing_Wireless_Prompt" xml:space="preserve">
+    <value>Att flasha anpassad firmware på din Babble Tracker fungerar bäst när enheten först sätts i "Wireless" läge.
+Du behöver inte ange några Wi-Fi-uppgifter. Sätt bara trackern i "Wireless" läge och starta om den innan du flashar.</value>
+  </data>
+  <data name="Firmware_Flashing_Header_Alert" xml:space="preserve">
+    <value>Om du använder en Babble Tracker med Valve Index eller Bigscreen Beyond (med/utan 1.0 basstationer) kan du märka:
+• Din skärm blir oväntat grå
+• Spårning avbryts eller förlorar position ofta
+Detta är oftast lätt att fixa! Installera bara "Tracking Loss Fix" firmware nedan.</value>
+  </data>
+  <data name="Common_Note" xml:space="preserve">
+    <value>Notera</value>
+  </data>
+  <data name="Home_Cameras_Linux_Workarounds" xml:space="preserve">
+    <value>Temporära lösningar:
+• Prova Steam scout 1.0 runtime (inte sniper 3.0), installera libudev, bygg från källkoden, eller gå med i plugdev-gruppen.
+• Vi stödjer endast Steam- och tarball-utgåvor, inte AUR-paketet.
+• Babble-kort stödjer inte UVC/Seriell på Linux, använd en trådlös konfiguration.</value>
+  </data>
+  <data name="Settings_ShareData_Header" xml:space="preserve">
+    <value>Dela ögon-/ansiktsdata</value>
+  </data>
+  <data name="Settings_ShareData_Description" xml:space="preserve">
+    <value>Samtyck till att dela anonym ögon-/ansiktsdata för att förbättra våra algoritmer</value>
+  </data>
+  <data name="Settings_DFR_Header" xml:space="preserve">
+    <value>Använd DFR</value>
+  </data>
+  <data name="Settings_DFR_Description" xml:space="preserve">
+    <value>Aktivera Pimax4All dynamisk foveated rendering för valda titlar</value>
+  </data>
+  <data name="Firmware_Mode_Both" xml:space="preserve">
+    <value>Båda</value>
+  </data>
+  <data name="Firmware_Mode_Eyes" xml:space="preserve">
+    <value>Ögon</value>
+  </data>
+  <data name="Firmware_Mode_Face" xml:space="preserve">
+    <value>Ansikte</value>
+  </data>
+  <data name="Firmware_Mode_None" xml:space="preserve">
+    <value>Inget</value>
+  </data>
+  <data name="Settings_LogLevel_Debug" xml:space="preserve">
+    <value>Felsökning</value>
+  </data>
+  <data name="Settings_LogLevel_Information" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="Settings_LogLevel_Warning" xml:space="preserve">
+    <value>Varning</value>
+  </data>
+  <data name="Settings_LogLevel_Error" xml:space="preserve">
+    <value>Fel</value>
+  </data>
+  <data name="Settings_LogLevel_Level" xml:space="preserve">
+    <value>Välj Nivå...</value>
   </data>
 </root>

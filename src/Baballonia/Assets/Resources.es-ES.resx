@@ -223,10 +223,10 @@
     <value>Calibración</value>
   </data>
   <data name="Calibration_Reset_Minimums" xml:space="preserve">
-    <value>Reset Minimums</value>
+    <value>Restablecer Mínimos</value>
   </data>
   <data name="Calibration_Reset_Maximums" xml:space="preserve">
-    <value>Reset Maximums</value>
+    <value>Restablecer Máximos</value>
   </data>
   <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
     <value>Expresiones de ojos</value>
@@ -316,7 +316,10 @@
     <value>Flashear el firmware de su dispositivo</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>¡¡ATENCIÓN!! ESTE FACTORIA REALIZARÁ TU TARJETO. SE NECESITA A PERFORMAR UNA TIENDA DE ARCHIVO ADELANTE A SU TARJETO.</value>
+    <value>¡PRECAUCIÓN! ESTO REESTABLECERÁ SU TRACKER DE FÁBRICA. NECESITARÁ REALIZAR UNA CONFIGURACIÓN INICIAL DESPUÉS DE FLASHEAR SU TRACKER.</value>
+  </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>Tipo de firmware a flashear:</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>Parpadear firmware</value>
@@ -414,6 +417,27 @@
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
     <value>Este asistente le guiará a través de la configuración de la nueva aplicación Babble.</value>
   </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>¡Bienvenido!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>Firmware</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>Ensamblaje</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>Descripción general de la interfaz de usuario</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>¡Terminado!</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>Siguiente</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>Finalizar</value>
+  </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
     <value>¿Alambrado o Wireless?</value>
   </data>
@@ -465,12 +489,6 @@
   <data name="Settings_Filter_Description" xml:space="preserve">
     <value>Ajustes de filtro</value>
   </data>
-  <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
-    <value>Activado</value>
-  </data>
-  <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
-    <value>Activar o desactivar el filtro.</value>
-  </data>
   <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
     <value>Reducción mínima de frecuencia</value>
   </data>
@@ -521,6 +539,9 @@
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>Iniciar</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>Anterior</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
     <value>Saltar</value>
@@ -717,20 +738,155 @@
   <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
     <value>Descartar</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Settings_OSC_VRCFT_Warning" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Settings_OSC_VRCFT_Warning" xml:space="preserve">
+    <value>Si estás usando Baballonia con VRCFaceTracking, no hay necesidad de cambiar estos puertos</value>
   </data>
-  <data name="Home_Eye_Load_Model" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Home_Preferred_Backend" xml:space="preserve">
+    <value>Backend Preferido</value>
   </data>
-  <data name="Firmware_Custom_Firmware_Load" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Home_Backend_Default" xml:space="preserve">
+    <value>Predeterminado</value>
   </data>
-  <data name="Settings_SteamVR_Auto_Start_Header" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Home_Eye_Load_Model" xml:space="preserve">
+    <value>Cargar Modelo de Ojo</value>
   </data>
-  <data name="Settings_SteamVR_Auto_Start_Description" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Firmware_Custom_Firmware_Load" xml:space="preserve">
+    <value>Cargar Firmware Personalizado</value>
+  </data>
+  <data name="Settings_SteamVR_Auto_Start_Header" xml:space="preserve">
+    <value>Inicio Automático con SteamVR</value>
+  </data>
+  <data name="Settings_SteamVR_Auto_Start_Description" xml:space="preserve">
+    <value>¿Debe la aplicación iniciarse con SteamVR? (El cambio requiere reiniciar SteamVR.)</value>
+  </data>
+  <data name="Settings_Advanced_Header" xml:space="preserve">
+    <value>Habilitar configuración avanzada</value>
+  </data>
+  <data name="Settings_Advanced_Description" xml:space="preserve">
+    <value>Configuración Avanzada</value>
+  </data>
+  <data name="Godot_Locale" xml:space="preserve">
+    <value>es</value>
+  </data>
+  <data name="About_Title_Header" xml:space="preserve">
+    <value>Acerca de</value>
+  </data>
+  <data name="About_AboutUs_Header" xml:space="preserve">
+    <value>Acerca de Nosotros</value>
+  </data>
+  <data name="About_AboutUs_Description" xml:space="preserve">
+    <value>Enlaces a nuestra guía de inicio rápido, redes sociales, documentación, etc.</value>
+  </data>
+  <data name="About_AboutBaballonia_Header" xml:space="preserve">
+    <value>Acerca de Baballonia</value>
+  </data>
+  <data name="About_AboutBaballonia_Description" xml:space="preserve">
+    <value>Enlaces para nerds (GitHub y así sucesivamente)</value>
+  </data>
+  <data name="About_Credits_Header" xml:space="preserve">
+    <value>Créditos</value>
+  </data>
+  <data name="About_Credits_Description" xml:space="preserve">
+    <value>Las personas que hicieron este proyecto lo que es. ¡Gracias a todos!</value>
+  </data>
+  <data name="About_QuickstartGuide_Alias" xml:space="preserve">
+    <value>Guía de Inicio Rápido ⧉</value>
+  </data>
+  <data name="About_BabbleDiscord_Alias" xml:space="preserve">
+    <value>Discord de Babble ⧉</value>
+  </data>
+  <data name="About_PishockDiscord_Alias" xml:space="preserve">
+    <value>Discord de PiShock ⧉</value>
+  </data>
+  <data name="About_BabbleDocs_Alias" xml:space="preserve">
+    <value>Documentación de Babble ⧉</value>
+  </data>
+  <data name="About_BabbleSite_Alias" xml:space="preserve">
+    <value>Sitio de Babble ⧉</value>
+  </data>
+  <data name="About_BabbleBlog_Alias" xml:space="preserve">
+    <value>Blog de Babble ⧉</value>
+  </data>
+  <data name="About_BabbleDataPrivacyPolicy_Alias" xml:space="preserve">
+    <value>Política de Privacidad de Datos ⧉</value>
+  </data>
+  <data name="About_YoutubeLink_Alias" xml:space="preserve">
+    <value>Página de YouTube de Babble ⧉</value>
+  </data>
+  <data name="About_BabbleTwitter_Alias" xml:space="preserve">
+    <value>Twitter de Babble ⧉</value>
+  </data>
+  <data name="About_BaballoniaGithub_Alias" xml:space="preserve">
+    <value>GitHub de Baballonia ⧉</value>
+  </data>
+  <data name="About_BaballoniaGithubIssues_Alias" xml:space="preserve">
+    <value>Issues de GitHub de Baballonia ⧉</value>
+  </data>
+  <data name="About_BaballoniaLicense_Alias" xml:space="preserve">
+    <value>Licencia de Baballonia ⧉</value>
+  </data>
+  <data name="About_BaballoniaBuildInstructions_Alias" xml:space="preserve">
+    <value>Instrucciones de Construcción de Baballonia ⧉</value>
+  </data>
+  <data name="About_Contributors_Commits" xml:space="preserve">
+    <value>{0} commits</value>
+  </data>
+  <data name="Firmware_Flashing_Wireless_Prompt" xml:space="preserve">
+    <value>Flashear firmware personalizado en tu Babble Tracker funciona mejor cuando el dispositivo está configurado primero en modo "Inalámbrico". 
+No necesitas ingresar ninguna credencial Wi-Fi. Simplemente cambia el tracker a modo "Inalámbrico", luego reinícialo antes de flashear.</value>
+  </data>
+  <data name="Firmware_Flashing_Header_Alert" xml:space="preserve">
+    <value>Si estás usando un Babble Tracker con Valve Index o Bigscreen Beyond (con/sin estaciones base 1.0), podrías notar:
+• Tu pantalla se vuelve gris inesperadamente
+• El seguimiento se corta o pierde la posición frecuentemente
+¡Esto generalmente es fácil de arreglar! Simplemente instala el firmware "Tracking Loss Fix" a continuación.</value>
+  </data>
+  <data name="Common_Note" xml:space="preserve">
+    <value>Nota</value>
+  </data>
+  <data name="Home_Cameras_Linux_Workarounds" xml:space="preserve">
+    <value>Soluciones alternativas:
+• Prueba el runtime Steam scout 1.0 (no sniper 3.0), instala libudev, compila desde el código fuente, o únete al grupo plugdev.
+• Solo soportamos lanzamientos de Steam y tarball, no el paquete AUR.
+• Las placas Babble no soportan UVC/Serie en Linux, usa una configuración inalámbrica.</value>
+  </data>
+  <data name="Settings_ShareData_Header" xml:space="preserve">
+    <value>Compartir datos de ojos/cara</value>
+  </data>
+  <data name="Settings_ShareData_Description" xml:space="preserve">
+    <value>Optar por compartir datos anónimos de ojos/cara para mejorar nuestros algoritmos</value>
+  </data>
+  <data name="Settings_DFR_Header" xml:space="preserve">
+    <value>Usar DFR</value>
+  </data>
+  <data name="Settings_DFR_Description" xml:space="preserve">
+    <value>Habilitar renderizado dinámico con foveación Pimax4All para títulos seleccionados</value>
+  </data>
+  <data name="Firmware_Mode_Both" xml:space="preserve">
+    <value>Ambos</value>
+  </data>
+  <data name="Firmware_Mode_Eyes" xml:space="preserve">
+    <value>Ojos</value>
+  </data>
+  <data name="Firmware_Mode_Face" xml:space="preserve">
+    <value>Cara</value>
+  </data>
+  <data name="Firmware_Mode_None" xml:space="preserve">
+    <value>Ninguno</value>
+  </data>
+  <data name="Settings_LogLevel_Debug" xml:space="preserve">
+    <value>Depuración</value>
+  </data>
+  <data name="Settings_LogLevel_Information" xml:space="preserve">
+    <value>Información</value>
+  </data>
+  <data name="Settings_LogLevel_Warning" xml:space="preserve">
+    <value>Advertencia</value>
+  </data>
+  <data name="Settings_LogLevel_Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Settings_LogLevel_Level" xml:space="preserve">
+    <value>Seleccionar Nivel...</value>
   </data>
 </root>

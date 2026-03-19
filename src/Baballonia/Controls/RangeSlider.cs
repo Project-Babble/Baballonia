@@ -1,5 +1,4 @@
-﻿using System;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
@@ -12,6 +11,7 @@ using Avalonia.Layout;
 using Avalonia.Reactive;
 using Avalonia.Utilities;
 using Baballonia.Controls.Primitives;
+using System;
 using RangeBase = Baballonia.Controls.Primitives.RangeBase;
 
 namespace Baballonia.Controls;

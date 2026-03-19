@@ -223,10 +223,10 @@
     <value>معايرة</value>
   </data>
   <data name="Calibration_Reset_Minimums" xml:space="preserve">
-    <value>Reset Minimums</value>
+    <value>إعادة تعيين الحد الأدنى</value>
   </data>
   <data name="Calibration_Reset_Maximums" xml:space="preserve">
-    <value>Reset Maximums</value>
+    <value>إعادة تعيين الحد الأقصى</value>
   </data>
   <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
     <value>تعبيرات العين</value>
@@ -316,7 +316,10 @@
     <value>تشغيل البرنامج الثابت لجهازك</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>تنبيه!! هذه هي المرة الأولى التي تقوم فيها بحركتك. أنت لا تريد أن تنشرك مرة أخرى لتنبيهك إلى مجموعة من الأشياء التي يمكنك الحصول عليها في وقت لاحق.</value>
+    <value>تحذير!! هذا سيعيد تعيين المتتبع الخاص بك إلى إعدادات المصنع. ستحتاج إلى إجراء إعداد أول مرة بعد وميض المتتبع الخاص بك.</value>
+  </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>نوع البرامج الثابتة للفلاش:</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>البرامج الثابتة الفلاش</value>
@@ -412,7 +415,28 @@
     <value>فتح دليل التسجيل</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>هذا المعالج سيوجهك من خلال إعداد تطبيق بابل الجديد.</value>
+    <value>سيساعدك هذا المعالج في إعداد تطبيق Babble الجديد.</value>
+  </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>أهلا بك!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>البرنامج الثابت</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>التجميع</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>نظرة عامة للواجهة</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>تم!</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>التالي</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>إنهاء</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
     <value>محلول أم لاسلكي؟</value>
@@ -465,12 +489,6 @@
   <data name="Settings_Filter_Description" xml:space="preserve">
     <value>إعدادات الفلتر</value>
   </data>
-  <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
-    <value>تمكين</value>
-  </data>
-  <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
-    <value>تشغيل الفلتر أو إيقاف تشغيله.</value>
-  </data>
   <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
     <value>الحد الأدنى من قطع التردد</value>
   </data>
@@ -521,6 +539,9 @@
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>تشغيل</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>السابق</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
     <value>تخطي</value>
@@ -717,20 +738,155 @@
   <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
     <value>تجاهل</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Settings_OSC_VRCFT_Warning" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Settings_OSC_VRCFT_Warning" xml:space="preserve">
+    <value>إذا كنت تستخدم Baballonia مع VRCFaceTracking، فلا داعي لتغيير هذه المنافذ</value>
   </data>
-  <data name="Home_Eye_Load_Model" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Home_Preferred_Backend" xml:space="preserve">
+    <value>الخلفية المفضلة</value>
   </data>
-  <data name="Firmware_Custom_Firmware_Load" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Home_Backend_Default" xml:space="preserve">
+    <value>الافتراضي</value>
   </data>
-  <data name="Settings_SteamVR_Auto_Start_Header" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Home_Eye_Load_Model" xml:space="preserve">
+    <value>تحميل نموذج العين</value>
   </data>
-  <data name="Settings_SteamVR_Auto_Start_Description" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Firmware_Custom_Firmware_Load" xml:space="preserve">
+    <value>تحميل برنامج ثابت مخصص</value>
+  </data>
+  <data name="Settings_SteamVR_Auto_Start_Header" xml:space="preserve">
+    <value>بدء التشغيل التلقائي مع SteamVR</value>
+  </data>
+  <data name="Settings_SteamVR_Auto_Start_Description" xml:space="preserve">
+    <value>هل يجب أن تبدأ التطبيق مع SteamVR؟ (يتطلب التغيير إعادة تشغيل SteamVR.)</value>
+  </data>
+  <data name="Settings_Advanced_Header" xml:space="preserve">
+    <value>تمكين الإعدادات المتقدمة</value>
+  </data>
+  <data name="Settings_Advanced_Description" xml:space="preserve">
+    <value>الإعدادات المتقدمة</value>
+  </data>
+  <data name="Godot_Locale" xml:space="preserve">
+    <value>ar</value>
+  </data>
+  <data name="About_Title_Header" xml:space="preserve">
+    <value>حول</value>
+  </data>
+  <data name="About_AboutUs_Header" xml:space="preserve">
+    <value>من نحن</value>
+  </data>
+  <data name="About_AboutUs_Description" xml:space="preserve">
+    <value>روابط إلى دليل البدء السريع الخاص بنا، وسائل التواصل الاجتماعي، الوثائق، إلخ.</value>
+  </data>
+  <data name="About_AboutBaballonia_Header" xml:space="preserve">
+    <value>حول Baballonia</value>
+  </data>
+  <data name="About_AboutBaballonia_Description" xml:space="preserve">
+    <value>روابط للمهوسين (GitHub وهكذا)</value>
+  </data>
+  <data name="About_Credits_Header" xml:space="preserve">
+    <value>الإشادات</value>
+  </data>
+  <data name="About_Credits_Description" xml:space="preserve">
+    <value>الأشخاص الذين جعلوا هذا المشروع ما هو عليه. شكراً للجميع!</value>
+  </data>
+  <data name="About_QuickstartGuide_Alias" xml:space="preserve">
+    <value>دليل البدء السريع ⧉</value>
+  </data>
+  <data name="About_BabbleDiscord_Alias" xml:space="preserve">
+    <value>Discord Babble ⧉</value>
+  </data>
+  <data name="About_PishockDiscord_Alias" xml:space="preserve">
+    <value>Discord PiShock ⧉</value>
+  </data>
+  <data name="About_BabbleDocs_Alias" xml:space="preserve">
+    <value>وثائق Babble ⧉</value>
+  </data>
+  <data name="About_BabbleSite_Alias" xml:space="preserve">
+    <value>موقع Babble ⧉</value>
+  </data>
+  <data name="About_BabbleBlog_Alias" xml:space="preserve">
+    <value>مدونة Babble ⧉</value>
+  </data>
+  <data name="About_BabbleDataPrivacyPolicy_Alias" xml:space="preserve">
+    <value>سياسة خصوصية البيانات ⧉</value>
+  </data>
+  <data name="About_YoutubeLink_Alias" xml:space="preserve">
+    <value>صفحة YouTube Babble ⧉</value>
+  </data>
+  <data name="About_BabbleTwitter_Alias" xml:space="preserve">
+    <value>Twitter Babble ⧉</value>
+  </data>
+  <data name="About_BaballoniaGithub_Alias" xml:space="preserve">
+    <value>GitHub Baballonia ⧉</value>
+  </data>
+  <data name="About_BaballoniaGithubIssues_Alias" xml:space="preserve">
+    <value>قضايا GitHub Baballonia ⧉</value>
+  </data>
+  <data name="About_BaballoniaLicense_Alias" xml:space="preserve">
+    <value>ترخيص Baballonia ⧉</value>
+  </data>
+  <data name="About_BaballoniaBuildInstructions_Alias" xml:space="preserve">
+    <value>تعليمات بناء Baballonia ⧉</value>
+  </data>
+  <data name="About_Contributors_Commits" xml:space="preserve">
+    <value>{0} عمليات إرسال</value>
+  </data>
+  <data name="Firmware_Flashing_Wireless_Prompt" xml:space="preserve">
+    <value>عملية وميض البرنامج الثابت المخصص على Babble Tracker الخاص بك تعمل بشكل أفضل عندما يتم تعيين الجهاز أولاً إلى وضع "لاسلكي".
+لا تحتاج إلى إدخال أي بيانات اعتماد Wi-Fi. ما عليك سوى تبديل المتتبع إلى وضع "لاسلكي" ثم إعادة تشغيله قبل الوميض.</value>
+  </data>
+  <data name="Firmware_Flashing_Header_Alert" xml:space="preserve">
+    <value>إذا كنت تستخدم Babble Tracker مع Valve Index أو Bigscreen Beyond (مع/بدون محطات أساس 1.0)، قد تلاحظ:
+• شاشتك تصبح رمادية بشكل غير متوقع
+• التتبع ينقطع أو يفقد الموضع بشكل متكرر
+هذا عادة ما يكون سهل الإصلاح! ما عليك سوى تثبيت البرنامج الثابت "Tracking Loss Fix" أدناه.</value>
+  </data>
+  <data name="Common_Note" xml:space="preserve">
+    <value>ملاحظة</value>
+  </data>
+  <data name="Home_Cameras_Linux_Workarounds" xml:space="preserve">
+    <value>حلول بديلة:
+• جرب وقت تشغيل Steam scout 1.0 (ليس نايبر 3.0)، قم بتثبيت libudev، أو انضم إلى مجموعة plugdev.
+• نحن ندعم فقط إصدارات Steam و tarball، وليست حزمة AUR.
+• لوحات Babble لا تدعم UVC/المنفذ التسلسلي على Linux، استخدم تكوين لاسلكي.</value>
+  </data>
+  <data name="Settings_ShareData_Header" xml:space="preserve">
+    <value>مشاركة بيانات العين/الوجه</value>
+  </data>
+  <data name="Settings_ShareData_Description" xml:space="preserve">
+    <value>الموافقة على مشاركة بيانات العين/الوجه المجهولة لتحسين خوارزمياتنا</value>
+  </data>
+  <data name="Settings_DFR_Header" xml:space="preserve">
+    <value>استخدام DFR</value>
+  </data>
+  <data name="Settings_DFR_Description" xml:space="preserve">
+    <value>تمكين Pimax4All العرض الديناميكي foveated للعناوين المحددة</value>
+  </data>
+  <data name="Firmware_Mode_Both" xml:space="preserve">
+    <value>كلاهما</value>
+  </data>
+  <data name="Firmware_Mode_Eyes" xml:space="preserve">
+    <value>العيون</value>
+  </data>
+  <data name="Firmware_Mode_Face" xml:space="preserve">
+    <value>الوجه</value>
+  </data>
+  <data name="Firmware_Mode_None" xml:space="preserve">
+    <value>لا شيء</value>
+  </data>
+  <data name="Settings_LogLevel_Debug" xml:space="preserve">
+    <value>تصحيح</value>
+  </data>
+  <data name="Settings_LogLevel_Information" xml:space="preserve">
+    <value>معلومات</value>
+  </data>
+  <data name="Settings_LogLevel_Warning" xml:space="preserve">
+    <value>تحذير</value>
+  </data>
+  <data name="Settings_LogLevel_Error" xml:space="preserve">
+    <value>خطأ</value>
+  </data>
+  <data name="Settings_LogLevel_Level" xml:space="preserve">
+    <value>اختيار المستوى...</value>
   </data>
 </root>

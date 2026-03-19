@@ -223,10 +223,10 @@
     <value>Kalibrointi</value>
   </data>
   <data name="Calibration_Reset_Minimums" xml:space="preserve">
-    <value>Reset Minimums</value>
+    <value>Nollaa Minimit</value>
   </data>
   <data name="Calibration_Reset_Maximums" xml:space="preserve">
-    <value>Reset Maximums</value>
+    <value>Nollaa Maksimit</value>
   </data>
   <data name="Calibration_Eye_Expressions_Header" xml:space="preserve">
     <value>Silmien Lausekkeet</value>
@@ -316,10 +316,13 @@
     <value>Flash laitteesi firmware</value>
   </data>
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
-    <value>VAROITUS!! TÄMÄ KÄYTTÖ PALAUTA RAKENTAJasi. SINÄ SUORITTAA ENSIMMÄISEN AJAN JÄLKEEN LÄHETTÄVÄN RAKENNUKSEN.</value>
+    <value>VAROITUS!! TÄMÄ NOLLAA TILAUKSEKSISETTÄNÄ. SINUN TÄYTYY SUORITTAA ENSIMMÄLLÄN ASETUKSEN KUN OLET FLASHANNUT TILAUKSEKSISETTÄNÄ.</value>
+  </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>Flashattavan firmwaren tyyppi:</value>
   </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
-    <value>Flash Firmware</value>
+    <value>Väliaa Firmware</value>
   </data>
   <data name="Firmware_Flashing_Note" xml:space="preserve">
     <value>Tämä kestää noin ~ 10 sekuntia. Älä jätä tätä sivua!</value>
@@ -412,7 +415,28 @@
     <value>Avaa lokihakemisto</value>
   </data>
   <data name="Onboarding_Welcome_Message" xml:space="preserve">
-    <value>Tämä avustaja opastaa sinua perustamalla uuden Babble Appin.</value>
+    <value>Tämä opastaja auttaa sinua määrittämään uuden Babble-sovelluksen.</value>
+  </data>
+  <data name="Onboarding_Slide_Welcome" xml:space="preserve">
+    <value>Tervetuloa!</value>
+  </data>
+  <data name="Onboarding_Slide_Firmware" xml:space="preserve">
+    <value>Firmware</value>
+  </data>
+  <data name="Onboarding_Slide_Assembly" xml:space="preserve">
+    <value>Kokoonpano</value>
+  </data>
+  <data name="Onboarding_Slide_UIOverview" xml:space="preserve">
+    <value>Käyttöliittymän yleiskatsaus</value>
+  </data>
+  <data name="Onboarding_Slide_Finished" xml:space="preserve">
+    <value>Valmis!</value>
+  </data>
+  <data name="Onboarding_Next_Button" xml:space="preserve">
+    <value>Seuraava</value>
+  </data>
+  <data name="Onboarding_Finish_Button" xml:space="preserve">
+    <value>Valmis</value>
   </data>
   <data name="Onboarding_Wireless_Header" xml:space="preserve">
     <value>Langallinen vai langaton?</value>
@@ -465,12 +489,6 @@
   <data name="Settings_Filter_Description" xml:space="preserve">
     <value>Suodattimen Asetukset</value>
   </data>
-  <data name="Settings_Filter_Enabled_Label" xml:space="preserve">
-    <value>Käytössä</value>
-  </data>
-  <data name="Settings_Filter_Enabled_Description" xml:space="preserve">
-    <value>Ota suodatus käyttöön tai pois päältä.</value>
-  </data>
   <data name="Settings_Filter_MinFreq_Label" xml:space="preserve">
     <value>Vähimmäistaajuus katto</value>
   </data>
@@ -521,6 +539,9 @@
   </data>
   <data name="Settings_FirstTime_Button" xml:space="preserve">
     <value>Käynnistä</value>
+  </data>
+  <data name="Onboarding_Previous_Button" xml:space="preserve">
+    <value>Edellinen</value>
   </data>
   <data name="Onboarding_Skip_Button" xml:space="preserve">
     <value>Ohita</value>
@@ -717,20 +738,155 @@
   <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
     <value>Hylkää</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Settings_OSC_VRCFT_Warning" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Settings_OSC_VRCFT_Warning" xml:space="preserve">
+    <value>Jos käytät Baballoniaa VRCFaceTrackingin kanssa, sinun ei tarvitse muuttaa näitä portteja</value>
   </data>
-  <data name="Home_Eye_Load_Model" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Home_Preferred_Backend" xml:space="preserve">
+    <value>Ensisijainen taustaohjelma</value>
   </data>
-  <data name="Firmware_Custom_Firmware_Load" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Home_Backend_Default" xml:space="preserve">
+    <value>Oletus</value>
   </data>
-  <data name="Settings_SteamVR_Auto_Start_Header" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Home_Eye_Load_Model" xml:space="preserve">
+    <value>Lataa silmämalli</value>
   </data>
-  <data name="Settings_SteamVR_Auto_Start_Description" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Firmware_Custom_Firmware_Load" xml:space="preserve">
+    <value>Lataa mukautettu laiteohjelmisto</value>
+  </data>
+  <data name="Settings_SteamVR_Auto_Start_Header" xml:space="preserve">
+    <value>Käynnistä automaattisesti SteamVR:n kanssa</value>
+  </data>
+  <data name="Settings_SteamVR_Auto_Start_Description" xml:space="preserve">
+    <value>Pitäisikö sovelluksen käynnistyä SteamVR:n kanssa? (Muutos vaatii SteamVR:n uudelleenkäynnistyksen.)</value>
+  </data>
+  <data name="Settings_Advanced_Header" xml:space="preserve">
+    <value>Ota käyttöön lisäasetukset</value>
+  </data>
+  <data name="Settings_Advanced_Description" xml:space="preserve">
+    <value>Lisäasetukset</value>
+  </data>
+  <data name="Godot_Locale" xml:space="preserve">
+    <value>fi</value>
+  </data>
+  <data name="About_Title_Header" xml:space="preserve">
+    <value>Tietoja</value>
+  </data>
+  <data name="About_AboutUs_Header" xml:space="preserve">
+    <value>Meistä</value>
+  </data>
+  <data name="About_AboutUs_Description" xml:space="preserve">
+    <value>Linkit pikakäynnistysoppaaseemme, sosiaaliseen mediaan, dokumentaatioon jne.</value>
+  </data>
+  <data name="About_AboutBaballonia_Header" xml:space="preserve">
+    <value>Tietoja Baballoniasta</value>
+  </data>
+  <data name="About_AboutBaballonia_Description" xml:space="preserve">
+    <value>Linkit nördeille (GitHub jne.)</value>
+  </data>
+  <data name="About_Credits_Header" xml:space="preserve">
+    <value>Kiitokset</value>
+  </data>
+  <data name="About_Credits_Description" xml:space="preserve">
+    <value>Ihmiset, jotka tekivät tästä projektista sen, mitä se on. Kiitos kaikille!</value>
+  </data>
+  <data name="About_QuickstartGuide_Alias" xml:space="preserve">
+    <value>Pikakäynnistysopas ⧉</value>
+  </data>
+  <data name="About_BabbleDiscord_Alias" xml:space="preserve">
+    <value>Babble Discord ⧉</value>
+  </data>
+  <data name="About_PishockDiscord_Alias" xml:space="preserve">
+    <value>PiShock Discord ⧉</value>
+  </data>
+  <data name="About_BabbleDocs_Alias" xml:space="preserve">
+    <value>Babble Dokumentaatio ⧉</value>
+  </data>
+  <data name="About_BabbleSite_Alias" xml:space="preserve">
+    <value>Babble Sivusto ⧉</value>
+  </data>
+  <data name="About_BabbleBlog_Alias" xml:space="preserve">
+    <value>Babble Blogi ⧉</value>
+  </data>
+  <data name="About_BabbleDataPrivacyPolicy_Alias" xml:space="preserve">
+    <value>Tietosuojakäytäntö ⧉</value>
+  </data>
+  <data name="About_YoutubeLink_Alias" xml:space="preserve">
+    <value>Babble YouTube Sivu ⧉</value>
+  </data>
+  <data name="About_BabbleTwitter_Alias" xml:space="preserve">
+    <value>Babble Twitter ⧉</value>
+  </data>
+  <data name="About_BaballoniaGithub_Alias" xml:space="preserve">
+    <value>Baballonia GitHub ⧉</value>
+  </data>
+  <data name="About_BaballoniaGithubIssues_Alias" xml:space="preserve">
+    <value>Baballonia GitHub Ongelmat ⧉</value>
+  </data>
+  <data name="About_BaballoniaLicense_Alias" xml:space="preserve">
+    <value>Baballonia Lisenssi ⧉</value>
+  </data>
+  <data name="About_BaballoniaBuildInstructions_Alias" xml:space="preserve">
+    <value>Baballonia Kääntöohjeet ⧉</value>
+  </data>
+  <data name="About_Contributors_Commits" xml:space="preserve">
+    <value>{0} committia</value>
+  </data>
+  <data name="Firmware_Flashing_Wireless_Prompt" xml:space="preserve">
+    <value>Mukautetun laiteohjelmiston flashaus Babble Trackeriisi toimii parhaiten, kun laite on ensin asetettu "Langattomuus"-tilaan.
+Sinun ei tarvitse syöttää Wi-Fi-tunnistetietoja. Vaihda vain tracker "Langattomuus"-tilaan ja käynnistä se uudelleen ennen flashausta.</value>
+  </data>
+  <data name="Firmware_Flashing_Header_Alert" xml:space="preserve">
+    <value>Jos käytät Babble Trackeriä Valve Index tai Bigscreen Beyond (ilman/1.0 tukiasemilla), saatat huomata:
+• Näyttösi muuttuu odottamattomasti harmaaksi
+• Seuranta katkeilee tai menettää sijainnin usein
+Tämä on yleensä helppo korjata! Asenna vain "Tracking Loss Fix" -laiteohjelmisto alla.</value>
+  </data>
+  <data name="Common_Note" xml:space="preserve">
+    <value>Huomautus</value>
+  </data>
+  <data name="Home_Cameras_Linux_Workarounds" xml:space="preserve">
+    <value>Väliaikaiset ratkaisut:
+- Kokeile Steam scout 1.0 -ajonaikaa (ei sniper 3.0), asenna libudev, käännä lähdekoodista, tai liity plugdev-ryhmään.
+- Tukemme vain Steam- ja tarball-julkaisuja, ei AUR-pakettia.
+- Babble-kortit eivät tue UVC/Sarjaa Linuxissa, käytä langatonta määritystä.</value>
+  </data>
+  <data name="Settings_ShareData_Header" xml:space="preserve">
+    <value>Jaa silmä-/kasvodata</value>
+  </data>
+  <data name="Settings_ShareData_Description" xml:space="preserve">
+    <value>Suostu anonyymien silmä-/kasvojen datan jakamiseen algoritmien parantamiseksi</value>
+  </data>
+  <data name="Settings_DFR_Header" xml:space="preserve">
+    <value>Käytä DFR</value>
+  </data>
+  <data name="Settings_DFR_Description" xml:space="preserve">
+    <value>Ota käyttöön Pimax4All dynaaminen foveated rendering valituille peleille</value>
+  </data>
+  <data name="Firmware_Mode_Both" xml:space="preserve">
+    <value>Molemmat</value>
+  </data>
+  <data name="Firmware_Mode_Eyes" xml:space="preserve">
+    <value>Silmät</value>
+  </data>
+  <data name="Firmware_Mode_Face" xml:space="preserve">
+    <value>Kasvot</value>
+  </data>
+  <data name="Firmware_Mode_None" xml:space="preserve">
+    <value>Ei mitään</value>
+  </data>
+  <data name="Settings_LogLevel_Debug" xml:space="preserve">
+    <value>Debug</value>
+  </data>
+  <data name="Settings_LogLevel_Information" xml:space="preserve">
+    <value>Tieto</value>
+  </data>
+  <data name="Settings_LogLevel_Warning" xml:space="preserve">
+    <value>Varoitus</value>
+  </data>
+  <data name="Settings_LogLevel_Error" xml:space="preserve">
+    <value>Virhe</value>
+  </data>
+  <data name="Settings_LogLevel_Level" xml:space="preserve">
+    <value>Valitse Taso...</value>
   </data>
 </root>

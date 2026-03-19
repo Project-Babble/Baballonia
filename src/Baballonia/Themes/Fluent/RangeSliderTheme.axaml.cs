@@ -1,7 +1,7 @@
-﻿using System;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Styling;
+using System;
 
 namespace Baballonia.Themes.Fluent;
 
