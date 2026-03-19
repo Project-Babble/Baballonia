@@ -152,6 +152,8 @@
             <TrayIcon Icon="/Assets/WindowIcon.ico" ToolTipText="Right click to see Project Babble options">
                 <TrayIcon.Menu>
                     <NativeMenu>
+                        <NativeMenuItem Click="OnTrayShowHideClicked" Header="Minimize to Tray" />
+                        <NativeMenuItemSeparator />
                         <NativeMenuItem Click="OnTrayShutdownClicked" Header="Exit" />
                     </NativeMenu>
                 </TrayIcon.Menu>

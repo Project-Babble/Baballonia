@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
@@ -254,6 +255,30 @@ public class App : Application
 
         mainService?.Teardown();
         IsTeardDown = true;
+    }
+
+    private void OnTrayShowHideClicked(object? sender, EventArgs e)
+    {
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            if (desktop.MainWindow.IsVisible)
+            {
+                desktop.MainWindow.Hide();
+                if (sender is NativeMenuItem ShowHide)
+                {
+                    ShowHide.Header = "Show Baballonia";
+                }
+
+            }
+            else
+            {
+                desktop.MainWindow.Show();
+                if (sender is NativeMenuItem ShowHide)
+                {
+                    ShowHide.Header = "Minimize to Tray";
+                }
+            }
+        }
     }
 
     private void OnTrayShutdownClicked(object? sender, EventArgs e)
