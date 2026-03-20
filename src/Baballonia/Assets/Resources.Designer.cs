@@ -19,7 +19,7 @@ namespace Baballonia.Assets {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -2305,6 +2305,42 @@ namespace Baballonia.Assets {
         public static string Settings_Updates_Header {
             get {
                 return ResourceManager.GetString("Settings_Updates_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit.
+        /// </summary>
+        public static string Tray_Exit {
+            get {
+                return ResourceManager.GetString("Tray_Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimize to Tray.
+        /// </summary>
+        public static string Tray_Hide {
+            get {
+                return ResourceManager.GetString("Tray_Hide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Baballonia.
+        /// </summary>
+        public static string Tray_Show {
+            get {
+                return ResourceManager.GetString("Tray_Show", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Right click to see Baballonia options.
+        /// </summary>
+        public static string Tray_Tooltip {
+            get {
+                return ResourceManager.GetString("Tray_Tooltip", resourceCulture);
             }
         }
         
