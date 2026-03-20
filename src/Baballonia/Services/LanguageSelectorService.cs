@@ -1,10 +1,13 @@
 using Baballonia.Contracts;
+using System;
 using System.Globalization;
 
 namespace Baballonia.Services;
 
 public class LanguageSelectorService(ILocalSettingsService localSettingsService) : ILanguageSelectorService
 {
+    public event Action OnLanguageUpdated;
+
     public const string DefaultLanguage = "DefaultLanguage";
 
     private const string SettingsKey = "AppBackgroundRequestedLanguage";
@@ -19,6 +22,7 @@ public class LanguageSelectorService(ILocalSettingsService localSettingsService)
 
     public void SetLanguage(string language)
     {
+        OnLanguageUpdated?.Invoke();
         Language = language;
         SetRequestedLanguage();
         SaveLanguageInSettings(Language);

@@ -149,17 +149,17 @@
     </Application.Styles>
 
     <TrayIcon.Icons>
-        <TrayIcons>
-            <TrayIcon Icon="/Assets/WindowIcon.ico" ToolTipText="{x:Static assets:Resources.Tray_Tooltip}">
-                <TrayIcon.Menu>
-                    <NativeMenu>
-                        <NativeMenuItem Click="OnTrayShowHideClicked" Header="{x:Static assets:Resources.Tray_Hide}" />
-                        <NativeMenuItemSeparator />
-                        <NativeMenuItem Click="OnTrayShutdownClicked" Header="{x:Static assets:Resources.Tray_Exit}" />
-                    </NativeMenu>
-                </TrayIcon.Menu>
-            </TrayIcon>
-        </TrayIcons>
+      <TrayIcons>
+        <TrayIcon Icon="/Assets/WindowIcon.ico">
+          <TrayIcon.Menu>
+            <NativeMenu>
+              <NativeMenuItem Click="OnTrayShowHideClicked" />
+              <NativeMenuItemSeparator />
+              <NativeMenuItem Click="OnTrayShutdownClicked" />
+            </NativeMenu>
+          </TrayIcon.Menu>
+        </TrayIcon>
+      </TrayIcons>
     </TrayIcon.Icons>
 
 </Application>

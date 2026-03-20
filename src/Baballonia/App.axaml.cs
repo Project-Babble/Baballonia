@@ -1,9 +1,7 @@
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
-using Baballonia.Assets;
 using Baballonia.Activation;
 using Baballonia.Contracts;
 using Baballonia.Factories;
@@ -29,7 +27,7 @@ using System.Threading.Tasks;
 
 namespace Baballonia;
 
-public class App : Application
+public partial class App : Application
 {
     private IHost? _host;
     private bool IsTeardDown = false;
@@ -53,7 +51,6 @@ public class App : Application
     {
         _platformSpecifficServices = configure;
     }
-
 
     public override void Initialize()
     {
@@ -228,6 +225,9 @@ public class App : Application
         switch (ApplicationLifetime)
         {
             case IClassicDesktopStyleApplicationLifetime desktop:
+                var languageService = Ioc.Default.GetRequiredService<ILanguageSelectorService>();
+                InitTray();
+                languageService.OnLanguageUpdated += () => { Dispatcher.UIThread.Post(RefreshTrayStrings); };
                 desktop.MainWindow = new MainWindow(vm);
                 desktop.MainWindow.Loaded += (_, _) => { desktop.MainWindow.ShowOnboardingIfNeeded(); };
                 desktop.Exit += (s, e) =>
@@ -256,36 +256,5 @@ public class App : Application
 
         mainService?.Teardown();
         IsTeardDown = true;
-    }
-
-    private void OnTrayShowHideClicked(object? sender, EventArgs e)
-    {
-        if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop)
-            return;
-
-        if (desktop.MainWindow!.IsVisible)
-        {
-            desktop.MainWindow.Hide();
-            if (sender is NativeMenuItem showHide)
-            {
-                showHide.Header = Assets.Resources.Tray_Show;
-            }
-        }
-        else
-        {
-            desktop.MainWindow.Show();
-            if (sender is NativeMenuItem showHide)
-            {
-                showHide.Header =  Assets.Resources.Tray_Hide;
-            }
-        }
-    }
-
-    private void OnTrayShutdownClicked(object? sender, EventArgs e)
-    {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            desktop.Shutdown();
-        }
     }
 }
