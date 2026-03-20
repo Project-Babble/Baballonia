@@ -889,4 +889,16 @@
   <data name="Settings_LogLevel_Level" xml:space="preserve">
     <value>اختيار المستوى...</value>
   </data>
+  <data name="Tray_Show" xml:space="preserve">
+    <value>إظهار Baballonia</value>
+  </data>
+  <data name="Tray_Hide" xml:space="preserve">
+    <value>تصغير إلى شريط المهام</value>
+  </data>
+  <data name="Tray_Tooltip" xml:space="preserve">
+    <value>انقر بزر الماوس الأيمن لرؤية خيارات Baballonia</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>خروج</value>
+  </data>
 </root>

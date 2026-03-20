@@ -889,4 +889,16 @@ To je obvykle snadné opravit! Stačí nainstalovat firmware "Tracking Loss Fix"
   <data name="Settings_LogLevel_Level" xml:space="preserve">
     <value>Vybrat úroveň...</value>
   </data>
+  <data name="Tray_Show" xml:space="preserve">
+    <value>Zobrazit Baballonia</value>
+  </data>
+  <data name="Tray_Hide" xml:space="preserve">
+    <value>Minimalizovat do systémové lišty</value>
+  </data>
+  <data name="Tray_Tooltip" xml:space="preserve">
+    <value>Klikněte pravým tlačítkem pro zobrazení možností Baballonia</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>Ukončit</value>
+  </data>
 </root>

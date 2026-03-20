@@ -6,7 +6,8 @@
     xmlns:baballonia="clr-namespace:Baballonia"
     xmlns:themes="using:Baballonia.Themes.Fluent"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:converters="clr-namespace:Baballonia.Converters">
+    xmlns:converters="clr-namespace:Baballonia.Converters"
+    xmlns:assets="clr-namespace:Baballonia.Assets">
 
     <Application.Resources>
       <converters:BooleanOrConverter x:Key="BooleanOrConverter"/>
@@ -149,12 +150,12 @@
 
     <TrayIcon.Icons>
         <TrayIcons>
-            <TrayIcon Icon="/Assets/WindowIcon.ico" ToolTipText="Right click to see Project Babble options">
+            <TrayIcon Icon="/Assets/WindowIcon.ico" ToolTipText="{x:Static assets:Resources.Tray_Tooltip}">
                 <TrayIcon.Menu>
                     <NativeMenu>
-                        <NativeMenuItem Click="OnTrayShowHideClicked" Header="Minimize to Tray" />
+                        <NativeMenuItem Click="OnTrayShowHideClicked" Header="{x:Static assets:Resources.Tray_Hide}" />
                         <NativeMenuItemSeparator />
-                        <NativeMenuItem Click="OnTrayShutdownClicked" Header="Exit" />
+                        <NativeMenuItem Click="OnTrayShutdownClicked" Header="{x:Static assets:Resources.Tray_Exit}" />
                     </NativeMenu>
                 </TrayIcon.Menu>
             </TrayIcon>

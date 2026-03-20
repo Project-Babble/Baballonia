@@ -889,4 +889,16 @@
   <data name="Settings_LogLevel_Level" xml:space="preserve">
     <value>בחר רמה...</value>
   </data>
+  <data name="Tray_Show" xml:space="preserve">
+    <value>הצג Baballonia</value>
+  </data>
+  <data name="Tray_Hide" xml:space="preserve">
+    <value>מזער לשורת המשימות</value>
+  </data>
+  <data name="Tray_Tooltip" xml:space="preserve">
+    <value>לחץ ימני כדי לראות אפשרויות Baballonia</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>יציאה</value>
+  </data>
 </root>

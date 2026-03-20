@@ -889,4 +889,16 @@ Acest lucru este de obicei ușor de reparat! Doar instalați firmware-ul "Tracki
   <data name="Settings_LogLevel_Level" xml:space="preserve">
     <value>Selectați Nivel...</value>
   </data>
+  <data name="Tray_Show" xml:space="preserve">
+    <value>Afișează Baballonia</value>
+  </data>
+  <data name="Tray_Hide" xml:space="preserve">
+    <value>Minimizează în bara de sistem</value>
+  </data>
+  <data name="Tray_Tooltip" xml:space="preserve">
+    <value>Clic dreapta pentru a vedea opțiunile Baballonia</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>Ieșire</value>
+  </data>
 </root>

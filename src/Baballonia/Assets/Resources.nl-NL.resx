@@ -889,4 +889,16 @@ Dit is meestal eenvoudig op te lossen! Installeer gewoon de "Tracking Loss Fix" 
   <data name="Settings_LogLevel_Level" xml:space="preserve">
     <value>Selecteer Niveau...</value>
   </data>
+  <data name="Tray_Show" xml:space="preserve">
+    <value>Baballonia tonen</value>
+  </data>
+  <data name="Tray_Hide" xml:space="preserve">
+    <value>Minimaliseren naar systeemvak</value>
+  </data>
+  <data name="Tray_Tooltip" xml:space="preserve">
+    <value>Klik met de rechtermuisknop om Baballonia-opties te zien</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>Afsluiten</value>
+  </data>
 </root>

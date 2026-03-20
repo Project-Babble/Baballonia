@@ -889,4 +889,16 @@
   <data name="Settings_LogLevel_Level" xml:space="preserve">
     <value>Επιλογή Επιπέδου...</value>
   </data>
+  <data name="Tray_Show" xml:space="preserve">
+    <value>Εμφάνιση Baballonia</value>
+  </data>
+  <data name="Tray_Hide" xml:space="preserve">
+    <value>Ελαχιστοποίηση στη γραμμή εργαλείων</value>
+  </data>
+  <data name="Tray_Tooltip" xml:space="preserve">
+    <value>Δεξί κλικ για να δείτε τις επιλογές Baballonia</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>Έξοδος</value>
+  </data>
 </root>

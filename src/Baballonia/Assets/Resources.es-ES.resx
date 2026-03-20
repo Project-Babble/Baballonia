@@ -889,4 +889,16 @@ No necesitas ingresar ninguna credencial Wi-Fi. Simplemente cambia el tracker a 
   <data name="Settings_LogLevel_Level" xml:space="preserve">
     <value>Seleccionar Nivel...</value>
   </data>
+  <data name="Tray_Show" xml:space="preserve">
+    <value>Mostrar Baballonia</value>
+  </data>
+  <data name="Tray_Hide" xml:space="preserve">
+    <value>Minimizar a la Bandeja</value>
+  </data>
+  <data name="Tray_Tooltip" xml:space="preserve">
+    <value>Clic derecho para ver las opciones de Baballonia</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>Salir</value>
+  </data>
 </root>

@@ -789,4 +789,16 @@
   <data name="Settings_LogLevel_Level" xml:space="preserve">
     <value>Velg Nivå...</value>
   </data>
+  <data name="Tray_Show" xml:space="preserve">
+    <value>Vis Baballonia</value>
+  </data>
+  <data name="Tray_Hide" xml:space="preserve">
+    <value>Minimer til systemkurven</value>
+  </data>
+  <data name="Tray_Tooltip" xml:space="preserve">
+    <value>Høyreklikk for å se Baballonia-alternativer</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>Avslutt</value>
+  </data>
 </root>

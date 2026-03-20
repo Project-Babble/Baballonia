@@ -889,4 +889,16 @@ Bạn không cần nhập thông tin xác thực Wi-Fi. Chỉ cần chuyển tra
   <data name="Settings_LogLevel_Level" xml:space="preserve">
     <value>Chọn Cấp...</value>
   </data>
+  <data name="Tray_Show" xml:space="preserve">
+    <value>Hiển thị Baballonia</value>
+  </data>
+  <data name="Tray_Hide" xml:space="preserve">
+    <value>Thu nhỏ vào khay hệ thống</value>
+  </data>
+  <data name="Tray_Tooltip" xml:space="preserve">
+    <value>Nhấp chuột phải để xem các tùy chọn Baballonia</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>Thoát</value>
+  </data>
 </root>

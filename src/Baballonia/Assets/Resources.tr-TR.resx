@@ -889,4 +889,16 @@ Bu genellikle kolayca düzeltilebilir! Sadece aşağıdaki "Takip Kaybı Düzelt
   <data name="Settings_LogLevel_Level" xml:space="preserve">
     <value>Seviye Seç...</value>
   </data>
+  <data name="Tray_Show" xml:space="preserve">
+    <value>Baballonia'yı Göster</value>
+  </data>
+  <data name="Tray_Hide" xml:space="preserve">
+    <value>Sistem Tepsisine Simge Durumuna Küçült</value>
+  </data>
+  <data name="Tray_Tooltip" xml:space="preserve">
+    <value>Baballonia seçeneklerini görmek için sağ tıklayın</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>Çıkış</value>
+  </data>
 </root>

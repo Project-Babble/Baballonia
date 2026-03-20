@@ -889,4 +889,16 @@ Zazwyczaj można to łatwo naprawić! Po prostu zainstaluj oprogramowanie "Track
   <data name="Settings_LogLevel_Level" xml:space="preserve">
     <value>Wybierz poziom...</value>
   </data>
+  <data name="Tray_Show" xml:space="preserve">
+    <value>Pokaż Baballonia</value>
+  </data>
+  <data name="Tray_Hide" xml:space="preserve">
+    <value>Zminimalizuj do zasobnika systemowego</value>
+  </data>
+  <data name="Tray_Tooltip" xml:space="preserve">
+    <value>Kliknij prawym przyciskiem myszy, aby zobaczyć opcje Baballonia</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>Wyjdź</value>
+  </data>
 </root>

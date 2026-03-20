@@ -889,4 +889,16 @@ Wi-Fi認証情報を入力する必要はありません。トラッカーを「
   <data name="Settings_LogLevel_Level" xml:space="preserve">
     <value>レベルを選択...</value>
   </data>
+  <data name="Tray_Show" xml:space="preserve">
+    <value>Baballoniaを表示</value>
+  </data>
+  <data name="Tray_Hide" xml:space="preserve">
+    <value>システムトレイに最小化</value>
+  </data>
+  <data name="Tray_Tooltip" xml:space="preserve">
+    <value>右クリックでBaballoniaオプションを表示</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>終了</value>
+  </data>
 </root>

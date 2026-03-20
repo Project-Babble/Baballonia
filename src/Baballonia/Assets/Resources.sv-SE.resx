@@ -889,4 +889,16 @@ Detta är oftast lätt att fixa! Installera bara "Tracking Loss Fix" firmware ne
   <data name="Settings_LogLevel_Level" xml:space="preserve">
     <value>Välj Nivå...</value>
   </data>
+  <data name="Tray_Show" xml:space="preserve">
+    <value>Visa Baballonia</value>
+  </data>
+  <data name="Tray_Hide" xml:space="preserve">
+    <value>Minimera till systemfältet</value>
+  </data>
+  <data name="Tray_Tooltip" xml:space="preserve">
+    <value>Högerklicka för att se Baballonia-alternativ</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>Avsluta</value>
+  </data>
 </root>

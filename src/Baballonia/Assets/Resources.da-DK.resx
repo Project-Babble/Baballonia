@@ -889,4 +889,16 @@ Dette er normalt let at rette! Bare installer "Tracking Loss Fix" firmwaren nede
   <data name="Settings_LogLevel_Level" xml:space="preserve">
     <value>Vælg Niveau...</value>
   </data>
+  <data name="Tray_Show" xml:space="preserve">
+    <value>Vis Baballonia</value>
+  </data>
+  <data name="Tray_Hide" xml:space="preserve">
+    <value>Minimer til proceslinjen</value>
+  </data>
+  <data name="Tray_Tooltip" xml:space="preserve">
+    <value>Højreklik for at se Baballonia-indstillinger</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>Afslut</value>
+  </data>
 </root>

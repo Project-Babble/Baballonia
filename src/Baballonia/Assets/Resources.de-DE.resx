@@ -889,4 +889,16 @@ Dies ist normalerweise einfach zu beheben! Installieren Sie einfach die "Trackin
   <data name="Settings_LogLevel_Level" xml:space="preserve">
     <value>Stufe auswählen...</value>
   </data>
+  <data name="Tray_Show" xml:space="preserve">
+    <value>Baballonia anzeigen</value>
+  </data>
+  <data name="Tray_Hide" xml:space="preserve">
+    <value>In Systemleiste minimieren</value>
+  </data>
+  <data name="Tray_Tooltip" xml:space="preserve">
+    <value>Rechtsklick für Baballonia-Optionen</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>Beenden</value>
+  </data>
 </root>

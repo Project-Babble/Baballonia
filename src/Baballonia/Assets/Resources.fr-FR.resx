@@ -889,4 +889,16 @@ C'est généralement facile à résoudre ! Installez simplement le micrologiciel
   <data name="Settings_LogLevel_Level" xml:space="preserve">
     <value>Sélectionner le niveau...</value>
   </data>
+  <data name="Tray_Show" xml:space="preserve">
+    <value>Afficher Baballonia</value>
+  </data>
+  <data name="Tray_Hide" xml:space="preserve">
+    <value>Réduire dans la barre d'état système</value>
+  </data>
+  <data name="Tray_Tooltip" xml:space="preserve">
+    <value>Clic droit pour voir les options de Baballonia</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>Quitter</value>
+  </data>
 </root>

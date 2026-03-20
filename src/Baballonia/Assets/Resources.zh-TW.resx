@@ -889,4 +889,16 @@
   <data name="Settings_LogLevel_Level" xml:space="preserve">
     <value>選擇級別...</value>
   </data>
+  <data name="Tray_Show" xml:space="preserve">
+    <value>顯示 Baballonia</value>
+  </data>
+  <data name="Tray_Hide" xml:space="preserve">
+    <value>最小化到系統托盤</value>
+  </data>
+  <data name="Tray_Tooltip" xml:space="preserve">
+    <value>右鍵單擊查看 Baballonia 選項</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>退出</value>
+  </data>
 </root>

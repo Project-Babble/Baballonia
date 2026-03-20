@@ -889,4 +889,16 @@ Dit is gewoon maklik om reg te maak! Installeer net die "Tracking Loss Fix" firm
   <data name="Settings_LogLevel_Level" xml:space="preserve">
     <value>Kies Vlak...</value>
   </data>
+  <data name="Tray_Show" xml:space="preserve">
+    <value>Wys Baballonia</value>
+  </data>
+  <data name="Tray_Hide" xml:space="preserve">
+    <value>Minimeer na stelselbalk</value>
+  </data>
+  <data name="Tray_Tooltip" xml:space="preserve">
+    <value>Kliek regs om Baballonia-opsies te sien</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>Verlaat</value>
+  </data>
 </root>

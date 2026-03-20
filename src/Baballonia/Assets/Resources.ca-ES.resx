@@ -889,4 +889,16 @@ Això normalment és fàcil d'arreglar! Simplement instal·leu el firmware "Trac
   <data name="Settings_LogLevel_Level" xml:space="preserve">
     <value>Seleccionar Nivell...</value>
   </data>
+  <data name="Tray_Show" xml:space="preserve">
+    <value>Mostrar Baballonia</value>
+  </data>
+  <data name="Tray_Hide" xml:space="preserve">
+    <value>Minimitzar a la safata del sistema</value>
+  </data>
+  <data name="Tray_Tooltip" xml:space="preserve">
+    <value>Clic dret per veure les opcions de Baballonia</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>Surtir</value>
+  </data>
 </root>

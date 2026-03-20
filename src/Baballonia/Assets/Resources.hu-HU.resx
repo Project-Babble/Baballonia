@@ -889,4 +889,16 @@ Ez általában könnyen javítható! Csak telepítse a "Tracking Loss Fix" firmw
   <data name="Settings_LogLevel_Level" xml:space="preserve">
     <value>Szint kiválasztás...</value>
   </data>
+  <data name="Tray_Show" xml:space="preserve">
+    <value>Baballonia megjelenítése</value>
+  </data>
+  <data name="Tray_Hide" xml:space="preserve">
+    <value>Minimalizálás a rendszertálcára</value>
+  </data>
+  <data name="Tray_Tooltip" xml:space="preserve">
+    <value>Kattintson a jobb egérgombbal a Baballonia beállítások megjelenítéséhez</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>Kilépés</value>
+  </data>
 </root>

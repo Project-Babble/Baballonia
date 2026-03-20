@@ -889,4 +889,16 @@ Isso geralmente é fácil de corrigir! Basta instalar o firmware "Tracking Loss 
   <data name="Settings_LogLevel_Level" xml:space="preserve">
     <value>Selecionar Nível...</value>
   </data>
+  <data name="Tray_Show" xml:space="preserve">
+    <value>Mostrar Baballonia</value>
+  </data>
+  <data name="Tray_Hide" xml:space="preserve">
+    <value>Minimizar para a Bandeja</value>
+  </data>
+  <data name="Tray_Tooltip" xml:space="preserve">
+    <value>Clique direito para ver as opções do Baballonia</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>Sair</value>
+  </data>
 </root>

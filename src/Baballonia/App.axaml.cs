@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
+using Baballonia.Assets;
 using Baballonia.Activation;
 using Baballonia.Contracts;
 using Baballonia.Factories;
@@ -259,24 +260,23 @@ public class App : Application
 
     private void OnTrayShowHideClicked(object? sender, EventArgs e)
     {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            if (desktop.MainWindow.IsVisible)
-            {
-                desktop.MainWindow.Hide();
-                if (sender is NativeMenuItem ShowHide)
-                {
-                    ShowHide.Header = "Show Baballonia";
-                }
+        if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop)
+            return;
 
-            }
-            else
+        if (desktop.MainWindow!.IsVisible)
+        {
+            desktop.MainWindow.Hide();
+            if (sender is NativeMenuItem showHide)
             {
-                desktop.MainWindow.Show();
-                if (sender is NativeMenuItem ShowHide)
-                {
-                    ShowHide.Header = "Minimize to Tray";
-                }
+                showHide.Header = Assets.Resources.Tray_Show;
+            }
+        }
+        else
+        {
+            desktop.MainWindow.Show();
+            if (sender is NativeMenuItem showHide)
+            {
+                showHide.Header =  Assets.Resources.Tray_Hide;
             }
         }
     }

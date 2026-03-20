@@ -889,4 +889,16 @@
   <data name="Settings_LogLevel_Level" xml:space="preserve">
     <value>Выбрать уровень...</value>
   </data>
+  <data name="Tray_Show" xml:space="preserve">
+    <value>Показать Baballonia</value>
+  </data>
+  <data name="Tray_Hide" xml:space="preserve">
+    <value>Свернуть в системный трей</value>
+  </data>
+  <data name="Tray_Tooltip" xml:space="preserve">
+    <value>Щелкните правой кнопкой мыши для просмотра опций Baballonia</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>Выход</value>
+  </data>
 </root>
