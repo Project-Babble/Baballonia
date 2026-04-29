@@ -78,6 +78,8 @@ public class SingleCameraSource : IVideoSource
             image = convertedMat;
         }
 
+        if (image.Empty())
+            return null;
 
         return image;
     }
