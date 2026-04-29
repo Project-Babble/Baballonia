@@ -40,15 +40,11 @@ public class DualCameraSource : IVideoSource
         rightImage ??= LastRightImage;
 
         // Check if either one of the images is null or empty
-        if (leftImage == null || rightImage == null){
-            _logger.LogWarning("Discarding empty frame from Dual Camera");
+        if (leftImage == null || rightImage == null)
             return null;
-        }
 
-        if (leftImage.Empty() || rightImage.Empty()){
-            _logger.LogWarning("Discarding empty frame from Dual Camera");
+        if (leftImage.Empty() || rightImage.Empty())
             return null;
-        }
 
         switch (leftImage)
         {
