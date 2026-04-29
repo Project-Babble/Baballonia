@@ -78,9 +78,11 @@ public class SingleCameraSource : IVideoSource
             image = convertedMat;
         }
 
-        if (image.Empty())
+        if (image.Empty()) {
+            _logger.LogWarning("Discarding empty frame from a Single Camera");
             return null;
-
+        }
+            
         return image;
     }
 
