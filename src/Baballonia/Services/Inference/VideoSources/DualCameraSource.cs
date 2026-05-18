@@ -39,10 +39,6 @@ public class DualCameraSource : IVideoSource
         leftImage ??= LastLeftImage;
         rightImage ??= LastRightImage;
 
-        // Check if either one of the images is null or empty
-        if (leftImage == null || rightImage == null)
-            return null;
-
         if (leftImage.Empty() || rightImage.Empty())
             return null;
 
