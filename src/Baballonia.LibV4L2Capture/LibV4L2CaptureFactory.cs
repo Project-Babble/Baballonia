@@ -17,5 +17,5 @@ public class LibV4L2CaptureFactory(ILoggerFactory loggerFactory) : ICaptureFacto
         return address.StartsWith("/dev/video");
     }
 
-    public string GetProviderName() => "V4L2";
+    public string GetProviderName() => "V4L2 Camera";
 }

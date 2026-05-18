@@ -26,5 +26,5 @@ public class OpenCvCaptureFactory(ILoggerFactory loggerFactory) : ICaptureFactor
                Uri.TryCreate(address, UriKind.Absolute, out _);
     }
 
-    public string GetProviderName() => "OpenCV";
+    public string GetProviderName() => "Normal Camera";
 }

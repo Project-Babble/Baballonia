@@ -3,18 +3,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Baballonia.SerialCameraCapture;
 
-public class SerialCameraCaptureFactory : ICaptureFactory
+public class SerialCameraCaptureFactory(ILoggerFactory loggerFactory) : ICaptureFactory
 {
-    private readonly ILoggerFactory _loggerFactory;
-
-    public SerialCameraCaptureFactory(ILoggerFactory loggerFactory)
-    {
-        _loggerFactory = loggerFactory;
-    }
-
     public Capture Create(string address)
     {
-        return new SerialCameraCapture(address, _loggerFactory.CreateLogger<SerialCameraCapture>());
+        return new SerialCameraCapture(address, loggerFactory.CreateLogger<SerialCameraCapture>());
     }
 
     public bool CanConnect(string address)
