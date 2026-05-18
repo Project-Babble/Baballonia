@@ -104,10 +104,10 @@ public sealed class LinuxVftCapture(string source, ILogger logger) : Capture(sou
                     await Task.Delay(1, ct);
                 }
             }
-            // catch (TaskCanceledException)
-            // {
-            //     return;
-            // }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
             catch (Exception ex)
             {
                 Logger.LogError(ex, "Error in VFT capture loop");
