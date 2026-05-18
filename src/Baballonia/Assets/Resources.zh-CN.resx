@@ -744,6 +744,9 @@
   <data name="Home_Preferred_Backend" xml:space="preserve">
     <value>首选后端</value>
   </data>
+  <data name="Home_Backend_Select_Placeholder" xml:space="preserve">
+    <value>选择一个设备...</value>
+  </data>
   <data name="Home_Backend_Default" xml:space="preserve">
     <value>默认</value>
   </data>

@@ -214,6 +214,9 @@
   <data name="Home_Right_Camera_Settings" xml:space="preserve">
     <value>Podešavanja desne kamere</value>
   </data>
+  <data name="Home_Backend_Select_Placeholder" xml:space="preserve">
+    <value>Izaberite uređaj...</value>
+  </data>
   <data name="Common_Start_Typing" xml:space="preserve">
     <value>Počnite da kucate...</value>
   </data>

@@ -744,6 +744,9 @@
   <data name="Home_Preferred_Backend" xml:space="preserve">
     <value>الخلفية المفضلة</value>
   </data>
+  <data name="Home_Backend_Select_Placeholder" xml:space="preserve">
+    <value>اختر جهازًا...</value>
+  </data>
   <data name="Home_Backend_Default" xml:space="preserve">
     <value>الافتراضي</value>
   </data>

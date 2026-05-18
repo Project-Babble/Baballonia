@@ -742,7 +742,10 @@
     <value>If you are using Baballonia with VRCFaceTracking, there is no need to change these ports</value>
   </data>
   <data name="Home_Preferred_Backend" xml:space="preserve">
-    <value>Preferred Backend</value>
+    <value>This is a...</value>
+  </data>
+  <data name="Home_Backend_Select_Placeholder" xml:space="preserve">
+    <value>Select a device...</value>
   </data>
   <data name="Home_Backend_Default" xml:space="preserve">
     <value>Default</value>

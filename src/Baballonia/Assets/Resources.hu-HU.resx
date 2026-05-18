@@ -744,6 +744,9 @@
   <data name="Home_Preferred_Backend" xml:space="preserve">
     <value>Preferált backend</value>
   </data>
+  <data name="Home_Backend_Select_Placeholder" xml:space="preserve">
+    <value>Válasszon egy eszközt...</value>
+  </data>
   <data name="Home_Backend_Default" xml:space="preserve">
     <value>Alapértelmezett</value>
   </data>

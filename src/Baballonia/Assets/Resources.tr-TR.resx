@@ -744,6 +744,9 @@
   <data name="Home_Preferred_Backend" xml:space="preserve">
     <value>Tercih edilen arka uç</value>
   </data>
+  <data name="Home_Backend_Select_Placeholder" xml:space="preserve">
+    <value>Bir cihaz seçin...</value>
+  </data>
   <data name="Home_Backend_Default" xml:space="preserve">
     <value>Varsayılan</value>
   </data>

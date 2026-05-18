@@ -1308,6 +1308,15 @@ namespace Baballonia.Assets {
                 return ResourceManager.GetString("Home_Title_Header", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Select a device...
+        /// </summary>
+        public static string Home_Backend_Select_Placeholder {
+            get {
+                return ResourceManager.GetString("Home_Backend_Select_Placeholder", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to If you need help putting your tracker together, here&apos;s a useful Youtube tutorial!.

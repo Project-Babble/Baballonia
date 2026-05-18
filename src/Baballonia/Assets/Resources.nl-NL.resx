@@ -744,6 +744,9 @@
   <data name="Home_Preferred_Backend" xml:space="preserve">
     <value>Voorkeur backend</value>
   </data>
+  <data name="Home_Backend_Select_Placeholder" xml:space="preserve">
+    <value>Selecteer een apparaat...</value>
+  </data>
   <data name="Home_Backend_Default" xml:space="preserve">
     <value>Standaard</value>
   </data>

@@ -194,7 +194,7 @@
                       <ComboBox
                       HorizontalAlignment="Stretch"
                       Margin="0,6"
-                      PlaceholderText="Select capture method..."
+                      PlaceholderText="{x:Static assets:Resources.Home_Backend_Select_Placeholder}"
                       ItemsSource="{Binding LeftCamera.CaptureMethods}"
                       SelectedItem="{Binding LeftCamera.SelectedCaptureMethod}"
                       Grid.Row="1"
@@ -463,7 +463,7 @@
                     <ComboBox
                       HorizontalAlignment="Stretch"
                       Margin="0,6"
-                      PlaceholderText="Select capture method..."
+                      PlaceholderText="{x:Static assets:Resources.Home_Backend_Select_Placeholder}"
                       ItemsSource="{Binding RightCamera.CaptureMethods}"
                       SelectedItem="{Binding RightCamera.SelectedCaptureMethod}"
                       Grid.Row="1"
@@ -728,7 +728,7 @@
                   <ComboBox
                     HorizontalAlignment="Stretch"
                     Margin="0,6"
-                    PlaceholderText="Select capture method..."
+                    PlaceholderText="{x:Static assets:Resources.Home_Backend_Select_Placeholder}"
                     ItemsSource="{Binding FaceCamera.CaptureMethods}"
                     SelectedItem="{Binding FaceCamera.SelectedCaptureMethod}"
                     Grid.Row="1"
