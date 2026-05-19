@@ -39,6 +39,7 @@ public class DualCameraSource : IVideoSource
         leftImage ??= LastLeftImage;
         rightImage ??= LastRightImage;
 
+
         switch (leftImage)
         {
             case null when rightImage == null:
@@ -56,7 +57,9 @@ public class DualCameraSource : IVideoSource
         int minHeight = Math.Min(leftImage.Rows, rightImage.Rows);
         int minWidth = Math.Min(leftImage.Cols, rightImage.Cols);
 
-
+        if (leftImage.Empty() || rightImage.Empty())
+            return null;
+            
         Mat resizedLeft = new Mat();
         Mat resizedRight = new Mat();
         Cv2.Resize(leftImage, resizedLeft, new Size(minWidth, minHeight));
