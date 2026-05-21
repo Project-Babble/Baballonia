@@ -1,11 +1,12 @@
-﻿using Baballonia.Contracts;
+﻿using System.Collections.Generic;
+using Baballonia.Contracts;
 using Baballonia.Services.Inference.Enums;
 
 namespace Baballonia.Services.Inference;
 
 public interface IProcessingPipeline
 {
-    float[]? RunUpdate();
+    Dictionary<string, float>? RunUpdate();
 }
 public class DefaultProcessingPipeline : IProcessingPipeline
 {
@@ -15,7 +16,7 @@ public class DefaultProcessingPipeline : IProcessingPipeline
     public IInferenceRunner? InferenceService;
     public IFilter? Filter;
 
-    public float[]? RunUpdate()
+    public Dictionary<string, float>? RunUpdate()
     {
         var frame = VideoSource?.GetFrame(ColorType.Gray8);
         if(frame == null)

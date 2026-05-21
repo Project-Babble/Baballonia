@@ -1,12 +1,13 @@
 ﻿using Baballonia.Services.events;
 using Baballonia.Services.Inference.Enums;
 using System;
+using System.Collections.Generic;
 
 namespace Baballonia.Services.Inference;
 
 public class FaceProcessingPipeline(IFacePipelineEventBus facePipelineEventBus) : DefaultProcessingPipeline
 {
-    public float[]? RunUpdate()
+    public Dictionary<string, float>? RunUpdate()
     {
         var frame = VideoSource?.GetFrame(ColorType.Gray8);
         if(frame == null)

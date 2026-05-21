@@ -1,6 +1,7 @@
-﻿using Baballonia.Services.events;
+﻿using System;
+using System.Collections.Generic;
+using Baballonia.Services.events;
 using Baballonia.Services.Inference.Enums;
-using System;
 
 namespace Baballonia.Services.Inference;
 
@@ -11,7 +12,7 @@ public class EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus) : D
 
     public bool StabilizeEyes { get; set; } = true;
 
-    public float[]? RunUpdate()
+    public Dictionary<string, float>? RunUpdate()
     {
         var frame = VideoSource?.GetFrame(ColorType.Gray8);
         if(frame == null)
@@ -42,11 +43,6 @@ public class EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus) : D
         if(inferenceResult == null)
             return null;
 
-        if (Filter != null)
-        {
-            inferenceResult = Filter.Filter(inferenceResult);
-        }
-
         ProcessExpressions(ref inferenceResult);
 
         eyePipelineEventBus.Publish(new EyePipelineEvents.NewFilteredResultEvent(inferenceResult));
@@ -57,23 +53,21 @@ public class EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus) : D
         return inferenceResult;
     }
 
-    private bool ProcessExpressions(ref float[] arKitExpressions)
+    private bool ProcessExpressions(ref Dictionary<string, float> arKitExpressions)
     {
-        if (arKitExpressions.Length < Utils.EyeRawExpressions)
-            return false;
 
         const float mulV = 2.0f;
         const float mulY = 2.0f;
 
-        var leftPitch = arKitExpressions[0] * mulY - mulY / 2;
-        var leftYaw = arKitExpressions[1] * mulV - mulV / 2;
-        var leftLid = 1 - arKitExpressions[2];
+        var leftPitch = arKitExpressions["/leftEyeX"] * mulY - mulY / 2;
+        var leftYaw = arKitExpressions["/leftEyeY"] * mulV - mulV / 2;
+        var leftLid = 1 - arKitExpressions["/leftEyeLid"];
 
-        var rightPitch = arKitExpressions[3] * mulY - mulY / 2;
-        var rightYaw = arKitExpressions[4] * mulV - mulV / 2;
-        var rightLid = 1 - arKitExpressions[5];
+        var rightPitch = arKitExpressions["/rightEyeX"] * mulY - mulY / 2;
+        var rightYaw = arKitExpressions["/rightEyeY"] * mulV - mulV / 2;
+        var rightLid = 1 - arKitExpressions["/rightEyeLid"];
 
-        var eyeY = (leftPitch * leftLid + rightPitch * rightLid) / (leftLid + rightLid);
+        var eyePitch = (leftPitch * leftLid + rightPitch * rightLid) / (leftLid + rightLid);
 
         var leftEyeYawCorrected = rightYaw * (1 - leftLid) + leftYaw * leftLid;
         var rightEyeYawCorrected = leftYaw * (1 - rightLid) + rightYaw * rightLid;
@@ -89,17 +83,12 @@ public class EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus) : D
             rightEyeYawCorrected = averagedYaw + convergence;
         }
 
-        // [left pitch, left yaw, left lid...
-        float[] convertedExpressions = new float[Utils.EyeRawExpressions];
+        // update the dict
+        arKitExpressions["/leftEyeX"] = eyePitch;
+        arKitExpressions["/leftEyeY"] = leftEyeYawCorrected;
 
-        convertedExpressions[0] = rightEyeYawCorrected; // left pitch
-        convertedExpressions[1] = eyeY;                   // left yaw
-        convertedExpressions[2] = rightLid;               // left lid
-        convertedExpressions[3] = leftEyeYawCorrected;  // right pitch
-        convertedExpressions[4] = eyeY;                   // right yaw
-        convertedExpressions[5] = leftLid;                // right lid
-
-        arKitExpressions = convertedExpressions;
+        arKitExpressions["/rightEyeX"] = eyePitch;
+        arKitExpressions["/rightEyeY"] = rightEyeYawCorrected;
 
         return true;
     }

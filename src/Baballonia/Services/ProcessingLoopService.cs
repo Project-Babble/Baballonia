@@ -3,12 +3,13 @@ using Baballonia.Services.events;
 using Baballonia.Services.Inference;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 
 namespace Baballonia.Services;
 
 public class ProcessingLoopService : IDisposable
 {
-    public record struct Expressions(float[]? FaceExpression, float[]? EyeExpression);
+    public record struct Expressions(Dictionary<string, float>? FaceExpression, Dictionary<string, float>? EyeExpression);
 
     public event Action<Expressions> ExpressionChangeEvent;
 

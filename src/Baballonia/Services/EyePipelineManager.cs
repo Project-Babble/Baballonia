@@ -88,9 +88,7 @@ public class EyePipelineManager
         if (!enabled)
             return;
 
-        var eyeArray = new float[Utils.EyeRawExpressions];
         var eyeFilter = new OneEuroFilter(
-            eyeArray,
             minCutoff: cutoff,
             beta: speedCutoff
         );
