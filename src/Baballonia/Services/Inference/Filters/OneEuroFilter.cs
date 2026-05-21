@@ -1,101 +1,129 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Baballonia.Services.Inference.Filters;
 
 public class OneEuroFilter : IFilter
 {
-    private float[] minCutoff;
-    private float[] beta;
-    private float[] dCutoff;
-    private float[] xPrev;
-    private float[] dxPrev;
-    private DateTime tPrev;
-    public OneEuroFilter(float[] x0, float minCutoff = 1.0f, float beta = 0.0f)
+    private readonly float _initialMinCutoff;
+    private readonly float _initialBeta;
+    private bool _isInitialized;
+
+    private string[] _keys;
+    private float[] _minCutoff;
+    private float[] _beta;
+    private float[] _dCutoff;
+    private float[] _xPrev;
+    private float[] _dxPrev;
+
+    private float[] _dx;
+    private float[] _dxHat;
+    private float[] _cutoff;
+    private float[] _xHat;
+
+    // Reusable output dictionary
+    private Dictionary<string, float> _output;
+    private DateTime _tPrev;
+
+    public OneEuroFilter(float minCutoff = 1.0f, float beta = 0.0f)
     {
-        float dx0 = 0.0f;
-        float dCutoff = 1.0f;
-        int length = x0.Length;
-        this.minCutoff = CreateFilledArray(length, minCutoff);
-        this.beta = CreateFilledArray(length, beta);
-        this.dCutoff = CreateFilledArray(length, dCutoff);
-        // Previous values.
-        this.xPrev = (float[])x0.Clone();
-        this.dxPrev = CreateFilledArray(length, dx0);
-        this.tPrev = DateTime.UtcNow;
+        _initialMinCutoff = minCutoff;
+        _initialBeta = beta;
+        _isInitialized = false;
     }
 
-    public float[] Filter(float[] x)
+    public Dictionary<string, float> Filter(Dictionary<string, float> x)
     {
-        if (x.Length != xPrev.Length)
-            throw new ArgumentException($"Input shape does not match initial shape. Expected: {xPrev.Length}, got: {x.Length}");
+        // Lazily initialize on the very first call
+        if (!_isInitialized)
+        {
+            Initialize(x);
+            return _output; // Return the initial state on the first frame
+        }
 
         DateTime now = DateTime.UtcNow;
-        float elapsedTime = (float)(now - tPrev).TotalSeconds;
+        float elapsedTime = (float)(now - _tPrev).TotalSeconds;
 
-        if (elapsedTime == 0.0f)
+        if (elapsedTime <= 0.0f)
         {
-            xPrev = (float[])x.Clone();
-            return x;
+            for (int i = 0; i < _keys.Length; i++)
+            {
+                string key = _keys[i];
+                if (x.TryGetValue(key, out float val))
+                {
+                    _output[key] = val;
+                    _xPrev[i] = val;
+                }
+            }
+            return _output;
         }
 
-        float[] t_e = CreateFilledArray(x.Length, elapsedTime);
-
-        // Derivative
-        float[] dx = new float[x.Length];
-        for (int i = 0; i < x.Length; i++)
+        for (int i = 0; i < _keys.Length; i++)
         {
-            dx[i] = (x[i] - xPrev[i]) / t_e[i];
+            string key = _keys[i];
+            
+            if (!x.TryGetValue(key, out float val))
+            {
+                val = _xPrev[i];
+            }
+
+            _dx[i] = (val - _xPrev[i]) / elapsedTime;
+
+            float r_d = 2 * (float)Math.PI * _dCutoff[i] * elapsedTime;
+            float a_d = r_d / (r_d + 1);
+
+            _dxHat[i] = a_d * _dx[i] + (1 - a_d) * _dxPrev[i];
+
+            _cutoff[i] = _minCutoff[i] + _beta[i] * Math.Abs(_dxHat[i]);
+
+            float r = 2 * (float)Math.PI * _cutoff[i] * elapsedTime;
+            float a = r / (r + 1);
+
+            _xHat[i] = a * val + (1 - a) * _xPrev[i];
+
+            _xPrev[i] = _xHat[i];
+            _dxPrev[i] = _dxHat[i];
+
+            _output[key] = _xHat[i];
         }
 
-        float[] a_d = SmoothingFactor(t_e, dCutoff);
-        float[] dxHat = ExponentialSmoothing(a_d, dx, dxPrev);
-
-        // Adjusted cutoff
-        float[] cutoff = new float[x.Length];
-        for (int i = 0; i < x.Length; i++)
-        {
-            cutoff[i] = minCutoff[i] + beta[i] * Math.Abs(dxHat[i]);
-        }
-
-        float[] a = SmoothingFactor(t_e, cutoff);
-        float[] xHat = ExponentialSmoothing(a, x, xPrev);
-
-        // Store previous values
-        xPrev = xHat;
-        dxPrev = dxHat;
-        tPrev = now;
-
-        return xHat;
+        _tPrev = now;
+        return _output;
     }
 
-    private float[] CreateFilledArray(int length, float value)
+    private void Initialize(Dictionary<string, float> x0)
     {
-        float[] arr = new float[length];
-        for (int i = 0; i < length; i++) arr[i] = value;
-        return arr;
-    }
+        int length = x0.Count;
 
-    private float[] SmoothingFactor(float[] t_e, float[] cutoff)
-    {
-        int length = t_e.Length;
-        float[] result = new float[length];
-        for (int i = 0; i < length; i++)
+        _keys = new string[length];
+        _minCutoff = new float[length];
+        _beta = new float[length];
+        _dCutoff = new float[length];
+        _xPrev = new float[length];
+        _dxPrev = new float[length];
+
+        _dx = new float[length];
+        _dxHat = new float[length];
+        _cutoff = new float[length];
+        _xHat = new float[length];
+
+        _output = new Dictionary<string, float>(length);
+
+        int i = 0;
+        foreach (KeyValuePair<string, float> kvp in x0)
         {
-            float r = 2 * (float)Math.PI * cutoff[i] * t_e[i];
-            result[i] = r / (r + 1);
+            _keys[i] = kvp.Key;
+            _xPrev[i] = kvp.Value;
+            _minCutoff[i] = _initialMinCutoff;
+            _beta[i] = _initialBeta;
+            _dCutoff[i] = 1.0f;
+            _dxPrev[i] = 0.0f;
+            
+            _output[kvp.Key] = kvp.Value;
+            i++;
         }
-        return result;
-    }
 
-    private float[] ExponentialSmoothing(float[] a, float[] x, float[] xPrev)
-    {
-        int length = a.Length;
-        float[] result = new float[length];
-        for (int i = 0; i < length; i++)
-        {
-            result[i] = a[i] * x[i] + (1 - a[i]) * xPrev[i];
-        }
-        return result;
+        _tPrev = DateTime.UtcNow;
+        _isInitialized = true;
     }
-
 }

@@ -26,72 +26,6 @@ public class ParameterSenderService : BackgroundService
     private readonly ConcurrentQueue<OscMessage> _vrcftQueue = new();
     private readonly ConcurrentQueue<OscMessage> _dfrQueue = new();
 
-    // Expression parameter names
-    private readonly Dictionary<string, string> _eyeExpressionMap = new()
-    {
-        { "LeftEyeX", "/LeftEyeX" },
-        { "LeftEyeY", "/LeftEyeY" },
-        { "LeftEyeLid", "/LeftEyeLid" },
-        //{ "LeftEyeWiden", "/LeftEyeWiden" },
-        //{ "LeftEyeLower", "/LeftEyeLower" },
-        //{ "LeftEyeBrow", "/LeftEyeBrow" },
-        { "RightEyeX", "/RightEyeX" },
-        { "RightEyeY", "/RightEyeY" },
-        { "RightEyeLid", "/RightEyeLid" },
-        //{ "RightEyeWiden", "/RightEyeWiden" },
-        //{ "RightEyeLower", "/RightEyeLower" },
-        //{ "RightEyeBrow", "/RightEyeBrow" },
-    };
-
-    public readonly Dictionary<string, string> FaceExpressionMap = new()
-    {
-        { "CheekPuffLeft", "/cheekPuffLeft" },
-        { "CheekPuffRight", "/cheekPuffRight" },
-        { "CheekSuckLeft", "/cheekSuckLeft" },
-        { "CheekSuckRight", "/cheekSuckRight" },
-        { "JawOpen", "/jawOpen" },
-        { "JawForward", "/jawForward" },
-        { "JawLeft", "/jawLeft" },
-        { "JawRight", "/jawRight" },
-        { "NoseSneerLeft", "/noseSneerLeft" },
-        { "NoseSneerRight", "/noseSneerRight" },
-        { "MouthFunnel", "/mouthFunnel" },
-        { "MouthPucker", "/mouthPucker" },
-        { "MouthLeft", "/mouthLeft" },
-        { "MouthRight", "/mouthRight" },
-        { "MouthRollUpper", "/mouthRollUpper" },
-        { "MouthRollLower", "/mouthRollLower" },
-        { "MouthShrugUpper", "/mouthShrugUpper" },
-        { "MouthShrugLower", "/mouthShrugLower" },
-        { "MouthClose", "/mouthClose" },
-        { "MouthSmileLeft", "/mouthSmileLeft" },
-        { "MouthSmileRight", "/mouthSmileRight" },
-        { "MouthFrownLeft", "/mouthFrownLeft" },
-        { "MouthFrownRight", "/mouthFrownRight" },
-        { "MouthDimpleLeft", "/mouthDimpleLeft" },
-        { "MouthDimpleRight", "/mouthDimpleRight" },
-        { "MouthUpperUpLeft", "/mouthUpperUpLeft" },
-        { "MouthUpperUpRight", "/mouthUpperUpRight" },
-        { "MouthLowerDownLeft", "/mouthLowerDownLeft" },
-        { "MouthLowerDownRight", "/mouthLowerDownRight" },
-        { "MouthPressLeft", "/mouthPressLeft" },
-        { "MouthPressRight", "/mouthPressRight" },
-        { "MouthStretchLeft", "/mouthStretchLeft" },
-        { "MouthStretchRight", "/mouthStretchRight" },
-        { "TongueOut", "/tongueOut" },
-        { "TongueUp", "/tongueUp" },
-        { "TongueDown", "/tongueDown" },
-        { "TongueLeft", "/tongueLeft" },
-        { "TongueRight", "/tongueRight" },
-        { "TongueRoll", "/tongueRoll" },
-        { "TongueBendDown", "/tongueBendDown" },
-        { "TongueCurlUp", "/tongueCurlUp" },
-        { "TongueSquish", "/tongueSquish" },
-        { "TongueFlat", "/tongueFlat" },
-        { "TongueTwistLeft", "/tongueTwistLeft" },
-        { "TongueTwistRight", "/tongueTwistRight" }
-    };
-
     public ParameterSenderService(
         VrcftModuleSendService vrcftModuleSendService,
         DfrSendService dfrSendService,
@@ -106,14 +40,13 @@ public class ParameterSenderService : BackgroundService
         this._calibrationService = calibrationService;
         this._logger = logger;
 
-         processingLoopService.ExpressionChangeEvent += ExpressionUpdateHandler;
+        processingLoopService.ExpressionChangeEvent += ExpressionUpdateHandler;
     }
 
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         _logger.LogDebug("Starting Parameter Sender Service...");
-        _logger.LogDebug("OSC parameter mapping initialized with {EyeCount} eye expressions and {FaceCount} face expressions",
-            _eyeExpressionMap.Count, FaceExpressionMap.Count);
+        _logger.LogDebug("OSC parameter mapping initialized");
 
         while (!cancellationToken.IsCancellationRequested)
         {
@@ -140,18 +73,16 @@ public class ParameterSenderService : BackgroundService
             ProcessFaceExpressionData(expressions.FaceExpression);
     }
 
-    private void ProcessEyeExpressionData(float[] expressions)
+    private void ProcessEyeExpressionData(Dictionary<string, float> expressions)
     {
         if (expressions is null) return;
-        if (expressions.Length == 0) return;
 
-        for (var i = 0; i < Math.Min(expressions.Length, _eyeExpressionMap.Count); i++)
+        foreach (var expression in expressions)
         {
-            var weight = expressions[i];
-            var eyeElement = _eyeExpressionMap.ElementAt(i);
-            var settings = _calibrationService.GetExpressionSettings(eyeElement.Key);
+            float weight = expression.Value;
+            var settings = _calibrationService.GetExpressionSettings(expression.Key);
 
-            var msg = new OscMessage(_prefix + eyeElement.Value,
+            var msg = new OscMessage(_prefix + expression.Key,
                 weight.Remap(settings.Lower, settings.Upper, settings.Min, settings.Max));
             _vrcftQueue.Enqueue(msg);
         }
@@ -163,14 +94,14 @@ public class ParameterSenderService : BackgroundService
             ProcessNativeVrcEyeTracking(expressions, _vrcftQueue);
     }
 
-    private void ProcessNativeVrcEyeTracking(float[] expressions, ConcurrentQueue<OscMessage> queue)
+    private void ProcessNativeVrcEyeTracking(Dictionary<string, float> expressions, ConcurrentQueue<OscMessage> queue)
     {
-        var leftEyeX = expressions[0];
-        var leftEyeY = expressions[1];
-        var leftEyeLid = expressions[2];
-        var rightEyeX = expressions[3];
-        var rightEyeY = expressions[4];
-        var rightEyeLid = expressions[5];
+        var leftEyeX = expressions["/leftEyePitch"];
+        var leftEyeY = expressions["/leftEyeYaw"];
+        var leftEyeLid = expressions["/leftEyeLid"];
+        var rightEyeX = expressions["/rightEyePitch"];
+        var rightEyeY = expressions["/rightEyeYaw"];
+        var rightEyeLid = expressions["/rightEyeLid"];
 
         var leftEyeLidSettings = _calibrationService.GetExpressionSettings("LeftEyeLid");
         var rightEyeLidSettings = _calibrationService.GetExpressionSettings("RightEyeLid");
@@ -188,18 +119,16 @@ public class ParameterSenderService : BackgroundService
         queue.Enqueue(new OscMessage("/tracking/eye/LeftRightPitchYaw", leftEyeY, rightEyeX, rightEyeY, leftEyeX));
     }
 
-    private void ProcessFaceExpressionData(float[] expressions)
+    private void ProcessFaceExpressionData(Dictionary<string, float> expressions)
     {
         if (expressions == null) return;
-        if (expressions.Length == 0) return;
 
-        for (var i = 0; i < Math.Min(expressions.Length, FaceExpressionMap.Count); i++)
+        foreach (var expression in expressions)
         {
-            var weight = expressions[i];
-            var faceElement = FaceExpressionMap.ElementAt(i);
-            var settings = _calibrationService.GetExpressionSettings(faceElement.Key);
+            float weight = expression.Value;
+            var settings = _calibrationService.GetExpressionSettings(expression.Key);
 
-            var msg = new OscMessage(_prefix + faceElement.Value,
+            var msg = new OscMessage(_prefix + expression.Key,
                 Math.Clamp(
                     weight.Remap(settings.Lower, settings.Upper, settings.Min, settings.Max),
                     settings.Min,

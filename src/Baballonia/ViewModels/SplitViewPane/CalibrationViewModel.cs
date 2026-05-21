@@ -28,8 +28,6 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
     private readonly ProcessingLoopService _processingLoopService;
     private readonly EyePipelineManager _eyePipelineManager;
 
-    private readonly Dictionary<string, int> _eyeKeyIndexMap;
-    private readonly Dictionary<string, int> _faceKeyIndexMap;
     public CalibrationViewModel(EyePipelineManager eyePipelineManager)
     {
         _eyePipelineManager = eyePipelineManager;
@@ -121,27 +119,6 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
             setting.PropertyChanged += OnSettingChanged;
         }
 
-        // Convert dictionary order into index mapping
-        _eyeKeyIndexMap = new Dictionary<string, int>
-        {
-            { "LeftEyeX", 0 },
-            { "LeftEyeY", 1 },
-            { "LeftEyeLid", 2 },
-            //{ "LeftEyeWiden", },
-            //{ "LeftEyeLower",  },
-            //{ "LeftEyeBrow", },
-            { "RightEyeX", 3 },
-            { "RightEyeY", 4 },
-            { "RightEyeLid", 5 },
-            //{ "RightEyeWiden", },
-            //{ "RightEyeLower",  },
-            //{ "RightEyeBrow", },
-        };
-
-        _faceKeyIndexMap = _parameterSenderService.FaceExpressionMap.Keys
-            .Select((key, index) => new { key, index })
-            .ToDictionary(x => x.key, x => x.index);
-
         PropertyChanged += (o, p) =>
         {
             var propertyInfo = GetType().GetProperty(p.PropertyName!);
@@ -164,16 +141,16 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
         if(expressions.FaceExpression != null)
             Dispatcher.UIThread.Post(() =>
             {
-                ApplyCurrentFaceExpressionValues(expressions.FaceExpression, CheekSettings);
-                ApplyCurrentFaceExpressionValues(expressions.FaceExpression, MouthSettings);
-                ApplyCurrentFaceExpressionValues(expressions.FaceExpression, JawSettings);
-                ApplyCurrentFaceExpressionValues(expressions.FaceExpression, NoseSettings);
-                ApplyCurrentFaceExpressionValues(expressions.FaceExpression, TongueSettings);
+                ApplyCurrentExpressionValues(expressions.FaceExpression, CheekSettings);
+                ApplyCurrentExpressionValues(expressions.FaceExpression, MouthSettings);
+                ApplyCurrentExpressionValues(expressions.FaceExpression, JawSettings);
+                ApplyCurrentExpressionValues(expressions.FaceExpression, NoseSettings);
+                ApplyCurrentExpressionValues(expressions.FaceExpression, TongueSettings);
             });
         if(expressions.EyeExpression != null)
             Dispatcher.UIThread.Post(() =>
             {
-                ApplyCurrentEyeExpressionValues(expressions.EyeExpression, EyeSettings);
+                ApplyCurrentExpressionValues(expressions.EyeExpression, EyeSettings);
             });
     }
     private void OnSettingChanged(object? sender, PropertyChangedEventArgs e)
@@ -191,31 +168,13 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
         }
     }
 
-    private void ApplyCurrentEyeExpressionValues(float[] values, IEnumerable<SliderBindableSetting> settings)
+    private void ApplyCurrentExpressionValues(Dictionary<string, float> values, IEnumerable<SliderBindableSetting> settings)
     {
         foreach (var setting in settings)
         {
-            if (_eyeKeyIndexMap.TryGetValue(setting.Name, out var index)
-                && index < values.Length)
-            {
-                var weight = values[index];
-                var val = Math.Clamp(
-                    weight.Remap(setting.Lower, setting.Upper, setting.Min, setting.Max),
-                    setting.Min,
-                    setting.Max);
-                setting.CurrentExpression = val;
-            }
-        }
-    }
-
-    private void ApplyCurrentFaceExpressionValues(float[] values, IEnumerable<SliderBindableSetting> settings)
-    {
-        foreach (var setting in settings)
-        {
-            if (_faceKeyIndexMap.TryGetValue(setting.Name, out var index)
-                && index < values.Length)
-            {
-                var weight = values[index];
+            var settingName = setting.Name;
+            if (values.ContainsKey(settingName)) {
+                var weight = values[settingName];
                 var val = Math.Clamp(
                     weight.Remap(setting.Lower, setting.Upper, setting.Min, setting.Max),
                     setting.Min,

@@ -69,9 +69,7 @@ public class FacePipelineManager
         if (!enabled)
             return;
 
-        var faceArray = new float[Utils.FaceRawExpressions];
         var faceFilter = new OneEuroFilter(
-            faceArray,
             minCutoff: cutoff,
             beta: speedCutoff
         );

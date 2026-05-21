@@ -14,13 +14,74 @@ namespace Baballonia.Services;
 public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRunner
 {
     public Size InputSize { get; private set; }
-    public int OutputSize { get; private set; }
     public DenseTensor<float> InputTensor;
     private ILogger _logger;
     private string _inputName;
     private InferenceSession _session;
     private string[] _outputExpressionNames;
-    private bool _isOldEyeModel;
+    private bool _hasModelMetadata;
+    private Dictionary<string, float> _outputs;
+
+    private readonly List<List<string>> _knownMappings = new()
+    {
+        new() // original prod FT layout
+        {
+            "/cheekPuffLeft",
+            "/cheekPuffRight",
+            "/cheekSuckLeft",
+            "/cheekSuckRight",
+            "/jawOpen",
+            "/jawForward",
+            "/jawLeft",
+            "/jawRight",
+            "/noseSneerLeft",
+            "/noseSneerRight",
+            "/mouthFunnel",
+            "/mouthPucker",
+            "/mouthLeft",
+            "/mouthRight",
+            "/mouthRollUpper",
+            "/mouthRollLower",
+            "/mouthShrugUpper",
+            "/mouthShrugLower",
+            "/mouthClose",
+            "/mouthSmileLeft",
+            "/mouthSmileRight",
+            "/mouthFrownLeft",
+            "/mouthFrownRight",
+            "/mouthDimpleLeft",
+            "/mouthDimpleRight",
+            "/mouthUpperUpLeft",
+            "/mouthUpperUpRight",
+            "/mouthLowerDownLeft",
+            "/mouthLowerDownRight",
+            "/mouthPressLeft",
+            "/mouthPressRight",
+            "/mouthStretchLeft",
+            "/mouthStretchRight",
+            "/tongueOut",
+            "/tongueUp",
+            "/tongueDown",
+            "/tongueLeft",
+            "/tongueRight",
+            "/tongueRoll",
+            "/tongueBendDown",
+            "/tongueCurlUp",
+            "/tongueSquish",
+            "/tongueFlat",
+            "/tongueTwistLeft",
+            "/tongueTwistRight"
+        },
+        new() // original prod ET layout
+        {
+            "/LeftEyeX",
+            "/LeftEyeY",
+            "/LeftEyeLid",
+            "/RightEyeX",
+            "/RightEyeY",
+            "/RightEyeLid"
+        },
+    };
 
 
     /// <summary>
@@ -56,12 +117,23 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
     /// </summary>
     private void InitializeModelMetadata()
     {
-        _isOldEyeModel = _session.ModelMetadata.CustomMetadataMap.Count() == 0;
+        _hasModelMetadata = _session.ModelMetadata.CustomMetadataMap.Count() != 0;
 
-        if (!_isOldEyeModel)
+        if (_hasModelMetadata)
         {
             var metadataJson = _session.ModelMetadata.CustomMetadataMap["blendshape_names"];
             _outputExpressionNames = JsonConvert.DeserializeObject<string[]>(metadataJson)!;
+        } else {
+            // determine expression mapping from model output size
+            var outputSize = _session.OutputMetadata.Values.First().Dimensions[1];
+            foreach(List<string> mapping in _knownMappings)
+            {
+                if(mapping.Count == outputSize)
+                {
+                    _outputExpressionNames = mapping.ToArray();
+                    break;
+                }
+            }
         }
     }
 
@@ -179,7 +251,7 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
     /// Runs inference on current InputTensor
     /// </summary>
     /// <returns></returns>
-    public float[] Run()
+    public Dictionary<string, float>? Run()
     {
         var inputs = new List<NamedOnnxValue>
         {
@@ -188,26 +260,15 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
 
         using var results = _session.Run(inputs);
 
-        var output = results[0].AsEnumerable<float>().ToArray();
-        OutputSize = output.Length;
-        return output;
+        var denseTensor = (DenseTensor<float>)results[0].AsTensor<float>();
+        var span = denseTensor.Buffer.Span;
+
+        int i = 0;
+        foreach (string s in _outputExpressionNames)
+            _outputs[s] = span[i++];
+
+        return _outputs;
     }
-
-    // Dictionary mapping eye output names to their indices
-    private static readonly Dictionary<string, int> OutputIndexMap = new()
-    {
-        { "leftEyePitch", 0 },
-        { "leftEyeYaw", 1 },
-        { "leftEyeLid", 2 },
-        { "leftEyeWiden", 3 },
-        { "leftBrow", 4 },
-        { "rightEyePitch", 5 },
-        { "rightEyeYaw", 6 },
-        { "rightEyeLid", 7 },
-        { "rightEyeWiden", 8 },
-        { "rightBrow", 9 }
-    };
-
 
     public DenseTensor<float> GetInputTensor()
     {
