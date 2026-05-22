@@ -122,7 +122,7 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
         if (_hasModelMetadata)
         {
             var metadataJson = _session.ModelMetadata.CustomMetadataMap["blendshape_names"];
-            _outputExpressionNames = JsonConvert.DeserializeObject<string[]>(metadataJson)!;
+            _outputExpressionNames = JsonConvert.DeserializeObject<string[]>(metadataJson).Select(s => "/" + s).ToArray();
         } else {
             // determine expression mapping from model output size
             var outputSize = _session.OutputMetadata.Values.First().Dimensions[1];
@@ -135,6 +135,8 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
                 }
             }
         }
+
+        _logger.LogInformation("Initialized model that predicts {Expressions}", string.Join(", ", _outputExpressionNames));
 
         _outputs = new OrderedFloatMap(_outputExpressionNames);
     }
