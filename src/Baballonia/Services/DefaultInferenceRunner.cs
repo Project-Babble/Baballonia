@@ -20,7 +20,7 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
     private InferenceSession _session;
     private string[] _outputExpressionNames;
     private bool _hasModelMetadata;
-    private Dictionary<string, float> _outputs;
+    private OrderedFloatMap _outputs;
 
     private readonly List<List<string>> _knownMappings = new()
     {
@@ -74,12 +74,12 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
         },
         new() // original prod ET layout
         {
-            "/LeftEyeX",
-            "/LeftEyeY",
-            "/LeftEyeLid",
-            "/RightEyeX",
-            "/RightEyeY",
-            "/RightEyeLid"
+            "/leftEyeX",
+            "/leftEyeY",
+            "/leftEyeLid",
+            "/rightEyeX",
+            "/rightEyeY",
+            "/rightEyeLid"
         },
     };
 
@@ -135,6 +135,8 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
                 }
             }
         }
+
+        _outputs = new OrderedFloatMap(_outputExpressionNames);
     }
 
     /// <summary>
@@ -251,7 +253,7 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
     /// Runs inference on current InputTensor
     /// </summary>
     /// <returns></returns>
-    public Dictionary<string, float>? Run()
+    public OrderedFloatMap? Run()
     {
         var inputs = new List<NamedOnnxValue>
         {
@@ -261,11 +263,8 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
         using var results = _session.Run(inputs);
 
         var denseTensor = (DenseTensor<float>)results[0].AsTensor<float>();
-        var span = denseTensor.Buffer.Span;
-
-        int i = 0;
-        foreach (string s in _outputExpressionNames)
-            _outputs[s] = span[i++];
+        
+        denseTensor.Buffer.Span.CopyTo(_outputs.ValuesSpan);
 
         return _outputs;
     }

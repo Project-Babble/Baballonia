@@ -5,6 +5,8 @@ namespace Baballonia.Services.Inference.Filters;
 
 public class OneEuroFilter : IFilter
 {
+    private const float TwoPi = 2.0f * MathF.PI;
+
     private readonly float _initialMinCutoff;
     private readonly float _initialBeta;
     private bool _isInitialized;
@@ -21,8 +23,8 @@ public class OneEuroFilter : IFilter
     private float[] _cutoff;
     private float[] _xHat;
 
-    // Reusable output dictionary
-    private Dictionary<string, float> _output;
+    // Reusable output map
+    private OrderedFloatMap _output;
     private DateTime _tPrev;
 
     public OneEuroFilter(float minCutoff = 1.0f, float beta = 0.0f)
@@ -32,7 +34,7 @@ public class OneEuroFilter : IFilter
         _isInitialized = false;
     }
 
-    public Dictionary<string, float> Filter(Dictionary<string, float> x)
+    public OrderedFloatMap Filter(OrderedFloatMap x)
     {
         // Lazily initialize on the very first call
         if (!_isInitialized)
@@ -44,54 +46,50 @@ public class OneEuroFilter : IFilter
         DateTime now = DateTime.UtcNow;
         float elapsedTime = (float)(now - _tPrev).TotalSeconds;
 
+        ReadOnlySpan<float> xSpan = x.ValuesSpan;
+        Span<float> outSpan = _output.ValuesSpan;
+        int length = _xPrev.Length;
+
         if (elapsedTime <= 0.0f)
         {
-            for (int i = 0; i < _keys.Length; i++)
+            for (int i = 0; i < length; i++)
             {
-                string key = _keys[i];
-                if (x.TryGetValue(key, out float val))
-                {
-                    _output[key] = val;
-                    _xPrev[i] = val;
-                }
+                float val = xSpan[i];
+                outSpan[i] = val;
+                _xPrev[i] = val;
             }
             return _output;
         }
 
-        for (int i = 0; i < _keys.Length; i++)
+        for (int i = 0; i < length; i++)
         {
-            string key = _keys[i];
-            
-            if (!x.TryGetValue(key, out float val))
-            {
-                val = _xPrev[i];
-            }
+            float val = xSpan[i];
 
             _dx[i] = (val - _xPrev[i]) / elapsedTime;
 
-            float r_d = 2 * (float)Math.PI * _dCutoff[i] * elapsedTime;
-            float a_d = r_d / (r_d + 1);
+            float r_d = TwoPi * _dCutoff[i] * elapsedTime;
+            float a_d = r_d / (r_d + 1.0f);
 
-            _dxHat[i] = a_d * _dx[i] + (1 - a_d) * _dxPrev[i];
+            _dxHat[i] = a_d * _dx[i] + (1.0f - a_d) * _dxPrev[i];
 
-            _cutoff[i] = _minCutoff[i] + _beta[i] * Math.Abs(_dxHat[i]);
+            _cutoff[i] = _minCutoff[i] + _beta[i] * MathF.Abs(_dxHat[i]);
 
-            float r = 2 * (float)Math.PI * _cutoff[i] * elapsedTime;
-            float a = r / (r + 1);
+            float r = TwoPi * _cutoff[i] * elapsedTime;
+            float a = r / (r + 1.0f);
 
-            _xHat[i] = a * val + (1 - a) * _xPrev[i];
+            _xHat[i] = a * val + (1.0f - a) * _xPrev[i];
 
             _xPrev[i] = _xHat[i];
             _dxPrev[i] = _dxHat[i];
 
-            _output[key] = _xHat[i];
+            outSpan[i] = _xHat[i];
         }
 
         _tPrev = now;
         return _output;
     }
 
-    private void Initialize(Dictionary<string, float> x0)
+    private void Initialize(OrderedFloatMap x0)
     {
         int length = x0.Count;
 
@@ -107,8 +105,6 @@ public class OneEuroFilter : IFilter
         _cutoff = new float[length];
         _xHat = new float[length];
 
-        _output = new Dictionary<string, float>(length);
-
         int i = 0;
         foreach (KeyValuePair<string, float> kvp in x0)
         {
@@ -118,10 +114,12 @@ public class OneEuroFilter : IFilter
             _beta[i] = _initialBeta;
             _dCutoff[i] = 1.0f;
             _dxPrev[i] = 0.0f;
-            
-            _output[kvp.Key] = kvp.Value;
             i++;
         }
+
+        _output = new OrderedFloatMap(_keys);
+        
+        _xPrev.CopyTo(_output.ValuesSpan);
 
         _tPrev = DateTime.UtcNow;
         _isInitialized = true;

@@ -9,7 +9,7 @@ namespace Baballonia.Services;
 
 public class ProcessingLoopService : IDisposable
 {
-    public record struct Expressions(Dictionary<string, float>? FaceExpression, Dictionary<string, float>? EyeExpression);
+    public record struct Expressions(OrderedFloatMap? FaceExpression, OrderedFloatMap? EyeExpression);
 
     public event Action<Expressions> ExpressionChangeEvent;
 
