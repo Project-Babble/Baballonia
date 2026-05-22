@@ -73,7 +73,7 @@ public class ParameterSenderService : BackgroundService
             ProcessFaceExpressionData(expressions.FaceExpression);
     }
 
-    private void ProcessEyeExpressionData(Dictionary<string, float> expressions)
+    private void ProcessEyeExpressionData(OrderedFloatMap expressions)
     {
         if (expressions is null) return;
 
@@ -94,7 +94,7 @@ public class ParameterSenderService : BackgroundService
             ProcessNativeVrcEyeTracking(expressions, _vrcftQueue);
     }
 
-    private void ProcessNativeVrcEyeTracking(Dictionary<string, float> expressions, ConcurrentQueue<OscMessage> queue)
+    private void ProcessNativeVrcEyeTracking(OrderedFloatMap expressions, ConcurrentQueue<OscMessage> queue)
     {
         var leftEyeX = expressions["/leftEyePitch"];
         var leftEyeY = expressions["/leftEyeYaw"];
@@ -119,7 +119,7 @@ public class ParameterSenderService : BackgroundService
         queue.Enqueue(new OscMessage("/tracking/eye/LeftRightPitchYaw", leftEyeY, rightEyeX, rightEyeY, leftEyeX));
     }
 
-    private void ProcessFaceExpressionData(Dictionary<string, float> expressions)
+    private void ProcessFaceExpressionData(OrderedFloatMap expressions)
     {
         if (expressions == null) return;
 
