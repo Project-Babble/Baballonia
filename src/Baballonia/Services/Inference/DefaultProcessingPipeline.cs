@@ -6,7 +6,7 @@ namespace Baballonia.Services.Inference;
 
 public interface IProcessingPipeline
 {
-    Dictionary<string, float>? RunUpdate();
+    OrderedFloatMap? RunUpdate();
 }
 public class DefaultProcessingPipeline : IProcessingPipeline
 {
@@ -16,7 +16,7 @@ public class DefaultProcessingPipeline : IProcessingPipeline
     public IInferenceRunner? InferenceService;
     public IFilter? Filter;
 
-    public Dictionary<string, float>? RunUpdate()
+    public OrderedFloatMap? RunUpdate()
     {
         var frame = VideoSource?.GetFrame(ColorType.Gray8);
         if(frame == null)

@@ -12,7 +12,7 @@ public class EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus) : D
 
     public bool StabilizeEyes { get; set; } = true;
 
-    public Dictionary<string, float>? RunUpdate()
+    public OrderedFloatMap? RunUpdate()
     {
         var frame = VideoSource?.GetFrame(ColorType.Gray8);
         if(frame == null)
@@ -43,6 +43,11 @@ public class EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus) : D
         if(inferenceResult == null)
             return null;
 
+        if (Filter != null)
+        {
+            inferenceResult = Filter.Filter(inferenceResult);
+        }
+
         ProcessExpressions(ref inferenceResult);
 
         eyePipelineEventBus.Publish(new EyePipelineEvents.NewFilteredResultEvent(inferenceResult));
@@ -53,7 +58,7 @@ public class EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus) : D
         return inferenceResult;
     }
 
-    private bool ProcessExpressions(ref Dictionary<string, float> arKitExpressions)
+    private bool ProcessExpressions(ref OrderedFloatMap arKitExpressions)
     {
 
         const float mulV = 2.0f;

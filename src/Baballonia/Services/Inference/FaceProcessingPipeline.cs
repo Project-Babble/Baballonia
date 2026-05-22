@@ -7,7 +7,7 @@ namespace Baballonia.Services.Inference;
 
 public class FaceProcessingPipeline(IFacePipelineEventBus facePipelineEventBus) : DefaultProcessingPipeline
 {
-    public Dictionary<string, float>? RunUpdate()
+    public OrderedFloatMap? RunUpdate()
     {
         var frame = VideoSource?.GetFrame(ColorType.Gray8);
         if(frame == null)

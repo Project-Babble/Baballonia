@@ -10,7 +10,7 @@ public class FacePipelineEvents
 
     public record NewTransformedFrameEvent(Mat image);
 
-    public record NewFilteredResultEvent(Dictionary<string, float> result);
+    public record NewFilteredResultEvent(OrderedFloatMap result);
 
     public record ExceptionEvent(Exception exception);
 }
@@ -20,7 +20,7 @@ public class EyePipelineEvents
 
     public record NewTransformedFrameEvent(Mat image);
 
-    public record NewFilteredResultEvent(Dictionary<string, float> result);
+    public record NewFilteredResultEvent(OrderedFloatMap result);
 
     public record ExceptionEvent(Exception exception);
 }

@@ -168,7 +168,7 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
         }
     }
 
-    private void ApplyCurrentExpressionValues(Dictionary<string, float> values, IEnumerable<SliderBindableSetting> settings)
+    private void ApplyCurrentExpressionValues(OrderedFloatMap values, IEnumerable<SliderBindableSetting> settings)
     {
         foreach (var setting in settings)
         {

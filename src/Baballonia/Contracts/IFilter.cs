@@ -4,5 +4,5 @@ namespace Baballonia.Services.Inference;
 
 public interface IFilter
 {
-    Dictionary<string, float> Filter(Dictionary<string, float> input);
+    OrderedFloatMap Filter(OrderedFloatMap input);
 }

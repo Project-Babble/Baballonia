@@ -5,6 +5,6 @@ namespace Baballonia.Contracts;
 
 public interface IInferenceRunner
 {
-    public Dictionary<string, float>? Run();
+    public OrderedFloatMap? Run();
     public DenseTensor<float> GetInputTensor();
 }
