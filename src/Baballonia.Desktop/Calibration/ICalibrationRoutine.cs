@@ -354,23 +354,23 @@ public class EyeCalibration(
                 TimeSpan.FromSeconds(20), lid: 0
             ),
 
-            // new BaseTutorialStep("widentutorial", TimeSpan.FromSeconds(10)),
-            // eyeCaptureStepFactory.Create("widen",
-            //     CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20), widen: 1, lid: 1),
-            // 
-            // new BaseTutorialStep("squinttutorial", TimeSpan.FromSeconds(10)),
-            // eyeCaptureStepFactory.Create("squint",
-            //     CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20), squint: 1, lid: 1),
-            // 
-            // new BaseTutorialStep("browtutorial", TimeSpan.FromSeconds(10)),
-            // eyeCaptureStepFactory.Create("brow",
-            //     CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20), browAngry: 1, lid: 1),
-            // steps.Add(new BaseTutorialStep("covergencetutorial"));
-            // steps.Add(_eyeCaptureStepFactory.Create("covergence",
-            //     CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_WHATEVER_NOT_IMPLEMENTED));
+            new BaseTutorialStep("widentutorial", TimeSpan.FromSeconds(10)),
+                eyeCaptureStepFactory.Create("widen",
+                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20), widen: 1, lid: 1),
+             
+            new BaseTutorialStep("squinttutorial", TimeSpan.FromSeconds(10)),
+                eyeCaptureStepFactory.Create("squint",
+                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20), squint: 1, lid: 1),
+             
+            new BaseTutorialStep("browtutorial", TimeSpan.FromSeconds(10)),
+                eyeCaptureStepFactory.Create("brow",
+                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20), browAngry: 1, lid: 1),
+            //steps.Add(new BaseTutorialStep("covergencetutorial"));
+            //steps.Add(_eyeCaptureStepFactory.Create("covergence",
+            //    CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_WHATEVER_NOT_IMPLEMENTED));
 
-            // new MergeBinsStep("gaze.bin", "blink.bin", "widen.bin", "squint.bin", "brow.bin"),
-            new MergeBinsStep("gaze.bin", "blink.bin"),
+            new MergeBinsStep("gaze.bin", "blink.bin", "widen.bin", "squint.bin", "brow.bin"),
+            // new MergeBinsStep("gaze.bin", "blink.bin"),
             new TrainerCalibrationStep(trainer),
             new CommandDispatchStep("close")
 
@@ -394,20 +394,20 @@ public class EyeCalibration(
                 TimeSpan.FromSeconds(20)
             ),
 
-            //new BaseTutorialStep("widentutorial", TimeSpan.FromSeconds(4)),
-            //eyeCaptureStepFactory.Create("widen",
-            //    CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20)),
-            //
-            //new BaseTutorialStep("squinttutorial", TimeSpan.FromSeconds(4)),
-            //eyeCaptureStepFactory.Create("squint",
-            //    CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20)),
-            //
-            //new BaseTutorialStep("browtutorial", TimeSpan.FromSeconds(4)),
-            //eyeCaptureStepFactory.Create("brow",
-            //    CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20)),
+            new BaseTutorialStep("widentutorial", TimeSpan.FromSeconds(4)),
+                eyeCaptureStepFactory.Create("widen",
+                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20)),
+            
+            new BaseTutorialStep("squinttutorial", TimeSpan.FromSeconds(4)),
+                eyeCaptureStepFactory.Create("squint",
+                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20)),
+            
+            new BaseTutorialStep("browtutorial", TimeSpan.FromSeconds(4)),
+                eyeCaptureStepFactory.Create("brow",
+                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20)),
 
-            //new MergeBinsStep("gaze.bin", "blink.bin", "widen.bin", "squint.bin", "brow.bin"),
-            new MergeBinsStep("gaze.bin", "blink.bin"),
+            new MergeBinsStep("gaze.bin", "blink.bin", "widen.bin", "squint.bin", "brow.bin"),
+            // new MergeBinsStep("gaze.bin", "blink.bin"),
             new TrainerCalibrationStep(trainer),
             new CommandDispatchStep("close")
 

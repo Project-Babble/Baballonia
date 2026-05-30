@@ -61,39 +61,50 @@ public class EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus) : D
     private bool ProcessExpressions(ref OrderedFloatMap arKitExpressions)
     {
 
+        
         const float mulV = 2.0f;
         const float mulY = 2.0f;
 
-        var leftPitch = arKitExpressions["/leftEyeX"] * mulY - mulY / 2;
-        var leftYaw = arKitExpressions["/leftEyeY"] * mulV - mulV / 2;
+        var leftX = arKitExpressions["/leftEyeX"] * mulY - mulY / 2;
+        var leftY = arKitExpressions["/leftEyeY"] * mulV - mulV / 2;
         var leftLid = 1 - arKitExpressions["/leftEyeLid"];
 
-        var rightPitch = arKitExpressions["/rightEyeX"] * mulY - mulY / 2;
-        var rightYaw = arKitExpressions["/rightEyeY"] * mulV - mulV / 2;
+        var rightX = arKitExpressions["/rightEyeX"] * mulY - mulY / 2;
+        var rightY = arKitExpressions["/rightEyeY"] * mulV - mulV / 2;
         var rightLid = 1 - arKitExpressions["/rightEyeLid"];
 
-        var eyePitch = (leftPitch * leftLid + rightPitch * rightLid) / (leftLid + rightLid);
+        var eyeY = (leftY * leftLid + rightY * rightLid) / (leftLid + rightLid);
 
-        var leftEyeYawCorrected = rightYaw * (1 - leftLid) + leftYaw * leftLid;
-        var rightEyeYawCorrected = leftYaw * (1 - rightLid) + rightYaw * rightLid;
+        var leftEyeXCorrected = rightX * (1 - leftLid) + leftX * leftLid;
+        var rightEyeXCorrected = leftX * (1 - rightLid) + rightX * rightLid;
 
-        if (StabilizeEyes)
+        if (StabilizeEyes && false)
         {
-            var rawConvergence = (rightEyeYawCorrected - leftEyeYawCorrected) / 2.0f;
+            var rawConvergence = (leftEyeXCorrected - rightEyeXCorrected) / 2.0f;
             var convergence = Math.Max(rawConvergence, 0.0f); // We clamp the value here to avoid accidental divergence, as the model sometimes decides that's a thing
 
-            var averagedYaw = (rightEyeYawCorrected + leftEyeYawCorrected) / 2.0f;
+            var averagedX = (rightEyeXCorrected + leftEyeXCorrected) / 2.0f;
 
-            leftEyeYawCorrected = averagedYaw - convergence;
-            rightEyeYawCorrected = averagedYaw + convergence;
+            leftEyeXCorrected = averagedX + convergence;
+            rightEyeXCorrected = averagedX - convergence;
         }
 
         // update the dict
-        arKitExpressions["/leftEyeX"] = eyePitch;
-        arKitExpressions["/leftEyeY"] = leftEyeYawCorrected;
+        arKitExpressions["/leftEyeX"] = leftEyeXCorrected;
+        arKitExpressions["/leftEyeY"] = eyeY;
 
-        arKitExpressions["/rightEyeX"] = eyePitch;
-        arKitExpressions["/rightEyeY"] = rightEyeYawCorrected;
+        arKitExpressions["/rightEyeX"] = rightEyeXCorrected;
+        arKitExpressions["/rightEyeY"] = eyeY;
+
+        arKitExpressions["/leftEyeLid"] = leftLid;
+        arKitExpressions["/rightEyeLid"] = rightLid;
+
+        //try{
+
+        //arKitExpressions["/leftEyeWiden"] = arKitExpressions["/rightEyeWiden"] = (arKitExpressions["/leftEyeWiden"] = arKitExpressions["/rightEyeWiden"]) / 2;
+        //arKitExpressions["/leftEyeSquint"] = arKitExpressions["/rightEyeSquint"] = (arKitExpressions["/leftEyeSquint"] = arKitExpressions["/rightEyeSquint"]) / 2;
+
+        //}catch{}
 
         return true;
     }

@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
+using System;
 namespace Baballonia.Services;
 
 public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRunner
@@ -74,12 +74,12 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
         },
         new() // original prod ET layout
         {
-            "/leftEyeX",
-            "/leftEyeY",
-            "/leftEyeLid",
-            "/rightEyeX",
             "/rightEyeY",
-            "/rightEyeLid"
+            "/rightEyeX",
+            "/rightEyeLid",
+            "/leftEyeY",
+            "/leftEyeX",
+            "/leftEyeLid",
         },
     };
 
@@ -255,6 +255,7 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
     /// Runs inference on current InputTensor
     /// </summary>
     /// <returns></returns>
+
     public OrderedFloatMap? Run()
     {
         var inputs = new List<NamedOnnxValue>
