@@ -78,6 +78,7 @@ public class CalibrationService : ICalibrationService
     private readonly ConcurrentDictionary<string, CalibrationParameter> _expressionSettings = new();
 
     private readonly ILocalSettingsService _localSettingsService;
+    private CalibrationParameter _DefaultCalibration = new CalibrationParameter();
 
     public CalibrationService(ILocalSettingsService localSettingsService)
     {
@@ -108,11 +109,11 @@ public class CalibrationService : ICalibrationService
         SaveAsync();
     }
 
-    public CalibrationParameter GetExpressionSettings(string parameterName)
+    public CalibrationParameter GetExpressionSettings(string parameterName) // run once per paremeter, per frame
     {
         return _expressionSettings.TryGetValue(parameterName, out var settings) ?
             settings :
-            new CalibrationParameter();
+            _DefaultCalibration;
     }
 
     public float GetExpressionSetting(string expression)
