@@ -40,12 +40,12 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
         [
             new("LeftEyeLid"),
             new("RightEyeLid"),
-            //new ("LeftEyeWiden"),
-            //new ("LeftEyeLower"),
-            //new ("LeftEyeBrow"),
-            //new ("RightEyeWiden"),
-            //new ("RightEyeLower"),
-            //new ("RightEyeBrow"),
+            new("LeftEyeWiden"),
+            new("LeftEyeSquint"),
+            new("LeftEyeBrow"),
+            new("RightEyeWiden"),
+            new("RightEyeSquint"),
+            new("RightEyeBrow"),
         ];
 
         JawSettings =
@@ -126,7 +126,7 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
             if (value is float floatValue)
             {
                 if (p.PropertyName == null) return;
-                _calibrationService.SetExpression(p.PropertyName!, floatValue);
+                _calibrationService.SetExpression(DisplayNameToInternalName(p.PropertyName!), floatValue);
             }
         };
 
@@ -134,6 +134,21 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
 
         LoadInitialSettings();
         _settingsService.Load(this);
+    }
+
+    private string DisplayNameToInternalName(string displayName)
+    {
+        if (string.IsNullOrEmpty(displayName))
+        {
+            return displayName;
+        }
+
+        return string.Create(displayName.Length + 1, displayName, (span, state) =>
+        {
+            span[0] = '/';
+            span[1] = char.ToLowerInvariant(state[0]);
+            state.AsSpan(1).CopyTo(span.Slice(2));
+        });
     }
 
     private void ExpressionUpdateHandler(ProcessingLoopService.Expressions expressions)
@@ -159,12 +174,12 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
 
         if (e.PropertyName is nameof(SliderBindableSetting.Lower))
         {
-            _calibrationService.SetExpression(setting.Name + "Lower", setting.Lower);
+            _calibrationService.SetExpression(DisplayNameToInternalName(setting.Name) + "Lower", setting.Lower);
         }
 
         if (e.PropertyName is nameof(SliderBindableSetting.Upper))
         {
-            _calibrationService.SetExpression(setting.Name + "Upper", setting.Upper);
+            _calibrationService.SetExpression(DisplayNameToInternalName(setting.Name) + "Upper", setting.Upper);
         }
     }
 
@@ -172,7 +187,7 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
     {
         foreach (var setting in settings)
         {
-            var settingName = setting.Name;
+            var settingName = DisplayNameToInternalName(setting.Name);
             if (values.ContainsKey(settingName)) {
                 var weight = values[settingName];
                 var val = Math.Clamp(
