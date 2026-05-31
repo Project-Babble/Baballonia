@@ -227,7 +227,11 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
     {
         foreach (var setting in settings)
         {
-            var val = _calibrationService.GetExpressionSettings(setting.Name);
+            var legacyVal = _calibrationService.GetExpressionSettings(setting.Name);
+            var newVal = _calibrationService.GetNullableExpressionSettings(DisplayNameToInternalName(setting.Name));
+
+            // if we have "new format" parameter in settings, use it. otherwise fall back to legacy (or default values)
+            var val = newVal == null ? legacyVal : newVal;
             setting.Lower = val.Lower;
             setting.Upper = val.Upper;
             setting.Min = val.Min;
@@ -237,6 +241,12 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
 
     public void Dispose()
     {
-        // _processingLoopService.ExpressionUpdateEvent -= ExpressionUpdateHandler;
+        _processingLoopService.ExpressionChangeEvent -= ExpressionUpdateHandler;
+        
+        foreach (var setting in EyeSettings.Concat(JawSettings).Concat(CheekSettings)
+                    .Concat(NoseSettings).Concat(MouthSettings).Concat(TongueSettings))
+        {
+            setting.PropertyChanged -= OnSettingChanged;
+        }
     }
 }
