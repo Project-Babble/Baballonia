@@ -117,6 +117,13 @@ public class CalibrationService : ICalibrationService
             _DefaultCalibration;
     }
 
+    public CalibrationParameter GetNullableExpressionSettings(string parameterName) // run once per paremeter, per frame
+    {
+        return _expressionSettings.TryGetValue(parameterName, out var settings) ?
+            settings :
+            null;
+    }
+
     public float GetExpressionSetting(string expression)
     {
         if (!expression.EndsWith("Lower") && !expression.EndsWith("Upper")) return 0;
