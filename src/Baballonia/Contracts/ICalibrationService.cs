@@ -7,6 +7,7 @@ public interface ICalibrationService
     void SetExpression(string expression, float value);
 
     CalibrationParameter GetExpressionSettings(string parameterName);
+    CalibrationParameter GetNullableExpressionSettings(string parameterName);
 
     float GetExpressionSetting(string expression);
     void ResetValues();
