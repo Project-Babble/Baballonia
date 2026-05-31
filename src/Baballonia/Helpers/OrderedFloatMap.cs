@@ -5,11 +5,13 @@ using System.Collections.Generic;
 
 public class OrderedFloatMap : IReadOnlyDictionary<string, float>
 {
+    private readonly string[] _orderedKeys;
     private readonly FrozenDictionary<string, int> _keyToIndex;
     private readonly float[] _values;
 
     public OrderedFloatMap(string[] orderedKeys)
     {
+        _orderedKeys = (string[])orderedKeys.Clone();
         _values = new float[orderedKeys.Length];
 
         // Create the temporary mapping to construct the FrozenDictionary
@@ -55,14 +57,14 @@ public class OrderedFloatMap : IReadOnlyDictionary<string, float>
     // --- IReadOnlyDictionary Boilerplate ---
     public int Count => _values.Length;
     public bool ContainsKey(string key) => _keyToIndex.ContainsKey(key);
-    public IEnumerable<string> Keys => _keyToIndex.Keys;
+    public IEnumerable<string> Keys => _orderedKeys;
     public IEnumerable<float> Values => _values;
 
     public IEnumerator<KeyValuePair<string, float>> GetEnumerator()
     {
-        foreach (var kvp in _keyToIndex)
+        foreach (var key in _orderedKeys)
         {
-            yield return new KeyValuePair<string, float>(kvp.Key, _values[kvp.Value]);
+            yield return new KeyValuePair<string, float>(key, this[key]);
         }
     }
 
