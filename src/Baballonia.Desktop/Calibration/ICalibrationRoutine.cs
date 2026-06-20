@@ -27,7 +27,7 @@ public sealed class BaseTutorialStep(string name, TimeSpan time) : PacketHandler
     public TimeSpan TimeToRun { get; } = time;
     private TaskCompletionSource Token = new();
 
-    public BaseTutorialStep(string name) : this(name, TimeSpan.FromSeconds(7))
+    public BaseTutorialStep(string name) : this(name, TimeSpan.FromSeconds(30))
     {
     }
 
@@ -423,9 +423,9 @@ public class EyeCalibration(
             // images while gaze is labeled by the reticle. The qpro trainer uses this as its
             // unlabeled-expression section (gaze_valid=1 -> used for gaze robustness, excluded from
             // supervised expression). Same flags as the neutral gaze pass; only the name/duration differ.
-            new BaseTutorialStep("gazeexprtutorial", TimeSpan.FromSeconds(5)),
+            new BaseTutorialStep("gazeexprtutorial", TimeSpan.FromSeconds(10)),
             new GazeCaptureStep(eyePipelineEventBus, TimeSpan.FromSeconds(60), "gazeexpr", CaptureFlags.FLAG_FREE_EXPRESSION),
-            new BaseTutorialStep("blinktutorial", TimeSpan.FromSeconds(5)),
+            new BaseTutorialStep("blinktutorial", TimeSpan.FromSeconds(10)),
             eyeCaptureStepFactory.Create("blink",
                 CaptureFlags.FLAG_GOOD_DATA |
                 CaptureFlags.FLAG_IN_MOVEMENT |
@@ -433,17 +433,17 @@ public class EyeCalibration(
                 TimeSpan.FromSeconds(10), lid: 0
             ),
 
-            new BaseTutorialStep("widentutorial", TimeSpan.FromSeconds(5)),
+            new BaseTutorialStep("widentutorial", TimeSpan.FromSeconds(10)),
                 eyeCaptureStepFactory.CreateGazeExpression("widen",
-                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_IN_MOVEMENT | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(25), widen: 1, lid: 1),
+                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_IN_MOVEMENT | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20), widen: 1, lid: 1),
 
-            new BaseTutorialStep("squinttutorial", TimeSpan.FromSeconds(5)),
+            new BaseTutorialStep("squinttutorial", TimeSpan.FromSeconds(10)),
                 eyeCaptureStepFactory.CreateGazeExpression("squint",
-                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_IN_MOVEMENT | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(10), squint: 1, lid: 1),
+                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_IN_MOVEMENT | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20), squint: 1, lid: 1),
 
-            new BaseTutorialStep("browtutorial", TimeSpan.FromSeconds(5)),
+            new BaseTutorialStep("browtutorial", TimeSpan.FromSeconds(10)),
                 eyeCaptureStepFactory.CreateGazeExpression("brow",
-                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_IN_MOVEMENT | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(30), browAngry: 1, lid: 1),
+                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_IN_MOVEMENT | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20), browAngry: 1, lid: 1),
             //steps.Add(new BaseTutorialStep("covergencetutorial"));
             //steps.Add(_eyeCaptureStepFactory.Create("covergence",
             //    CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_WHATEVER_NOT_IMPLEMENTED));
