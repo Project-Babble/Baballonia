@@ -31,6 +31,13 @@ public static class CaptureFlags
     public const uint FLAG_VERSION_BIT3 = 1U << 22;
     public const uint FLAG_VERSION_BIT4 = 1U << 23;
 
+    // qpro trainer marker: a gaze-valid section recorded with FREE / unlabeled expressions
+    // (the "look at the dot and make all kinds of faces" pass). Aliases FLAG_ROUTINE_2 — read by the
+    // Python trainer (bin_reader.FLAG_EXPR_UNLABELED) to route these frames into the
+    // unlabeled-expression Mean-Teacher / temporal-smoothness stream. Such frames also carry
+    // FLAG_ROUTINE_BIT1 (gaze-valid), so they train gaze too but are excluded from supervised expression.
+    public const uint FLAG_FREE_EXPRESSION = FLAG_ROUTINE_2;
+
     public const uint FLAG_CONVERGENCE = 1u << 24;
     public const uint FLAG_IN_MOVEMENT = 1u << 25;
     public const uint FLAG_RESTING = 1u << 26; // Unused right now, was used to denote tutorial sections
