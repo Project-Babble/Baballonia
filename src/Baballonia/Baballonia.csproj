@@ -13,6 +13,9 @@
 
     <ItemGroup>
         <AvaloniaResource Include="Assets\**" />
+        <None Update="BabbleConfig.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
         <None Update="Firmware\Binaries\BabbleFirmware1.0.bin">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
