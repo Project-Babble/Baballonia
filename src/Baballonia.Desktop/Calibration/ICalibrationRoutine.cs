@@ -27,7 +27,7 @@ public sealed class BaseTutorialStep(string name, TimeSpan time) : PacketHandler
     public TimeSpan TimeToRun { get; } = time;
     private TaskCompletionSource Token = new();
 
-    public BaseTutorialStep(string name) : this(name, TimeSpan.FromSeconds(30))
+    public BaseTutorialStep(string name) : this(name, TimeSpan.FromSeconds(7))
     {
     }
 
@@ -159,16 +159,16 @@ public abstract class BaseCaptureStep(string name, uint flags, TimeSpan time) : 
     }
 }
 
-public class GazeCaptureStep(IEyePipelineEventBus bus, TimeSpan time) : BasePositionalAwareEyeCaptureStep(bus, "gaze",
+public class GazeCaptureStep(IEyePipelineEventBus bus, TimeSpan time, string name = "gaze", uint extraFlags = 0) : BasePositionalAwareEyeCaptureStep(bus, name,
     CaptureFlags.FLAG_GOOD_DATA |
     CaptureFlags.FLAG_IN_MOVEMENT |
     CaptureFlags.FLAG_VERSION_BIT1 |
-    CaptureFlags.FLAG_ROUTINE_BIT1, time)
+    CaptureFlags.FLAG_ROUTINE_BIT1 | extraFlags, time)
 {
     private Stopwatch _posDataTimer = new();
     private readonly TimeSpan _posDataTimeout = TimeSpan.FromSeconds(0.2);
 
-    public GazeCaptureStep(IEyePipelineEventBus bus) : this(bus, TimeSpan.FromSeconds(120))
+    public GazeCaptureStep(IEyePipelineEventBus bus) : this(bus, TimeSpan.FromSeconds(60))
     {
     }
 
@@ -195,6 +195,66 @@ public class GazeCaptureStep(IEyePipelineEventBus bus, TimeSpan time) : BasePosi
                 {
                     RoutineLeftLid = 1,
                     RoutineRightLid = 1,
+                };
+            }
+        }
+    }
+}
+
+/// <summary>
+/// Records frames with BOTH per-frame gaze ground-truth (injected from the overlay reticle
+/// via <see cref="PositionalBinCollector"/>) AND a held-expression label stamped onto each frame.
+/// Modeled on <see cref="GazeCaptureStep"/> (same fresh-positional-data gate) but with a fully
+/// parameterized expression label so the gaze dot can be recorded during the squint/widen/brow passes.
+/// </summary>
+public class GazeExpressionCaptureStep(
+    IEyePipelineEventBus bus,
+    string name,
+    uint flags,
+    TimeSpan time,
+    float lid = 0,
+    float browRaise = 0,
+    float browAngry = 0,
+    float widen = 0,
+    float squint = 0,
+    float dilate = 0)
+    // FLAG_ROUTINE_BIT1 (= gaze-valid / Python FLAG_GAZE_DATA) is forced ON: every GazeExpressionCaptureStep
+    // records REAL per-frame gaze from the reticle, so the gaze net trains on these held-expression+gaze
+    // frames (fixes "eye looks up while squinting"). They are NOT FLAG_FREE_EXPRESSION, so they keep their
+    // real expr labels for the supervised expr net (kept by exclude_expr_unlabeled, not the unlabeled stream).
+    : BasePositionalAwareEyeCaptureStep(bus, name, flags | CaptureFlags.FLAG_ROUTINE_BIT1, time)
+{
+    private readonly Stopwatch _posDataTimer = new();
+    private readonly TimeSpan _posDataTimeout = TimeSpan.FromSeconds(0.2);
+
+    public override void OnHmdPositionalData(HmdPositionalDataPacket positionalData)
+    {
+        if (!ShouldCollect)
+            return;
+
+        PositionalBinCollector.UpdatePositionalData(positionalData);
+        _posDataTimer.Restart();
+    }
+
+    public override void OnNewEyeFrame(EyePipelineEvents.NewTransformedFrameEvent frame)
+    {
+        if (!ShouldCollect)
+            return;
+        if (_posDataTimer.Elapsed <= _posDataTimeout)
+        {
+            var images = frame.image.Split();
+            var f = PositionalBinCollector.AddFrame(images[1], images[0]);
+            if (f is not null)
+            {
+                f.Header = f.Header with
+                {
+                    RoutineLeftLid = lid,
+                    RoutineRightLid = lid,
+                    RoutineBrowRaise = browRaise,
+                    RoutineBrowAngry = browAngry,
+                    RoutineWiden = widen,
+                    RoutineSquint = squint,
+                    RoutineDilate = dilate,
                 };
             }
         }
@@ -315,6 +375,19 @@ public class EyeCaptureStepFactory(IEyePipelineEventBus eyePipelineEvent)
         float squint = 0,
         float dilate = 0) =>
         new(eyePipelineEvent, name, flags, time, lid, browRaise, browAngry, widen, squint, dilate);
+
+    /// <summary>
+    /// Like <see cref="Create"/>, but the step also records per-frame gaze ground-truth from the
+    /// overlay reticle (so the gaze dot is shown and captured during the expression pass).
+    /// </summary>
+    public GazeExpressionCaptureStep CreateGazeExpression(string name, uint flags, TimeSpan time,
+        float lid = 0,
+        float browRaise = 0,
+        float browAngry = 0,
+        float widen = 0,
+        float squint = 0,
+        float dilate = 0) =>
+        new(eyePipelineEvent, name, flags, time, lid, browRaise, browAngry, widen, squint, dilate);
 }
 
 public class MergeBinsStep(params string[] binNames) : ICalibrationStep
@@ -346,30 +419,36 @@ public class EyeCalibration(
         [
             new BaseTutorialStep("gazetutorial"),
             new GazeCaptureStep(eyePipelineEventBus),
-            new BaseTutorialStep("blinktutorial", TimeSpan.FromSeconds(10)),
+            // Gaze-valid section with FREE/RANDOM (unlabeled) expressions: real expressions in the
+            // images while gaze is labeled by the reticle. The qpro trainer uses this as its
+            // unlabeled-expression section (gaze_valid=1 -> used for gaze robustness, excluded from
+            // supervised expression). Same flags as the neutral gaze pass; only the name/duration differ.
+            new BaseTutorialStep("gazeexprtutorial", TimeSpan.FromSeconds(5)),
+            new GazeCaptureStep(eyePipelineEventBus, TimeSpan.FromSeconds(60), "gazeexpr", CaptureFlags.FLAG_FREE_EXPRESSION),
+            new BaseTutorialStep("blinktutorial", TimeSpan.FromSeconds(5)),
             eyeCaptureStepFactory.Create("blink",
                 CaptureFlags.FLAG_GOOD_DATA |
                 CaptureFlags.FLAG_IN_MOVEMENT |
                 CaptureFlags.FLAG_VERSION_BIT1,
-                TimeSpan.FromSeconds(20), lid: 0
+                TimeSpan.FromSeconds(10), lid: 0
             ),
 
-            new BaseTutorialStep("widentutorial", TimeSpan.FromSeconds(10)),
-                eyeCaptureStepFactory.Create("widen",
-                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20), widen: 1, lid: 1),
-             
-            new BaseTutorialStep("squinttutorial", TimeSpan.FromSeconds(10)),
-                eyeCaptureStepFactory.Create("squint",
-                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20), squint: 1, lid: 1),
-             
-            new BaseTutorialStep("browtutorial", TimeSpan.FromSeconds(10)),
-                eyeCaptureStepFactory.Create("brow",
-                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20), browAngry: 1, lid: 1),
+            new BaseTutorialStep("widentutorial", TimeSpan.FromSeconds(5)),
+                eyeCaptureStepFactory.CreateGazeExpression("widen",
+                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_IN_MOVEMENT | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(25), widen: 1, lid: 1),
+
+            new BaseTutorialStep("squinttutorial", TimeSpan.FromSeconds(5)),
+                eyeCaptureStepFactory.CreateGazeExpression("squint",
+                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_IN_MOVEMENT | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(10), squint: 1, lid: 1),
+
+            new BaseTutorialStep("browtutorial", TimeSpan.FromSeconds(5)),
+                eyeCaptureStepFactory.CreateGazeExpression("brow",
+                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_IN_MOVEMENT | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(30), browAngry: 1, lid: 1),
             //steps.Add(new BaseTutorialStep("covergencetutorial"));
             //steps.Add(_eyeCaptureStepFactory.Create("covergence",
             //    CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_WHATEVER_NOT_IMPLEMENTED));
 
-            new MergeBinsStep("gaze.bin", "blink.bin", "widen.bin", "squint.bin", "brow.bin"),
+            new MergeBinsStep("gaze.bin", "gazeexpr.bin", "blink.bin", "widen.bin", "squint.bin", "brow.bin"),
             // new MergeBinsStep("gaze.bin", "blink.bin"),
             new TrainerCalibrationStep(trainer),
             new CommandDispatchStep("close")
@@ -385,6 +464,8 @@ public class EyeCalibration(
         [
             new BaseTutorialStep("gazetutorialshort", TimeSpan.FromSeconds(5)),
             new GazeCaptureStep(eyePipelineEventBus, TimeSpan.FromSeconds(10)),
+            new BaseTutorialStep("gazeexprtutorial", TimeSpan.FromSeconds(4)),
+            new GazeCaptureStep(eyePipelineEventBus, TimeSpan.FromSeconds(15), "gazeexpr", CaptureFlags.FLAG_FREE_EXPRESSION),
             new BaseTutorialStep("blinktutorial", TimeSpan.FromSeconds(4)),
             eyeCaptureStepFactory.Create("blink",
                 CaptureFlags.FLAG_GOOD_DATA |
@@ -395,18 +476,18 @@ public class EyeCalibration(
             ),
 
             new BaseTutorialStep("widentutorial", TimeSpan.FromSeconds(4)),
-                eyeCaptureStepFactory.Create("widen",
-                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20)),
-            
-            new BaseTutorialStep("squinttutorial", TimeSpan.FromSeconds(4)),
-                eyeCaptureStepFactory.Create("squint",
-                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20)),
-            
-            new BaseTutorialStep("browtutorial", TimeSpan.FromSeconds(4)),
-                eyeCaptureStepFactory.Create("brow",
-                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20)),
+                eyeCaptureStepFactory.CreateGazeExpression("widen",
+                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_IN_MOVEMENT | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20), widen: 1, lid: 1),
 
-            new MergeBinsStep("gaze.bin", "blink.bin", "widen.bin", "squint.bin", "brow.bin"),
+            new BaseTutorialStep("squinttutorial", TimeSpan.FromSeconds(4)),
+                eyeCaptureStepFactory.CreateGazeExpression("squint",
+                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_IN_MOVEMENT | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20), squint: 1, lid: 1),
+
+            new BaseTutorialStep("browtutorial", TimeSpan.FromSeconds(4)),
+                eyeCaptureStepFactory.CreateGazeExpression("brow",
+                CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_IN_MOVEMENT | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20), browAngry: 1, lid: 1),
+
+            new MergeBinsStep("gaze.bin", "gazeexpr.bin", "blink.bin", "widen.bin", "squint.bin", "brow.bin"),
             // new MergeBinsStep("gaze.bin", "blink.bin"),
             new TrainerCalibrationStep(trainer),
             new CommandDispatchStep("close")
