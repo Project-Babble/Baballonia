@@ -244,6 +244,12 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
         // Setup inference backend
         var sessionOptions = new SessionOptions();
         sessionOptions.InterOpNumThreads = 1;
+        // These models are small, so ORT's default intra-op pool (one thread per core, per session)
+        // spends more on thread fan-out + barrier sync each inference than on the actual math —
+        // profiling showed ~50 native ORT threads dominating CPU. Cap it low; 2 keeps a little
+        // parallelism for latency while shedding that overhead. allow_spinning=0 (below) means the
+        // idle threads block rather than busy-wait between frames.
+        sessionOptions.IntraOpNumThreads = 2;
         sessionOptions.GraphOptimizationLevel = GraphOptimizationLevel.ORT_ENABLE_ALL;
         // ~3% savings worth ~6ms avg latency. Not noticeable at 60fps?
         sessionOptions.AddSessionConfigEntry("session.intra_op.allow_spinning", "0");

@@ -50,9 +50,18 @@ public class OscRecvService : BackgroundService
                 return;
             }
 
-            if (_oscTarget.DestinationAddress is not null)
+            // Guard against a malformed/legacy stored address. IPAddress.Parse would throw
+            // here, and because this handler runs synchronously during settings load in
+            // StartAsync, the exception would escape and fail host startup (taking the whole
+            // app's hosted services down with it). TryParse degrades gracefully instead.
+            if (IPAddress.TryParse(_oscTarget.DestinationAddress, out var address))
             {
-                UpdateTarget(new IPEndPoint(IPAddress.Parse(_oscTarget.DestinationAddress), _oscTarget.InPort));
+                UpdateTarget(new IPEndPoint(address, _oscTarget.InPort));
+            }
+            else
+            {
+                _logger.LogWarning("Ignoring invalid OSC destination address: '{Address}'",
+                    _oscTarget.DestinationAddress);
             }
         };
     }
@@ -111,9 +120,9 @@ public class OscRecvService : BackgroundService
                 }
 
                 var bytesReceived = await _recvSocket.ReceiveAsync(_recvBuffer, _linkedToken.Token);
-                OscPacket packet = OscPacket.Read(_recvBuffer, 0, bytesReceived);
-
                 if (bytesReceived == 0) continue;
+
+                OscPacket packet = OscPacket.Read(_recvBuffer, 0, bytesReceived);
 
                 if (packet is OscBundle)
                 {

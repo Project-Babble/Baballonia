@@ -362,12 +362,6 @@
                IconPath="PowerRegular"
                SettingToggled="{Binding SteamvrAutoStart, Mode=TwoWay}" />
 
-      <controls:SettingsToggle
-        Title="{x:Static assets:Resources.Settings_Advanced_Header}"
-        Description="{x:Static assets:Resources.Settings_Advanced_Description}"
-        IconPath="SettingsRegular"
-        SettingToggled="{Binding AdvancedOptions, Mode=TwoWay}" />
-
       <Expander
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
@@ -466,6 +460,28 @@
               Content="{x:Static assets:Resources.Settings_FirstTime_Button}" />
         </Grid>
       </Border>
+
+      <!-- Advanced options live at the bottom of the list. The two entries below the Advanced toggle
+           are only shown once Advanced is enabled. -->
+      <controls:SettingsToggle
+          Title="{x:Static assets:Resources.Settings_Advanced_Header}"
+          Description="{x:Static assets:Resources.Settings_Advanced_Description}"
+          IconPath="SettingsRegular"
+          SettingToggled="{Binding AdvancedOptions, Mode=TwoWay}" />
+
+      <controls:SettingsToggle
+          IsVisible="{Binding AdvancedOptions}"
+          Title="Split Eye Video Swap"
+          Description="Swap the left/right eye feeds of a split video device. (Leave off for BSB2E)"
+          IconPath="EyeTrackingRegular"
+          SettingToggled="{Binding SplitEyeVideoSwap, Mode=TwoWay}" />
+
+      <controls:SettingsToggle
+          IsVisible="{Binding DebugMenuToggleVisible}"
+          Title="Show Debug menu"
+          Description="Show the Debug / Performance page in the navigation sidebar."
+          IconPath="WindowDevToolsRegular"
+          SettingToggled="{Binding ShowDebugMenu, Mode=TwoWay}" />
 
     </StackPanel>
   </ScrollViewer>

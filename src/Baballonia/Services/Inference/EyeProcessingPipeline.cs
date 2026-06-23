@@ -1,20 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Baballonia.Services.events;
 using Baballonia.Services.Inference.Enums;
 
 namespace Baballonia.Services.Inference;
 
-public class EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus) : DefaultProcessingPipeline, IDisposable
+public class EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus, PipelineMetrics metrics) : DefaultProcessingPipeline, IDisposable
 {
     private readonly FastCorruptionDetector.FastCorruptionDetector _fastCorruptionDetector = new();
     private readonly ImageCollector _imageCollector = new();
 
     public bool StabilizeEyes { get; set; } = true;
 
+    /// <summary>
+    /// For single-camera (split) eye feeds, swap which half drives which eye. Off by default — most
+    /// split devices (e.g. BSB2E) want the unswapped orientation. User-controlled via the
+    /// "Split Eye Video Swap" advanced setting; has no effect on dual-camera setups.
+    /// </summary>
+    public bool SwapSplitEyes { get; set; }
+
     public OrderedFloatMap? RunUpdate()
     {
-        var frame = VideoSource?.GetFrame(ColorType.Gray8);
+        var sw = Stopwatch.StartNew();
+
+        // `frame` is owned by us (AcquireRawMat contract); `using` frees it on every exit path.
+        // Subscribers to the published events copy the Mat synchronously during Publish, so it is
+        // safe to dispose afterwards.
+        using var frame = VideoSource?.GetFrame(ColorType.Gray8);
         if(frame == null)
             return null;
 
@@ -22,27 +35,41 @@ public class EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus) : D
             return null;
 
         eyePipelineEventBus.Publish(new EyePipelineEvents.NewFrameEvent(frame));
+        metrics.EyeCaptureMs = PipelineMetrics.Ewma(metrics.EyeCaptureMs, sw.Elapsed.TotalMilliseconds);
 
+        // A single-camera (split-eye) feed drives both eyes from one sensor. Whether to swap which
+        // half feeds which eye is user-controlled (SwapSplitEyes / "Split Eye Video Swap"), defaulting
+        // to unswapped. Dual-camera setups assign each eye explicitly, so they are always left as-is.
+        if (ImageTransformer is DualImageTransformer splitTransformer)
+            splitTransformer.SwapEyes = VideoSource is VideoSources.SingleCameraSource && SwapSplitEyes;
+
+        sw.Restart();
         var transformed = ImageTransformer?.Apply(frame);
         if(transformed == null)
             return null;
 
         eyePipelineEventBus.Publish(new EyePipelineEvents.NewTransformedFrameEvent(transformed));
 
-        var collected = _imageCollector.Apply(transformed);
+        // ImageCollector copies `transformed` into its temporal queue, so free it right away.
+        // `collected` (the 8-channel temporal stack) is owned by us; `using` frees it on all paths.
+        using var collected = _imageCollector.Apply(transformed);
         transformed.Dispose();
         if (collected == null)
             return null;
+        metrics.EyeTransformMs = PipelineMetrics.Ewma(metrics.EyeTransformMs, sw.Elapsed.TotalMilliseconds);
 
         if (InferenceService == null)
             return null;
 
+        sw.Restart();
         ImageConverter?.Convert(collected, InferenceService.GetInputTensor());
 
         var inferenceResult = InferenceService?.Run();
         if(inferenceResult == null)
             return null;
+        metrics.EyeInferenceMs = PipelineMetrics.Ewma(metrics.EyeInferenceMs, sw.Elapsed.TotalMilliseconds);
 
+        sw.Restart();
         if (Filter != null)
         {
             inferenceResult = Filter.Filter(inferenceResult);
@@ -51,9 +78,7 @@ public class EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus) : D
         ProcessExpressions(ref inferenceResult);
 
         eyePipelineEventBus.Publish(new EyePipelineEvents.NewFilteredResultEvent(inferenceResult));
-
-        frame.Dispose();
-        transformed.Dispose();
+        metrics.EyePostMs = PipelineMetrics.Ewma(metrics.EyePostMs, sw.Elapsed.TotalMilliseconds);
 
         return inferenceResult;
     }
