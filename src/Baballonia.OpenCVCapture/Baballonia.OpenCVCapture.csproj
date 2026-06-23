@@ -6,15 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <!-- Windows-only: DirectShow is used to enumerate camera modes so we can skip
-         formats the OpenCV DSHOW backend can't stream (e.g. Y800). -->
-    <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
-        <DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>
-    </PropertyGroup>
-
     <ItemGroup>
       <ProjectReference Include="..\Baballonia.SDK\Baballonia.SDK.csproj" />
-      <PackageReference Include="DirectShowLib" Version="1.0.0" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />
     </ItemGroup>
 
 </Project>
