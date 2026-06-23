@@ -10,7 +10,14 @@ public sealed class LibV4L2Capture(string source, ILogger<LibV4L2Capture> logger
 {
     private Device? _device;
     private CancellationTokenSource? _cts;
-    private Task? _captureTask;
+    private Thread? _captureThread;
+
+    // How long poll() blocks waiting for a frame before the loop re-checks cancellation. Bounds
+    // worst-case shutdown latency; never hit during normal streaming (a frame arrives every ~8 ms).
+    private const int FramePollTimeoutMs = 200;
+
+    public override double TargetFps => _device?.Fps ?? 0;
+    public override string PixelFormatName => _device?.PixelFormat.ToString() ?? "";
 
     public override Task<bool> StartCapture()
     {
@@ -35,7 +42,14 @@ public sealed class LibV4L2Capture(string source, ILogger<LibV4L2Capture> logger
         _cts = new CancellationTokenSource();
         var token = _cts.Token;
 
-        _captureTask = Task.Run(() => VideoCapture_UpdateLoop(token), token);
+        // Dedicated thread: the loop blocks in-kernel on poll() waiting for frames, which would be
+        // inappropriate on a pooled thread.
+        _captureThread = new Thread(() => VideoCapture_UpdateLoop(token))
+        {
+            IsBackground = true,
+            Name = "V4L2Capture"
+        };
+        _captureThread.Start();
 
         return Task.FromResult(true);
     }
@@ -48,7 +62,7 @@ public sealed class LibV4L2Capture(string source, ILogger<LibV4L2Capture> logger
 
     private void DecodeYUYV(byte[] frame, uint width, uint height)
     {
-        var yuyvMat = new Mat((int)height, (int)width, MatType.CV_8UC2);
+        using var yuyvMat = new Mat((int)height, (int)width, MatType.CV_8UC2);
         Marshal.Copy(frame, 0, yuyvMat.Data, frame.Length);
 
         var grayMat = new Mat();
@@ -56,13 +70,15 @@ public sealed class LibV4L2Capture(string source, ILogger<LibV4L2Capture> logger
         SetRawMat(grayMat);
     }
 
-    private async Task VideoCapture_UpdateLoop(CancellationToken ct)
+    private void VideoCapture_UpdateLoop(CancellationToken ct)
     {
         while (!ct.IsCancellationRequested && _device != null)
         {
             try
             {
-                if (_device.CaptureFrame(out byte[]? frame))
+                // Blocks in-kernel until a frame is ready or FramePollTimeoutMs elapses, so the
+                // thread sleeps between frames instead of busy-polling + Task.Delay(1).
+                if (_device.CaptureFrame(out byte[]? frame, FramePollTimeoutMs))
                 {
                     if (frame is { Length: > 0 })
                     {
@@ -80,21 +96,13 @@ public sealed class LibV4L2Capture(string source, ILogger<LibV4L2Capture> logger
                         }
                     }
                 }
-                else
-                {
-                    await Task.Delay(1, ct);
-                }
             }
-            // catch (TaskCanceledException)
-            // {
-            //     return;
-            // }
             catch(Exception e)
             {
                 SetRawMat(new Mat());
                 IsReady = false;
                 Logger.LogError(e.ToString());
-                _device.Dispose();
+                _device?.Dispose();
                 break;
             }
         }
@@ -105,11 +113,11 @@ public sealed class LibV4L2Capture(string source, ILogger<LibV4L2Capture> logger
         if (_device is null)
             return Task.FromResult(false);
 
-        if (_captureTask != null)
-        {
-            _cts?.Cancel();
-            _captureTask.Wait();
-        }
+        // Signal the loop to stop; it wakes within FramePollTimeoutMs (poll() doesn't observe the
+        // token). Join is bounded so a wedged device can never hang shutdown indefinitely.
+        _cts?.Cancel();
+        if (_captureThread is { IsAlive: true })
+            _captureThread.Join(TimeSpan.FromSeconds(2));
 
         IsReady = false;
         _device?.Dispose();

@@ -1,6 +1,8 @@
 using Baballonia.Services.Inference.Enums;
 using OpenCvSharp;
 using System;
+using System.Collections.Generic;
+using System.Threading;
 
 namespace Baballonia.Services.Inference;
 
@@ -20,6 +22,14 @@ public class DualCameraSource : IVideoSource
     public bool Stop()
     {
         return (LeftCam?.Start() ?? true) && (RightCam?.Start() ?? true);
+    }
+
+    public WaitHandle[] GetFrameWaitHandles()
+    {
+        var handles = new List<WaitHandle>(2);
+        if (LeftCam != null) handles.AddRange(LeftCam.GetFrameWaitHandles());
+        if (RightCam != null) handles.AddRange(RightCam.GetFrameWaitHandles());
+        return handles.ToArray();
     }
 
     // Here we try to acquire 2 images from both cameras and stitch them into a single image

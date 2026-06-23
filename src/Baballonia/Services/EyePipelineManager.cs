@@ -50,12 +50,14 @@ public class EyePipelineManager
         _ = LoadInferenceAsync();
         LoadFilter();
         LoadEyeStabilization();
+        LoadSplitEyeSwap();
     }
 
     public async Task LoadInferenceAsync()
     {
         var inf = await Task.Run(CreateInference);
-        _pipeline.InferenceService = inf;
+        lock (_pipeline.SyncRoot)
+            _pipeline.InferenceService = inf;
     }
 
     private DefaultInferenceRunner CreateInference()
@@ -76,7 +78,9 @@ public class EyePipelineManager
 
     public void LoadInference()
     {
-        _pipeline.InferenceService = CreateInference();
+        var inf = CreateInference();
+        lock (_pipeline.SyncRoot)
+            _pipeline.InferenceService = inf;
     }
 
     public void LoadFilter()
@@ -93,7 +97,8 @@ public class EyePipelineManager
             beta: speedCutoff
         );
 
-        _pipeline.Filter = eyeFilter;
+        lock (_pipeline.SyncRoot)
+            _pipeline.Filter = eyeFilter;
     }
 
     public void LoadEyeStabilization()
@@ -102,18 +107,30 @@ public class EyePipelineManager
         _pipeline.StabilizeEyes = stabilizeEyes;
     }
 
+    public void LoadSplitEyeSwap()
+    {
+        // Default unswapped: split devices like BSB2E expect the left/right halves as-is.
+        _pipeline.SwapSplitEyes = _localSettings.ReadSetting<bool>("AppSettings_SplitEyeVideoSwap", false);
+    }
+
     public void SetLeftTransformation(CameraSettings cameraSettings)
     {
-        if (_pipeline.ImageTransformer is DualImageTransformer dualImageTransformer)
+        lock (_pipeline.SyncRoot)
         {
-            dualImageTransformer.LeftTransformer.Transformation = cameraSettings;
+            if (_pipeline.ImageTransformer is DualImageTransformer dualImageTransformer)
+            {
+                dualImageTransformer.LeftTransformer.Transformation = cameraSettings;
+            }
         }
     }
     public void SetRightTransformation(CameraSettings cameraSettings)
     {
-        if (_pipeline.ImageTransformer is DualImageTransformer dualImageTransformer)
+        lock (_pipeline.SyncRoot)
         {
-            dualImageTransformer.RightTransformer.Transformation = cameraSettings;
+            if (_pipeline.ImageTransformer is DualImageTransformer dualImageTransformer)
+            {
+                dualImageTransformer.RightTransformer.Transformation = cameraSettings;
+            }
         }
     }
 
@@ -135,7 +152,8 @@ public class EyePipelineManager
 
             var source = new DualCameraSource();
             source.LeftCam = cam;
-            _pipeline.VideoSource = source;
+            lock (_pipeline.SyncRoot)
+                _pipeline.VideoSource = source;
             _currentLeftAddress = cameraAddress;
             return true;
         }
@@ -144,22 +162,27 @@ public class EyePipelineManager
             if (cameraAddress == _currentRightAddress && _currentRightAddress != null)
             {
                 var tmp = dualCameraSource.RightCam;
-                _pipeline.VideoSource = tmp;
+                lock (_pipeline.SyncRoot)
+                    _pipeline.VideoSource = tmp;
                 _currentLeftAddress = cameraAddress;
                 return true;
             }
             else
             {
-                if (dualCameraSource.LeftCam != null)
+                lock (_pipeline.SyncRoot)
                 {
-                    dualCameraSource.LeftCam.Dispose();
-                    dualCameraSource.LeftCam = null;
+                    if (dualCameraSource.LeftCam != null)
+                    {
+                        dualCameraSource.LeftCam.Dispose();
+                        dualCameraSource.LeftCam = null;
+                    }
                 }
 
                 var cam = await _singleCameraSourceFactory.CreateStart(cameraAddress, preferredBackend);
                 if (cam == null)
                     return false;
-                dualCameraSource.LeftCam = cam;
+                lock (_pipeline.SyncRoot)
+                    dualCameraSource.LeftCam = cam;
                 _currentLeftAddress = cameraAddress;
                 return true;
             }
@@ -174,7 +197,8 @@ public class EyePipelineManager
                 return false;
 
             var tmp = singleCameraSource;
-            _pipeline.VideoSource = null;
+            lock (_pipeline.SyncRoot)
+                _pipeline.VideoSource = null;
             var source = new DualCameraSource();
             source.LeftCam = cam;
             source.RightCam = tmp;
@@ -204,7 +228,8 @@ public class EyePipelineManager
 
             var source = new DualCameraSource();
             source.RightCam = cam;
-            _pipeline.VideoSource = source;
+            lock (_pipeline.SyncRoot)
+                _pipeline.VideoSource = source;
             _currentRightAddress = cameraAddress;
             return true;
         }
@@ -213,22 +238,27 @@ public class EyePipelineManager
             if (cameraAddress == _currentLeftAddress && _currentLeftAddress != null)
             {
                 var tmp = dualCameraSource.LeftCam;
-                _pipeline.VideoSource = tmp;
+                lock (_pipeline.SyncRoot)
+                    _pipeline.VideoSource = tmp;
                 _currentRightAddress = cameraAddress;
                 return true;
             }
             else
             {
-                if (dualCameraSource.RightCam != null)
+                lock (_pipeline.SyncRoot)
                 {
-                    dualCameraSource.RightCam.Dispose();
-                    dualCameraSource.RightCam = null;
+                    if (dualCameraSource.RightCam != null)
+                    {
+                        dualCameraSource.RightCam.Dispose();
+                        dualCameraSource.RightCam = null;
+                    }
                 }
 
                 var cam = await _singleCameraSourceFactory.CreateStart(cameraAddress, preferredBackend);
                 if (cam == null)
                     return false;
-                dualCameraSource.RightCam = cam;
+                lock (_pipeline.SyncRoot)
+                    dualCameraSource.RightCam = cam;
                 _currentRightAddress = cameraAddress;
                 return true;
             }
@@ -243,7 +273,8 @@ public class EyePipelineManager
                 return false;
 
             var tmp = singleCameraSource;
-            _pipeline.VideoSource = null;
+            lock (_pipeline.SyncRoot)
+                _pipeline.VideoSource = null;
             var source = new DualCameraSource();
             source.RightCam = cam;
             source.LeftCam = tmp;
@@ -280,34 +311,40 @@ public class EyePipelineManager
     public void StopLeftCamera()
     {
         _currentLeftAddress = null;
-        if (_pipeline.VideoSource is DualCameraSource dualCameraSource)
+        lock (_pipeline.SyncRoot)
         {
-            dualCameraSource.LeftCam?.Dispose();
-            dualCameraSource.LeftCam = null;
-        }
+            if (_pipeline.VideoSource is DualCameraSource dualCameraSource)
+            {
+                dualCameraSource.LeftCam?.Dispose();
+                dualCameraSource.LeftCam = null;
+            }
 
-        if (_pipeline.VideoSource is SingleCameraSource singleCameraSource)
-        {
-            singleCameraSource.Dispose();
-            _pipeline.VideoSource = null;
-            _currentRightAddress = null;
+            if (_pipeline.VideoSource is SingleCameraSource singleCameraSource)
+            {
+                singleCameraSource.Dispose();
+                _pipeline.VideoSource = null;
+                _currentRightAddress = null;
+            }
         }
     }
 
     public void StopRightCamera()
     {
         _currentRightAddress = null;
-        if (_pipeline.VideoSource is DualCameraSource dualCameraSource)
+        lock (_pipeline.SyncRoot)
         {
-            dualCameraSource.RightCam?.Dispose();
-            dualCameraSource.RightCam = null;
-        }
+            if (_pipeline.VideoSource is DualCameraSource dualCameraSource)
+            {
+                dualCameraSource.RightCam?.Dispose();
+                dualCameraSource.RightCam = null;
+            }
 
-        if (_pipeline.VideoSource is SingleCameraSource singleCameraSource)
-        {
-            singleCameraSource.Dispose();
-            _pipeline.VideoSource = null;
-            _currentLeftAddress = null;
+            if (_pipeline.VideoSource is SingleCameraSource singleCameraSource)
+            {
+                singleCameraSource.Dispose();
+                _pipeline.VideoSource = null;
+                _currentLeftAddress = null;
+            }
         }
     }
 
@@ -315,8 +352,11 @@ public class EyePipelineManager
     {
         _currentRightAddress = null;
         _currentLeftAddress = null;
-        _pipeline.VideoSource?.Dispose();
-        _pipeline.VideoSource = null;
+        lock (_pipeline.SyncRoot)
+        {
+            _pipeline.VideoSource?.Dispose();
+            _pipeline.VideoSource = null;
+        }
     }
 
     public bool IsUsingSameCamera()
@@ -326,6 +366,7 @@ public class EyePipelineManager
 
     public void SetFilter(IFilter? filter)
     {
-        _pipeline.Filter = filter;
+        lock (_pipeline.SyncRoot)
+            _pipeline.Filter = filter;
     }
 }

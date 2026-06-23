@@ -22,6 +22,7 @@ public class ViewLocator : IDataTemplate
         RegisterViewFactory<OutputPageViewModel, OutputPageView>();
         RegisterViewFactory<AppSettingsViewModel, AppSettingsView>();
         RegisterViewFactory<AboutPageViewModel, AboutPageView>();
+        RegisterViewFactory<DebugViewModel, DebugView>();
 
         if (!Utils.IsSupportedDesktopOS) return;
 
