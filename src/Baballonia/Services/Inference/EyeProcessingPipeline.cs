@@ -103,7 +103,7 @@ public class EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus, Pip
         var leftEyeXCorrected = rightX * (1 - leftLid) + leftX * leftLid;
         var rightEyeXCorrected = leftX * (1 - rightLid) + rightX * rightLid;
 
-        if (StabilizeEyes && false)
+        if (StabilizeEyes)
         {
             var rawConvergence = (leftEyeXCorrected - rightEyeXCorrected) / 2.0f;
             var convergence = Math.Max(rawConvergence, 0.0f); // We clamp the value here to avoid accidental divergence, as the model sometimes decides that's a thing
