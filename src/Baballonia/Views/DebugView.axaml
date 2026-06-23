@@ -11,32 +11,36 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <ScrollViewer>
     <StackPanel Classes="Page" Spacing="12">
-      <TextBlock Classes="Header" Text="Debug / Performance" />
+      <TextBlock Classes="Header" Text="Performance metrics" />
 
       <Border
           Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
           CornerRadius="8"
           Padding="16">
         <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
-          <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,4" Text="UI thread (responsiveness)" />
+          <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,4" Text="UI Render thread" />
           <TextBlock Grid.Row="0" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
+                     Text="{Binding RenderFps, StringFormat='{}{0:F1} fps'}" />
+
+          <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,4" Text="UI data thread" />
+          <TextBlock Grid.Row="1" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
                      Text="{Binding UiLoopFps, StringFormat='{}{0:F1} fps'}" />
 
-          <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,4" Text="Eye inference" />
-          <TextBlock Grid.Row="1" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
+          <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,4" Text="Eye inference" />
+          <TextBlock Grid.Row="2" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
                      Text="{Binding EyeInferenceFps, StringFormat='{}{0:F1} fps'}" />
 
-          <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,4" Text="Face inference" />
-          <TextBlock Grid.Row="2" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
+          <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,4" Text="Mouth inference" />
+          <TextBlock Grid.Row="3" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
                      Text="{Binding FaceInferenceFps, StringFormat='{}{0:F1} fps'}" />
         </Grid>
       </Border>
 
-      <TextBlock Classes="Header" FontSize="18" Text="CPU hotspots (per thread)" />
+      <TextBlock Classes="Header" FontSize="18" Text="Thread CPU Usage" />
       <TextBlock Opacity="0.7"
-                 Text="{Binding ProcessCpuPercent, StringFormat='Process: {0:F0}% of one core'}" />
+                 Text="{Binding ProcessCpuPercent, StringFormat='Process: {0:F0}% x 1 core'}" />
       <TextBlock Opacity="0.7" Margin="0,-4,0,0"
-                 Text="{Binding ProcessorCount, StringFormat='{}{0} logical cores ({0}00% = fully saturated)'}" />
+                 Text="{Binding ProcessorCount, StringFormat='{}{0} logical cores'}" />
       <Border
           Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
           CornerRadius="8"
@@ -81,7 +85,7 @@
         </Grid>
       </Border>
 
-      <TextBlock Classes="Header" FontSize="18" Text="Face pipeline stages (avg)" />
+      <TextBlock Classes="Header" FontSize="18" Text="Mouth pipeline stages (avg)" />
       <Border
           Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
           CornerRadius="8"
