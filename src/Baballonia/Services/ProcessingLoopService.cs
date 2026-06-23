@@ -79,7 +79,7 @@ public class ProcessingLoopService : IDisposable
         _uiHeartbeat.Start();
 
         _eyeThread = new Thread(EyeWorker) { IsBackground = true, Name = "EyeInference" };
-        _faceThread = new Thread(FaceWorker) { IsBackground = true, Name = "FaceInference" };
+        _faceThread = new Thread(FaceWorker) { IsBackground = true, Name = "MouthInference" };
         _eyeThread.Start();
         _faceThread.Start();
     }
@@ -120,7 +120,7 @@ public class ProcessingLoopService : IDisposable
 
     private void FaceWorker()
     {
-        _profiler.Register("FaceInference");
+        _profiler.Register("MouthInference");
         var ct = _cts.Token;
         while (!ct.IsCancellationRequested)
         {
