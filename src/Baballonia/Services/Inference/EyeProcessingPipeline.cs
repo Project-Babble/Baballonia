@@ -1,11 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Baballonia.Services.events;
 using Baballonia.Services.Inference.Enums;
 
 namespace Baballonia.Services.Inference;
 
-public class EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus) : DefaultProcessingPipeline, IDisposable
+public class EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus, PipelineMetrics metrics) : DefaultProcessingPipeline, IDisposable
 {
     private readonly FastCorruptionDetector.FastCorruptionDetector _fastCorruptionDetector = new();
     private readonly ImageCollector _imageCollector = new();
@@ -14,6 +15,9 @@ public class EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus) : D
 
     public OrderedFloatMap? RunUpdate()
     {
+        // Per-stage timings for the Debug page (EWMA, ms). Inserted around the stock pipeline stages.
+        var sw = Stopwatch.StartNew();
+
         var frame = VideoSource?.GetFrame(ColorType.Gray8);
         if(frame == null)
             return null;
@@ -22,7 +26,9 @@ public class EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus) : D
             return null;
 
         eyePipelineEventBus.Publish(new EyePipelineEvents.NewFrameEvent(frame));
+        metrics.EyeCaptureMs = PipelineMetrics.Ewma(metrics.EyeCaptureMs, sw.Elapsed.TotalMilliseconds);
 
+        sw.Restart();
         var transformed = ImageTransformer?.Apply(frame);
         if(transformed == null)
             return null;
@@ -33,16 +39,20 @@ public class EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus) : D
         transformed.Dispose();
         if (collected == null)
             return null;
+        metrics.EyeTransformMs = PipelineMetrics.Ewma(metrics.EyeTransformMs, sw.Elapsed.TotalMilliseconds);
 
         if (InferenceService == null)
             return null;
 
+        sw.Restart();
         ImageConverter?.Convert(collected, InferenceService.GetInputTensor());
 
         var inferenceResult = InferenceService?.Run();
         if(inferenceResult == null)
             return null;
+        metrics.EyeInferenceMs = PipelineMetrics.Ewma(metrics.EyeInferenceMs, sw.Elapsed.TotalMilliseconds);
 
+        sw.Restart();
         if (Filter != null)
         {
             inferenceResult = Filter.Filter(inferenceResult);
@@ -51,6 +61,7 @@ public class EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus) : D
         ProcessExpressions(ref inferenceResult);
 
         eyePipelineEventBus.Publish(new EyePipelineEvents.NewFilteredResultEvent(inferenceResult));
+        metrics.EyePostMs = PipelineMetrics.Ewma(metrics.EyePostMs, sw.Elapsed.TotalMilliseconds);
 
         frame.Dispose();
         transformed.Dispose();
@@ -61,7 +72,7 @@ public class EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus) : D
     private bool ProcessExpressions(ref OrderedFloatMap arKitExpressions)
     {
 
-        
+
         const float mulV = 2.0f;
         const float mulY = 2.0f;
 

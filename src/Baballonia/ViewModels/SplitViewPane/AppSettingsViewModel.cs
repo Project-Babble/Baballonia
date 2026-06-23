@@ -3,9 +3,11 @@ using Avalonia.Media;
 using Avalonia.Styling;
 using Baballonia.Assets;
 using Baballonia.Contracts;
+using Baballonia.Models;
 using Baballonia.Services;
 using Baballonia.Services.Inference;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Logging;
 using OscCore;
 using System;
@@ -76,8 +78,19 @@ public partial class AppSettingsViewModel : ViewModelBase
     ];
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DebugMenuToggleVisible))]
     [property: SavedSetting("AppSettings_AdvancedOptions", false)]
     private bool _advancedOptions;
+
+    [ObservableProperty]
+    [property: SavedSetting("AppSettings_ShowDebugMenu", false)]
+    private bool _showDebugMenu;
+
+    /// <summary>
+    /// The "Show Debug menu" toggle is desktop-only (the Debug page isn't reachable on mobile), so it
+    /// shows only when Advanced is on <em>and</em> we're on a supported desktop OS.
+    /// </summary>
+    public bool DebugMenuToggleVisible => AdvancedOptions && Utils.IsSupportedDesktopOS;
 
     [ObservableProperty]
     [property: SavedSetting("AppSettings_StabilizeEyes", true)]
@@ -146,6 +159,12 @@ public partial class AppSettingsViewModel : ViewModelBase
                 _eyePipelineManager.LoadEyeStabilization();
             }
         };
+    }
+
+    // Tell the navigation sidebar to add/remove the Debug page entry as soon as the toggle flips.
+    partial void OnShowDebugMenuChanged(bool value)
+    {
+        WeakReferenceMessenger.Default.Send(new ShowDebugMenuChangedMessage(value));
     }
 
     partial void OnLogLevelChanged(string value)

@@ -100,6 +100,8 @@ public partial class App : Application
 
             services.AddSingleton<IActivationService, ActivationService>();
             services.AddSingleton<IDispatcherService, DispatcherService>();
+            services.AddSingleton<PipelineMetrics>();
+            services.AddSingleton<ThreadProfiler>();
             services.AddSingleton<ProcessingLoopService>();
 
             services.AddSingleton<InferenceFactory>();
@@ -142,6 +144,8 @@ public partial class App : Application
             services.AddTransient<AppSettingsView>();
             services.AddTransient<AboutPageViewModel>();
             services.AddTransient<AboutPageView>();
+            services.AddTransient<DebugViewModel>();
+            services.AddTransient<DebugView>();
 
             if (Utils.IsSupportedDesktopOS)
             {
@@ -159,6 +163,7 @@ public partial class App : Application
             ConfigurePlatformServices.Invoke(services);
             _platformSpecifficServices?.Invoke(services);
 
+            services.AddHostedService(provider => provider.GetService<ThreadProfiler>()!);
             services.AddHostedService(provider => provider.GetService<OscRecvService>()!);
             services.AddHostedService(provider => provider.GetService<ParameterSenderService>()!);
 

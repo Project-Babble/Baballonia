@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Baballonia.Assets;
+using Baballonia.Contracts;
 using Baballonia.Models;
 using Baballonia.Services;
 using Baballonia.ViewModels.SplitViewPane;
@@ -28,6 +29,39 @@ public partial class MainViewModel : ViewModelBase
 
         _dropOverlayService = Ioc.Default.GetService<DropOverlayService>()!;
         _dropOverlayService.ShowOverlayChanged += SetOverlay;
+
+        // The Debug / Performance page is an advanced, opt-in entry: hidden by default and revealed
+        // via Settings > Advanced > "Show Debug menu". Seed from the saved setting, then stay in sync
+        // with the toggle live via the messenger.
+        if (Utils.IsSupportedDesktopOS)
+        {
+            var showDebug = Ioc.Default.GetService<ILocalSettingsService>()?
+                .ReadSetting<bool>("AppSettings_ShowDebugMenu") ?? false;
+            SetDebugMenuVisible(showDebug);
+
+            messenger.Register<MainViewModel, ShowDebugMenuChangedMessage>(this,
+                (recipient, message) => recipient.SetDebugMenuVisible(message.Value));
+        }
+    }
+
+    private static readonly ListItemTemplate DebugMenuItem =
+        new(typeof(DebugViewModel), "WindowDevToolsRegular", "Debug");
+
+    private void SetDebugMenuVisible(bool visible)
+    {
+        var existing = Items.FirstOrDefault(i => i.ModelType == typeof(DebugViewModel));
+        if (visible)
+        {
+            if (existing is null)
+                Items.Add(DebugMenuItem);
+        }
+        else if (existing is not null)
+        {
+            // Don't strand the selection on a page we're about to remove.
+            if (SelectedListItem == existing)
+                SelectedListItem = Items.First(i => i.ModelType == typeof(HomePageViewModel));
+            Items.Remove(existing);
+        }
     }
 
     private void SetOverlay(bool show)

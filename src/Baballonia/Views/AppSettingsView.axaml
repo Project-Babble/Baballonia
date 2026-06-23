@@ -368,6 +368,13 @@
         IconPath="SettingsRegular"
         SettingToggled="{Binding AdvancedOptions, Mode=TwoWay}" />
 
+      <controls:SettingsToggle
+        IsVisible="{Binding DebugMenuToggleVisible}"
+        Title="Show Debug menu"
+        Description="Show the Debug / Performance page in the navigation sidebar."
+        IconPath="WindowDevToolsRegular"
+        SettingToggled="{Binding ShowDebugMenu, Mode=TwoWay}" />
+
       <Expander
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
