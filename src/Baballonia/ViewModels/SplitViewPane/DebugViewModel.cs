@@ -28,9 +28,13 @@ public partial class DebugViewModel : ViewModelBase, IDisposable
     private readonly ThreadProfiler _profiler;
     private readonly DispatcherTimer _timer;
 
-    private long _prevUi, _prevEye, _prevFace, _prevCam;
+    private long _prevUi, _prevEye, _prevFace, _prevCam, _prevRender;
     private DateTime _prevTime;
 
+    // Incremented once per compositor frame by the view; surfaces Avalonia's render-thread fps.
+    public long RenderTicks;
+
+    [ObservableProperty] private double _renderFps;
     [ObservableProperty] private double _uiLoopFps;
     [ObservableProperty] private double _eyeInferenceFps;
     [ObservableProperty] private double _faceInferenceFps;
@@ -66,6 +70,7 @@ public partial class DebugViewModel : ViewModelBase, IDisposable
         _prevEye = metrics.EyeInferences;
         _prevFace = metrics.FaceInferences;
         _prevCam = metrics.EyeCameraFrames;
+        _prevRender = RenderTicks;
 
         _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
         _timer.Tick += Sample;
@@ -79,6 +84,7 @@ public partial class DebugViewModel : ViewModelBase, IDisposable
         if (dt <= 0)
             return;
 
+        RenderFps = (RenderTicks - _prevRender) / dt;
         UiLoopFps = (_metrics.UiTicks - _prevUi) / dt;
         EyeInferenceFps = (_metrics.EyeInferences - _prevEye) / dt;
         FaceInferenceFps = (_metrics.FaceInferences - _prevFace) / dt;
@@ -102,6 +108,7 @@ public partial class DebugViewModel : ViewModelBase, IDisposable
 
         UpdateThreads();
 
+        _prevRender = RenderTicks;
         _prevUi = _metrics.UiTicks;
         _prevEye = _metrics.EyeInferences;
         _prevFace = _metrics.FaceInferences;
