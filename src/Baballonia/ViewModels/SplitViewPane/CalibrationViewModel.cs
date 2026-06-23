@@ -151,22 +151,38 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
         });
     }
 
+    private long _lastCalibUiTick;
+
     private void ExpressionUpdateHandler(ProcessingLoopService.Expressions expressions)
     {
+        // Fired from the inference worker thread(s) at the full inference rate (~115 Hz). These slider
+        // values are a visual meter only — calibration capture and OSC output go through other paths —
+        // so throttle the UI updates to ~30 Hz to avoid pinning the UI thread with per-slider relayout.
+        var now = Environment.TickCount64;
+        if (now - _lastCalibUiTick < 33)
+            return;
+        _lastCalibUiTick = now;
+
         if(expressions.FaceExpression != null)
+        {
+            var face = expressions.FaceExpression;
             Dispatcher.UIThread.Post(() =>
             {
-                ApplyCurrentExpressionValues(expressions.FaceExpression, CheekSettings);
-                ApplyCurrentExpressionValues(expressions.FaceExpression, MouthSettings);
-                ApplyCurrentExpressionValues(expressions.FaceExpression, JawSettings);
-                ApplyCurrentExpressionValues(expressions.FaceExpression, NoseSettings);
-                ApplyCurrentExpressionValues(expressions.FaceExpression, TongueSettings);
+                ApplyCurrentExpressionValues(face, CheekSettings);
+                ApplyCurrentExpressionValues(face, MouthSettings);
+                ApplyCurrentExpressionValues(face, JawSettings);
+                ApplyCurrentExpressionValues(face, NoseSettings);
+                ApplyCurrentExpressionValues(face, TongueSettings);
             });
+        }
         if(expressions.EyeExpression != null)
+        {
+            var eye = expressions.EyeExpression;
             Dispatcher.UIThread.Post(() =>
             {
-                ApplyCurrentExpressionValues(expressions.EyeExpression, EyeSettings);
+                ApplyCurrentExpressionValues(eye, EyeSettings);
             });
+        }
     }
     private void OnSettingChanged(object? sender, PropertyChangedEventArgs e)
     {
@@ -194,7 +210,9 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
                     weight.Remap(setting.Lower, setting.Upper, setting.Min, setting.Max),
                     setting.Min,
                     setting.Max);
-                setting.CurrentExpression = val;
+                // Skip the write (and its PropertyChanged + per-slider relayout) when unchanged.
+                if (setting.CurrentExpression != val)
+                    setting.CurrentExpression = val;
             }
         }
     }

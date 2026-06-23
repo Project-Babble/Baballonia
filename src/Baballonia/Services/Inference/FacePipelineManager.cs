@@ -46,12 +46,15 @@ public class FacePipelineManager
     public async Task LoadInferenceAsync()
     {
         var inf = await Task.Run(CreateInference);
-        _pipeline.InferenceService = inf;
+        lock (_pipeline.SyncRoot)
+            _pipeline.InferenceService = inf;
     }
 
     public void LoadInference()
     {
-        _pipeline.InferenceService = CreateInference();
+        var inf = CreateInference();
+        lock (_pipeline.SyncRoot)
+            _pipeline.InferenceService = inf;
     }
 
     public DefaultInferenceRunner CreateInference()
@@ -74,25 +77,33 @@ public class FacePipelineManager
             beta: speedCutoff
         );
 
-        _pipeline.Filter = faceFilter;
+        lock (_pipeline.SyncRoot)
+            _pipeline.Filter = faceFilter;
     }
 
     public void StopCamera()
     {
-        _pipeline.VideoSource?.Dispose();
-        _pipeline.VideoSource = null;
+        lock (_pipeline.SyncRoot)
+        {
+            _pipeline.VideoSource?.Dispose();
+            _pipeline.VideoSource = null;
+        }
     }
 
     public void SetVideoSource(IVideoSource videoSource)
     {
-        _pipeline.VideoSource = videoSource;
+        lock (_pipeline.SyncRoot)
+            _pipeline.VideoSource = videoSource;
     }
 
     public void SetTransformation(CameraSettings cameraSettings)
     {
-        if (_pipeline.ImageTransformer is ImageTransformer dualImageTransformer)
+        lock (_pipeline.SyncRoot)
         {
-            dualImageTransformer.Transformation = cameraSettings;
+            if (_pipeline.ImageTransformer is ImageTransformer dualImageTransformer)
+            {
+                dualImageTransformer.Transformation = cameraSettings;
+            }
         }
     }
 
@@ -101,10 +112,13 @@ public class FacePipelineManager
         if (string.IsNullOrEmpty(cameraAddress))
             return false;
 
-        if (_pipeline.VideoSource != null)
+        lock (_pipeline.SyncRoot)
         {
-            _pipeline.VideoSource.Dispose();
-            _pipeline.VideoSource = null;
+            if (_pipeline.VideoSource != null)
+            {
+                _pipeline.VideoSource.Dispose();
+                _pipeline.VideoSource = null;
+            }
         }
 
         SingleCameraSource cam;
@@ -116,7 +130,8 @@ public class FacePipelineManager
         if (cam == null)
             return false;
 
-        _pipeline.VideoSource = cam;
+        lock (_pipeline.SyncRoot)
+            _pipeline.VideoSource = cam;
         return true;
     }
 
@@ -130,7 +145,8 @@ public class FacePipelineManager
 
     public void SetFilter(IFilter? filter)
     {
-        _pipeline.Filter = filter;
+        lock (_pipeline.SyncRoot)
+            _pipeline.Filter = filter;
     }
 
     public static string GenerateMD5(string filepath)

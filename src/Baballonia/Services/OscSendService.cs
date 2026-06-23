@@ -51,8 +51,9 @@ public abstract class OscSendService(
 
         try
         {
-            var ip = IPEndPoint.Parse(OscTarget.DestinationAddress);
-            await _sendSocket.SendToAsync(message.ToByteArray(), SocketFlags.None, ip, ct);
+            // Socket is already connected to the target (UpdateTarget), so send on the connected
+            // socket instead of re-parsing DestinationAddress into an IPEndPoint per message.
+            await _sendSocket.SendAsync(message.ToByteArray(), SocketFlags.None, ct);
             OnMessagesDispatched(1);
         }
         catch (Exception ex)

@@ -20,11 +20,15 @@ public class ParameterSenderService : BackgroundService
     private readonly ICalibrationService _calibrationService;
     private readonly ILogger<ParameterSenderService> _logger;
 
-    private string _prefix = "";
-    private bool _sendNativeVrcEyeTracking;
-    private bool _useDfr;
+    // Written ~once/sec on the sender loop, read on the inference worker threads — volatile for a
+    // well-defined cross-thread read.
+    private volatile string _prefix = "";
+    private volatile bool _sendNativeVrcEyeTracking;
+    private volatile bool _useDfr;
     private readonly ConcurrentQueue<OscMessage> _vrcftQueue = new();
     private readonly ConcurrentQueue<OscMessage> _dfrQueue = new();
+    // Reused drain buffer for the (single-threaded) sender loop.
+    private readonly List<OscMessage> _sendBuffer = new();
 
     public ParameterSenderService(
         VrcftModuleSendService vrcftModuleSendService,
@@ -48,13 +52,22 @@ public class ParameterSenderService : BackgroundService
         _logger.LogDebug("Starting Parameter Sender Service...");
         _logger.LogDebug("OSC parameter mapping initialized");
 
+        long lastSettingsRead = 0;
         while (!cancellationToken.IsCancellationRequested)
         {
             try
             {
-                _prefix = _localSettingsService.ReadSetting<string>("AppSettings_OSCPrefix");
-                _sendNativeVrcEyeTracking = _localSettingsService.ReadSetting<bool>("VRC_UseNativeTracking");
-                _useDfr = _localSettingsService.ReadSetting<bool>("AppSettings_UseDFR");
+                // These settings change only on user edits, but ReadSetting deserializes JSON on
+                // every call. Refreshing them on each 10 ms tick was ~300 deserializations/sec for
+                // nothing; refresh roughly once per second instead.
+                var now = Environment.TickCount64;
+                if (now - lastSettingsRead >= 1000)
+                {
+                    lastSettingsRead = now;
+                    _prefix = _localSettingsService.ReadSetting<string>("AppSettings_OSCPrefix");
+                    _sendNativeVrcEyeTracking = _localSettingsService.ReadSetting<bool>("VRC_UseNativeTracking");
+                    _useDfr = _localSettingsService.ReadSetting<bool>("AppSettings_UseDFR");
+                }
                 await SendAndClearQueue(cancellationToken);
                 await Task.Delay(10, cancellationToken);
             }
@@ -139,16 +152,25 @@ public class ParameterSenderService : BackgroundService
 
     private async Task SendAndClearQueue(CancellationToken cancellationToken)
     {
-        if (!_vrcftQueue.IsEmpty)
-        {
-            await _vrcftModuleSendService.Send(_vrcftQueue.ToArray(), cancellationToken);
-            _vrcftQueue.Clear();
-        }
+        await DrainAndSend(_vrcftQueue, _vrcftModuleSendService, cancellationToken);
+        await DrainAndSend(_dfrQueue, _dfrSendService, cancellationToken);
+    }
 
-        if (!_dfrQueue.IsEmpty)
-        {
-            await _dfrSendService.Send(_dfrQueue.ToArray(), cancellationToken);
-            _dfrQueue.Clear();
-        }
+    /// <summary>
+    /// Atomically drains the queue (via TryDequeue) and sends it. The previous ToArray()+Clear()
+    /// was not atomic — anything enqueued between the snapshot and the Clear() was silently dropped.
+    /// </summary>
+    private async Task DrainAndSend(ConcurrentQueue<OscMessage> queue, OscSendService sender,
+        CancellationToken cancellationToken)
+    {
+        if (queue.IsEmpty)
+            return;
+
+        _sendBuffer.Clear();
+        while (queue.TryDequeue(out var message))
+            _sendBuffer.Add(message);
+
+        if (_sendBuffer.Count > 0)
+            await sender.Send(_sendBuffer.ToArray(), cancellationToken);
     }
 }
