@@ -1,4 +1,4 @@
-using Baballonia.SDK;
+using Baballonia.Services.Inference.VideoSources;
 
 namespace Baballonia.Services;
 
@@ -12,13 +12,12 @@ public sealed class PipelineMetrics
     public long EyeInferences;
     public long FaceInferences;
 
-    // Active eye capture; the sampler reads FramesProduced off this live. Written on a worker, read on UI.
-    public volatile Capture? EyeCapture;
-
-    public double EyeCameraTargetFps;
-    public int EyeCameraWidth;
-    public int EyeCameraHeight;
-    public string EyeCameraFormat = "";
+    // Active camera sources, published by the workers; the sampler reads frame stats off them live.
+    // A single split eye feed sets only EyeLeftSource (EyeDual false); two independent feeds set both.
+    public volatile SingleCameraSource? EyeLeftSource;
+    public volatile SingleCameraSource? EyeRightSource;
+    public volatile bool EyeDual;
+    public volatile SingleCameraSource? FaceSource;
 
     // Per-stage processing time (EWMA, milliseconds). Written by the respective inference worker while
     // it holds the pipeline's SyncRoot (so writes are serialised); read on the UI thread for display.

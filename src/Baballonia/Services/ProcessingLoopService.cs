@@ -134,6 +134,7 @@ public class ProcessingLoopService : IDisposable
                 lock (_faceProcessingPipeline.SyncRoot)
                 {
                     faceExpression = _faceProcessingPipeline.RunUpdate();
+                    UpdateFaceCameraMetrics();
                 }
 
                 if (faceExpression == null)
@@ -189,34 +190,33 @@ public class ProcessingLoopService : IDisposable
         }
     }
 
-    /// <summary>Snapshot the eye camera's throughput/stats into <see cref="PipelineMetrics"/>.
-    /// Called while holding the eye pipeline's <see cref="DefaultProcessingPipeline.SyncRoot"/>.</summary>
+    /// <summary>Publish the active eye camera source(s) for the Debug page; the sampler reads frame stats
+    /// off them live. A DualCameraSource exposes two independent feeds. Called under the eye SyncRoot.</summary>
     private void UpdateEyeCameraMetrics()
     {
-        var source = _eyeProcessingPipeline.VideoSource;
-        Capture? capture = source switch
+        switch (_eyeProcessingPipeline.VideoSource)
         {
-            SingleCameraSource s => s.Capture,
-            DualCameraSource d => (d.LeftCam as SingleCameraSource)?.Capture
-                                  ?? (d.RightCam as SingleCameraSource)?.Capture,
-            _ => null
-        };
-        if (capture == null)
-            return;
-
-        // Hand the sampler the capture so it can read FramesProduced live; the rest changes rarely.
-        _metrics.EyeCapture = capture;
-        _metrics.EyeCameraTargetFps = capture.TargetFps;
-        _metrics.EyeCameraFormat = capture.PixelFormatName;
-
-        var sized = source as SingleCameraSource
-                    ?? (source as DualCameraSource)?.LeftCam as SingleCameraSource
-                    ?? (source as DualCameraSource)?.RightCam as SingleCameraSource;
-        if (sized != null)
-        {
-            _metrics.EyeCameraWidth = sized.CameraSize.Width;
-            _metrics.EyeCameraHeight = sized.CameraSize.Height;
+            case SingleCameraSource single:
+                _metrics.EyeLeftSource = single;
+                _metrics.EyeRightSource = null;
+                _metrics.EyeDual = false;
+                break;
+            case DualCameraSource dual:
+                _metrics.EyeLeftSource = dual.LeftCam as SingleCameraSource;
+                _metrics.EyeRightSource = dual.RightCam as SingleCameraSource;
+                _metrics.EyeDual = true;
+                break;
+            default:
+                _metrics.EyeLeftSource = null;
+                _metrics.EyeRightSource = null;
+                _metrics.EyeDual = false;
+                break;
         }
+    }
+
+    private void UpdateFaceCameraMetrics()
+    {
+        _metrics.FaceSource = _faceProcessingPipeline.VideoSource as SingleCameraSource;
     }
 
     public void Start()
