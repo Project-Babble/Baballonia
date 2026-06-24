@@ -21,6 +21,25 @@ public sealed class DesktopDeviceEnumerator(ILogger<DesktopDeviceEnumerator> log
     public ILogger Logger { get; set; } = logger;
     public Dictionary<string, string> Cameras { get; set; } = null!;
 
+    static DesktopDeviceEnumerator()
+    {
+        // The udev DllImports below name "libudev.so" — the dev-package symlink, which is missing in
+        // minimal runtimes like the Steam Linux Runtime (sniper); only the versioned soname
+        // "libudev.so.1" ships there. Resolve to whichever exists so camera enumeration works without
+        // requiring the -dev package or a specific Steam runtime. Other library names fall through.
+        NativeLibrary.SetDllImportResolver(typeof(DesktopDeviceEnumerator).Assembly, (name, assembly, searchPath) =>
+        {
+            if (name != "libudev.so")
+                return IntPtr.Zero;
+
+            foreach (var candidate in new[] { "libudev.so.1", "libudev.so", "libudev.so.0" })
+                if (NativeLibrary.TryLoad(candidate, assembly, searchPath, out var handle))
+                    return handle;
+
+            return IntPtr.Zero;
+        });
+    }
+
     /// <summary>
     /// Lists available cameras with friendly names as dictionary keys and device identifiers as values.
     /// </summary>
