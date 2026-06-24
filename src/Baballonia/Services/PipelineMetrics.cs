@@ -1,20 +1,20 @@
+using Baballonia.SDK;
+
 namespace Baballonia.Services;
 
 /// <summary>
-/// Lightweight throughput counters for the processing pipeline, surfaced on the Debug page.
-/// Counters are monotonic; consumers derive a rate by sampling deltas over time.
-/// ProcessingLoopService writes these on the UI thread each tick (snapshotting the camera frame
-/// count from the capture thread); the Debug view-model reads them on the UI thread.
+/// Monotonic throughput counters for the pipeline, surfaced on the Debug page. Producers just increment
+/// on their own thread; the Debug view-model samples deltas against a monotonic clock to derive rates.
 /// </summary>
 public sealed class PipelineMetrics
 {
-    // Monotonic tick/inference counters.
     public long UiTicks;
     public long EyeInferences;
     public long FaceInferences;
 
-    // Latest eye-camera snapshot.
-    public long EyeCameraFrames;
+    // Active eye capture; the sampler reads FramesProduced off this live. Written on a worker, read on UI.
+    public volatile Capture? EyeCapture;
+
     public double EyeCameraTargetFps;
     public int EyeCameraWidth;
     public int EyeCameraHeight;

@@ -62,7 +62,12 @@ public abstract class Capture(string source, ILogger logger) : IDisposable
         {
             if (ReferenceEquals(_rawMat, value)) return;
 
-            _rawMat?.Dispose();
+            if (_rawMat != null)
+            {
+                // Previous frame was never acquired by the consumer — it's lost.
+                _rawMat.Dispose();
+                Interlocked.Increment(ref _framesDropped);
+            }
             _rawMat = value;
             _frameReady.Set();
         }
@@ -70,12 +75,16 @@ public abstract class Capture(string source, ILogger logger) : IDisposable
     }
 
     private long _framesProduced;
+    private long _framesDropped;
 
     /// <summary>
     /// Total frames this source has produced so far (incremented once per delivered frame).
     /// Sample the delta over time to compute the real capture throughput. Thread safe.
     /// </summary>
     public long FramesProduced => Interlocked.Read(ref _framesProduced);
+
+    /// <summary>Frames overwritten before the consumer acquired them — frames actually lost (not in-flight). Thread safe.</summary>
+    public long FramesDropped => Interlocked.Read(ref _framesDropped);
 
     /// <summary>Negotiated capture frame rate if the backend knows it (0 = unknown).</summary>
     public virtual double TargetFps => 0;
