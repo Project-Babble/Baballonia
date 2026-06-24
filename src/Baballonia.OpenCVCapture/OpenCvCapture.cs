@@ -66,6 +66,24 @@ public sealed class OpenCvCapture(string source, ILogger<OpenCvCapture> logger) 
         _videoCapture.ConvertRgb = true;
         IsReady = _videoCapture.IsOpened();
 
+        if (!IsReady)
+        {
+            // This build's OpenCV ships only the GStreamer capture backend, which needs the v4l2src
+            // plugin (gst-plugins-good) to read /dev/video* — and that isn't bundled. Fail fast with
+            // a pointer to the dependency-free "V4L2 Camera" backend instead of leaving the caller to
+            // wait out its frame-arrival timeout.
+            if (OperatingSystem.IsLinux())
+                logger.LogError(
+                    "Could not open '{Source}' via OpenCV's GStreamer backend. Install the v4l2src GStreamer " +
+                    "plugin (gst-plugins-good), or use the 'V4L2 Camera' backend which needs no GStreamer.", Source);
+            else
+                logger.LogError("Could not open '{Source}' via OpenCV.", Source);
+
+            _videoCapture.Dispose();
+            _videoCapture = null;
+            return false;
+        }
+
         CancellationToken token = _updateTaskCts.Token;
         _updateTask = Task.Run(() => VideoCapture_UpdateLoop(_videoCapture, token));
 
