@@ -2,7 +2,9 @@ using Avalonia.Threading;
 using Baballonia.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace Baballonia.ViewModels.SplitViewPane;
 
@@ -14,22 +16,25 @@ public partial class ThreadCpuRow : ObservableObject
 }
 
 /// <summary>
-/// Live performance/diagnostics page: samples the monotonic <see cref="PipelineMetrics"/> counters
-/// twice a second and derives rates (UI loop, eye/face inference, camera throughput), and surfaces the
-/// per-thread CPU snapshot from the always-on <see cref="ThreadProfiler"/> plus per-stage pipeline timings.
-/// The profiler samples continuously on its own background thread, so the hotspot data reflects the whole
-/// app — not just whatever happens while this page is on screen.
+/// Live performance page. Rates are monotonic counter deltas measured against a Stopwatch clock and
+/// EWMA-smoothed; per-thread CPU comes from the always-on <see cref="ThreadProfiler"/>.
 /// </summary>
 public partial class DebugViewModel : ViewModelBase, IDisposable
 {
     private const int MaxThreadRows = 14;
+
+    // EWMA weight per 500 ms sample: smooths jitter but still reacts within ~1-2 s.
+    private const double Smoothing = 0.3;
+
+    private static readonly long DropWindowTicks = 60 * Stopwatch.Frequency;
+    private readonly Queue<(long Timestamp, long Dropped)> _dropWindow = new();
 
     private readonly PipelineMetrics _metrics;
     private readonly ThreadProfiler _profiler;
     private readonly DispatcherTimer _timer;
 
     private long _prevUi, _prevEye, _prevFace, _prevCam, _prevRender;
-    private DateTime _prevTime;
+    private long _prevTimestamp;
 
     // Incremented once per compositor frame by the view; surfaces Avalonia's render-thread fps.
     public long RenderTicks;
@@ -42,6 +47,9 @@ public partial class DebugViewModel : ViewModelBase, IDisposable
     [ObservableProperty] private double _cameraTargetFps;
     [ObservableProperty] private string _cameraResolution = "—";
     [ObservableProperty] private string _cameraFormat = "—";
+
+    // Frames the camera delivered but inference skipped (delivered - inferred).
+    [ObservableProperty] private string _droppedSummary = "—";
 
     // CPU hotspots.
     [ObservableProperty] private double _processCpuPercent;
@@ -65,11 +73,11 @@ public partial class DebugViewModel : ViewModelBase, IDisposable
         _metrics = metrics;
         _profiler = profiler;
         ProcessorCount = profiler.ProcessorCount;
-        _prevTime = DateTime.UtcNow;
+        _prevTimestamp = Stopwatch.GetTimestamp();
         _prevUi = metrics.UiTicks;
         _prevEye = metrics.EyeInferences;
         _prevFace = metrics.FaceInferences;
-        _prevCam = metrics.EyeCameraFrames;
+        _prevCam = metrics.EyeCapture?.FramesProduced ?? 0;
         _prevRender = RenderTicks;
 
         _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
@@ -77,18 +85,36 @@ public partial class DebugViewModel : ViewModelBase, IDisposable
         _timer.Start();
     }
 
+    /// <summary>EWMA that seeds from the first sample (so it converges immediately, not from zero).</summary>
+    private static double Smooth(double previous, double sample) =>
+        previous <= 0 ? sample : previous + Smoothing * (sample - previous);
+
     private void Sample(object? sender, EventArgs e)
     {
-        var now = DateTime.UtcNow;
-        var dt = (now - _prevTime).TotalSeconds;
+        var now = Stopwatch.GetTimestamp();
+        var dt = (now - _prevTimestamp) / (double)Stopwatch.Frequency;
         if (dt <= 0)
             return;
 
-        RenderFps = (RenderTicks - _prevRender) / dt;
-        UiLoopFps = (_metrics.UiTicks - _prevUi) / dt;
-        EyeInferenceFps = (_metrics.EyeInferences - _prevEye) / dt;
-        FaceInferenceFps = (_metrics.FaceInferences - _prevFace) / dt;
-        CameraFps = (_metrics.EyeCameraFrames - _prevCam) / dt;
+        var cam = _metrics.EyeCapture?.FramesProduced ?? 0;
+        var eye = _metrics.EyeInferences;
+        // Seed the baseline the first time we see a running camera, to avoid a startup spike.
+        if (_prevCam == 0 && cam > 0)
+            _prevCam = cam;
+
+        RenderFps = Smooth(RenderFps, (RenderTicks - _prevRender) / dt);
+        UiLoopFps = Smooth(UiLoopFps, (_metrics.UiTicks - _prevUi) / dt);
+        EyeInferenceFps = Smooth(EyeInferenceFps, (eye - _prevEye) / dt);
+        FaceInferenceFps = Smooth(FaceInferenceFps, (_metrics.FaceInferences - _prevFace) / dt);
+        CameraFps = cam > 0 ? Smooth(CameraFps, (cam - _prevCam) / dt) : 0;
+
+        // Frames the capture overwrote before the pipeline acquired them, over a rolling 60 s window.
+        var drop = _metrics.EyeCapture?.FramesDropped ?? 0;
+        _dropWindow.Enqueue((now, drop));
+        while (_dropWindow.Count > 1 && _dropWindow.Peek().Timestamp < now - DropWindowTicks)
+            _dropWindow.Dequeue();
+        var lost = Math.Max(0, drop - _dropWindow.Peek().Dropped);
+        DroppedSummary = cam > 0 ? $"{lost} frames" : "—";
 
         CameraTargetFps = _metrics.EyeCameraTargetFps;
         CameraResolution = _metrics.EyeCameraWidth > 0
@@ -112,8 +138,8 @@ public partial class DebugViewModel : ViewModelBase, IDisposable
         _prevUi = _metrics.UiTicks;
         _prevEye = _metrics.EyeInferences;
         _prevFace = _metrics.FaceInferences;
-        _prevCam = _metrics.EyeCameraFrames;
-        _prevTime = now;
+        _prevCam = cam;
+        _prevTimestamp = now;
     }
 
     /// <summary>Reconcile the hottest threads into the bound collection, reusing rows to avoid UI churn.</summary>
