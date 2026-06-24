@@ -29,8 +29,9 @@ public class SingleCameraSource : IVideoSource
 
     public bool Start()
     {
-        _capture.StartCapture();
-        return true;
+        // Surface the backend's real result so a failed open (e.g. GStreamer with no v4l2src) fails
+        // fast instead of being mistaken for a slow camera and waiting out the frame timeout.
+        return _capture.StartCapture().GetAwaiter().GetResult();
     }
 
     public WaitHandle[] GetFrameWaitHandles() => [_capture.FrameWaitHandle];
