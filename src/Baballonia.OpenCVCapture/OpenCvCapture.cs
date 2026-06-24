@@ -44,7 +44,11 @@ public sealed class OpenCvCapture(string source, ILogger<OpenCvCapture> logger) 
         {
             try
             {
-                if (int.TryParse(Source, out var index))
+                // A bare "/dev/videoN" path must open by index, not via the string ctor: the mini
+                // runtime has no V4L2 backend, so CAP_ANY falls back to GStreamer's file source and
+                // tries to read the char device as a media file ("unable to start pipeline"). Going
+                // through FromCamera makes GStreamer build a proper v4l2src pipeline instead.
+                if (int.TryParse(Source, out var index) || TryGetV4l2Index(Source, out index))
                     _videoCapture = await Task.Run(() => VideoCapture.FromCamera(index, PreferredBackend), cts.Token);
                 else
                     _videoCapture = await Task.Run(() => new VideoCapture(Source), cts.Token);
@@ -66,6 +70,14 @@ public sealed class OpenCvCapture(string source, ILogger<OpenCvCapture> logger) 
         _updateTask = Task.Run(() => VideoCapture_UpdateLoop(_videoCapture, token));
 
         return IsReady;
+    }
+
+    // Parses the index out of a Linux "/dev/videoN" path so it can be opened via FromCamera.
+    private static bool TryGetV4l2Index(string source, out int index)
+    {
+        index = 0;
+        const string prefix = "/dev/video";
+        return source.StartsWith(prefix) && int.TryParse(source.AsSpan(prefix.Length), out index);
     }
 
     private Task VideoCapture_UpdateLoop(VideoCapture capture, CancellationToken ct)
