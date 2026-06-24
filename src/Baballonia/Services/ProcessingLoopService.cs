@@ -204,7 +204,8 @@ public class ProcessingLoopService : IDisposable
         if (capture == null)
             return;
 
-        _metrics.EyeCameraFrames = capture.FramesProduced;
+        // Hand the sampler the capture so it can read FramesProduced live; the rest changes rarely.
+        _metrics.EyeCapture = capture;
         _metrics.EyeCameraTargetFps = capture.TargetFps;
         _metrics.EyeCameraFormat = capture.PixelFormatName;
 
