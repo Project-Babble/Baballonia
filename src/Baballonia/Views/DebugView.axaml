@@ -106,33 +106,43 @@
         </Grid>
       </Border>
 
-      <TextBlock Classes="Header" FontSize="18" Margin="0,10,0,-6" Text="Eye camera" />
-      <Border
-          Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-          CornerRadius="8"
-          Padding="16">
-        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
-          <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,4" Text="Delivered (measured)" />
-          <TextBlock Grid.Row="0" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
-                     Text="{Binding CameraFps, StringFormat='{}{0:F1} fps'}" />
+      <TextBlock Classes="Header" FontSize="18" Margin="0,10,0,-6" Text="Cameras" />
+      <ItemsControl ItemsSource="{Binding Cameras}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate x:DataType="splitViewPane:CameraRow">
+            <Border
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="8"
+                Margin="0,0,0,12"
+                Padding="16">
+              <StackPanel>
+                <TextBlock FontSize="15" FontWeight="SemiBold" Margin="0,0,0,6" Text="{Binding Name}" />
+                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+                  <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,4" Text="Delivered (measured)" />
+                  <TextBlock Grid.Row="0" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
+                             Text="{Binding DeliveredFps, StringFormat='{}{0:F1} fps'}" />
 
-          <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,4" Text="Dropped (Last 60 seconds)" />
-          <TextBlock Grid.Row="1" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
-                     Text="{Binding DroppedSummary}" />
+                  <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,4" Text="Dropped (Last 60 seconds)" />
+                  <TextBlock Grid.Row="1" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
+                             Text="{Binding DroppedSummary}" />
 
-          <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,4" Text="Negotiated (driver)" />
-          <TextBlock Grid.Row="2" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
-                     Text="{Binding CameraTargetFps, StringFormat='{}{0:F0} fps'}" />
+                  <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,4" Text="Negotiated (driver)" />
+                  <TextBlock Grid.Row="2" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
+                             Text="{Binding NegotiatedFps, StringFormat='{}{0:F0} fps'}" />
 
-          <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,4" Text="Resolution" />
-          <TextBlock Grid.Row="3" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
-                     Text="{Binding CameraResolution}" />
+                  <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,4" Text="Resolution" />
+                  <TextBlock Grid.Row="3" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
+                             Text="{Binding Resolution}" />
 
-          <TextBlock Grid.Row="4" Grid.Column="0" Margin="0,4" Text="Pixel format" />
-          <TextBlock Grid.Row="4" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
-                     Text="{Binding CameraFormat}" />
-        </Grid>
-      </Border>
+                  <TextBlock Grid.Row="4" Grid.Column="0" Margin="0,4" Text="Pixel format" />
+                  <TextBlock Grid.Row="4" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
+                             Text="{Binding Format}" />
+                </Grid>
+              </StackPanel>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
     </StackPanel>
   </ScrollViewer>
 </UserControl>

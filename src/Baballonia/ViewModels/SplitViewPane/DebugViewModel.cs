@@ -1,5 +1,6 @@
 using Avalonia.Threading;
 using Baballonia.Services;
+using Baballonia.Services.Inference.VideoSources;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,17 @@ public partial class ThreadCpuRow : ObservableObject
     [ObservableProperty] private double _cpuPercent;
 }
 
+/// <summary>One camera card (eye left/right or mouth).</summary>
+public partial class CameraRow : ObservableObject
+{
+    [ObservableProperty] private string _name = "";
+    [ObservableProperty] private double _deliveredFps;
+    [ObservableProperty] private string _droppedSummary = "—";
+    [ObservableProperty] private double _negotiatedFps;
+    [ObservableProperty] private string _resolution = "—";
+    [ObservableProperty] private string _format = "—";
+}
+
 /// <summary>
 /// Live performance page. Rates are monotonic counter deltas measured against a Stopwatch clock and
 /// EWMA-smoothed; per-thread CPU comes from the always-on <see cref="ThreadProfiler"/>.
@@ -27,13 +39,20 @@ public partial class DebugViewModel : ViewModelBase, IDisposable
     private const double Smoothing = 0.3;
 
     private static readonly long DropWindowTicks = 60 * Stopwatch.Frequency;
-    private readonly Queue<(long Timestamp, long Dropped)> _dropWindow = new();
+
+    private sealed class CamState
+    {
+        public long PrevFrames;
+        public double FpsEwma;
+        public readonly Queue<(long Timestamp, long Dropped)> DropWindow = new();
+    }
 
     private readonly PipelineMetrics _metrics;
     private readonly ThreadProfiler _profiler;
     private readonly DispatcherTimer _timer;
+    private readonly Dictionary<SingleCameraSource, CamState> _camStates = new();
 
-    private long _prevUi, _prevEye, _prevFace, _prevCam, _prevRender;
+    private long _prevUi, _prevEye, _prevFace, _prevRender;
     private long _prevTimestamp;
 
     // Incremented once per compositor frame by the view; surfaces Avalonia's render-thread fps.
@@ -43,18 +62,14 @@ public partial class DebugViewModel : ViewModelBase, IDisposable
     [ObservableProperty] private double _uiLoopFps;
     [ObservableProperty] private double _eyeInferenceFps;
     [ObservableProperty] private double _faceInferenceFps;
-    [ObservableProperty] private double _cameraFps;
-    [ObservableProperty] private double _cameraTargetFps;
-    [ObservableProperty] private string _cameraResolution = "—";
-    [ObservableProperty] private string _cameraFormat = "—";
-
-    // Frames the camera delivered but inference skipped (delivered - inferred).
-    [ObservableProperty] private string _droppedSummary = "—";
 
     // CPU hotspots.
     [ObservableProperty] private double _processCpuPercent;
     [ObservableProperty] private int _processorCount;
     public ObservableCollection<ThreadCpuRow> Threads { get; } = new();
+
+    // One card per active camera (eye left/right or mouth).
+    public ObservableCollection<CameraRow> Cameras { get; } = new();
 
     // Eye pipeline stage timings (ms).
     [ObservableProperty] private double _eyeCaptureMs;
@@ -77,7 +92,6 @@ public partial class DebugViewModel : ViewModelBase, IDisposable
         _prevUi = metrics.UiTicks;
         _prevEye = metrics.EyeInferences;
         _prevFace = metrics.FaceInferences;
-        _prevCam = metrics.EyeCapture?.FramesProduced ?? 0;
         _prevRender = RenderTicks;
 
         _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
@@ -96,31 +110,13 @@ public partial class DebugViewModel : ViewModelBase, IDisposable
         if (dt <= 0)
             return;
 
-        var cam = _metrics.EyeCapture?.FramesProduced ?? 0;
         var eye = _metrics.EyeInferences;
-        // Seed the baseline the first time we see a running camera, to avoid a startup spike.
-        if (_prevCam == 0 && cam > 0)
-            _prevCam = cam;
-
         RenderFps = Smooth(RenderFps, (RenderTicks - _prevRender) / dt);
         UiLoopFps = Smooth(UiLoopFps, (_metrics.UiTicks - _prevUi) / dt);
         EyeInferenceFps = Smooth(EyeInferenceFps, (eye - _prevEye) / dt);
         FaceInferenceFps = Smooth(FaceInferenceFps, (_metrics.FaceInferences - _prevFace) / dt);
-        CameraFps = cam > 0 ? Smooth(CameraFps, (cam - _prevCam) / dt) : 0;
 
-        // Frames the capture overwrote before the pipeline acquired them, over a rolling 60 s window.
-        var drop = _metrics.EyeCapture?.FramesDropped ?? 0;
-        _dropWindow.Enqueue((now, drop));
-        while (_dropWindow.Count > 1 && _dropWindow.Peek().Timestamp < now - DropWindowTicks)
-            _dropWindow.Dequeue();
-        var lost = Math.Max(0, drop - _dropWindow.Peek().Dropped);
-        DroppedSummary = cam > 0 ? $"{lost} frames" : "—";
-
-        CameraTargetFps = _metrics.EyeCameraTargetFps;
-        CameraResolution = _metrics.EyeCameraWidth > 0
-            ? $"{_metrics.EyeCameraWidth} x {_metrics.EyeCameraHeight}"
-            : "—";
-        CameraFormat = string.IsNullOrEmpty(_metrics.EyeCameraFormat) ? "—" : _metrics.EyeCameraFormat;
+        UpdateCameras(now, dt);
 
         EyeCaptureMs = _metrics.EyeCaptureMs;
         EyeTransformMs = _metrics.EyeTransformMs;
@@ -136,10 +132,69 @@ public partial class DebugViewModel : ViewModelBase, IDisposable
 
         _prevRender = RenderTicks;
         _prevUi = _metrics.UiTicks;
-        _prevEye = _metrics.EyeInferences;
+        _prevEye = eye;
         _prevFace = _metrics.FaceInferences;
-        _prevCam = cam;
         _prevTimestamp = now;
+    }
+
+    private void UpdateCameras(long now, double dt)
+    {
+        var current = new List<(string Label, SingleCameraSource Source)>(3);
+        if (_metrics.EyeDual)
+        {
+            if (_metrics.EyeLeftSource is { } el) current.Add(("Eye (left)", el));
+            if (_metrics.EyeRightSource is { } er) current.Add(("Eye (right)", er));
+        }
+        else if (_metrics.EyeLeftSource is { } single)
+        {
+            current.Add(("Eye", single));
+        }
+        if (_metrics.FaceSource is { } mouth) current.Add(("Mouth", mouth));
+
+        while (Cameras.Count < current.Count) Cameras.Add(new CameraRow());
+        while (Cameras.Count > current.Count) Cameras.RemoveAt(Cameras.Count - 1);
+
+        var active = new HashSet<SingleCameraSource>();
+        for (var i = 0; i < current.Count; i++)
+        {
+            var (label, src) = current[i];
+            active.Add(src);
+            var cap = src.Capture;
+
+            if (!_camStates.TryGetValue(src, out var st))
+            {
+                st = new CamState { PrevFrames = cap.FramesProduced };
+                st.DropWindow.Enqueue((now, cap.FramesDropped));
+                _camStates[src] = st;
+            }
+
+            var frames = cap.FramesProduced;
+            st.FpsEwma = Smooth(st.FpsEwma, (frames - st.PrevFrames) / dt);
+            st.PrevFrames = frames;
+
+            var drop = cap.FramesDropped;
+            st.DropWindow.Enqueue((now, drop));
+            while (st.DropWindow.Count > 1 && st.DropWindow.Peek().Timestamp < now - DropWindowTicks)
+                st.DropWindow.Dequeue();
+            var lost = Math.Max(0, drop - st.DropWindow.Peek().Dropped);
+
+            var row = Cameras[i];
+            row.Name = label;
+            row.DeliveredFps = st.FpsEwma;
+            row.DroppedSummary = $"{lost} frames";
+            row.NegotiatedFps = cap.TargetFps;
+            row.Resolution = src.CameraSize.Width > 0 ? $"{src.CameraSize.Width} x {src.CameraSize.Height}" : "—";
+            row.Format = string.IsNullOrEmpty(cap.PixelFormatName) ? "—" : cap.PixelFormatName;
+        }
+
+        // Drop state for cameras that went away (swap/disconnect).
+        if (_camStates.Count > active.Count)
+        {
+            var stale = new List<SingleCameraSource>();
+            foreach (var key in _camStates.Keys)
+                if (!active.Contains(key)) stale.Add(key);
+            foreach (var key in stale) _camStates.Remove(key);
+        }
     }
 
     /// <summary>Reconcile the hottest threads into the bound collection, reusing rows to avoid UI churn.</summary>
