@@ -20,6 +20,14 @@ public class EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus, Pip
     /// </summary>
     public bool SwapSplitEyes { get; set; }
 
+    /// <summary>
+    /// The raw (un-smoothed) result of the most recent <see cref="RunUpdate"/> — geometry-corrected
+    /// exactly like the returned map but with the OneEuroFilter skipped. Native eye tracking (DFR /
+    /// VRChat native) reads this for lowest latency. Shares RunUpdate's reused-buffer lifetime: only
+    /// valid until the next RunUpdate on this pipeline.
+    /// </summary>
+    public OrderedFloatMap? RawEyeResult { get; private set; }
+
     public OrderedFloatMap? RunUpdate()
     {
         var sw = Stopwatch.StartNew();
@@ -70,12 +78,20 @@ public class EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus, Pip
         metrics.EyeInferenceMs = PipelineMetrics.Ewma(metrics.EyeInferenceMs, sw.Elapsed.TotalMilliseconds);
 
         sw.Restart();
+        // OneEuroFilter returns its own buffer and leaves the input untouched, so the runner's map
+        // still holds the raw values. Process both: the raw map feeds native eye tracking (DFR), the
+        // filtered map feeds VRCFT/UI as before.
+        OrderedFloatMap? rawForDfr = null;
         if (Filter != null)
         {
-            inferenceResult = Filter.Filter(inferenceResult);
+            var filtered = Filter.Filter(inferenceResult);
+            ProcessExpressions(ref inferenceResult);
+            rawForDfr = inferenceResult;
+            inferenceResult = filtered;
         }
 
         ProcessExpressions(ref inferenceResult);
+        RawEyeResult = rawForDfr ?? inferenceResult; // filter off: raw == filtered
 
         eyePipelineEventBus.Publish(new EyePipelineEvents.NewFilteredResultEvent(inferenceResult));
         metrics.EyePostMs = PipelineMetrics.Ewma(metrics.EyePostMs, sw.Elapsed.TotalMilliseconds);
