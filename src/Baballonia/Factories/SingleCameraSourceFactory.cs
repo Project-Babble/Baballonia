@@ -55,7 +55,13 @@ public class SingleCameraSourceFactory
     {
         var camera = address;
         _deviceEnumerator.Cameras ??= _deviceEnumerator.UpdateCameras();
-        if (_deviceEnumerator.Cameras.TryGetValue(camera, out var mappedAddress))
+        if (!_deviceEnumerator.Cameras.TryGetValue(camera, out var mappedAddress))
+        {
+            // Stale list (e.g. camera plugged in after launch). Re-enumerate once and retry.
+            _deviceEnumerator.Cameras = _deviceEnumerator.UpdateCameras();
+            _deviceEnumerator.Cameras.TryGetValue(camera, out mappedAddress);
+        }
+        if (mappedAddress != null)
             camera = mappedAddress;
 
         return Task.Run<SingleCameraSource?>(() => StartWithFallback(address, camera, providerName));
