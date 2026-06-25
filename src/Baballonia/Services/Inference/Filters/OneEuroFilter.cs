@@ -25,6 +25,8 @@ public class OneEuroFilter : IFilter
 
     // Reusable output map
     private OrderedFloatMap _output;
+    // The input map we sized our state to; detects a model hot-swap.
+    private OrderedFloatMap _source;
     private DateTime _tPrev;
 
     public OneEuroFilter(float minCutoff = 1.0f, float beta = 0.0f)
@@ -36,8 +38,9 @@ public class OneEuroFilter : IFilter
 
     public OrderedFloatMap Filter(OrderedFloatMap x)
     {
-        // Lazily initialize on the very first call
-        if (!_isInitialized)
+        // (Re)init on first frame or after a model swap. State is sized to the first frame;
+        // a shrunk output overruns it, a grown one gets truncated/mis-keyed.
+        if (!_isInitialized || ShapeChanged(x))
         {
             Initialize(x);
             return _output; // Return the initial state on the first frame
@@ -89,6 +92,29 @@ public class OneEuroFilter : IFilter
         return _output;
     }
 
+    // True when x's output set differs from ours. The runner reuses one map per model, so a
+    // reference change flags a swap; length/keys confirm it so an equivalent map never resets us.
+    private bool ShapeChanged(OrderedFloatMap x)
+    {
+        if (ReferenceEquals(x, _source))
+            return false;
+
+        if (x.Count != _keys.Length)
+            return true;
+
+        int i = 0;
+        foreach (string key in x.Keys)
+        {
+            if (!string.Equals(key, _keys[i], StringComparison.Ordinal))
+                return true;
+            i++;
+        }
+
+        // Same shape, new instance — adopt it for the fast path.
+        _source = x;
+        return false;
+    }
+
     private void Initialize(OrderedFloatMap x0)
     {
         int length = x0.Count;
@@ -118,7 +144,8 @@ public class OneEuroFilter : IFilter
         }
 
         _output = new OrderedFloatMap(_keys);
-        
+        _source = x0;
+
         _xPrev.CopyTo(_output.ValuesSpan);
 
         _tPrev = DateTime.UtcNow;
