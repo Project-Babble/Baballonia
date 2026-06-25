@@ -1,10 +1,9 @@
-﻿using Baballonia.Contracts;
+using Baballonia.Contracts;
 using Baballonia.Helpers;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OscCore;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -12,17 +11,25 @@ using System.Threading.Tasks;
 
 namespace Baballonia.Services;
 
+/// <summary>
+/// Receives OSC over UDP. The local port may be temporarily unavailable (a companion app holding it,
+/// a restart in progress); binding is owned by the receive loop, which retries with backoff so the
+/// path recovers on its own once the port frees up. Re-targeting closes the current socket to wake
+/// an in-flight receive, then the loop rebinds.
+/// </summary>
 public class OscRecvService : BackgroundService
 {
     private readonly ILogger<OscRecvService> _logger;
     private readonly IOscTarget _oscTarget;
     private readonly ILocalSettingsService _settingsService;
 
-    private Socket _recvSocket;
     private readonly byte[] _recvBuffer = new byte[4096];
-
-    private CancellationTokenSource _cts, _linkedToken;
-    private CancellationToken _stoppingToken;
+    private readonly object _gate = new();
+    private Socket? _recvSocket;
+    private IPEndPoint? _desiredEndpoint;
+    private long _nextBindTick;
+    private bool _bindWarned;
+    private const int BindBackoffMs = 1000;
 
     public event Action<OscMessage> OnMessageReceived = _ => { };
 
@@ -33,8 +40,6 @@ public class OscRecvService : BackgroundService
     )
     {
         _logger = logger;
-        _cts = new CancellationTokenSource();
-
         _oscTarget = oscTarget;
         _settingsService = settingsService;
 
@@ -50,10 +55,8 @@ public class OscRecvService : BackgroundService
                 return;
             }
 
-            // Guard against a malformed/legacy stored address. IPAddress.Parse would throw
-            // here, and because this handler runs synchronously during settings load in
-            // StartAsync, the exception would escape and fail host startup (taking the whole
-            // app's hosted services down with it). TryParse degrades gracefully instead.
+            // TryParse, not Parse: this handler runs synchronously during settings load in StartAsync,
+            // so a malformed stored address must degrade gracefully instead of failing host startup.
             if (IPAddress.TryParse(_oscTarget.DestinationAddress, out var address))
             {
                 UpdateTarget(new IPEndPoint(address, _oscTarget.InPort));
@@ -78,82 +81,150 @@ public class OscRecvService : BackgroundService
 
     public IPEndPoint UpdateTarget(IPEndPoint endpoint)
     {
-        _cts.Cancel();
-        _recvSocket?.Close();
-        _oscTarget.IsConnected = false;
-
-        _recvSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-
-        try
+        lock (_gate)
         {
-            _recvSocket.Bind(endpoint);
-            _oscTarget.IsConnected = true;
-            return (IPEndPoint)_recvSocket.LocalEndPoint!;
+            _desiredEndpoint = endpoint;
+            _nextBindTick = 0;     // rebind to the new target immediately
+            _bindWarned = false;
+            DropSocketLocked();    // closing the current socket wakes an in-flight ReceiveAsync
         }
-        catch (SocketException ex)
-        {
-            _logger.LogWarning($"Could not bind to recv endpoint: {endpoint}. {ex.Message}");
-        }
-        finally
-        {
-            _cts = new CancellationTokenSource();
-            _linkedToken = CancellationTokenSource.CreateLinkedTokenSource(_stoppingToken, _cts.Token);
-        }
-
-        return null!;
+        return endpoint;
     }
 
-    protected async override Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         _logger.LogDebug("OSC Receive Service ExecuteAsync started");
-        _stoppingToken = stoppingToken;
-        _linkedToken = CancellationTokenSource.CreateLinkedTokenSource(_stoppingToken, _cts.Token);
 
-        while (!_stoppingToken.IsCancellationRequested)
+        while (!stoppingToken.IsCancellationRequested)
         {
+            Socket? socket;
+            lock (_gate)
+                socket = EnsureBoundLocked();
+
+            if (socket is null)
+            {
+                await DelayQuietly(BindBackoffMs, stoppingToken);
+                continue;
+            }
+
             try
             {
-                if (_linkedToken.IsCancellationRequested || _recvSocket is not { IsBound: true })
-                {
-                    await Task.Delay(100, stoppingToken);
-                    continue;
-                }
-
-                var bytesReceived = await _recvSocket.ReceiveAsync(_recvBuffer, _linkedToken.Token);
-                if (bytesReceived == 0) continue;
-
-                OscPacket packet = OscPacket.Read(_recvBuffer, 0, bytesReceived);
-
-                if (packet is OscBundle)
-                {
-                    List<OscMessage> allMessages = OscHelper.ExtractMessages(packet);
-
-                    foreach (var message in allMessages)
-                    {
-                        OnMessageReceived(message);
-                    }
-                }
-                else if (packet is OscMessage message)
-                {
-                    OnMessageReceived(message);
-                }
+                var received = await socket.ReceiveAsync(_recvBuffer, stoppingToken);
+                if (received > 0)
+                    Dispatch(received);
             }
             catch (OperationCanceledException)
             {
-                // Expected during shutdown or target updates
+                // Shutting down.
+            }
+            catch (ObjectDisposedException)
+            {
+                // Socket swapped out by a re-target; the loop rebinds next iteration.
+            }
+            catch (SocketException ex) when (ex.SocketErrorCode is SocketError.OperationAborted or SocketError.Interrupted)
+            {
+                // Socket closed mid-receive for a re-target; rebind without backoff.
+            }
+            catch (SocketException ex)
+            {
+                lock (_gate)
+                    if (ReferenceEquals(_recvSocket, socket))
+                        DropSocketLocked();
+                _logger.LogWarning("OSC receive error: {Message}; retrying", ex.Message);
+                await DelayQuietly(BindBackoffMs, stoppingToken);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error processing OSC message");
-                await Task.Delay(1000, stoppingToken); // Prevent tight loop on errors
             }
         }
+
+        lock (_gate)
+            DropSocketLocked();
+    }
+
+    // Caller holds _gate. Returns a bound socket, retrying the bind at most once per backoff window.
+    private Socket? EnsureBoundLocked()
+    {
+        if (_recvSocket is { IsBound: true } bound)
+            return bound;
+        if (_desiredEndpoint is null)
+            return null;
+
+        var now = Environment.TickCount64;
+        if (now < _nextBindTick)
+            return null;
+        _nextBindTick = now + BindBackoffMs;
+
+        DropSocketLocked();
+        try
+        {
+            var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            socket.Bind(_desiredEndpoint);
+            _recvSocket = socket;
+            _oscTarget.IsConnected = true;
+            _bindWarned = false;
+            _logger.LogInformation("OSC receive bound to {Endpoint}", _desiredEndpoint);
+            return socket;
+        }
+        catch (SocketException ex)
+        {
+            DropSocketLocked();
+            _oscTarget.IsConnected = false;
+            if (!_bindWarned)
+            {
+                _bindWarned = true;
+                _logger.LogWarning("Could not bind OSC receive to {Endpoint}: {Message}; will keep retrying",
+                    _desiredEndpoint, ex.Message);
+            }
+            return null;
+        }
+    }
+
+    // Caller holds _gate.
+    private void DropSocketLocked()
+    {
+        if (_recvSocket is { } socket)
+        {
+            try { socket.Close(); } catch { /* ignored */ }
+            socket.Dispose();
+            _recvSocket = null;
+        }
+    }
+
+    private void Dispatch(int received)
+    {
+        OscPacket packet;
+        try
+        {
+            packet = OscPacket.Read(_recvBuffer, 0, received);
+        }
+        catch
+        {
+            return;     // ignore a malformed datagram; never blackout the receive loop over one bad packet
+        }
+
+        if (packet is OscBundle)
+        {
+            foreach (var message in OscHelper.ExtractMessages(packet))
+                OnMessageReceived(message);
+        }
+        else if (packet is OscMessage message)
+        {
+            OnMessageReceived(message);
+        }
+    }
+
+    private static async Task DelayQuietly(int ms, CancellationToken ct)
+    {
+        try { await Task.Delay(ms, ct); }
+        catch (OperationCanceledException) { /* shutting down */ }
     }
 
     public override async Task StopAsync(CancellationToken cancellationToken)
     {
-        _cts.Cancel();
-        _recvSocket?.Close();
+        lock (_gate)
+            DropSocketLocked();
         await base.StopAsync(cancellationToken);
     }
 }
