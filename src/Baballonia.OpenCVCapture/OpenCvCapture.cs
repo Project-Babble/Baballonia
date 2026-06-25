@@ -109,13 +109,21 @@ public sealed class OpenCvCapture(string source, ILogger<OpenCvCapture> logger) 
                 var frame = new Mat();
                 IsReady = capture.Read(frame);
                 if (IsReady)
+                {
                     SetRawMat(frame);
+                }
                 else
+                {
                     frame.Dispose();
+                    // A failing read (camera unplugged, or a second handle contending the same
+                    // physical device) returns immediately; without this the loop pegs a whole core.
+                    // Back off briefly, staying responsive to cancellation.
+                    ct.WaitHandle.WaitOne(10);
+                }
             }
             catch (Exception)
             {
-                // ignored
+                ct.WaitHandle.WaitOne(10);
             }
         }
 
@@ -124,21 +132,24 @@ public sealed class OpenCvCapture(string source, ILogger<OpenCvCapture> logger) 
 
     public override Task<bool> StopCapture()
     {
-        if (_videoCapture is null)
+        var capture = _videoCapture;
+        if (capture is null)
             return Task.FromResult(false);
 
-        if (_updateTask != null) {
-            _updateTaskCts.Cancel();
-            _updateTask.Wait();
-        }
 
         IsReady = false;
-        if (_videoCapture != null)
+        _videoCapture = null;
+        var updateTask = _updateTask;
+        _updateTask = null;
+        _updateTaskCts.Cancel();
+
+        Task.Run(() =>
         {
-            _videoCapture.Release();
-            _videoCapture.Dispose();
-            _videoCapture = null;
-        }
+            try { updateTask?.Wait(); } catch { /* loop faulted; release the device anyway */ }
+            try { capture.Release(); } catch { /* best-effort */ }
+            try { capture.Dispose(); } catch { /* best-effort */ }
+        });
+
         return Task.FromResult(true);
     }
 }
