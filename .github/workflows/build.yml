@@ -63,7 +63,7 @@ jobs:
       - name: Install build prerequisites
         run: |
           apt-get update
-          apt-get install -y --no-install-recommends git curl unzip xz-utils ca-certificates
+          apt-get install -y --no-install-recommends git curl unzip xz-utils ca-certificates patchelf
 
       - name: Checkout latest
         uses: actions/checkout@v5
