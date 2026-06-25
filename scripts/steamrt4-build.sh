@@ -31,7 +31,7 @@ if ! docker image inspect "$LOCAL_IMG" >/dev/null 2>&1; then
   docker build -t "$LOCAL_IMG" - <<DOCKER
 FROM $BASE
 RUN apt-get update \
- && apt-get install -y --no-install-recommends curl ca-certificates xz-utils \
+ && apt-get install -y --no-install-recommends curl ca-certificates xz-utils patchelf \
  && rm -rf /var/lib/apt/lists/*
 RUN curl -fsSL https://dot.net/v1/dotnet-install.sh -o /tmp/d.sh \
  && bash /tmp/d.sh --channel 10.0 --install-dir /usr/share/dotnet \
