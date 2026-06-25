@@ -104,21 +104,32 @@ public class ParameterSenderService : BackgroundService
         // latency, so it bypasses the OneEuroFilter. Falls back to the filtered map if no raw is supplied.
         var nativeSource = rawExpressions ?? expressions;
 
-        if (_useDfr)
-            ProcessNativeVrcEyeTracking(nativeSource, _dfrQueue);
+        // Never let an OSC-fanout error escape into the inference worker: ProcessingLoopService's
+        // EyeWorker catch tears down all cameras, so a single bad value here would kill eye tracking.
+        try
+        {
+            if (_useDfr)
+                ProcessNativeVrcEyeTracking(nativeSource, _dfrQueue);
 
-        if (_sendNativeVrcEyeTracking)
-            ProcessNativeVrcEyeTracking(nativeSource, _vrcftQueue);
+            if (_sendNativeVrcEyeTracking)
+                ProcessNativeVrcEyeTracking(nativeSource, _vrcftQueue);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error building native/DFR eye OSC parameters");
+        }
     }
 
     private void ProcessNativeVrcEyeTracking(OrderedFloatMap expressions, ConcurrentQueue<OscMessage> queue)
     {
-        var leftEyeX = expressions["/leftEyePitch"];
-        var leftEyeY = expressions["/leftEyeYaw"];
-        var leftEyeLid = expressions["/leftEyeLid"];
-        var rightEyeX = expressions["/rightEyePitch"];
-        var rightEyeY = expressions["/rightEyeYaw"];
-        var rightEyeLid = expressions["/rightEyeLid"];
+        // Keys produced by the eye runner are X/Y/Lid (see DefaultInferenceRunner); read them with the
+        // non-throwing accessor so a future key-set change degrades to 0 instead of throwing.
+        expressions.TryGetValue("/leftEyeX", out var leftEyeX);
+        expressions.TryGetValue("/leftEyeY", out var leftEyeY);
+        expressions.TryGetValue("/leftEyeLid", out var leftEyeLid);
+        expressions.TryGetValue("/rightEyeX", out var rightEyeX);
+        expressions.TryGetValue("/rightEyeY", out var rightEyeY);
+        expressions.TryGetValue("/rightEyeLid", out var rightEyeLid);
 
         var leftEyeLidSettings = _calibrationService.GetExpressionSettings("LeftEyeLid");
         var rightEyeLidSettings = _calibrationService.GetExpressionSettings("RightEyeLid");
