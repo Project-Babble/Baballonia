@@ -379,11 +379,7 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # VS Code files for those working on multiple tools
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+.vscode/
 *.code-workspace
 
 # Local History for Visual Studio Code
@@ -416,3 +412,5 @@ src/Baballonia/Firmware/Windows/espflash.exe
 src/Baballonia/Firmware/Linux/espflash
 src/Baballonia.Desktop/Calibration/Windows/Trainer/BabbleTrainer.exe
 src/Baballonia.Desktop/Calibration/Linux/Trainer/BabbleTrainer
+src/Baballonia.Desktop/Calibration/Linux/Trainer/_internal
+src/Baballonia.Desktop/Calibration/Windows/Trainer/_internal

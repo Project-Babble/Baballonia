@@ -359,6 +359,60 @@ public class EyePipelineManager
         }
     }
 
+    /// <summary>
+    /// Stops only the eye feed(s) backed by a serial camera, releasing the serial handle so the
+    /// firmware page can open it. For a DualCameraSource each eye is evaluated independently so a
+    /// non-serial eye keeps running. UVC/IP eyes are left untouched.
+    /// </summary>
+    public bool StopSerialCameras()
+    {
+        var stopped = false;
+        lock (_pipeline.SyncRoot)
+        {
+            switch (_pipeline.VideoSource)
+            {
+                case SingleCameraSource single when IsSerialAddress(single.Capture?.Source):
+                    single.Dispose();
+                    _pipeline.VideoSource = null;
+                    _currentLeftAddress = null;
+                    _currentRightAddress = null;
+                    stopped = true;
+                    break;
+                case DualCameraSource dual:
+                    // Same physical serial cam used for both eyes -> one shared instance; null both
+                    // refs after a single dispose so the right branch can't double-dispose it.
+                    var shared = ReferenceEquals(dual.LeftCam, dual.RightCam);
+                    if (dual.LeftCam is SingleCameraSource l && IsSerialAddress(l.Capture?.Source))
+                    {
+                        l.Dispose();
+                        dual.LeftCam = null;
+                        _currentLeftAddress = null;
+                        stopped = true;
+                        if (shared) { dual.RightCam = null; _currentRightAddress = null; }
+                    }
+                    if (dual.RightCam is SingleCameraSource r && IsSerialAddress(r.Capture?.Source))
+                    {
+                        r.Dispose();
+                        dual.RightCam = null;
+                        _currentRightAddress = null;
+                        stopped = true;
+                    }
+                    if (dual.LeftCam == null && dual.RightCam == null)
+                        _pipeline.VideoSource = null;
+                    break;
+            }
+        }
+        return stopped;
+    }
+
+    // Mirrors SerialCameraCaptureFactory.CanConnect: serial camera addresses are COM* / /dev/tty* / /dev/cu*.
+    private static bool IsSerialAddress(string? address)
+    {
+        if (string.IsNullOrEmpty(address)) return false;
+        var a = address.ToLowerInvariant();
+        return a.StartsWith("com") || a.StartsWith("/dev/tty") || a.StartsWith("/dev/cu");
+    }
+
     public bool IsUsingSameCamera()
     {
         return _currentLeftAddress == _currentRightAddress && _currentLeftAddress != null;

@@ -330,6 +330,12 @@
   <data name="Firmware_Flashing_Complete" xml:space="preserve">
     <value>Done! You will need to restart your tracker</value>
   </data>
+  <data name="Firmware_Flashing_Failed" xml:space="preserve">
+    <value>Firmware flash failed. Your tracker was not updated.</value>
+  </data>
+  <data name="Firmware_Flashing_Failed_Detail" xml:space="preserve">
+    <value>Check the connection and try again.</value>
+  </data>
   <data name="Firmware_TrackerComboBox_Default" xml:space="preserve">
     <value>Click to see trackers...</value>
   </data>

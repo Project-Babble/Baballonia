@@ -17,6 +17,8 @@ public class FirmwareService(ILogger<FirmwareService> logger, ICommandSenderFact
     public event Action OnFirmwareUpdateStart;
     public event Action OnFirmwareUpdateComplete;
     public event Action<string> OnFirmwareUpdateError;
+    /// <summary>Raised for each line espflash writes, so the UI can show flashing progress.</summary>
+    public event Action<string>? OnFirmwareUpdateProgress;
 
     private static readonly string EsptoolCommand;
     private const int DefaultBaudRate = 921600; // esptool-rs: Setting baud rate higher than 115,200 can cause issues
@@ -48,7 +50,7 @@ public class FirmwareService(ILogger<FirmwareService> logger, ICommandSenderFact
     /// <param name="port">COM port where the device is connected</param>
     /// <param name="pathToFirmware">Path to the firmware file to upload</param>
     /// <returns>A task representing the asynchronous operation</returns>
-    public async Task UploadFirmwareAsync(string port, string pathToFirmware)
+    public async Task<bool> UploadFirmwareAsync(string port, string pathToFirmware)
     {
         try
         {
@@ -56,7 +58,7 @@ public class FirmwareService(ILogger<FirmwareService> logger, ICommandSenderFact
             if (!File.Exists(pathToFirmware))
             {
                 OnFirmwareUpdateError?.Invoke($"Firmware file not found: {pathToFirmware}");
-                return;
+                return false;
             }
 
             // Notify start of firmware update
@@ -67,15 +69,20 @@ public class FirmwareService(ILogger<FirmwareService> logger, ICommandSenderFact
                     arguments:
                     $"write-bin 0x00 \"{pathToFirmware}\" --port {port} --baud {DefaultBaudRate}"))
             {
-                OnFirmwareUpdateError?.Invoke($"Firmware update failed!");
+                // Non-zero exit (e.g. "Error while connecting to device"): report failure and do
+                // NOT signal completion, so the UI shows a failure state instead of "Done!".
+                OnFirmwareUpdateError?.Invoke("Firmware update failed!");
+                return false;
             }
 
             // Wired firmware update completed successfully
             OnFirmwareUpdateComplete?.Invoke();
+            return true;
         }
         catch (Exception ex)
         {
             OnFirmwareUpdateError?.Invoke($"Firmware update failed: {ex.Message}");
+            return false;
         }
     }
 
@@ -91,13 +98,27 @@ public class FirmwareService(ILogger<FirmwareService> logger, ICommandSenderFact
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
             process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+
+            // Surface espflash's output as live progress, and drain both pipes asynchronously so a
+            // full OS pipe buffer can't deadlock WaitForExitAsync during a long flash.
+            void Forward(string? line)
+            {
+                if (string.IsNullOrWhiteSpace(line)) return;
+                logger.LogInformation("espflash: {Line}", line);
+                OnFirmwareUpdateProgress?.Invoke(line.Trim());
+            }
+            process.OutputDataReceived += (_, e) => Forward(e.Data);
+            process.ErrorDataReceived += (_, e) => Forward(e.Data);
+
             process.Start();
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
             await process.WaitForExitAsync();
             return process.ExitCode == 0;
         }
         catch (Exception ex)
         {
-            OnFirmwareUpdateError($"Firmware update failed: {ex.Message}");
+            OnFirmwareUpdateError?.Invoke($"Firmware update failed: {ex.Message}");
             return false;
         }
     }
