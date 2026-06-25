@@ -29,14 +29,15 @@ on:
 
 jobs:
   build-linux:
+    name: ${{ matrix.name }}
     defaults:
       run:
         shell: bash
     strategy:
       matrix:
         include:
-          - { result: Baballonia.x64.tar.xz, runs-on: ubuntu-22.04, upload-path: src/Baballonia.Desktop/bin/Baballonia.x64.tar.xz, arch: linux-x64, container: "registry.gitlab.steamos.cloud/steamrt/steamrt4/sdk:latest" }
-          - { result: Baballonia.arm64.tar.xz, runs-on: ubuntu-22.04-arm, upload-path: src/Baballonia.Desktop/bin/Baballonia.arm64.tar.xz, arch: linux-arm64, container: "registry.gitlab.steamos.cloud/steamrt/steamrt4/sdk/arm64:latest" }
+          - { name: steamrt4-x64, result: Baballonia.x64.tar.xz, runs-on: ubuntu-22.04, upload-path: src/Baballonia.Desktop/bin/Baballonia.x64.tar.xz, arch: linux-x64, container: "registry.gitlab.steamos.cloud/steamrt/steamrt4/sdk:latest" }
+          - { name: steamrt4-arm, result: Baballonia.arm64.tar.xz, runs-on: ubuntu-22.04-arm, upload-path: src/Baballonia.Desktop/bin/Baballonia.arm64.tar.xz, arch: linux-arm64, container: "registry.gitlab.steamos.cloud/steamrt/steamrt4/sdk/arm64:latest" }
 
     runs-on: ${{ matrix.runs-on }}
 
