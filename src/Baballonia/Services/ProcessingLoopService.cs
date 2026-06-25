@@ -18,7 +18,8 @@ namespace Baballonia.Services;
 /// </summary>
 public class ProcessingLoopService : IDisposable
 {
-    public record struct Expressions(OrderedFloatMap? FaceExpression, OrderedFloatMap? EyeExpression);
+    public record struct Expressions(OrderedFloatMap? FaceExpression, OrderedFloatMap? EyeExpression,
+        OrderedFloatMap? EyeExpressionRaw = null);
 
     public event Action<Expressions> ExpressionChangeEvent;
 
@@ -97,9 +98,11 @@ public class ProcessingLoopService : IDisposable
                 if (_paused) continue;
 
                 OrderedFloatMap? eyeExpression;
+                OrderedFloatMap? eyeExpressionRaw;
                 lock (_eyeProcessingPipeline.SyncRoot)
                 {
                     eyeExpression = _eyeProcessingPipeline.RunUpdate();
+                    eyeExpressionRaw = _eyeProcessingPipeline.RawEyeResult;
                     UpdateEyeCameraMetrics();
                 }
 
@@ -107,7 +110,7 @@ public class ProcessingLoopService : IDisposable
                     continue;
 
                 Interlocked.Increment(ref _metrics.EyeInferences);
-                ExpressionChangeEvent?.Invoke(new Expressions(null, eyeExpression));
+                ExpressionChangeEvent?.Invoke(new Expressions(null, eyeExpression, eyeExpressionRaw));
             }
             catch (Exception ex)
             {

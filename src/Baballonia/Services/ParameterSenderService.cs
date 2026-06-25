@@ -81,12 +81,12 @@ public class ParameterSenderService : BackgroundService
     private void ExpressionUpdateHandler(ProcessingLoopService.Expressions expressions)
     {
         if (expressions.EyeExpression != null)
-            ProcessEyeExpressionData(expressions.EyeExpression);
+            ProcessEyeExpressionData(expressions.EyeExpression, expressions.EyeExpressionRaw);
         if (expressions.FaceExpression != null)
             ProcessFaceExpressionData(expressions.FaceExpression);
     }
 
-    private void ProcessEyeExpressionData(OrderedFloatMap expressions)
+    private void ProcessEyeExpressionData(OrderedFloatMap expressions, OrderedFloatMap? rawExpressions)
     {
         if (expressions is null) return;
 
@@ -100,11 +100,15 @@ public class ParameterSenderService : BackgroundService
             _vrcftQueue.Enqueue(msg);
         }
 
+        // Native eye tracking (DFR / VRChat native) wants the raw, un-smoothed stream for the lowest
+        // latency, so it bypasses the OneEuroFilter. Falls back to the filtered map if no raw is supplied.
+        var nativeSource = rawExpressions ?? expressions;
+
         if (_useDfr)
-            ProcessNativeVrcEyeTracking(expressions, _dfrQueue);
+            ProcessNativeVrcEyeTracking(nativeSource, _dfrQueue);
 
         if (_sendNativeVrcEyeTracking)
-            ProcessNativeVrcEyeTracking(expressions, _vrcftQueue);
+            ProcessNativeVrcEyeTracking(nativeSource, _vrcftQueue);
     }
 
     private void ProcessNativeVrcEyeTracking(OrderedFloatMap expressions, ConcurrentQueue<OscMessage> queue)
