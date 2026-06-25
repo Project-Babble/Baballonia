@@ -90,6 +90,34 @@ public class FacePipelineManager
         }
     }
 
+    /// <summary>
+    /// Stops the running video source ONLY if it is backed by a serial camera (its capture
+    /// address looks like a COM/tty serial port), releasing the exclusive serial handle so the
+    /// firmware page can open it. UVC (/dev/videoN) and IP feeds are left running.
+    /// </summary>
+    public bool StopSerialCameras()
+    {
+        lock (_pipeline.SyncRoot)
+        {
+            if (_pipeline.VideoSource is SingleCameraSource single && IsSerialAddress(single.Capture?.Source))
+            {
+                _pipeline.VideoSource.Dispose();
+                _pipeline.VideoSource = null;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Mirrors SerialCameraCaptureFactory.CanConnect (the main project can't reference that type):
+    // serial camera addresses are COM* / /dev/tty* / /dev/cu*.
+    internal static bool IsSerialAddress(string? address)
+    {
+        if (string.IsNullOrEmpty(address)) return false;
+        var a = address.ToLowerInvariant();
+        return a.StartsWith("com") || a.StartsWith("/dev/tty") || a.StartsWith("/dev/cu");
+    }
+
     public void SetVideoSource(IVideoSource videoSource)
     {
         lock (_pipeline.SyncRoot)

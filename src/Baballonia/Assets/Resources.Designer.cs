@@ -662,6 +662,24 @@ namespace Baballonia.Assets {
                 return ResourceManager.GetString("Firmware_Flashing_Complete", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Firmware flash failed. Your tracker was not updated..
+        /// </summary>
+        public static string Firmware_Flashing_Failed {
+            get {
+                return ResourceManager.GetString("Firmware_Flashing_Failed", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Check the connection and try again..
+        /// </summary>
+        public static string Firmware_Flashing_Failed_Detail {
+            get {
+                return ResourceManager.GetString("Firmware_Flashing_Failed_Detail", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Flash your device&apos;s firmware.
