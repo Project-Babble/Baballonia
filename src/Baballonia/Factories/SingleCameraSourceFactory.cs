@@ -83,32 +83,54 @@ public class SingleCameraSourceFactory
         foreach (var factory in candidates)
         {
             var providerLabel = factory.GetProviderName();
-            var source = new SingleCameraSource(_loggerFactory.CreateLogger<SingleCameraSource>(), factory.Create(camera), camera);
 
-            if (!source.Start())
+            // Create() can throw before any frame is attempted — e.g. a backend whose native deps are
+            // missing runs a failing static ctor (the PSVR2 module throws TypeInitializationException
+            // from Create()). Treat any such failure as "this backend can't open the device" and fall
+            // through to the next candidate instead of letting it abort the whole fallback chain.
+            SingleCameraSource source;
+            try
             {
-                _logger.LogWarning("{} could not open {}; trying the next backend", providerLabel, address);
-                source.Dispose();
+                source = new SingleCameraSource(_loggerFactory.CreateLogger<SingleCameraSource>(), factory.Create(camera), camera);
+            }
+            catch (Exception e)
+            {
+                _logger.LogWarning("{} threw while creating a capture for {}: {}; trying the next backend", providerLabel, address, e.Message);
                 continue;
             }
 
-            var waitHandles = source.GetFrameWaitHandles();
-            var sw = Stopwatch.StartNew();
-            var timeout = TimeSpan.FromSeconds(13);
-            while (sw.Elapsed < timeout)
+            try
             {
-                // Block until a frame is signalled rather than busy-polling.
-                WaitHandle.WaitAny(waitHandles, TimeSpan.FromMilliseconds(250));
-                using var frame = source.GetFrame();
-                if (frame != null)
+                if (!source.Start())
                 {
-                    _logger.LogInformation("Opened {} with {}", address, providerLabel);
-                    return source;
+                    _logger.LogWarning("{} could not open {}; trying the next backend", providerLabel, address);
+                    source.Dispose();
+                    continue;
                 }
-            }
 
-            _logger.LogWarning("No data from {} via {}; trying the next backend", address, providerLabel);
-            source.Dispose();
+                var waitHandles = source.GetFrameWaitHandles();
+                var sw = Stopwatch.StartNew();
+                var timeout = TimeSpan.FromSeconds(13);
+                while (sw.Elapsed < timeout)
+                {
+                    // Block until a frame is signalled rather than busy-polling.
+                    WaitHandle.WaitAny(waitHandles, TimeSpan.FromMilliseconds(250));
+                    using var frame = source.GetFrame();
+                    if (frame != null)
+                    {
+                        _logger.LogInformation("Opened {} with {}", address, providerLabel);
+                        return source;
+                    }
+                }
+
+                _logger.LogWarning("No data from {} via {}; trying the next backend", address, providerLabel);
+                source.Dispose();
+            }
+            catch (Exception e)
+            {
+                _logger.LogWarning("{} failed while starting {}: {}; trying the next backend", providerLabel, address, e.Message);
+                source.Dispose();
+            }
         }
 
         _logger.LogError("No data was received from {} on any backend, closing... Maybe the camera is opened somewhere else?", address);

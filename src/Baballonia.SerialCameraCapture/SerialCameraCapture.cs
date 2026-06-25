@@ -116,15 +116,36 @@ public sealed class SerialCameraCapture(string source, ILogger<SerialCameraCaptu
     private void Dispose(bool disposing)
     {
         if (_isDisposed) return;
+        // Set first: disposal runs from the async-void DataLoop, so a throw below must neither
+        // re-enter nor escape — an exception escaping DataLoop crashes the whole process.
+        _isDisposed = true;
 
         if (disposing)
         {
             Logger.LogDebug("Disposing serial camera capture resources...");
-            StopCapture(); // xlinka 11/8/24: Ensure capture stops before disposing resources
-            _serialPort?.Dispose(); // xlinka 11/8/24: Dispose of serial port if initialized
+            try
+            {
+                StopCapture(); // Ensure capture stops before disposing resources
+            }
+            catch (Exception ex)
+            {
+                Logger.LogDebug(ex, "Ignored error stopping capture during dispose");
+            }
+
+            try
+            {
+                // SerialPort.Dispose() flushes/drains the underlying device handle. When the device
+                // was unplugged that handle is already dead and TermiosDrain throws
+                // ObjectDisposedException — disposal must never throw here.
+                _serialPort?.Dispose();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogDebug(ex, "Ignored error disposing serial port (device likely unplugged)");
+            }
+
             Logger.LogDebug("Serial camera capture resources disposed");
         }
-        _isDisposed = true;
     }
 
     public override void Dispose()
