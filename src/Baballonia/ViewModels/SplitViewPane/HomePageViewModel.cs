@@ -596,14 +596,30 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
 
     private async Task TryStartCamerasAsync()
     {
-        if (!FaceCamera.IsCameraRunning && FaceCamera.ShouldAutostart)
-            await StartCameraWithMaximization(FaceCamera, startMaximized: false);
-
+        // Start the eyes before the mouth to catch config conflicts.
         if (!LeftCamera.IsCameraRunning && LeftCamera.ShouldAutostart)
             await StartCameraWithMaximization(LeftCamera, startMaximized: false);
 
         if (!RightCamera.IsCameraRunning && RightCamera.ShouldAutostart)
             await StartCameraWithMaximization(RightCamera, startMaximized: false);
+
+        if (!FaceCamera.IsCameraRunning && FaceCamera.ShouldAutostart)
+            await StartCameraWithMaximization(FaceCamera, startMaximized: false);
+    }
+
+    private bool ConflictsAcrossPipelines(CameraControllerModel model)
+    {
+        var address = model.DisplayAddress;
+        if (string.IsNullOrEmpty(address))
+            return false;
+
+        bool SharesWith(CameraControllerModel? other) =>
+            other is { IsCameraRunning: true } &&
+            string.Equals(other.DisplayAddress, address, StringComparison.OrdinalIgnoreCase);
+
+        return model.Camera == Camera.Face
+            ? SharesWith(LeftCamera) || SharesWith(RightCamera)
+            : SharesWith(FaceCamera);
     }
 
     private void EyePipelineExceptionHandler(EyePipelineEvents.ExceptionEvent e)
@@ -702,6 +718,18 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         {
             SetButtons(model, false, false);
             var address = model.DisplayAddress;
+
+            if (ConflictsAcrossPipelines(model))
+            {
+                var inUseBy = model.Camera == Camera.Face ? "the eye tracker" : "the mouth tracker";
+                _logger.LogWarning(
+                    "Not starting the {} camera on '{}': that device is already in use by {}. Split eye cameras can share one video feed, but the mouth needs its own — pick a different camera for it.",
+                    model.Camera, address, inUseBy);
+                model.ShouldAutostart = false; // don't recreate this broken state on the next launch
+                SetButtons(model, true, false);
+                return;
+            }
+
             var backend = model.SelectedCaptureMethod;
             if (!model.CaptureMethodVisible || backend == Assets.Resources.Home_Backend_Default)
                 backend = "";
