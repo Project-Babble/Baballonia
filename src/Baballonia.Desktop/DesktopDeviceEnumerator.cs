@@ -239,8 +239,8 @@ public sealed class DesktopDeviceEnumerator(ILogger<DesktopDeviceEnumerator> log
         catch (Exception ex)
         {
             Logger.LogWarning($"Unable to probe UVC devices: {ex.Message}");
-            Logger.LogWarning(Resources.Home_Cameras_Linux_Workarounds);
-            cameraDict.Add($"Unable to probe UVC devices. {Resources.Home_Cameras_Linux_Workarounds}", "error");
+            Logger.LogWarning(Resources.Home_Cameras_Linux_Workarounds_SLR4);
+            cameraDict.Add($"Unable to probe UVC devices. {Resources.Home_Cameras_Linux_Workarounds_SLR4}", "error");
         }
     }
 

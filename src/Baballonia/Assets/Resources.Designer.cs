@@ -1110,13 +1110,14 @@ namespace Baballonia.Assets {
         
         /// <summary>
         ///   Looks up a localized string similar to Workarounds:
-        ///• Try the Steam scout 1.0 runtime (not sniper 3.0), installing libudev, building from source, or joining the plugdev group.
-        ///• We only support Steam and tarball releases, not the AUR package.
-        ///• Babble Boards do not support UVC/Serial on Linux, use a wireless configuration..
+        ///• Install from Steam and use Steam Linux Runtime 4.0. Do NOT force a tool if it's not listed.
+        ///• Use tarball or build from source to use system local libraries. AUR not recommended.
+        ///• Add your user to the video group for uvc, and dialout/uucp group for serial, then reboot.
+        ///• Wired support of Babble Boards is experimental on Linux. Wireless may work better..
         /// </summary>
-        public static string Home_Cameras_Linux_Workarounds {
+        public static string Home_Cameras_Linux_Workarounds_SLR4 {
             get {
-                return ResourceManager.GetString("Home_Cameras_Linux_Workarounds", resourceCulture);
+                return ResourceManager.GetString("Home_Cameras_Linux_Workarounds_SLR4", resourceCulture);
             }
         }
         
