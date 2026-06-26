@@ -187,6 +187,7 @@ public class EyePipelineManager
                 return true;
             }
 
+        // FLAWED + currently UNUSED: builds `source` below but never assigns it to VideoSource; unreachable because TryStartLeftIfNotRunning no-ops on a SingleCameraSource.
         if (_pipeline.VideoSource is SingleCameraSource singleCameraSource)
         {
             if (_currentLeftAddress == cameraAddress && _currentLeftAddress != null)
@@ -263,6 +264,7 @@ public class EyePipelineManager
                 return true;
             }
 
+        // FLAWED + currently UNUSED: builds `source` below but never assigns it to VideoSource; unreachable because TryStartRightIfNotRunning no-ops on a SingleCameraSource.
         if (_pipeline.VideoSource is SingleCameraSource singleCameraSource)
         {
             if (_currentRightAddress == cameraAddress && _currentRightAddress != null)
