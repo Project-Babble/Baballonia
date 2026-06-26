@@ -41,6 +41,23 @@ DOCKER
 fi
 
 mkdir -p "$HOME/.nuget/packages"
+
+# The BabbleTrainer calibration binary is a gitignored symlink into a local
+# PyInstaller build that lives OUTSIDE the repo. The csproj copies it during
+# publish, but the container only mounts $PWD, so the symlink dangles and the
+# copy fails (MSB3021). Bind-mount the link target at its own absolute path so
+# it resolves inside the container. No-op when the symlink/target is absent.
+TRAINER_LINK="src/Baballonia.Desktop/Calibration/Linux/Trainer/BabbleTrainer"
+TRAINER_MOUNT=()
+if [ -L "$TRAINER_LINK" ]; then
+  TRAINER_TGT="$(readlink "$TRAINER_LINK")"
+  if [ -e "$TRAINER_TGT" ]; then
+    TRAINER_MOUNT=(-v "$TRAINER_TGT":"$TRAINER_TGT":ro)
+  else
+    echo ">> warning: $TRAINER_LINK -> $TRAINER_TGT is missing; publish will fail on the copy." >&2
+  fi
+fi
+
 echo ">> publishing $ARCH in the steamrt4 SDK ..."
 # --user keeps build outputs owned by you (not root); the host NuGet cache is
 # reused so restore is fast.
@@ -49,6 +66,7 @@ docker run --rm \
   -e HOME=/tmp -e NUGET_PACKAGES=/nuget \
   -v "$HOME/.nuget/packages":/nuget \
   -v "$PWD":/src -w /src \
+  "${TRAINER_MOUNT[@]}" \
   "$LOCAL_IMG" \
   dotnet publish src/Baballonia.Desktop/Baballonia.Desktop.csproj \
     -r "$ARCH" -c Release --self-contained -f net10.0
