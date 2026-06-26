@@ -7,6 +7,7 @@ using Baballonia.Models;
 using Baballonia.Services;
 using Baballonia.Services.Inference;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Logging;
 using OscCore;
@@ -113,7 +114,7 @@ public partial class AppSettingsViewModel : ViewModelBase
     private readonly IIdentityService _identityService;
     private readonly ILogger<AppSettingsViewModel> _logger;
     private readonly ILocalSettingsService _localSettingsService;
-    private readonly OpenVRService _openVrService;
+    private readonly OpenVRService? _openVrService;
 
     public AppSettingsViewModel(
         FacePipelineManager facePipelineManager,
@@ -132,6 +133,9 @@ public partial class AppSettingsViewModel : ViewModelBase
         _eyePipelineManager = eyePipelineManager;
         _identityService = identityService;
         _logger = logger;
+        // OpenVRService is only registered on supported desktop OSes; resolve it optionally
+        // so the SteamVR-autostart toggle works there and no-ops elsewhere (see null guard below).
+        _openVrService = Ioc.Default.GetService<OpenVRService>();
         _localSettingsService.Load(this);
 
         LogLevel = _localSettingsService.ReadSetting("AppSettings_LogLevel", "Debug");
@@ -237,7 +241,7 @@ public partial class AppSettingsViewModel : ViewModelBase
         }
         catch (Exception e)
         {
-            _logger.LogError("DLL not found!", e);
+            _logger.LogError(e, "DLL not found!");
         }
     }
 

@@ -71,11 +71,9 @@
         <PackageReference Include="OscCore" Version="1.0.5" />
         <PackageReference Include="Project-Babble.Baballonia.OverlaySDK" Version="1.0.5-alpha" />
         <PackageReference Include="SkiaSharp" Version="3.119.2" />
-        <PackageReference Include="System.Net.Http" Version="4.3.4" />
         <PackageReference Include="VRChat.OSCQuery" Version="0.0.7" />
         <PackageReference Include="System.IO.Ports" Version="10.0.4" />
         <PackageReference Include="System.Management" Version="10.0.4" />
-        <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
         <PackageReference Include="Xaml.Behaviors.Interactions.Draggable" Version="11.3.9.5" />
     </ItemGroup>
 
