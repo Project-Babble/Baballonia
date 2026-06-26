@@ -99,7 +99,19 @@ public class LocalSettingsService : ILocalSettingsService
 
     public void ForceSave()
     {
-        _debouncedSave.Force();
+        // Synchronous by design: this runs during shutdown, just before the process is force-terminated
+        // (the camera teardown can wedge a native thread, so we don't get a clean exit to flush on).
+        // The debounced async writer wouldn't finish in time.
+        _debouncedSave.Cancel();
+        try
+        {
+            var json = JsonSerializer.Serialize(_settings, _jsonSerializerOptions);
+            File.WriteAllText(_localSettingsFile, json);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("Could not save settings file: {}", e);
+        }
     }
 
     public void SaveSetting<T>(string key, T value, bool forceLocal = false)
