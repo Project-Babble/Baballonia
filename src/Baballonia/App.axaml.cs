@@ -237,8 +237,25 @@ public partial class App : Application
                 desktop.MainWindow.Loaded += (_, _) => { desktop.MainWindow.ShowOnboardingIfNeeded(); };
                 desktop.Exit += (s, e) =>
                 {
-                    OnShutdown(s, e);
-                    _host.Dispose();
+                    OnShutdown(s, e); // flushes settings synchronously (ForceSave) + teardown
+
+                    // On Windows the OpenCV/DirectShow camera capture wedges its native Read()/Release()
+                    // during teardown, leaving a thread the OS can't reap; a graceful _host.Dispose()
+                    // then waits on it forever, so the process lingers in the background after the window
+                    // closes (you'd have to End Task it). Try a bounded graceful dispose, then
+                    // force-terminate: TerminateProcess reaps the wedged camera thread that a cooperative
+                    // exit (ExitProcess) cannot. Linux's V4L2/GStreamer capture unblocks cleanly, so it
+                    // keeps the normal graceful path.
+                    if (OperatingSystem.IsWindows())
+                    {
+                        Task.Run(() => { try { _host.Dispose(); } catch { /* ignore */ } })
+                            .Wait(TimeSpan.FromSeconds(2));
+                        System.Diagnostics.Process.GetCurrentProcess().Kill();
+                    }
+                    else
+                    {
+                        _host.Dispose();
+                    }
                 };
                 desktop.ShutdownRequested += OnShutdown;
                 break;

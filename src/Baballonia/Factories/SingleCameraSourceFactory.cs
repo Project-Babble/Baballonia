@@ -73,8 +73,17 @@ public class SingleCameraSourceFactory
     // dependency-free "V4L2 Camera" one instead of failing outright.
     private SingleCameraSource? StartWithFallback(string address, string camera, string providerName)
     {
+        // The Vive Facial Tracker backend fires a native USB tracker-enable (enableViveFacialTracker)
+        // *before* it ever opens the camera. On a name that isn't a real, present tracker — e.g. a
+        // stale saved camera that has since been unplugged — that native call wedges a thread Windows
+        // can't reap, so the process lingers as a ghost after the window closes. Only offer VFT for a
+        // device the current enumeration actually knows about. Other backends open lazily and fail
+        // gracefully, so they don't need this guard. (Linux's VFT only matches /dev/video* paths, which
+        // don't exist when unplugged, so present setups there are unaffected.)
+        var deviceIsPresent = IsEnumeratedDevice(address) || IsEnumeratedDevice(camera);
         var candidates = _platformConnector.GetCaptureFactories()
             .Where(factory => factory.CanConnect(camera))
+            .Where(factory => deviceIsPresent || !IsViveFacialTracker(factory))
             .ToList();
 
         if (!string.IsNullOrEmpty(providerName))
@@ -142,4 +151,17 @@ public class SingleCameraSourceFactory
         _logger.LogError("No data was received from {} on any backend, closing... Maybe the camera is opened somewhere else?", address);
         return null;
     }
+
+    // A device is "present" when the current enumeration knows it — either as a friendly-name key or
+    // as a resolved value (a camera index like "0", a "/dev/videoN" path, or a COM port). Used to keep
+    // the wedge-prone VFT backend off stale/absent device names.
+    private bool IsEnumeratedDevice(string address)
+    {
+        var cameras = _deviceEnumerator.Cameras;
+        return cameras != null && (cameras.ContainsKey(address) || cameras.Values.Contains(address));
+    }
+
+    // Matches VFTCaptureFactory.GetProviderName().
+    private static bool IsViveFacialTracker(ICaptureFactory factory) =>
+        string.Equals(factory.GetProviderName(), "Vive Facial Tracker", StringComparison.Ordinal);
 }
