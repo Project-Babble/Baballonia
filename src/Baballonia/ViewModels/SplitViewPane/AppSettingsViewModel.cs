@@ -115,6 +115,9 @@ public partial class AppSettingsViewModel : ViewModelBase
     private readonly ILogger<AppSettingsViewModel> _logger;
     private readonly ILocalSettingsService _localSettingsService;
     private readonly OpenVRService? _openVrService;
+    // Set once the constructor finishes loading persisted settings, so OnSteamvrAutoStartChanged
+    // can tell a user toggle apart from the initial load (which must not touch OpenVR).
+    private bool _settingsLoaded;
 
     public AppSettingsViewModel(
         FacePipelineManager facePipelineManager,
@@ -174,6 +177,8 @@ public partial class AppSettingsViewModel : ViewModelBase
                 _eyePipelineManager.LoadSplitEyeSwap();
             }
         };
+
+        _settingsLoaded = true;
     }
 
     // Tell the navigation sidebar to add/remove the Debug page entry as soon as the toggle flips,
@@ -230,18 +235,20 @@ public partial class AppSettingsViewModel : ViewModelBase
 
     partial void OnSteamvrAutoStartChanged(bool value)
     {
-        var readValue = _localSettingsService.ReadSetting("AppSettings_SteamVRAutoStart", value);
-        if (readValue == value || _openVrService == null)
+        // Ignore the initial load (the value came from disk); only apply real user toggles.
+        // OpenVRService is null on non-desktop platforms where SteamVR isn't available.
+        if (!_settingsLoaded || _openVrService == null)
             return;
 
         try
         {
+            // Idempotent at the OpenVR layer; applies both enabling and disabling autostart.
             _openVrService.SteamvrAutoStart = value;
             _localSettingsService.SaveSetting("AppSettings_SteamVRAutoStart", value);
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "DLL not found!");
+            _logger.LogError(e, "Failed to update SteamVR AutoStart");
         }
     }
 
