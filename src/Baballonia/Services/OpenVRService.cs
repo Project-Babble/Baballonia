@@ -62,7 +62,7 @@ public class OpenVRService(ILogger<OpenVRService> logger)
         }
         catch (Exception e)
         {
-            logger.LogWarning("DLL not found! Your current OS might not be supported for SteamVR AutoStart", e);
+            logger.LogWarning(e, "DLL not found! Your current OS might not be supported for SteamVR AutoStart");
         }
     }
 

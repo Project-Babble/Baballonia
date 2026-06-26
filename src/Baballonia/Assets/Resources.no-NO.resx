@@ -762,9 +762,6 @@
   <data name="Settings_DFR_Header" xml:space="preserve">
     <value>Bruk DFR</value>
   </data>
-  <data name="Settings_DFR_Description" xml:space="preserve">
-    <value>Aktiver Pimax4All dynamisk foveated rendering for valgte titler</value>
-  </data>
   <data name="Firmware_Mode_Both" xml:space="preserve">
     <value>Begge</value>
   </data>
