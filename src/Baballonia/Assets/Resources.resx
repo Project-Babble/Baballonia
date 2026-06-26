@@ -853,7 +853,7 @@ This is usually easy to fix! Just install the “Tracking Loss Fix” firmware b
   <data name="Common_Note" xml:space="preserve">
     <value>Note</value>
   </data>
-  <data name="Home_Cameras_Linux_Workarounds" xml:space="preserve">
+  <data name="Home_Cameras_Linux_Workarounds_SLR4" xml:space="preserve">
     <value>Workarounds:
 • Install from Steam and use Steam Linux Runtime 4.0. Do NOT force a tool if it's not listed.
 • Use tarball or build from source to use system local libraries. AUR not recommended.
