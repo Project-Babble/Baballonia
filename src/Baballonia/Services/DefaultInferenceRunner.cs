@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System;
 namespace Baballonia.Services;
 
 public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRunner

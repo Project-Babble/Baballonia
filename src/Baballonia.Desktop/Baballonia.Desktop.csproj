@@ -24,8 +24,6 @@
         <PackageReference Include="Avalonia.Desktop" Version="11.3.12" />
         <!-- Override Avalonia's transitive Tmds.DBus.Protocol 0.21.2 (GHSA-xrw6-gwf8-vvr9). 0.21.3 is the backported fix. -->
         <PackageReference Include="Tmds.DBus.Protocol" Version="0.21.3" />
-        <PackageReference Include="System.Net.Http" Version="4.3.4" />
-        <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
         <PackageReference Include="Velopack" Version="0.0.1298" />
 
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
