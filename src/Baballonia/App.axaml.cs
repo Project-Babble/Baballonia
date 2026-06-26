@@ -31,6 +31,7 @@ public partial class App : Application
 {
     private IHost? _host;
     private bool IsTeardDown = false;
+    private volatile bool _shuttingDown;
     private static Action<IServiceCollection> ConfigurePlatformServices { get; set; }
     private static Action<IServiceCollection>? _platformSpecifficServices;
 
@@ -75,6 +76,9 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+        TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
+
         var locator = new ViewLocator();
         DataTemplates.Add(locator);
 
@@ -270,6 +274,7 @@ public partial class App : Application
     private void OnShutdown(object? sender, EventArgs e)
     {
         if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime) return;
+        _shuttingDown = true;
         if (IsTeardDown) return;
 
         var mainService = Ioc.Default.GetService<IMainService>();
@@ -278,5 +283,38 @@ public partial class App : Application
 
         mainService?.Teardown();
         IsTeardDown = true;
+    }
+
+    private void OnUnhandledException(object? sender, UnhandledExceptionEventArgs e)
+    {
+        var ex = e.ExceptionObject as Exception;
+
+        // Benign Avalonia/Linux DBus-vs-dispatcher teardown race at exit; exit cleanly, don't abort.
+        if ((_shuttingDown || IsTeardDown) && IsBenignCancellation(ex))
+        {
+            Environment.Exit(0);
+            return;
+        }
+
+        SafeLogError(ex, "Unhandled exception");
+    }
+
+    private void OnUnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
+    {
+        SafeLogError(e.Exception, "Unobserved task exception");
+        e.SetObserved();
+    }
+
+    private static bool IsBenignCancellation(Exception? ex) => ex switch
+    {
+        OperationCanceledException => true,
+        AggregateException agg => agg.Flatten().InnerExceptions.All(i => i is OperationCanceledException),
+        _ => false
+    };
+
+    private static void SafeLogError(Exception? ex, string message)
+    {
+        try { Ioc.Default.GetService<ILogger<App>>()?.LogError(ex, message); }
+        catch { Console.Error.WriteLine($"{message}: {ex}"); }
     }
 }
