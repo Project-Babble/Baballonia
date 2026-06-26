@@ -9,53 +9,14 @@ public class OpenVRService(ILogger<OpenVRService> logger)
 {
     //app key needed for vrmanifest
     private const string ApplicationKey = "projectbabble.Baballonia";
-    private bool _isAutoStartReady;
 
-    //AutoStart function
-    public bool AutoStart()
-    {
-        // Checking if SteamVR is open in the background
-        EVRInitError error = EVRInitError.None;
-        OpenVR.Init(ref error, EVRApplicationType.VRApplication_Background);
+    // Registers the .vrmanifest so SteamVR knows about the app. Safe to call repeatedly;
+    // returns false (never throws) when SteamVR isn't running.
+    public bool AutoStart() => WithSession(RegisterManifest);
 
-        if (error != EVRInitError.None)
-        {
-            logger.LogWarning("Failed to Enable SteamVR AutoStart: {0}", error);
-            _isAutoStartReady = false;
-            return _isAutoStartReady;
-        }
-
-        // Trying to check for and find the manifest.vrmanifest file using the exe's directory
-        string? fullManifestPath = Path.GetDirectoryName(AppContext.BaseDirectory);
-        if (fullManifestPath == null)
-        {
-            throw new Exception("Can not find the executable Path");
-        }
-        var VRManifestPath = Path.GetFullPath(Path.Combine(fullManifestPath, "manifest.vrmanifest"));
-
-        // Checking if the manifest is registered and if anything went wrong
-        var VRManifestRegResult = OpenVR.Applications.AddApplicationManifest(VRManifestPath, false);
-        if(VRManifestRegResult != EVRApplicationError.None)
-        {
-            logger.LogWarning("Failed to register vrmanifest: {0}", VRManifestRegResult);
-            _isAutoStartReady = false;
-            return _isAutoStartReady;
-        }
-        // Checking if the application in the vrmanifest is valid
-        var ApplicationCheck = OpenVR.Applications.IsApplicationInstalled(ApplicationKey);
-        logger.LogDebug("checking for application {0}", ApplicationCheck);
-
-        logger.LogInformation("Successfully Added to SteamVR startup apps");
-
-        _isAutoStartReady = true;
-        return _isAutoStartReady;
-    }
-
-    // Checking to see if autostart is ready
+    // Ensures the manifest is registered, swallowing the unsupported-OS case.
     public void CheckIfReadyIfIsnt()
     {
-        if (_isAutoStartReady) return;
-
         try
         {
             AutoStart();
@@ -69,20 +30,78 @@ public class OpenVRService(ILogger<OpenVRService> logger)
     //bool for checking, getting, and setting the application key for auto launch
     public bool SteamvrAutoStart
     {
-        get => _isAutoStartReady && OpenVR.Applications.GetApplicationAutoLaunch(ApplicationKey);
+        get => WithSession(apps => apps.GetApplicationAutoLaunch(ApplicationKey));
         set
         {
-            if (!_isAutoStartReady && !AutoStart())
+            var enabled = value;
+            WithSession(apps =>
             {
-                logger.LogError("Failed to change SteamVR AutoStart setting. OpenVR could not be Configured.");
-                return;
+                if (!RegisterManifest(apps))
+                    return false;
+
+                var result = apps.SetApplicationAutoLaunch(ApplicationKey, enabled);
+                if (result != EVRApplicationError.None)
+                {
+                    logger.LogError("Failed to set SteamVR AutoStart: {0}", result);
+                    return false;
+                }
+
+                return true;
+            });
+        }
+    }
+
+    // Opens a short-lived background OpenVR session, runs the action, then always shuts down.
+    // Re-initialising per call means SteamVR being closed between calls surfaces as an init
+    // error rather than crashing or hanging the process on a now-invalid native interface
+    // (OpenVR.Shutdown invalidates all cached interface pointers, so a stale session that
+    // outlived SteamVR must never be reused).
+    private bool WithSession(Func<CVRApplications, bool> action)
+    {
+        EVRInitError error = EVRInitError.None;
+        OpenVR.Init(ref error, EVRApplicationType.VRApplication_Background);
+        if (error != EVRInitError.None)
+        {
+            logger.LogWarning("Unable to toggle autostart; SteamVR issue (Is it even running?): {0}", error);
+            return false;
+        }
+
+        try
+        {
+            var applications = OpenVR.Applications;
+            if (applications == null)
+            {
+                logger.LogWarning("SteamVR applications interface is unavailable.");
+                return false;
             }
 
-            var SetAutoStartResult = OpenVR.Applications.SetApplicationAutoLaunch(ApplicationKey, value);
-            if (SetAutoStartResult != EVRApplicationError.None)
-            {
-                logger.LogError("Failed to set SteamVR Auto Start: {0}", SetAutoStartResult);
-            }
+            return action(applications);
         }
+        finally
+        {
+            OpenVR.Shutdown();
+        }
+    }
+
+    private bool RegisterManifest(CVRApplications applications)
+    {
+        // Locate the manifest.vrmanifest next to the executable.
+        string? fullManifestPath = Path.GetDirectoryName(AppContext.BaseDirectory);
+        if (fullManifestPath == null)
+        {
+            logger.LogWarning("Cannot find the executable path to locate manifest.vrmanifest");
+            return false;
+        }
+
+        var vrManifestPath = Path.GetFullPath(Path.Combine(fullManifestPath, "manifest.vrmanifest"));
+        var registerResult = applications.AddApplicationManifest(vrManifestPath, false);
+        if (registerResult != EVRApplicationError.None)
+        {
+            logger.LogWarning("Failed to register vrmanifest: {0}", registerResult);
+            return false;
+        }
+
+        logger.LogDebug("Application installed check: {0}", applications.IsApplicationInstalled(ApplicationKey));
+        return true;
     }
 }
