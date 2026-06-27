@@ -88,6 +88,15 @@ public class SingleCameraSourceFactory
 
         if (!string.IsNullOrEmpty(providerName))
             candidates = candidates.OrderBy(factory => factory.GetProviderName() == providerName ? 0 : 1).ToList();
+        else if (_deviceEnumerator.IsViveFacialTracker(camera) || _deviceEnumerator.IsViveFacialTracker(address))
+        {
+            // Positively-identified Vive Facial Tracker (USB VID 0x0BB4/PID 0x0321 or "HTC Boot"):
+            // the generic "Normal Camera"/"V4L2 Camera" backends can also open it but skip the USB
+            // activation and YUYV decode, producing a recognizable-but-broken image. Force the VFT
+            // backend first unless the user explicitly picked a different one.
+            candidates = candidates.OrderBy(factory => IsViveFacialTracker(factory) ? 0 : 1).ToList();
+            _logger.LogInformation("{} is a Vive Facial Tracker; preferring the VFT capture backend", address);
+        }
 
         if (candidates.Count == 0)
         {
