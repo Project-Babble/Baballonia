@@ -40,15 +40,16 @@ public sealed class OpenCvCapture(string source, ILogger<OpenCvCapture> logger) 
 
     public override async Task<bool> StartCapture()
     {
+        // A bare "/dev/videoN" path or numeric index is a local device: open it by index, not via the
+        // string ctor. The mini runtime has no V4L2 backend, so CAP_ANY falls back to GStreamer's file
+        // source and tries to read the char device as a media file ("unable to start pipeline"). Going
+        // through FromCamera makes GStreamer build a proper v4l2src pipeline instead.
+        var isLocalDevice = int.TryParse(Source, out var index) || TryGetV4l2Index(Source, out index);
         using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(15)))
         {
             try
             {
-                // A bare "/dev/videoN" path must open by index, not via the string ctor: the mini
-                // runtime has no V4L2 backend, so CAP_ANY falls back to GStreamer's file source and
-                // tries to read the char device as a media file ("unable to start pipeline"). Going
-                // through FromCamera makes GStreamer build a proper v4l2src pipeline instead.
-                if (int.TryParse(Source, out var index) || TryGetV4l2Index(Source, out index))
+                if (isLocalDevice)
                     _videoCapture = await Task.Run(() => VideoCapture.FromCamera(index, PreferredBackend), cts.Token);
                 else
                     _videoCapture = await Task.Run(() => new VideoCapture(Source), cts.Token);
@@ -66,12 +67,17 @@ public sealed class OpenCvCapture(string source, ILogger<OpenCvCapture> logger) 
         _videoCapture.ConvertRgb = true;
         IsReady = _videoCapture.IsOpened();
 
-        if (!IsReady)
+        // Fail-fast only for local /dev/video* or index cameras: this build's OpenCV ships only the
+        // GStreamer backend, which needs the (unbundled) v4l2src plugin to read them, so a false
+        // IsOpened() there is terminal — bail with a pointer to the dependency-free "V4L2 Camera"
+        // backend instead of leaving the caller to wait out its frame-arrival timeout.
+        //
+        // Network/URL sources (http MJPEG streams, appsink pipelines) are different: VideoCapture
+        // .IsOpened() can read false right after construction yet still deliver frames once the read
+        // loop pumps the stream — which is how IP/streaming cameras opened before this fail-fast was
+        // added. For those, start the loop and let the caller's frame-arrival timeout be the real gate.
+        if (!IsReady && isLocalDevice)
         {
-            // This build's OpenCV ships only the GStreamer capture backend, which needs the v4l2src
-            // plugin (gst-plugins-good) to read /dev/video* — and that isn't bundled. Fail fast with
-            // a pointer to the dependency-free "V4L2 Camera" backend instead of leaving the caller to
-            // wait out its frame-arrival timeout.
             if (OperatingSystem.IsLinux())
                 logger.LogError(
                     "Could not open '{Source}' via OpenCV's GStreamer backend. Install the v4l2src GStreamer " +
@@ -87,7 +93,7 @@ public sealed class OpenCvCapture(string source, ILogger<OpenCvCapture> logger) 
         CancellationToken token = _updateTaskCts.Token;
         _updateTask = Task.Run(() => VideoCapture_UpdateLoop(_videoCapture, token));
 
-        return IsReady;
+        return true;
     }
 
     // Parses the index out of a Linux "/dev/videoN" path so it can be opened via FromCamera.

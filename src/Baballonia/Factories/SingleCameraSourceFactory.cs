@@ -64,7 +64,30 @@ public class SingleCameraSourceFactory
         if (mappedAddress != null)
             camera = mappedAddress;
 
+        // A scheme-less host like "openiristracker.local" or "192.168.0.42:81/mjpeg" matches no
+        // backend as typed (each one wants a local device or a fully-schemed URL). When the resolved
+        // address looks like a bare network endpoint, assume an http MJPEG stream so the IP/OpenCV
+        // backends can claim it.
+        camera = NormalizeNetworkAddress(camera);
+
         return Task.Run<SingleCameraSource?>(() => StartWithFallback(address, camera, providerName));
+    }
+
+    // Turns a bare network endpoint into an http URL the capture backends can open. Leaves untouched:
+    // already-schemed URLs (http/https/rtsp/rtmp/... — handled by OpenCV), unix device paths,
+    // friendly names (which contain whitespace) and GStreamer pipeline strings, and camera indices.
+    // Anything else that looks like a host — has a '.' (domain/IP) or ':' (port) — is assumed to be an
+    // http MJPEG stream, by far the most common scheme-less case (e.g. OpenIris/wireless trackers).
+    private static string NormalizeNetworkAddress(string address)
+    {
+        if (string.IsNullOrWhiteSpace(address)) return address;
+        if (address.Contains("://")) return address;            // already has a scheme
+        if (address.StartsWith('/')) return address;            // unix device path
+        if (address.Any(char.IsWhiteSpace)) return address;     // friendly name / pipeline string
+        if (int.TryParse(address, out _)) return address;       // camera index
+        if (address.Contains('.') || address.Contains(':'))
+            return "http://" + address;
+        return address;
     }
 
     // Tries each compatible backend in preference order until one delivers a frame. A specific
