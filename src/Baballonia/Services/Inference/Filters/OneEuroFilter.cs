@@ -53,12 +53,9 @@ public class OneEuroFilter : IFilter
 
         if (elapsedTime <= 0.0f)
         {
-            for (int i = 0; i < length; i++)
-            {
-                float val = xSpan[i];
-                outSpan[i] = val;
-                _xPrev[i] = val;
-            }
+            ReadOnlySpan<float> src = xSpan.Slice(0, length);
+            src.CopyTo(outSpan);
+            src.CopyTo(_xPrev);
             return _output;
         }
 
