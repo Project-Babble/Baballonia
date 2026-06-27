@@ -5,8 +5,6 @@ namespace Baballonia.Services.Inference.Filters;
 
 public class OneEuroFilter : IFilter
 {
-    private const float TwoPi = 2.0f * MathF.PI;
-
     private readonly float _initialMinCutoff;
     private readonly float _initialBeta;
     private bool _isInitialized;
@@ -70,14 +68,14 @@ public class OneEuroFilter : IFilter
 
             _dx[i] = (val - _xPrev[i]) / elapsedTime;
 
-            float r_d = TwoPi * _dCutoff[i] * elapsedTime;
+            float r_d = MathF.Tau * _dCutoff[i] * elapsedTime;
             float a_d = r_d / (r_d + 1.0f);
 
             _dxHat[i] = a_d * _dx[i] + (1.0f - a_d) * _dxPrev[i];
 
             _cutoff[i] = _minCutoff[i] + _beta[i] * MathF.Abs(_dxHat[i]);
 
-            float r = TwoPi * _cutoff[i] * elapsedTime;
+            float r = MathF.Tau * _cutoff[i] * elapsedTime;
             float a = r / (r + 1.0f);
 
             _xHat[i] = a * val + (1.0f - a) * _xPrev[i];
