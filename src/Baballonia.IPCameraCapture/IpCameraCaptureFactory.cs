@@ -12,7 +12,11 @@ public class IpCameraCaptureFactory(ILoggerFactory loggerFactory) : ICaptureFact
 
     public bool CanConnect(string address)
     {
-        return Uri.TryCreate(address, UriKind.RelativeOrAbsolute, out _) && address.StartsWith("http://");
+        // MJPEG-over-HTTP(S). The parser streams via HttpClient, which handles TLS, so https works
+        // too. Scheme-only match (not rtsp/rtmp/etc.) — those carry codecs this raw JPEG parser
+        // can't decode and belong to the OpenCV backend instead.
+        return Uri.TryCreate(address, UriKind.Absolute, out var uri) &&
+               (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
     }
 
     public string GetProviderName() => "Wireless/IP Camera";
