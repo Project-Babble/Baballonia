@@ -133,6 +133,9 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
                     break;
                 }
             }
+
+            if (_outputExpressionNames is null)
+                throw new InvalidOperationException($"Model output size {outputSize} matches no known expression layout");
         }
 
         _logger.LogDebug("Initialized model that predicts {Expressions}", string.Join(", ", _outputExpressionNames));
