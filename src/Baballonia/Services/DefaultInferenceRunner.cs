@@ -135,7 +135,7 @@ public class DefaultInferenceRunner(ILoggerFactory loggerFactory) : IInferenceRu
             }
         }
 
-        _logger.LogInformation("Initialized model that predicts {Expressions}", string.Join(", ", _outputExpressionNames));
+        _logger.LogDebug("Initialized model that predicts {Expressions}", string.Join(", ", _outputExpressionNames));
 
         _outputs = new OrderedFloatMap(_outputExpressionNames);
     }
