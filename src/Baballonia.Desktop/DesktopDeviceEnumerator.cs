@@ -21,6 +21,28 @@ public sealed class DesktopDeviceEnumerator(ILogger<DesktopDeviceEnumerator> log
     public ILogger Logger { get; set; } = logger;
     public Dictionary<string, string> Cameras { get; set; } = null!;
 
+    // Friendly-names and resolved addresses (index / device path) that belong to a Vive Facial
+    // Tracker, filled during UpdateCameras. Lets the capture selector force the VFT backend instead
+    // of letting a generic backend grab and mis-decode the tracker.
+    private readonly HashSet<string> _viveFacialTrackerAddresses = new(StringComparer.OrdinalIgnoreCase);
+
+    public bool IsViveFacialTracker(string address) =>
+        !string.IsNullOrEmpty(address) && _viveFacialTrackerAddresses.Contains(address);
+
+    // Loose Vive Facial Tracker identification: HTC (USB VID 0x0BB4) + PID 0x0321, or the device's
+    // pre-activation "HTC Boot" enumeration name. hardwareId is the OS device/instance id
+    // (Windows DevicePath) or a "VID_xxxx&PID_xxxx" string built from udev (Linux).
+    private static bool IsViveFacialTrackerDevice(string? name, string? hardwareId)
+    {
+        if (!string.IsNullOrEmpty(hardwareId))
+        {
+            var h = hardwareId.ToUpperInvariant();
+            if (h.Contains("VID_0BB4") && h.Contains("PID_0321")) return true;
+        }
+        return !string.IsNullOrEmpty(name) &&
+               name.Contains("HTC Boot", StringComparison.OrdinalIgnoreCase);
+    }
+
     static DesktopDeviceEnumerator()
     {
         // The udev DllImports below name "libudev.so" — the dev-package symlink, which is missing in
@@ -48,6 +70,7 @@ public sealed class DesktopDeviceEnumerator(ILogger<DesktopDeviceEnumerator> log
     {
         Logger.LogDebug("Starting camera device enumeration...");
         var cameraDict = new Dictionary<string, string>();
+        _viveFacialTrackerAddresses.Clear();
 
         try
         {
@@ -131,7 +154,13 @@ public sealed class DesktopDeviceEnumerator(ILogger<DesktopDeviceEnumerator> log
         {
             var dev = videoInputDevices[index];
             logger.LogDebug("Found device: {}, ClassId: {}, Path: {}", dev.Name, dev.ClassID, dev.DevicePath);
-            EnsureUniqueKey(cameraDict, dev.Name, index.ToString());
+            var key = EnsureUniqueKey(cameraDict, dev.Name, index.ToString());
+            if (IsViveFacialTrackerDevice(dev.Name, dev.DevicePath))
+            {
+                _viveFacialTrackerAddresses.Add(key);
+                _viveFacialTrackerAddresses.Add(index.ToString());
+                logger.LogInformation("Identified Vive Facial Tracker: '{}' (index {}, path {})", dev.Name, index, dev.DevicePath);
+            }
         }
         #endif
     }
@@ -202,6 +231,8 @@ public sealed class DesktopDeviceEnumerator(ILogger<DesktopDeviceEnumerator> log
                         // Try to get a friendly name from udev properties
                         var modelName = udev_device_get_property_value(udevDevice, "ID_MODEL");
                         var vendorName = udev_device_get_property_value(udevDevice, "ID_VENDOR");
+                        var vendorIdPtr = udev_device_get_property_value(udevDevice, "ID_VENDOR_ID");
+                        var modelIdPtr = udev_device_get_property_value(udevDevice, "ID_MODEL_ID");
 
                         var friendlyName = Path.GetFileName(devicePath); // Default to filename
 
@@ -225,7 +256,17 @@ public sealed class DesktopDeviceEnumerator(ILogger<DesktopDeviceEnumerator> log
                             }
                         }
 
-                        EnsureUniqueKey(cameraDict, friendlyName, devicePath);
+                        var vftVid = vendorIdPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(vendorIdPtr) : null;
+                        var vftPid = modelIdPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(modelIdPtr) : null;
+                        var hardwareId = vftVid != null && vftPid != null ? $"VID_{vftVid}&PID_{vftPid}" : null;
+
+                        var key = EnsureUniqueKey(cameraDict, friendlyName, devicePath);
+                        if (IsViveFacialTrackerDevice(friendlyName, hardwareId))
+                        {
+                            _viveFacialTrackerAddresses.Add(key);
+                            _viveFacialTrackerAddresses.Add(devicePath);
+                            Logger.LogInformation("Identified Vive Facial Tracker: '{}' ({})", friendlyName, devicePath);
+                        }
                     }
                 }
             }
@@ -278,7 +319,7 @@ public sealed class DesktopDeviceEnumerator(ILogger<DesktopDeviceEnumerator> log
         }
     }
 
-    private void EnsureUniqueKey(Dictionary<string, string> dict, string key, string value)
+    private string EnsureUniqueKey(Dictionary<string, string> dict, string key, string value)
     {
         var uniqueKey = key;
         var counter = 1;
@@ -291,5 +332,6 @@ public sealed class DesktopDeviceEnumerator(ILogger<DesktopDeviceEnumerator> log
         }
 
         dict.Add(uniqueKey, value);
+        return uniqueKey;
     }
 }
