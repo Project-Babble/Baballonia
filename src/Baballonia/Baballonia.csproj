@@ -9,6 +9,9 @@
 	<Company>Paradigm Reality Enhancement Labs</Company>
 	<AssemblyVersion>1.1.1.1</AssemblyVersion>
 	<FileVersion>1.1.1.1</FileVersion>
+	<!-- Informational/titlebar version; CI overrides via -p:Version (workflow version-number input). -->
+	<Version>1.1.1.1</Version>
+	<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     </PropertyGroup>
 
     <ItemGroup>

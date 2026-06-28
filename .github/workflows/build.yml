@@ -83,7 +83,9 @@ jobs:
       - name: Run publish
         run: |
           cd src/Baballonia.Desktop
-          dotnet publish -r ${{ matrix.arch }} -c Release --self-contained -f net10.0
+          version_arg=()
+          [ -n "${{ github.event.inputs.version-number }}" ] && version_arg=(-p:Version="${{ github.event.inputs.version-number }}")
+          dotnet publish -r ${{ matrix.arch }} -c Release --self-contained -f net10.0 "${version_arg[@]}"
           cd "bin/Release/net10.0/${{ matrix.arch }}/publish"
           tar -cJf ./../../../../${{ matrix.result }} *
 
@@ -119,7 +121,9 @@ jobs:
       - name: Build project
         run: |
           cd src/Baballonia.Desktop
-          dotnet publish -r win-x64 -c Release --self-contained -f net10.0
+          version_arg=()
+          [ -n "${{ github.event.inputs.version-number }}" ] && version_arg=(-p:Version="${{ github.event.inputs.version-number }}")
+          dotnet publish -r win-x64 -c Release --self-contained -f net10.0 "${version_arg[@]}"
           cd "bin/Release/net10.0/win-x64/publish"
           tar -cJf ./../../../../Baballonia.win.tar.xz *
 
