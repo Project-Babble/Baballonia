@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Logging;
 using OpenCvSharp;
+using System.Net;
 using System.Net.Http.Headers;
+using System.Net.Sockets;
 using System.Text;
 using Capture = Baballonia.SDK.Capture;
 
@@ -14,6 +16,7 @@ namespace Baballonia.IPCameraCapture;
 public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger) : Capture(url, logger)
 {
     private readonly CancellationTokenSource _cancellationTokenSource = new();
+    private HttpClient? _httpClient;
 
     // JPEG delimiters
     private const byte PicMarker = 0xFF;
@@ -22,9 +25,40 @@ public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger)
 
     public override Task<bool> StartCapture()
     {
-        Task.Run(() => StartStreaming(Source, null, null, _cancellationTokenSource.Token)); // Size of Babble frame
+        _httpClient = CreateHttpClient();
+        _ = Task.Run(() => StartStreaming(_httpClient, Source, null, null, _cancellationTokenSource.Token));
         IsReady = true;
         return Task.FromResult(true);
+    }
+
+    // Prefer IPv4 (A-record) connects with a short timeout: a ".local" name resolving to an IPv6
+    // link-local can stall the open past the caller's frame window, which wedges a 1-connection camera.
+    private static HttpClient CreateHttpClient()
+    {
+        var handler = new SocketsHttpHandler
+        {
+            ConnectTimeout = TimeSpan.FromSeconds(4),
+            ConnectCallback = async (context, ct) =>
+            {
+                var host = context.DnsEndPoint.Host;
+                var addresses = await Dns.GetHostAddressesAsync(host, AddressFamily.InterNetwork, ct).ConfigureAwait(false);
+                if (addresses.Length == 0)
+                    addresses = await Dns.GetHostAddressesAsync(host, ct).ConfigureAwait(false);
+
+                var socket = new Socket(SocketType.Stream, ProtocolType.Tcp) { NoDelay = true };
+                try
+                {
+                    await socket.ConnectAsync(addresses, context.DnsEndPoint.Port, ct).ConfigureAwait(false);
+                    return new NetworkStream(socket, ownsSocket: true);
+                }
+                catch
+                {
+                    socket.Dispose();
+                    throw;
+                }
+            }
+        };
+        return new HttpClient(handler);
     }
 
     /// <summary>
@@ -38,33 +72,68 @@ public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger)
     /// <param name="frameBufferSize">Maximum frame byte size</param>
     /// <returns></returns>
     ///
-    private async Task StartStreaming(string url, string? login = null, string? password = null, CancellationToken? token = null,
+    private async Task StartStreaming(HttpClient cli, string url, string? login = null, string? password = null, CancellationToken? token = null,
         int chunkMaxSize = 1024, int frameBufferSize = 1024 * 1024)
     {
         var tok = token ?? CancellationToken.None;
 
-        using var cli = new HttpClient();
-
-        if (!string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(password))
-            cli.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
-                Convert.ToBase64String(Encoding.ASCII.GetBytes($"{login}:{password}")));
-
-        using var stream = await cli.GetStreamAsync(url).ConfigureAwait(false);
-
-        var streamBuffer = new byte[chunkMaxSize];      // Stream chunk read
-        var frameBuffer = new byte[frameBufferSize];    // Frame buffer
-
-        var frameIdx = 0;       // Last written byte location in the frame buffer
-        var inPicture = false;  // Are we currently parsing a picture ?
-        byte current = 0x00;    // The last byte read
-        byte previous = 0x00;   // The byte before
-
-        // Continuously pump the stream. The cancellation token is used to get out of there
-        while (true)
+        try
         {
-            var streamLength = await stream.ReadAsync(streamBuffer, 0, chunkMaxSize, tok).ConfigureAwait(false);
-            ParseStreamBuffer(frameBuffer, ref frameIdx, streamLength, streamBuffer, ref inPicture, ref previous, ref current);
-        };
+            if (!string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(password))
+                cli.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
+                    Convert.ToBase64String(Encoding.ASCII.GetBytes($"{login}:{password}")));
+
+            using var response = await cli.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, tok).ConfigureAwait(false);
+            if (!response.IsSuccessStatusCode)
+            {
+                Logger.LogError("IP camera '{Url}' returned HTTP {Status}", url, (int)response.StatusCode);
+                return;
+            }
+
+            var mediaType = response.Content.Headers.ContentType?.MediaType ?? "";
+            if (!mediaType.Contains("multipart", StringComparison.OrdinalIgnoreCase) &&
+                !mediaType.Contains("jpeg", StringComparison.OrdinalIgnoreCase))
+                Logger.LogWarning("IP camera '{Url}' served '{ContentType}', not an MJPEG stream — check the address (port/path)", url, mediaType);
+            else
+                Logger.LogDebug("IP camera '{Url}' connected ({ContentType})", url, mediaType);
+
+            using var stream = await response.Content.ReadAsStreamAsync(tok).ConfigureAwait(false);
+
+            var streamBuffer = new byte[chunkMaxSize];
+            var frameBuffer = new byte[frameBufferSize];
+            var frameIdx = 0;
+            var inPicture = false;
+            byte current = 0x00;
+            byte previous = 0x00;
+            var loggedFirstFrame = false;
+
+            while (!tok.IsCancellationRequested)
+            {
+                var streamLength = await stream.ReadAsync(streamBuffer.AsMemory(0, chunkMaxSize), tok).ConfigureAwait(false);
+                if (streamLength == 0)
+                {
+                    Logger.LogWarning("IP camera '{Url}' closed the connection", url);
+                    break;
+                }
+                ParseStreamBuffer(frameBuffer, ref frameIdx, streamLength, streamBuffer, ref inPicture, ref previous, ref current);
+
+                if (!loggedFirstFrame && FramesProduced > 0)
+                {
+                    Logger.LogInformation("IP camera '{Url}' delivering frames", url);
+                    loggedFirstFrame = true;
+                }
+            }
+        }
+        catch (OperationCanceledException) { /* normal on StopCapture */ }
+        catch (Exception ex)
+        {
+            // A forced teardown (StopCapture disposes the client) surfaces here as a disposed/aborted
+            // request rather than cancellation — don't report that as a real failure.
+            if (tok.IsCancellationRequested)
+                Logger.LogDebug("IP camera '{Url}' stream stopped", url);
+            else
+                Logger.LogError(ex, "IP camera '{Url}' connection failed", url);
+        }
     }
 
     // Parse the stream buffer
@@ -144,10 +213,15 @@ public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger)
 
     public override Task<bool> StopCapture()
     {
-        _cancellationTokenSource.Cancel();
         IsReady = false;
+        _cancellationTokenSource.Cancel();
+        // Dispose, not just cancel: a stuck socket read may ignore the token; disposing aborts it and
+        // frees the single-connection camera's slot so failover/retry can connect. Non-blocking.
+        _httpClient?.Dispose();
         return Task.FromResult(true);
     }
+
+    public override void Dispose() => StopCapture();
 
     private static byte[] TrimEnd(byte[] array)
     {
