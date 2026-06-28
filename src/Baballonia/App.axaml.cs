@@ -252,8 +252,12 @@ public partial class App : Application
                     // keeps the normal graceful path.
                     if (OperatingSystem.IsWindows())
                     {
+                        var settings = Ioc.Default.GetService<ILocalSettingsService>();
                         Task.Run(() => { try { _host.Dispose(); } catch { /* ignore */ } })
                             .Wait(TimeSpan.FromSeconds(2));
+                        // Final atomic flush right before force-terminate: captures anything changed
+                        // during dispose and cancels the debounce so no write is mid-flight at Kill.
+                        try { settings?.ForceSave(); } catch { /* best effort */ }
                         System.Diagnostics.Process.GetCurrentProcess().Kill();
                     }
                     else
