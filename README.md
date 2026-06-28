@@ -58,7 +58,7 @@ Resonite works natively with Baballonia's eye and face tracking - no external to
 
 ChilloutVR has a mod-based integration for Baballonia's eye and face tracking. Please refer to our docs (below) for installation.
 
-*For more game information and setup, refer to our [games documentation page](https://docs.babble.diy/docs/software/integrations).*
+*For more game information and setup, refer to our [ChilloutVR documentation page](https://docs.babble.diy/docs/software/integrations/chilloutVR).*
 
 ## Supported Hardware
 
@@ -76,7 +76,7 @@ Baballonia supports many kinds of hardware for eye and face tracking:
 | HP Reverb G2 Omnicept             | ✅ | :x: | Requires [BrokenEye](https://github.com/ghostiam/BrokenEye)                                    |
 | Pimax Crystal                     | ✅ | :x: | Requires [BrokenEye](https://github.com/ghostiam/BrokenEye)                                    |
 
-*For more hardware information, refer to our [hardware documentation page](https://docs.babble.diy/docs/software/integrations).*
+*For more hardware information, refer to our [documentation pages](https://docs.babble.diy/docs/intro).*
 
 ---
 
