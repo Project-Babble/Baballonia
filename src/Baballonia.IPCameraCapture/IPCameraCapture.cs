@@ -42,7 +42,7 @@ public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger)
             ConnectCallback = async (context, ct) =>
             {
                 var host = context.DnsEndPoint.Host;
-                var addresses = await Dns.GetHostAddressesAsync(host, ct).ConfigureAwait(false);
+                var addresses = await ResolveAsync(host, ct).ConfigureAwait(false);
                 if (addresses.Length == 0)
                     throw new SocketException((int)SocketError.HostNotFound);
 
@@ -64,6 +64,107 @@ public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger)
         };
         // No overall timeout — the stream is open-ended; ConnectTimeout above bounds the open.
         return new HttpClient(handler) { Timeout = Timeout.InfiniteTimeSpan };
+    }
+
+    // The OS resolver doesn't do mDNS ".local" inside sandboxed runtimes like the Steam Linux Runtime
+    // (no nss-mdns/Avahi), so a ".local" lookup throws "Name or service not known" even though the
+    // host shell's browser/curl resolve it. Fall back to an in-process mDNS query, which only needs
+    // multicast UDP — available in the sandbox.
+    private async Task<IPAddress[]> ResolveAsync(string host, CancellationToken ct)
+    {
+        var isLocal = host.EndsWith(".local", StringComparison.OrdinalIgnoreCase);
+        try
+        {
+            var addresses = await Dns.GetHostAddressesAsync(host, ct).ConfigureAwait(false);
+            if (addresses.Length > 0 || !isLocal)
+                return addresses;
+        }
+        catch (SocketException) when (isLocal)
+        {
+            // OS resolver can't see mDNS here — fall through.
+        }
+
+        var viaMdns = await ResolveMdnsAsync(host, ct).ConfigureAwait(false);
+        if (viaMdns.Length > 0)
+            Logger.LogDebug("IP camera '{Host}' resolved via mDNS", host);
+        return viaMdns;
+    }
+
+    // Minimal one-shot multicast-DNS A-record lookup (RFC 6762): ask 224.0.0.251:5353 for the host's
+    // IPv4 with the unicast-response bit set, and read the direct reply. Returns empty on timeout/error.
+    private static async Task<IPAddress[]> ResolveMdnsAsync(string host, CancellationToken ct)
+    {
+        var name = host.TrimEnd('.');
+        var results = new List<IPAddress>();
+        try
+        {
+            using var udp = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            udp.Bind(new IPEndPoint(IPAddress.Any, 0));
+            var mdns = new IPEndPoint(IPAddress.Parse("224.0.0.251"), 5353);
+
+            using var cts = CancellationTokenSource.CreateLinkedTokenSource(ct);
+            cts.CancelAfter(TimeSpan.FromSeconds(2));
+
+            await udp.SendToAsync(BuildMdnsQuery(name), SocketFlags.None, mdns, cts.Token).ConfigureAwait(false);
+
+            var buf = new byte[4096];
+            while (results.Count == 0)
+            {
+                var n = await udp.ReceiveAsync(buf, SocketFlags.None, cts.Token).ConfigureAwait(false);
+                ParseMdnsARecords(buf, n, results);
+            }
+        }
+        catch (OperationCanceledException) { /* timed out */ }
+        catch (Exception) { /* network error — treat as unresolved */ }
+
+        return results.ToArray();
+    }
+
+    private static byte[] BuildMdnsQuery(string name)
+    {
+        using var ms = new MemoryStream();
+        ms.Write([0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0]); // id=0, flags=0, qdcount=1
+        foreach (var label in name.Split('.'))
+        {
+            var bytes = Encoding.ASCII.GetBytes(label);
+            ms.WriteByte((byte)bytes.Length);
+            ms.Write(bytes);
+        }
+        ms.WriteByte(0);            // end of QNAME
+        ms.Write([0, 1]);           // QTYPE = A
+        ms.Write([0x80, 1]);        // QCLASS = IN with unicast-response (QU) bit
+        return ms.ToArray();
+    }
+
+    private static void ParseMdnsARecords(byte[] buf, int len, List<IPAddress> results)
+    {
+        if (len < 12) return;
+        int qd = (buf[4] << 8) | buf[5];
+        int an = (buf[6] << 8) | buf[7];
+        var pos = 12;
+        for (var i = 0; i < qd && pos < len; i++) { SkipName(buf, ref pos, len); pos += 4; }
+        for (var i = 0; i < an && pos < len; i++)
+        {
+            SkipName(buf, ref pos, len);
+            if (pos + 10 > len) return;
+            int type = (buf[pos] << 8) | buf[pos + 1];
+            int rdlen = (buf[pos + 8] << 8) | buf[pos + 9];
+            pos += 10;
+            if (type == 1 && rdlen == 4 && pos + 4 <= len)
+                results.Add(new IPAddress(buf.AsSpan(pos, 4)));
+            pos += rdlen;
+        }
+    }
+
+    private static void SkipName(byte[] buf, ref int pos, int len)
+    {
+        while (pos < len)
+        {
+            int l = buf[pos];
+            if (l == 0) { pos++; return; }
+            if ((l & 0xC0) == 0xC0) { pos += 2; return; } // compression pointer ends the name
+            pos += 1 + l;
+        }
     }
 
     /// <summary>
