@@ -31,9 +31,10 @@ public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger)
         return Task.FromResult(true);
     }
 
-    // Prefer IPv4 (A-record) connects with a short timeout: a ".local" name resolving to an IPv6
-    // link-local can stall the open past the caller's frame window, which wedges a 1-connection camera.
-    private static HttpClient CreateHttpClient()
+    // Resolve unfiltered (AF_UNSPEC) so mDNS ".local" names resolve the same way they do for browsers
+    // and curl — a family-filtered (AF_INET) lookup fails to find them on many systems — then connect
+    // IPv4-first to avoid stalling on an IPv6 link-local. A short ConnectTimeout bounds the open.
+    private HttpClient CreateHttpClient()
     {
         var handler = new SocketsHttpHandler
         {
@@ -41,14 +42,17 @@ public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger)
             ConnectCallback = async (context, ct) =>
             {
                 var host = context.DnsEndPoint.Host;
-                var addresses = await Dns.GetHostAddressesAsync(host, AddressFamily.InterNetwork, ct).ConfigureAwait(false);
+                var addresses = await Dns.GetHostAddressesAsync(host, ct).ConfigureAwait(false);
                 if (addresses.Length == 0)
-                    addresses = await Dns.GetHostAddressesAsync(host, ct).ConfigureAwait(false);
+                    throw new SocketException((int)SocketError.HostNotFound);
+
+                var ordered = addresses.OrderBy(a => a.AddressFamily == AddressFamily.InterNetwork ? 0 : 1).ToArray();
+                Logger.LogDebug("IP camera '{Host}' resolved to {Addresses}", host, string.Join(", ", ordered.Select(a => a.ToString())));
 
                 var socket = new Socket(SocketType.Stream, ProtocolType.Tcp) { NoDelay = true };
                 try
                 {
-                    await socket.ConnectAsync(addresses, context.DnsEndPoint.Port, ct).ConfigureAwait(false);
+                    await socket.ConnectAsync(ordered, context.DnsEndPoint.Port, ct).ConfigureAwait(false);
                     return new NetworkStream(socket, ownsSocket: true);
                 }
                 catch
@@ -58,7 +62,8 @@ public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger)
                 }
             }
         };
-        return new HttpClient(handler);
+        // No overall timeout — the stream is open-ended; ConnectTimeout above bounds the open.
+        return new HttpClient(handler) { Timeout = Timeout.InfiniteTimeSpan };
     }
 
     /// <summary>
@@ -79,6 +84,8 @@ public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger)
 
         try
         {
+            Logger.LogDebug("IP camera '{Url}' connecting...", url);
+
             if (!string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(password))
                 cli.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
                     Convert.ToBase64String(Encoding.ASCII.GetBytes($"{login}:{password}")));
@@ -132,8 +139,21 @@ public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger)
             if (tok.IsCancellationRequested)
                 Logger.LogDebug("IP camera '{Url}' stream stopped", url);
             else
-                Logger.LogError(ex, "IP camera '{Url}' connection failed", url);
+                Logger.LogError(ex, "IP camera '{Url}' failed: {Reason}", url, Describe(ex));
         }
+    }
+
+    // Flatten the exception chain onto one line so the underlying cause (a SocketException, an HTTP
+    // framing error, etc.) is visible even when the log sink doesn't render the exception object.
+    private static string Describe(Exception ex)
+    {
+        var sb = new StringBuilder();
+        for (Exception? e = ex; e != null; e = e.InnerException)
+        {
+            if (sb.Length > 0) sb.Append(" -> ");
+            sb.Append(e.GetType().Name).Append(": ").Append(e.Message);
+        }
+        return sb.ToString();
     }
 
     // Parse the stream buffer
