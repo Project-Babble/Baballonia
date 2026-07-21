@@ -1,7 +1,10 @@
 ﻿using Baballonia.Assets;
+using Baballonia.Contracts;
+using Baballonia.Services;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -12,10 +15,11 @@ namespace Baballonia.Desktop.Calibration;
 public class OverlayProgram : IOverlayProgram
 {
     private readonly ILogger<OverlayProgram> _logger;
+    private readonly ILanguageSelectorService _languageSelectorService;
     private readonly string? _executablePath;
     private Process? _process;
 
-    public OverlayProgram(ILogger<OverlayProgram> logger)
+    public OverlayProgram(ILogger<OverlayProgram> logger, ILanguageSelectorService languageSelectorService)
     {
         var isWindows = OperatingSystem.IsWindows();
         var isArm = RuntimeInformation.OSArchitecture is Architecture.Arm or Architecture.Arm64 or Architecture.Armv6;
@@ -26,6 +30,7 @@ public class OverlayProgram : IOverlayProgram
             isWindows ? $"BabbleCalibration.{architectureIdentifier}.exe" : $"BabbleCalibration.{architectureIdentifier}");
         _executablePath = overlay;
         _logger = logger;
+        _languageSelectorService = languageSelectorService;
     }
 
     public bool CanStart()
@@ -55,13 +60,18 @@ public class OverlayProgram : IOverlayProgram
             OperatingSystem.IsWindows() && hasSteamVr ? XrMode.OpenVr :
             XrMode.OpenXr;
 
-        var launchArgs = $"-l {Resources.Godot_Locale}" + xrMode switch
+        var locale = GetGodotLocale();
+        // Pass both Godot's engine option and an application option. The latter is applied by
+        // MainScene as well, so exported builds cannot silently fall back to English.
+        var launchArgs = $"--language {locale} --baballonia-locale={locale}" + (xrMode switch
         {
             XrMode.Debug  => " --use-debug",
             XrMode.OpenVr => " --use-openvr",
             XrMode.OpenXr => " --xr-mode on",
             _ => throw new ArgumentOutOfRangeException()
-        };
+        });
+
+        _logger.LogInformation("Starting calibration overlay in {Mode} mode with locale {Locale}", xrMode, locale);
 
         var startInfo = new ProcessStartInfo
         {
@@ -85,6 +95,21 @@ public class OverlayProgram : IOverlayProgram
         };
 
         _process.Start();
+    }
+
+    private string GetGodotLocale()
+    {
+        var language = _languageSelectorService.Language;
+        var culture = language == LanguageSelectorService.DefaultLanguage
+            ? CultureInfo.CurrentUICulture
+            : CultureInfo.GetCultureInfo(language);
+
+        return culture.Name switch
+        {
+            "zh-CN" => "zh_CN",
+            "zh-TW" => "zh_TW",
+            _ => culture.TwoLetterISOLanguageName
+        };
     }
 
     private static bool IsProcessRunning(Process[] ps, string name) =>

@@ -45,7 +45,7 @@ public partial class TrainerService(ILogger<TrainerService> logger) : ITrainerSe
 
         var currentEpoch = int.Parse(match.Groups[1].Value);
         var totalEpochs = int.Parse(match.Groups[2].Value);
-        var loss = double.Parse(match.Groups[3].Value, CultureInfo.InvariantCulture);
+        var loss = double.Parse(match.Groups[4].Value, CultureInfo.InvariantCulture);
 
         return new TrainerProgressReportPacket("Epoch", currentEpoch, totalEpochs, loss);
     }
