@@ -239,6 +239,8 @@ public class BabbleOsc
                             case "/LeftEyeWiden":
                             case "/leftEyeWiden":
                                 UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.EyeWideLeft].Weight = value;
+                                UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.BrowOuterUpLeft].Weight = value;
+                                UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.BrowInnerUpLeft].Weight = value;
                                 break;
                             case "/LeftEyeSquint":
                             case "/leftEyeSquint":
@@ -263,6 +265,8 @@ public class BabbleOsc
                             case "/RightEyeWiden":
                             case "/rightEyeWiden":
                                 UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.EyeWideRight].Weight = value;
+                                UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.BrowOuterUpRight].Weight = value;
+                                UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.BrowInnerUpRight].Weight = value;
                                 break;
                             case "/RightEyeSquint":
                             case "/rightEyeSquint":
@@ -277,7 +281,12 @@ public class BabbleOsc
                             case "/CombinedEyeWiden":
                             case "/combinedEyeWiden":
                                 UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.EyeWideLeft].Weight = value;
+                                UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.BrowOuterUpLeft].Weight = value;
+                                UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.BrowInnerUpLeft].Weight = value;
                                 UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.EyeWideRight].Weight = value;
+                                UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.BrowOuterUpRight].Weight = value;
+                                UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.BrowInnerUpRight].Weight = value;
+
                                 break;
                             case "/CombinedEyeSquint":
                             case "/combinedEyeSquint":
