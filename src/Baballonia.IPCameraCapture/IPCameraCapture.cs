@@ -15,6 +15,9 @@ public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger)
 {
     private readonly CancellationTokenSource _cancellationTokenSource = new();
 
+    private static readonly TimeSpan ConnectionTimeout = TimeSpan.FromSeconds(5);
+    private static readonly TimeSpan ReconnectDelay = TimeSpan.FromSeconds(2);
+
     // JPEG delimiters
     private const byte PicMarker = 0xFF;
     private const byte PicStart = 0xD8;
@@ -22,9 +25,41 @@ public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger)
 
     public override Task<bool> StartCapture()
     {
-        Task.Run(() => StartStreaming(Source, null, null, _cancellationTokenSource.Token)); // Size of Babble frame
-        IsReady = true;
+        Task.Run(() => RunCaptureLoop(Source, null, null, _cancellationTokenSource.Token));
         return Task.FromResult(true);
+    }
+
+    /// <summary>
+    /// Keeps the stream connected for as long as this capture is running, reconnecting after any non-stop button cancellation / failure
+    /// </summary>
+    private async Task RunCaptureLoop(string url, string? login, string? password, CancellationToken cancellationToken)
+    {
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            try
+            {
+                await StartStreaming(url, login, password, cancellationToken).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+                break;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWarning(ex, "IP camera stream for '{Url}' dropped, reconnecting in {Delay}s...", url, ReconnectDelay.TotalSeconds);
+            }
+
+            IsReady = false;
+
+            try
+            {
+                await Task.Delay(ReconnectDelay, cancellationToken).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException)
+            {
+                break;
+            }
+        }
     }
 
     /// <summary>
@@ -33,23 +68,23 @@ public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger)
     /// <param name="url">url of the http stream (only basic auth is implemented)</param>
     /// <param name="login">optional login</param>
     /// <param name="password">optional password (only basic auth is implemented)</param>
-    /// <param name="token">cancellation token used to cancel the stream parsing</param>
+    /// <param name="cancellationToken">cancellation token used to cancel the stream parsing</param>
     /// <param name="chunkMaxSize">Max chunk byte size when reading stream</param>
     /// <param name="frameBufferSize">Maximum frame byte size</param>
     /// <returns></returns>
     ///
-    private async Task StartStreaming(string url, string? login = null, string? password = null, CancellationToken? token = null,
+    private async Task StartStreaming(string url, string? login, string? password, CancellationToken cancellationToken,
         int chunkMaxSize = 1024, int frameBufferSize = 1024 * 1024)
     {
-        var tok = token ?? CancellationToken.None;
-
         using var cli = new HttpClient();
 
         if (!string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(password))
             cli.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
                 Convert.ToBase64String(Encoding.ASCII.GetBytes($"{login}:{password}")));
 
-        using var stream = await cli.GetStreamAsync(url).ConfigureAwait(false);
+        using var stream = await cli.GetStreamAsync(url, cancellationToken).ConfigureAwait(false);
+
+        IsReady = true;
 
         var streamBuffer = new byte[chunkMaxSize];      // Stream chunk read
         var frameBuffer = new byte[frameBufferSize];    // Frame buffer
@@ -59,10 +94,28 @@ public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger)
         byte current = 0x00;    // The last byte read
         byte previous = 0x00;   // The byte before
 
-        // Continuously pump the stream. The cancellation token is used to get out of there
+        // Linked token source for the timeout
+        using var timeoutCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+
+        // Continuously pump the stream. The cancellation token is used to get out of there,
+        // and the timeout token is used to detect a stalled stream.
         while (true)
         {
-            var streamLength = await stream.ReadAsync(streamBuffer, 0, chunkMaxSize, tok).ConfigureAwait(false);
+            timeoutCancellationTokenSource.CancelAfter(ConnectionTimeout);
+
+            int streamLength;
+            try
+            {
+                streamLength = await stream.ReadAsync(streamBuffer, 0, chunkMaxSize, timeoutCancellationTokenSource.Token).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
+            {
+                throw new TimeoutException($"No data received from {url} for {ConnectionTimeout.TotalSeconds} seconds.");
+            }
+
+            if (streamLength == 0)
+                throw new IOException("Camera stream ended unexpectedly.");
+
             ParseStreamBuffer(frameBuffer, ref frameIdx, streamLength, streamBuffer, ref inPicture, ref previous, ref current);
         };
     }
