@@ -30,7 +30,7 @@ public sealed class IpCameraCapture(string url, ILogger<IpCameraCapture> logger)
     }
 
     /// <summary>
-    /// Keeps the stream connected for as long as this capture is running, reconnecting after any non-stop button cancellation / failure
+    /// Keeps the stream connected for as long as the capture is running, reconnecting after any non-stop button cancellation / failure
     /// </summary>
     private async Task RunCaptureLoop(string url, string? login, string? password, CancellationToken cancellationToken)
     {
