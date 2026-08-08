@@ -249,6 +249,7 @@ public class BabbleOsc
                             case "/LeftEyeBrow":
                             case "/leftEyeBrow":
                                 UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.BrowLowererLeft].Weight = value;
+                                UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.BrowPinchLeft].Weight = value;
                                 break;
                             case "/RightEyeX":
                             case "/rightEyeX":
@@ -275,6 +276,7 @@ public class BabbleOsc
                             case "/RightEyeBrow":
                             case "/rightEyeBrow":
                                 UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.BrowLowererRight].Weight = value;
+                                UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.BrowPinchRight].Weight = value;
                                 break;
 
                             /* combined eye params (single value driving both eyes) */
@@ -296,7 +298,9 @@ public class BabbleOsc
                             case "/CombinedEyeBrow":
                             case "/combinedEyeBrow":
                                 UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.BrowLowererLeft].Weight = value;
+                                UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.BrowPinchLeft].Weight = value;
                                 UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.BrowLowererRight].Weight = value;
+                                UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.BrowPinchRight].Weight = value;
                                 break;
                         }
                     }
