@@ -724,7 +724,7 @@
     <value>Maksimum</value>
   </data>
   <data name="Calibration_Instructions_Bullet2_2" xml:space="preserve">
-    <value>spowoduje że Tracker wykryje ruch jako 100% szybciej, zmniejszając potrzebę na większe ruchy twarzy.</value>
+    <value>spowoduje że Tracker wykryje ruch jako 100% danej ekspresji szybciej, zmniejszając potrzebę na większe ruchy twarzy.</value>
   </data>
   <data name="DropOverlay_Important_Header" xml:space="preserve">
     <value>Ważne!</value>
@@ -857,7 +857,7 @@ Zazwyczaj można to łatwo naprawić! Po prostu zainstaluj oprogramowanie "Track
     <value>Udostępnij dane oczu/twarzy</value>
   </data>
   <data name="Settings_ShareData_Description" xml:space="preserve">
-    <value>Zgadzasz się na udostępnianie anonimowych danych dotyczących oczu/twarzy w celu poprawy naszych algorytmów</value>
+    <value>Czy zgadzasz się na udostępnianie anonimowych danych dotyczących oczu/twarzy w celu poprawy naszych algorytmów</value>
   </data>
   <data name="Settings_DFR_Header" xml:space="preserve">
     <value>Włącz DFR</value>
