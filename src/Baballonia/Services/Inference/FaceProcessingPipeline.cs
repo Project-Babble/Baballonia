@@ -47,7 +47,7 @@ public class FaceProcessingPipeline(IFacePipelineEventBus facePipelineEventBus, 
 
         sw.Restart();
         if(Filter != null)
-            inferenceResult = Filter.Filter(inferenceResult);
+            inferenceResult = Filter.Filter(inferenceResult, VideoSource?.FrameIntervalSeconds ?? 0);
 
         facePipelineEventBus.Publish(new FacePipelineEvents.NewFilteredResultEvent(inferenceResult));
         metrics.FacePostMs = PipelineMetrics.Ewma(metrics.FacePostMs, sw.Elapsed.TotalMilliseconds);

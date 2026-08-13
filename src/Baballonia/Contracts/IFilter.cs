@@ -4,5 +4,5 @@ namespace Baballonia.Services.Inference;
 
 public interface IFilter
 {
-    OrderedFloatMap Filter(OrderedFloatMap input);
+    OrderedFloatMap Filter(OrderedFloatMap input, double elapsedSeconds);
 }
