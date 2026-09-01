@@ -2,6 +2,7 @@ using Baballonia.Services.Inference.Enums;
 using OpenCvSharp;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 
 namespace Baballonia.Services.Inference;
@@ -13,6 +14,10 @@ public class DualCameraSource : IVideoSource
 
     private Mat? LastLeftImage;
     private Mat? LastRightImage;
+    private long _lastDeliveredFrameTimestamp;
+    private double _frameIntervalSeconds;
+
+    public double FrameIntervalSeconds => Volatile.Read(ref _frameIntervalSeconds);
 
     public bool Start()
     {
@@ -101,6 +106,11 @@ public class DualCameraSource : IVideoSource
             resizedLeft.Dispose();
         if (rightIsNew)
             resizedRight.Dispose();
+
+        var now = Stopwatch.GetTimestamp();
+        var previous = Interlocked.Exchange(ref _lastDeliveredFrameTimestamp, now);
+        if (previous != 0)
+            Volatile.Write(ref _frameIntervalSeconds, Stopwatch.GetElapsedTime(previous, now).TotalSeconds);
 
         return result;
     }

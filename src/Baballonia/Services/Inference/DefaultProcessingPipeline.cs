@@ -47,7 +47,7 @@ public class DefaultProcessingPipeline : IProcessingPipeline
             return null;
 
         if(Filter != null)
-            inferenceResult = Filter.Filter(inferenceResult);
+            inferenceResult = Filter.Filter(inferenceResult, VideoSource?.FrameIntervalSeconds ?? 0);
 
         frame.Dispose();
         transformed.Dispose();

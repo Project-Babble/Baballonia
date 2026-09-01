@@ -7,6 +7,9 @@ namespace Baballonia.Services.Inference;
 
 public interface IVideoSource : IDisposable
 {
+    /// <summary>Seconds between the two most recently delivered frames, updated continuously.</summary>
+    double FrameIntervalSeconds { get; }
+
     bool Start();
     bool Stop();
     Mat? GetFrame(ColorType? color = null);

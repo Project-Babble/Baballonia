@@ -203,7 +203,7 @@
           HorizontalContentAlignment="Stretch"
           IsExpanded="{Binding IsExpandedByDefault, RelativeSource={RelativeSource AncestorType=controls:SettingsExpander}}">
         <Expander.Header>
-          <Grid ColumnDefinitions="Auto,Auto,*,Auto">
+          <Grid ColumnDefinitions="Auto,Auto,*">
             <PathIcon
                 Grid.Column="0"
                 Width="32"
@@ -225,30 +225,41 @@
                   Foreground="{DynamicResource SystemChromeGrayColor}"
                   Text="{x:Static assets:Resources.Settings_Filter_Description}" />
             </StackPanel>
-            <ToggleSwitch
-              Grid.Column="3"
-              IsChecked="{Binding OneEuroMinEnabled,  Mode=TwoWay}"/>
           </Grid>
         </Expander.Header>
-        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+
+          <Grid Grid.Row="0" Grid.ColumnSpan="3" ColumnDefinitions="Auto,*,Auto" Margin="0,8">
+            <TextBlock
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                FontSize="16"
+                FontWeight="SemiBold"
+                Text="Gaze" />
+            <ToggleSwitch
+                Grid.Column="2"
+                IsChecked="{Binding GazeOneEuroEnabled, Mode=TwoWay}" />
+          </Grid>
 
           <StackPanel
-              Grid.Row="0"
+              Grid.Row="1"
               Grid.Column="0"
+              IsVisible="{Binding AdvancedOptions}"
               Margin="0,8">
             <TextBlock FontWeight="Bold" Text="{x:Static assets:Resources.Settings_Filter_MinFreq_Label}" />
             <TextBlock Text="{x:Static assets:Resources.Settings_Filter_MinFreq_Description}" />
           </StackPanel>
           <StackPanel
-              Grid.Row="0"
+              Grid.Row="1"
               Grid.Column="2"
+              IsVisible="{Binding AdvancedOptions}"
               Orientation="Horizontal"
               Spacing="8">
             <ComboBox
-                x:Name="SelectedMinFreqCutoffComboBox"
+                x:Name="GazeMinFreqCutoffComboBox"
                 Margin="0,8"
                 PlaceholderText="{x:Static assets:Resources.Settings_Filter_Template_Placeholder}"
-                SelectionChanged="SelectedMinFreqCutoffComboBox_OnSelectionChanged">
+                SelectionChanged="GazeMinFreqCutoffComboBox_OnSelectionChanged">
               <ComboBoxItem Tag="0.5">
                 <TextBlock>
                   <TextBlock.Text>
@@ -281,44 +292,328 @@
             </ComboBox>
 
             <NumericUpDown
-                x:Name="SelectedMinFreqCutoffUpDown"
+                x:Name="GazeMinFreqCutoffUpDown"
                 Margin="0,8"
                 FormatString="F1"
                 Increment="0.1"
                 Maximum="10"
                 Minimum="0.1"
-                Value="{Binding OneEuroMinFreqCutoff, Mode=TwoWay}" />
+                Value="{Binding GazeOneEuroMinFreqCutoff, Mode=TwoWay}" />
           </StackPanel>
 
           <StackPanel
-              Grid.Row="1"
+              Grid.Row="2"
               Grid.Column="0"
+              IsVisible="{Binding AdvancedOptions}"
               Margin="0,8">
             <TextBlock FontWeight="Bold" Text="{x:Static assets:Resources.Settings_Filter_Speed_Label}" />
             <TextBlock Text="{x:Static assets:Resources.Settings_Filter_Speed_Description}" />
           </StackPanel>
           <StackPanel
-              Grid.Row="1"
+              Grid.Row="2"
               Grid.Column="2"
+              IsVisible="{Binding AdvancedOptions}"
               Orientation="Horizontal"
               Spacing="8">
             <ComboBox
-                x:Name="SelectedSpeedCutoffComboBox"
+                x:Name="GazeSpeedCutoffComboBox"
                 Margin="0,8"
                 PlaceholderText="{x:Static assets:Resources.Settings_Filter_Template_Placeholder}"
-                SelectionChanged="SelectedSpeedCutoffComboBox_OnSelectionChanged">
-              <ComboBoxItem Tag="0.5"><TextBlock Text="{x:Static assets:Resources.Settings_Filter_Template_Low}" DataContext="0.5" /></ComboBoxItem>
-              <ComboBoxItem Tag="1.0"><TextBlock Text="{x:Static assets:Resources.Settings_Filter_Template_Medium}" DataContext="1.0" /></ComboBoxItem>
-              <ComboBoxItem Tag="2.0"><TextBlock Text="{x:Static assets:Resources.Settings_Filter_Template_High}" DataContext="2.0" /></ComboBoxItem>
+                SelectionChanged="GazeSpeedCutoffComboBox_OnSelectionChanged">
+              <ComboBoxItem Tag="0.5">
+                <TextBlock>
+                  <TextBlock.Text>
+                    <MultiBinding StringFormat="{x:Static assets:Resources.Settings_Filter_Template_Low}">
+                      <Binding Source="0.5" />
+                    </MultiBinding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </ComboBoxItem>
+              <ComboBoxItem Tag="1.0">
+                <TextBlock>
+                  <TextBlock.Text>
+                    <MultiBinding StringFormat="{x:Static assets:Resources.Settings_Filter_Template_Medium}">
+                      <Binding Source="1.0" />
+                    </MultiBinding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </ComboBoxItem>
+              <ComboBoxItem Tag="2.0">
+                <TextBlock>
+                  <TextBlock.Text>
+                    <MultiBinding StringFormat="{x:Static assets:Resources.Settings_Filter_Template_High}">
+                      <Binding Source="2.0" />
+                    </MultiBinding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </ComboBoxItem>
             </ComboBox>
             <NumericUpDown
-                x:Name="SelectedSpeedCutoffUpDown"
+                x:Name="GazeSpeedCutoffUpDown"
                 Margin="0,8"
                 FormatString="F1"
                 Increment="0.1"
                 Maximum="10"
                 Minimum="0.1"
-                Value="{Binding OneEuroSpeedCutoff, Mode=TwoWay}" />
+                Value="{Binding GazeOneEuroSpeedCutoff, Mode=TwoWay}" />
+          </StackPanel>
+
+          <Separator Grid.Row="3" Grid.ColumnSpan="3" Margin="0,8" />
+
+          <Grid Grid.Row="4" Grid.ColumnSpan="3" ColumnDefinitions="Auto,*,Auto" Margin="0,8">
+            <TextBlock
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                FontSize="16"
+                FontWeight="SemiBold"
+                Text="{x:Static assets:Resources.Calibration_Eye_Expressions_Header}" />
+            <ToggleSwitch
+                Grid.Column="2"
+                IsChecked="{Binding EyeExpressionOneEuroEnabled, Mode=TwoWay}" />
+          </Grid>
+
+          <StackPanel
+              Grid.Row="5"
+              Grid.Column="0"
+              IsVisible="{Binding AdvancedOptions}"
+              Margin="0,8">
+            <TextBlock FontWeight="Bold" Text="{x:Static assets:Resources.Settings_Filter_MinFreq_Label}" />
+            <TextBlock Text="{x:Static assets:Resources.Settings_Filter_MinFreq_Description}" />
+          </StackPanel>
+          <StackPanel
+              Grid.Row="5"
+              Grid.Column="2"
+              IsVisible="{Binding AdvancedOptions}"
+              Orientation="Horizontal"
+              Spacing="8">
+            <ComboBox
+                x:Name="EyeExpressionMinFreqCutoffComboBox"
+                Margin="0,8"
+                PlaceholderText="{x:Static assets:Resources.Settings_Filter_Template_Placeholder}"
+                SelectionChanged="EyeExpressionMinFreqCutoffComboBox_OnSelectionChanged">
+              <ComboBoxItem Tag="0.5">
+                <TextBlock>
+                  <TextBlock.Text>
+                    <MultiBinding StringFormat="{x:Static assets:Resources.Settings_Filter_Template_Low}">
+                      <Binding Source="0.5" />
+                    </MultiBinding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </ComboBoxItem>
+              <ComboBoxItem Tag="1.0">
+                <TextBlock>
+                  <TextBlock.Text>
+                    <MultiBinding StringFormat="{x:Static assets:Resources.Settings_Filter_Template_Medium}">
+                      <Binding Source="1.0" />
+                    </MultiBinding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </ComboBoxItem>
+              <ComboBoxItem Tag="2.0">
+                <TextBlock>
+                  <TextBlock.Text>
+                    <MultiBinding StringFormat="{x:Static assets:Resources.Settings_Filter_Template_High}">
+                      <Binding Source="2.0" />
+                    </MultiBinding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </ComboBoxItem>
+            </ComboBox>
+
+            <NumericUpDown
+                x:Name="EyeExpressionMinFreqCutoffUpDown"
+                Margin="0,8"
+                FormatString="F1"
+                Increment="0.1"
+                Maximum="10"
+                Minimum="0.1"
+                Value="{Binding EyeExpressionOneEuroMinFreqCutoff, Mode=TwoWay}" />
+          </StackPanel>
+
+          <StackPanel
+              Grid.Row="6"
+              Grid.Column="0"
+              IsVisible="{Binding AdvancedOptions}"
+              Margin="0,8">
+            <TextBlock FontWeight="Bold" Text="{x:Static assets:Resources.Settings_Filter_Speed_Label}" />
+            <TextBlock Text="{x:Static assets:Resources.Settings_Filter_Speed_Description}" />
+          </StackPanel>
+          <StackPanel
+              Grid.Row="6"
+              Grid.Column="2"
+              IsVisible="{Binding AdvancedOptions}"
+              Orientation="Horizontal"
+              Spacing="8">
+            <ComboBox
+                x:Name="EyeExpressionSpeedCutoffComboBox"
+                Margin="0,8"
+                PlaceholderText="{x:Static assets:Resources.Settings_Filter_Template_Placeholder}"
+                SelectionChanged="EyeExpressionSpeedCutoffComboBox_OnSelectionChanged">
+              <ComboBoxItem Tag="0.5">
+                <TextBlock>
+                  <TextBlock.Text>
+                    <MultiBinding StringFormat="{x:Static assets:Resources.Settings_Filter_Template_Low}">
+                      <Binding Source="0.5" />
+                    </MultiBinding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </ComboBoxItem>
+              <ComboBoxItem Tag="1.0">
+                <TextBlock>
+                  <TextBlock.Text>
+                    <MultiBinding StringFormat="{x:Static assets:Resources.Settings_Filter_Template_Medium}">
+                      <Binding Source="1.0" />
+                    </MultiBinding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </ComboBoxItem>
+              <ComboBoxItem Tag="2.0">
+                <TextBlock>
+                  <TextBlock.Text>
+                    <MultiBinding StringFormat="{x:Static assets:Resources.Settings_Filter_Template_High}">
+                      <Binding Source="2.0" />
+                    </MultiBinding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </ComboBoxItem>
+            </ComboBox>
+            <NumericUpDown
+                x:Name="EyeExpressionSpeedCutoffUpDown"
+                Margin="0,8"
+                FormatString="F1"
+                Increment="0.1"
+                Maximum="10"
+                Minimum="0.1"
+                Value="{Binding EyeExpressionOneEuroSpeedCutoff, Mode=TwoWay}" />
+          </StackPanel>
+
+          <Separator Grid.Row="7" Grid.ColumnSpan="3" Margin="0,8" />
+
+          <Grid Grid.Row="8" Grid.ColumnSpan="3" ColumnDefinitions="Auto,*,Auto" Margin="0,8">
+            <TextBlock
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                FontSize="16"
+                FontWeight="SemiBold"
+                Text="{x:Static assets:Resources.Firmware_Mode_Face}" />
+            <ToggleSwitch
+                Grid.Column="2"
+                IsChecked="{Binding FaceOneEuroEnabled, Mode=TwoWay}" />
+          </Grid>
+
+          <StackPanel
+              Grid.Row="9"
+              Grid.Column="0"
+              IsVisible="{Binding AdvancedOptions}"
+              Margin="0,8">
+            <TextBlock FontWeight="Bold" Text="{x:Static assets:Resources.Settings_Filter_MinFreq_Label}" />
+            <TextBlock Text="{x:Static assets:Resources.Settings_Filter_MinFreq_Description}" />
+          </StackPanel>
+          <StackPanel
+              Grid.Row="9"
+              Grid.Column="2"
+              IsVisible="{Binding AdvancedOptions}"
+              Orientation="Horizontal"
+              Spacing="8">
+            <ComboBox
+                x:Name="FaceMinFreqCutoffComboBox"
+                Margin="0,8"
+                PlaceholderText="{x:Static assets:Resources.Settings_Filter_Template_Placeholder}"
+                SelectionChanged="FaceMinFreqCutoffComboBox_OnSelectionChanged">
+              <ComboBoxItem Tag="0.5">
+                <TextBlock>
+                  <TextBlock.Text>
+                    <MultiBinding StringFormat="{x:Static assets:Resources.Settings_Filter_Template_Low}">
+                      <Binding Source="0.5" />
+                    </MultiBinding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </ComboBoxItem>
+              <ComboBoxItem Tag="1.0">
+                <TextBlock>
+                  <TextBlock.Text>
+                    <MultiBinding StringFormat="{x:Static assets:Resources.Settings_Filter_Template_Medium}">
+                      <Binding Source="1.0" />
+                    </MultiBinding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </ComboBoxItem>
+              <ComboBoxItem Tag="2.0">
+                <TextBlock>
+                  <TextBlock.Text>
+                    <MultiBinding StringFormat="{x:Static assets:Resources.Settings_Filter_Template_High}">
+                      <Binding Source="2.0" />
+                    </MultiBinding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </ComboBoxItem>
+            </ComboBox>
+
+            <NumericUpDown
+                x:Name="FaceMinFreqCutoffUpDown"
+                Margin="0,8"
+                FormatString="F1"
+                Increment="0.1"
+                Maximum="10"
+                Minimum="0.1"
+                Value="{Binding FaceOneEuroMinFreqCutoff, Mode=TwoWay}" />
+          </StackPanel>
+
+          <StackPanel
+              Grid.Row="10"
+              Grid.Column="0"
+              IsVisible="{Binding AdvancedOptions}"
+              Margin="0,8">
+            <TextBlock FontWeight="Bold" Text="{x:Static assets:Resources.Settings_Filter_Speed_Label}" />
+            <TextBlock Text="{x:Static assets:Resources.Settings_Filter_Speed_Description}" />
+          </StackPanel>
+          <StackPanel
+              Grid.Row="10"
+              Grid.Column="2"
+              IsVisible="{Binding AdvancedOptions}"
+              Orientation="Horizontal"
+              Spacing="8">
+            <ComboBox
+                x:Name="FaceSpeedCutoffComboBox"
+                Margin="0,8"
+                PlaceholderText="{x:Static assets:Resources.Settings_Filter_Template_Placeholder}"
+                SelectionChanged="FaceSpeedCutoffComboBox_OnSelectionChanged">
+              <ComboBoxItem Tag="0.5">
+                <TextBlock>
+                  <TextBlock.Text>
+                    <MultiBinding StringFormat="{x:Static assets:Resources.Settings_Filter_Template_Low}">
+                      <Binding Source="0.5" />
+                    </MultiBinding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </ComboBoxItem>
+              <ComboBoxItem Tag="1.0">
+                <TextBlock>
+                  <TextBlock.Text>
+                    <MultiBinding StringFormat="{x:Static assets:Resources.Settings_Filter_Template_Medium}">
+                      <Binding Source="1.0" />
+                    </MultiBinding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </ComboBoxItem>
+              <ComboBoxItem Tag="2.0">
+                <TextBlock>
+                  <TextBlock.Text>
+                    <MultiBinding StringFormat="{x:Static assets:Resources.Settings_Filter_Template_High}">
+                      <Binding Source="2.0" />
+                    </MultiBinding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </ComboBoxItem>
+            </ComboBox>
+            <NumericUpDown
+                x:Name="FaceSpeedCutoffUpDown"
+                Margin="0,8"
+                FormatString="F1"
+                Increment="0.1"
+                Maximum="10"
+                Minimum="0.1"
+                Value="{Binding FaceOneEuroSpeedCutoff, Mode=TwoWay}" />
           </StackPanel>
         </Grid>
       </Expander>

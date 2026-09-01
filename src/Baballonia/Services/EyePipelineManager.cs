@@ -6,6 +6,7 @@ using Baballonia.Services.Inference.VideoSources;
 using Microsoft.Extensions.Logging;
 using OpenCvSharp;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -16,6 +17,14 @@ namespace Baballonia.Services;
 /// </summary>
 public class EyePipelineManager
 {
+    private static readonly HashSet<string> GazeParameters =
+    [
+        "/leftEyeX",
+        "/leftEyeY",
+        "/rightEyeX",
+        "/rightEyeY"
+    ];
+
     private readonly ILogger<EyePipelineManager> _logger;
     private readonly EyeProcessingPipeline _pipeline;
     private readonly ILocalSettingsService _localSettings;
@@ -85,17 +94,25 @@ public class EyePipelineManager
 
     public void LoadFilter()
     {
-        var enabled = _localSettings.ReadSetting<bool>("AppSettings_OneEuroEnabled");
-        var cutoff = _localSettings.ReadSetting<float>("AppSettings_OneEuroMinFreqCutoff");
-        var speedCutoff = _localSettings.ReadSetting<float>("AppSettings_OneEuroSpeedCutoff");
+        var gazeEnabled = _localSettings.ReadSetting("AppSettings_GazeOneEuroEnabled", true);
+        var gazeMinCutoff = _localSettings.ReadSetting("AppSettings_GazeOneEuroMinFreqCutoff", 0.5f);
+        var gazeBeta = _localSettings.ReadSetting("AppSettings_GazeOneEuroSpeedCutoff", 3f);
 
-        if (!enabled)
-            return;
+        var expressionsEnabled = _localSettings.ReadSetting("AppSettings_EyeExpressionOneEuroEnabled", true);
+        var expressionsMinCutoff = _localSettings.ReadSetting("AppSettings_EyeExpressionOneEuroMinFreqCutoff", 0.5f);
+        var expressionsBeta = _localSettings.ReadSetting("AppSettings_EyeExpressionOneEuroSpeedCutoff", 3f);
 
-        var eyeFilter = new OneEuroFilter(
-            minCutoff: cutoff,
-            beta: speedCutoff
-        );
+        IFilter? eyeFilter = null;
+        if (gazeEnabled || expressionsEnabled)
+        {
+            var gazeParameters = new OneEuroFilterParameters(gazeEnabled, gazeMinCutoff, gazeBeta);
+            var expressionParameters = new OneEuroFilterParameters(
+                expressionsEnabled, expressionsMinCutoff, expressionsBeta);
+
+            eyeFilter = new OneEuroFilter(parameterName => GazeParameters.Contains(parameterName)
+                ? gazeParameters
+                : expressionParameters);
+        }
 
         lock (_pipeline.SyncRoot)
             _pipeline.Filter = eyeFilter;
