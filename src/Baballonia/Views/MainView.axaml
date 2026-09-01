@@ -16,12 +16,68 @@
         <viewModels:MainViewModel />
     </Design.DataContext>
 
-    <SplitView
-        Background="{DynamicResource SystemChromeLowColor}"
-        CompactPaneLength="45"
-        DisplayMode="CompactInline"
-        IsPaneOpen="{Binding IsPaneOpen}"
-        OpenPaneLength="300">
+    <Grid RowDefinitions="Auto,*">
+
+        <!--  Alpha test banner: collapsible (description hides) but not dismissable (always present)  -->
+        <Border
+            Grid.Row="0"
+            Background="#B71C1C"
+            Padding="14,10">
+            <StackPanel Orientation="Vertical" Spacing="6">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <PathIcon
+                        Grid.Column="0"
+                        Data="{StaticResource WarningRegular}"
+                        Foreground="White"
+                        Height="18"
+                        Margin="0,0,10,0"
+                        VerticalAlignment="Center"
+                        Width="18" />
+                    <TextBlock
+                        Grid.Column="1"
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="ALPHA TEST BRANCH"
+                        VerticalAlignment="Center" />
+                    <ToggleButton
+                        Grid.Column="2"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Height="28"
+                        IsChecked="True"
+                        Padding="6"
+                        ToolTip.Tip="Collapse / expand"
+                        VerticalAlignment="Center"
+                        Width="28"
+                        x:Name="AlphaBannerToggle">
+                        <PathIcon
+                            Data="M4,6 L8,10 L12,6"
+                            Foreground="White"
+                            Height="12"
+                            RenderTransformOrigin="50%,50%"
+                            Width="12">
+                            <PathIcon.RenderTransform>
+                                <RotateTransform Angle="{Binding #AlphaBannerToggle.IsChecked, Converter={x:Static converters:TypeConverters.BoolToChevronAngleConverter}}" />
+                            </PathIcon.RenderTransform>
+                        </PathIcon>
+                    </ToggleButton>
+                </Grid>
+                <TextBlock
+                    Foreground="White"
+                    IsVisible="{Binding #AlphaBannerToggle.IsChecked}"
+                    Text="You are in the Eye Expressions Alpha test branch. This build demonstrates an early testing build of our eye expressions. Tracking quality and overall performance of this branch may change significantly between now and a stable release."
+                    TextWrapping="Wrap" />
+            </StackPanel>
+        </Border>
+
+        <SplitView
+            Grid.Row="1"
+            Background="{DynamicResource SystemChromeLowColor}"
+            CompactPaneLength="45"
+            DisplayMode="CompactInline"
+            IsPaneOpen="{Binding IsPaneOpen}"
+            OpenPaneLength="300">
         <SplitView.Pane>
             <StackPanel
                 HorizontalAlignment="Stretch"
@@ -93,5 +149,6 @@
            <controls:DropOverlay IsOverlayVisible="{Binding IsDropOverlayVisible}"/>
            </Grid>
         </SplitView.Content>
-    </SplitView>
+        </SplitView>
+    </Grid>
 </UserControl>

@@ -19,6 +19,10 @@ public class ImageCollector : IImageTransformer
         // swap left and right because inference requires them in that way
         Cv2.Merge(split.Reverse().ToArray(), merged);
 
+        // `merged` now owns its own copy of the data; free the per-channel split Mats.
+        foreach (var mat in split)
+            mat.Dispose();
+
         ImageQueue.Enqueue(merged);
 
         if (ImageQueue.Count < 5)

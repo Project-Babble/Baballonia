@@ -42,8 +42,8 @@ public static class Ioctl
     public static readonly uint VIDIOC_DQBUF = IOWR<Data.v4l2_buffer>('V', 17);
     public static readonly uint VIDIOC_STREAMON = IOW<int>('V', 18);
     public static readonly uint VIDIOC_STREAMOFF = IOW<int>('V', 19);
-    //public static readonly uint VIDIOC_G_PARM = IOWR<v4l2_streamparm>('V', 21);
-    //public static readonly uint VIDIOC_S_PARM = IOWR<v4l2_streamparm>('V', 22);
+    public static readonly uint VIDIOC_G_PARM = IOWR<Data.v4l2_streamparm>('V', 21);
+    public static readonly uint VIDIOC_S_PARM = IOWR<Data.v4l2_streamparm>('V', 22);
     public static readonly uint VIDIOC_G_STD = IOR<UInt64>('V', 23);
     public static readonly uint VIDIOC_S_STD = IOW<UInt64>('V', 24);
     //public static readonly uint VIDIOC_ENUMSTD = IOWR<v4l2_standard>('V', 25);

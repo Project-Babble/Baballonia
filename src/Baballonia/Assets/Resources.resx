@@ -330,6 +330,12 @@
   <data name="Firmware_Flashing_Complete" xml:space="preserve">
     <value>Done! You will need to restart your tracker</value>
   </data>
+  <data name="Firmware_Flashing_Failed" xml:space="preserve">
+    <value>Firmware flash failed. Your tracker was not updated.</value>
+  </data>
+  <data name="Firmware_Flashing_Failed_Detail" xml:space="preserve">
+    <value>Check the connection and try again.</value>
+  </data>
   <data name="Firmware_TrackerComboBox_Default" xml:space="preserve">
     <value>Click to see trackers...</value>
   </data>
@@ -493,7 +499,7 @@
     <value>Minimum frequency cutoff</value>
   </data>
   <data name="Settings_Filter_MinFreq_Description" xml:space="preserve">
-    <value>Controls how much smoothing is applied to slow movements</value>
+    <value>Baseline smoothing. Lower values reduce jitter but add lag.</value>
   </data>
   <data name="Settings_Filter_Template_Placeholder" xml:space="preserve">
     <value>Select from a template</value>
@@ -511,7 +517,7 @@
     <value>Speed coefficient</value>
   </data>
   <data name="Settings_Filter_Speed_Description" xml:space="preserve">
-    <value>Determines how the filter adapts when you move faster</value>
+    <value>Fast-movement response. Higher values reduce lag during quick movements but may add jitter.</value>
   </data>
   <data name="Settings_GPU_Header" xml:space="preserve">
     <value>Use GPU acceleration</value>
@@ -847,11 +853,12 @@ This is usually easy to fix! Just install the “Tracking Loss Fix” firmware b
   <data name="Common_Note" xml:space="preserve">
     <value>Note</value>
   </data>
-  <data name="Home_Cameras_Linux_Workarounds" xml:space="preserve">
+  <data name="Home_Cameras_Linux_Workarounds_SLR4" xml:space="preserve">
     <value>Workarounds:
-• Try the Steam scout 1.0 runtime (not sniper 3.0), installing libudev, building from source, or joining the plugdev group.
-• We only support Steam and tarball releases, not the AUR package.
-• Babble Boards do not support UVC/Serial on Linux, use a wireless configuration.</value>
+• Install from Steam and use Steam Linux Runtime 4.0. Do NOT force a tool if it's not listed.
+• Use tarball or build from source to use system local libraries. AUR not recommended.
+• Add your user to the video group for uvc, and dialout/uucp group for serial, then reboot.
+• Wired support of Babble Boards is experimental on Linux. Wireless may work better.</value>
   </data>
   <data name="Settings_ShareData_Header" xml:space="preserve">
     <value>Share eye/face data</value>

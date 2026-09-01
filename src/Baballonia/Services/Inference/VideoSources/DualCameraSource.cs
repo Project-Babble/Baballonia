@@ -1,6 +1,9 @@
 using Baballonia.Services.Inference.Enums;
 using OpenCvSharp;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
 
 namespace Baballonia.Services.Inference;
 
@@ -11,6 +14,10 @@ public class DualCameraSource : IVideoSource
 
     private Mat? LastLeftImage;
     private Mat? LastRightImage;
+    private long _lastDeliveredFrameTimestamp;
+    private double _frameIntervalSeconds;
+
+    public double FrameIntervalSeconds => Volatile.Read(ref _frameIntervalSeconds);
 
     public bool Start()
     {
@@ -20,6 +27,14 @@ public class DualCameraSource : IVideoSource
     public bool Stop()
     {
         return (LeftCam?.Start() ?? true) && (RightCam?.Start() ?? true);
+    }
+
+    public WaitHandle[] GetFrameWaitHandles()
+    {
+        var handles = new List<WaitHandle>(2);
+        if (LeftCam != null) handles.AddRange(LeftCam.GetFrameWaitHandles());
+        if (RightCam != null) handles.AddRange(RightCam.GetFrameWaitHandles());
+        return handles.ToArray();
     }
 
     // Here we try to acquire 2 images from both cameras and stitch them into a single image
@@ -91,6 +106,11 @@ public class DualCameraSource : IVideoSource
             resizedLeft.Dispose();
         if (rightIsNew)
             resizedRight.Dispose();
+
+        var now = Stopwatch.GetTimestamp();
+        var previous = Interlocked.Exchange(ref _lastDeliveredFrameTimestamp, now);
+        if (previous != 0)
+            Volatile.Write(ref _frameIntervalSeconds, Stopwatch.GetElapsedTime(previous, now).TotalSeconds);
 
         return result;
     }

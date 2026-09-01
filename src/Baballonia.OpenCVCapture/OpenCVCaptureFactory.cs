@@ -23,8 +23,19 @@ public class OpenCvCaptureFactory(ILoggerFactory loggerFactory) : ICaptureFactor
                lowered.EndsWith("appsink") ||
                address == "HTC Multimedia Camera" ||
                int.TryParse(address, out _) ||
-               Uri.TryCreate(address, UriKind.Absolute, out _);
+               IsSupportedStreamUrl(address);
     }
+
+    // Network streams OpenCV can open through its FFMPEG/GStreamer backends. An explicit allowlist
+    // rather than "any absolute URI" so non-capture schemes (file://, ftp://, …) aren't claimed and
+    // then left to fail out the caller's frame timeout.
+    private static readonly HashSet<string> StreamSchemes = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "http", "https", "rtsp", "rtsps", "rtmp", "rtmps", "rtp", "udp", "tcp", "mms", "mmsh", "mmst",
+    };
+
+    private static bool IsSupportedStreamUrl(string address) =>
+        Uri.TryCreate(address, UriKind.Absolute, out var uri) && StreamSchemes.Contains(uri.Scheme);
 
     public string GetProviderName() => "Normal Camera";
 }

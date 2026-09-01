@@ -94,6 +94,22 @@ public class Data {
         public uint denominator;
     }
 
+    // struct v4l2_streamparm: __u32 type; union { v4l2_captureparm capture; ...; __u8 raw_data[200]; }.
+    // The union has no 8-byte members, so it sits at offset 4 -> total 204 bytes (must match the
+    // kernel exactly: VIDIOC_S_PARM's ioctl number is derived from this size). The capture fields
+    // are laid flat at the union offset; raw_data forces the 200-byte union width.
+    [StructLayout(LayoutKind.Explicit, Pack = 1)]
+    public unsafe struct v4l2_streamparm
+    {
+        [FieldOffset(0)] public v4l2_buf_type type;
+        [FieldOffset(4)] public uint capability;
+        [FieldOffset(8)] public uint capturemode;
+        [FieldOffset(12)] public v4l2_fract timeperframe;
+        [FieldOffset(20)] public uint extendedmode;
+        [FieldOffset(24)] public uint readbuffers;
+        [FieldOffset(4)] public fixed byte raw_data[200];
+    }
+
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct v4l2_frmival_stepwise
     {

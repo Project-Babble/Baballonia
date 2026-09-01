@@ -20,77 +20,15 @@ public class ParameterSenderService : BackgroundService
     private readonly ICalibrationService _calibrationService;
     private readonly ILogger<ParameterSenderService> _logger;
 
-    private string _prefix = "";
-    private bool _sendNativeVrcEyeTracking;
-    private bool _useDfr;
+    // Written ~once/sec on the sender loop, read on the inference worker threads — volatile for a
+    // well-defined cross-thread read.
+    private volatile string _prefix = "";
+    private volatile bool _sendNativeVrcEyeTracking;
+    private volatile bool _useDfr;
     private readonly ConcurrentQueue<OscMessage> _vrcftQueue = new();
     private readonly ConcurrentQueue<OscMessage> _dfrQueue = new();
-
-    // Expression parameter names
-    private readonly Dictionary<string, string> _eyeExpressionMap = new()
-    {
-        { "LeftEyeX", "/LeftEyeX" },
-        { "LeftEyeY", "/LeftEyeY" },
-        { "LeftEyeLid", "/LeftEyeLid" },
-        //{ "LeftEyeWiden", "/LeftEyeWiden" },
-        //{ "LeftEyeLower", "/LeftEyeLower" },
-        //{ "LeftEyeBrow", "/LeftEyeBrow" },
-        { "RightEyeX", "/RightEyeX" },
-        { "RightEyeY", "/RightEyeY" },
-        { "RightEyeLid", "/RightEyeLid" },
-        //{ "RightEyeWiden", "/RightEyeWiden" },
-        //{ "RightEyeLower", "/RightEyeLower" },
-        //{ "RightEyeBrow", "/RightEyeBrow" },
-    };
-
-    public readonly Dictionary<string, string> FaceExpressionMap = new()
-    {
-        { "CheekPuffLeft", "/cheekPuffLeft" },
-        { "CheekPuffRight", "/cheekPuffRight" },
-        { "CheekSuckLeft", "/cheekSuckLeft" },
-        { "CheekSuckRight", "/cheekSuckRight" },
-        { "JawOpen", "/jawOpen" },
-        { "JawForward", "/jawForward" },
-        { "JawLeft", "/jawLeft" },
-        { "JawRight", "/jawRight" },
-        { "NoseSneerLeft", "/noseSneerLeft" },
-        { "NoseSneerRight", "/noseSneerRight" },
-        { "MouthFunnel", "/mouthFunnel" },
-        { "MouthPucker", "/mouthPucker" },
-        { "MouthLeft", "/mouthLeft" },
-        { "MouthRight", "/mouthRight" },
-        { "MouthRollUpper", "/mouthRollUpper" },
-        { "MouthRollLower", "/mouthRollLower" },
-        { "MouthShrugUpper", "/mouthShrugUpper" },
-        { "MouthShrugLower", "/mouthShrugLower" },
-        { "MouthClose", "/mouthClose" },
-        { "MouthSmileLeft", "/mouthSmileLeft" },
-        { "MouthSmileRight", "/mouthSmileRight" },
-        { "MouthFrownLeft", "/mouthFrownLeft" },
-        { "MouthFrownRight", "/mouthFrownRight" },
-        { "MouthDimpleLeft", "/mouthDimpleLeft" },
-        { "MouthDimpleRight", "/mouthDimpleRight" },
-        { "MouthUpperUpLeft", "/mouthUpperUpLeft" },
-        { "MouthUpperUpRight", "/mouthUpperUpRight" },
-        { "MouthLowerDownLeft", "/mouthLowerDownLeft" },
-        { "MouthLowerDownRight", "/mouthLowerDownRight" },
-        { "MouthPressLeft", "/mouthPressLeft" },
-        { "MouthPressRight", "/mouthPressRight" },
-        { "MouthStretchLeft", "/mouthStretchLeft" },
-        { "MouthStretchRight", "/mouthStretchRight" },
-        { "TongueOut", "/tongueOut" },
-        { "TongueUp", "/tongueUp" },
-        { "TongueDown", "/tongueDown" },
-        { "TongueLeft", "/tongueLeft" },
-        { "TongueRight", "/tongueRight" },
-        { "TongueRoll", "/tongueRoll" },
-        { "TongueBendDown", "/tongueBendDown" },
-        { "TongueCurlUp", "/tongueCurlUp" },
-        { "TongueSquish", "/tongueSquish" },
-        { "TongueFlat", "/tongueFlat" },
-        { "TongueTwistLeft", "/tongueTwistLeft" },
-        { "TongueTwistRight", "/tongueTwistRight" }
-    };
+    // Reused drain buffer for the (single-threaded) sender loop.
+    private readonly List<OscMessage> _sendBuffer = new();
 
     public ParameterSenderService(
         VrcftModuleSendService vrcftModuleSendService,
@@ -106,22 +44,30 @@ public class ParameterSenderService : BackgroundService
         this._calibrationService = calibrationService;
         this._logger = logger;
 
-         processingLoopService.ExpressionChangeEvent += ExpressionUpdateHandler;
+        processingLoopService.ExpressionChangeEvent += ExpressionUpdateHandler;
     }
 
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         _logger.LogDebug("Starting Parameter Sender Service...");
-        _logger.LogDebug("OSC parameter mapping initialized with {EyeCount} eye expressions and {FaceCount} face expressions",
-            _eyeExpressionMap.Count, FaceExpressionMap.Count);
+        _logger.LogDebug("OSC parameter mapping initialized");
 
+        long lastSettingsRead = 0;
         while (!cancellationToken.IsCancellationRequested)
         {
             try
             {
-                _prefix = _localSettingsService.ReadSetting<string>("AppSettings_OSCPrefix");
-                _sendNativeVrcEyeTracking = _localSettingsService.ReadSetting<bool>("VRC_UseNativeTracking");
-                _useDfr = _localSettingsService.ReadSetting<bool>("AppSettings_UseDFR");
+                // These settings change only on user edits, but ReadSetting deserializes JSON on
+                // every call. Refreshing them on each 10 ms tick was ~300 deserializations/sec for
+                // nothing; refresh roughly once per second instead.
+                var now = Environment.TickCount64;
+                if (now - lastSettingsRead >= 1000)
+                {
+                    lastSettingsRead = now;
+                    _prefix = _localSettingsService.ReadSetting<string>("AppSettings_OSCPrefix");
+                    _sendNativeVrcEyeTracking = _localSettingsService.ReadSetting<bool>("VRC_UseNativeTracking");
+                    _useDfr = _localSettingsService.ReadSetting<bool>("AppSettings_UseDFR");
+                }
                 await SendAndClearQueue(cancellationToken);
                 await Task.Delay(10, cancellationToken);
             }
@@ -135,42 +81,55 @@ public class ParameterSenderService : BackgroundService
     private void ExpressionUpdateHandler(ProcessingLoopService.Expressions expressions)
     {
         if (expressions.EyeExpression != null)
-            ProcessEyeExpressionData(expressions.EyeExpression);
+            ProcessEyeExpressionData(expressions.EyeExpression, expressions.EyeExpressionRaw);
         if (expressions.FaceExpression != null)
             ProcessFaceExpressionData(expressions.FaceExpression);
     }
 
-    private void ProcessEyeExpressionData(float[] expressions)
+    private void ProcessEyeExpressionData(OrderedFloatMap expressions, OrderedFloatMap? rawExpressions)
     {
         if (expressions is null) return;
-        if (expressions.Length == 0) return;
 
-        for (var i = 0; i < Math.Min(expressions.Length, _eyeExpressionMap.Count); i++)
+        foreach (var expression in expressions)
         {
-            var weight = expressions[i];
-            var eyeElement = _eyeExpressionMap.ElementAt(i);
-            var settings = _calibrationService.GetExpressionSettings(eyeElement.Key);
+            float weight = expression.Value;
+            var settings = _calibrationService.GetExpressionSettings(expression.Key);
 
-            var msg = new OscMessage(_prefix + eyeElement.Value,
+            var msg = new OscMessage(_prefix + expression.Key,
                 weight.Remap(settings.Lower, settings.Upper, settings.Min, settings.Max));
             _vrcftQueue.Enqueue(msg);
         }
 
-        if (_useDfr)
-            ProcessNativeVrcEyeTracking(expressions, _dfrQueue);
+        // Native eye tracking (DFR / VRChat native) wants the raw, un-smoothed stream for the lowest
+        // latency, so it bypasses the OneEuroFilter. Falls back to the filtered map if no raw is supplied.
+        var nativeSource = rawExpressions ?? expressions;
 
-        if (_sendNativeVrcEyeTracking)
-            ProcessNativeVrcEyeTracking(expressions, _vrcftQueue);
+        // Never let an OSC-fanout error escape into the inference worker: ProcessingLoopService's
+        // EyeWorker catch tears down all cameras, so a single bad value here would kill eye tracking.
+        try
+        {
+            if (_useDfr)
+                ProcessNativeVrcEyeTracking(nativeSource, _dfrQueue);
+
+            if (_sendNativeVrcEyeTracking)
+                ProcessNativeVrcEyeTracking(nativeSource, _vrcftQueue);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error building native/DFR eye OSC parameters");
+        }
     }
 
-    private void ProcessNativeVrcEyeTracking(float[] expressions, ConcurrentQueue<OscMessage> queue)
+    private void ProcessNativeVrcEyeTracking(OrderedFloatMap expressions, ConcurrentQueue<OscMessage> queue)
     {
-        var leftEyeX = expressions[0];
-        var leftEyeY = expressions[1];
-        var leftEyeLid = expressions[2];
-        var rightEyeX = expressions[3];
-        var rightEyeY = expressions[4];
-        var rightEyeLid = expressions[5];
+        // Keys produced by the eye runner are X/Y/Lid (see DefaultInferenceRunner); read them with the
+        // non-throwing accessor so a future key-set change degrades to 0 instead of throwing.
+        expressions.TryGetValue("/leftEyeX", out var leftEyeX);
+        expressions.TryGetValue("/leftEyeY", out var leftEyeY);
+        expressions.TryGetValue("/leftEyeLid", out var leftEyeLid);
+        expressions.TryGetValue("/rightEyeX", out var rightEyeX);
+        expressions.TryGetValue("/rightEyeY", out var rightEyeY);
+        expressions.TryGetValue("/rightEyeLid", out var rightEyeLid);
 
         var leftEyeLidSettings = _calibrationService.GetExpressionSettings("LeftEyeLid");
         var rightEyeLidSettings = _calibrationService.GetExpressionSettings("RightEyeLid");
@@ -188,18 +147,16 @@ public class ParameterSenderService : BackgroundService
         queue.Enqueue(new OscMessage("/tracking/eye/LeftRightPitchYaw", leftEyeY, rightEyeX, rightEyeY, leftEyeX));
     }
 
-    private void ProcessFaceExpressionData(float[] expressions)
+    private void ProcessFaceExpressionData(OrderedFloatMap expressions)
     {
         if (expressions == null) return;
-        if (expressions.Length == 0) return;
 
-        for (var i = 0; i < Math.Min(expressions.Length, FaceExpressionMap.Count); i++)
+        foreach (var expression in expressions)
         {
-            var weight = expressions[i];
-            var faceElement = FaceExpressionMap.ElementAt(i);
-            var settings = _calibrationService.GetExpressionSettings(faceElement.Key);
+            float weight = expression.Value;
+            var settings = _calibrationService.GetExpressionSettings(expression.Key);
 
-            var msg = new OscMessage(_prefix + faceElement.Value,
+            var msg = new OscMessage(_prefix + expression.Key,
                 Math.Clamp(
                     weight.Remap(settings.Lower, settings.Upper, settings.Min, settings.Max),
                     settings.Min,
@@ -210,16 +167,25 @@ public class ParameterSenderService : BackgroundService
 
     private async Task SendAndClearQueue(CancellationToken cancellationToken)
     {
-        if (!_vrcftQueue.IsEmpty)
-        {
-            await _vrcftModuleSendService.Send(_vrcftQueue.ToArray(), cancellationToken);
-            _vrcftQueue.Clear();
-        }
+        await DrainAndSend(_vrcftQueue, _vrcftModuleSendService, cancellationToken);
+        await DrainAndSend(_dfrQueue, _dfrSendService, cancellationToken);
+    }
 
-        if (!_dfrQueue.IsEmpty)
-        {
-            await _dfrSendService.Send(_dfrQueue.ToArray(), cancellationToken);
-            _dfrQueue.Clear();
-        }
+    /// <summary>
+    /// Atomically drains the queue (via TryDequeue) and sends it. The previous ToArray()+Clear()
+    /// was not atomic — anything enqueued between the snapshot and the Clear() was silently dropped.
+    /// </summary>
+    private async Task DrainAndSend(ConcurrentQueue<OscMessage> queue, OscSendService sender,
+        CancellationToken cancellationToken)
+    {
+        if (queue.IsEmpty)
+            return;
+
+        _sendBuffer.Clear();
+        while (queue.TryDequeue(out var message))
+            _sendBuffer.Add(message);
+
+        if (_sendBuffer.Count > 0)
+            await sender.Send(_sendBuffer.ToArray(), cancellationToken);
     }
 }

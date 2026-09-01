@@ -31,6 +31,19 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     private readonly Dictionary<string, CancellationTokenSource> _animationCancellationTokens = new();
     private readonly FirmwareSessionFactory _firmwareSessionFactory;
 
+    // Pipeline managers (singletons) own the running camera feeds; used to release ONLY serial
+    // camera handles on Refresh so the firmware probe can open the port.
+    private readonly Baballonia.Services.Inference.FacePipelineManager _facePipeline = Ioc.Default.GetRequiredService<Baballonia.Services.Inference.FacePipelineManager>();
+    private readonly EyePipelineManager _eyePipeline = Ioc.Default.GetRequiredService<EyePipelineManager>();
+
+    // Guards RefreshSerialPorts against re-entrancy (RelayCommand does not serialize invocations,
+    // and the body disposes/mutates _firmwareSessions).
+    private bool _isRefreshing;
+
+    // Set in Dispose(); lets an in-flight flash that finishes after the tab is left skip
+    // recreating a live session that would never be released.
+    private bool _disposed;
+
     [ObservableProperty] private ObservableCollection<string> _availableSerialPorts = [];
 
     [ObservableProperty] private ObservableCollection<string> _availableWifiNetworks = [];
@@ -65,6 +78,12 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
 
     [ObservableProperty] private bool _isFinished;
 
+    // True when the last flash attempt failed; drives the red failure message in the view.
+    [ObservableProperty] private bool _isFlashFailed;
+
+    // Latest line of espflash output, shown live under the flashing progress bar.
+    [ObservableProperty] private string? _flashStatus;
+
     [ObservableProperty] private string? _modeSetButton = Resources.Firmware_ModeSetButton_Default;
 
     [ObservableProperty] private string? _wifiSetButton = Resources.Firmware_WifiSetButton_Default;
@@ -90,9 +109,13 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
         {
             AvailableFirmwareTypes.Add(Path.GetFileName(bin));
         }
+
+        _firmwareService.OnFirmwareUpdateProgress += OnFlashProgress;
     }
 
-    private readonly ProgressBar _progressBar;
+    // espflash output arrives on a background thread; marshal the status to the UI thread.
+    private void OnFlashProgress(string status) =>
+        Dispatcher.UIThread.Post(() => FlashStatus = status);
 
     private async Task AnimateEllipsesAsync(string baseText, string propertyName,
         CancellationToken cancellationToken = default)
@@ -230,32 +253,57 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     [RelayCommand]
     private async Task RefreshSerialPorts()
     {
-        AvailableSerialPorts.Clear();
-        // all sessions should be disposed before querying
-        foreach (var s in _firmwareSessions)
+        if (_isRefreshing) return;
+        _isRefreshing = true;
+        try
         {
-            s.Value.Dispose();
-        }
+            var previousSelection = SelectedSerialPort;
 
-        _firmwareSessions.Clear();
+            // Serial cameras hold the COM/tty port exclusively; release ONLY those so the probe
+            // below can open them. UVC (/dev/videoN) and IP feeds keep tracking. This is the ONLY
+            // place that stops serial video — merely navigating to the firmware tab never does.
+            _facePipeline.StopSerialCameras();
+            _eyePipeline.StopSerialCameras();
 
-        await Task.Run(async () =>
-        {
+            AvailableSerialPorts.Clear();
+            // Dispose stale sessions before re-probing; a dead/re-plugged port can throw on close.
+            foreach (var s in _firmwareSessions.Values)
+            {
+                try { s?.Dispose(); }
+                catch (Exception e) { _logger.LogDebug("Error disposing stale session: {Exception}", e); }
+            }
+            _firmwareSessions.Clear();
+
             StartButtonAnimation(Resources.Firmware_RefreshDevices_Refreshing, nameof(OnRefreshDevicesButton));
 
+            // The probe runs async (one Task.Run per port inside the factory), so the UI thread
+            // stays responsive while we await it. Crucially every _firmwareSessions / bound-property
+            // mutation below stays on the UI thread, avoiding a cross-thread Dictionary race with
+            // Dispose() (which runs on the UI thread during tab navigation).
             var candidates = await _firmwareSessionFactory.TryOpenAllSessionsAsync();
             TrackerComboBox = string.Format(Resources.Firmware_RefreshDevices_Found, candidates.Count());
 
             foreach (var mappings in candidates)
             {
-                await Dispatcher.UIThread.InvokeAsync(() => AvailableSerialPorts.Add(mappings.Port));
+                AvailableSerialPorts.Add(mappings.Port);
                 _firmwareSessions.Add(mappings.Port, mappings.Session);
             }
 
             StopButtonAnimation(nameof(OnRefreshDevicesButton));
-            await Dispatcher.UIThread.InvokeAsync(() =>
-                OnRefreshDevicesButton = Resources.Firmware_RefreshDevices_Default);
-        });
+            OnRefreshDevicesButton = Resources.Firmware_RefreshDevices_Default;
+
+            // Re-validate the selection: if the previously selected port vanished (e.g. the device
+            // was re-plugged and re-enumerated under a new name) clear it so the user can't act on
+            // a dead port. A still-present selection is preserved.
+            if (!string.IsNullOrEmpty(previousSelection) && AvailableSerialPorts.Contains(previousSelection))
+                SelectedSerialPort = previousSelection;
+            else
+                SelectedSerialPort = null;
+        }
+        finally
+        {
+            _isRefreshing = false;
+        }
     }
 
     [RelayCommand]
@@ -265,8 +313,16 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
 
         StartButtonAnimation(Resources.Firmware_WifiScanButton_Scanning, nameof(WifiScanButton));
 
-        // By this point we should have a valid serial port, no need to do any error wrapping here
-        var response = await _firmwareSessions[SelectedSerialPort!]
+        // Session may have been invalidated (e.g. port closed / re-plugged); guard the lookup.
+        if (string.IsNullOrEmpty(SelectedSerialPort) ||
+            !_firmwareSessions.TryGetValue(SelectedSerialPort, out var wifiSession) || wifiSession is null)
+        {
+            StopButtonAnimation(nameof(WifiScanButton));
+            WifiScanButton = Resources.Firmware_WifiScanButton_Error;
+            return;
+        }
+
+        var response = await wifiSession
             .SendCommandAsync(new FirmwareRequests.ScanWifiRequest(), TimeSpan.FromSeconds(30));
         if (!response.IsSuccess)
         {
@@ -331,13 +387,21 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
     [RelayCommand]
     private async Task FlashFirmware()
     {
+        FlashStatus = null; // clear any status left over from a previous flash
+
+        IsFlashFailed = false;
+        IsFinished = false; // clear any lingering "Done!" so success and failure can't both show
+
         if (_firmwareSessions.TryGetValue(SelectedSerialPort!, out var value))
         {
             if (value == null) return;
 
-            // True, this is a multimodal device that needs to be released prior to flashing
+            // Multimodal device: release the stream before flashing (no-op on firmware that doesn't
+            // support pause). Then dispose the session so espflash can take the serial port, and
+            // drop it from the map so a disposed session is never reused.
             await TrySendCommandAsync(new FirmwareRequests.SetPausedRequest(false), TimeSpan.FromSeconds(5));
             value.Dispose();
+            _firmwareSessions.Remove(SelectedSerialPort!);
         }
         else if (!_firmwareService.FindAvailableSerialPorts().Contains(SelectedSerialPort))
         {
@@ -348,17 +412,18 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
 
         // Check if the user has selected custom firmware for upload
         var candidateFirmwarePath = Path.Combine(_bundledFirmwarePath, AvailableFirmwareTypes[SelectedFirmwareIndex]);
+        bool success;
         if (File.Exists(candidateFirmwarePath))
         {
             // Combobox selection
             IsFlashing = true;
-            await _firmwareService.UploadFirmwareAsync(SelectedSerialPort!, candidateFirmwarePath);
+            success = await _firmwareService.UploadFirmwareAsync(SelectedSerialPort!, candidateFirmwarePath);
         }
         else if (!string.IsNullOrEmpty(CustomFirmwarePath))
         {
             // Else, pass in the absolute path
             IsFlashing = true;
-            await _firmwareService.UploadFirmwareAsync(SelectedSerialPort!, CustomFirmwarePath);
+            success = await _firmwareService.UploadFirmwareAsync(SelectedSerialPort!, CustomFirmwarePath);
         }
         else
         {
@@ -366,6 +431,23 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
         }
 
         IsFlashing = false;
+
+        if (!success)
+        {
+            // espflash failed (e.g. "Error while connecting to device"). Show a clear failure
+            // instead of "Done!", and do NOT recreate a session against a device that didn't flash.
+            if (string.IsNullOrWhiteSpace(FlashStatus))
+                FlashStatus = Resources.Firmware_Flashing_Failed_Detail;
+            IsFlashFailed = true;
+            IsValidDeviceSelected = false; // the session was disposed above; require a re-refresh
+            await Task.Delay(8000);
+            IsFlashFailed = false;
+            return;
+        }
+
+        // If the user navigated away mid-flash the VM was disposed; don't create a new live session
+        // (it would never be released and would keep holding the port).
+        if (_disposed) return;
 
         IsFinished = true;
         // No need to check if this is a valid Babble tracker - treat it like a normal device
@@ -388,33 +470,92 @@ public partial class FirmwareViewModel : ViewModelBase, IDisposable
 
     private async Task<FirmwareResponse<JsonDocument>> TrySendCommandAsync(IFirmwareRequest request, TimeSpan timeSpan)
     {
+        var port = SelectedSerialPort;
+        if (string.IsNullOrEmpty(port) ||
+            !_firmwareSessions.TryGetValue(port, out var session) || session is null)
+            return FirmwareResponse<JsonDocument>.Failure("No active session.");
+
+        // Skip requests the firmware version doesn't support (e.g. SetPausedRequest on v2 firmware)
+        // so they become a benign no-op instead of throwing NotSupportedException.
+        if (!RequestVersionGuard.IsSupported(request, session.Version))
+        {
+            _logger.LogDebug("Skipping {Request}; not supported by firmware v{Version}",
+                request.GetType().Name, session.Version);
+            return FirmwareResponse<JsonDocument>.Failure(
+                $"{request.GetType().Name} not supported by firmware v{session.Version}.");
+        }
+
         try
         {
-            if (_firmwareSessions.TryGetValue(SelectedSerialPort!, out var session))
-            {
-                return await session.SendCommandAsync(request, timeSpan);
-            }
+            return await session.SendCommandAsync(request, timeSpan);
+        }
+        catch (Exception e) when (e is ObjectDisposedException or IOException or InvalidOperationException)
+        {
+            // Port closed / device re-plugged: drop the dead session so it isn't reused.
+            _logger.LogWarning("Port {Port} appears closed; invalidating session. {Message}", port, e.Message);
+            InvalidateSession(port);
+            return FirmwareResponse<JsonDocument>.Failure("Device port is closed.");
         }
         catch (Exception e)
         {
             _logger.LogError("Error while sending command {Exception}", e);
+            return FirmwareResponse<JsonDocument>.Failure("Error while sending command.");
         }
+    }
 
-        return await Task.FromResult(FirmwareResponse<JsonDocument>.Failure("Error while sending command."));
+    // Disposes and removes a session whose port has gone away, reflecting it in the UI so the user
+    // isn't left able to act on a dead device.
+    private void InvalidateSession(string? port)
+    {
+        if (string.IsNullOrEmpty(port)) return;
+        if (_firmwareSessions.TryGetValue(port, out var s))
+        {
+            try { s?.Dispose(); } catch { /* port already dead */ }
+            _firmwareSessions.Remove(port);
+        }
+        if (port == SelectedSerialPort)
+            IsValidDeviceSelected = false;
     }
 
     public void Dispose()
     {
+        _disposed = true;
+        _firmwareService.OnFirmwareUpdateProgress -= OnFlashProgress;
+
         // Stop all button animations
         foreach (var propertyName in _animationCancellationTokens.Keys.ToList())
         {
             StopButtonAnimation(propertyName);
         }
 
-        foreach (var sessions in _firmwareSessions.Values)
+        // Release every serial connection on leaving the tab. Snapshot + clear synchronously so the
+        // dictionary is empty immediately and can't race anything; run the (possibly slow) unpause +
+        // dispose on a background thread so switching tabs never freezes the UI for up to 5s.
+        var toRelease = _firmwareSessions.Values.Where(s => s is not null).ToList();
+        _firmwareSessions.Clear();
+        if (toRelease.Count == 0)
+            return;
+
+        Task.Run(() =>
         {
-            if (sessions != null)
-                sessions.SendCommand(new FirmwareRequests.SetPausedRequest(false), TimeSpan.FromSeconds(5));
-        }
+            foreach (var session in toRelease)
+            {
+                try
+                {
+                    // Best-effort unpause only for firmware that supports it (V1, v0.0.0).
+                    var unpause = new FirmwareRequests.SetPausedRequest(false);
+                    if (RequestVersionGuard.IsSupported(unpause, session.Version))
+                        session.SendCommand(unpause, TimeSpan.FromSeconds(5));
+                }
+                catch (Exception e) when (e is NotSupportedException or ObjectDisposedException or IOException or InvalidOperationException)
+                {
+                    _logger.LogDebug("Dispose: skipping unpause: {Message}", e.Message);
+                }
+                finally
+                {
+                    try { session.Dispose(); } catch { /* already gone */ }
+                }
+            }
+        });
     }
 }

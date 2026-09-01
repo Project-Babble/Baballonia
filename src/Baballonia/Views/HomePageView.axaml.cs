@@ -150,6 +150,11 @@ public partial class HomePageView : ViewBase
             vm.SelectedCalibrationTextBlock = this.Find<TextBlock>("SelectedCalibrationTextBlockColor")!;
             vm.SelectedCalibrationTextBlock.Text = Assets.Resources.Home_Eye_Calibration;
         };
+
+        // Pause preview blitting while the page is off-screen (navigated away), resume on return.
+        // Cameras and inference keep running regardless; this only gates the visible bitmap work.
+        AttachedToVisualTree += (_, _) => (DataContext as HomePageViewModel)?.SetPreviewActive(true);
+        DetachedFromVisualTree += (_, _) => (DataContext as HomePageViewModel)?.SetPreviewActive(false);
     }
 
     private void SetupCropEvents(HomePageViewModel.CameraControllerModel model, Image image)

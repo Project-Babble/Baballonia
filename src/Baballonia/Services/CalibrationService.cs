@@ -2,6 +2,7 @@
 using Baballonia.Services.Calibration;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System;
 
 namespace Baballonia.Services;
 
@@ -10,24 +11,24 @@ public class CalibrationService : ICalibrationService
     // Expression parameter names
     private readonly Dictionary<string, string> _eyeExpressionMap = new()
     {
-        { "LeftEyeX", "/LeftEyeX" },
-        { "LeftEyeY", "/LeftEyeY" },
-        { "RightEyeX", "/RightEyeX" },
-        { "RightEyeY", "/RightEyeY" },
+        { "LeftEyeX", "/leftEyeX" },
+        { "LeftEyeY", "/leftEyeY" },
+        { "RightEyeX", "/rightEyeX" },
+        { "RightEyeY", "/rightEyeY" },
     };
 
     private readonly Dictionary<string, string> _faceExpressionMap = new()
     {
-        { "LeftEyeLid", "/LeftEyeLid" },
-        { "LeftEyeWiden", "/LeftEyeWiden" },
-        // { "LeftEyeLower", "/LeftEyeLower" },
-        { "LeftEyeBrow", "/LeftEyeBrow" },
-        { "RightEyeX", "/RightEyeX" },
-        { "RightEyeY", "/RightEyeY" },
-        { "RightEyeLid", "/RightEyeLid" },
-        { "RightEyeWiden", "/RightEyeWiden" },
-        // { "RightEyeLower", "/RightEyeLower" },
-        { "RightEyeBrow", "/RightEyeBrow" },
+        { "LeftEyeLid", "/leftEyeLid" },
+        { "LeftEyeWiden", "/leftEyeWiden" },
+        { "LeftEyeSquint", "/leftEyeSquint" },
+        { "LeftEyeBrow", "/leftEyeBrow" },
+        { "RightEyeX", "/rightEyeX" },
+        { "RightEyeY", "/rightEyeY" },
+        { "RightEyeLid", "/rightEyeLid" },
+        { "RightEyeWiden", "/rightEyeWiden" },
+        { "RightEyeSquint", "/rightEyeSquint" },
+        { "RightEyeBrow", "/rightEyeBrow" },
         { "CheekPuffLeft", "/cheekPuffLeft" },
         { "CheekPuffRight", "/cheekPuffRight" },
         { "CheekSuckLeft", "/cheekSuckLeft" },
@@ -78,6 +79,7 @@ public class CalibrationService : ICalibrationService
     private readonly ConcurrentDictionary<string, CalibrationParameter> _expressionSettings = new();
 
     private readonly ILocalSettingsService _localSettingsService;
+    private CalibrationParameter _DefaultCalibration = new CalibrationParameter();
 
     public CalibrationService(ILocalSettingsService localSettingsService)
     {
@@ -108,11 +110,18 @@ public class CalibrationService : ICalibrationService
         SaveAsync();
     }
 
-    public CalibrationParameter GetExpressionSettings(string parameterName)
+    public CalibrationParameter GetExpressionSettings(string parameterName) // run once per paremeter, per frame
     {
         return _expressionSettings.TryGetValue(parameterName, out var settings) ?
             settings :
-            new CalibrationParameter();
+            _DefaultCalibration;
+    }
+
+    public CalibrationParameter GetNullableExpressionSettings(string parameterName) // run once per paremeter, per frame
+    {
+        return _expressionSettings.TryGetValue(parameterName, out var settings) ?
+            settings :
+            null;
     }
 
     public float GetExpressionSetting(string expression)
@@ -143,23 +152,23 @@ public class CalibrationService : ICalibrationService
         {
             foreach (var parameterName in _eyeExpressionMap)
             {
-                _expressionSettings[parameterName.Key] = new CalibrationParameter(-1, 1f, -1f, 1f);
+                _expressionSettings[parameterName.Value] = new CalibrationParameter(-1, 1f, -1f, 1f);
             }
 
             foreach (var parameterName in _faceExpressionMap)
             {
-                _expressionSettings[parameterName.Key] = new CalibrationParameter(0, 1f, 0f, 1f);
+                _expressionSettings[parameterName.Value] = new CalibrationParameter(0, 1f, 0f, 1f);
             }
         }
         else
         {
-            var eyeParameterNames = _eyeExpressionMap.Keys;
+            var eyeParameterNames = _eyeExpressionMap.Values;
             foreach (var parameterName in eyeParameterNames)
             {
                 var param = parameters.GetValueOrDefault(parameterName);
                 _expressionSettings[parameterName] = param ?? new CalibrationParameter(-1f, 1f, -1f, 1f);
             }
-            var faceParameterNames = _faceExpressionMap.Keys;
+            var faceParameterNames = _faceExpressionMap.Values;
             foreach (var parameterName in faceParameterNames)
             {
                 var param = parameters.GetValueOrDefault(parameterName);

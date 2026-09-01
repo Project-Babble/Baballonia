@@ -38,6 +38,7 @@ public class Device : IDisposable {
     public string Address { get; private set; }
     public v4l2_pix_fmt PixelFormat { get; private set; }
     public Data.v4l2_format CurrentFormat { get; private set; }
+    public double Fps { get; private set; }
 
     private int _fileDescriptor;
 
@@ -110,6 +111,13 @@ public class Device : IDisposable {
 
         device.SetFormat(bestInterval);
 
+        // VIDIOC_S_FMT only sets pixel format + resolution; without VIDIOC_S_PARM the camera stays
+        // at its default frame rate (commonly 30fps). Apply the highest interval we selected above.
+        var bestFract = bestInterval.type == v4l2_frmivaltypes.V4L2_FRMIVAL_TYPE_DISCRETE
+            ? bestInterval.discrete
+            : bestInterval.stepwise.min;
+        device.SetFrameInterval(bestFract);
+
         return device;
     }
 
@@ -170,6 +178,25 @@ public class Device : IDisposable {
         if (ret < 0) throw new Exception($"VIDIOC_S_FMT failed: errno={Marshal.GetLastWin32Error()}");
 
         CurrentFormat = fmt;
+    }
+
+    public void SetFrameInterval(Data.v4l2_fract timeperframe)
+    {
+        // Not all cameras honour S_PARM; a failure here must not prevent capture (it just runs at
+        // the device default FPS), so we deliberately don't throw on error.
+        Data.v4l2_streamparm parm = default;
+        parm.type = v4l2_buf_type.V4L2_BUF_TYPE_VIDEO_CAPTURE;
+        parm.timeperframe = timeperframe;
+        NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_S_PARM, ref parm);
+
+        // Read back what the driver actually applied so callers can report the true rate.
+        Data.v4l2_streamparm got = default;
+        got.type = v4l2_buf_type.V4L2_BUF_TYPE_VIDEO_CAPTURE;
+        if (NativeMethods.v4l2_ioctl_safe(_fileDescriptor, Ioctl.VIDIOC_G_PARM, ref got) >= 0 &&
+            got.timeperframe.numerator > 0)
+            Fps = (double)got.timeperframe.denominator / got.timeperframe.numerator;
+        else if (timeperframe.numerator > 0)
+            Fps = (double)timeperframe.denominator / timeperframe.numerator;
     }
 
     public List<Data.v4l2_frmsizeenum> EnumerateFrameSizes(v4l2_pix_fmt pixelformat)
@@ -302,9 +329,9 @@ public class Device : IDisposable {
         return (revents & Data.POLLIN) != 0;
     }
 
-    public bool CaptureFrame(out byte[]? frame) {
+    public bool CaptureFrame(out byte[]? frame, int timeoutMs = 0) {
         frame = null;
-        if (!FrameReady())
+        if (!FrameReady(timeoutMs))
             return false;
 
         Data.v4l2_buffer buf = default;
