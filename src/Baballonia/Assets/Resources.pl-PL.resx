@@ -866,13 +866,13 @@ Zazwyczaj można to łatwo naprawić! Po prostu zainstaluj oprogramowanie "Track
     <value>Włącza dynamiczne renderowanie fov Pimax4All dla obsługiwanych tytułów</value>
   </data>
   <data name="Firmware_Mode_Both" xml:space="preserve">
-    <value>Oba</value>
+    <value>Usta + Oczy</value>
   </data>
   <data name="Firmware_Mode_Eyes" xml:space="preserve">
     <value>Oczy</value>
   </data>
   <data name="Firmware_Mode_Face" xml:space="preserve">
-    <value>Twarz</value>
+    <value>Usta</value>
   </data>
   <data name="Firmware_Mode_None" xml:space="preserve">
     <value>Brak</value>
