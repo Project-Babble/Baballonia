@@ -48,7 +48,8 @@ public sealed class BaseTutorialStep(string name, TimeSpan time) : PacketHandler
 
     public override void OnRoutineFinishedPacket(RoutineFinishedPacket packet)
     {
-        Token.SetResult();
+        if (string.Equals(packet.RoutineName, Name, StringComparison.OrdinalIgnoreCase))
+            Token.TrySetResult();
     }
 }
 
@@ -98,7 +99,8 @@ public abstract class PositionalAwareCaptureStep(string name, uint flags, TimeSp
 
     public override void OnRoutineFinishedPacket(RoutineFinishedPacket packet)
     {
-        Token.SetResult();
+        if (string.Equals(packet.RoutineName, Name, StringComparison.OrdinalIgnoreCase))
+            Token.TrySetResult();
     }
 
     public void Dispose()
@@ -150,7 +152,8 @@ public abstract class BaseCaptureStep(string name, uint flags, TimeSpan time) : 
 
     public override void OnRoutineFinishedPacket(RoutineFinishedPacket packet)
     {
-        Token.SetResult();
+        if (string.Equals(packet.RoutineName, Name, StringComparison.OrdinalIgnoreCase))
+            Token.TrySetResult();
     }
 
     public void Dispose()
@@ -298,7 +301,9 @@ public class BaseEyeCaptureStep(
     float browAngry = 0,
     float widen = 0,
     float squint = 0,
-    float dilate = 0)
+    float dilate = 0,
+    float? leftLid = null,
+    float? rightLid = null)
     : BaseCaptureStep(name, flags, time)
 {
     public override async Task ExecuteAsync(OverlayMessageDispatcher dispatcher, CancellationToken ct)
@@ -325,8 +330,8 @@ public class BaseEyeCaptureStep(
         var frame = base.AddFrame(images);
         frame.Header = frame.Header with
         {
-            RoutineLeftLid = lid,
-            RoutineRightLid = lid,
+            RoutineLeftLid = leftLid ?? lid,
+            RoutineRightLid = rightLid ?? lid,
             RoutineBrowRaise = browRaise,
             RoutineBrowAngry = browAngry,
             RoutineWiden = widen,
@@ -357,6 +362,9 @@ public class TrainerCalibrationStep(ITrainerService overlayTrainer) : ICalibrati
         dispatcher.Dispatch(new RunVariableLenghtRoutinePacket(Name, TimeSpan.FromSeconds(120)));
         var onProgressHandler = (TrainerProgressReportPacket packet) => { dispatcher.Dispatch(packet); };
         overlayTrainer.OnProgress += onProgressHandler;
+        // The trainer first scans and indexes the capture file, which can take a while before its
+        // first batch line. Show immediately that training has started instead of an idle graph.
+        dispatcher.Dispatch(new TrainerProgressReportPacket("Batch", 0, 1, 0));
         overlayTrainer.RunTraining(Path.Combine(Utils.ModelDataDirectory, "user_cal.bin"),
             Path.Combine(Utils.ModelDataDirectory, "tuned_temporal_eye_tracking_latest.onnx"));
         await overlayTrainer.WaitAsync();
@@ -375,6 +383,10 @@ public class EyeCaptureStepFactory(IEyePipelineEventBus eyePipelineEvent)
         float squint = 0,
         float dilate = 0) =>
         new(eyePipelineEvent, name, flags, time, lid, browRaise, browAngry, widen, squint, dilate);
+
+    public BaseEyeCaptureStep CreateAsymmetricLids(string name, uint flags, TimeSpan time,
+        float leftLid, float rightLid) =>
+        new(eyePipelineEvent, name, flags, time, leftLid: leftLid, rightLid: rightLid);
 
     /// <summary>
     /// Like <see cref="Create"/>, but the step also records per-frame gaze ground-truth from the
@@ -432,6 +444,20 @@ public class EyeCalibration(
                 CaptureFlags.FLAG_VERSION_BIT1,
                 TimeSpan.FromSeconds(10), lid: 0
             ),
+            new BaseTutorialStep("winklefttutorial", TimeSpan.FromSeconds(10)),
+            eyeCaptureStepFactory.CreateAsymmetricLids("winkleft",
+                CaptureFlags.FLAG_GOOD_DATA |
+                CaptureFlags.FLAG_IN_MOVEMENT |
+                CaptureFlags.FLAG_VERSION_BIT1,
+                TimeSpan.FromSeconds(10), leftLid: 1, rightLid: 0
+            ),
+            new BaseTutorialStep("winkrighttutorial", TimeSpan.FromSeconds(10)),
+            eyeCaptureStepFactory.CreateAsymmetricLids("winkright",
+                CaptureFlags.FLAG_GOOD_DATA |
+                CaptureFlags.FLAG_IN_MOVEMENT |
+                CaptureFlags.FLAG_VERSION_BIT1,
+                TimeSpan.FromSeconds(10), leftLid: 0, rightLid: 1
+            ),
 
             new BaseTutorialStep("widentutorial", TimeSpan.FromSeconds(10)),
                 eyeCaptureStepFactory.CreateGazeExpression("widen",
@@ -448,7 +474,7 @@ public class EyeCalibration(
             //steps.Add(_eyeCaptureStepFactory.Create("covergence",
             //    CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_WHATEVER_NOT_IMPLEMENTED));
 
-            new MergeBinsStep("gaze.bin", "gazeexpr.bin", "blink.bin", "widen.bin", "squint.bin", "brow.bin"),
+            new MergeBinsStep("gaze.bin", "gazeexpr.bin", "blink.bin", "winkleft.bin", "winkright.bin", "widen.bin", "squint.bin", "brow.bin"),
             // new MergeBinsStep("gaze.bin", "blink.bin"),
             new TrainerCalibrationStep(trainer),
             new CommandDispatchStep("close")
@@ -462,11 +488,11 @@ public class EyeCalibration(
     {
         List<ICalibrationStep> steps =
         [
-            new BaseTutorialStep("gazetutorialshort", TimeSpan.FromSeconds(5)),
+            new BaseTutorialStep("gazetutorialshort", TimeSpan.FromSeconds(10)),
             new GazeCaptureStep(eyePipelineEventBus, TimeSpan.FromSeconds(10)),
-            new BaseTutorialStep("gazeexprtutorial", TimeSpan.FromSeconds(4)),
+            new BaseTutorialStep("gazeexprtutorial", TimeSpan.FromSeconds(10)),
             new GazeCaptureStep(eyePipelineEventBus, TimeSpan.FromSeconds(15), "gazeexpr", CaptureFlags.FLAG_FREE_EXPRESSION),
-            new BaseTutorialStep("blinktutorial", TimeSpan.FromSeconds(4)),
+            new BaseTutorialStep("blinktutorial", TimeSpan.FromSeconds(10)),
             eyeCaptureStepFactory.Create("blink",
                 CaptureFlags.FLAG_GOOD_DATA |
                 CaptureFlags.FLAG_IN_MOVEMENT |
@@ -474,20 +500,34 @@ public class EyeCalibration(
                 CaptureFlags.FLAG_ROUTINE_BIT1,
                 TimeSpan.FromSeconds(20)
             ),
+            new BaseTutorialStep("winklefttutorial", TimeSpan.FromSeconds(10)),
+            eyeCaptureStepFactory.CreateAsymmetricLids("winkleft",
+                CaptureFlags.FLAG_GOOD_DATA |
+                CaptureFlags.FLAG_IN_MOVEMENT |
+                CaptureFlags.FLAG_VERSION_BIT1,
+                TimeSpan.FromSeconds(10), leftLid: 1, rightLid: 0
+            ),
+            new BaseTutorialStep("winkrighttutorial", TimeSpan.FromSeconds(10)),
+            eyeCaptureStepFactory.CreateAsymmetricLids("winkright",
+                CaptureFlags.FLAG_GOOD_DATA |
+                CaptureFlags.FLAG_IN_MOVEMENT |
+                CaptureFlags.FLAG_VERSION_BIT1,
+                TimeSpan.FromSeconds(10), leftLid: 0, rightLid: 1
+            ),
 
-            new BaseTutorialStep("widentutorial", TimeSpan.FromSeconds(4)),
+            new BaseTutorialStep("widentutorial", TimeSpan.FromSeconds(10)),
                 eyeCaptureStepFactory.CreateGazeExpression("widen",
                 CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_IN_MOVEMENT | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20), widen: 1, lid: 1),
 
-            new BaseTutorialStep("squinttutorial", TimeSpan.FromSeconds(4)),
+            new BaseTutorialStep("squinttutorial", TimeSpan.FromSeconds(10)),
                 eyeCaptureStepFactory.CreateGazeExpression("squint",
                 CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_IN_MOVEMENT | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20), squint: 1, lid: 1),
 
-            new BaseTutorialStep("browtutorial", TimeSpan.FromSeconds(4)),
+            new BaseTutorialStep("browtutorial", TimeSpan.FromSeconds(10)),
                 eyeCaptureStepFactory.CreateGazeExpression("brow",
                 CaptureFlags.FLAG_GOOD_DATA | CaptureFlags.FLAG_IN_MOVEMENT | CaptureFlags.FLAG_VERSION_BIT1, TimeSpan.FromSeconds(20), browAngry: 1, lid: 1),
 
-            new MergeBinsStep("gaze.bin", "gazeexpr.bin", "blink.bin", "widen.bin", "squint.bin", "brow.bin"),
+            new MergeBinsStep("gaze.bin", "gazeexpr.bin", "blink.bin", "winkleft.bin", "winkright.bin", "widen.bin", "squint.bin", "brow.bin"),
             // new MergeBinsStep("gaze.bin", "blink.bin"),
             new TrainerCalibrationStep(trainer),
             new CommandDispatchStep("close")
@@ -501,7 +541,7 @@ public class EyeCalibration(
     {
         List<ICalibrationStep> steps =
         [
-            new BaseTutorialStep("gazetutorialshort", TimeSpan.FromSeconds(5)),
+            new BaseTutorialStep("gazetutorialshort", TimeSpan.FromSeconds(10)),
             new GazeCaptureStep(eyePipelineEventBus),
 
             new MergeBinsStep("gaze.bin", "blink.bin"),
@@ -517,7 +557,7 @@ public class EyeCalibration(
     {
         List<ICalibrationStep> steps =
         [
-            new BaseTutorialStep("blinktutorial", TimeSpan.FromSeconds(4)),
+            new BaseTutorialStep("blinktutorial", TimeSpan.FromSeconds(10)),
             eyeCaptureStepFactory.Create("blink",
                 CaptureFlags.FLAG_GOOD_DATA |
                 CaptureFlags.FLAG_IN_MOVEMENT |
@@ -526,7 +566,22 @@ public class EyeCalibration(
                 TimeSpan.FromSeconds(20)
             ),
 
-            new MergeBinsStep("gaze.bin", "blink.bin"),
+            new BaseTutorialStep("winklefttutorial", TimeSpan.FromSeconds(10)),
+            eyeCaptureStepFactory.CreateAsymmetricLids("winkleft",
+                CaptureFlags.FLAG_GOOD_DATA |
+                CaptureFlags.FLAG_IN_MOVEMENT |
+                CaptureFlags.FLAG_VERSION_BIT1,
+                TimeSpan.FromSeconds(10), leftLid: 1, rightLid: 0
+            ),
+            new BaseTutorialStep("winkrighttutorial", TimeSpan.FromSeconds(10)),
+            eyeCaptureStepFactory.CreateAsymmetricLids("winkright",
+                CaptureFlags.FLAG_GOOD_DATA |
+                CaptureFlags.FLAG_IN_MOVEMENT |
+                CaptureFlags.FLAG_VERSION_BIT1,
+                TimeSpan.FromSeconds(10), leftLid: 0, rightLid: 1
+            ),
+
+            new MergeBinsStep("gaze.bin", "blink.bin", "winkleft.bin", "winkright.bin"),
             new TrainerCalibrationStep(trainer),
             new CommandDispatchStep("close")
 

@@ -7,6 +7,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using OverlaySDK.Packets;
 
 namespace Baballonia.Desktop.Calibration;
 
@@ -35,20 +36,28 @@ public class OverlayTrainerService(
             return (false, "Cannot start Overlay");
         }
 
-        overlayProgram.Start();
-
-        await Task.Delay(TimeSpan.FromSeconds(0.25));
-
         var overlayLogger = new OverlayLogger(logger);
 
         var sfactory = new SocketFactory();
-        var sock = sfactory.CreateServer("127.0.0.1", 2425);
+        // Start binding/listening before launching Godot. CreateServer waits for the client, so run
+        // it in the background; this removes the first-launch race caused by the old fixed delay.
+        var serverTask = Task.Run(() => sfactory.CreateServer("127.0.0.1", 2425), _tokenSource.Token);
+
+        overlayProgram.Start();
+
+        var sock = await serverTask.WaitAsync(TimeSpan.FromSeconds(30), _tokenSource.Token);
         overlayLogger.Info("Accepted connection");
 
         var tcp = new EventDrivenTcpClient(sock);
         var client = new EventDrivenJsonClient(tcp);
 
         var messageDispatcher = new OverlayMessageDispatcher(overlayLogger, client);
+
+        var readyHandler = new OverlayReadyHandler();
+        messageDispatcher.RegisterHandler(readyHandler);
+        await readyHandler.WaitAsync(_tokenSource.Token);
+        messageDispatcher.UnRegisterHandler(readyHandler);
+        overlayLogger.Info("Calibration overlay is ready");
 
         if (!Directory.Exists(Utils.ModelDataDirectory)) Directory.CreateDirectory(Utils.ModelDataDirectory);
         if (!Directory.Exists(Utils.ModelsDirectory)) Directory.CreateDirectory(Utils.ModelsDirectory);
@@ -63,7 +72,9 @@ public class OverlayTrainerService(
         };
         foreach (var calibrationStep in steps)
         {
+            logger.LogInformation("Starting calibration step {Step}", calibrationStep.Name);
             await calibrationStep.ExecuteAsync(messageDispatcher, _tokenSource.Token);
+            logger.LogInformation("Finished calibration step {Step}", calibrationStep.Name);
         }
 
         var srcPath = Path.Combine(Utils.ModelDataDirectory, "tuned_temporal_eye_tracking_latest.onnx");
@@ -84,5 +95,19 @@ public class OverlayTrainerService(
         await overlayProgram.WaitForExitAsync();
 
         return (true, string.Empty);
+    }
+
+    private sealed class OverlayReadyHandler : PacketHandlerAdapter
+    {
+        private readonly TaskCompletionSource _ready = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        public Task WaitAsync(CancellationToken cancellationToken) =>
+            _ready.Task.WaitAsync(TimeSpan.FromSeconds(10), cancellationToken);
+
+        public override void OnRoutineFinishedPacket(RoutineFinishedPacket packet)
+        {
+            if (string.Equals(packet.RoutineName, "ready", StringComparison.OrdinalIgnoreCase))
+                _ready.TrySetResult();
+        }
     }
 }
