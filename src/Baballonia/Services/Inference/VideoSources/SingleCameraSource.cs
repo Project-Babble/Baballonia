@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Diagnostics;
+using System.Threading;
 using Baballonia.SDK;
 using Baballonia.Services.Inference.Enums;
 using Microsoft.Extensions.Logging;
@@ -12,9 +13,13 @@ public class SingleCameraSource : IVideoSource
     public Size CameraSize;
     private string _cameraAddress;
     private readonly Capture _capture;
+    private long _lastDeliveredFrameTimestamp;
+    private double _frameIntervalSeconds;
 
     /// <summary>The underlying capture source (exposes frame-rate / throughput stats).</summary>
     public Capture Capture => _capture;
+
+    public double FrameIntervalSeconds => Volatile.Read(ref _frameIntervalSeconds);
 
     public SingleCameraSource(
         ILogger logger,
@@ -92,6 +97,11 @@ public class SingleCameraSource : IVideoSource
             image.Dispose();
             return null;
         }
+
+        var now = Stopwatch.GetTimestamp();
+        var previous = Interlocked.Exchange(ref _lastDeliveredFrameTimestamp, now);
+        if (previous != 0)
+            Volatile.Write(ref _frameIntervalSeconds, Stopwatch.GetElapsedTime(previous, now).TotalSeconds);
 
         return image;
     }

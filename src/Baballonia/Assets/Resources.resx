@@ -499,7 +499,7 @@
     <value>Minimum frequency cutoff</value>
   </data>
   <data name="Settings_Filter_MinFreq_Description" xml:space="preserve">
-    <value>Controls how much smoothing is applied to slow movements</value>
+    <value>Baseline smoothing. Lower values reduce jitter but add lag.</value>
   </data>
   <data name="Settings_Filter_Template_Placeholder" xml:space="preserve">
     <value>Select from a template</value>
@@ -517,7 +517,7 @@
     <value>Speed coefficient</value>
   </data>
   <data name="Settings_Filter_Speed_Description" xml:space="preserve">
-    <value>Determines how the filter adapts when you move faster</value>
+    <value>Fast-movement response. Higher values reduce lag during quick movements but may add jitter.</value>
   </data>
   <data name="Settings_GPU_Header" xml:space="preserve">
     <value>Use GPU acceleration</value>

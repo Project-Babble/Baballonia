@@ -3,13 +3,15 @@ using System.Collections.Generic;
 
 namespace Baballonia.Services.Inference.Filters;
 
+public readonly record struct OneEuroFilterParameters(bool Enabled, float MinCutoff, float Beta);
+
 public class OneEuroFilter : IFilter
 {
-    private readonly float _initialMinCutoff;
-    private readonly float _initialBeta;
+    private readonly Func<string, OneEuroFilterParameters> _getParameters;
     private bool _isInitialized;
 
     private string[] _keys;
+    private bool[] _enabled;
     private float[] _minCutoff;
     private float[] _beta;
     private float[] _dCutoff;
@@ -25,16 +27,18 @@ public class OneEuroFilter : IFilter
     private OrderedFloatMap _output;
     // The input map we sized our state to; detects a model hot-swap.
     private OrderedFloatMap _source;
-    private DateTime _tPrev;
 
     public OneEuroFilter(float minCutoff = 1.0f, float beta = 0.0f)
+        : this(_ => new OneEuroFilterParameters(true, minCutoff, beta))
     {
-        _initialMinCutoff = minCutoff;
-        _initialBeta = beta;
-        _isInitialized = false;
     }
 
-    public OrderedFloatMap Filter(OrderedFloatMap x)
+    public OneEuroFilter(Func<string, OneEuroFilterParameters> getParameters)
+    {
+        _getParameters = getParameters;
+    }
+
+    public OrderedFloatMap Filter(OrderedFloatMap x, double elapsedSeconds)
     {
         // (Re)init on first frame or after a model swap. State is sized to the first frame;
         // a shrunk output overruns it, a grown one gets truncated/mis-keyed.
@@ -44,14 +48,11 @@ public class OneEuroFilter : IFilter
             return _output; // Return the initial state on the first frame
         }
 
-        DateTime now = DateTime.UtcNow;
-        float elapsedTime = (float)(now - _tPrev).TotalSeconds;
-
         ReadOnlySpan<float> xSpan = x.ValuesSpan;
         Span<float> outSpan = _output.ValuesSpan;
         int length = _xPrev.Length;
 
-        if (elapsedTime <= 0.0f)
+        if (elapsedSeconds <= 0.0 || !double.IsFinite(elapsedSeconds))
         {
             ReadOnlySpan<float> src = xSpan.Slice(0, length);
             src.CopyTo(outSpan);
@@ -59,9 +60,19 @@ public class OneEuroFilter : IFilter
             return _output;
         }
 
+        float elapsedTime = (float)elapsedSeconds;
+
         for (int i = 0; i < length; i++)
         {
             float val = xSpan[i];
+
+            if (!_enabled[i])
+            {
+                _xPrev[i] = val;
+                _dxPrev[i] = 0.0f;
+                outSpan[i] = val;
+                continue;
+            }
 
             _dx[i] = (val - _xPrev[i]) / elapsedTime;
 
@@ -83,7 +94,6 @@ public class OneEuroFilter : IFilter
             outSpan[i] = _xHat[i];
         }
 
-        _tPrev = now;
         return _output;
     }
 
@@ -115,6 +125,7 @@ public class OneEuroFilter : IFilter
         int length = x0.Count;
 
         _keys = new string[length];
+        _enabled = new bool[length];
         _minCutoff = new float[length];
         _beta = new float[length];
         _dCutoff = new float[length];
@@ -129,10 +140,12 @@ public class OneEuroFilter : IFilter
         int i = 0;
         foreach (KeyValuePair<string, float> kvp in x0)
         {
+            var parameters = _getParameters(kvp.Key);
             _keys[i] = kvp.Key;
+            _enabled[i] = parameters.Enabled;
             _xPrev[i] = kvp.Value;
-            _minCutoff[i] = _initialMinCutoff;
-            _beta[i] = _initialBeta;
+            _minCutoff[i] = parameters.MinCutoff;
+            _beta[i] = parameters.Beta;
             _dCutoff[i] = 1.0f;
             _dxPrev[i] = 0.0f;
             i++;
@@ -143,7 +156,6 @@ public class OneEuroFilter : IFilter
 
         _xPrev.CopyTo(_output.ValuesSpan);
 
-        _tPrev = DateTime.UtcNow;
         _isInitialized = true;
     }
 }

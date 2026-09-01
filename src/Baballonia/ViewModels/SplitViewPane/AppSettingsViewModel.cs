@@ -36,16 +36,40 @@ public partial class AppSettingsViewModel : ViewModelBase
     private bool _isOscPrefixValid = true;
 
     [ObservableProperty]
-    [property: SavedSetting("AppSettings_OneEuroEnabled", true)]
-    private bool _oneEuroMinEnabled;
+    [property: SavedSetting("AppSettings_GazeOneEuroEnabled", true)]
+    private bool _gazeOneEuroEnabled;
 
     [ObservableProperty]
-    [property: SavedSetting("AppSettings_OneEuroMinFreqCutoff", 0.5f)]
-    private float _oneEuroMinFreqCutoff;
+    [property: SavedSetting("AppSettings_GazeOneEuroMinFreqCutoff", 0.5f)]
+    private float _gazeOneEuroMinFreqCutoff;
 
     [ObservableProperty]
-    [property: SavedSetting("AppSettings_OneEuroSpeedCutoff", 3f)]
-    private float _oneEuroSpeedCutoff;
+    [property: SavedSetting("AppSettings_GazeOneEuroSpeedCutoff", 3f)]
+    private float _gazeOneEuroSpeedCutoff;
+
+    [ObservableProperty]
+    [property: SavedSetting("AppSettings_EyeExpressionOneEuroEnabled", true)]
+    private bool _eyeExpressionOneEuroEnabled;
+
+    [ObservableProperty]
+    [property: SavedSetting("AppSettings_EyeExpressionOneEuroMinFreqCutoff", 0.5f)]
+    private float _eyeExpressionOneEuroMinFreqCutoff;
+
+    [ObservableProperty]
+    [property: SavedSetting("AppSettings_EyeExpressionOneEuroSpeedCutoff", 3f)]
+    private float _eyeExpressionOneEuroSpeedCutoff;
+
+    [ObservableProperty]
+    [property: SavedSetting("AppSettings_FaceOneEuroEnabled", true)]
+    private bool _faceOneEuroEnabled;
+
+    [ObservableProperty]
+    [property: SavedSetting("AppSettings_FaceOneEuroMinFreqCutoff", 0.5f)]
+    private float _faceOneEuroMinFreqCutoff;
+
+    [ObservableProperty]
+    [property: SavedSetting("AppSettings_FaceOneEuroSpeedCutoff", 3f)]
+    private float _faceOneEuroSpeedCutoff;
 
     [ObservableProperty]
     [property: SavedSetting("AppSettings_UseDFR", false)]
@@ -164,8 +188,23 @@ public partial class AppSettingsViewModel : ViewModelBase
         PropertyChanged += (_, p) =>
         {
             _localSettingsService.Save(this);
-            _facePipelineManager.LoadFilter();
-            _eyePipelineManager.LoadFilter();
+
+            switch (p.PropertyName)
+            {
+                case nameof(GazeOneEuroEnabled):
+                case nameof(GazeOneEuroMinFreqCutoff):
+                case nameof(GazeOneEuroSpeedCutoff):
+                case nameof(EyeExpressionOneEuroEnabled):
+                case nameof(EyeExpressionOneEuroMinFreqCutoff):
+                case nameof(EyeExpressionOneEuroSpeedCutoff):
+                    _eyePipelineManager.LoadFilter();
+                    break;
+                case nameof(FaceOneEuroEnabled):
+                case nameof(FaceOneEuroMinFreqCutoff):
+                case nameof(FaceOneEuroSpeedCutoff):
+                    _facePipelineManager.LoadFilter();
+                    break;
+            }
 
             if (p.PropertyName == nameof(StabilizeEyes))
             {

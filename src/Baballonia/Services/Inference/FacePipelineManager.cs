@@ -65,17 +65,13 @@ public class FacePipelineManager
 
     public void LoadFilter()
     {
-        var enabled = _localSettings.ReadSetting<bool>("AppSettings_OneEuroEnabled");
-        var cutoff = _localSettings.ReadSetting<float>("AppSettings_OneEuroMinFreqCutoff");
-        var speedCutoff = _localSettings.ReadSetting<float>("AppSettings_OneEuroSpeedCutoff");
+        var filterEnabled = _localSettings.ReadSetting("AppSettings_FaceOneEuroEnabled", true);
+        var minCutoff = _localSettings.ReadSetting("AppSettings_FaceOneEuroMinFreqCutoff", 0.5f);
+        var beta = _localSettings.ReadSetting("AppSettings_FaceOneEuroSpeedCutoff", 3f);
 
-        if (!enabled)
-            return;
-
-        var faceFilter = new OneEuroFilter(
-            minCutoff: cutoff,
-            beta: speedCutoff
-        );
+        IFilter? faceFilter = filterEnabled
+            ? new OneEuroFilter(minCutoff, beta)
+            : null;
 
         lock (_pipeline.SyncRoot)
             _pipeline.Filter = faceFilter;

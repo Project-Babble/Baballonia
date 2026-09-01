@@ -84,7 +84,7 @@ public class EyeProcessingPipeline(IEyePipelineEventBus eyePipelineEventBus, Pip
         OrderedFloatMap? rawForDfr = null;
         if (Filter != null)
         {
-            var filtered = Filter.Filter(inferenceResult);
+            var filtered = Filter.Filter(inferenceResult, VideoSource?.FrameIntervalSeconds ?? 0);
             ProcessExpressions(ref inferenceResult);
             rawForDfr = inferenceResult;
             inferenceResult = filtered;
