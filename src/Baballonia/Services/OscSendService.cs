@@ -19,40 +19,32 @@ public abstract class OscSendService(
     public event Action<int> OnMessagesDispatched = _ => { };
     protected readonly IOscTarget OscTarget = oscTarget;
     private Socket _sendSocket;
+    private bool _connected;
+    private IPEndPoint? _sendEndpoint;
 
     protected void UpdateTarget(IPEndPoint endpoint)
     {
         _sendSocket?.Close();
         OscTarget.IsConnected = false;
+        _connected = false;
+        _sendEndpoint = null;
 
         _sendSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-
-        try
-        {
-            _sendSocket.Connect(endpoint);
-            OscTarget.IsConnected = true;
-        }
-        catch (SocketException ex)
-        {
-            logger.LogWarning("Failed to bind to sender endpoint: {IpEndPoint}. {ExMessage}", endpoint, ex.Message);
-        }
-        catch (Exception ex)
-        {
-            logger.LogError("Unexpected Exception while binding to sender endpoint: {IpEndPoint}. {ExMessage}", endpoint, ex.Message);
-        }
+        _sendEndpoint = endpoint;
+        _connected = true;
+        OscTarget.IsConnected = true;
     }
 
     public async Task Send(OscMessage message, CancellationToken ct)
     {
-        if (_sendSocket is not { Connected: true })
+        if (!_connected || _sendEndpoint is null)
         {
             return;
         }
 
         try
         {
-            var ip = IPEndPoint.Parse(OscTarget.DestinationAddress);
-            await _sendSocket.SendToAsync(message.ToByteArray(), SocketFlags.None, ip, ct);
+            await _sendSocket.SendToAsync(message.ToByteArray(), SocketFlags.None, _sendEndpoint, ct);
             OnMessagesDispatched(1);
         }
         catch (Exception ex)
@@ -63,7 +55,7 @@ public abstract class OscSendService(
 
     public async Task Send(OscMessage[] messages, CancellationToken ct)
     {
-        if (_sendSocket is not { Connected: true })
+        if (!_connected || _sendEndpoint is null)
         {
             return;
         }
@@ -72,7 +64,7 @@ public abstract class OscSendService(
         {
             foreach (var message in messages)
             {
-                await _sendSocket.SendAsync(message.ToByteArray(), SocketFlags.None, ct);
+                await _sendSocket.SendToAsync(message.ToByteArray(), SocketFlags.None, _sendEndpoint, ct);
             }
 
             OnMessagesDispatched(messages.Length);
