@@ -1,6 +1,6 @@
 {
   "Host": "127.0.0.1",
   "Port": 8888,
-  "IsEyeSupported": false,
+  "IsEyeSupported": true,
   "IsFaceSupported": true
 }

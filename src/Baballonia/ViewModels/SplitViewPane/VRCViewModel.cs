@@ -29,33 +29,52 @@ public partial class VrcViewModel : ViewModelBase
         Resources.Firmware_Mode_None
     ];
 
-    private string _baballoniaModulePath;
+    private const string BabbleModuleGuid = "360b014b-b57b-450f-8f12-9904618ff370";
+
+    private const string BabbleConfigFile = "BabbleConfig.json";
+
+    private static readonly string _babbleModulePath = Path.Combine(Utils.VrcftLibsDirectory, BabbleModuleGuid);
+
+    private static readonly string _babbleVrcftConfigPath = Path.Combine(_babbleModulePath, BabbleConfigFile);
 
     private bool TryGetModuleConfig(out ModuleConfig? config)
     {
-        if (!Directory.Exists(Utils.VrcftLibsDirectory))
+        // Can we detect a valid install of VRCFaceTracking and a Babble module?
+        if (!Directory.Exists(_babbleModulePath))
         {
             config = null;
             return false;
         }
 
-        var moduleFiles = Directory.GetFiles(Utils.VrcftLibsDirectory, "*.json", SearchOption.AllDirectories);
-        foreach (var moduleFile in moduleFiles)
-        {
-            if (Path.GetFileName(moduleFile) != "BabbleConfig.json") continue;
+        /* Up until the release of the 3.1.0 VRCFT module, we used to bundle the module config 
+        * (BabbleConfig.json) with VRCFT. However, this would overwrite the existing settings file.
+        * Now, we set and control it from here.  
+        * 
+        * 1) If there is already a settings file present, just use it
+        * 2) If there *isn't* a file, then this is a fresh install and we'll copy our own file
+        */
+        if (!File.Exists(_babbleVrcftConfigPath))
+            File.Copy(BabbleConfigFile, _babbleVrcftConfigPath);
 
-            var contents = File.ReadAllText(moduleFile);
-            if (string.IsNullOrEmpty(contents))
-            {
-                // How do we even get here??
-                config = null;
-                return false;
-            }
-            var possibleBabbleConfig = JsonSerializer.Deserialize<ModuleConfig>(contents);
-            if (possibleBabbleConfig != null) _baballoniaModulePath = moduleFile;
+        // Now we're garunteed to have a settings file!
+        var contents = File.ReadAllText(_babbleVrcftConfigPath);
+
+        // Sanity check if the (existing) config file is empty
+        if (string.IsNullOrEmpty(contents))
+        {
+            config = null;
+            return false;
+        }
+
+        // Sanity check if the (existing) config file is malformed
+        var possibleBabbleConfig = JsonSerializer.Deserialize<ModuleConfig>(contents);
+        if (possibleBabbleConfig != null)
+        {
+            // All good? Send it
             config = possibleBabbleConfig;
             return true;
         }
+
         config = null;
         return false;
     }
@@ -81,8 +100,8 @@ public partial class VrcViewModel : ViewModelBase
 
     private async Task WriteModuleConfig(ModuleConfig config)
     {
-        if (!string.IsNullOrWhiteSpace(_baballoniaModulePath))
-            await File.WriteAllTextAsync(_baballoniaModulePath, JsonSerializer.Serialize(config));
+        if (!string.IsNullOrWhiteSpace(_babbleVrcftConfigPath))
+            await File.WriteAllTextAsync(_babbleVrcftConfigPath, JsonSerializer.Serialize(config));
     }
 
     async partial void OnSelectedModuleModeChanged(string? value)
