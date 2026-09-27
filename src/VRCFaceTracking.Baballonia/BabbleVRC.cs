@@ -7,6 +7,7 @@ namespace VRCFaceTracking.Baballonia;
 public class BabbleVrc : ExtTrackingModule
 {
     private BabbleOsc babbleOSC;
+    private BabbleLink? babbleLink;
     private Config config;
     private bool needsEye;
     private bool needsExpression;
@@ -17,7 +18,20 @@ public class BabbleVrc : ExtTrackingModule
     public override (bool eyeSuccess, bool expressionSuccess) Initialize(bool eyeAvailable, bool expressionAvailable)
     {
         config = BabbleConfig.GetBabbleConfig();
-        babbleOSC = new BabbleOsc(Logger, config.Host, config.Port);
+        if (config.LinkEnabled)
+        {
+            try
+            {
+                babbleLink = new BabbleLink(Logger, config.LinkPort, config.Port);
+            }
+            catch (Exception e)
+            {
+                Logger.LogWarning($"BFR Link is off: cannot listen on UDP {config.LinkPort} ({e.Message})");
+            }
+        }
+        babbleOSC = new BabbleOsc(Logger, config.Host, config.Port, babbleLink);
+        if (babbleLink != null)
+            babbleLink.SessionEnded += babbleOSC.ResetLinkValues;
 
         List<Stream> list = new List<Stream>();
         Assembly executingAssembly = Assembly.GetExecutingAssembly();
@@ -49,6 +63,7 @@ public class BabbleVrc : ExtTrackingModule
 
     public override void Teardown()
     {
+        babbleLink?.Teardown();
         babbleOSC.Teardown();
     }
 
