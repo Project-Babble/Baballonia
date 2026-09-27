@@ -2,5 +2,7 @@
   "Host": "127.0.0.1",
   "Port": 8888,
   "IsEyeSupported": false,
-  "IsFaceSupported": true
+  "IsFaceSupported": true,
+  "LinkEnabled": true,
+  "LinkPort": 6767
 }
