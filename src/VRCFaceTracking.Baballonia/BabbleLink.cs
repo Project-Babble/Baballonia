@@ -10,15 +10,19 @@ namespace VRCFaceTracking.Baballonia;
 
 /// <summary>
 /// BFR Link, protocol v1: lets a Babble Frame Runtime headset find this module over the network, keeps a heartbeat
-/// with it, and tells <see cref="BabbleOsc"/> which addresses the headset's OSC data may come from.
+/// with it, and receives its tracking data.
 ///
-/// Control messages are small JSON datagrams on UDP <c>LinkPort</c> (6767), each with "proto":"bfr-link","v":1:
+/// Everything arrives on UDP <c>LinkPort</c> (6767). Control messages are small JSON datagrams, each with
+/// "proto":"bfr-link","v":1:
 ///   beacon  headset -> broadcast   {sid, name, version}       answered with an offer
 ///   query   module  -> broadcast   {mid}                      on start and when a session ends; headsets beacon back
-///   offer   module  -> beacon      {mid, name, data_port, busy}
+///   offer   module  -> beacon      {mid, name, busy}
 ///   ping    headset -> module      {sid, seq, path, active}   1 Hz on every path; answered with a pong
-///   pong    module  -> ping        {mid, seq}
+///   pong    module  -> ping        {mid, seq, rx}             rx: data datagrams received so far
 ///   bye     either side            {sid} / {mid}
+/// Data is OSC (bundles of single-float messages), told apart from control by its first byte, and comes from the
+/// same headset socket as that path's pings. Our pongs go back to that socket, which keeps the pair open in the PC's
+/// firewall, so the data needs no inbound rule. The headset compares rx with what it sent to see whether data arrives.
 /// The headset can reach the PC over several paths at once (its streaming dongle, USB, the home LAN). Every address a
 /// beacon or ping of the session came from is a valid source for its data, so a path switch needs no new handshake.
 /// One headset at a time: others get busy offers until the session ends (3 s without pings or data, or a bye).
@@ -30,7 +34,6 @@ public sealed class BabbleLink
 
     private readonly ILogger _logger;
     private readonly int _port;
-    private readonly int _dataPort;
     private readonly string _mid = Guid.NewGuid().ToString("N")[..16];
     private readonly Socket _socket;
     private readonly Thread _thread;
@@ -42,15 +45,19 @@ public sealed class BabbleLink
     private readonly Dictionary<IPAddress, string> _peers = new();   // source address -> path kind
     private string _activePath = "";
     private DateTime _lastSeen;
+    private long _rx;                   // data datagrams received from linked headsets (only ever grows)
+    private bool _dataSeen;             // in this session, for the log
 
     /// <summary>Raised on the link thread when a session ends, so the headset's values can be reset.</summary>
     public event Action? SessionEnded;
 
-    public BabbleLink(ILogger logger, int port, int dataPort)
+    /// <summary>Raised on the link thread for each value the linked headset sends (OSC address, value).</summary>
+    public event Action<string, float>? ValueReceived;
+
+    public BabbleLink(ILogger logger, int port)
     {
         _logger = logger;
         _port = port;
-        _dataPort = dataPort;
         _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         _socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
         _socket.EnableBroadcast = true;
@@ -61,18 +68,6 @@ public sealed class BabbleLink
         _thread = new Thread(Loop) { IsBackground = true, Name = "BFR Link" };
         _thread.Start();
         SendQuery();
-    }
-
-    /// <summary>Whether OSC data from this address belongs to the linked headset (called for every datagram).</summary>
-    public bool IsPeer(IPAddress address)
-    {
-        lock (_lock)
-        {
-            if (_sid == null || !_peers.ContainsKey(address))
-                return false;
-            _lastSeen = DateTime.UtcNow;
-            return true;
-        }
     }
 
     public void Teardown()
@@ -105,7 +100,10 @@ public sealed class BabbleLink
                     CheckTimeout();
                     continue;
                 }
-                Handle(buffer.AsSpan(0, length), (IPEndPoint)remote);
+                if (length > 0 && buffer[0] == (byte)'{')
+                    Handle(buffer.AsSpan(0, length), (IPEndPoint)remote);
+                else
+                    HandleData(buffer.AsSpan(0, length), (IPEndPoint)remote);
                 CheckTimeout();
             }
             catch (Exception e) when (_running)
@@ -154,6 +152,26 @@ public sealed class BabbleLink
         }
     }
 
+    /// <summary>OSC from the linked headset; anything else (another headset, a stray sender) is ignored.</summary>
+    private void HandleData(ReadOnlySpan<byte> data, IPEndPoint from)
+    {
+        string name;
+        lock (_lock)
+        {
+            if (_sid == null || !_peers.ContainsKey(from.Address))
+                return;
+            _lastSeen = DateTime.UtcNow;
+            _rx++;
+            name = _dataSeen ? "" : _headsetName;
+            _dataSeen = true;
+        }
+        if (name.Length > 0)
+            _logger.LogInformation($"BFR Link: receiving tracking data from \"{name}\" ({from.Address})");
+        var handler = ValueReceived;
+        if (handler != null)
+            OscPacket.ForEachFloat(data, handler);
+    }
+
     private void OnBeacon(string sid, string name, string version, IPEndPoint from)
     {
         bool busy;
@@ -180,13 +198,13 @@ public sealed class BabbleLink
         }
         var offer = Message("offer");
         offer["name"] = Environment.MachineName;
-        offer["data_port"] = _dataPort;
         offer["busy"] = busy;
         Send(from, offer);
     }
 
     private void OnPing(string sid, string path, bool active, JsonNode? seq, IPEndPoint from)
     {
+        long rx;
         lock (_lock)
         {
             if (sid != _sid)
@@ -200,9 +218,11 @@ public sealed class BabbleLink
                     : $"BFR Link: \"{_headsetName}\" switched to {path} ({from.Address})");
                 _activePath = path;
             }
+            rx = _rx;
         }
         var pong = Message("pong");
         pong["seq"] = seq?.DeepClone();
+        pong["rx"] = rx;
         Send(from, pong);
     }
 
@@ -222,6 +242,7 @@ public sealed class BabbleLink
         _sid = null;
         _peers.Clear();
         _activePath = "";
+        _dataSeen = false;
         try
         {
             SessionEnded?.Invoke();
