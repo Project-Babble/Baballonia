@@ -22,7 +22,7 @@ public class BabbleVrc : ExtTrackingModule
         {
             try
             {
-                babbleLink = new BabbleLink(Logger, config.LinkPort, config.Port);
+                babbleLink = new BabbleLink(Logger, config.LinkPort);
             }
             catch (Exception e)
             {
@@ -31,7 +31,11 @@ public class BabbleVrc : ExtTrackingModule
         }
         babbleOSC = new BabbleOsc(Logger, config.Host, config.Port, babbleLink);
         if (babbleLink != null)
-            babbleLink.SessionEnded += babbleOSC.ResetLinkValues;
+        {
+            var osc = babbleOSC;
+            babbleLink.ValueReceived += (address, value) => osc.Apply(address, value, fromLink: true);
+            babbleLink.SessionEnded += osc.ResetLinkValues;
+        }
 
         List<Stream> list = new List<Stream>();
         Assembly executingAssembly = Assembly.GetExecutingAssembly();

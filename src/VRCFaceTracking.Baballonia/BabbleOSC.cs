@@ -37,8 +37,9 @@ public class BabbleOsc
 
     private readonly HashSet<string> _linkAddresses = new();
 
-    /// <param name="link">With a BFR Link, the socket listens on every interface and takes data from the linked
-    /// headset and from this machine; without one it listens on <paramref name="host"/> only.</param>
+    /// <param name="link">With a BFR Link, the socket listens on every interface for senders on this machine (the
+    /// Baballonia app); the headset's data comes through the link instead. Without one it listens on
+    /// <paramref name="host"/> only.</param>
     public BabbleOsc(ILogger iLogger, string host, int? port, BabbleLink? link = null)
     {
         _link = link;
@@ -53,7 +54,7 @@ public class BabbleOsc
         _resolvedPort = port ?? DefaultPort;
 
         iLogger.LogInformation(_link != null
-            ? $"Started BabbleEyeOSC on port {_resolvedPort} (this machine and a BFR Link headset{(_openToNetwork ? ", and any sender" : "")})"
+            ? $"Started BabbleEyeOSC on port {_resolvedPort} (this machine{(_openToNetwork ? " and any sender" : "")}; a BFR Link headset sends through the link)"
             : $"Started BabbleEyeOSC with Host: {_resolvedHost} and Port {_resolvedPort}");
         ConfigureReceiver();
         _loop = true;
@@ -63,7 +64,9 @@ public class BabbleOsc
 
     private void ConfigureReceiver()
     {
-        IPAddress address = _link != null ? IPAddress.Any : IPAddress.Parse(_resolvedHost!);
+        // Only local senders here (the headset's data comes through the link), so the configured host as given:
+        // 127.0.0.1, or "0.0.0.0" to take any sender.
+        IPAddress address = IPAddress.Parse(_resolvedHost!);
         IPEndPoint localEp = new IPEndPoint(address, _resolvedPort);
         _receiver = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         _receiver.Bind(localEp);
@@ -83,9 +86,8 @@ public class BabbleOsc
                     EndPoint remote = new IPEndPoint(IPAddress.Any, 0);
                     int len = _receiver.ReceiveFrom(array, ref remote);
                     IPAddress sender = ((IPEndPoint)remote).Address;
-                    bool fromLink = _link != null && _link.IsPeer(sender);
-                    if (!fromLink && !IPAddress.IsLoopback(sender) && !_openToNetwork)
-                        continue;   // not the linked headset, not this machine
+                    if (!IPAddress.IsLoopback(sender) && !_openToNetwork)
+                        continue;   // not this machine
                     int messageIndex = 0;
                     OscMessage oscMessage;
                     try
@@ -98,7 +100,7 @@ public class BabbleOsc
                     }
                     if (oscMessage.Value is float value)
                     {
-                        Apply(oscMessage.Address, value, fromLink);
+                        Apply(oscMessage.Address, value, fromLink: false);
                     }
                 }
                 else
@@ -119,7 +121,7 @@ public class BabbleOsc
     /// Applies one OSC value. Values from the linked headset are recorded, so they can be reset when the link ends
     /// (merged per expression with a local sender such as the Baballonia app: the latest value wins).
     /// </summary>
-    private void Apply(string address, float value, bool fromLink)
+    public void Apply(string address, float value, bool fromLink)
     {
         lock (_applyLock)
         {
