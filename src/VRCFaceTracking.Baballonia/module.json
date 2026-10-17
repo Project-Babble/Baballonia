@@ -10,7 +10,7 @@
   "ModuleName": "VRCFT-Babble",
   "ModuleDescription": "Project Babble eye and face tracking for VRCFaceTracking v5.",
   "UsageInstructions": "For complete instructions, please refer to the project page.",
-  "DownloadUrl": "https://github.com/Project-Babble/Baballonia/releases/download/v1.1.1.0rc6/VRCFaceTracking.Baballonia.zip",
+  "DownloadUrl": "https://github.com/Project-Babble/Baballonia/releases/download/vrcft-module-4.0.0/VRCFaceTracking.Baballonia.zip",
   "ModulePageUrl": "https://github.com/Project-Babble/Baballonia",
   "DllFileName": "VRCFaceTracking.Baballonia.dll"
 }
