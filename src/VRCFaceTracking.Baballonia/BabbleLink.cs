@@ -14,12 +14,15 @@ namespace VRCFaceTracking.Baballonia;
 ///
 /// Everything arrives on UDP <c>LinkPort</c> (6767). Control messages are small JSON datagrams, each with
 /// "proto":"bfr-link","v":1:
-///   beacon  headset -> broadcast   {sid, name, version}       answered with an offer
+///   beacon  headset -> broadcast   {sid, name, version, eye, face}   answered with an offer
 ///   query   module  -> broadcast   {mid}                      on start and when a session ends; headsets beacon back
-///   offer   module  -> beacon      {mid, name, busy}
-///   ping    headset -> module      {sid, seq, path, active}   1 Hz on every path; answered with a pong
-///   pong    module  -> ping        {mid, seq, rx}             rx: data datagrams received so far
+///   offer   module  -> beacon      {mid, name, busy, eye, face, restart}
+///   ping    headset -> module      {sid, seq, path, active, eye, face}   1 Hz on every path; answered with a pong
+///   pong    module  -> ping        {mid, seq, rx, eye, face, restart}   rx: data datagrams received so far
 ///   bye     either side            {sid} / {mid}
+/// eye and face (optional; older headsets leave them out) say whether the headset's eye and mouth tracking are on,
+/// so this module can claim only those in VRCFaceTracking. In an offer or a pong, eye and face say what this module
+/// claims now, and restart says whether a VRCFaceTracking restart would change that.
 /// Data is OSC (bundles of single-float messages), told apart from control by its first byte, and comes from the
 /// same headset socket as that path's pings. Our pongs go back to that socket, which keeps the pair open in the PC's
 /// firewall, so the data needs no inbound rule. The headset compares rx with what it sent to see whether data arrives.
@@ -50,6 +53,13 @@ public sealed class BabbleLink
 
     /// <summary>Raised on the link thread when a session ends, so the headset's values can be reset.</summary>
     public event Action? SessionEnded;
+
+    /// <summary>Raised on the link thread with the linked headset's eye and face tracking state, on every beacon and
+    /// ping that carries it.</summary>
+    public event Action<bool, bool>? FeaturesReceived;
+
+    /// <summary>Gives what this module claims now, and whether a VRCFaceTracking restart would change that.</summary>
+    public Func<(bool Eye, bool Face, bool Restart)>? Mode { get; set; }
 
     /// <summary>Raised on the link thread for each value the linked headset sends (OSC address, value).</summary>
     public event Action<string, float>? ValueReceived;
@@ -138,9 +148,11 @@ public sealed class BabbleLink
         {
             case "beacon" when sid.Length > 0:
                 OnBeacon(sid, Str(m, "name"), Str(m, "version"), from);
+                OnFeatures(sid, m);
                 break;
             case "ping" when sid.Length > 0:
                 OnPing(sid, Str(m, "path"), m["active"]?.GetValue<bool>() ?? false, m["seq"], from);
+                OnFeatures(sid, m);
                 break;
             case "bye" when sid.Length > 0:
                 lock (_lock)
@@ -199,6 +211,7 @@ public sealed class BabbleLink
         var offer = Message("offer");
         offer["name"] = Environment.MachineName;
         offer["busy"] = busy;
+        AddMode(offer);
         Send(from, offer);
     }
 
@@ -223,7 +236,32 @@ public sealed class BabbleLink
         var pong = Message("pong");
         pong["seq"] = seq?.DeepClone();
         pong["rx"] = rx;
+        AddMode(pong);
         Send(from, pong);
+    }
+
+    /// <summary>Passes on the eye and face state of the current session's headset, when the message has both.</summary>
+    private void OnFeatures(string sid, JsonObject m)
+    {
+        if (Flag(m, "eye") is not bool eye || Flag(m, "face") is not bool face)
+            return;
+        lock (_lock)
+        {
+            if (sid != _sid)
+                return;
+        }
+        FeaturesReceived?.Invoke(eye, face);
+    }
+
+    private void AddMode(JsonObject message)
+    {
+        var mode = Mode;
+        if (mode == null)
+            return;
+        var (eye, face, restart) = mode();
+        message["eye"] = eye;
+        message["face"] = face;
+        message["restart"] = restart;
     }
 
     private void CheckTimeout()
@@ -308,6 +346,9 @@ public sealed class BabbleLink
 
     private static string Str(JsonObject m, string key) =>
         m[key] is JsonValue v && v.TryGetValue<string>(out var s) ? s : "";
+
+    private static bool? Flag(JsonObject m, string key) =>
+        m[key] is JsonValue v && v.TryGetValue<bool>(out var b) ? b : null;
 
     /// <summary>
     /// On Windows, an ICMP "port unreachable" for an earlier send makes the next receive on a UDP socket throw

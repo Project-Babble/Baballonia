@@ -37,12 +37,20 @@ public class BabbleOsc
 
     private readonly HashSet<string> _linkAddresses = new();
 
+    private readonly bool _eye;
+
+    private readonly bool _expression;
+
     /// <param name="link">With a BFR Link, the socket listens on every interface for senders on this machine (the
     /// Baballonia app); the headset's data comes through the link instead. Without one it listens on
     /// <paramref name="host"/> only.</param>
-    public BabbleOsc(ILogger iLogger, string host, int? port, BabbleLink? link = null)
+    /// <param name="eye">Whether this module claimed eye tracking; eye values are dropped otherwise.</param>
+    /// <param name="expression">Whether this module claimed expression tracking; face values are dropped otherwise.</param>
+    public BabbleOsc(ILogger iLogger, string host, int? port, bool eye, bool expression, BabbleLink? link = null)
     {
         _link = link;
+        _eye = eye;
+        _expression = expression;
         // "0.0.0.0" set by hand: accept any sender, as before the link existed.
         _openToNetwork = host == "0.0.0.0";
         if (_receiver != null)
@@ -123,6 +131,12 @@ public class BabbleOsc
     /// </summary>
     public void Apply(string address, float value, bool fromLink)
     {
+        // Only write what this module claimed in Initialize: the rest belongs to other modules. Every eye address
+        // (gaze, lid, widen, squint, brow, pupil) has "Eye" in it, and no face address does.
+        bool isEye = address.Contains("Eye", StringComparison.OrdinalIgnoreCase);
+        if (isEye ? !_eye : !_expression)
+            return;
+
         lock (_applyLock)
         {
             if (fromLink)
