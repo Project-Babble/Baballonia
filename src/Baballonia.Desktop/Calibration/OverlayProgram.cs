@@ -68,8 +68,15 @@ public class OverlayProgram : IOverlayProgram
             FileName = _executablePath,
             WindowStyle = ProcessWindowStyle.Hidden,
             CreateNoWindow = true,
-            Arguments = launchArgs
+            Arguments = launchArgs,
+            UseShellExecute = false
         };
+
+        // The overlay is a separate .NET (Godot Mono) binary with its own runtime and no app-local
+        // ICU. Under Steam Runtime 4 (which ships no libicui18n) its globalization init
+        // FailFast/SIGABRTs at launch. Run it invariant — it needs no localized cultures, and
+        // invariant gives consistent "." decimal formatting for the calibration data it hands back.
+        startInfo.Environment["DOTNET_SYSTEM_GLOBALIZATION_INVARIANT"] = "1";
 
         _process = new Process
         {

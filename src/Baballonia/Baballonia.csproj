@@ -7,8 +7,11 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	<NoWarn>CS8618;CS8509;CS0067;CS8613;CS8622;MVVMTK0034</NoWarn>
 	<Company>Paradigm Reality Enhancement Labs</Company>
-	<AssemblyVersion>1.1.1.0</AssemblyVersion>
-	<FileVersion>1.1.1.0</FileVersion>
+	<AssemblyVersion>1.1.1.1</AssemblyVersion>
+	<FileVersion>1.1.1.1</FileVersion>
+	<!-- Informational/titlebar version; CI overrides via -p:Version (workflow version-number input). -->
+	<Version>1.1.1.1</Version>
+	<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -49,6 +52,8 @@
 
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="11.3.12" />
+        <!-- Override Avalonia's transitive Tmds.DBus.Protocol 0.21.2 (GHSA-xrw6-gwf8-vvr9). 0.21.3 is the backported fix. -->
+        <PackageReference Include="Tmds.DBus.Protocol" Version="0.21.3" />
         <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.12" />
         <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.1.5" />
         <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.12" />
@@ -69,11 +74,9 @@
         <PackageReference Include="OscCore" Version="1.0.5" />
         <PackageReference Include="Project-Babble.Baballonia.OverlaySDK" Version="1.0.5-alpha" />
         <PackageReference Include="SkiaSharp" Version="3.119.2" />
-        <PackageReference Include="System.Net.Http" Version="4.3.4" />
         <PackageReference Include="VRChat.OSCQuery" Version="0.0.7" />
         <PackageReference Include="System.IO.Ports" Version="10.0.4" />
         <PackageReference Include="System.Management" Version="10.0.4" />
-        <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
         <PackageReference Include="Xaml.Behaviors.Interactions.Draggable" Version="11.3.9.5" />
     </ItemGroup>
 

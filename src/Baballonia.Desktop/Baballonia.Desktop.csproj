@@ -22,8 +22,8 @@
 
     <ItemGroup>
         <PackageReference Include="Avalonia.Desktop" Version="11.3.12" />
-        <PackageReference Include="System.Net.Http" Version="4.3.4" />
-        <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+        <!-- Override Avalonia's transitive Tmds.DBus.Protocol 0.21.2 (GHSA-xrw6-gwf8-vvr9). 0.21.3 is the backported fix. -->
+        <PackageReference Include="Tmds.DBus.Protocol" Version="0.21.3" />
         <PackageReference Include="Velopack" Version="0.0.1298" />
 
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
@@ -43,13 +43,21 @@
         <PackageReference Include="SkiaSharp.NativeAssets.macOS" Version="3.119.0" Condition="$([MSBuild]::IsOSPlatform('OSX'))" />
 
         <!-- Linux-specific -->
-        <PackageReference Include="Project-Babble.OpenCvSharp4.mini.runtime.ubuntu.22.04-x64" Version="4.11.0.1" Condition="$([MSBuild]::IsOSPlatform('Linux')) And
+        <PackageReference Include="Project-Babble.OpenCvSharp4.mini.runtime.ubuntu.22.04-x64" Version="4.11.0.2" Condition="$([MSBuild]::IsOSPlatform('Linux')) And
              !($([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString().Contains('Arm')))" />
 
-        <PackageReference Include="Project-Babble.OpenCvSharp4.mini.runtime.ubuntu.22.04-arm64" Version="4.11.0.1" Condition="$([MSBuild]::IsOSPlatform('Linux')) And
+        <PackageReference Include="Project-Babble.OpenCvSharp4.mini.runtime.ubuntu.22.04-arm64" Version="4.11.0.2" Condition="$([MSBuild]::IsOSPlatform('Linux')) And
              $([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString().Contains('Arm'))" />
 	    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.22.0" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
         <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.119.0" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
+
+        <!-- App-local ICU (Linux only). .NET uses system ICU on Linux by default, but Steam Linux
+             Runtime 4.0 ships no libicui18n, so globalization init FailFasts/SIGABRTs at startup
+             before any app code runs. Bundle ICU and point the runtime at it (value must match the
+             package's .so version suffix, e.g. libicudata.so.72.1.0.3). macOS uses system ICU (this
+             metapackage has no osx runtime) and Windows ships ICU in-box, so this is Linux-scoped. -->
+        <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" Version="72.1.0.3" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
+        <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="72.1.0.3" Trim="false" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
         <PackageReference Include="Xaml.Behaviors.Interactions.Draggable" Version="11.3.9.5" />
         <ProjectReference Include="..\Baballonia.LibV4L2Capture\Baballonia.LibV4L2Capture.csproj" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
     </ItemGroup>
@@ -106,12 +114,18 @@
       <None Update="baseline_R.pth">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Calibration\Linux\**" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+      <None Update="Calibration\Linux\**\*" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
           <Link>%(RecursiveDir)\%(Filename)%(Extension)</Link>
           <TargetPath>%(RecursiveDir)\%(Filename)%(Extension)</TargetPath>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Calibration\Windows\**" Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+      <!-- _internal is a local CUDA PyInstaller bundle (~7.8GB) that must never ship (CI builds
+           contain only the single BabbleTrainer file). It is a SYMLINK-to-directory, which MSBuild
+           enumerates as a file-like item; copying it raises MSB3024. Remove both the symlink item
+           itself AND anything under it. -->
+      <None Remove="Calibration\Linux\Trainer\_internal" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
+      <None Remove="Calibration\Linux\Trainer\_internal\**" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
+      <None Update="Calibration\Windows\**\*" Condition="$([MSBuild]::IsOSPlatform('Windows'))">
           <Link>%(RecursiveDir)\%(Filename)%(Extension)</Link>
           <TargetPath>%(RecursiveDir)\%(Filename)%(Extension)</TargetPath>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -28,8 +28,6 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
     private readonly ProcessingLoopService _processingLoopService;
     private readonly EyePipelineManager _eyePipelineManager;
 
-    private readonly Dictionary<string, int> _eyeKeyIndexMap;
-    private readonly Dictionary<string, int> _faceKeyIndexMap;
     public CalibrationViewModel(EyePipelineManager eyePipelineManager)
     {
         _eyePipelineManager = eyePipelineManager;
@@ -42,12 +40,12 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
         [
             new("LeftEyeLid"),
             new("RightEyeLid"),
-            //new ("LeftEyeWiden"),
-            //new ("LeftEyeLower"),
-            //new ("LeftEyeBrow"),
-            //new ("RightEyeWiden"),
-            //new ("RightEyeLower"),
-            //new ("RightEyeBrow"),
+            new("LeftEyeWiden"),
+            new("LeftEyeSquint"),
+            new("LeftEyeBrow"),
+            new("RightEyeWiden"),
+            new("RightEyeSquint"),
+            new("RightEyeBrow"),
         ];
 
         JawSettings =
@@ -121,27 +119,6 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
             setting.PropertyChanged += OnSettingChanged;
         }
 
-        // Convert dictionary order into index mapping
-        _eyeKeyIndexMap = new Dictionary<string, int>
-        {
-            { "LeftEyeX", 0 },
-            { "LeftEyeY", 1 },
-            { "LeftEyeLid", 2 },
-            //{ "LeftEyeWiden", },
-            //{ "LeftEyeLower",  },
-            //{ "LeftEyeBrow", },
-            { "RightEyeX", 3 },
-            { "RightEyeY", 4 },
-            { "RightEyeLid", 5 },
-            //{ "RightEyeWiden", },
-            //{ "RightEyeLower",  },
-            //{ "RightEyeBrow", },
-        };
-
-        _faceKeyIndexMap = _parameterSenderService.FaceExpressionMap.Keys
-            .Select((key, index) => new { key, index })
-            .ToDictionary(x => x.key, x => x.index);
-
         PropertyChanged += (o, p) =>
         {
             var propertyInfo = GetType().GetProperty(p.PropertyName!);
@@ -149,7 +126,7 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
             if (value is float floatValue)
             {
                 if (p.PropertyName == null) return;
-                _calibrationService.SetExpression(p.PropertyName!, floatValue);
+                _calibrationService.SetExpression(DisplayNameToInternalName(p.PropertyName!), floatValue);
             }
         };
 
@@ -159,22 +136,53 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
         _settingsService.Load(this);
     }
 
+    private string DisplayNameToInternalName(string displayName)
+    {
+        if (string.IsNullOrEmpty(displayName))
+        {
+            return displayName;
+        }
+
+        return string.Create(displayName.Length + 1, displayName, (span, state) =>
+        {
+            span[0] = '/';
+            span[1] = char.ToLowerInvariant(state[0]);
+            state.AsSpan(1).CopyTo(span.Slice(2));
+        });
+    }
+
+    private long _lastCalibUiTick;
+
     private void ExpressionUpdateHandler(ProcessingLoopService.Expressions expressions)
     {
+        // Fired from the inference worker thread(s) at the full inference rate (~115 Hz). These slider
+        // values are a visual meter only — calibration capture and OSC output go through other paths —
+        // so throttle the UI updates to ~30 Hz to avoid pinning the UI thread with per-slider relayout.
+        var now = Environment.TickCount64;
+        if (now - _lastCalibUiTick < 33)
+            return;
+        _lastCalibUiTick = now;
+
         if(expressions.FaceExpression != null)
+        {
+            var face = expressions.FaceExpression;
             Dispatcher.UIThread.Post(() =>
             {
-                ApplyCurrentFaceExpressionValues(expressions.FaceExpression, CheekSettings);
-                ApplyCurrentFaceExpressionValues(expressions.FaceExpression, MouthSettings);
-                ApplyCurrentFaceExpressionValues(expressions.FaceExpression, JawSettings);
-                ApplyCurrentFaceExpressionValues(expressions.FaceExpression, NoseSettings);
-                ApplyCurrentFaceExpressionValues(expressions.FaceExpression, TongueSettings);
+                ApplyCurrentExpressionValues(face, CheekSettings);
+                ApplyCurrentExpressionValues(face, MouthSettings);
+                ApplyCurrentExpressionValues(face, JawSettings);
+                ApplyCurrentExpressionValues(face, NoseSettings);
+                ApplyCurrentExpressionValues(face, TongueSettings);
             });
+        }
         if(expressions.EyeExpression != null)
+        {
+            var eye = expressions.EyeExpression;
             Dispatcher.UIThread.Post(() =>
             {
-                ApplyCurrentEyeExpressionValues(expressions.EyeExpression, EyeSettings);
+                ApplyCurrentExpressionValues(eye, EyeSettings);
             });
+        }
     }
     private void OnSettingChanged(object? sender, PropertyChangedEventArgs e)
     {
@@ -182,45 +190,29 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
 
         if (e.PropertyName is nameof(SliderBindableSetting.Lower))
         {
-            _calibrationService.SetExpression(setting.Name + "Lower", setting.Lower);
+            _calibrationService.SetExpression(DisplayNameToInternalName(setting.Name) + "Lower", setting.Lower);
         }
 
         if (e.PropertyName is nameof(SliderBindableSetting.Upper))
         {
-            _calibrationService.SetExpression(setting.Name + "Upper", setting.Upper);
+            _calibrationService.SetExpression(DisplayNameToInternalName(setting.Name) + "Upper", setting.Upper);
         }
     }
 
-    private void ApplyCurrentEyeExpressionValues(float[] values, IEnumerable<SliderBindableSetting> settings)
+    private void ApplyCurrentExpressionValues(OrderedFloatMap values, IEnumerable<SliderBindableSetting> settings)
     {
         foreach (var setting in settings)
         {
-            if (_eyeKeyIndexMap.TryGetValue(setting.Name, out var index)
-                && index < values.Length)
-            {
-                var weight = values[index];
+            var settingName = DisplayNameToInternalName(setting.Name);
+            if (values.ContainsKey(settingName)) {
+                var weight = values[settingName];
                 var val = Math.Clamp(
                     weight.Remap(setting.Lower, setting.Upper, setting.Min, setting.Max),
                     setting.Min,
                     setting.Max);
-                setting.CurrentExpression = val;
-            }
-        }
-    }
-
-    private void ApplyCurrentFaceExpressionValues(float[] values, IEnumerable<SliderBindableSetting> settings)
-    {
-        foreach (var setting in settings)
-        {
-            if (_faceKeyIndexMap.TryGetValue(setting.Name, out var index)
-                && index < values.Length)
-            {
-                var weight = values[index];
-                var val = Math.Clamp(
-                    weight.Remap(setting.Lower, setting.Upper, setting.Min, setting.Max),
-                    setting.Min,
-                    setting.Max);
-                setting.CurrentExpression = val;
+                // Skip the write (and its PropertyChanged + per-slider relayout) when unchanged.
+                if (setting.CurrentExpression != val)
+                    setting.CurrentExpression = val;
             }
         }
     }
@@ -253,7 +245,11 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
     {
         foreach (var setting in settings)
         {
-            var val = _calibrationService.GetExpressionSettings(setting.Name);
+            var legacyVal = _calibrationService.GetExpressionSettings(setting.Name);
+            var newVal = _calibrationService.GetNullableExpressionSettings(DisplayNameToInternalName(setting.Name));
+
+            // if we have "new format" parameter in settings, use it. otherwise fall back to legacy (or default values)
+            var val = newVal == null ? legacyVal : newVal;
             setting.Lower = val.Lower;
             setting.Upper = val.Upper;
             setting.Min = val.Min;
@@ -263,6 +259,12 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
 
     public void Dispose()
     {
-        // _processingLoopService.ExpressionUpdateEvent -= ExpressionUpdateHandler;
+        _processingLoopService.ExpressionChangeEvent -= ExpressionUpdateHandler;
+        
+        foreach (var setting in EyeSettings.Concat(JawSettings).Concat(CheekSettings)
+                    .Concat(NoseSettings).Concat(MouthSettings).Concat(TongueSettings))
+        {
+            setting.PropertyChanged -= OnSettingChanged;
+        }
     }
 }

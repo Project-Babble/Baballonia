@@ -29,34 +29,63 @@ on:
 
 jobs:
   build-linux:
+    name: ${{ matrix.name }}
     defaults:
       run:
         shell: bash
     strategy:
       matrix:
         include:
-          - { result: Baballonia.x64.tar.xz, runs-on: ubuntu-22.04, upload-path: src/Baballonia.Desktop/bin/Baballonia.x64.tar.xz, arch: linux-x64 }
-          - { result: Baballonia.arm64.tar.xz, runs-on: ubuntu-22.04-arm, upload-path: src/Baballonia.Desktop/bin/Baballonia.arm64.tar.xz, arch: linux-arm64  }
+          - { name: steamrt4-x64, result: Baballonia.x64.tar.xz, runs-on: ubuntu-22.04, upload-path: src/Baballonia.Desktop/bin/Baballonia.x64.tar.xz, arch: linux-x64, container: "registry.gitlab.steamos.cloud/steamrt/steamrt4/sdk:latest" }
+          - { name: steamrt4-arm, result: Baballonia.arm64.tar.xz, runs-on: ubuntu-22.04-arm, upload-path: src/Baballonia.Desktop/bin/Baballonia.arm64.tar.xz, arch: linux-arm64, container: "registry.gitlab.steamos.cloud/steamrt/steamrt4/sdk/arm64:latest" }
 
     runs-on: ${{ matrix.runs-on }}
 
+    # Build inside the Steam Runtime 4 SDK so the artifact is produced against the
+    # steamrt4 (Debian 13 'trixie') ABI the app actually runs under at launch,
+    # rather than the host ubuntu image. steamrt4 deliberately omits ICU and ships
+    # libv4l2 only as libv4l2.so.0 — the app now carries app-local ICU and resolves
+    # V4L2 via libc, so the published self-contained build runs there unmodified.
+    container:
+      image: ${{ matrix.container }}
+
+    env:
+      # steamrt4 has no ICU, so the .NET *build* CLI can't initialise globalization
+      # in this container — run the build tooling invariant. This only affects the
+      # build process; the published app still ships its own ICU and sets
+      # System.Globalization.AppLocalIcu in its runtimeconfig (see Desktop.csproj).
+      DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: '1'
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+      DOTNET_NOLOGO: '1'
+
     steps:
+      # git/curl/unzip are needed by checkout (submodules), the .NET installer, and
+      # download_dependencies.sh. Installed from the SDK's preconfigured apt repo.
+      - name: Install build prerequisites
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends git curl unzip xz-utils ca-certificates patchelf
+
       - name: Checkout latest
         uses: actions/checkout@v5
         with:
           submodules: 'recursive'
 
+      - name: Install .NET SDK
+        run: |
+          curl -fsSL https://dot.net/v1/dotnet-install.sh -o /tmp/dotnet-install.sh
+          bash /tmp/dotnet-install.sh --channel 10.0 --install-dir /usr/share/dotnet
+          echo "/usr/share/dotnet" >> "$GITHUB_PATH"
+
       - name: Download dependencies
         run: ./download_dependencies.sh
-
-      #- name: Install dependencies
-      #  run: |
-      #    dotnet tool install -g vpk
 
       - name: Run publish
         run: |
           cd src/Baballonia.Desktop
-          dotnet publish -r ${{ matrix.arch }} -c Release --self-contained -f net10.0
+          version_arg=()
+          [ -n "${{ github.event.inputs.version-number }}" ] && version_arg=(-p:Version="${{ github.event.inputs.version-number }}")
+          dotnet publish -r ${{ matrix.arch }} -c Release --self-contained -f net10.0 "${version_arg[@]}"
           cd "bin/Release/net10.0/${{ matrix.arch }}/publish"
           tar -cJf ./../../../../${{ matrix.result }} *
 
@@ -92,7 +121,9 @@ jobs:
       - name: Build project
         run: |
           cd src/Baballonia.Desktop
-          dotnet publish -r win-x64 -c Release --self-contained -f net10.0
+          version_arg=()
+          [ -n "${{ github.event.inputs.version-number }}" ] && version_arg=(-p:Version="${{ github.event.inputs.version-number }}")
+          dotnet publish -r win-x64 -c Release --self-contained -f net10.0 "${version_arg[@]}"
           cd "bin/Release/net10.0/win-x64/publish"
           tar -cJf ./../../../../Baballonia.win.tar.xz *
 

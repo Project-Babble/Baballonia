@@ -27,4 +27,9 @@ public class DebounceFunction
         _timer.Stop();
         _action();
     }
+
+    public void Cancel()
+    {
+        _timer.Stop();
+    }
 }

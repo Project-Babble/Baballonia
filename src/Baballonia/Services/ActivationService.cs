@@ -20,12 +20,12 @@ public class ActivationService(
         // Guard against mobile
         if (!Utils.IsSupportedDesktopOS) return;
 
-        // Checking to see if AutoStart has checks pass during service activation
-        var openVrService = Ioc.Default.GetService<OpenVRService>();
-        logger.LogInformation("Configuring OpenVR...");
-        if (!openVrService!.AutoStart())
-        {
-            logger.LogWarning("Failed to configure OpenVR during ActivationService startup. Skipping.");
-        }
+        // // Checking to see if AutoStart has checks pass during service activation
+        // var openVrService = Ioc.Default.GetService<OpenVRService>();
+        // logger.LogInformation("Configuring OpenVR...");
+        // if (!openVrService!.AutoStart())
+        // {
+        //     logger.LogWarning("Failed to configure OpenVR during ActivationService startup. Skipping.");
+        // }
     }
 }
