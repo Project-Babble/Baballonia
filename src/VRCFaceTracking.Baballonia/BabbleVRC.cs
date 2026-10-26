@@ -1,51 +1,70 @@
+using System.Globalization;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
-using VRCFaceTracking.Core.Params.Expressions;
 
 namespace VRCFaceTracking.Baballonia;
 
 public class BabbleVrc : ExtTrackingModule
 {
+    private const string Host = "127.0.0.1";
+    private const int Port = 8888;
+    /// <summary>BFR Link control port (UDP): lets a Babble Frame headset find this module on the network.</summary>
+    private const int LinkPort = 6767;
+
+    /// <summary>How long Initialize waits for Baballonia (or a linked headset) to say what to track.</summary>
+    private static readonly TimeSpan RequestWait = TimeSpan.FromSeconds(10);
+    /// <summary>What to track when nothing says otherwise within <see cref="RequestWait"/>.</summary>
+    private static readonly (bool Eye, bool Face) Fallback = (false, true);
+
+    /// <summary>
+    /// A reinitialization tears this module's process down, so the request that caused it is handed to the next
+    /// Initialize through this file, which reads and deletes it. Older ones are leftovers from a crash and ignored.
+    /// </summary>
+    private const string PendingRequestFile = "BabblePendingInit.txt";
+    private static readonly TimeSpan PendingRequestMaxAge = TimeSpan.FromMinutes(2);
+
     private BabbleOsc babbleOSC;
     private BabbleLink? babbleLink;
-    private Config config;
     private bool needsEye;
     private bool needsExpression;
-    private bool eyeOffered;          // VRCFaceTracking offered eye tracking at initialization.
-    private bool expressionOffered;   // VRCFaceTracking offered expression tracking at initialization.
+
+    private readonly object requestLock = new();
+    private readonly ManualResetEventSlim requestReceived = new();
+    private (bool Eye, bool Face)? startupRequest;   // the latest request while Initialize waits
+    private (bool Eye, bool Face)? initRequest;      // the request Initialize used; null while it waits
+    private bool reinitRequested;
 
     public override (bool SupportsEye, bool SupportsExpression) Supported => (true, true);
 
     public override (bool eyeSuccess, bool expressionSuccess) Initialize(bool eyeAvailable, bool expressionAvailable)
     {
-        config = BabbleConfig.GetBabbleConfig();
-        // Claim what the config allows and no other module has. A linked headset keeps the config in step with its
-        // eye and mouth tracking. Decided before the receivers start, so they only write what this module claims.
-        eyeOffered = eyeAvailable;
-        expressionOffered = expressionAvailable;
-        needsEye = eyeAvailable && config.IsEyeSupported;
-        needsExpression = expressionAvailable && config.IsFaceSupported;
-
-        if (config.LinkEnabled)
+        // Listen first: the request saying what to claim arrives over these.
+        try
         {
-            try
-            {
-                babbleLink = new BabbleLink(Logger, config.LinkPort);
-            }
-            catch (Exception e)
-            {
-                Logger.LogWarning($"BFR Link is off: cannot listen on UDP {config.LinkPort} ({e.Message})");
-            }
+            babbleLink = new BabbleLink(Logger, LinkPort);
         }
-        babbleOSC = new BabbleOsc(Logger, config.Host, config.Port, needsEye, needsExpression, babbleLink);
+        catch (Exception e)
+        {
+            Logger.LogWarning($"BFR Link is off: cannot listen on UDP {LinkPort} ({e.Message})");
+        }
+        babbleOSC = new BabbleOsc(Logger, Host, Port, babbleLink);
+        babbleOSC.InitRequested += (eye, face) => OnRequest(eye, face, "Baballonia");
         if (babbleLink != null)
         {
             var osc = babbleOSC;
             babbleLink.ValueReceived += (address, value) => osc.Apply(address, value, fromLink: true);
             babbleLink.SessionEnded += osc.ResetLinkValues;
-            babbleLink.FeaturesReceived += OnHeadsetFeatures;
-            babbleLink.Mode = () => (needsEye, needsExpression, RestartNeeded());
+            babbleLink.FeaturesReceived += (eye, face) => OnRequest(eye, face, "BFR Link headset");
+            babbleLink.Mode = () => (needsEye, needsExpression, reinitRequested);
         }
+
+        var (wantEye, wantFace) = TakePendingRequest() ?? WaitForRequest();
+
+        // Claim what was asked for and no other module has. Set before any value is applied, so the receivers only
+        // write what this module claims.
+        needsEye = eyeAvailable && wantEye;
+        needsExpression = expressionAvailable && wantFace;
+        babbleOSC.SetClaims(needsEye, needsExpression);
 
         List<Stream> list = new List<Stream>();
         Assembly executingAssembly = Assembly.GetExecutingAssembly();
@@ -62,8 +81,6 @@ public class BabbleVrc : ExtTrackingModule
             list.Add(manifestResourceStream);
         }
 
-        executingAssembly.GetManifestResourceNames();
-
         ModuleInformation = new ModuleMetadata
         {
             Name = "Project Babble Module v4.0.0",
@@ -73,33 +90,87 @@ public class BabbleVrc : ExtTrackingModule
         return (needsEye, needsExpression);
     }
 
-    /// <summary>Saves the linked headset's eye and face tracking state as the claims for the next initialization.</summary>
-    private void OnHeadsetFeatures(bool eye, bool face)
+    /// <summary>Waits up to <see cref="RequestWait"/> for a request, then settles on it (or the fallback). A request
+    /// arriving after this goes through a reinitialization.</summary>
+    private (bool Eye, bool Face) WaitForRequest()
     {
-        if (config.IsEyeSupported == eye && config.IsFaceSupported == face)
-            return;
-        config.IsEyeSupported = eye;
-        config.IsFaceSupported = face;
+        Logger.LogInformation($"Waiting up to {RequestWait.TotalSeconds:0} s for Baballonia to request eye and/or face tracking...");
+        requestReceived.Wait(RequestWait);
+        lock (requestLock)
+        {
+            if (startupRequest == null)
+                Logger.LogInformation("No request received; falling back to face tracking only.");
+            initRequest = startupRequest ?? Fallback;
+            return initRequest.Value;
+        }
+    }
+
+    /// <summary>A request for eye and face tracking, from the Baballonia app or a linked headset.</summary>
+    private void OnRequest(bool eye, bool face, string source)
+    {
+        lock (requestLock)
+        {
+            if (initRequest == null)
+            {
+                // Initialize is still waiting: it takes this one directly.
+                startupRequest = (eye, face);
+                requestReceived.Set();
+                return;
+            }
+            // Already in effect (or on its way): nothing to do. A headset repeats its state on every ping.
+            if (!reinitRequested && initRequest == (eye, face))
+                return;
+            if (!SavePendingRequest(eye, face))
+                return;
+            if (reinitRequested)
+                return;   // the reinitialization underway picks up the newer request from the file
+            reinitRequested = true;
+        }
+        Logger.LogInformation($"{source} requested eye tracking {(eye ? "on" : "off")}, face tracking {(face ? "on" : "off")}. Reinitializing modules.");
+        RequestReinitialize();
+    }
+
+    private static string PendingRequestPath =>
+        Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, PendingRequestFile);
+
+    private bool SavePendingRequest(bool eye, bool face)
+    {
         try
         {
-            BabbleConfig.SaveBabbleConfig();
+            File.WriteAllText(PendingRequestPath, string.Create(CultureInfo.InvariantCulture, $"{eye},{face}"));
+            return true;
         }
         catch (Exception e)
         {
-            Logger.LogWarning($"BFR Link: cannot save BabbleConfig.json ({e.Message})");
+            Logger.LogWarning($"Cannot pass the tracking request on to the reinitialized module ({e.Message}); ignoring it.");
+            return false;
         }
-        var state = $"eye tracking {(eye ? "on" : "off")}, face tracking {(face ? "on" : "off")}";
-        if (RestartNeeded())
-            Logger.LogWarning($"BFR Link: the headset has {state}. Restart VRCFaceTracking to claim this.");
-        else
-            Logger.LogInformation($"BFR Link: the headset has {state}.");
     }
 
-    /// <summary>True if initializing again with the saved config would claim something different. Only what
-    /// VRCFaceTracking offered counts, because a restart cannot take tracking from another module.</summary>
-    private bool RestartNeeded() =>
-        (config.IsEyeSupported && eyeOffered) != needsEye ||
-        (config.IsFaceSupported && expressionOffered) != needsExpression;
+    /// <summary>The request that caused this reinitialization, if any. Read once: the file is deleted.</summary>
+    private (bool Eye, bool Face)? TakePendingRequest()
+    {
+        var path = PendingRequestPath;
+        try
+        {
+            if (!File.Exists(path))
+                return null;
+            var fresh = DateTime.UtcNow - File.GetLastWriteTimeUtc(path) < PendingRequestMaxAge;
+            var parts = File.ReadAllText(path).Split(',');
+            File.Delete(path);
+            if (!fresh || parts.Length != 2 || !bool.TryParse(parts[0], out var eye) || !bool.TryParse(parts[1], out var face))
+                return null;
+            lock (requestLock)
+                initRequest = (eye, face);
+            Logger.LogInformation($"Reinitialized on request: eye tracking {(eye ? "on" : "off")}, face tracking {(face ? "on" : "off")}.");
+            return (eye, face);
+        }
+        catch (Exception e)
+        {
+            Logger.LogWarning($"Cannot read the pending tracking request ({e.Message}).");
+            return null;
+        }
+    }
 
     public override void Teardown()
     {

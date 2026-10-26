@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Sockets;
 using VRCFaceTracking.Core.OSC;
@@ -37,20 +37,24 @@ public class BabbleOsc
 
     private readonly HashSet<string> _linkAddresses = new();
 
-    private readonly bool _eye;
+    private volatile bool _eye;
 
-    private readonly bool _expression;
+    private volatile bool _expression;
+
+    /// <summary>OSC address of the (re)initialization request: two booleans, eye tracking then face tracking.</summary>
+    public const string InitAddress = "/vrcft/initialize";
+
+    /// <summary>Raised on the listener thread when a local sender (the Baballonia app) asks for eye and face tracking.</summary>
+    public event Action<bool, bool>? InitRequested;
 
     /// <param name="link">With a BFR Link, the socket listens on every interface for senders on this machine (the
     /// Baballonia app); the headset's data comes through the link instead. Without one it listens on
     /// <paramref name="host"/> only.</param>
-    /// <param name="eye">Whether this module claimed eye tracking; eye values are dropped otherwise.</param>
-    /// <param name="expression">Whether this module claimed expression tracking; face values are dropped otherwise.</param>
-    public BabbleOsc(ILogger iLogger, string host, int? port, bool eye, bool expression, BabbleLink? link = null)
+    /// Nothing is claimed until <see cref="SetClaims"/>, so values are dropped until then; the socket still listens, so
+    /// an <see cref="InitAddress"/> request can arrive while the module decides what to claim.
+    public BabbleOsc(ILogger iLogger, string host, int? port, BabbleLink? link = null)
     {
         _link = link;
-        _eye = eye;
-        _expression = expression;
         // "0.0.0.0" set by hand: accept any sender, as before the link existed.
         _openToNetwork = host == "0.0.0.0";
         if (_receiver != null)
@@ -68,6 +72,14 @@ public class BabbleOsc
         _loop = true;
         _thread = new Thread(ListenLoop);
         _thread.Start();
+    }
+
+    /// <summary>Sets what this module claimed in VRCFaceTracking: eye values are dropped unless <paramref name="eye"/>,
+    /// face values unless <paramref name="expression"/>.</summary>
+    public void SetClaims(bool eye, bool expression)
+    {
+        _eye = eye;
+        _expression = expression;
     }
 
     private void ConfigureReceiver()
@@ -96,6 +108,12 @@ public class BabbleOsc
                     IPAddress sender = ((IPEndPoint)remote).Address;
                     if (!IPAddress.IsLoopback(sender) && !_openToNetwork)
                         continue;   // not this machine
+                    if (OscPacket.TryReadTwoBools(array.AsSpan(0, len), out var address, out var eye, out var face))
+                    {
+                        if (address == InitAddress)
+                            InitRequested?.Invoke(eye, face);
+                        continue;
+                    }
                     int messageIndex = 0;
                     OscMessage oscMessage;
                     try

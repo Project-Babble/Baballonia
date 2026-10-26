@@ -22,7 +22,7 @@ namespace VRCFaceTracking.Baballonia;
 ///   bye     either side            {sid} / {mid}
 /// eye and face (optional; older headsets leave them out) say whether the headset's eye and mouth tracking are on,
 /// so this module can claim only those in VRCFaceTracking. In an offer or a pong, eye and face say what this module
-/// claims now, and restart says whether a VRCFaceTracking restart would change that.
+/// claims now, and restart says whether a module reinitialization is underway to change that.
 /// Data is OSC (bundles of single-float messages), told apart from control by its first byte, and comes from the
 /// same headset socket as that path's pings. Our pongs go back to that socket, which keeps the pair open in the PC's
 /// firewall, so the data needs no inbound rule. The headset compares rx with what it sent to see whether data arrives.
@@ -58,7 +58,7 @@ public sealed class BabbleLink
     /// ping that carries it.</summary>
     public event Action<bool, bool>? FeaturesReceived;
 
-    /// <summary>Gives what this module claims now, and whether a VRCFaceTracking restart would change that.</summary>
+    /// <summary>Gives what this module claims now, and whether a module reinitialization is underway to change that.</summary>
     public Func<(bool Eye, bool Face, bool Restart)>? Mode { get; set; }
 
     /// <summary>Raised on the link thread for each value the linked headset sends (OSC address, value).</summary>
