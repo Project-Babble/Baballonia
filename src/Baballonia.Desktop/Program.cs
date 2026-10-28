@@ -47,6 +47,7 @@ sealed class Program
             collection.AddSingleton<ITrainerService, TrainerService>();
             collection.AddSingleton<EyeCaptureStepFactory>();
             collection.AddSingleton<EyeCalibration>();
+            collection.AddHostedService<FaceDataCollectionService>();
         });
 
         try
