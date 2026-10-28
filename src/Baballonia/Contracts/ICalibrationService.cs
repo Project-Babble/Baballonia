@@ -10,6 +10,8 @@ public interface ICalibrationService
 
     event Action? AutoCalibrationReset;
 
+    event Action<bool>? AutoCalibrationEnabledChanged;
+
     void SetExpression(string expression, float value);
 
     CalibrationParameter GetExpressionSettings(string parameterName);

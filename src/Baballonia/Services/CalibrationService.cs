@@ -95,14 +95,32 @@ public class CalibrationService : ICalibrationService
     private readonly ILocalSettingsService _localSettingsService;
     private readonly ProcessingLoopService _processingLoopService;
 
-    public bool AutoCalibrationEnabled { get; set; }
+    private bool _autoCalibrationEnabled;
+
+    public bool AutoCalibrationEnabled
+    {
+        get => _autoCalibrationEnabled;
+        set
+        {
+            if (_autoCalibrationEnabled == value)
+                return;
+
+            _autoCalibrationEnabled = value;
+            AutoCalibrationEnabledChanged?.Invoke(value);
+        }
+    }
 
     public event Action? AutoCalibrationReset;
+
+    public event Action<bool>? AutoCalibrationEnabledChanged;
 
     public CalibrationService(ILocalSettingsService localSettingsService, ProcessingLoopService processingLoopService)
     {
         _localSettingsService = localSettingsService;
         _processingLoopService = processingLoopService;
+
+        // Restore the persisted toggle here, as AppSettingsViewModel is only created when its page is opened
+        _autoCalibrationEnabled = _localSettingsService.ReadSetting("AppSettings_AutoCalibrationEnabled", false);
 
         _processingLoopService.ExpressionChangeEvent += OnExpressionChanged;
 

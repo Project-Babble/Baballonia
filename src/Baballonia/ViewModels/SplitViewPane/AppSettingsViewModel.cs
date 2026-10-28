@@ -222,6 +222,10 @@ public partial class AppSettingsViewModel : ViewModelBase
 
     partial void OnAutoCalibrationEnabledChanged(bool value)
     {
+        // Loading saved settings raises this too; don't wipe learned ranges if nothing changed
+        if (_calibrationService.AutoCalibrationEnabled == value)
+            return;
+
         if (value)
         {
             // Reset seeds BEFORE enabling tracking, so the UI can

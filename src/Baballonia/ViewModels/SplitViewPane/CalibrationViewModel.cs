@@ -3,6 +3,7 @@ using Baballonia.Contracts;
 using Baballonia.Helpers;
 using Baballonia.Models;
 using Baballonia.Services;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using System;
@@ -29,6 +30,12 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
 
     private readonly Dictionary<string, int> _eyeKeyIndexMap;
     private readonly Dictionary<string, int> _faceKeyIndexMap;
+
+    // Sensitivity sliders and reset buttons are disabled while auto-calibration drives the bounds
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(ResetMinimumsCommand), nameof(ResetMaximumsCommand))]
+    private bool _isManualCalibrationEnabled;
+
     public CalibrationViewModel(EyePipelineManager eyePipelineManager)
     {
         _eyePipelineManager = eyePipelineManager;
@@ -153,6 +160,8 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
 
         _processingLoopService.ExpressionChangeEvent += ExpressionUpdateHandler;
         _calibrationService.AutoCalibrationReset += OnAutoCalibrationReset;
+        _calibrationService.AutoCalibrationEnabledChanged += OnAutoCalibrationEnabledChanged;
+        IsManualCalibrationEnabled = !_calibrationService.AutoCalibrationEnabled;
 
         LoadInitialSettings();
         _settingsService.Load(this);
@@ -167,6 +176,15 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
             LoadInitialSettings();
         else
             Dispatcher.UIThread.Post(LoadInitialSettings);
+    }
+
+    private void OnAutoCalibrationEnabledChanged(bool enabled)
+    {
+        Dispatcher.UIThread.Post(() =>
+        {
+            IsManualCalibrationEnabled = !enabled;
+            LoadInitialSettings();
+        });
     }
 
     private void ExpressionUpdateHandler(ProcessingLoopService.Expressions expressions)
@@ -258,14 +276,14 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
         setting.PropertyChanged += OnSettingChanged;
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(IsManualCalibrationEnabled))]
     public void ResetMinimums()
     {
         _calibrationService.ResetMinimums();
         LoadInitialSettings();
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(IsManualCalibrationEnabled))]
     public void ResetMaximums()
     {
         _calibrationService.ResetMaximums();
@@ -297,5 +315,6 @@ public partial class CalibrationViewModel : ViewModelBase, IDisposable
     public void Dispose()
     {
         // _processingLoopService.ExpressionUpdateEvent -= ExpressionUpdateHandler;
+        _calibrationService.AutoCalibrationEnabledChanged -= OnAutoCalibrationEnabledChanged;
     }
 }
