@@ -892,9 +892,6 @@ Questo di solito è facile da risolvere! Installa semplicemente il firmware "Tra
   <data name="Settings_LogLevel_Level" xml:space="preserve">
     <value>Seleziona Livello...</value>
   </data>
-  <data name="Settings_LogLevel_Level" xml:space="preserve">
-    <value>Seleziona Livello...</value>
-  </data>
   <data name="Tray_Show" xml:space="preserve">
       <value>Mostra Baballonia</value>
   </data>

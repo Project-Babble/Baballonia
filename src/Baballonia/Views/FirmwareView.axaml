@@ -308,9 +308,32 @@
                     ShowProgressText="False" />
 
                   <TextBlock
+                    IsVisible="{Binding IsFlashing}"
+                    HorizontalAlignment="Center"
+                    TextWrapping="Wrap"
+                    Opacity="0.7"
+                    Text="{Binding FlashStatus}" />
+
+                  <TextBlock
                     IsVisible="{Binding IsFinished}"
                     HorizontalAlignment="Center"
                     Text="{x:Static assets:Resources.Firmware_Flashing_Complete}" />
+
+                  <TextBlock
+                    IsVisible="{Binding IsFlashFailed}"
+                    HorizontalAlignment="Center"
+                    FontWeight="Bold"
+                    Foreground="#E53935"
+                    TextWrapping="Wrap"
+                    Text="{x:Static assets:Resources.Firmware_Flashing_Failed}" />
+
+                  <TextBlock
+                    IsVisible="{Binding IsFlashFailed}"
+                    HorizontalAlignment="Center"
+                    Foreground="#E53935"
+                    Opacity="0.8"
+                    TextWrapping="Wrap"
+                    Text="{Binding FlashStatus}" />
 
                 </StackPanel>
             </Expander>

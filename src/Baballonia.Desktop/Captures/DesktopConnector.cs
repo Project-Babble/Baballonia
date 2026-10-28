@@ -30,6 +30,16 @@ public class DesktopConnector : IPlatformConnector
         _logger.LogDebug("Found {DllCount} DLL files in application directory: {DllFiles}", dlls.Length,
             string.Join(", ", dlls.Select(Path.GetFileName)));
         _captureFactories = LoadAssembliesFromPath(dlls);
+
+        // Directory.GetFiles order is arbitrary, so the default backend picked for a /dev/video*
+        // device was effectively random. On Linux prefer "V4L2 Camera" (LibV4L2): it reads V4L2
+        // directly and needs no GStreamer plugins, unlike the OpenCV/GStreamer "Normal Camera"
+        // backend whose v4l2src dependency isn't bundled. OrderBy is stable, so the rest keep order.
+        if (OperatingSystem.IsLinux())
+            _captureFactories = _captureFactories
+                .OrderBy(f => f.GetProviderName() == "V4L2 Camera" ? 0 : 1)
+                .ToList();
+
         _logger.LogDebug("Loaded {CaptureCount} capture types from assemblies", _captureFactories.Count);
     }
 

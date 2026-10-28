@@ -1,0 +1,148 @@
+<UserControl
+    d:DesignHeight="800"
+    d:DesignWidth="800"
+    mc:Ignorable="d"
+    xmlns:splitViewPane="clr-namespace:Baballonia.ViewModels.SplitViewPane"
+    x:Class="Baballonia.Views.DebugView"
+    x:DataType="splitViewPane:DebugViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ScrollViewer>
+    <StackPanel Classes="Page" Spacing="12">
+      <TextBlock Classes="Header" Margin="0,10,0,-6" Text="Performance metrics" />
+
+      <Border
+          Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+          CornerRadius="8"
+          Padding="16">
+        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
+          <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,4" Text="UI Render thread" />
+          <TextBlock Grid.Row="0" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
+                     Text="{Binding RenderFps, StringFormat='{}{0:F1} fps'}" />
+
+          <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,4" Text="UI data thread" />
+          <TextBlock Grid.Row="1" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
+                     Text="{Binding UiLoopFps, StringFormat='{}{0:F1} fps'}" />
+
+          <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,4" Text="Eye inference" />
+          <TextBlock Grid.Row="2" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
+                     Text="{Binding EyeInferenceFps, StringFormat='{}{0:F1} fps'}" />
+
+          <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,4" Text="Mouth inference" />
+          <TextBlock Grid.Row="3" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
+                     Text="{Binding FaceInferenceFps, StringFormat='{}{0:F1} fps'}" />
+        </Grid>
+      </Border>
+
+      <TextBlock Classes="Header" FontSize="18" Text="Thread CPU Usage" />
+      <TextBlock Opacity="0.7"
+                 Text="{Binding ProcessCpuPercent, StringFormat='Process: {0:F0}% x 1 core'}" />
+      <TextBlock Opacity="0.7" Margin="0,-4,0,0"
+                 Text="{Binding ProcessorCount, StringFormat='{}{0} logical cores'}" />
+      <Border
+          Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+          CornerRadius="8"
+          Padding="16">
+        <StackPanel Spacing="2">
+          <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,4">
+            <TextBlock Grid.Column="0" FontWeight="SemiBold" Opacity="0.6" Text="Thread" />
+            <TextBlock Grid.Column="1" FontWeight="SemiBold" Opacity="0.6" Text="CPU" />
+          </Grid>
+          <ItemsControl ItemsSource="{Binding Threads}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="splitViewPane:ThreadCpuRow">
+                <Grid ColumnDefinitions="*,Auto" Margin="0,2">
+                  <TextBlock Grid.Column="0" Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+                  <TextBlock Grid.Column="1" FontWeight="SemiBold"
+                             Text="{Binding CpuPercent, StringFormat='{}{0:F1}%'}" />
+                </Grid>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="Header" FontSize="18" Margin="0,10,0,-6" Text="Eye pipeline stages (avg)" />
+      <Border
+          Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+          CornerRadius="8"
+          Padding="16">
+        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
+          <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,4" Text="Capture + corruption check" />
+          <TextBlock Grid.Row="0" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
+                     Text="{Binding EyeCaptureMs, StringFormat='{}{0:F2} ms'}" />
+          <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,4" Text="Transform + collect" />
+          <TextBlock Grid.Row="1" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
+                     Text="{Binding EyeTransformMs, StringFormat='{}{0:F2} ms'}" />
+          <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,4" Text="Convert + inference" />
+          <TextBlock Grid.Row="2" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
+                     Text="{Binding EyeInferenceMs, StringFormat='{}{0:F2} ms'}" />
+          <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,4" Text="Filter + post" />
+          <TextBlock Grid.Row="3" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
+                     Text="{Binding EyePostMs, StringFormat='{}{0:F2} ms'}" />
+        </Grid>
+      </Border>
+
+      <TextBlock Classes="Header" FontSize="18" Margin="0,10,0,-6" Text="Mouth pipeline stages (avg)" />
+      <Border
+          Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+          CornerRadius="8"
+          Padding="16">
+        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
+          <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,4" Text="Capture" />
+          <TextBlock Grid.Row="0" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
+                     Text="{Binding FaceCaptureMs, StringFormat='{}{0:F2} ms'}" />
+          <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,4" Text="Transform" />
+          <TextBlock Grid.Row="1" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
+                     Text="{Binding FaceTransformMs, StringFormat='{}{0:F2} ms'}" />
+          <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,4" Text="Convert + inference" />
+          <TextBlock Grid.Row="2" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
+                     Text="{Binding FaceInferenceMs, StringFormat='{}{0:F2} ms'}" />
+          <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,4" Text="Filter + post" />
+          <TextBlock Grid.Row="3" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
+                     Text="{Binding FacePostMs, StringFormat='{}{0:F2} ms'}" />
+        </Grid>
+      </Border>
+
+      <TextBlock Classes="Header" FontSize="18" Margin="0,10,0,-6" Text="Cameras" />
+      <ItemsControl ItemsSource="{Binding Cameras}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate x:DataType="splitViewPane:CameraRow">
+            <Border
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="8"
+                Margin="0,0,0,12"
+                Padding="16">
+              <StackPanel>
+                <TextBlock FontSize="15" FontWeight="SemiBold" Margin="0,0,0,6" Text="{Binding Name}" />
+                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+                  <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,4" Text="Delivered (measured)" />
+                  <TextBlock Grid.Row="0" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
+                             Text="{Binding DeliveredFps, StringFormat='{}{0:F1} fps'}" />
+
+                  <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,4" Text="Dropped (Last 60 seconds)" />
+                  <TextBlock Grid.Row="1" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
+                             Text="{Binding DroppedSummary}" />
+
+                  <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,4" Text="Negotiated (driver)" />
+                  <TextBlock Grid.Row="2" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
+                             Text="{Binding NegotiatedFps, StringFormat='{}{0:F0} fps'}" />
+
+                  <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,4" Text="Resolution" />
+                  <TextBlock Grid.Row="3" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
+                             Text="{Binding Resolution}" />
+
+                  <TextBlock Grid.Row="4" Grid.Column="0" Margin="0,4" Text="Pixel format" />
+                  <TextBlock Grid.Row="4" Grid.Column="1" Margin="0,4" FontWeight="SemiBold"
+                             Text="{Binding Format}" />
+                </Grid>
+              </StackPanel>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

@@ -1,4 +1,6 @@
-﻿using Baballonia.SDK;
+﻿using System.Diagnostics;
+using System.Threading;
+using Baballonia.SDK;
 using Baballonia.Services.Inference.Enums;
 using Microsoft.Extensions.Logging;
 using OpenCvSharp;
@@ -11,6 +13,13 @@ public class SingleCameraSource : IVideoSource
     public Size CameraSize;
     private string _cameraAddress;
     private readonly Capture _capture;
+    private long _lastDeliveredFrameTimestamp;
+    private double _frameIntervalSeconds;
+
+    /// <summary>The underlying capture source (exposes frame-rate / throughput stats).</summary>
+    public Capture Capture => _capture;
+
+    public double FrameIntervalSeconds => Volatile.Read(ref _frameIntervalSeconds);
 
     public SingleCameraSource(
         ILogger logger,
@@ -25,9 +34,12 @@ public class SingleCameraSource : IVideoSource
 
     public bool Start()
     {
-        _capture.StartCapture();
-        return true;
+        // Surface the backend's real result so a failed open (e.g. GStreamer with no v4l2src) fails
+        // fast instead of being mistaken for a slow camera and waiting out the frame timeout.
+        return _capture.StartCapture().GetAwaiter().GetResult();
     }
+
+    public WaitHandle[] GetFrameWaitHandles() => [_capture.FrameWaitHandle];
 
     public bool Stop()
     {
@@ -75,12 +87,22 @@ public class SingleCameraSource : IVideoSource
                         ColorType.Rgb24 => ColorConversionCodes.BGR2RGB,
                         ColorType.Rgba32 => ColorConversionCodes.BGR2RGBA,
                     });
+            // The conversion produced a fresh Mat; the raw frame is no longer needed.
+            rawMat.Dispose();
             image = convertedMat;
         }
 
         if (image.Empty())
+        {
+            image.Dispose();
             return null;
-            
+        }
+
+        var now = Stopwatch.GetTimestamp();
+        var previous = Interlocked.Exchange(ref _lastDeliveredFrameTimestamp, now);
+        if (previous != 0)
+            Volatile.Write(ref _frameIntervalSeconds, Stopwatch.GetElapsedTime(previous, now).TotalSeconds);
+
         return image;
     }
 

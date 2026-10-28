@@ -18,4 +18,10 @@ public class TypeConverters
             Application.Current!.TryFindResource(iconKey, out var resource);
             return resource as StreamGeometry ?? StreamGeometry.Parse(StreamGeometryNotFound);
         });
+
+    /// <summary>
+    /// Rotates a chevron so it points up when expanded (true) and down when collapsed (false).
+    /// </summary>
+    public static FuncValueConverter<bool?, double> BoolToChevronAngleConverter { get; } =
+        new(isExpanded => isExpanded == true ? 180d : 0d);
 }

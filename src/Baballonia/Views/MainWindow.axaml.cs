@@ -16,8 +16,19 @@ public partial class MainWindow : Window
         DataContext = vm;
         InitializeComponent();
         AdjustTitleBarForPlatform();
-        AppNameAndVersion.Text = $"Project Babble v{Assembly.GetExecutingAssembly().GetName().Version}";
+        AppNameAndVersion.Text = $"Project Babble v{GetDisplayVersion()}";
         Window.Title = AppNameAndVersion.Text;
+    }
+
+    private static string GetDisplayVersion()
+    {
+        var asm = Assembly.GetExecutingAssembly();
+        var version = asm.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+        if (string.IsNullOrEmpty(version))
+            return asm.GetName().Version?.ToString() ?? "";
+        // strip the +<git-sha> the SDK appends to InformationalVersion
+        var plus = version.IndexOf('+');
+        return plus >= 0 ? version[..plus] : version;
     }
 
     private void AdjustTitleBarForPlatform()
