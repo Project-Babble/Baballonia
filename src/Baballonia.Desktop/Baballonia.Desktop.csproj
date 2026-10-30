@@ -38,7 +38,7 @@
 		<PackageReference Include="DirectShowLib" Version="1.0.0" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />
 
         <!-- macOS-specific -->
-        <PackageReference Include="OneWare.OpenCvSharp4.runtime.osx-arm64" Version="4.13.0.20260628" Condition="$([MSBuild]::IsOSPlatform('OSX'))" />
+        <PackageReference Include="OpenCvSharp4.runtime.osx.arm64" Version="4.13.0.20260627" Condition="$([MSBuild]::IsOSPlatform('OSX'))" />
 	      <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.24.3" Condition="$([MSBuild]::IsOSPlatform('OSX'))" />
         <PackageReference Include="SkiaSharp.NativeAssets.macOS" Version="3.119.2" Condition="$([MSBuild]::IsOSPlatform('OSX'))" />
 
