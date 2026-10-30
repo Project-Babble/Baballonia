@@ -49,6 +49,10 @@ public partial class AppSettingsViewModel : ViewModelBase
     private bool _useDFR;
 
     [ObservableProperty]
+    [property: SavedSetting("AppSettings_UseNativeVRCFT", false)]
+    private bool _useNativeVrcft;
+
+    [ObservableProperty]
     [property: SavedSetting("AppSettings_UseGPU", true)]
     private bool _useGPU;
 
@@ -93,6 +97,8 @@ public partial class AppSettingsViewModel : ViewModelBase
 
     public IOscTarget OscTarget { get; }
 
+    public INativeVrcftService NativeVrcft { get; }
+
     private readonly FacePipelineManager _facePipelineManager;
     private readonly EyePipelineManager _eyePipelineManager;
     private readonly IIdentityService _identityService;
@@ -106,6 +112,7 @@ public partial class AppSettingsViewModel : ViewModelBase
         EyePipelineManager eyePipelineManager,
         ILocalSettingsService localSettingsService,
         IOscTarget oscTarget,
+        INativeVrcftService nativeVrcft,
         IIdentityService identityService,
         GithubService githubService,
         ParameterSenderService parameterSenderService,
@@ -114,6 +121,7 @@ public partial class AppSettingsViewModel : ViewModelBase
         ICalibrationService calibrationService)
     {
         OscTarget = oscTarget;
+        NativeVrcft = nativeVrcft;
         _localSettingsService = localSettingsService;
         _facePipelineManager = facePipelineManager;
         _eyePipelineManager = eyePipelineManager;

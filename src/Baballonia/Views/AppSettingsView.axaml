@@ -119,6 +119,29 @@
             </Grid>
           </Border>
 
+          <StackPanel Spacing="4" IsVisible="{Binding NativeVrcft.IsSupported}">
+            <CheckBox
+                Content="{x:Static assets:Resources.Settings_OSC_NativeVRCFT_Header}"
+                IsChecked="{Binding UseNativeVrcft, Mode=TwoWay}" />
+            <TextBlock
+                FontSize="14"
+                Foreground="{DynamicResource SystemChromeGrayColor}"
+                Text="{x:Static assets:Resources.Settings_OSC_NativeVRCFT_Description}"
+                TextWrapping="Wrap" />
+            <TextBlock
+                FontSize="14"
+                IsVisible="{Binding NativeVrcft.IsRunning}"
+                Text="{Binding NativeVrcft.Status}"
+                TextWrapping="Wrap" />
+            <TextBlock
+                FontSize="14"
+                FontWeight="DemiBold"
+                Foreground="Orange"
+                IsVisible="{Binding NativeVrcft.ExternalVrcftDetected}"
+                Text="{x:Static assets:Resources.Settings_OSC_NativeVRCFT_ExternalWarning}"
+                TextWrapping="Wrap" />
+          </StackPanel>
+
           <Grid
               Margin="0,4"
               ColumnDefinitions="Auto,*,Auto"

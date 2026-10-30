@@ -61,6 +61,7 @@
         <ProjectReference Include="..\Baballonia.IPCameraCapture\Baballonia.IPCameraCapture.csproj" />
         <ProjectReference Include="..\Baballonia.VFTCapture\Baballonia.VFTCapture.csproj" />
         <ProjectReference Include="..\Baballonia\Baballonia.csproj" />
+        <ProjectReference Include="..\Baballonia.NativeVrcft\Baballonia.NativeVrcft.csproj" />
     </ItemGroup>
 
     <ItemGroup>

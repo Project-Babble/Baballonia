@@ -16,6 +16,7 @@ public class ParameterSenderService : BackgroundService
 {
     private readonly VrcftModuleSendService _vrcftModuleSendService;
     private readonly DfrSendService _dfrSendService;
+    private readonly INativeVrcftService _nativeVrcftService;
     private readonly ILocalSettingsService _localSettingsService;
     private readonly ICalibrationService _calibrationService;
     private readonly ILogger<ParameterSenderService> _logger;
@@ -23,6 +24,9 @@ public class ParameterSenderService : BackgroundService
     private string _prefix = "";
     private bool _sendNativeVrcEyeTracking;
     private bool _useDfr;
+    private bool _useNativeVrcft;
+    private bool? _appliedUseNativeVrcft;
+    private volatile bool _nativeVrcftDirty;
     private readonly ConcurrentQueue<OscMessage> _vrcftQueue = new();
     private readonly ConcurrentQueue<OscMessage> _dfrQueue = new();
 
@@ -95,6 +99,7 @@ public class ParameterSenderService : BackgroundService
     public ParameterSenderService(
         VrcftModuleSendService vrcftModuleSendService,
         DfrSendService dfrSendService,
+        INativeVrcftService nativeVrcftService,
         ILocalSettingsService localSettingsService,
         ICalibrationService calibrationService,
         ProcessingLoopService processingLoopService,
@@ -102,6 +107,7 @@ public class ParameterSenderService : BackgroundService
     {
         this._vrcftModuleSendService = vrcftModuleSendService;
         this._dfrSendService = dfrSendService;
+        this._nativeVrcftService = nativeVrcftService;
         this._localSettingsService = localSettingsService;
         this._calibrationService = calibrationService;
         this._logger = logger;
@@ -122,6 +128,9 @@ public class ParameterSenderService : BackgroundService
                 _prefix = _localSettingsService.ReadSetting<string>("AppSettings_OSCPrefix");
                 _sendNativeVrcEyeTracking = _localSettingsService.ReadSetting<bool>("VRC_UseNativeTracking");
                 _useDfr = _localSettingsService.ReadSetting<bool>("AppSettings_UseDFR");
+                _useNativeVrcft = _nativeVrcftService.IsSupported &&
+                                  _localSettingsService.ReadSetting<bool>("AppSettings_UseNativeVRCFT");
+                await ApplyNativeVrcftSetting();
                 await SendAndClearQueue(cancellationToken);
                 await Task.Delay(10, cancellationToken);
             }
@@ -151,10 +160,13 @@ public class ParameterSenderService : BackgroundService
             var eyeElement = EyeExpressionMap.ElementAt(i);
             var settings = _calibrationService.GetExpressionSettings(eyeElement.Key);
 
-            var msg = new OscMessage(_prefix + eyeElement.Value,
-                weight.Remap(settings.Lower, settings.Upper, settings.Min, settings.Max));
-            _vrcftQueue.Enqueue(msg);
+            var value = weight.Remap(settings.Lower, settings.Upper, settings.Min, settings.Max);
+            _vrcftQueue.Enqueue(new OscMessage(_prefix + eyeElement.Value, value));
+            if (_useNativeVrcft)
+                _nativeVrcftService.SetExpression(eyeElement.Key, value);
         }
+
+        _nativeVrcftDirty = _useNativeVrcft;
 
         if (_useDfr)
             ProcessNativeVrcEyeTracking(expressions, _dfrQueue);
@@ -199,17 +211,47 @@ public class ParameterSenderService : BackgroundService
             var faceElement = FaceExpressionMap.ElementAt(i);
             var settings = _calibrationService.GetExpressionSettings(faceElement.Key);
 
-            var msg = new OscMessage(_prefix + faceElement.Value,
-                Math.Clamp(
-                    weight.Remap(settings.Lower, settings.Upper, settings.Min, settings.Max),
-                    settings.Min,
-                    settings.Max));
-            _vrcftQueue.Enqueue(msg);
+            var value = Math.Clamp(
+                weight.Remap(settings.Lower, settings.Upper, settings.Min, settings.Max),
+                settings.Min,
+                settings.Max);
+            _vrcftQueue.Enqueue(new OscMessage(_prefix + faceElement.Value, value));
+            if (_useNativeVrcft)
+                _nativeVrcftService.SetExpression(faceElement.Key, value);
+        }
+
+        _nativeVrcftDirty = _useNativeVrcft;
+    }
+
+    private async Task ApplyNativeVrcftSetting()
+    {
+        // Only act on changes, so a failed start isn't retried every tick. Toggling the setting retries.
+        if (_appliedUseNativeVrcft == _useNativeVrcft)
+            return;
+
+        _appliedUseNativeVrcft = _useNativeVrcft;
+        try
+        {
+            if (_useNativeVrcft)
+                await _nativeVrcftService.StartAsync();
+            else
+                await _nativeVrcftService.StopAsync();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Failed to toggle native VRCFaceTracking");
         }
     }
 
     private async Task SendAndClearQueue(CancellationToken cancellationToken)
     {
+        // The VRCFT module queue is always sent too, for backwards compatibility
+        if (_nativeVrcftDirty)
+        {
+            _nativeVrcftDirty = false;
+            await _nativeVrcftService.FlushAsync(cancellationToken);
+        }
+
         if (!_vrcftQueue.IsEmpty)
         {
             await _vrcftModuleSendService.Send(_vrcftQueue.ToArray(), cancellationToken);

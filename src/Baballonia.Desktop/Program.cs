@@ -2,6 +2,7 @@
 using Baballonia.Contracts;
 using Baballonia.Desktop.Calibration;
 using Baballonia.Desktop.Captures;
+using Baballonia.NativeVrcft;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;
@@ -47,6 +48,7 @@ sealed class Program
             collection.AddSingleton<ITrainerService, TrainerService>();
             collection.AddSingleton<EyeCaptureStepFactory>();
             collection.AddSingleton<EyeCalibration>();
+            collection.AddSingleton<INativeVrcftService, NativeVrcftService>();
         });
 
         try

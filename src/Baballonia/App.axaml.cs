@@ -119,6 +119,7 @@ public partial class App : Application
             services.AddSingleton<OscRecvService>();
             services.AddSingleton<VrcftModuleSendService>();
             services.AddSingleton<DfrSendService>();
+            services.AddSingleton<INativeVrcftService, UnsupportedNativeVrcftService>();
             services.AddTransient<OscQueryServiceWrapper>();
             services.AddSingleton<ParameterSenderService>();
             services.AddTransient<GithubService>();

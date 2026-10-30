@@ -2156,6 +2156,51 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Convert and send avatar parameters to VRChat directly, without running VRCFaceTracking. Data is still sent to the VRCFaceTracking module port below..
+        /// </summary>
+        public static string Settings_OSC_NativeVRCFT_Description {
+            get {
+                return ResourceManager.GetString("Settings_OSC_NativeVRCFT_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to VRCFaceTracking is also running, so VRChat will receive parameters twice. Close VRCFaceTracking or turn off Use Native VRCFaceTracking..
+        /// </summary>
+        public static string Settings_OSC_NativeVRCFT_ExternalWarning {
+            get {
+                return ResourceManager.GetString("Settings_OSC_NativeVRCFT_ExternalWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Native VRCFaceTracking.
+        /// </summary>
+        public static string Settings_OSC_NativeVRCFT_Header {
+            get {
+                return ResourceManager.GetString("Settings_OSC_NativeVRCFT_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avatar: {0} ({1} parameters).
+        /// </summary>
+        public static string Settings_OSC_NativeVRCFT_Status {
+            get {
+                return ResourceManager.GetString("Settings_OSC_NativeVRCFT_Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Waiting for an avatar....
+        /// </summary>
+        public static string Settings_OSC_NativeVRCFT_Status_Waiting {
+            get {
+                return ResourceManager.GetString("Settings_OSC_NativeVRCFT_Status_Waiting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OSC Prefix.
         /// </summary>
         public static string Settings_OSC_Prefix_Label {

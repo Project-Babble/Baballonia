@@ -741,6 +741,21 @@
   <data name="Settings_OSC_VRCFT_Warning" xml:space="preserve">
     <value>If you are using Baballonia with VRCFaceTracking, there is no need to change these ports</value>
   </data>
+  <data name="Settings_OSC_NativeVRCFT_Description" xml:space="preserve">
+    <value>Convert and send avatar parameters to VRChat directly, without running VRCFaceTracking. Data is still sent to the VRCFaceTracking module port below.</value>
+  </data>
+  <data name="Settings_OSC_NativeVRCFT_ExternalWarning" xml:space="preserve">
+    <value>VRCFaceTracking is also running, so VRChat will receive parameters twice. Close VRCFaceTracking or turn off Use Native VRCFaceTracking.</value>
+  </data>
+  <data name="Settings_OSC_NativeVRCFT_Header" xml:space="preserve">
+    <value>Use Native VRCFaceTracking</value>
+  </data>
+  <data name="Settings_OSC_NativeVRCFT_Status" xml:space="preserve">
+    <value>Avatar: {0} ({1} parameters)</value>
+  </data>
+  <data name="Settings_OSC_NativeVRCFT_Status_Waiting" xml:space="preserve">
+    <value>Waiting for an avatar...</value>
+  </data>
   <data name="Home_Preferred_Backend" xml:space="preserve">
     <value>This is a...</value>
   </data>
