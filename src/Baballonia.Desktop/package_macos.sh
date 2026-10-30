@@ -29,11 +29,14 @@ if [ ! -x "$PUBLISH/Baballonia.Desktop" ]; then
   exit 1
 fi
 
+TMP_DIR="$(mktemp -d)"
+trap 'rm -rf "$TMP_DIR"' EXIT
+trap 'rm -rf "$APP"' ERR
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp -R "$PUBLISH/." "$APP/Contents/MacOS/"
 
-ICONSET="$(mktemp -d)/Baballonia.iconset"
+ICONSET="$TMP_DIR/Baballonia.iconset"
 mkdir -p "$ICONSET"
 for s in 16 32 128 256 512; do
   sips -z $s $s Assets/Icon_512x512.png --out "$ICONSET/icon_${s}x${s}.png" >/dev/null
@@ -73,15 +76,15 @@ EOF
 
 codesign --force --deep --sign - "$APP"
 codesign --verify --deep --strict "$APP"
+trap - ERR
 
 echo "Built $APP ($VERSION)"
 
 if [[ $DMG == true ]]; then
-  DMG_PATH="bin/Baballonia.arm64.dmg"
-  STAGING="$(mktemp -d)"
+  DMG_PATH="bin/Baballonia.dmg"
+  STAGING="$TMP_DIR/dmg"
   ditto "$APP" "$STAGING/Baballonia.app"
   ln -s /Applications "$STAGING/Applications"
   hdiutil create -quiet -volname "Baballonia" -srcfolder "$STAGING" -ov -format UDZO "$DMG_PATH"
-  rm -rf "$STAGING"
   echo "Built $DMG_PATH"
 fi
