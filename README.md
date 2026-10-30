@@ -28,7 +28,9 @@ You may be prompted to download the .NET runtime for desktop apps, install it if
 
 Baballonia currently does not have an installer for MacOS. You will need to follow our build instructions and run it from source.
 
-When building on macOS you should install Microsoft's .NET SDK runtime (`brew install --cask dotnet-sdk`). Do not use the `dotnet` forumla.
+When building on macOS you should install Microsoft's .NET SDK (`brew install --cask dotnet-sdk`). Do not use the `dotnet` formula.
+
+**Note:** macOS builds only support Apple Silicon.
 
 ## Platform Compatibility
 

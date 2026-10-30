@@ -6,7 +6,7 @@ cd "$(dirname "$0")"
 arch=$(uname -m)
 
 if [[ $arch != "arm64" ]]; then
-  echo "Packaging not supported on $arch." >&2
+  echo "$arch not supported for macOS." >&2
   exit 1
 fi
 

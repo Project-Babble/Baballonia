@@ -4,6 +4,11 @@ os=$(uname -s)
 arch=$(uname -m)
 
 if [[ $os == "Darwin" ]]; then
+  if [[ $arch != "arm64" ]]; then
+    echo "$arch not supported for macOS." >&2
+    exit 1
+  fi
+
   espflashDownloadPath="https://github.com/esp-rs/espflash/releases/latest/download/espflash-aarch64-apple-darwin.zip"
 
   curl -L $espflashDownloadPath -o "src/Baballonia/Firmware/MacOS/espflash.zip"
