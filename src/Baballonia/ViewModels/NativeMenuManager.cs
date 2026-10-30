@@ -38,7 +38,7 @@ public partial class App : Application
         _appTrayTooltip.ToolTipText = Assets.Resources.Tray_Tooltip;
         _trayShowHideItem.Header = Assets.Resources.Tray_Hide;
         _trayExitItem.Header = Assets.Resources.Tray_Exit;
-        _appMenuAboutItem.Header = Assets.Resources.AppMenu_About;
+        _appMenuAboutItem.Header = Assets.Resources.About_AboutBaballonia_Header;
     }
 
     // Intellisense says this has 0 references - this is referenced by App.axaml
