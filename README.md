@@ -105,10 +105,10 @@ If you want to publish a standalone installer for Baballonia, download [NSIS](ht
 
 ##### macOS
 
-If you want to publish a macOS .app application bundle run the `.sh` script located at
+If you want to package a macOS .app application bundle run the `.sh` script located at
 `src/Baballonia.Desktop/package_macos.sh`.
 
-You can publish a macOS disk image containing the application by using the `--dmg` arg when running the `.sh` script.
+You can create a macOS disk image containing the application by using the `--dmg` arg when running the `.sh` script.
 
 ### Baballonia.Android/iOS
 
