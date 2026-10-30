@@ -165,7 +165,7 @@
 
     <NativeMenu.Menu>
       <NativeMenu>
-        <NativeMenuItem Header="About Baballonia" Click="OnAboutClicked" />
+        <NativeMenuItem Click="OnAboutClicked" />
       </NativeMenu>
     </NativeMenu.Menu>
 

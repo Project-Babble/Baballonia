@@ -904,4 +904,7 @@ This is usually easy to fix! Just install the “Tracking Loss Fix” firmware b
   <data name="Tray_Exit" xml:space="preserve">
       <value>Exit</value>
   </data>
+  <data name="AppMenu_About" xml:space="preserve">
+      <value>About Baballonia</value>
+  </data>
 </root>

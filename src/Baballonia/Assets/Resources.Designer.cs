@@ -329,7 +329,16 @@ namespace Baballonia.Assets {
                 return ResourceManager.GetString("Aero_SteamVR_NotRunning", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to About Baballonia.
+        /// </summary>
+        public static string AppMenu_About {
+            get {
+                return ResourceManager.GetString("AppMenu_About", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Cheek Expressions.
         /// </summary>

@@ -15,8 +15,9 @@ public partial class App : Application
     private TrayIcon _appTrayTooltip;
     private NativeMenuItem _trayShowHideItem;
     private NativeMenuItem _trayExitItem;
+    private NativeMenuItem? _appMenuAboutItem;
 
-    private void InitTray()
+    private void InitNativeMenus()
     {
         var icons = TrayIcon.GetIcons(this);
         _appTrayTooltip = icons?.OfType<TrayIcon>().First()!;
@@ -27,14 +28,17 @@ public partial class App : Application
         _trayShowHideItem = items?[0]!;                                              // Show/Hide
         _trayExitItem = items?[2]!;                                                  // Exit
 
-        RefreshTrayStrings();
+        _appMenuAboutItem = NativeMenu.GetMenu(this)?.Items.OfType<NativeMenuItem>().FirstOrDefault();
+
+        RefreshNativeMenuStrings();
     }
 
-    private void RefreshTrayStrings()
+    private void RefreshNativeMenuStrings()
     {
         _appTrayTooltip.ToolTipText = Assets.Resources.Tray_Tooltip;
         _trayShowHideItem.Header = Assets.Resources.Tray_Hide;
         _trayExitItem.Header = Assets.Resources.Tray_Exit;
+        _appMenuAboutItem.Header = Assets.Resources.AppMenu_About;
     }
 
     // Intellisense says this has 0 references - this is referenced by App.axaml
