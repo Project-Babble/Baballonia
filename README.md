@@ -28,6 +28,8 @@ You may be prompted to download the .NET runtime for desktop apps, install it if
 
 Baballonia currently does not have an installer for MacOS. You will need to follow our build instructions and run it from source.
 
+When building on macOS you should install Microsoft's .NET SDK runtime (`brew install --cask dotnet-sdk`). Do not use the `dotnet` forumla.
+
 ## Platform Compatibility
 
 To get started, follow the [quickstart guide on our documentation page](https://docs.babble.diy/docs/babbleofficaltracker).
@@ -84,7 +86,7 @@ Baballonia supports many kinds of hardware for eye and face tracking:
 
 ### Baballonia.Desktop
 
-1. Run the associated ``download_dependencies`` script for your given platform (``.ps1`` on Windows, ``.sh`` on Linux).
+1. Run the associated ``download_dependencies`` script for your given platform (``.ps1`` on Windows, ``.sh`` on Linux and macOS).
 2. If you are using an IDE, disable these projects:
 - `VRCFaceTracking`
 - `VRCFaceTracking.Core`
@@ -96,8 +98,17 @@ Baballonia supports many kinds of hardware for eye and face tracking:
 
 #### Publishing
 
+##### Windows
+
 If you want to publish a standalone installer for Baballonia, download [NSIS](https://github.com/negrutiu/nsis) here, or use your package manager. Then, run the 
 `.nsi` script located at `src/Baballonia.Desktop/main.nsi`
+
+##### macOS
+
+If you want to publish a macOS .app application bundle run the `.sh` script located at
+`src/Baballonia.Desktop/package_macos.sh`.
+
+You can publish a macOS disk image containing the application by using the `--dmg` arg when running the `.sh` script.
 
 ### Baballonia.Android/iOS
 

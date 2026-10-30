@@ -1,4 +1,5 @@
 <Application
+    Name="Baballonia"
     RequestedThemeVariant="Dark"
     x:Class="Baballonia.App"
     xmlns="https://github.com/avaloniaui"
@@ -161,5 +162,11 @@
         </TrayIcon>
       </TrayIcons>
     </TrayIcon.Icons>
+
+    <NativeMenu.Menu>
+      <NativeMenu>
+        <NativeMenuItem Header="About Baballonia" Click="OnAboutClicked" />
+      </NativeMenu>
+    </NativeMenu.Menu>
 
 </Application>

@@ -1,6 +1,9 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Baballonia.ViewModels;
+using Baballonia.ViewModels.SplitViewPane;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using System;
 using System.Linq;
 
@@ -56,6 +59,23 @@ public partial class App : Application
                 showHide.Header = Assets.Resources.Tray_Hide;
             }
         }
+    }
+
+    // Intellisense says this has 0 references - this is referenced by App.axaml
+    private void OnAboutClicked(object? sender, EventArgs e)
+    {
+        if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop)
+            return;
+
+        if (!desktop.MainWindow!.IsVisible)
+        {
+            desktop.MainWindow.Show();
+            _trayShowHideItem.Header = Assets.Resources.Tray_Hide;
+        }
+        desktop.MainWindow.Activate();
+
+        var vm = Ioc.Default.GetRequiredService<MainViewModel>();
+        vm.SelectedListItem = vm.Items.First(item => item.ModelType == typeof(AboutPageViewModel));
     }
 
     // Intellisense says this has 0 references - this is referenced by App.axaml
