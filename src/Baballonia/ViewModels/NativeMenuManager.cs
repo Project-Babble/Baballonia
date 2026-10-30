@@ -15,7 +15,7 @@ public partial class App : Application
     private TrayIcon _appTrayTooltip;
     private NativeMenuItem _trayShowHideItem;
     private NativeMenuItem _trayExitItem;
-    private NativeMenuItem? _appMenuAboutItem;
+    private NativeMenuItem _appMenuAboutItem;
 
     private void InitNativeMenus()
     {
@@ -28,7 +28,7 @@ public partial class App : Application
         _trayShowHideItem = items?[0]!;                                              // Show/Hide
         _trayExitItem = items?[2]!;                                                  // Exit
 
-        _appMenuAboutItem = NativeMenu.GetMenu(this)?.Items.OfType<NativeMenuItem>().FirstOrDefault();
+        _appMenuAboutItem = NativeMenu.GetMenu(this)?.Items.OfType<NativeMenuItem>().First()!;
 
         RefreshNativeMenuStrings();
     }
