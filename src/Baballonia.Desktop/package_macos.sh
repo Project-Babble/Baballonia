@@ -52,7 +52,7 @@ cat > "$APP/Contents/Info.plist" <<EOF
     <key>CFBundleDisplayName</key>
     <string>Baballonia</string>
     <key>CFBundleIdentifier</key>
-    <string>Baballonia</string>
+    <string>diy.babble.baballonia</string>
     <key>CFBundleExecutable</key>
     <string>Baballonia.Desktop</string>
     <key>CFBundleIconFile</key>
