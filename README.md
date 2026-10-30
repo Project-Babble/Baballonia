@@ -97,6 +97,7 @@ Baballonia supports many kinds of hardware for eye and face tracking:
 - `Baballonia.iOS`
 - `Baballonia.Android`
 3. Run ``dotnet build`` inside the ``src/Baballonia.Desktop`` directory, or build with your IDE
+    - **Note:** If you intend to package an `.app` or `.dmg` on **macOS** run ``dotnet publish -r osx-arm64 -c Release --self-contained -f net10.0`` when building instead.
 
 #### Publishing
 
@@ -107,7 +108,7 @@ If you want to publish a standalone installer for Baballonia, download [NSIS](ht
 
 ##### macOS
 
-If you want to package a macOS .app application bundle run the `.sh` script located at
+If you want to package a macOS `.app` application bundle run the `.sh` script located at
 `src/Baballonia.Desktop/package_macos.sh`.
 
 You can create a macOS disk image containing the application by using the `--dmg` arg when running the `.sh` script.
