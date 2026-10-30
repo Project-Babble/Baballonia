@@ -3,8 +3,6 @@
 os=$(uname -s)
 arch=$(uname -m)
 
-echo $arch
-
 if [[ $os == "Darwin" ]]; then
   espflashDownloadPath="https://github.com/esp-rs/espflash/releases/latest/download/espflash-aarch64-apple-darwin.zip"
 
