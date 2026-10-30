@@ -226,8 +226,8 @@ public partial class App : Application
         {
             case IClassicDesktopStyleApplicationLifetime desktop:
                 var languageService = Ioc.Default.GetRequiredService<ILanguageSelectorService>();
-                InitTray();
-                languageService.OnLanguageUpdated += () => { Dispatcher.UIThread.Post(RefreshTrayStrings); };
+                InitNativeMenus();
+                languageService.OnLanguageUpdated += () => { Dispatcher.UIThread.Post(RefreshNativeMenuStrings); };
                 desktop.MainWindow = new MainWindow(vm);
                 desktop.MainWindow.Loaded += (_, _) => { desktop.MainWindow.ShowOnboardingIfNeeded(); };
                 desktop.Exit += (s, e) =>

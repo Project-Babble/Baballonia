@@ -1,6 +1,9 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Baballonia.ViewModels;
+using Baballonia.ViewModels.SplitViewPane;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using System;
 using System.Linq;
 
@@ -12,8 +15,9 @@ public partial class App : Application
     private TrayIcon _appTrayTooltip;
     private NativeMenuItem _trayShowHideItem;
     private NativeMenuItem _trayExitItem;
+    private NativeMenuItem _appMenuAboutItem;
 
-    private void InitTray()
+    private void InitNativeMenus()
     {
         var icons = TrayIcon.GetIcons(this);
         _appTrayTooltip = icons?.OfType<TrayIcon>().First()!;
@@ -24,14 +28,17 @@ public partial class App : Application
         _trayShowHideItem = items?[0]!;                                              // Show/Hide
         _trayExitItem = items?[2]!;                                                  // Exit
 
-        RefreshTrayStrings();
+        _appMenuAboutItem = NativeMenu.GetMenu(this)?.Items.OfType<NativeMenuItem>().First()!;
+
+        RefreshNativeMenuStrings();
     }
 
-    private void RefreshTrayStrings()
+    private void RefreshNativeMenuStrings()
     {
         _appTrayTooltip.ToolTipText = Assets.Resources.Tray_Tooltip;
         _trayShowHideItem.Header = Assets.Resources.Tray_Hide;
         _trayExitItem.Header = Assets.Resources.Tray_Exit;
+        _appMenuAboutItem.Header = Assets.Resources.About_AboutBaballonia_Header;
     }
 
     // Intellisense says this has 0 references - this is referenced by App.axaml
@@ -56,6 +63,23 @@ public partial class App : Application
                 showHide.Header = Assets.Resources.Tray_Hide;
             }
         }
+    }
+
+    // Intellisense says this has 0 references - this is referenced by App.axaml
+    private void OnAboutClicked(object? sender, EventArgs e)
+    {
+        if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop)
+            return;
+
+        if (!desktop.MainWindow!.IsVisible)
+        {
+            desktop.MainWindow.Show();
+            _trayShowHideItem.Header = Assets.Resources.Tray_Hide;
+        }
+        desktop.MainWindow.Activate();
+
+        var vm = Ioc.Default.GetRequiredService<MainViewModel>();
+        vm.SelectedListItem = vm.Items.First(item => item.ModelType == typeof(AboutPageViewModel));
     }
 
     // Intellisense says this has 0 references - this is referenced by App.axaml
