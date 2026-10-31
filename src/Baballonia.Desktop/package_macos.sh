@@ -1,6 +1,7 @@
 #!/bin/bash
 # Usage: ./package_macos.sh [--dmg] [version]
-set -euo pipefail
+
+set -e
 cd "$(dirname "$0")"
 
 arch=$(uname -m)
@@ -10,42 +11,54 @@ if [[ $arch != "arm64" ]]; then
   exit 1
 fi
 
-DMG=false
-VERSION=""
+createDmg=false
+version=""
+
 for arg in "$@"; do
-  case $arg in
-    --dmg) DMG=true ;;
-    -*) echo "Unknown option: $arg" >&2; exit 1 ;;
-    *) VERSION=$arg ;;
-  esac
+  if [[ $arg == "--dmg" ]]; then
+    createDmg=true
+  elif [[ $arg == -* ]]; then
+    echo "Unknown option: $arg" >&2
+    exit 1
+  else
+    version=$arg
+  fi
 done
 
-VERSION="${VERSION:-$(sed -n 's:.*<AssemblyVersion>\(.*\)</AssemblyVersion>.*:\1:p' ../Baballonia/Baballonia.csproj | head -1)}"
-PUBLISH="bin/Release/net10.0/osx-arm64/publish"
-APP="bin/Baballonia.app"
+if [[ -z $version ]]; then
+  version=$(grep -m 1 "<AssemblyVersion>" ../Baballonia/Baballonia.csproj | sed 's/<[^>]*>//g' | tr -d '[:space:]')
+fi
 
-if [ ! -x "$PUBLISH/Baballonia.Desktop" ]; then
+publishPath="bin/Release/net10.0/osx-arm64/publish"
+appPath="bin/Baballonia.app"
+
+if [[ ! -x "$publishPath/Baballonia.Desktop" ]]; then
   echo "You need to run dotnet publish before running this package script." >&2
   exit 1
 fi
 
-TMP_DIR="$(mktemp -d)"
-trap 'rm -rf "$TMP_DIR"' EXIT
-trap 'rm -rf "$APP"' ERR
-rm -rf "$APP"
-mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
-cp -R "$PUBLISH/." "$APP/Contents/MacOS/"
+tmpDir=$(mktemp -d)
+trap 'rm -rf "$tmpDir"' EXIT
 
-ICONSET="$TMP_DIR/Baballonia.iconset"
-mkdir -p "$ICONSET"
-for s in 16 32 128 256 512; do
-  sips -z $s $s Assets/Icon_512x512.png --out "$ICONSET/icon_${s}x${s}.png" >/dev/null
-  d=$((s * 2))
-  [ $d -le 512 ] && sips -z $d $d Assets/Icon_512x512.png --out "$ICONSET/icon_${s}x${s}@2x.png" >/dev/null
-done
-iconutil -c icns "$ICONSET" -o "$APP/Contents/Resources/Baballonia.icns"
+tmpAppPath="$tmpDir/Baballonia.app"
+mkdir -p "$tmpAppPath/Contents/MacOS" "$tmpAppPath/Contents/Resources"
+cp -R "$publishPath/." "$tmpAppPath/Contents/MacOS/"
 
-cat > "$APP/Contents/Info.plist" <<EOF
+iconPath="Assets/Icon_512x512.png"
+iconsetPath="$tmpDir/Baballonia.iconset"
+mkdir "$iconsetPath"
+sips -z 16 16 "$iconPath" --out "$iconsetPath/icon_16x16.png" > /dev/null
+sips -z 32 32 "$iconPath" --out "$iconsetPath/icon_16x16@2x.png" > /dev/null
+sips -z 32 32 "$iconPath" --out "$iconsetPath/icon_32x32.png" > /dev/null
+sips -z 64 64 "$iconPath" --out "$iconsetPath/icon_32x32@2x.png" > /dev/null
+sips -z 128 128 "$iconPath" --out "$iconsetPath/icon_128x128.png" > /dev/null
+sips -z 256 256 "$iconPath" --out "$iconsetPath/icon_128x128@2x.png" > /dev/null
+sips -z 256 256 "$iconPath" --out "$iconsetPath/icon_256x256.png" > /dev/null
+sips -z 512 512 "$iconPath" --out "$iconsetPath/icon_256x256@2x.png" > /dev/null
+sips -z 512 512 "$iconPath" --out "$iconsetPath/icon_512x512.png" > /dev/null
+iconutil -c icns "$iconsetPath" -o "$tmpAppPath/Contents/Resources/Baballonia.icns"
+
+cat > "$tmpAppPath/Contents/Info.plist" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -63,9 +76,9 @@ cat > "$APP/Contents/Info.plist" <<EOF
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>$VERSION</string>
+    <string>$version</string>
     <key>CFBundleVersion</key>
-    <string>$VERSION</string>
+    <string>$version</string>
     <key>NSHighResolutionCapable</key>
     <true/>
     <key>NSCameraUsageDescription</key>
@@ -74,17 +87,20 @@ cat > "$APP/Contents/Info.plist" <<EOF
 </plist>
 EOF
 
-codesign --force --deep --sign - "$APP"
-codesign --verify --deep --strict "$APP"
-trap - ERR
+codesign --force --deep --sign - "$tmpAppPath"
 
-echo "Built $APP ($VERSION)"
+rm -rf "$appPath"
+mv "$tmpAppPath" "$appPath"
 
-if [[ $DMG == true ]]; then
-  DMG_PATH="bin/Baballonia.dmg"
-  STAGING="$TMP_DIR/dmg"
-  ditto "$APP" "$STAGING/Baballonia.app"
-  ln -s /Applications "$STAGING/Applications"
-  hdiutil create -quiet -volname "Baballonia" -srcfolder "$STAGING" -ov -format UDZO "$DMG_PATH"
-  echo "Built $DMG_PATH"
+echo "Built $appPath ($version)"
+
+if [[ $createDmg == true ]]; then
+  dmgPath="bin/Baballonia.dmg"
+  dmgStagingPath="$tmpDir/dmg"
+
+  ditto "$appPath" "$dmgStagingPath/Baballonia.app"
+  ln -s /Applications "$dmgStagingPath/Applications"
+  hdiutil create -quiet -volname "Baballonia" -srcfolder "$dmgStagingPath" -ov -format UDZO "$dmgPath"
+
+  echo "Built $dmgPath"
 fi
