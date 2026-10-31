@@ -33,7 +33,7 @@ public class FirmwareService(ILogger<FirmwareService> logger, ICommandSenderFact
         }
         else if (OperatingSystem.IsMacOS())
         {
-            EsptoolCommand = Path.Combine("Firmware", "MacOS", "espflash");
+            EsptoolCommand = Path.Combine(AppContext.BaseDirectory, "Firmware", "MacOS", "espflash");
         }
     }
 

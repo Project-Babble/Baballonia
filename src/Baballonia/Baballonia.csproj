@@ -38,6 +38,11 @@
             <TargetPath>%(RecursiveDir)\%(Filename)%(Extension)</TargetPath>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="Firmware\MacOS\espflash" Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+            <Link>%(RecursiveDir)\%(Filename)%(Extension)</Link>
+            <TargetPath>%(RecursiveDir)\%(Filename)%(Extension)</TargetPath>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
         <None Update="font.ttf">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
