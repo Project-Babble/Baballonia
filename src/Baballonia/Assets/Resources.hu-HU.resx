@@ -384,14 +384,56 @@
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
     <value>Talált {0} hálózatot. Kattintson az újrascanneléshez.</value>
   </data>
-  <data name="VRC_Title_Header" xml:space="preserve">
-    <value>VRChat + VRCFaceTracking beállítások</value>
+  <data name="Apps_Title_Header" xml:space="preserve">
+    <value>Alkalmazások</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
-    <value>Natív VRC szemkövetés használata</value>
+  <data name="Apps_Output_Header" xml:space="preserve">
+    <value>Kimenet</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
-    <value>Szemkövetést hoz az avatárokhoz, amelyek nem rendelkeznek VRCFaceTracking-kel</value>
+  <data name="Apps_Output_Description" xml:space="preserve">
+    <value>Válaszd ki, hová küldje a Baballonia a követési adataidat</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Header" xml:space="preserve">
+    <value>Kimenet más alkalmazásokba</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Description" xml:space="preserve">
+    <value>Kimenet a VRCFaceTracking asztali alkalmazásba, a Resonite-ba és a ChilloutVR-be. Bármely alkalmazást támogat, amely a 8888-as porton figyel.</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Header" xml:space="preserve">
+    <value>Kimenet a VRChatbe a beépített VRCFaceTracking használatával</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Description" xml:space="preserve">
+    <value>Kimenet közvetlenül a VRChatbe egy beépített VRCFaceTracking használatával. Nincs szükség asztali alkalmazásra!</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Header" xml:space="preserve">
+    <value>Kimenet a VRChatbe a VRChat natív szem-/arckövetésével</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Description" xml:space="preserve">
+    <value>Kimenet közvetlenül a VRChat natív szem- és arckövetésébe. Kísérleti, nem minden avatar van ehhez beállítva.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Header" xml:space="preserve">
+    <value>Natív VRCFaceTracking használata</value>
+  </data>
+  <data name="Apps_BundledVrcft_Description" xml:space="preserve">
+    <value>Az avatar paramétereinek átalakítása és közvetlen küldése a VRChatbe a VRCFaceTracking futtatása nélkül. Az adatok továbbra is a 8888-as porton keresztül jutnak el más alkalmazásokhoz.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status" xml:space="preserve">
+    <value>Avatar: {0} ({1})</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status_Waiting" xml:space="preserve">
+    <value>Várakozás egy avatarra...</value>
+  </data>
+  <data name="Apps_BundledVrcft_Parameters_Header" xml:space="preserve">
+    <value>Feldolgozott paraméterek ({0})</value>
+  </data>
+  <data name="Apps_BundledVrcft_ExternalWarning" xml:space="preserve">
+    <value>A VRCFaceTracking is fut, így a VRChat kétszer kapja meg a paramétereket. Zárd be a VRCFaceTrackinget, vagy válts másik kimenetre.</value>
+  </data>
+  <data name="Apps_VrchatNative_Eye" xml:space="preserve">
+    <value>Szemkövetés</value>
+  </data>
+  <data name="Apps_VrchatNative_Face" xml:space="preserve">
+    <value>Arckövetés</value>
   </data>
   <data name="VRC_ModuleMode_Header" xml:space="preserve">
     <value>VRCFT modul módjának beállítása</value>
@@ -457,7 +499,7 @@
     <value>Ha segítségre van szüksége a követő összeállításában, itt van egy hasznos YouTube oktatóanyag!</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
-    <value>Alkalmazás beállítások</value>
+    <value>Beállítások</value>
   </data>
   <data name="Settings_Language_Header" xml:space="preserve">
     <value>Nyelv</value>

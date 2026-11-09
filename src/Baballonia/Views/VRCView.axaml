@@ -2,33 +2,140 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:controls="clr-namespace:Baballonia.Controls"
              xmlns:splitViewPane="clr-namespace:Baballonia.ViewModels.SplitViewPane"
              x:DataType="splitViewPane:VrcViewModel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Baballonia.Views.VrcView"
              xmlns:assets="clr-namespace:Baballonia.Assets">
+    <UserControl.Styles>
+        <ContainerQuery Name="ModuleMode" Query="max-width:500">
+            <Style Selector="ComboBox#ModeCombo">
+                <Setter Property="Grid.Column" Value="0" />
+                <Setter Property="Grid.Row" Value="1" />
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="Margin" Value="0,8,0,0" />
+            </Style>
+        </ContainerQuery>
+    </UserControl.Styles>
     <ScrollViewer>
         <StackPanel Classes="Page">
-            <TextBlock Classes="Header" Text="{x:Static assets:Resources.VRC_Title_Header}" />
+            <TextBlock Classes="Header" Text="{x:Static assets:Resources.Apps_Title_Header}" />
 
-            <controls:SettingsToggle
-              Title="{x:Static assets:Resources.VRC_UseNativeEyeTracking_Header}"
-              Description="{x:Static assets:Resources.VRC_UseNativeEyeTracking_Description}"
-              SettingToggled="{Binding UseNativeVrcEyeTracking, Mode=TwoWay}" />
+            <Border
+              Background="{DynamicResource SystemChromeMediumLowColor}"
+              CornerRadius="6"
+              Padding="25,15">
+              <StackPanel Spacing="12">
+                <StackPanel>
+                  <TextBlock
+                    FontSize="16"
+                    FontWeight="SemiBold"
+                    Text="{x:Static assets:Resources.Apps_Output_Header}" />
+                  <TextBlock
+                    FontSize="14"
+                    Foreground="{DynamicResource SystemChromeGrayColor}"
+                    Text="{x:Static assets:Resources.Apps_Output_Description}"
+                    TextWrapping="Wrap" />
+                </StackPanel>
 
-            <controls:SettingsBlock
-              Title="{x:Static assets:Resources.VRC_ModuleMode_Header}"
-              Description="{x:Static assets:Resources.VRC_ModuleMode_Description}">
-              <controls:SettingsBlock.SettingsContent>
-                <ComboBox x:Name="ModeCombo" VerticalAlignment="Center"
-                          ItemsSource="{Binding ModuleModeOptions}"
-                          SelectedItem="{Binding SelectedModuleMode, Mode=TwoWay}"
-                          PlaceholderText="{x:Static assets:Resources.VRC_ModuleMode_Placeholder}"
-                          IsEnabled="{Binding VrcftDetected}"/>
-              </controls:SettingsBlock.SettingsContent>
-            </controls:SettingsBlock>
+                <ComboBox
+                  HorizontalAlignment="Stretch"
+                  ItemsSource="{Binding OutputModes}"
+                  SelectedItem="{Binding SelectedOutputMode, Mode=TwoWay}">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="splitViewPane:OutputModeOption">
+                      <StackPanel Margin="0,4">
+                        <TextBlock FontWeight="SemiBold" Text="{Binding Header}" />
+                        <TextBlock
+                          FontSize="12"
+                          Foreground="{DynamicResource SystemChromeGrayColor}"
+                          Text="{Binding Description}"
+                          TextWrapping="Wrap" />
+                      </StackPanel>
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
 
+                <!-- Output to other apps -->
+                <!-- The mode drop-down sits beside the text, and moves below it when narrow (see ContainerQuery above) -->
+                <Grid
+                  Container.Name="ModuleMode"
+                  Container.Sizing="Width"
+                  ColumnDefinitions="*,Auto"
+                  RowDefinitions="Auto,Auto"
+                  IsVisible="{Binding IsOtherAppsSelected}">
+                  <StackPanel Grid.Column="0" Grid.Row="0" Margin="0,0,12,0" VerticalAlignment="Center">
+                    <TextBlock
+                      FontSize="16"
+                      FontWeight="SemiBold"
+                      Text="{x:Static assets:Resources.VRC_ModuleMode_Header}"
+                      TextWrapping="Wrap" />
+                    <TextBlock
+                      FontSize="14"
+                      Foreground="{DynamicResource SystemChromeGrayColor}"
+                      Text="{x:Static assets:Resources.VRC_ModuleMode_Description}"
+                      TextWrapping="Wrap" />
+                  </StackPanel>
+                  <ComboBox x:Name="ModeCombo"
+                            Grid.Column="1" Grid.Row="0"
+                            VerticalAlignment="Center"
+                            ItemsSource="{Binding ModuleModeOptions}"
+                            SelectedItem="{Binding SelectedModuleMode, Mode=TwoWay}"
+                            PlaceholderText="{x:Static assets:Resources.VRC_ModuleMode_Placeholder}"
+                            IsEnabled="{Binding VrcftDetected}"/>
+                </Grid>
+
+                <!-- Bundled VRCFaceTracking: avatar details and parsed parameters -->
+                <StackPanel Spacing="8" IsVisible="{Binding IsBundledVrcftSelected}">
+                  <StackPanel Spacing="4">
+                    <CheckBox
+                      Content="{x:Static assets:Resources.Apps_BundledVrcft_Header}"
+                      IsChecked="{Binding UseNativeVrcft, Mode=TwoWay}" />
+                    <TextBlock
+                      FontSize="14"
+                      Foreground="{DynamicResource SystemChromeGrayColor}"
+                      Text="{x:Static assets:Resources.Apps_BundledVrcft_Description}"
+                      TextWrapping="Wrap" />
+                  </StackPanel>
+                  <TextBlock
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    IsVisible="{Binding NativeVrcft.IsRunning}"
+                    Text="{Binding NativeVrcft.Status}"
+                    TextWrapping="Wrap" />
+                  <TextBlock
+                    FontSize="14"
+                    FontWeight="DemiBold"
+                    Foreground="Orange"
+                    IsVisible="{Binding NativeVrcft.ExternalVrcftDetected}"
+                    Text="{x:Static assets:Resources.Apps_BundledVrcft_ExternalWarning}"
+                    TextWrapping="Wrap" />
+                  <Expander
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch"
+                    Header="{Binding NativeVrcft.AvatarParameters.Count, StringFormat={x:Static assets:Resources.Apps_BundledVrcft_Parameters_Header}}"
+                    IsVisible="{Binding NativeVrcft.IsRunning}">
+                    <ItemsControl ItemsSource="{Binding NativeVrcft.AvatarParameters}">
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                          <SelectableTextBlock FontFamily="monospace" FontSize="13" Text="{Binding}" />
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                  </Expander>
+                </StackPanel>
+
+                <!-- VRChat's native eye/face tracking -->
+                <StackPanel Spacing="4" IsVisible="{Binding IsVrchatNativeSelected}">
+                  <CheckBox
+                    Content="{x:Static assets:Resources.Apps_VrchatNative_Eye}"
+                    IsChecked="{Binding UseNativeVrcEyeTracking, Mode=TwoWay}" />
+                  <CheckBox
+                    Content="{x:Static assets:Resources.Apps_VrchatNative_Face}"
+                    IsChecked="{Binding UseNativeVrcFaceTracking, Mode=TwoWay}" />
+                </StackPanel>
+              </StackPanel>
+            </Border>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

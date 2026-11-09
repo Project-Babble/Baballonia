@@ -384,14 +384,56 @@
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
     <value>Löytyi {0} verkot. Klikkaa skannataksesi uudelleen.</value>
   </data>
-  <data name="VRC_Title_Header" xml:space="preserve">
-    <value>VRChat + VRCFaceTracking Asetukset</value>
+  <data name="Apps_Title_Header" xml:space="preserve">
+    <value>Sovellukset</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
-    <value>Käytä Native Vrc Silmien Seurantaa</value>
+  <data name="Apps_Output_Header" xml:space="preserve">
+    <value>Ulostulo</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
-    <value>Tuo silmien seuranta hahmoille, joilla ei ole VRCFaceTrackingiä</value>
+  <data name="Apps_Output_Description" xml:space="preserve">
+    <value>Valitse, minne Baballonia lähettää seurantatietosi</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Header" xml:space="preserve">
+    <value>Ulostulo muihin sovelluksiin</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Description" xml:space="preserve">
+    <value>Ulostulo VRCFaceTracking-työpöytäsovellukseen, Resoniteen ja ChilloutVR:ään. Tukee mitä tahansa sovellusta, joka kuuntelee porttia 8888.</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Header" xml:space="preserve">
+    <value>Ulostulo VRChatiin mukana tulevalla VRCFaceTrackingillä</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Description" xml:space="preserve">
+    <value>Ulostulo suoraan VRChatiin mukana tulevalla VRCFaceTrackingillä. Työpöytäsovellusta ei tarvita!</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Header" xml:space="preserve">
+    <value>Ulostulo VRChatiin VRChatin omalla silmien/kasvojen seurannalla</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Description" xml:space="preserve">
+    <value>Ulostulo suoraan VRChatin omaan silmien ja kasvojen seurantaan. Kokeellinen, kaikkia avatareja ei ole määritetty tätä varten.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Header" xml:space="preserve">
+    <value>Käytä sisäänrakennettua VRCFaceTrackingiä</value>
+  </data>
+  <data name="Apps_BundledVrcft_Description" xml:space="preserve">
+    <value>Muunna ja lähetä avatarin parametrit suoraan VRChatiin ilman VRCFaceTrackingin käyttöä. Tietoja lähetetään edelleen muihin sovelluksiin porttiin 8888.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status" xml:space="preserve">
+    <value>Avatar: {0} ({1})</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status_Waiting" xml:space="preserve">
+    <value>Odotetaan avataria...</value>
+  </data>
+  <data name="Apps_BundledVrcft_Parameters_Header" xml:space="preserve">
+    <value>Jäsennetyt parametrit ({0})</value>
+  </data>
+  <data name="Apps_BundledVrcft_ExternalWarning" xml:space="preserve">
+    <value>VRCFaceTracking on myös käynnissä, joten VRChat vastaanottaa parametrit kahdesti. Sulje VRCFaceTracking tai vaihda toiseen ulostuloon.</value>
+  </data>
+  <data name="Apps_VrchatNative_Eye" xml:space="preserve">
+    <value>Silmien seuranta</value>
+  </data>
+  <data name="Apps_VrchatNative_Face" xml:space="preserve">
+    <value>Kasvojen seuranta</value>
   </data>
   <data name="VRC_ModuleMode_Header" xml:space="preserve">
     <value>Aseta VRCFT-moduuli</value>
@@ -457,7 +499,7 @@
     <value>Jos tarvitset apua seurantapalvelimen kokoamisessa, tässä on hyödyllinen Youtube-opetusohjelma!</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
-    <value>Sovelluksen Asetukset</value>
+    <value>Asetukset</value>
   </data>
   <data name="Settings_Language_Header" xml:space="preserve">
     <value>Kieli</value>

@@ -384,14 +384,56 @@
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
     <value>Nalezeny sítě {0} . Klikněte pro opětovné skenování.</value>
   </data>
-  <data name="VRC_Title_Header" xml:space="preserve">
-    <value>VRChat + VRCFaceTracking nastavení</value>
+  <data name="Apps_Title_Header" xml:space="preserve">
+    <value>Aplikace</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
-    <value>Použít Nativní VRC sledování očí</value>
+  <data name="Apps_Output_Header" xml:space="preserve">
+    <value>Výstup</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
-    <value>Přenese sledování očí do avatarů, kteří nemají VRCFaceTracking</value>
+  <data name="Apps_Output_Description" xml:space="preserve">
+    <value>Vyberte, kam Baballonia posílá vaše data sledování</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Header" xml:space="preserve">
+    <value>Výstup do jiných aplikací</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Description" xml:space="preserve">
+    <value>Výstup do desktopové aplikace VRCFaceTracking, Resonite, ChilloutVR. Podporuje jakoukoli aplikaci naslouchající na portu 8888.</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Header" xml:space="preserve">
+    <value>Výstup do VRChatu pomocí přibaleného VRCFaceTracking</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Description" xml:space="preserve">
+    <value>Výstup přímo do VRChatu pomocí přibaleného VRCFaceTracking. Není potřeba žádná desktopová aplikace!</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Header" xml:space="preserve">
+    <value>Výstup do VRChatu pomocí nativního sledování očí/obličeje ve VRChatu</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Description" xml:space="preserve">
+    <value>Výstup přímo do nativního sledování očí a obličeje ve VRChatu. Experimentální, ne všechny avatary jsou pro to nastavené.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Header" xml:space="preserve">
+    <value>Použít nativní VRCFaceTracking</value>
+  </data>
+  <data name="Apps_BundledVrcft_Description" xml:space="preserve">
+    <value>Převádí a posílá parametry avatara přímo do VRChatu bez spuštěného VRCFaceTracking. Data se stále posílají do jiných aplikací na port 8888.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status" xml:space="preserve">
+    <value>Avatar: {0} ({1})</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status_Waiting" xml:space="preserve">
+    <value>Čekání na avatara...</value>
+  </data>
+  <data name="Apps_BundledVrcft_Parameters_Header" xml:space="preserve">
+    <value>Zpracované parametry ({0})</value>
+  </data>
+  <data name="Apps_BundledVrcft_ExternalWarning" xml:space="preserve">
+    <value>VRCFaceTracking také běží, takže VRChat obdrží parametry dvakrát. Zavřete VRCFaceTracking nebo přepněte na jiný výstup.</value>
+  </data>
+  <data name="Apps_VrchatNative_Eye" xml:space="preserve">
+    <value>Sledování očí</value>
+  </data>
+  <data name="Apps_VrchatNative_Face" xml:space="preserve">
+    <value>Sledování obličeje</value>
   </data>
   <data name="VRC_ModuleMode_Header" xml:space="preserve">
     <value>Nastavit režim VRCFT modulu</value>
@@ -457,7 +499,7 @@
     <value>Pokud potřebujete pomoci dát svůj tracker dohromady, tady je užitečný Youtube tutoriál!</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
-    <value>Nastavení aplikace</value>
+    <value>Nastavení</value>
   </data>
   <data name="Settings_Language_Header" xml:space="preserve">
     <value>Jazyk</value>

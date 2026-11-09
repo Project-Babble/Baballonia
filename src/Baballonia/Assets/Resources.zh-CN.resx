@@ -384,14 +384,56 @@
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
     <value>找到 {0} 网络。点击再次扫描。</value>
   </data>
-  <data name="VRC_Title_Header" xml:space="preserve">
-    <value>VRChat + VRCFacebook跟踪设置</value>
+  <data name="Apps_Title_Header" xml:space="preserve">
+    <value>应用</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
-    <value>使用原生VRC 眼睛跟踪</value>
+  <data name="Apps_Output_Header" xml:space="preserve">
+    <value>输出</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
-    <value>将眼睛跟踪带到没有VRC追踪的头像</value>
+  <data name="Apps_Output_Description" xml:space="preserve">
+    <value>选择 Baballonia 将追踪数据发送到哪里</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Header" xml:space="preserve">
+    <value>输出到其他应用</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Description" xml:space="preserve">
+    <value>输出到 VRCFaceTracking 桌面应用、Resonite、ChilloutVR。支持任何监听 8888 端口的应用程序。</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Header" xml:space="preserve">
+    <value>使用内置 VRCFaceTracking 输出到 VRChat</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Description" xml:space="preserve">
+    <value>使用内置的 VRCFaceTracking 直接输出到 VRChat。无需桌面应用！</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Header" xml:space="preserve">
+    <value>使用 VRChat 原生眼部/面部追踪输出到 VRChat</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Description" xml:space="preserve">
+    <value>直接输出到 VRChat 原生的眼部和面部追踪。实验性功能，并非所有模型都已为此配置。</value>
+  </data>
+  <data name="Apps_BundledVrcft_Header" xml:space="preserve">
+    <value>使用原生 VRCFaceTracking</value>
+  </data>
+  <data name="Apps_BundledVrcft_Description" xml:space="preserve">
+    <value>无需运行 VRCFaceTracking，直接转换模型参数并发送到 VRChat。数据仍会通过 8888 端口发送给其他应用。</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status" xml:space="preserve">
+    <value>模型：{0}（{1}）</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status_Waiting" xml:space="preserve">
+    <value>正在等待模型...</value>
+  </data>
+  <data name="Apps_BundledVrcft_Parameters_Header" xml:space="preserve">
+    <value>已解析的参数（{0}）</value>
+  </data>
+  <data name="Apps_BundledVrcft_ExternalWarning" xml:space="preserve">
+    <value>VRCFaceTracking 也在运行，因此 VRChat 会收到两次参数。请关闭 VRCFaceTracking 或切换到其他输出。</value>
+  </data>
+  <data name="Apps_VrchatNative_Eye" xml:space="preserve">
+    <value>眼部追踪</value>
+  </data>
+  <data name="Apps_VrchatNative_Face" xml:space="preserve">
+    <value>面部追踪</value>
   </data>
   <data name="VRC_ModuleMode_Header" xml:space="preserve">
     <value>设置 VRCFT 模块模式</value>
@@ -457,7 +499,7 @@
     <value>如果你需要帮助你的跟踪者集合起来，这里是一个有用的 Youtube 教程！</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
-    <value>应用设置</value>
+    <value>设置</value>
   </data>
   <data name="Settings_Language_Header" xml:space="preserve">
     <value>语言</value>

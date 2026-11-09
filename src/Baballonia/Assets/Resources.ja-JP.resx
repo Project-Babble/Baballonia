@@ -384,14 +384,56 @@
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
     <value>{0} ネットワークが見つかりました。クリックして再度スキャンしてください。</value>
   </data>
-  <data name="VRC_Title_Header" xml:space="preserve">
-    <value>VRChat + VRCFaceTracking 設定</value>
+  <data name="Apps_Title_Header" xml:space="preserve">
+    <value>アプリ</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
-    <value>ネイティブ VRC アイトラッキングを使用する</value>
+  <data name="Apps_Output_Header" xml:space="preserve">
+    <value>出力</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
-    <value>VRCFaceTrackingを持たないアバターにアイトラッキングをもたらします</value>
+  <data name="Apps_Output_Description" xml:space="preserve">
+    <value>Baballonia がトラッキングデータを送信する先を選択します</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Header" xml:space="preserve">
+    <value>他のアプリに出力</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Description" xml:space="preserve">
+    <value>VRCFaceTracking デスクトップアプリ、Resonite、ChilloutVR に出力します。ポート 8888 で待ち受けるすべてのアプリに対応しています。</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Header" xml:space="preserve">
+    <value>同梱の VRCFaceTracking で VRChat に出力</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Description" xml:space="preserve">
+    <value>同梱の VRCFaceTracking を使って VRChat に直接出力します。デスクトップアプリは不要です！</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Header" xml:space="preserve">
+    <value>VRChat のネイティブ アイ/フェイストラッキングで VRChat に出力</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Description" xml:space="preserve">
+    <value>VRChat のネイティブ アイトラッキングとフェイストラッキングに直接出力します。実験的な機能で、すべてのアバターが対応しているわけではありません。</value>
+  </data>
+  <data name="Apps_BundledVrcft_Header" xml:space="preserve">
+    <value>ネイティブ VRCFaceTracking を使用</value>
+  </data>
+  <data name="Apps_BundledVrcft_Description" xml:space="preserve">
+    <value>VRCFaceTracking を起動せずに、アバターパラメーターを変換して VRChat に直接送信します。データは引き続きポート 8888 で他のアプリにも送信されます。</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status" xml:space="preserve">
+    <value>アバター: {0} ({1})</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status_Waiting" xml:space="preserve">
+    <value>アバターを待機しています...</value>
+  </data>
+  <data name="Apps_BundledVrcft_Parameters_Header" xml:space="preserve">
+    <value>解析されたパラメーター ({0})</value>
+  </data>
+  <data name="Apps_BundledVrcft_ExternalWarning" xml:space="preserve">
+    <value>VRCFaceTracking も起動しているため、VRChat はパラメーターを二重に受信します。VRCFaceTracking を閉じるか、別の出力に切り替えてください。</value>
+  </data>
+  <data name="Apps_VrchatNative_Eye" xml:space="preserve">
+    <value>アイトラッキング</value>
+  </data>
+  <data name="Apps_VrchatNative_Face" xml:space="preserve">
+    <value>フェイストラッキング</value>
   </data>
   <data name="VRC_ModuleMode_Header" xml:space="preserve">
     <value>VRCFTモジュールモードを設定</value>
@@ -457,7 +499,7 @@
     <value>トラッカーをまとめるのに手助けが必要な場合は、こちらの Youtube のチュートリアルをご覧ください。</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
-    <value>アプリの設定</value>
+    <value>設定</value>
   </data>
   <data name="Settings_Language_Header" xml:space="preserve">
     <value>言語</value>

@@ -1,5 +1,6 @@
 ﻿using Baballonia.Contracts;
 using Baballonia.Helpers;
+using Baballonia.Models;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OscCore;
@@ -16,6 +17,7 @@ public class ParameterSenderService : BackgroundService
 {
     private readonly VrcftModuleSendService _vrcftModuleSendService;
     private readonly DfrSendService _dfrSendService;
+    private readonly VrchatSendService _vrchatSendService;
     private readonly INativeVrcftService _nativeVrcftService;
     private readonly ILocalSettingsService _localSettingsService;
     private readonly ICalibrationService _calibrationService;
@@ -23,12 +25,16 @@ public class ParameterSenderService : BackgroundService
 
     private string _prefix = "";
     private bool _sendNativeVrcEyeTracking;
+    private bool _sendNativeVrcFaceTracking;
+    private volatile bool _faceTrackingPayloadDirty;
+    private readonly VrcFaceTrackingPayload _faceTrackingPayload = new();
     private bool _useDfr;
     private bool _useNativeVrcft;
     private bool? _appliedUseNativeVrcft;
     private volatile bool _nativeVrcftDirty;
     private readonly ConcurrentQueue<OscMessage> _vrcftQueue = new();
     private readonly ConcurrentQueue<OscMessage> _dfrQueue = new();
+    private readonly ConcurrentQueue<OscMessage> _vrchatQueue = new();
 
     // Expression parameter names
     public static readonly Dictionary<string, string> EyeExpressionMap = new()
@@ -99,6 +105,7 @@ public class ParameterSenderService : BackgroundService
     public ParameterSenderService(
         VrcftModuleSendService vrcftModuleSendService,
         DfrSendService dfrSendService,
+        VrchatSendService vrchatSendService,
         INativeVrcftService nativeVrcftService,
         ILocalSettingsService localSettingsService,
         ICalibrationService calibrationService,
@@ -107,6 +114,7 @@ public class ParameterSenderService : BackgroundService
     {
         this._vrcftModuleSendService = vrcftModuleSendService;
         this._dfrSendService = dfrSendService;
+        this._vrchatSendService = vrchatSendService;
         this._nativeVrcftService = nativeVrcftService;
         this._localSettingsService = localSettingsService;
         this._calibrationService = calibrationService;
@@ -126,10 +134,14 @@ public class ParameterSenderService : BackgroundService
             try
             {
                 _prefix = _localSettingsService.ReadSetting<string>("AppSettings_OSCPrefix");
-                _sendNativeVrcEyeTracking = _localSettingsService.ReadSetting<bool>("VRC_UseNativeTracking");
+                var useVrchatNative = OutputModeSettings.Read(_localSettingsService) == OutputMode.VrchatNative;
+                _sendNativeVrcEyeTracking = useVrchatNative &&
+                                            _localSettingsService.ReadSetting<bool>(OutputModeSettings.NativeEyeTrackingKey);
+                _sendNativeVrcFaceTracking = useVrchatNative &&
+                                             _localSettingsService.ReadSetting<bool>(OutputModeSettings.NativeFaceTrackingKey);
                 _useDfr = _localSettingsService.ReadSetting<bool>("AppSettings_UseDFR");
                 _useNativeVrcft = _nativeVrcftService.IsSupported &&
-                                  _localSettingsService.ReadSetting<bool>("AppSettings_UseNativeVRCFT");
+                                  _localSettingsService.ReadSetting<bool>(OutputModeSettings.UseNativeVrcftKey);
                 await ApplyNativeVrcftSetting();
                 await SendAndClearQueue(cancellationToken);
                 await Task.Delay(10, cancellationToken);
@@ -172,7 +184,24 @@ public class ParameterSenderService : BackgroundService
             ProcessNativeVrcEyeTracking(expressions, _dfrQueue);
 
         if (_sendNativeVrcEyeTracking)
-            ProcessNativeVrcEyeTracking(expressions, _vrcftQueue);
+            ProcessNativeVrcEyeTracking(expressions, _vrchatQueue);
+
+        if (_sendNativeVrcFaceTracking)
+        {
+            // The face payload also carries eye keys; leave them at 0 unless eye tracking is enabled
+            if (_sendNativeVrcEyeTracking)
+                _faceTrackingPayload.SetEyes(expressions[0], expressions[1], GetWeightedEyeLid(expressions[2], "LeftEyeLid"),
+                    expressions[3], expressions[4], GetWeightedEyeLid(expressions[5], "RightEyeLid"));
+            else
+                _faceTrackingPayload.ClearEyes();
+            _faceTrackingPayloadDirty = true;
+        }
+    }
+
+    private float GetWeightedEyeLid(float lid, string name)
+    {
+        var settings = _calibrationService.GetExpressionSettings(name);
+        return lid.Remap(settings.Lower, settings.Upper, settings.Min, settings.Max);
     }
 
     private void ProcessNativeVrcEyeTracking(float[] expressions, ConcurrentQueue<OscMessage> queue)
@@ -184,10 +213,8 @@ public class ParameterSenderService : BackgroundService
         var rightEyeY = expressions[4];
         var rightEyeLid = expressions[5];
 
-        var leftEyeLidSettings = _calibrationService.GetExpressionSettings("LeftEyeLid");
-        var rightEyeLidSettings = _calibrationService.GetExpressionSettings("RightEyeLid");
-        var weightedLeftEyeLid = leftEyeLid.Remap(leftEyeLidSettings.Lower, leftEyeLidSettings.Upper, leftEyeLidSettings.Min, leftEyeLidSettings.Max);
-        var weightedRightEyeLid = rightEyeLid.Remap(rightEyeLidSettings.Lower, rightEyeLidSettings.Upper, rightEyeLidSettings.Min, rightEyeLidSettings.Max);
+        var weightedLeftEyeLid = GetWeightedEyeLid(leftEyeLid, "LeftEyeLid");
+        var weightedRightEyeLid = GetWeightedEyeLid(rightEyeLid, "RightEyeLid");
         var averageLid = (weightedLeftEyeLid + weightedRightEyeLid) / 2f;
         queue.Enqueue(new OscMessage("/tracking/eye/EyesClosedAmount", 1f - Math.Clamp(averageLid, 0f, 1f)));
 
@@ -218,9 +245,12 @@ public class ParameterSenderService : BackgroundService
             _vrcftQueue.Enqueue(new OscMessage(_prefix + faceElement.Value, value));
             if (_useNativeVrcft)
                 _nativeVrcftService.SetExpression(faceElement.Key, value);
+            if (_sendNativeVrcFaceTracking)
+                _faceTrackingPayload.SetFace(faceElement.Key, value);
         }
 
         _nativeVrcftDirty = _useNativeVrcft;
+        _faceTrackingPayloadDirty = _sendNativeVrcFaceTracking;
     }
 
     private async Task ApplyNativeVrcftSetting()
@@ -262,6 +292,18 @@ public class ParameterSenderService : BackgroundService
         {
             await _dfrSendService.Send(_dfrQueue.ToArray(), cancellationToken);
             _dfrQueue.Clear();
+        }
+
+        if (_faceTrackingPayloadDirty)
+        {
+            _faceTrackingPayloadDirty = false;
+            _vrchatQueue.Enqueue(_faceTrackingPayload.ToMessage());
+        }
+
+        if (!_vrchatQueue.IsEmpty)
+        {
+            await _vrchatSendService.Send(_vrchatQueue.ToArray(), cancellationToken);
+            _vrchatQueue.Clear();
         }
     }
 }

@@ -331,6 +331,159 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Convert and send avatar parameters to VRChat directly, without running VRCFaceTracking. Data is still sent to other apps on port 8888..
+        /// </summary>
+        public static string Apps_BundledVrcft_Description {
+            get {
+                return ResourceManager.GetString("Apps_BundledVrcft_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to VRCFaceTracking is also running, so VRChat will receive parameters twice. Close VRCFaceTracking or switch to another output..
+        /// </summary>
+        public static string Apps_BundledVrcft_ExternalWarning {
+            get {
+                return ResourceManager.GetString("Apps_BundledVrcft_ExternalWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Native VRCFaceTracking.
+        /// </summary>
+        public static string Apps_BundledVrcft_Header {
+            get {
+                return ResourceManager.GetString("Apps_BundledVrcft_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parsed parameters ({0}).
+        /// </summary>
+        public static string Apps_BundledVrcft_Parameters_Header {
+            get {
+                return ResourceManager.GetString("Apps_BundledVrcft_Parameters_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avatar: {0} ({1}).
+        /// </summary>
+        public static string Apps_BundledVrcft_Status {
+            get {
+                return ResourceManager.GetString("Apps_BundledVrcft_Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Waiting for an avatar....
+        /// </summary>
+        public static string Apps_BundledVrcft_Status_Waiting {
+            get {
+                return ResourceManager.GetString("Apps_BundledVrcft_Status_Waiting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output to VRChat directly using a bundled VRCFaceTracking. No desktop app required!.
+        /// </summary>
+        public static string Apps_Output_BundledVrcft_Description {
+            get {
+                return ResourceManager.GetString("Apps_Output_BundledVrcft_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output to VRChat using bundled VRCFaceTracking.
+        /// </summary>
+        public static string Apps_Output_BundledVrcft_Header {
+            get {
+                return ResourceManager.GetString("Apps_Output_BundledVrcft_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose where Baballonia sends your tracking data.
+        /// </summary>
+        public static string Apps_Output_Description {
+            get {
+                return ResourceManager.GetString("Apps_Output_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output.
+        /// </summary>
+        public static string Apps_Output_Header {
+            get {
+                return ResourceManager.GetString("Apps_Output_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output to the VRCFaceTracking desktop app, Resonite, ChilloutVR. Supports any application listening on port 8888..
+        /// </summary>
+        public static string Apps_Output_OtherApps_Description {
+            get {
+                return ResourceManager.GetString("Apps_Output_OtherApps_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output to other apps.
+        /// </summary>
+        public static string Apps_Output_OtherApps_Header {
+            get {
+                return ResourceManager.GetString("Apps_Output_OtherApps_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output to VRChat's native eye and face tracking directly. Experimental, not all avatars are configured for this..
+        /// </summary>
+        public static string Apps_Output_VrchatNative_Description {
+            get {
+                return ResourceManager.GetString("Apps_Output_VrchatNative_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output to VRChat using VRChat's Native Eye/Face Tracking.
+        /// </summary>
+        public static string Apps_Output_VrchatNative_Header {
+            get {
+                return ResourceManager.GetString("Apps_Output_VrchatNative_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apps.
+        /// </summary>
+        public static string Apps_Title_Header {
+            get {
+                return ResourceManager.GetString("Apps_Title_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Eye tracking.
+        /// </summary>
+        public static string Apps_VrchatNative_Eye {
+            get {
+                return ResourceManager.GetString("Apps_VrchatNative_Eye", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Face tracking.
+        /// </summary>
+        public static string Apps_VrchatNative_Face {
+            get {
+                return ResourceManager.GetString("Apps_VrchatNative_Face", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cheek Expressions.
         /// </summary>
         public static string Calibration_Cheek_Expressions_Header {
@@ -2156,51 +2309,6 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Convert and send avatar parameters to VRChat directly, without running VRCFaceTracking. Data is still sent to the VRCFaceTracking module port below..
-        /// </summary>
-        public static string Settings_OSC_NativeVRCFT_Description {
-            get {
-                return ResourceManager.GetString("Settings_OSC_NativeVRCFT_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to VRCFaceTracking is also running, so VRChat will receive parameters twice. Close VRCFaceTracking or turn off Use Native VRCFaceTracking..
-        /// </summary>
-        public static string Settings_OSC_NativeVRCFT_ExternalWarning {
-            get {
-                return ResourceManager.GetString("Settings_OSC_NativeVRCFT_ExternalWarning", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Use Native VRCFaceTracking.
-        /// </summary>
-        public static string Settings_OSC_NativeVRCFT_Header {
-            get {
-                return ResourceManager.GetString("Settings_OSC_NativeVRCFT_Header", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Avatar: {0} ({1} parameters).
-        /// </summary>
-        public static string Settings_OSC_NativeVRCFT_Status {
-            get {
-                return ResourceManager.GetString("Settings_OSC_NativeVRCFT_Status", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Waiting for an avatar....
-        /// </summary>
-        public static string Settings_OSC_NativeVRCFT_Status_Waiting {
-            get {
-                return ResourceManager.GetString("Settings_OSC_NativeVRCFT_Status_Waiting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to OSC Prefix.
         /// </summary>
         public static string Settings_OSC_Prefix_Label {
@@ -2336,7 +2444,7 @@ namespace Baballonia.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to App Settings.
+        ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string Settings_Title_Header {
             get {
@@ -2422,33 +2530,6 @@ namespace Baballonia.Assets {
         public static string VRC_ModuleMode_Placeholder {
             get {
                 return ResourceManager.GetString("VRC_ModuleMode_Placeholder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to VRChat + VRCFaceTracking Settings.
-        /// </summary>
-        public static string VRC_Title_Header {
-            get {
-                return ResourceManager.GetString("VRC_Title_Header", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Brings eye tracking to avatars that do not have VRCFaceTracking.
-        /// </summary>
-        public static string VRC_UseNativeEyeTracking_Description {
-            get {
-                return ResourceManager.GetString("VRC_UseNativeEyeTracking_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Use Native VRC Eye Tracking.
-        /// </summary>
-        public static string VRC_UseNativeEyeTracking_Header {
-            get {
-                return ResourceManager.GetString("VRC_UseNativeEyeTracking_Header", resourceCulture);
             }
         }
     }

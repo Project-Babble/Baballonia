@@ -384,14 +384,56 @@
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
     <value>Found {0} networks. Click to scan again.</value>
   </data>
-  <data name="VRC_Title_Header" xml:space="preserve">
-    <value>VRChat + VRCFaceTracking Settings</value>
+  <data name="Apps_Title_Header" xml:space="preserve">
+    <value>Aplicacions</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
-    <value>Use Native VRC Eye Tracking</value>
+  <data name="Apps_Output_Header" xml:space="preserve">
+    <value>Sortida</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
-    <value>Brings eye tracking to avatars that do not have VRCFaceTracking</value>
+  <data name="Apps_Output_Description" xml:space="preserve">
+    <value>Tria on envia Baballonia les teves dades de seguiment</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Header" xml:space="preserve">
+    <value>Sortida a altres aplicacions</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Description" xml:space="preserve">
+    <value>Sortida a l'aplicació d'escriptori de VRCFaceTracking, Resonite, ChilloutVR. Compatible amb qualsevol aplicació que escolti al port 8888.</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Header" xml:space="preserve">
+    <value>Sortida a VRChat amb el VRCFaceTracking integrat</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Description" xml:space="preserve">
+    <value>Sortida directa a VRChat amb un VRCFaceTracking integrat. No cal cap aplicació d'escriptori!</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Header" xml:space="preserve">
+    <value>Sortida a VRChat amb el seguiment d'ulls/cara natiu de VRChat</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Description" xml:space="preserve">
+    <value>Sortida directa al seguiment d'ulls i cara natiu de VRChat. Experimental, no tots els avatars estan configurats per a això.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Header" xml:space="preserve">
+    <value>Utilitza el VRCFaceTracking natiu</value>
+  </data>
+  <data name="Apps_BundledVrcft_Description" xml:space="preserve">
+    <value>Converteix i envia els paràmetres de l'avatar directament a VRChat, sense executar VRCFaceTracking. Les dades encara s'envien a altres aplicacions pel port 8888.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status" xml:space="preserve">
+    <value>Avatar: {0} ({1})</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status_Waiting" xml:space="preserve">
+    <value>Esperant un avatar...</value>
+  </data>
+  <data name="Apps_BundledVrcft_Parameters_Header" xml:space="preserve">
+    <value>Paràmetres analitzats ({0})</value>
+  </data>
+  <data name="Apps_BundledVrcft_ExternalWarning" xml:space="preserve">
+    <value>VRCFaceTracking també s'està executant, de manera que VRChat rebrà els paràmetres dues vegades. Tanca VRCFaceTracking o canvia a una altra sortida.</value>
+  </data>
+  <data name="Apps_VrchatNative_Eye" xml:space="preserve">
+    <value>Seguiment d'ulls</value>
+  </data>
+  <data name="Apps_VrchatNative_Face" xml:space="preserve">
+    <value>Seguiment facial</value>
   </data>
   <data name="VRC_ModuleMode_Header" xml:space="preserve">
     <value>Set VRCFT module mode</value>
@@ -457,7 +499,7 @@
     <value>If you need help putting your tracker together, here's a useful Youtube tutorial!</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
-    <value>App Settings</value>
+    <value>Configuració</value>
   </data>
   <data name="Settings_Language_Header" xml:space="preserve">
     <value>Language</value>

@@ -384,14 +384,56 @@
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
     <value>Trovate reti {0} . Fare clic per eseguire nuovamente la scansione.</value>
   </data>
-  <data name="VRC_Title_Header" xml:space="preserve">
-    <value>Impostazioni VRChat + VRCFaceTracking</value>
+  <data name="Apps_Title_Header" xml:space="preserve">
+    <value>App</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
-    <value>Usa Il Tracciamento Nativo Degli Occhi Vrc</value>
+  <data name="Apps_Output_Header" xml:space="preserve">
+    <value>Uscita</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
-    <value>Porta il tracciamento degli occhi ad avatar che non hanno VRCFaceTracking</value>
+  <data name="Apps_Output_Description" xml:space="preserve">
+    <value>Scegli dove Baballonia invia i tuoi dati di tracciamento</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Header" xml:space="preserve">
+    <value>Uscita verso altre app</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Description" xml:space="preserve">
+    <value>Uscita verso l'app desktop di VRCFaceTracking, Resonite, ChilloutVR. Supporta qualsiasi applicazione in ascolto sulla porta 8888.</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Header" xml:space="preserve">
+    <value>Uscita verso VRChat con VRCFaceTracking integrato</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Description" xml:space="preserve">
+    <value>Uscita diretta verso VRChat con un VRCFaceTracking integrato. Nessuna app desktop necessaria!</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Header" xml:space="preserve">
+    <value>Uscita verso VRChat con il tracciamento occhi/viso nativo di VRChat</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Description" xml:space="preserve">
+    <value>Uscita diretta verso il tracciamento occhi e viso nativo di VRChat. Sperimentale, non tutti gli avatar sono configurati per questo.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Header" xml:space="preserve">
+    <value>Usa VRCFaceTracking nativo</value>
+  </data>
+  <data name="Apps_BundledVrcft_Description" xml:space="preserve">
+    <value>Converte e invia i parametri dell'avatar direttamente a VRChat, senza eseguire VRCFaceTracking. I dati vengono comunque inviati alle altre app sulla porta 8888.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status" xml:space="preserve">
+    <value>Avatar: {0} ({1})</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status_Waiting" xml:space="preserve">
+    <value>In attesa di un avatar...</value>
+  </data>
+  <data name="Apps_BundledVrcft_Parameters_Header" xml:space="preserve">
+    <value>Parametri analizzati ({0})</value>
+  </data>
+  <data name="Apps_BundledVrcft_ExternalWarning" xml:space="preserve">
+    <value>Anche VRCFaceTracking è in esecuzione, quindi VRChat riceverà i parametri due volte. Chiudi VRCFaceTracking o passa a un'altra uscita.</value>
+  </data>
+  <data name="Apps_VrchatNative_Eye" xml:space="preserve">
+    <value>Tracciamento occhi</value>
+  </data>
+  <data name="Apps_VrchatNative_Face" xml:space="preserve">
+    <value>Tracciamento viso</value>
   </data>
   <data name="VRC_ModuleMode_Header" xml:space="preserve">
     <value>Imposta modalità modulo VRCFT</value>
@@ -457,7 +499,7 @@
     <value>Se hai bisogno di aiuto per mettere insieme il tuo tracker, ecco un utile tutorial su Youtube!</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
-    <value>Impostazioni App</value>
+    <value>Impostazioni</value>
   </data>
   <data name="Settings_Language_Header" xml:space="preserve">
     <value>Lingua</value>

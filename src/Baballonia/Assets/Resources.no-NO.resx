@@ -222,6 +222,106 @@
   <data name="Home_Backend_Select_Placeholder" xml:space="preserve">
     <value>Velg en enhet...</value>
   </data>
+  <data name="Home_Backend_Default" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="Home_Eye_Load_Model" xml:space="preserve">
+    <value>Last inn øyemodell</value>
+  </data>
+  <data name="Firmware_Custom_Firmware_Load" xml:space="preserve">
+    <value>Last inn egendefinert fastvare</value>
+  </data>
+  <data name="Settings_SteamVR_Auto_Start_Header" xml:space="preserve">
+    <value>Start automatisk med SteamVR</value>
+  </data>
+  <data name="Settings_SteamVR_Auto_Start_Description" xml:space="preserve">
+    <value>Skal appen starte sammen med SteamVR? (Endringen krever omstart av SteamVR.)</value>
+  </data>
+  <data name="Settings_Advanced_Header" xml:space="preserve">
+    <value>Aktiver avanserte innstillinger</value>
+  </data>
+  <data name="Settings_Advanced_Description" xml:space="preserve">
+    <value>Avanserte innstillinger</value>
+  </data>
+  <data name="Godot_Locale" xml:space="preserve">
+    <value>nb</value>
+  </data>
+  <data name="About_Title_Header" xml:space="preserve">
+    <value>Om</value>
+  </data>
+  <data name="About_AboutUs_Header" xml:space="preserve">
+    <value>Om oss</value>
+  </data>
+  <data name="About_AboutUs_Description" xml:space="preserve">
+    <value>Lenker til hurtigstartveiledningen, sosiale medier, dokumentasjon osv.</value>
+  </data>
+  <data name="About_AboutBaballonia_Header" xml:space="preserve">
+    <value>Om Baballonia</value>
+  </data>
+  <data name="About_AboutBaballonia_Description" xml:space="preserve">
+    <value>Lenker for nerder (GitHub og så videre)</value>
+  </data>
+  <data name="About_Credits_Header" xml:space="preserve">
+    <value>Bidragsytere</value>
+  </data>
+  <data name="About_Credits_Description" xml:space="preserve">
+    <value>Menneskene som gjorde dette prosjektet til det det er. Takk, alle sammen!</value>
+  </data>
+  <data name="About_QuickstartGuide_Alias" xml:space="preserve">
+    <value>Hurtigstartveiledning ⧉</value>
+  </data>
+  <data name="About_BabbleDiscord_Alias" xml:space="preserve">
+    <value>Babble Discord ⧉</value>
+  </data>
+  <data name="About_PishockDiscord_Alias" xml:space="preserve">
+    <value>PiShock Discord ⧉</value>
+  </data>
+  <data name="About_BabbleDocs_Alias" xml:space="preserve">
+    <value>Babble-dokumentasjon ⧉</value>
+  </data>
+  <data name="About_BabbleSite_Alias" xml:space="preserve">
+    <value>Babble-nettsted ⧉</value>
+  </data>
+  <data name="About_BabbleBlog_Alias" xml:space="preserve">
+    <value>Babble-blogg ⧉</value>
+  </data>
+  <data name="About_BabbleDataPrivacyPolicy_Alias" xml:space="preserve">
+    <value>Personvernerklæring ⧉</value>
+  </data>
+  <data name="About_YoutubeLink_Alias" xml:space="preserve">
+    <value>Babble YouTube-side ⧉</value>
+  </data>
+  <data name="About_BabbleTwitter_Alias" xml:space="preserve">
+    <value>Babble Twitter ⧉</value>
+  </data>
+  <data name="About_BaballoniaGithub_Alias" xml:space="preserve">
+    <value>Baballonia GitHub ⧉</value>
+  </data>
+  <data name="About_BaballoniaGithubIssues_Alias" xml:space="preserve">
+    <value>Baballonia GitHub-saker ⧉</value>
+  </data>
+  <data name="About_BaballoniaLicense_Alias" xml:space="preserve">
+    <value>Baballonia-lisens ⧉</value>
+  </data>
+  <data name="About_BaballoniaBuildInstructions_Alias" xml:space="preserve">
+    <value>Byggeinstruksjoner for Baballonia ⧉</value>
+  </data>
+  <data name="About_Contributors_Commits" xml:space="preserve">
+    <value>{0} commits</value>
+  </data>
+  <data name="Firmware_Flashing_Wireless_Prompt" xml:space="preserve">
+    <value>Flashing av egendefinert fastvare på Babble Tracker fungerer best når enheten først er satt i «Trådløs»-modus. 
+Du trenger ikke å skrive inn Wi-Fi-opplysninger. Bare bytt trackeren til «Trådløs»-modus, og start den på nytt før du flasher.</value>
+  </data>
+  <data name="Firmware_Flashing_Header_Alert" xml:space="preserve">
+    <value>Hvis du bruker en Babble Tracker med Valve Index eller Bigscreen Beyond (med/uten 1.0-basestasjoner), kan du oppleve:
+• At skjermen plutselig blir grå
+• At sporingen faller ut eller ofte mister posisjonen
+Dette er vanligvis lett å fikse! Bare installer «Tracking Loss Fix»-fastvaren nedenfor.</value>
+  </data>
+  <data name="Common_Note" xml:space="preserve">
+    <value>Merk</value>
+  </data>
   <data name="Common_Start_Typing" xml:space="preserve">
     <value>Begynn å skrive...</value>
   </data>
@@ -324,6 +424,9 @@
   <data name="Firmware_Flashing_Warning" xml:space="preserve">
     <value>ADVARSEL! DENNE VIL FULLFØRE TILGJENGELIG DIN TRACKER. DU VIL IKKE FOR Å PERFORERTE FØRSTE GANG TIL OPPEN FELLES DINE TRACKER.</value>
   </data>
+  <data name="Firmware_Type_To_Flash" xml:space="preserve">
+    <value>Fastvaretype som skal flashes:</value>
+  </data>
   <data name="Firmware_Flashing_Button" xml:space="preserve">
     <value>Flash Firmware</value>
   </data>
@@ -387,14 +490,56 @@
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
     <value>Fant {0} nettverk. Klikk for å skanne på nytt.</value>
   </data>
-  <data name="VRC_Title_Header" xml:space="preserve">
-    <value>VRChat + VRCFaceTracking Innstillinger</value>
+  <data name="Apps_Title_Header" xml:space="preserve">
+    <value>Apper</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
-    <value>Bruk naturlig VRC Sporing</value>
+  <data name="Apps_Output_Header" xml:space="preserve">
+    <value>Utdata</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
-    <value>Merke øyesporing til avatarer som ikke har VRCFaceTracking</value>
+  <data name="Apps_Output_Description" xml:space="preserve">
+    <value>Velg hvor Baballonia sender sporingsdataene dine</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Header" xml:space="preserve">
+    <value>Utdata til andre apper</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Description" xml:space="preserve">
+    <value>Utdata til VRCFaceTracking-skrivebordsappen, Resonite, ChilloutVR. Støtter alle programmer som lytter på port 8888.</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Header" xml:space="preserve">
+    <value>Utdata til VRChat med medfølgende VRCFaceTracking</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Description" xml:space="preserve">
+    <value>Utdata direkte til VRChat med en medfølgende VRCFaceTracking. Ingen skrivebordsapp nødvendig!</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Header" xml:space="preserve">
+    <value>Utdata til VRChat med VRChats innebygde øye-/ansiktssporing</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Description" xml:space="preserve">
+    <value>Utdata direkte til VRChats innebygde øye- og ansiktssporing. Eksperimentelt, ikke alle avatarer er satt opp for dette.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Header" xml:space="preserve">
+    <value>Bruk innebygd VRCFaceTracking</value>
+  </data>
+  <data name="Apps_BundledVrcft_Description" xml:space="preserve">
+    <value>Konverter og send avatarparametere direkte til VRChat uten å kjøre VRCFaceTracking. Data sendes fortsatt til andre apper på port 8888.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status" xml:space="preserve">
+    <value>Avatar: {0} ({1})</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status_Waiting" xml:space="preserve">
+    <value>Venter på en avatar...</value>
+  </data>
+  <data name="Apps_BundledVrcft_Parameters_Header" xml:space="preserve">
+    <value>Tolkede parametere ({0})</value>
+  </data>
+  <data name="Apps_BundledVrcft_ExternalWarning" xml:space="preserve">
+    <value>VRCFaceTracking kjører også, så VRChat vil motta parameterne to ganger. Lukk VRCFaceTracking eller bytt til en annen utdata.</value>
+  </data>
+  <data name="Apps_VrchatNative_Eye" xml:space="preserve">
+    <value>Øyesporing</value>
+  </data>
+  <data name="Apps_VrchatNative_Face" xml:space="preserve">
+    <value>Ansiktssporing</value>
   </data>
   <data name="VRC_ModuleMode_Header" xml:space="preserve">
     <value>Angi VRCFT modulmodus</value>
@@ -460,7 +605,7 @@
     <value>Hvis du trenger hjelp med å sette trackeren din sammen, får du en nyttig YouTube-opplæring!</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
-    <value>Innstillinger for app</value>
+    <value>Innstillinger</value>
   </data>
   <data name="Settings_Language_Header" xml:space="preserve">
     <value>Språk</value>
@@ -746,6 +891,12 @@
   </data>
   <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
     <value>Avvis</value>
+  </data>
+  <data name="Settings_OSC_VRCFT_Warning" xml:space="preserve">
+    <value>Hvis du bruker Baballonia med VRCFaceTracking, trenger du ikke å endre disse portene</value>
+  </data>
+  <data name="Home_Preferred_Backend" xml:space="preserve">
+    <value>Foretrukket backend</value>
   </data>
   <data name="Home_Cameras_Linux_Workarounds" xml:space="preserve">
     <value>Midlertidige løsninger:

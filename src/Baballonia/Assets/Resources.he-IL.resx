@@ -384,14 +384,56 @@
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
     <value>נמצאו {0} רשתות. לחץ כדי לסרוק שוב.</value>
   </data>
-  <data name="VRC_Title_Header" xml:space="preserve">
-    <value>הגדרות VRChat + VRCFaceTracking</value>
+  <data name="Apps_Title_Header" xml:space="preserve">
+    <value>אפליקציות</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
-    <value>השתמש במעקב עיניים מקורי של VRC</value>
+  <data name="Apps_Output_Header" xml:space="preserve">
+    <value>פלט</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
-    <value>מביא מעקב עיניים לאווטרים שאין להם VRCFaceTracking</value>
+  <data name="Apps_Output_Description" xml:space="preserve">
+    <value>בחרו לאן Baballonia ישלח את נתוני המעקב שלכם</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Header" xml:space="preserve">
+    <value>פלט לאפליקציות אחרות</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Description" xml:space="preserve">
+    <value>פלט לאפליקציית שולחן העבודה של VRCFaceTracking, ל-Resonite ול-ChilloutVR. תומך בכל אפליקציה שמאזינה בפורט 8888.</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Header" xml:space="preserve">
+    <value>פלט ל-VRChat באמצעות VRCFaceTracking המובנה</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Description" xml:space="preserve">
+    <value>פלט ישירות ל-VRChat באמצעות VRCFaceTracking מובנה. אין צורך באפליקציית שולחן עבודה!</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Header" xml:space="preserve">
+    <value>פלט ל-VRChat באמצעות מעקב העיניים/הפנים המקורי של VRChat</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Description" xml:space="preserve">
+    <value>פלט ישירות למעקב העיניים והפנים המקורי של VRChat. ניסיוני, לא כל האווטארים מוגדרים לכך.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Header" xml:space="preserve">
+    <value>שימוש ב-VRCFaceTracking מובנה</value>
+  </data>
+  <data name="Apps_BundledVrcft_Description" xml:space="preserve">
+    <value>המרה ושליחה של פרמטרי האווטאר ישירות ל-VRChat, ללא הפעלת VRCFaceTracking. הנתונים עדיין נשלחים לאפליקציות אחרות בפורט 8888.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status" xml:space="preserve">
+    <value>אווטאר: {0} ({1})</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status_Waiting" xml:space="preserve">
+    <value>ממתין לאווטאר...</value>
+  </data>
+  <data name="Apps_BundledVrcft_Parameters_Header" xml:space="preserve">
+    <value>פרמטרים שנותחו ({0})</value>
+  </data>
+  <data name="Apps_BundledVrcft_ExternalWarning" xml:space="preserve">
+    <value>VRCFaceTracking פועל גם הוא, ולכן VRChat יקבל את הפרמטרים פעמיים. סגרו את VRCFaceTracking או עברו לפלט אחר.</value>
+  </data>
+  <data name="Apps_VrchatNative_Eye" xml:space="preserve">
+    <value>מעקב עיניים</value>
+  </data>
+  <data name="Apps_VrchatNative_Face" xml:space="preserve">
+    <value>מעקב פנים</value>
   </data>
   <data name="VRC_ModuleMode_Header" xml:space="preserve">
     <value>הגדר מצב מודול VRCFT</value>
@@ -457,7 +499,7 @@
     <value>אם אתה צריך עזרה בהרכבת המכשיר שלך, הנה טוטוריאל יוטיוב שימושי!</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
-    <value>הגדרות יישום</value>
+    <value>הגדרות</value>
   </data>
   <data name="Settings_Language_Header" xml:space="preserve">
     <value>שפה</value>

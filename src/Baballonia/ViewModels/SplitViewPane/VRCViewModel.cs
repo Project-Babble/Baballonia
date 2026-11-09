@@ -1,20 +1,48 @@
 ﻿using Baballonia.Assets;
 using Baballonia.Contracts;
 using Baballonia.Helpers;
+using Baballonia.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Baballonia.ViewModels.SplitViewPane;
 
+public record OutputModeOption(OutputMode Mode, string Header, string Description);
+
+// The "Apps" page
 public partial class VrcViewModel : ViewModelBase
 {
     [ObservableProperty]
-    [property: SavedSetting("VRC_UseNativeTracking", false)]
+    [property: SavedSetting(OutputModeSettings.NativeEyeTrackingKey, false)]
     private bool _useNativeVrcEyeTracking;
+
+    [ObservableProperty]
+    [property: SavedSetting(OutputModeSettings.NativeFaceTrackingKey, false)]
+    private bool _useNativeVrcFaceTracking;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsOtherAppsSelected), nameof(IsBundledVrcftSelected), nameof(IsVrchatNativeSelected))]
+    private OutputModeOption _selectedOutputMode;
+
+    // Mirrors the bundled VRCFaceTracking output mode, saved alongside it by OutputModeSettings
+    [ObservableProperty]
+    private bool _useNativeVrcft;
+
+    public List<OutputModeOption> OutputModes { get; }
+
+    public bool IsOtherAppsSelected => SelectedOutputMode.Mode == OutputMode.OtherApps;
+    public bool IsBundledVrcftSelected => SelectedOutputMode.Mode == OutputMode.BundledVrcft;
+    public bool IsVrchatNativeSelected => SelectedOutputMode.Mode == OutputMode.VrchatNative;
+
+    public INativeVrcftService NativeVrcft { get; }
+
+    private readonly ILocalSettingsService _localSettingsService;
 
     [ObservableProperty]
     private string? _selectedModuleMode = Resources.Firmware_Mode_Face;
@@ -60,8 +88,23 @@ public partial class VrcViewModel : ViewModelBase
         return false;
     }
 
-    public VrcViewModel(ILocalSettingsService localSettingsService)
+    public VrcViewModel(ILocalSettingsService localSettingsService, INativeVrcftService nativeVrcft)
     {
+        _localSettingsService = localSettingsService;
+        NativeVrcft = nativeVrcft;
+
+        OutputModes =
+        [
+            new(OutputMode.OtherApps, Resources.Apps_Output_OtherApps_Header, Resources.Apps_Output_OtherApps_Description),
+            new(OutputMode.BundledVrcft, Resources.Apps_Output_BundledVrcft_Header, Resources.Apps_Output_BundledVrcft_Description),
+            new(OutputMode.VrchatNative, Resources.Apps_Output_VrchatNative_Header, Resources.Apps_Output_VrchatNative_Description),
+        ];
+        if (!nativeVrcft.IsSupported)
+            OutputModes.RemoveAll(o => o.Mode == OutputMode.BundledVrcft);
+
+        var mode = OutputModeSettings.Read(localSettingsService);
+        SelectedOutputMode = OutputModes.FirstOrDefault(o => o.Mode == mode) ?? OutputModes[0];
+
         VrcftDetected = TryGetModuleConfig(out var config);
         if (VrcftDetected && config is not null)
         {
@@ -72,11 +115,27 @@ public partial class VrcViewModel : ViewModelBase
             };
         }
 
+        // Load before saving on change: Load sets properties one at a time, and saving mid-load
+        // would overwrite the not-yet-loaded ones (e.g. face tracking) with their defaults
+        localSettingsService.Load(this);
         PropertyChanged += (_, p) =>
         {
             localSettingsService.Save(this);
         };
-        localSettingsService.Load(this);
+    }
+
+    partial void OnSelectedOutputModeChanged(OutputModeOption value)
+    {
+        OutputModeSettings.Save(_localSettingsService, value.Mode);
+        UseNativeVrcft = value.Mode == OutputMode.BundledVrcft;
+    }
+
+    partial void OnUseNativeVrcftChanged(bool value)
+    {
+        if (value && !IsBundledVrcftSelected)
+            SelectedOutputMode = OutputModes.First(o => o.Mode == OutputMode.BundledVrcft);
+        else if (!value && IsBundledVrcftSelected)
+            SelectedOutputMode = OutputModes.First(o => o.Mode == OutputMode.OtherApps);
     }
 
     private async Task WriteModuleConfig(ModuleConfig config)

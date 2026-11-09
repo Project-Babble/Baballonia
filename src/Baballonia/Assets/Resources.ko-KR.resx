@@ -384,14 +384,56 @@
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
     <value>발견된 네트워크: {0}개. 다시 스캔하려면 클릭하세요.</value>
   </data>
-  <data name="VRC_Title_Header" xml:space="preserve">
-    <value>VRChat + VRCFaceTracking 설정</value>
+  <data name="Apps_Title_Header" xml:space="preserve">
+    <value>앱</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
-    <value>VRC 자체 아이트래킹</value>
+  <data name="Apps_Output_Header" xml:space="preserve">
+    <value>출력</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
-    <value>VRCFaceTracking이 없는 아바타에 아이트래킹을 제공합니다.</value>
+  <data name="Apps_Output_Description" xml:space="preserve">
+    <value>Baballonia가 트래킹 데이터를 보낼 곳을 선택하세요</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Header" xml:space="preserve">
+    <value>다른 앱으로 출력</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Description" xml:space="preserve">
+    <value>VRCFaceTracking 데스크톱 앱, Resonite, ChilloutVR로 출력합니다. 포트 8888에서 수신하는 모든 애플리케이션을 지원합니다.</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Header" xml:space="preserve">
+    <value>내장 VRCFaceTracking으로 VRChat에 출력</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Description" xml:space="preserve">
+    <value>내장된 VRCFaceTracking을 사용해 VRChat으로 직접 출력합니다. 데스크톱 앱이 필요 없습니다!</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Header" xml:space="preserve">
+    <value>VRChat 기본 눈/얼굴 트래킹으로 VRChat에 출력</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Description" xml:space="preserve">
+    <value>VRChat의 기본 눈 및 얼굴 트래킹으로 직접 출력합니다. 실험적 기능이며, 모든 아바타가 이를 지원하도록 설정되어 있지는 않습니다.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Header" xml:space="preserve">
+    <value>네이티브 VRCFaceTracking 사용</value>
+  </data>
+  <data name="Apps_BundledVrcft_Description" xml:space="preserve">
+    <value>VRCFaceTracking을 실행하지 않고 아바타 파라미터를 변환하여 VRChat으로 직접 보냅니다. 데이터는 여전히 포트 8888로 다른 앱에도 전송됩니다.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status" xml:space="preserve">
+    <value>아바타: {0} ({1})</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status_Waiting" xml:space="preserve">
+    <value>아바타를 기다리는 중...</value>
+  </data>
+  <data name="Apps_BundledVrcft_Parameters_Header" xml:space="preserve">
+    <value>분석된 파라미터 ({0})</value>
+  </data>
+  <data name="Apps_BundledVrcft_ExternalWarning" xml:space="preserve">
+    <value>VRCFaceTracking도 실행 중이므로 VRChat이 파라미터를 두 번 받게 됩니다. VRCFaceTracking을 닫거나 다른 출력으로 전환하세요.</value>
+  </data>
+  <data name="Apps_VrchatNative_Eye" xml:space="preserve">
+    <value>눈 트래킹</value>
+  </data>
+  <data name="Apps_VrchatNative_Face" xml:space="preserve">
+    <value>얼굴 트래킹</value>
   </data>
   <data name="VRC_ModuleMode_Header" xml:space="preserve">
     <value>VRCFT 모듈 모드 설정</value>
@@ -457,7 +499,7 @@
     <value>트래커 조립에 도움이 필요하면 유용한 유튜브 튜토리얼이 있습니다!</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
-    <value>앱 설정</value>
+    <value>설정</value>
   </data>
   <data name="Settings_Language_Header" xml:space="preserve">
     <value>Language</value>

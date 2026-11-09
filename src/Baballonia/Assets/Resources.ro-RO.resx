@@ -384,14 +384,56 @@
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
     <value>Am găsit {0} . Faceți clic pentru a scana din nou.</value>
   </data>
-  <data name="VRC_Title_Header" xml:space="preserve">
-    <value>Setări VRChat + VRCFaceTracking</value>
+  <data name="Apps_Title_Header" xml:space="preserve">
+    <value>Aplicații</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
-    <value>Utilizați urmărirea ochilor VRC nativi</value>
+  <data name="Apps_Output_Header" xml:space="preserve">
+    <value>Ieșire</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
-    <value>Obține urmărirea ochilor la avatarele care nu au VRCFaceTracking</value>
+  <data name="Apps_Output_Description" xml:space="preserve">
+    <value>Alege unde trimite Baballonia datele tale de urmărire</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Header" xml:space="preserve">
+    <value>Ieșire către alte aplicații</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Description" xml:space="preserve">
+    <value>Ieșire către aplicația desktop VRCFaceTracking, Resonite, ChilloutVR. Compatibil cu orice aplicație care ascultă pe portul 8888.</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Header" xml:space="preserve">
+    <value>Ieșire către VRChat folosind VRCFaceTracking inclus</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Description" xml:space="preserve">
+    <value>Ieșire direct către VRChat folosind un VRCFaceTracking inclus. Nu este necesară aplicația desktop!</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Header" xml:space="preserve">
+    <value>Ieșire către VRChat folosind urmărirea nativă a ochilor/feței din VRChat</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Description" xml:space="preserve">
+    <value>Ieșire direct către urmărirea nativă a ochilor și a feței din VRChat. Experimental, nu toate avatarurile sunt configurate pentru asta.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Header" xml:space="preserve">
+    <value>Folosește VRCFaceTracking nativ</value>
+  </data>
+  <data name="Apps_BundledVrcft_Description" xml:space="preserve">
+    <value>Convertește și trimite parametrii avatarului direct către VRChat, fără a rula VRCFaceTracking. Datele sunt în continuare trimise către alte aplicații pe portul 8888.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status" xml:space="preserve">
+    <value>Avatar: {0} ({1})</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status_Waiting" xml:space="preserve">
+    <value>Se așteaptă un avatar...</value>
+  </data>
+  <data name="Apps_BundledVrcft_Parameters_Header" xml:space="preserve">
+    <value>Parametri analizați ({0})</value>
+  </data>
+  <data name="Apps_BundledVrcft_ExternalWarning" xml:space="preserve">
+    <value>VRCFaceTracking rulează și el, așa că VRChat va primi parametrii de două ori. Închide VRCFaceTracking sau comută pe altă ieșire.</value>
+  </data>
+  <data name="Apps_VrchatNative_Eye" xml:space="preserve">
+    <value>Urmărirea ochilor</value>
+  </data>
+  <data name="Apps_VrchatNative_Face" xml:space="preserve">
+    <value>Urmărirea feței</value>
   </data>
   <data name="VRC_ModuleMode_Header" xml:space="preserve">
     <value>Setează modul VRCFT</value>
@@ -457,7 +499,7 @@
     <value>Dacă ai nevoie de ajutor pentru a pune trackerul la un loc, iată un tutorial folositor Youtube!</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
-    <value>Setări aplicație</value>
+    <value>Setări</value>
   </data>
   <data name="Settings_Language_Header" xml:space="preserve">
     <value>Limba</value>

@@ -384,14 +384,56 @@
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
     <value>Βρέθηκαν δίκτυα {0} . Κάντε κλικ για σάρωση ξανά.</value>
   </data>
-  <data name="VRC_Title_Header" xml:space="preserve">
-    <value>Ρυθμίσεις VRChat + VRCFaceTracking</value>
+  <data name="Apps_Title_Header" xml:space="preserve">
+    <value>Εφαρμογές</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
-    <value>Χρήση Εγγενούς Παρακολούθησης Ματιών Vrc</value>
+  <data name="Apps_Output_Header" xml:space="preserve">
+    <value>Έξοδος</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
-    <value>Φέρνει την παρακολούθηση των ματιών σε avatars που δεν έχουν VRCFaceTracking</value>
+  <data name="Apps_Output_Description" xml:space="preserve">
+    <value>Επιλέξτε πού στέλνει το Baballonia τα δεδομένα παρακολούθησης</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Header" xml:space="preserve">
+    <value>Έξοδος σε άλλες εφαρμογές</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Description" xml:space="preserve">
+    <value>Έξοδος στην εφαρμογή επιφάνειας εργασίας VRCFaceTracking, στο Resonite και στο ChilloutVR. Υποστηρίζει οποιαδήποτε εφαρμογή ακούει στη θύρα 8888.</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Header" xml:space="preserve">
+    <value>Έξοδος στο VRChat με το ενσωματωμένο VRCFaceTracking</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Description" xml:space="preserve">
+    <value>Έξοδος απευθείας στο VRChat με ένα ενσωματωμένο VRCFaceTracking. Δεν απαιτείται εφαρμογή επιφάνειας εργασίας!</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Header" xml:space="preserve">
+    <value>Έξοδος στο VRChat με την εγγενή παρακολούθηση ματιών/προσώπου του VRChat</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Description" xml:space="preserve">
+    <value>Έξοδος απευθείας στην εγγενή παρακολούθηση ματιών και προσώπου του VRChat. Πειραματικό, δεν είναι όλα τα avatar ρυθμισμένα για αυτό.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Header" xml:space="preserve">
+    <value>Χρήση εγγενούς VRCFaceTracking</value>
+  </data>
+  <data name="Apps_BundledVrcft_Description" xml:space="preserve">
+    <value>Μετατροπή και αποστολή των παραμέτρων του avatar απευθείας στο VRChat, χωρίς να εκτελείται το VRCFaceTracking. Τα δεδομένα εξακολουθούν να αποστέλλονται σε άλλες εφαρμογές στη θύρα 8888.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status" xml:space="preserve">
+    <value>Avatar: {0} ({1})</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status_Waiting" xml:space="preserve">
+    <value>Αναμονή για avatar...</value>
+  </data>
+  <data name="Apps_BundledVrcft_Parameters_Header" xml:space="preserve">
+    <value>Αναλυμένες παράμετροι ({0})</value>
+  </data>
+  <data name="Apps_BundledVrcft_ExternalWarning" xml:space="preserve">
+    <value>Το VRCFaceTracking εκτελείται επίσης, οπότε το VRChat θα λαμβάνει τις παραμέτρους δύο φορές. Κλείστε το VRCFaceTracking ή επιλέξτε άλλη έξοδο.</value>
+  </data>
+  <data name="Apps_VrchatNative_Eye" xml:space="preserve">
+    <value>Παρακολούθηση ματιών</value>
+  </data>
+  <data name="Apps_VrchatNative_Face" xml:space="preserve">
+    <value>Παρακολούθηση προσώπου</value>
   </data>
   <data name="VRC_ModuleMode_Header" xml:space="preserve">
     <value>Ορισμός λειτουργίας μονάδας VRCFT</value>
@@ -457,7 +499,7 @@
     <value>Αν χρειάζεστε βοήθεια βάζοντας τον ιχνηλάτη σας μαζί, εδώ είναι ένα χρήσιμο φροντιστήριο Youtube!</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
-    <value>Ρυθμίσεις Εφαρμογής</value>
+    <value>Ρυθμίσεις</value>
   </data>
   <data name="Settings_Language_Header" xml:space="preserve">
     <value>Γλώσσα</value>

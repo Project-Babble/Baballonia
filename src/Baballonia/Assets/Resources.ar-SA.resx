@@ -384,14 +384,56 @@
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
     <value>تم العثور على شبكات {0} . انقر للمسح مرة أخرى.</value>
   </data>
-  <data name="VRC_Title_Header" xml:space="preserve">
-    <value>إعدادات VRChat + VRCFaceTTrking</value>
+  <data name="Apps_Title_Header" xml:space="preserve">
+    <value>التطبيقات</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
-    <value>استخدام الـ VRC الأصلية لتتبع العين</value>
+  <data name="Apps_Output_Header" xml:space="preserve">
+    <value>الإخراج</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
-    <value>يجلب تتبع العين إلى الصور الرمزية التي لا تملك VRCFaceTTrking</value>
+  <data name="Apps_Output_Description" xml:space="preserve">
+    <value>اختر الوجهة التي يرسل إليها Baballonia بيانات التتبع الخاصة بك</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Header" xml:space="preserve">
+    <value>الإخراج إلى تطبيقات أخرى</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Description" xml:space="preserve">
+    <value>الإخراج إلى تطبيق VRCFaceTracking لسطح المكتب وResonite وChilloutVR. يدعم أي تطبيق يستمع على المنفذ 8888.</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Header" xml:space="preserve">
+    <value>الإخراج إلى VRChat باستخدام VRCFaceTracking المدمج</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Description" xml:space="preserve">
+    <value>الإخراج مباشرة إلى VRChat باستخدام VRCFaceTracking مدمج. لا حاجة إلى تطبيق سطح المكتب!</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Header" xml:space="preserve">
+    <value>الإخراج إلى VRChat باستخدام تتبع العين/الوجه الأصلي في VRChat</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Description" xml:space="preserve">
+    <value>الإخراج مباشرة إلى تتبع العين والوجه الأصلي في VRChat. تجريبي، ليست كل الصور الرمزية مهيأة لذلك.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Header" xml:space="preserve">
+    <value>استخدام VRCFaceTracking الأصلي</value>
+  </data>
+  <data name="Apps_BundledVrcft_Description" xml:space="preserve">
+    <value>تحويل معلمات الصورة الرمزية وإرسالها مباشرة إلى VRChat دون تشغيل VRCFaceTracking. لا تزال البيانات تُرسل إلى التطبيقات الأخرى على المنفذ 8888.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status" xml:space="preserve">
+    <value>الصورة الرمزية: {0} ({1})</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status_Waiting" xml:space="preserve">
+    <value>في انتظار صورة رمزية...</value>
+  </data>
+  <data name="Apps_BundledVrcft_Parameters_Header" xml:space="preserve">
+    <value>المعلمات المحللة ({0})</value>
+  </data>
+  <data name="Apps_BundledVrcft_ExternalWarning" xml:space="preserve">
+    <value>يعمل VRCFaceTracking أيضًا، لذا سيستقبل VRChat المعلمات مرتين. أغلق VRCFaceTracking أو بدّل إلى إخراج آخر.</value>
+  </data>
+  <data name="Apps_VrchatNative_Eye" xml:space="preserve">
+    <value>تتبع العين</value>
+  </data>
+  <data name="Apps_VrchatNative_Face" xml:space="preserve">
+    <value>تتبع الوجه</value>
   </data>
   <data name="VRC_ModuleMode_Header" xml:space="preserve">
     <value>تعيين وضع وحدة VRCFT</value>
@@ -457,7 +499,7 @@
     <value>إذا كنت بحاجة إلى مساعدة في وضع المتتبع الخاص بك معا، إليك برنامج تعليمي مفيد على اليوتيوب!</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
-    <value>إعدادات التطبيق</value>
+    <value>الإعدادات</value>
   </data>
   <data name="Settings_Language_Header" xml:space="preserve">
     <value>اللغة</value>

@@ -40,7 +40,7 @@ public partial class MainViewModel : ViewModelBase
         new(typeof(HomePageViewModel), "HomeRegular", Resources.Home_Title_Header), // Home
         new(typeof(CalibrationViewModel), "EditRegular", Resources.Calibration_Title_Header), // Calibration
         new(typeof(FirmwareViewModel), "DeveloperBoardRegular", Resources.Firmware_Title_Header), // Firmware
-        new(typeof(VrcViewModel), "CommentRegular", "VRChat"), // VRChat. No translation :P
+        new(typeof(VrcViewModel), "GridRegular", Resources.Apps_Title_Header), // Apps
         new(typeof(OutputPageViewModel), "TextFirstLineRegular", Resources.Output_Title_Header), // Output
         new(typeof(AppSettingsViewModel), "SettingsRegular", Resources.Settings_Title_Header), // Settings
         new(typeof(AboutPageViewModel), "InfoRegular", Resources.About_Title_Header), // About

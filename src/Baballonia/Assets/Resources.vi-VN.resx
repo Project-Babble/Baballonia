@@ -384,14 +384,56 @@
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
     <value>Tìm thấy {0} mạng. Nhấp chuột để quét lại.</value>
   </data>
-  <data name="VRC_Title_Header" xml:space="preserve">
-    <value>Cài đặt VRChat + VRCFaceTracking</value>
+  <data name="Apps_Title_Header" xml:space="preserve">
+    <value>Ứng dụng</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
-    <value>Sử dụng Theo dõi Mắt VRC Bản địa</value>
+  <data name="Apps_Output_Header" xml:space="preserve">
+    <value>Đầu ra</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
-    <value>Đưa theo dõi mắt đến các avatar không có VRCFaceTracking</value>
+  <data name="Apps_Output_Description" xml:space="preserve">
+    <value>Chọn nơi Baballonia gửi dữ liệu theo dõi của bạn</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Header" xml:space="preserve">
+    <value>Xuất sang ứng dụng khác</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Description" xml:space="preserve">
+    <value>Xuất sang ứng dụng VRCFaceTracking trên máy tính, Resonite, ChilloutVR. Hỗ trợ mọi ứng dụng lắng nghe trên cổng 8888.</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Header" xml:space="preserve">
+    <value>Xuất sang VRChat bằng VRCFaceTracking đi kèm</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Description" xml:space="preserve">
+    <value>Xuất trực tiếp sang VRChat bằng VRCFaceTracking đi kèm. Không cần ứng dụng trên máy tính!</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Header" xml:space="preserve">
+    <value>Xuất sang VRChat bằng theo dõi mắt/khuôn mặt gốc của VRChat</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Description" xml:space="preserve">
+    <value>Xuất trực tiếp sang tính năng theo dõi mắt và khuôn mặt gốc của VRChat. Đang thử nghiệm, không phải avatar nào cũng được thiết lập cho tính năng này.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Header" xml:space="preserve">
+    <value>Dùng VRCFaceTracking tích hợp</value>
+  </data>
+  <data name="Apps_BundledVrcft_Description" xml:space="preserve">
+    <value>Chuyển đổi và gửi thông số avatar trực tiếp đến VRChat mà không cần chạy VRCFaceTracking. Dữ liệu vẫn được gửi đến các ứng dụng khác qua cổng 8888.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status" xml:space="preserve">
+    <value>Avatar: {0} ({1})</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status_Waiting" xml:space="preserve">
+    <value>Đang chờ avatar...</value>
+  </data>
+  <data name="Apps_BundledVrcft_Parameters_Header" xml:space="preserve">
+    <value>Thông số đã phân tích ({0})</value>
+  </data>
+  <data name="Apps_BundledVrcft_ExternalWarning" xml:space="preserve">
+    <value>VRCFaceTracking cũng đang chạy nên VRChat sẽ nhận thông số hai lần. Hãy đóng VRCFaceTracking hoặc chuyển sang đầu ra khác.</value>
+  </data>
+  <data name="Apps_VrchatNative_Eye" xml:space="preserve">
+    <value>Theo dõi mắt</value>
+  </data>
+  <data name="Apps_VrchatNative_Face" xml:space="preserve">
+    <value>Theo dõi khuôn mặt</value>
   </data>
   <data name="VRC_ModuleMode_Header" xml:space="preserve">
     <value>Đặt chế độ mô-đun VRCFT</value>
@@ -457,7 +499,7 @@
     <value>Nếu bạn cần giúp đỡ lắp ráp thiết bị theo dõi của mình, đây là một hướng dẫn hữu ích trên Youtube!</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
-    <value>Cài đặt Ứng dụng</value>
+    <value>Cài đặt</value>
   </data>
   <data name="Settings_Language_Header" xml:space="preserve">
     <value>Ngôn ngữ</value>

@@ -384,14 +384,56 @@
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
     <value>{0} ağ bulundu. Tekrar taramak için tıklayın.</value>
   </data>
-  <data name="VRC_Title_Header" xml:space="preserve">
-    <value>VRChat + VRCFaceTracking Ayarları</value>
+  <data name="Apps_Title_Header" xml:space="preserve">
+    <value>Uygulamalar</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
-    <value>Yerel VRC Göz Takibini Kullan</value>
+  <data name="Apps_Output_Header" xml:space="preserve">
+    <value>Çıkış</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
-    <value>VRCFaceTracking'i olmayan avatarlara göz takibini getirir</value>
+  <data name="Apps_Output_Description" xml:space="preserve">
+    <value>Baballonia'nın izleme verilerinizi nereye göndereceğini seçin</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Header" xml:space="preserve">
+    <value>Diğer uygulamalara çıkış</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Description" xml:space="preserve">
+    <value>VRCFaceTracking masaüstü uygulamasına, Resonite'a ve ChilloutVR'a çıkış. 8888 numaralı bağlantı noktasını dinleyen tüm uygulamaları destekler.</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Header" xml:space="preserve">
+    <value>Dahili VRCFaceTracking ile VRChat'e çıkış</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Description" xml:space="preserve">
+    <value>Dahili bir VRCFaceTracking ile doğrudan VRChat'e çıkış. Masaüstü uygulaması gerekmez!</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Header" xml:space="preserve">
+    <value>VRChat'in yerel göz/yüz izlemesi ile VRChat'e çıkış</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Description" xml:space="preserve">
+    <value>Doğrudan VRChat'in yerel göz ve yüz izlemesine çıkış. Deneyseldir, tüm avatarlar bunun için yapılandırılmamıştır.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Header" xml:space="preserve">
+    <value>Yerel VRCFaceTracking kullan</value>
+  </data>
+  <data name="Apps_BundledVrcft_Description" xml:space="preserve">
+    <value>Avatar parametrelerini VRCFaceTracking çalıştırmadan dönüştürüp doğrudan VRChat'e gönderir. Veriler 8888 numaralı bağlantı noktasından diğer uygulamalara gönderilmeye devam eder.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status" xml:space="preserve">
+    <value>Avatar: {0} ({1})</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status_Waiting" xml:space="preserve">
+    <value>Bir avatar bekleniyor...</value>
+  </data>
+  <data name="Apps_BundledVrcft_Parameters_Header" xml:space="preserve">
+    <value>Ayrıştırılan parametreler ({0})</value>
+  </data>
+  <data name="Apps_BundledVrcft_ExternalWarning" xml:space="preserve">
+    <value>VRCFaceTracking de çalışıyor, bu nedenle VRChat parametreleri iki kez alacak. VRCFaceTracking'i kapatın veya başka bir çıkışa geçin.</value>
+  </data>
+  <data name="Apps_VrchatNative_Eye" xml:space="preserve">
+    <value>Göz izleme</value>
+  </data>
+  <data name="Apps_VrchatNative_Face" xml:space="preserve">
+    <value>Yüz izleme</value>
   </data>
   <data name="VRC_ModuleMode_Header" xml:space="preserve">
     <value>VRCFT modül modunu ayarla</value>
@@ -457,7 +499,7 @@
     <value>Tracker'ınızı birleştirmede yardıma ihtiyacınız varsa, işte faydalı bir YouTube eğitimi!</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
-    <value>Uygulama Ayarları</value>
+    <value>Ayarlar</value>
   </data>
   <data name="Settings_Language_Header" xml:space="preserve">
     <value>Dil</value>

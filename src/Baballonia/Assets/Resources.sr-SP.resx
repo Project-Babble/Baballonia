@@ -217,6 +217,106 @@
   <data name="Home_Backend_Select_Placeholder" xml:space="preserve">
     <value>Izaberite uređaj...</value>
   </data>
+  <data name="Home_Backend_Default" xml:space="preserve">
+    <value>Podrazumevano</value>
+  </data>
+  <data name="Home_Eye_Load_Model" xml:space="preserve">
+    <value>Učitaj model očiju</value>
+  </data>
+  <data name="Firmware_Custom_Firmware_Load" xml:space="preserve">
+    <value>Učitaj prilagođeni firmware</value>
+  </data>
+  <data name="Settings_SteamVR_Auto_Start_Header" xml:space="preserve">
+    <value>Automatski pokreni sa SteamVR-om</value>
+  </data>
+  <data name="Settings_SteamVR_Auto_Start_Description" xml:space="preserve">
+    <value>Da li aplikacija treba da se pokrene sa SteamVR-om? (Promena zahteva ponovno pokretanje SteamVR-a.)</value>
+  </data>
+  <data name="Settings_Advanced_Header" xml:space="preserve">
+    <value>Omogući napredna podešavanja</value>
+  </data>
+  <data name="Settings_Advanced_Description" xml:space="preserve">
+    <value>Napredna podešavanja</value>
+  </data>
+  <data name="Godot_Locale" xml:space="preserve">
+    <value>sr</value>
+  </data>
+  <data name="About_Title_Header" xml:space="preserve">
+    <value>O aplikaciji</value>
+  </data>
+  <data name="About_AboutUs_Header" xml:space="preserve">
+    <value>O nama</value>
+  </data>
+  <data name="About_AboutUs_Description" xml:space="preserve">
+    <value>Linkovi ka vodiču za brzi početak, društvenim mrežama, dokumentaciji itd.</value>
+  </data>
+  <data name="About_AboutBaballonia_Header" xml:space="preserve">
+    <value>O Baballonia</value>
+  </data>
+  <data name="About_AboutBaballonia_Description" xml:space="preserve">
+    <value>Linkovi za štrebere (GitHub i tako dalje)</value>
+  </data>
+  <data name="About_Credits_Header" xml:space="preserve">
+    <value>Zasluge</value>
+  </data>
+  <data name="About_Credits_Description" xml:space="preserve">
+    <value>Ljudi koji su ovaj projekat učinili onim što jeste. Hvala svima!</value>
+  </data>
+  <data name="About_QuickstartGuide_Alias" xml:space="preserve">
+    <value>Vodič za brzi početak ⧉</value>
+  </data>
+  <data name="About_BabbleDiscord_Alias" xml:space="preserve">
+    <value>Babble Discord ⧉</value>
+  </data>
+  <data name="About_PishockDiscord_Alias" xml:space="preserve">
+    <value>PiShock Discord ⧉</value>
+  </data>
+  <data name="About_BabbleDocs_Alias" xml:space="preserve">
+    <value>Babble dokumentacija ⧉</value>
+  </data>
+  <data name="About_BabbleSite_Alias" xml:space="preserve">
+    <value>Babble sajt ⧉</value>
+  </data>
+  <data name="About_BabbleBlog_Alias" xml:space="preserve">
+    <value>Babble blog ⧉</value>
+  </data>
+  <data name="About_BabbleDataPrivacyPolicy_Alias" xml:space="preserve">
+    <value>Politika privatnosti podataka ⧉</value>
+  </data>
+  <data name="About_YoutubeLink_Alias" xml:space="preserve">
+    <value>Babble YouTube stranica ⧉</value>
+  </data>
+  <data name="About_BabbleTwitter_Alias" xml:space="preserve">
+    <value>Babble Twitter ⧉</value>
+  </data>
+  <data name="About_BaballoniaGithub_Alias" xml:space="preserve">
+    <value>Baballonia GitHub ⧉</value>
+  </data>
+  <data name="About_BaballoniaGithubIssues_Alias" xml:space="preserve">
+    <value>Baballonia GitHub problemi ⧉</value>
+  </data>
+  <data name="About_BaballoniaLicense_Alias" xml:space="preserve">
+    <value>Baballonia licenca ⧉</value>
+  </data>
+  <data name="About_BaballoniaBuildInstructions_Alias" xml:space="preserve">
+    <value>Uputstva za izgradnju Baballonia ⧉</value>
+  </data>
+  <data name="About_Contributors_Commits" xml:space="preserve">
+    <value>{0} komitova</value>
+  </data>
+  <data name="Firmware_Flashing_Wireless_Prompt" xml:space="preserve">
+    <value>Flešovanje prilagođenog firmware-a na Babble Tracker najbolje funkcioniše kada je uređaj prvo podešen na „Bežični” režim. 
+Ne morate da unosite Wi-Fi podatke. Samo prebacite tracker u „Bežični” režim, a zatim ga ponovo pokrenite pre flešovanja.</value>
+  </data>
+  <data name="Firmware_Flashing_Header_Alert" xml:space="preserve">
+    <value>Ako koristite Babble Tracker sa Valve Index-om ili Bigscreen Beyond-om (sa/bez 1.0 baznih stanica), možda ćete primetiti:
+• Da ekran neočekivano postaje siv
+• Da se praćenje prekida ili često gubi poziciju
+Ovo se obično lako rešava! Samo instalirajte „Tracking Loss Fix” firmware ispod.</value>
+  </data>
+  <data name="Common_Note" xml:space="preserve">
+    <value>Napomena</value>
+  </data>
   <data name="Common_Start_Typing" xml:space="preserve">
     <value>Počnite da kucate...</value>
   </data>
@@ -385,14 +485,56 @@
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
     <value>Pronađeno {0} mreža. Kliknite da skenirate ponovo.</value>
   </data>
-  <data name="VRC_Title_Header" xml:space="preserve">
-    <value>VRChat + VRCFaceTracking podešavanja</value>
+  <data name="Apps_Title_Header" xml:space="preserve">
+    <value>Aplikacije</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
-    <value>Koristite nativno VRC praćenje očima</value>
+  <data name="Apps_Output_Header" xml:space="preserve">
+    <value>Izlaz</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
-    <value>Donosi praćenje očima avatarima koji nemaju VRCFaceTracking</value>
+  <data name="Apps_Output_Description" xml:space="preserve">
+    <value>Izaberite gde Baballonia šalje vaše podatke o praćenju</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Header" xml:space="preserve">
+    <value>Izlaz u druge aplikacije</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Description" xml:space="preserve">
+    <value>Izlaz u VRCFaceTracking desktop aplikaciju, Resonite, ChilloutVR. Podržava bilo koju aplikaciju koja osluškuje na portu 8888.</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Header" xml:space="preserve">
+    <value>Izlaz u VRChat pomoću ugrađenog VRCFaceTracking-a</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Description" xml:space="preserve">
+    <value>Izlaz direktno u VRChat pomoću ugrađenog VRCFaceTracking-a. Nije potrebna desktop aplikacija!</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Header" xml:space="preserve">
+    <value>Izlaz u VRChat pomoću VRChat-ovog izvornog praćenja očiju/lica</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Description" xml:space="preserve">
+    <value>Izlaz direktno u VRChat-ovo izvorno praćenje očiju i lica. Eksperimentalno, nisu svi avatari podešeni za ovo.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Header" xml:space="preserve">
+    <value>Koristi ugrađeni VRCFaceTracking</value>
+  </data>
+  <data name="Apps_BundledVrcft_Description" xml:space="preserve">
+    <value>Pretvara i šalje parametre avatara direktno u VRChat, bez pokretanja VRCFaceTracking-a. Podaci se i dalje šalju drugim aplikacijama na portu 8888.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status" xml:space="preserve">
+    <value>Avatar: {0} ({1})</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status_Waiting" xml:space="preserve">
+    <value>Čeka se avatar...</value>
+  </data>
+  <data name="Apps_BundledVrcft_Parameters_Header" xml:space="preserve">
+    <value>Učitani parametri ({0})</value>
+  </data>
+  <data name="Apps_BundledVrcft_ExternalWarning" xml:space="preserve">
+    <value>VRCFaceTracking je takođe pokrenut, pa će VRChat primati parametre dvaput. Zatvorite VRCFaceTracking ili pređite na drugi izlaz.</value>
+  </data>
+  <data name="Apps_VrchatNative_Eye" xml:space="preserve">
+    <value>Praćenje očiju</value>
+  </data>
+  <data name="Apps_VrchatNative_Face" xml:space="preserve">
+    <value>Praćenje lica</value>
   </data>
   <data name="VRC_ModuleMode_Header" xml:space="preserve">
     <value>Podesi režim VRCFT modula</value>
@@ -458,7 +600,7 @@
     <value>Ako vam treba pomoć oko sastavljanja trakera, evo korisnog YouTube tutorijala!</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
-    <value>Podešavanja aplikacije</value>
+    <value>Podešavanja</value>
   </data>
   <data name="Settings_Language_Header" xml:space="preserve">
     <value>Jezik</value>
@@ -744,6 +886,12 @@
   </data>
   <data name="DropOverlay_Dismiss_Button" xml:space="preserve">
     <value>Odbaci</value>
+  </data>
+  <data name="Settings_OSC_VRCFT_Warning" xml:space="preserve">
+    <value>Ako koristite Baballonia sa VRCFaceTracking-om, nema potrebe da menjate ove portove</value>
+  </data>
+  <data name="Home_Preferred_Backend" xml:space="preserve">
+    <value>Željeni backend</value>
   </data>
   <data name="Home_Cameras_Linux_Workarounds" xml:space="preserve">
     <value>Privremena rešenja:

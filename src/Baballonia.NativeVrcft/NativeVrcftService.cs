@@ -99,6 +99,7 @@ public sealed partial class NativeVrcftService(
     [ObservableProperty] private bool _isRunning;
     [ObservableProperty] private string? _status;
     [ObservableProperty] private bool _externalVrcftDetected;
+    [ObservableProperty] private IReadOnlyList<string> _avatarParameters = [];
 
     public bool IsSupported => true;
 
@@ -141,7 +142,7 @@ public sealed partial class NativeVrcftService(
             OnUiThread(() =>
             {
                 IsRunning = true;
-                Status = Resources.Settings_OSC_NativeVRCFT_Status_Waiting;
+                Status = Resources.Apps_BundledVrcft_Status_Waiting;
             });
         }
         catch (Exception e)
@@ -286,6 +287,7 @@ public sealed partial class NativeVrcftService(
         {
             IsRunning = false;
             Status = null;
+            AvatarParameters = [];
             ExternalVrcftDetected = false;
         });
     }
@@ -302,9 +304,18 @@ public sealed partial class NativeVrcftService(
             return;
         }
 
-        var status = string.Format(Resources.Settings_OSC_NativeVRCFT_Status,
-            oscQuery.AvatarInfo.Name, oscQuery.AvatarParameters.Count);
-        OnUiThread(() => Status = status);
+        var status = string.Format(Resources.Apps_BundledVrcft_Status, oscQuery.AvatarInfo.Name, oscQuery.AvatarInfo.Id);
+        var parameters = oscQuery.AvatarParameters
+            .SelectMany(p => p.GetParamNames())
+            .Select(p => p.paramName)
+            .Distinct()
+            .Order()
+            .ToList();
+        OnUiThread(() =>
+        {
+            Status = status;
+            AvatarParameters = parameters;
+        });
     }
 
     private void CheckForExternalVrcft()

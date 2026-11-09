@@ -384,14 +384,56 @@
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
     <value>Hittade {0} nätverk. Klicka för att skanna igen.</value>
   </data>
-  <data name="VRC_Title_Header" xml:space="preserve">
-    <value>VRChat + VRCFaceTracking inställningar</value>
+  <data name="Apps_Title_Header" xml:space="preserve">
+    <value>Appar</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
-    <value>Använd Native VRC Eye Tracking</value>
+  <data name="Apps_Output_Header" xml:space="preserve">
+    <value>Utdata</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
-    <value>Ger eyetracking till avatarer som inte har VRCFaceTracking</value>
+  <data name="Apps_Output_Description" xml:space="preserve">
+    <value>Välj vart Baballonia skickar din spårningsdata</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Header" xml:space="preserve">
+    <value>Utdata till andra appar</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Description" xml:space="preserve">
+    <value>Utdata till VRCFaceTracking-skrivbordsappen, Resonite, ChilloutVR. Stöder alla program som lyssnar på port 8888.</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Header" xml:space="preserve">
+    <value>Utdata till VRChat med medföljande VRCFaceTracking</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Description" xml:space="preserve">
+    <value>Utdata direkt till VRChat med en medföljande VRCFaceTracking. Ingen skrivbordsapp behövs!</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Header" xml:space="preserve">
+    <value>Utdata till VRChat med VRChats inbyggda ögon-/ansiktsspårning</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Description" xml:space="preserve">
+    <value>Utdata direkt till VRChats inbyggda ögon- och ansiktsspårning. Experimentellt, alla avatarer är inte konfigurerade för detta.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Header" xml:space="preserve">
+    <value>Använd inbyggd VRCFaceTracking</value>
+  </data>
+  <data name="Apps_BundledVrcft_Description" xml:space="preserve">
+    <value>Konvertera och skicka avatarparametrar direkt till VRChat utan att köra VRCFaceTracking. Data skickas fortfarande till andra appar på port 8888.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status" xml:space="preserve">
+    <value>Avatar: {0} ({1})</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status_Waiting" xml:space="preserve">
+    <value>Väntar på en avatar...</value>
+  </data>
+  <data name="Apps_BundledVrcft_Parameters_Header" xml:space="preserve">
+    <value>Tolkade parametrar ({0})</value>
+  </data>
+  <data name="Apps_BundledVrcft_ExternalWarning" xml:space="preserve">
+    <value>VRCFaceTracking körs också, så VRChat kommer att ta emot parametrarna två gånger. Stäng VRCFaceTracking eller byt till en annan utdata.</value>
+  </data>
+  <data name="Apps_VrchatNative_Eye" xml:space="preserve">
+    <value>Ögonspårning</value>
+  </data>
+  <data name="Apps_VrchatNative_Face" xml:space="preserve">
+    <value>Ansiktsspårning</value>
   </data>
   <data name="VRC_ModuleMode_Header" xml:space="preserve">
     <value>Ställ in VRCFT-modulläge</value>
@@ -457,7 +499,7 @@
     <value>Om du behöver hjälp med att sätta ihop din spårare, här är en användbar Youtube tutorial!</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
-    <value>Appens inställningar</value>
+    <value>Inställningar</value>
   </data>
   <data name="Settings_Language_Header" xml:space="preserve">
     <value>Språk</value>

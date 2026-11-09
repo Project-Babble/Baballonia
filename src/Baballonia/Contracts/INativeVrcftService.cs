@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,8 +17,11 @@ public interface INativeVrcftService : INotifyPropertyChanged
 
     bool IsRunning { get; }
 
-    /// <summary>Human-readable status (current avatar, parameter count), or null when not running.</summary>
+    /// <summary>Human-readable status (current avatar name and ID), or null when not running.</summary>
     string? Status { get; }
+
+    /// <summary>Names of the current avatar's face tracking parameters that are being sent.</summary>
+    IReadOnlyList<string> AvatarParameters { get; }
 
     /// <summary>True when a standalone VRCFaceTracking process is running alongside us.</summary>
     bool ExternalVrcftDetected { get; }
@@ -43,6 +48,7 @@ public class UnsupportedNativeVrcftService : INativeVrcftService
     public bool IsSupported => false;
     public bool IsRunning => false;
     public string? Status => null;
+    public IReadOnlyList<string> AvatarParameters => Array.Empty<string>();
     public bool ExternalVrcftDetected => false;
 
     public Task StartAsync() => Task.CompletedTask;

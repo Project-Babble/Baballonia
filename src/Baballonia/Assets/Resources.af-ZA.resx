@@ -384,14 +384,56 @@
   <data name="Firmware_WifiScanButton_Success" xml:space="preserve">
     <value>Found {0} networks. Click to scan again.</value>
   </data>
-  <data name="VRC_Title_Header" xml:space="preserve">
-    <value>VRChat + VRCFaceTracking Settings</value>
+  <data name="Apps_Title_Header" xml:space="preserve">
+    <value>Toepassings</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Header" xml:space="preserve">
-    <value>Use Native VRC Eye Tracking</value>
+  <data name="Apps_Output_Header" xml:space="preserve">
+    <value>Uitvoer</value>
   </data>
-  <data name="VRC_UseNativeEyeTracking_Description" xml:space="preserve">
-    <value>Brings eye tracking to avatars that do not have VRCFaceTracking</value>
+  <data name="Apps_Output_Description" xml:space="preserve">
+    <value>Kies waarheen Baballonia jou nasporingsdata stuur</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Header" xml:space="preserve">
+    <value>Uitvoer na ander toepassings</value>
+  </data>
+  <data name="Apps_Output_OtherApps_Description" xml:space="preserve">
+    <value>Uitvoer na die VRCFaceTracking-rekenaartoepassing, Resonite, ChilloutVR. Ondersteun enige toepassing wat op poort 8888 luister.</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Header" xml:space="preserve">
+    <value>Uitvoer na VRChat met ingeslote VRCFaceTracking</value>
+  </data>
+  <data name="Apps_Output_BundledVrcft_Description" xml:space="preserve">
+    <value>Uitvoer direk na VRChat met 'n ingeslote VRCFaceTracking. Geen rekenaartoepassing nodig nie!</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Header" xml:space="preserve">
+    <value>Uitvoer na VRChat met VRChat se eie oog-/gesigsnasporing</value>
+  </data>
+  <data name="Apps_Output_VrchatNative_Description" xml:space="preserve">
+    <value>Uitvoer direk na VRChat se eie oog- en gesigsnasporing. Eksperimenteel, nie alle avatars is hiervoor opgestel nie.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Header" xml:space="preserve">
+    <value>Gebruik ingeboude VRCFaceTracking</value>
+  </data>
+  <data name="Apps_BundledVrcft_Description" xml:space="preserve">
+    <value>Skakel avatarparameters om en stuur dit direk na VRChat, sonder om VRCFaceTracking te laat loop. Data word steeds op poort 8888 na ander toepassings gestuur.</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status" xml:space="preserve">
+    <value>Avatar: {0} ({1})</value>
+  </data>
+  <data name="Apps_BundledVrcft_Status_Waiting" xml:space="preserve">
+    <value>Wag vir 'n avatar...</value>
+  </data>
+  <data name="Apps_BundledVrcft_Parameters_Header" xml:space="preserve">
+    <value>Ontlede parameters ({0})</value>
+  </data>
+  <data name="Apps_BundledVrcft_ExternalWarning" xml:space="preserve">
+    <value>VRCFaceTracking loop ook, so VRChat sal parameters twee keer ontvang. Maak VRCFaceTracking toe of skakel oor na 'n ander uitvoer.</value>
+  </data>
+  <data name="Apps_VrchatNative_Eye" xml:space="preserve">
+    <value>Oognasporing</value>
+  </data>
+  <data name="Apps_VrchatNative_Face" xml:space="preserve">
+    <value>Gesigsnasporing</value>
   </data>
   <data name="VRC_ModuleMode_Header" xml:space="preserve">
     <value>Set VRCFT module mode</value>
@@ -457,7 +499,7 @@
     <value>If you need help putting your tracker together, here's a useful Youtube tutorial!</value>
   </data>
   <data name="Settings_Title_Header" xml:space="preserve">
-    <value>App Settings</value>
+    <value>Instellings</value>
   </data>
   <data name="Settings_Language_Header" xml:space="preserve">
     <value>Language</value>
